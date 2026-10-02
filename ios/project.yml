@@ -1,0 +1,25 @@
+name: Mia
+options:
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: '5.9'
+    IPHONEOS_DEPLOYMENT_TARGET: '17.0'
+    TARGETED_DEVICE_FAMILY: '1'
+targets:
+  Mia:
+    type: application
+    platform: iOS
+    sources:
+      - MiaApp
+    info:
+      path: MiaApp/Info.plist
+      properties:
+        CFBundleDisplayName: Mia
+        NSMicrophoneUsageDescription: Mia 需要使用麦克风与你进行语音对话。
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia
