@@ -23,3 +23,22 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia
+  MiaTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - MiaTests
+    dependencies:
+      - target: Mia
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.tests
+schemes:
+  Mia:
+    build:
+      targets:
+        Mia: all
+        MiaTests: [test]
+    test:
+      targets:
+        - MiaTests
