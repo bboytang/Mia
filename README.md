@@ -1,6 +1,6 @@
 # An MCP-based Chatbot
 
-> Mia iPhone 客户端的[完整方案与进度计划](docs/mia-ios-roadmap.md)位于 `ios/` 与 `server/` 子项目；原有 ESP-IDF 固件说明见下文。
+> Mia iPhone 客户端的[完整方案与进度计划](docs/mia-ios-roadmap.md)和[跨设备 Codex 交接](docs/mia-ios-handoff.md)位于 `ios/` 与 `server/` 子项目；原有 ESP-IDF 固件说明见下文。
 
 (English | [中文](README_zh.md) | [日本語](README_ja.md))
 
