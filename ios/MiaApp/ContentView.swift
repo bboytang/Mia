@@ -130,11 +130,13 @@ private struct MiaSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("服务端") {
+                Section {
                     TextField("wss://你的域名/xiaozhi/v1/", text: $serverURL)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .keyboardType(.URL)
+                } header: {
+                    Text("服务端")
                 } footer: {
                     Text("请填写支持小智 WebSocket 协议的安全连接地址。")
                 }
