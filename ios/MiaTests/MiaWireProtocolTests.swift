@@ -19,13 +19,24 @@ final class MiaWireProtocolTests: XCTestCase {
     func testAcceptsServerHelloWithSessionId() throws {
         let data = Data(#"{"type":"hello","transport":"websocket","session_id":"s-1"}"#.utf8)
 
-        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data), .hello(sessionID: "s-1"))
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data),
+                       .hello(sessionID: "s-1", sampleRate: 24_000))
     }
 
     func testRejectsWrongServerTransport() {
         let data = Data(#"{"type":"hello","transport":"mqtt"}"#.utf8)
 
         XCTAssertThrowsError(try MiaWireProtocol.parseServerEvent(data))
+    }
+
+    func testReadsServerSampleRateAndFallsBackForInvalidValue() throws {
+        let valid = Data(#"{"type":"hello","transport":"websocket","audio_params":{"sample_rate":16000}}"#.utf8)
+        let invalid = Data(#"{"type":"hello","transport":"websocket","audio_params":{"sample_rate":-1}}"#.utf8)
+
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(valid),
+                       .hello(sessionID: nil, sampleRate: 16_000))
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(invalid),
+                       .hello(sessionID: nil, sampleRate: 24_000))
     }
 
     func testParsesMiaSpeechSentence() throws {

@@ -1,7 +1,7 @@
 import Foundation
 
 enum MiaServerEvent: Equatable {
-    case hello(sessionID: String?)
+    case hello(sessionID: String?, sampleRate: Int)
     case ttsStart
     case ttsSentence(String)
     case ttsStop
@@ -65,7 +65,11 @@ enum MiaWireProtocol {
             guard object["transport"] as? String == "websocket" else {
                 throw MiaWireError.invalidTransport
             }
-            return .hello(sessionID: object["session_id"] as? String)
+            let audio = object["audio_params"] as? [String: Any]
+            let advertisedRate = audio?["sample_rate"] as? Int
+            let sampleRate = advertisedRate.flatMap { $0 > 0 ? $0 : nil } ?? 24_000
+            return .hello(sessionID: object["session_id"] as? String,
+                          sampleRate: sampleRate)
         case "tts":
             switch object["state"] as? String {
             case "start":
