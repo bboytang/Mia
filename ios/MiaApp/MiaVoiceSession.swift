@@ -181,6 +181,7 @@ final class MiaVoiceSession: ObservableObject {
                 self.audio = audio
             }
             try await transport.startListening(sessionID: sessionID)
+            audio?.beginMicrophoneCapture()
             state = .listening
         } catch { fail(error) }
     }

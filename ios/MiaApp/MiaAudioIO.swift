@@ -18,6 +18,7 @@ final class MiaAudioIO {
     private var converter: AVAudioConverter?
     private var frameBuffer = MiaPCMFrameBuffer()
     private let inputLock = NSLock()
+    private var captureEnabled = false
     private var onMicrophoneFrame: (([Int16]) -> Void)?
     private var onPlaybackFrame: ((Double, Float) -> Void)?
     private var outputSampleRate = 24_000.0
@@ -97,6 +98,7 @@ final class MiaAudioIO {
         player.stop()
         engine.stop()
         inputLock.lock()
+        captureEnabled = false
         frameBuffer.reset()
         inputLock.unlock()
         converter = nil
@@ -109,7 +111,15 @@ final class MiaAudioIO {
     func takeFinalMicrophoneFrame() -> [Int16]? {
         inputLock.lock()
         defer { inputLock.unlock() }
+        captureEnabled = false
         return frameBuffer.takePaddedFrame()
+    }
+
+    func beginMicrophoneCapture() {
+        inputLock.lock()
+        frameBuffer.reset()
+        captureEnabled = true
+        inputLock.unlock()
     }
 
     private func handleMicrophone(_ input: AVAudioPCMBuffer, captureFormat: AVAudioFormat) {
@@ -133,7 +143,7 @@ final class MiaAudioIO {
               let data = output.int16ChannelData?[0] else { return }
         let samples = Array(UnsafeBufferPointer(start: data, count: Int(output.frameLength)))
         inputLock.lock()
-        let frames = frameBuffer.append(samples)
+        let frames = captureEnabled ? frameBuffer.append(samples) : []
         inputLock.unlock()
         for frame in frames { onMicrophoneFrame?(frame) }
     }
