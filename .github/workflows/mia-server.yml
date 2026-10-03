@@ -28,4 +28,7 @@ jobs:
           sudo apt-get install -y libopus0
           python -m pip install -r server/requirements.txt
       - name: Test WebSocket and Opus protocol fixture
-        run: python -m unittest discover -s server/tests -v
+        run: |
+          python -m unittest discover -s server/tests -v
+          bash -n server/deploy/install-ubuntu.sh
+          python -m py_compile server/deploy/check_wss.py

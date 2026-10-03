@@ -22,7 +22,8 @@ fi
 apt-get update
 apt-get install -y python3 python3-venv libopus0 caddy
 gateway_token=$(python3 -c 'import secrets; print(secrets.token_hex(32))')
-id -u mia >/dev/null 2>&1 || useradd --system --home /opt/mia --shell /usr/sbin/nologin mia
+getent group mia >/dev/null || groupadd --system mia
+id -u mia >/dev/null 2>&1 || useradd --system --gid mia --home /opt/mia --shell /usr/sbin/nologin mia
 install -d -o mia -g mia /opt/mia
 cp -a "$repo_dir/server" /opt/mia/
 chown -R mia:mia /opt/mia/server
