@@ -46,7 +46,7 @@ flowchart LR
 | iPhone 语音管线 | 代码完成，真机待验 | WebSocket 握手、Opus 编解码、麦克风、播放、打断、尾帧补齐与轮次间采集关闭；模拟器测试通过，尚无真实 iPhone 录放反馈。 |
 | 仅 Mia 字幕 | 代码完成，时序待校准 | 用户识别文本被忽略；Mia 字幕按播放回调推进。多句、真实语速和弱网情况待验。 |
 | 百炼网关 | 代码完成，真实 API 待验 | 北京地域 ASR、对话、流式 24 kHz PCM TTS 接入；9 项服务端测试通过，[GitHub 服务端 CI](https://github.com/bboytang/Mia/actions/runs/37089492807) 通过。测试使用假提供者，未消耗真实 API 额度。 |
-| VPS 部署 | 待执行 | 已备安装脚本、systemd/Caddy 模板和 WSS 握手检查工具；还没有 VPS 上的运行结果。 |
+| VPS 部署 | 进行中 | 新 VPS 已通过专用 SSH 公钥登录，Caddy TLS 和外网 HTTPS 已通过；源码、服务账号和 Python 依赖已安装，VPS 上 9 项测试通过。百炼 Key、`mia-gateway` 和 WSS 握手待完成。 |
 | 正式 Live2D | 输入缺失 | 没有分层源稿、`.cmo3`、`.moc3` 或已绑定授权模型，无法完成 Cubism 运行时与口型验收。 |
 
 ### 2026-10-03 继续开发核对
@@ -59,8 +59,15 @@ flowchart LR
 
 ### 2026-10-03 服务器地址变更
 
-- 用户将 VPS 改为中国内地服务器 `43.143.230.174`；`8kraw.cloud` 已解析至新地址。SSH 22 可达，但登录尚未验证；HTTPS 443 拒绝连接。新 VPS 的系统配置、域名备案、80 端口与 WSS 尚待核对，迁移前网络结果不能作为新服务器的验收依据。
+- 用户将 VPS 改为中国内地服务器 `43.143.230.174`；`8kraw.cloud` 已解析至新地址。地址变更时 SSH 22 可达，但登录尚未验证，HTTPS 443 拒绝连接；后续部署进度见下节。迁移前网络结果不能作为新服务器的验收依据。
 - iOS 客户端和 WSS 握手工具继续使用 `wss://8kraw.cloud/xiaozhi/v1/`，无需改变应用端地址。先在新 VPS 完成网关与 Caddy 部署，再进行真机联调。
+
+### 2026-10-03 新 VPS 部署进度
+
+- 已核对 SSH 主机指纹，并以专用公钥登录 `ubuntu`；`sudo` 可用。服务器为 Ubuntu 24.04.4 LTS，约 2 GB 内存、50 GB 系统盘。
+- VPS 访问 GitHub 超时，已从本地提交 `70db0c8` 将 `server/` 传到 `/home/ubuntu/Mia/server`；创建 `mia` 服务账号和 `/opt/mia/.venv`，安装 `libopus0`、Caddy 与服务端 Python 依赖。虚拟环境 `pip check`、9 项服务端测试和安装脚本语法检查均通过。
+- 已备份 Caddy 的初始配置，并启用仓库的 `8kraw.cloud` 反向代理模板。Caddy 已取得有效 TLS 证书；从外网请求 `https://8kraw.cloud/` 返回 HTTP 200。80/443 在 VPS 上监听。
+- **待完成**：用户在 VPS 终端运行 `sudo bash /home/ubuntu/Mia/server/deploy/install-ubuntu.sh`，隐藏输入北京地域百炼 Key 并自行保存网关令牌；之后验证 `mia-gateway`、WSS 握手和真实百炼语音。当前尚不能宣称步骤 1 完成。
 
 ## 分阶段执行计划
 
@@ -77,13 +84,13 @@ flowchart LR
 
 ## 部署、安全与费用边界
 
-- 新 VPS 的 SSH 登录方式待核对；密码不进入聊天或仓库。安装脚本在 VPS 终端隐藏读取百炼 Key，服务以独立 `mia` 用户运行，密钥文件权限限制为 `0600`。安装脚本不覆盖现有 Caddy 站点配置。
+- 新 VPS 以专用 SSH 公钥登录 `ubuntu` 并通过 `sudo` 管理服务；密码不进入聊天或仓库。安装脚本在 VPS 终端隐藏读取百炼 Key，服务以独立 `mia` 用户运行，密钥文件权限限制为 `0600`。安装脚本不覆盖现有 Caddy 站点配置。
 - 客户端默认地址为 `wss://8kraw.cloud/xiaozhi/v1/`；首次使用需在设置中填网关令牌。网页证书由 Caddy 自动申请，须确认 DNS、80/443 端口和现有站点配置。
 - 云 ASR、对话和 TTS 都按百炼实际计费；仓库内没有实时价格。上线前在控制台核对额度、地域与模型可用性，并在真实联调记录成本。
 - 不持有 Apple 签名凭据；CI 产物不可直接安装，需用户自行重签。模拟器构建与测试成功不等同于 iPhone 麦克风、蓝牙及性能验收。
 
 ## 当前等待的外部结果
 
-1. VPS 上执行部署后，仅回传 `systemctl status mia-gateway --no-pager` 和 WSS 握手检查的结果摘要；**不要发送百炼 Key、网关令牌或 SSH 密码**。
+1. 用户在 VPS 终端完成北京地域百炼 Key 的隐藏输入并保存网关令牌；Codex 随后通过 SSH 检查 `mia-gateway` 和 WSS 握手。**不要发送百炼 Key、网关令牌或 SSH 密码**。
 2. 用户重签并在 iPhone 上测试 GitHub 的 IPA，反馈语音、字幕、耳机切换及 UI 实际表现。
 3. 提供获授权的、已分层绑定的 Mia Cubism 模型。单张概念图无法直接生成真正的 `.moc3`；目前没有可执行绑定的设备或画师。
