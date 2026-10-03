@@ -44,6 +44,9 @@ final class MiaVoiceSession: ObservableObject {
                 try await transport?.abort(sessionID: sessionID)
                 audio?.stop()
                 audio = nil
+                pendingPlaybackFrames = 0
+                speechEnded = false
+                audioLevel = 0
                 captionTimeline.interrupt()
                 caption = ""
                 await startListening()
@@ -133,6 +136,7 @@ final class MiaVoiceSession: ObservableObject {
             captionTimeline.handle(event)
             caption = captionTimeline.visibleText
         case .ttsStop:
+            guard state == .speaking else { break }
             speechEnded = true
             finishSpeechIfPlayed()
         case .userTranscript:
