@@ -45,8 +45,8 @@ flowchart LR
 | 首页视觉 | 联调版完成 | 原创城市背景、选定 Mia 静态立绘、深色字幕板、声波和麦克风；已检查 GitHub 模拟器截图。静态立绘没有 Live2D 动画和口型。 |
 | iPhone 语音管线 | 代码完成，真机待验 | WebSocket 握手、Opus 编解码、麦克风、播放、打断、尾帧补齐与轮次间采集关闭；模拟器测试通过，尚无真实 iPhone 录放反馈。 |
 | 仅 Mia 字幕 | 代码完成，时序待校准 | 用户识别文本被忽略；Mia 字幕按播放回调推进。多句、真实语速和弱网情况待验。 |
-| 火山网关迁移 | 代码与本地测试进行中 | 火山三条 API 已在真实中国 VPS 独立验证；新 Provider、网关选择及自动化测试须经 CI 和部署复核。百炼实现暂留回滚。 |
-| VPS 部署 | 旧网关与 WSS 已验，火山待部署 | 专用 SSH、公网 HTTPS、Caddy TLS 和旧进程的 WSS 令牌握手已通过；火山代码与空白 Key 字段部署后，由用户统一填 Key，再做新网关真实全链路。 |
+| 火山网关迁移 | 代码、CI 与服务器静态部署完成；真实全链路待验 | 新 Provider、网关选择及百炼回滚已推送；本地和 VPS 各 23 项服务端测试通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过。火山三条 API 已在 VPS 独立真实验证，尚未用新网关串联。 |
+| VPS 部署 | 新代码与空白 Key 配置已部署；切换待用户填 Key | 新代码已安装到 `/opt/mia/server`；Caddy TLS 有效，旧进程公网 WSS 令牌握手通过，令牌保留且环境文件权限 `0600`。按用户要求未重启服务，用户最后填两把 Key 后再切换。 |
 | 正式 Live2D | 输入缺失 | 没有分层源稿、`.cmo3`、`.moc3` 或已绑定授权模型，无法完成 Cubism 运行时与口型验收。 |
 
 ### 2026-10-03 继续开发核对
@@ -82,6 +82,7 @@ flowchart LR
 - 用户已在真实中国 VPS 独立验证三条 API：方舟北京 `doubao-seed-2-1-lite-260915` 返回 HTTP 200、内容 `OK`；Seed-TTS 2.0 双向 WebSocket 生成 171592 字节 24 kHz PCM；豆包流式 ASR 2.0 识别由该音频转换的 16 kHz PCM，结果为“你好，我是 Mia。这是实时语音测试。”这不等于新网关全链路已验证。
 - 新 Provider 使用既定 ASR 二进制 WebSocket、方舟 HTTP 和 TTS 双向 WebSocket；TTS 以 VPS 实测成功脚本为准，在 `TaskRequest` 后发送 `FinishSession`，再接收 `TTSResponse` 音频。第一阶段 LLM 保持非流式。
 - `VOLC_ARK_API_KEY` 仅用于方舟；一把 `VOLC_VOICE_API_KEY` 同时用于 ASR 和 TTS。安装脚本只预置空白字段并保留现有网关令牌；用户要求在代码部署完成后统一设置两把 Key。填 Key 前不得把旧进程的 WSS 成功当成火山网关验收。
+- 提交 `dcc3dbd` 已推送到 `origin/feature/mia-ios-bootstrap`；[GitHub 服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)成功。本地与 VPS 的 23 项服务端测试、VPS `pip check`、Caddy 配置校验均通过。VPS 已备份旧代码及环境文件、安装新代码和空白字段；令牌与旧 Key 值均未变化，文件权限 `0600`，旧服务仍运行且公网 WSS 握手成功。当前仅完成静态部署，火山网关尚未重启或真实联调。
 
 ## 分阶段执行计划
 

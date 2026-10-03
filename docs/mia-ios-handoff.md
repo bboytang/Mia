@@ -32,11 +32,13 @@ git status --short
 | 模块 | 位置 | 已验证 | 未验证 |
 | --- | --- | --- | --- |
 | iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕 | `ios/MiaApp/`、`ios/MiaTests/` | [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37089783261)通过模拟器测试、真机编译，上传 `Mia-unsigned.ipa`、SHA-256 与首页截图；已目视检查截图。 | 用户重签后在真机上的录放、耳机切换、弱网与字幕时序。 |
-| 小智兼容网关、火山 Provider、Opus | `server/xiaozhi_gateway.py`、`server/volcengine_provider.py`、`server/tests/` | 火山三条 API 在 VPS 独立真实验证；新增协议与旧网关回归测试在本地通过。百炼 Provider 保留回滚。 | 新代码部署、网关全链路与真机语音。 |
-| Ubuntu 部署材料 | `server/deploy/`、`server/README.md` | 旧部署的 Caddy TLS、WSS 令牌握手已验证；新脚本保留令牌并预置火山字段。 | 新代码部署后检查、用户填写两把 Key、重启和真实全链路。 |
+| 小智兼容网关、火山 Provider、Opus | `server/xiaozhi_gateway.py`、`server/volcengine_provider.py`、`server/tests/` | 火山三条 API 在 VPS 独立真实验证；23 项服务端测试在本地与 VPS 通过，[新服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过。百炼 Provider 保留回滚。 | 填 Key 后的新网关全链路与真机语音。 |
+| Ubuntu 部署材料 | `server/deploy/`、`server/README.md` | 新代码已部署到 `/opt/mia/server`；Caddy 校验、旧进程公网 WSS 握手、令牌保留、空白火山 Key 字段与 `0600` 权限均核对通过。 | 用户填写两把 Key、重启并验证真实全链路。 |
 | 角色 | `docs/design/`、`ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/` | 已选概念图和静态图可在 GitHub 查看，模拟器首页已展示。 | 真正 Cubism 模型制作、许可和运行时口型。 |
 
 **测试边界**：自动化服务端测试使用假提供者；火山 API 独立真实验证不等于新网关全链路已验证。模拟器构建成功不等于 iPhone 真机语音通过。GitHub Actions 产物有有效期，继续开发时用最新成功构建。
+
+**最新部署快照**：提交 `dcc3dbd` 已推送并通过服务端 CI；VPS 新代码和配置字段已落盘，旧 `mia-gateway` 进程按用户要求尚未重启。火山 Key 均为空，旧网关令牌未改变。部署前的服务器代码与环境文件已分别备份为 `/opt/mia/server.before-volc-dcc3dbd`、`/etc/mia/gateway.env.before-volc-dcc3dbd`。用户最后填两把 Key 后，才能切换新进程并进行真实联调。
 
 ## 下一步顺序与交接所需信息
 
