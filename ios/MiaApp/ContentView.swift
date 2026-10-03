@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showsSettings = false
+    @StateObject private var session = MiaVoiceSession()
+    @AppStorage("mia.serverURL") private var serverURL = ""
 
     var body: some View {
         GeometryReader { geometry in
@@ -38,7 +40,14 @@ struct ContentView: View {
                     captionPanel
                     waveform.padding(.top, 22)
                     Button {
-                        showsSettings = true
+                        if serverURL.isEmpty {
+                            showsSettings = true
+                        } else {
+                            Task {
+                                await session.toggleTalk(endpoint: serverURL,
+                                                         token: MiaTokenStore.read())
+                            }
+                        }
                     } label: {
                         Image(systemName: "mic.fill")
                             .font(.system(size: 31, weight: .light))
@@ -56,9 +65,10 @@ struct ContentView: View {
                             .overlay(Circle().stroke(.white.opacity(0.8), lineWidth: 1.5))
                             .shadow(color: .purple.opacity(0.9), radius: 22)
                     }
-                    .accessibilityLabel("语音设置")
+                    .accessibilityLabel(session.state == .listening ? "结束说话" : "开始说话")
+                    .disabled(session.state == .connecting)
                     .padding(.top, 12)
-                    Text("语音连接准备中 · 点击配置服务端")
+                    Text(serverURL.isEmpty ? "点击配置服务端" : session.state.rawValue)
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.8))
                         .padding(.top, 14)
@@ -70,6 +80,14 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showsSettings) {
             MiaSettingsView()
+        }
+        .alert("连接出错", isPresented: Binding(
+            get: { session.errorMessage != nil },
+            set: { if !$0 { session.errorMessage = nil } }
+        )) {
+            Button("知道了") { session.errorMessage = nil }
+        } message: {
+            Text(session.errorMessage ?? "未知错误")
         }
     }
 
@@ -98,7 +116,7 @@ struct ContentView: View {
     }
 
     private var captionPanel: some View {
-        Text("Mia 的回答会显示在这里")
+        Text(session.caption.isEmpty ? "Mia 的回答会显示在这里" : session.caption)
             .font(.system(size: 17, weight: .regular, design: .rounded))
             .foregroundStyle(.white.opacity(0.85))
             .frame(maxWidth: .infinity, minHeight: 80)
@@ -115,7 +133,8 @@ struct ContentView: View {
             ForEach(0..<27, id: \.self) { index in
                 Capsule()
                     .fill(index.isMultiple(of: 2) ? Color.cyan : Color.purple)
-                    .frame(width: 3, height: CGFloat([9, 16, 25, 13, 33, 20, 12][index % 7]))
+                    .frame(width: 3, height: CGFloat([9, 16, 25, 13, 33, 20, 12][index % 7])
+                           * CGFloat(1 + min(session.audioLevel * 5, 1)))
             }
         }
         .frame(height: 37)
@@ -126,6 +145,8 @@ struct ContentView: View {
 private struct MiaSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("mia.serverURL") private var serverURL = ""
+    @State private var accessToken = ""
+    @State private var tokenStatus = ""
 
     var body: some View {
         NavigationStack {
@@ -140,13 +161,26 @@ private struct MiaSettingsView: View {
                 } footer: {
                     Text("请填写支持小智 WebSocket 协议的安全连接地址。")
                 }
+                Section("访问令牌") {
+                    SecureField("服务端令牌（可选）", text: $accessToken)
+                    Button("保存令牌") {
+                        do {
+                            try MiaTokenStore.save(accessToken)
+                            tokenStatus = "已保存在本机钥匙串"
+                        } catch {
+                            tokenStatus = "保存失败：\(error.localizedDescription)"
+                        }
+                    }
+                    if !tokenStatus.isEmpty { Text(tokenStatus).font(.footnote) }
+                }
                 Section("开发进度") {
                     LabeledContent("WebSocket 协议", value: "已接入")
-                    LabeledContent("语音收发", value: "开发中")
+                    LabeledContent("语音收发", value: "等待真机联调")
                     LabeledContent("Live2D 角色", value: "等待模型素材")
                 }
             }
             .navigationTitle("设置")
+            .onAppear { accessToken = MiaTokenStore.read() ?? "" }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("完成") { dismiss() }

@@ -3,11 +3,13 @@ import Foundation
 enum MiaConnectionError: LocalizedError {
     case invalidEndpoint
     case unexpectedMessage
+    case handshakeTimeout
 
     var errorDescription: String? {
         switch self {
         case .invalidEndpoint: "请输入有效的 wss:// 服务端地址"
         case .unexpectedMessage: "服务端返回了无法识别的消息"
+        case .handshakeTimeout: "服务端握手超时"
         }
     }
 }
