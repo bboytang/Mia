@@ -22,20 +22,17 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
 
+                Image("MiaPortrait")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: geometry.size.width * 1.12,
+                           height: geometry.size.height * 0.75)
+                    .position(x: geometry.size.width / 2,
+                              y: geometry.size.height * 0.49)
+                    .accessibilityLabel("Mia 角色概念立绘")
+
                 VStack(spacing: 0) {
                     header
-                    Spacer()
-                    VStack(spacing: 8) {
-                        Image(systemName: "sparkles.rectangle.stack")
-                            .font(.system(size: 31, weight: .ultraLight))
-                        Text("Mia 即将登场")
-                            .font(.system(size: 20, weight: .medium, design: .rounded))
-                        Text("角色动画模型准备中")
-                            .font(.footnote)
-                            .foregroundStyle(.white.opacity(0.72))
-                    }
-                    .foregroundStyle(.white.opacity(0.86))
-                    .shadow(color: .purple.opacity(0.8), radius: 15)
                     Spacer()
                     captionPanel
                     waveform.padding(.top, 22)
