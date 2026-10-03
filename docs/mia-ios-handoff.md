@@ -24,7 +24,7 @@ git status --short
 - **视觉**：用户在三款角色比较图中选定**右侧第三款**紫发 Mia 和蓝紫未来都市；比较图、最终概念图、背景、字幕板、声波及麦克风参考均在[视觉参考目录](design/README.md)。功能入口的具体种类和位置尚未最终定稿。
 - **真正 Live2D**：最终必须接入 Cubism 绑定模型，并以 Mia 播放音量驱动 `ParamMouthOpenY`。目前只有概念图和静态立绘，没有分层源稿、`.cmo3`、`.model3.json`、`.moc3` 或可用授权模型；用户也没有 Windows/Cubism 环境或已委托画师。此项是实际阻塞，不能用静态图、视频或模拟嘴形宣称完成。
 - **云服务**：阿里云百炼北京地域，已开通并有 Key；默认 `qwen3-asr-flash`、`qwen-plus`、`qwen3-tts-flash` 与 Cherry 音色。Key 从未提交到仓库。不要回退到 OpenAI 方案。
-- **VPS**：现用中国内地服务器 `43.143.230.174`，域名 `8kraw.cloud` 已解析至该地址。专用公钥可登录 `ubuntu` 并使用 `sudo`；Caddy 已取得 `8kraw.cloud` 的 TLS 证书，外网 HTTPS 可访问。网关依赖和源码已安装，VPS 上 9 项服务端测试通过；百炼 Key 尚待用户在 VPS 终端隐藏输入，`mia-gateway` 与 WSS 握手尚未验收。部署进度见[路线图](mia-ios-roadmap.md)。
+- **VPS**：现用中国内地服务器 `43.143.230.174`，域名 `8kraw.cloud` 已解析至该地址。专用公钥可登录 `ubuntu` 并使用 `sudo`；Caddy 已取得 `8kraw.cloud` 的 TLS 证书，外网 HTTPS 可访问。网关依赖和源码已安装，VPS 上 9 项服务端测试通过；安装器已修复含点号的百炼 Key 被误拒绝的问题并同步 VPS。Key 尚待用户在 VPS 终端隐藏输入，`mia-gateway` 与 WSS 握手尚未验收。部署进度见[路线图](mia-ios-roadmap.md)。
 - **Apple**：用户没有付费 Apple Developer Program，但能自行重签 IPA。GitHub macOS runner 编译未签名 IPA；不把 TestFlight/App Store 当作当前交付途径。
 
 ## 当前代码与验证快照

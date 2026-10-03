@@ -67,6 +67,7 @@ flowchart LR
 - 已核对 SSH 主机指纹，并以专用公钥登录 `ubuntu`；`sudo` 可用。服务器为 Ubuntu 24.04.4 LTS，约 2 GB 内存、50 GB 系统盘。
 - VPS 访问 GitHub 超时，已从本地提交 `70db0c8` 将 `server/` 传到 `/home/ubuntu/Mia/server`；创建 `mia` 服务账号和 `/opt/mia/.venv`，安装 `libopus0`、Caddy 与服务端 Python 依赖。虚拟环境 `pip check`、9 项服务端测试和安装脚本语法检查均通过。
 - 已备份 Caddy 的初始配置，并启用仓库的 `8kraw.cloud` 反向代理模板。Caddy 已取得有效 TLS 证书；从外网请求 `https://8kraw.cloud/` 返回 HTTP 200。80/443 在 VPS 上监听。
+- 用户首次输入的北京地域百炼 Key 含点号，旧安装器正则错误拒绝；已允许点号并将修复同步到 VPS。用模拟 Key 验证带点号输入能通过校验、带空格输入仍被拒绝，脚本语法检查通过。真实 Key 尚未写入 VPS。
 - **待完成**：用户在 VPS 终端运行 `sudo bash /home/ubuntu/Mia/server/deploy/install-ubuntu.sh`，隐藏输入北京地域百炼 Key 并自行保存网关令牌；之后验证 `mia-gateway`、WSS 握手和真实百炼语音。当前尚不能宣称步骤 1 完成。
 
 ## 分阶段执行计划

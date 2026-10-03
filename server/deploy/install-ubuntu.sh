@@ -14,7 +14,7 @@ fi
 
 read -r -s -p '输入北京地域百炼 API Key（输入不回显）：' dashscope_key
 echo
-if [[ ! $dashscope_key =~ ^sk-[A-Za-z0-9_-]+$ ]]; then
+if [[ ! $dashscope_key =~ ^sk-[A-Za-z0-9_.-]+$ ]]; then
   echo 'API Key 格式不符合预期，未写入配置。' >&2
   exit 1
 fi
