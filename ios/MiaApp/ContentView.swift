@@ -8,13 +8,6 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Image("CityBackground")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-                    .ignoresSafeArea()
-
                 LinearGradient(
                     colors: [.black.opacity(0.32), .clear, .black.opacity(0.58)],
                     startPoint: .top,
@@ -75,6 +68,13 @@ struct ContentView: View {
                 .padding(.bottom, 22)
             }
         }
+        .background {
+            Image("CityBackground")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        }
+        .preferredColorScheme(.dark)
         .sheet(isPresented: $showsSettings) {
             MiaSettingsView()
         }
