@@ -50,8 +50,10 @@ final class MiaOpusCodec {
         var payload = [UInt8](repeating: 0, count: 4_000)
         let length = samples.withUnsafeBufferPointer { pcm in
             payload.withUnsafeMutableBufferPointer { output in
-                opus_encode(encoder, pcm.baseAddress, Int32(inputFrameSamples),
-                            output.baseAddress, Int32(output.count))
+                guard let pcmData = pcm.baseAddress,
+                      let outputData = output.baseAddress else { return Int32(-1) }
+                return opus_encode(encoder, pcmData, Int32(inputFrameSamples),
+                                   outputData, Int32(output.count))
             }
         }
         guard length > 0 else { throw MiaOpusError.encodeFailed(length) }
@@ -63,9 +65,10 @@ final class MiaOpusCodec {
         var samples = [Int16](repeating: 0, count: maxOutputSamples)
         let count = payload.withUnsafeBytes { input in
             samples.withUnsafeMutableBufferPointer { output in
-                opus_decode(decoder, input.bindMemory(to: UInt8.self).baseAddress,
-                            Int32(payload.count), output.baseAddress,
-                            Int32(maxOutputSamples), 0)
+                guard let outputData = output.baseAddress else { return Int32(-1) }
+                return opus_decode(decoder, input.bindMemory(to: UInt8.self).baseAddress,
+                                   Int32(payload.count), outputData,
+                                   Int32(maxOutputSamples), 0)
             }
         }
         guard count > 0 else { throw MiaOpusError.decodeFailed(count) }
