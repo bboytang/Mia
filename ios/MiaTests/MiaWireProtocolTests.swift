@@ -33,4 +33,44 @@ final class MiaWireProtocolTests: XCTestCase {
 
         XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data), .ttsSentence("你好，我是 Mia。"))
     }
+
+    func testSendsManualListenControl() throws {
+        let data = try MiaWireProtocol.startListening(sessionID: "s-1")
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+
+        XCTAssertEqual(object["type"] as? String, "listen")
+        XCTAssertEqual(object["state"] as? String, "start")
+        XCTAssertEqual(object["mode"] as? String, "manual")
+        XCTAssertEqual(object["session_id"] as? String, "s-1")
+    }
+
+    func testSendsStopAndAbortControl() throws {
+        let stop = try XCTUnwrap(JSONSerialization.jsonObject(
+            with: MiaWireProtocol.stopListening(sessionID: "s-1")) as? [String: Any])
+        let abort = try XCTUnwrap(JSONSerialization.jsonObject(
+            with: MiaWireProtocol.abort(sessionID: "s-1")) as? [String: Any])
+
+        XCTAssertEqual(stop["state"] as? String, "stop")
+        XCTAssertEqual(stop["session_id"] as? String, "s-1")
+        XCTAssertEqual(abort["type"] as? String, "abort")
+        XCTAssertEqual(abort["session_id"] as? String, "s-1")
+    }
+
+    func testParsesSpeechLifecycleAndEmotion() throws {
+        XCTAssertEqual(
+            try MiaWireProtocol.parseServerEvent(Data(#"{"type":"tts","state":"start"}"#.utf8)),
+            .ttsStart)
+        XCTAssertEqual(
+            try MiaWireProtocol.parseServerEvent(Data(#"{"type":"tts","state":"stop"}"#.utf8)),
+            .ttsStop)
+        XCTAssertEqual(
+            try MiaWireProtocol.parseServerEvent(Data(#"{"type":"llm","emotion":"happy"}"#.utf8)),
+            .emotion("happy"))
+    }
+
+    func testKeepsUserSpeechSeparateFromMiaSpeech() throws {
+        let data = Data(#"{"type":"stt","text":"用户说的话"}"#.utf8)
+
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data), .userTranscript("用户说的话"))
+    }
 }
