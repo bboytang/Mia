@@ -6,12 +6,24 @@ settings:
     SWIFT_VERSION: '5.9'
     IPHONEOS_DEPLOYMENT_TARGET: '17.0'
     TARGETED_DEVICE_FAMILY: '1'
+packages:
+  Opus:
+    url: https://github.com/sbooth/opus-binary-xcframework
+    exactVersion: 0.3.0
+  Ogg:
+    url: https://github.com/sbooth/ogg-binary-xcframework
+    exactVersion: 0.1.3
 targets:
   Mia:
     type: application
     platform: iOS
     sources:
       - MiaApp
+    dependencies:
+      - package: Opus
+        product: opus
+      - package: Ogg
+        product: ogg
     info:
       path: MiaApp/Info.plist
       properties:
