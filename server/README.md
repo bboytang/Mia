@@ -33,4 +33,24 @@ python -m server.xiaozhi_gateway
 
 部署模板位于 `server/deploy/`：将代码放在 `/opt/mia`，建立非 root 用户 `mia` 和虚拟环境；把 `gateway.env` 放到 `/etc/mia/` 并限制权限；用 systemd 启动网关，再让 Caddy 将 `8kraw.cloud` 上的 `/xiaozhi/v1/` 转发至本地 `127.0.0.1:8765`。域名已解析至 `199.102.217.22`；还需确认 VPS 放行 80/443 端口以申请 TLS 证书。不要把密钥或令牌写进仓库。
 
+北京地域的 VPS 快速安装（在你自己的终端执行，API Key 只在 VPS 上隐藏输入）：
+
+```bash
+ssh root@199.102.217.22
+git clone --branch feature/mia-ios-bootstrap https://github.com/bboytang/Mia.git /root/Mia
+bash /root/Mia/server/deploy/install-ubuntu.sh
+```
+
+脚本安装 Python、libopus、Caddy 和 systemd 服务，生成随机网关令牌并显示一次供 iPhone 设置使用；它不会覆盖现有 Caddy 配置。若 `git clone` 要求 GitHub 登录，先在 VPS 上用你已有的 GitHub 访问方式取得仓库即可，不要把 GitHub 凭据填进脚本。接着编辑 `/etc/caddy/Caddyfile`，在不删除已有站点的前提下加入 `server/deploy/Caddyfile.example` 的内容，然后运行：
+
+```bash
+caddy validate --config /etc/caddy/Caddyfile
+systemctl reload caddy
+systemctl status mia-gateway --no-pager
+curl -I https://8kraw.cloud/
+cd /root/Mia && . /opt/mia/.venv/bin/activate && python server/deploy/check_wss.py
+```
+
+站点根路径返回 404 也可以；握手脚本会验证 TLS、令牌及小智协议，但不会调用百炼 API。若 `80/443` 被防火墙拦截，先在 VPS 和云厂商安全组中放行。更新代码后重新运行脚本会生成**新的**客户端令牌，必须同步更新 iPhone 钥匙串中的令牌。
+
 目前的自动化测试用内存假提供者验证协议与 Opus，不会调用真实 API。需要开通账号并在 VPS 与 iPhone 上实测中文识别、声音、延迟、中断和费用后，才能宣称语音聊天交付完成。

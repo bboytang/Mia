@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var showsSettings = false
     @StateObject private var session = MiaVoiceSession()
-    @AppStorage("mia.serverURL") private var serverURL = ""
+    @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
 
     var body: some View {
         GeometryReader { geometry in
@@ -40,7 +40,7 @@ struct ContentView: View {
                     captionPanel
                     waveform.padding(.top, 22)
                     Button {
-                        if serverURL.isEmpty {
+                        if serverURL.isEmpty || MiaTokenStore.read() == nil {
                             showsSettings = true
                         } else {
                             Task {
@@ -68,7 +68,7 @@ struct ContentView: View {
                     .accessibilityLabel(session.state == .listening ? "结束说话" : "开始说话")
                     .disabled(session.state == .connecting)
                     .padding(.top, 12)
-                    Text(serverURL.isEmpty ? "点击配置服务端" : session.state.rawValue)
+                    Text(MiaTokenStore.read() == nil ? "先在设置中填写网关令牌" : session.state.rawValue)
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.8))
                         .padding(.top, 14)
@@ -144,7 +144,7 @@ struct ContentView: View {
 
 private struct MiaSettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("mia.serverURL") private var serverURL = ""
+    @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
     @State private var accessToken = ""
     @State private var tokenStatus = ""
 
@@ -152,7 +152,7 @@ private struct MiaSettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("wss://你的域名/xiaozhi/v1/", text: $serverURL)
+                    TextField("wss://8kraw.cloud/xiaozhi/v1/", text: $serverURL)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .keyboardType(.URL)
@@ -162,7 +162,7 @@ private struct MiaSettingsView: View {
                     Text("请填写支持小智 WebSocket 协议的安全连接地址。")
                 }
                 Section("访问令牌") {
-                    SecureField("服务端令牌（可选）", text: $accessToken)
+                    SecureField("网关访问令牌", text: $accessToken)
                     Button("保存令牌") {
                         do {
                             try MiaTokenStore.save(accessToken)
