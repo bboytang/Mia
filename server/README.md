@@ -31,12 +31,12 @@ python -m server.xiaozhi_gateway
 
 `MIA_BAILIAN_REGION` 必须与 API Key 的地域相同，目前支持北京和新加坡；美国地域不支持此处采用的 OpenAI 兼容 ASR 接口。可选变量：`MIA_ASR_MODEL`、`MIA_CHAT_MODEL`、`MIA_TTS_MODEL`、`MIA_TTS_VOICE`。客户端设置中的访问令牌填 `MIA_GATEWAY_TOKEN`，服务端地址填 `wss://8kraw.cloud/xiaozhi/v1/`。**不能直接把本机监听的 `ws://` 地址填进 iPhone 客户端。**
 
-部署模板位于 `server/deploy/`：将代码放在 `/opt/mia`，建立非 root 用户 `mia` 和虚拟环境；把 `gateway.env` 放到 `/etc/mia/` 并限制权限；用 systemd 启动网关，再让 Caddy 将 `8kraw.cloud` 上的 `/xiaozhi/v1/` 转发至本地 `127.0.0.1:8765`。域名已解析至 `199.102.217.22`；还需确认 VPS 放行 80/443 端口以申请 TLS 证书。不要把密钥或令牌写进仓库。
+部署模板位于 `server/deploy/`：将代码放在 `/opt/mia`，建立非 root 用户 `mia` 和虚拟环境；把 `gateway.env` 放到 `/etc/mia/` 并限制权限；用 systemd 启动网关，再让 Caddy 将 `8kraw.cloud` 上的 `/xiaozhi/v1/` 转发至本地 `127.0.0.1:8765`。域名已解析至中国内地 VPS `43.143.230.174`；还需确认域名备案和服务器接入要求，以及 VPS 的 80/443 端口是否放行，以申请 TLS 证书。不要把密钥或令牌写进仓库。
 
-北京地域的 VPS 快速安装（在你自己的终端执行，API Key 只在 VPS 上隐藏输入）：
+使用北京地域百炼 Key 的 VPS 快速安装（在你自己的终端执行，API Key 只在 VPS 上隐藏输入）：
 
 ```bash
-ssh root@199.102.217.22
+ssh root@43.143.230.174
 git clone --branch feature/mia-ios-bootstrap https://github.com/bboytang/Mia.git /root/Mia
 bash /root/Mia/server/deploy/install-ubuntu.sh
 ```

@@ -14,7 +14,7 @@ Mia 是在 iPhone 上直接使用的中文语音伙伴。打开应用看到未�
 | 语音协议 | 小智兼容 WebSocket v1、上行 16 kHz Opus、下行 24 kHz Opus |
 | 交互 | 首版按键开始/结束说话；回答时可打断 |
 | 云服务 | 阿里云百炼**北京地域**：`qwen3-asr-flash` → `qwen-plus` → `qwen3-tts-flash`，默认 Cherry 音色 |
-| 服务器 | 美国 Ubuntu VPS，`199.102.217.22`；域名 `8kraw.cloud`；Caddy 提供 WSS，Python 网关只监听本机 |
+| 服务器 | 中国内地 VPS，`43.143.230.174`；域名 `8kraw.cloud`；Caddy 提供 WSS，Python 网关只监听本机 |
 | 凭据 | 百炼 Key 仅在 VPS；iPhone 钥匙串仅保存随机网关令牌；仓库不保存密钥和密码 |
 | 编译安装 | GitHub Actions 的 macOS runner 生成未签名 IPA；用户自行签名安装。当前没有付费 Apple Developer 账号，不承诺 TestFlight/App Store |
 | 角色 | 已选紫发黑紫赛博造型；当前是静态概念立绘，正式版须替换为获得授权的 Cubism 绑定模型 |
@@ -54,8 +54,13 @@ flowchart LR
 - 已核对本地工作分支 `feature/mia-ios-bootstrap` 与 GitHub 远端均指向 `98c90ed`，核对前工作树干净；三款角色比较图仍以**右侧第三款**为准。
 - [iOS 构建](https://github.com/bboytang/Mia/actions/runs/37089783261)和[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37089492807)的作业步骤均为成功。iOS 的 `Mia-iOS-unsigned-b05b6c99...` 产物尚未过期；其应用代码仍是 `b05b6c99`，后续文档提交不会生成新 IPA。
 - 使用项目 `.venv/bin/python` 运行 `python -m unittest discover -s server/tests -v`，9 项通过；`bash -n server/deploy/install-ubuntu.sh` 和握手脚本的 `py_compile` 通过。受限沙箱内不能创建回环套接字，服务端测试在允许本地套接字的执行环境中重跑后通过。
-- `8kraw.cloud` 解析为 `199.102.217.22`。本环境可连接 VPS 的 SSH 端口，但服务器要求密码；本会话没有登录凭据。HTTPS 443 当前拒绝连接。尚无 `mia-gateway`、Caddy TLS 或 WSS 握手成功的 VPS 证据，步骤 1 仍待执行。
-- 用户目前暂时无法登录 VPS；已有可用于后续联调的 iPhone。待 VPS 可登录时，按[部署说明](../server/README.md)安装、配置 Caddy 并运行握手检查。仅回传 `systemctl status mia-gateway --no-pager`、`caddy validate --config /etc/caddy/Caddyfile` 和 `check_wss.py` 的结果摘要，不传密码、Key 或令牌。步骤 1 成功后再用重签 iPhone IPA 开始步骤 2。
+- 迁移前美国 VPS 的 SSH 端口可达但需要密码，HTTPS 443 拒绝连接。这些探测结果不适用于现用中国内地 VPS；尚无 `mia-gateway`、Caddy TLS 或 WSS 握手成功的证据，步骤 1 仍待执行。
+- 迁移前用户暂时无法登录旧 VPS；已有可用于后续联调的 iPhone。新 VPS 登录待核对。可登录后按[部署说明](../server/README.md)安装、配置 Caddy 并运行握手检查。仅回传 `systemctl status mia-gateway --no-pager`、`caddy validate --config /etc/caddy/Caddyfile` 和 `check_wss.py` 的结果摘要，不传密码、Key 或令牌。步骤 1 成功后再用重签 iPhone IPA 开始步骤 2。
+
+### 2026-10-03 服务器地址变更
+
+- 用户将 VPS 改为中国内地服务器 `43.143.230.174`；`8kraw.cloud` 已解析至新地址。SSH 22 可达，但登录尚未验证；HTTPS 443 拒绝连接。新 VPS 的系统配置、域名备案、80 端口与 WSS 尚待核对，迁移前网络结果不能作为新服务器的验收依据。
+- iOS 客户端和 WSS 握手工具继续使用 `wss://8kraw.cloud/xiaozhi/v1/`，无需改变应用端地址。先在新 VPS 完成网关与 Caddy 部署，再进行真机联调。
 
 ## 分阶段执行计划
 
@@ -72,7 +77,7 @@ flowchart LR
 
 ## 部署、安全与费用边界
 
-- VPS 使用 root 通过 SSH 密码登录，但密码不进入聊天或仓库。安装脚本在 VPS 终端隐藏读取百炼 Key，服务以独立 `mia` 用户运行，密钥文件权限限制为 `0600`。安装脚本不覆盖现有 Caddy 站点配置。
+- 新 VPS 的 SSH 登录方式待核对；密码不进入聊天或仓库。安装脚本在 VPS 终端隐藏读取百炼 Key，服务以独立 `mia` 用户运行，密钥文件权限限制为 `0600`。安装脚本不覆盖现有 Caddy 站点配置。
 - 客户端默认地址为 `wss://8kraw.cloud/xiaozhi/v1/`；首次使用需在设置中填网关令牌。网页证书由 Caddy 自动申请，须确认 DNS、80/443 端口和现有站点配置。
 - 云 ASR、对话和 TTS 都按百炼实际计费；仓库内没有实时价格。上线前在控制台核对额度、地域与模型可用性，并在真实联调记录成本。
 - 不持有 Apple 签名凭据；CI 产物不可直接安装，需用户自行重签。模拟器构建与测试成功不等同于 iPhone 麦克风、蓝牙及性能验收。
