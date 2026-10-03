@@ -84,4 +84,11 @@ final class MiaWireProtocolTests: XCTestCase {
 
         XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data), .userTranscript("用户说的话"))
     }
+
+    func testIgnoresUnknownMessageAndRejectsMalformedJSON() throws {
+        XCTAssertEqual(
+            try MiaWireProtocol.parseServerEvent(Data(#"{"type":"custom","value":1}"#.utf8)),
+            .other)
+        XCTAssertThrowsError(try MiaWireProtocol.parseServerEvent(Data("{".utf8)))
+    }
 }
