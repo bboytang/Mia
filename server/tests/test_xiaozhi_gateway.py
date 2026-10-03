@@ -1,13 +1,16 @@
 import asyncio
 import json
 import unittest
+from unittest.mock import patch
 
 from websockets.asyncio.client import connect
 from websockets.asyncio.server import serve
 from websockets.exceptions import ConnectionClosed
 
 from server.opus_pcm import OpusEncoder
-from server.xiaozhi_gateway import MiaGateway
+from server.bailian_provider import BailianProvider
+from server.volcengine_provider import VolcengineProvider
+from server.xiaozhi_gateway import MiaGateway, selected_provider
 
 
 class FakeProvider:
@@ -53,6 +56,18 @@ class SlowProvider(FakeProvider):
 
 
 class MiaGatewayTests(unittest.IsolatedAsyncioTestCase):
+    def test_provider_selection_and_rollback(self):
+        with patch.dict("os.environ", {"VOLC_ARK_API_KEY": "placeholder-ark",
+                                    "VOLC_VOICE_API_KEY": "placeholder-voice"}):
+            self.assertIs(selected_provider(), VolcengineProvider)
+        with patch.dict("os.environ", {"MIA_PROVIDER": "bailian",
+                                    "DASHSCOPE_API_KEY": "placeholder-old",
+                                    "MIA_BAILIAN_REGION": "cn-beijing"}):
+            self.assertIs(selected_provider(), BailianProvider)
+        with patch.dict("os.environ", {"MIA_PROVIDER": "invalid"}):
+            with self.assertRaises(ValueError):
+                selected_provider()
+
     async def asyncSetUp(self):
         self.provider = FakeProvider()
         self.gateway = MiaGateway("test-token", lambda: self.provider)
