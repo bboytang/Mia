@@ -106,6 +106,12 @@ final class MiaAudioIO {
         try? AVAudioSession.sharedInstance().setActive(false)
     }
 
+    func takeFinalMicrophoneFrame() -> [Int16]? {
+        inputLock.lock()
+        defer { inputLock.unlock() }
+        return frameBuffer.takePaddedFrame()
+    }
+
     private func handleMicrophone(_ input: AVAudioPCMBuffer, captureFormat: AVAudioFormat) {
         guard let converter else { return }
         let capacity = AVAudioFrameCount(Double(input.frameLength) * 16_000 /

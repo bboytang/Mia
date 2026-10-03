@@ -10,7 +10,7 @@ import uuid
 from websockets.asyncio.server import serve
 from websockets.exceptions import ConnectionClosed
 
-from server.openai_provider import OpenAIProvider
+from server.bailian_provider import BailianProvider
 from server.opus_pcm import OpusDecoder, OpusEncoder
 
 MAX_INPUT_BYTES = 16_000 * 2 * 30
@@ -18,7 +18,7 @@ OUTPUT_FRAME_BYTES = 24_000 * 2 * 60 // 1_000
 
 
 class MiaGateway:
-    def __init__(self, token: str, provider_factory=OpenAIProvider):
+    def __init__(self, token: str, provider_factory=BailianProvider):
         if not token:
             raise ValueError("必须设置 MIA_GATEWAY_TOKEN")
         self.token = token
@@ -165,8 +165,10 @@ class MiaGateway:
 async def main(host: str, port: int):
     token = os.environ.get("MIA_GATEWAY_TOKEN", "")
     gateway = MiaGateway(token)
-    if not os.environ.get("OPENAI_API_KEY"):
-        raise ValueError("必须设置 OPENAI_API_KEY")
+    if not os.environ.get("DASHSCOPE_API_KEY"):
+        raise ValueError("必须设置 DASHSCOPE_API_KEY")
+    if os.environ.get("MIA_BAILIAN_REGION") not in {"cn-beijing", "ap-southeast-1"}:
+        raise ValueError("必须设置 MIA_BAILIAN_REGION 为 cn-beijing 或 ap-southeast-1")
     async with serve(gateway.handle_client, host, port, max_size=65_536):
         print(f"Mia 语音网关已启动: ws://{host}:{port}", flush=True)
         await asyncio.Future()

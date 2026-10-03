@@ -18,18 +18,19 @@ python -m server.mock_xiaozhi
 
 ## 正式云语音网关
 
-`server.xiaozhi_gateway` 接收 16 kHz 单声道 Opus，调用云端中文 ASR、对话和 TTS，再发送 24 kHz 原始 Opus。iOS 只收到 Mia 的 TTS 文本，不收到用户 STT 文本。当前默认使用 OpenAI API；相关模型可通过环境变量替换。云服务可能收费，需用户自行开通额度。
+`server.xiaozhi_gateway` 接收 16 kHz 单声道 Opus，调用阿里云百炼的 `qwen3-asr-flash`、`qwen-plus`、`qwen3-tts-flash`，再发送 24 kHz Opus。iOS 只收到 Mia 的 TTS 文本，不收到用户 STT 文本。百炼 API 会产生费用。
 
 在 Ubuntu 上安装上述 Python 依赖后，使用环境变量启动：
 
 ```bash
 export MIA_GATEWAY_TOKEN='自行生成的长随机令牌'
-export OPENAI_API_KEY='只存放在服务器上的 API 密钥'
+export DASHSCOPE_API_KEY='只存放在服务器上的百炼 API Key'
+export MIA_BAILIAN_REGION='cn-beijing'  # 新加坡 Key 则改为 ap-southeast-1
 python -m server.xiaozhi_gateway
 ```
 
-可选变量：`MIA_ASR_MODEL`、`MIA_CHAT_MODEL`、`MIA_TTS_MODEL`、`MIA_TTS_VOICE`。客户端设置中的访问令牌填 `MIA_GATEWAY_TOKEN`，服务端地址填 `wss://你的域名/xiaozhi/v1/`。**不能直接把本机监听的 `ws://` 地址填进 iPhone 客户端。**
+`MIA_BAILIAN_REGION` 必须与 API Key 的地域相同，目前支持北京和新加坡；美国地域不支持此处采用的 OpenAI 兼容 ASR 接口。可选变量：`MIA_ASR_MODEL`、`MIA_CHAT_MODEL`、`MIA_TTS_MODEL`、`MIA_TTS_VOICE`。客户端设置中的访问令牌填 `MIA_GATEWAY_TOKEN`，服务端地址填 `wss://8kraw.cloud/xiaozhi/v1/`。**不能直接把本机监听的 `ws://` 地址填进 iPhone 客户端。**
 
-部署模板位于 `server/deploy/`：将代码放在 `/opt/mia`，建立非 root 用户 `mia` 和虚拟环境；把 `gateway.env` 放到 `/etc/mia/` 并限制权限；用 systemd 启动网关，再让 Caddy 将域名上的 `/xiaozhi/v1/` 转发至本地 `127.0.0.1:8765`。先配置域名 DNS 指向 VPS，并放行 80/443 端口，Caddy 才能申请 TLS 证书。模板中的 `mia.example.com` 必须替换为实际域名。不要把密钥、令牌或真实域名写进仓库。
+部署模板位于 `server/deploy/`：将代码放在 `/opt/mia`，建立非 root 用户 `mia` 和虚拟环境；把 `gateway.env` 放到 `/etc/mia/` 并限制权限；用 systemd 启动网关，再让 Caddy 将 `8kraw.cloud` 上的 `/xiaozhi/v1/` 转发至本地 `127.0.0.1:8765`。域名已解析至 `199.102.217.22`；还需确认 VPS 放行 80/443 端口以申请 TLS 证书。不要把密钥或令牌写进仓库。
 
 目前的自动化测试用内存假提供者验证协议与 Opus，不会调用真实 API。需要开通账号并在 VPS 与 iPhone 上实测中文识别、声音、延迟、中断和费用后，才能宣称语音聊天交付完成。

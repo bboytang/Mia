@@ -21,4 +21,11 @@ struct MiaPCMFrameBuffer {
     mutating func reset() {
         pending.removeAll(keepingCapacity: true)
     }
+
+    mutating func takePaddedFrame() -> [Int16]? {
+        guard !pending.isEmpty else { return nil }
+        let frame = pending + [Int16](repeating: 0, count: frameSize - pending.count)
+        reset()
+        return frame
+    }
 }

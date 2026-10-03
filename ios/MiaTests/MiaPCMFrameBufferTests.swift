@@ -17,4 +17,12 @@ final class MiaPCMFrameBufferTests: XCTestCase {
 
         XCTAssertEqual(buffer.append([3, 4, 5, 6]), [[3, 4, 5, 6]])
     }
+
+    func testPadsLastPartialFrameWhenUserStopsTalking() {
+        var buffer = MiaPCMFrameBuffer(frameSize: 4)
+        XCTAssertTrue(buffer.append([7, 8]).isEmpty)
+
+        XCTAssertEqual(buffer.takePaddedFrame(), [7, 8, 0, 0])
+        XCTAssertNil(buffer.takePaddedFrame())
+    }
 }

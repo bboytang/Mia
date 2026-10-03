@@ -186,9 +186,13 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     private func stopListening() async {
+        let finalFrame = audio?.takeFinalMicrophoneFrame()
         state = .ready
         do {
             await sendTask?.value
+            if let finalFrame, let codec, let transport {
+                try await transport.sendOpus(codec.encode(finalFrame))
+            }
             try await transport?.stopListening(sessionID: sessionID)
         } catch { fail(error) }
     }
