@@ -20,3 +20,5 @@ mmap_generate_*.h
 .clangd
 ios/*.xcodeproj/
 ios/build/
+
+.venv/
