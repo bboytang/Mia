@@ -7,6 +7,7 @@ enum MiaServerEvent: Equatable {
     case ttsStop
     case userTranscript(String)
     case emotion(String)
+    case serverError(String)
     case other
 }
 
@@ -92,6 +93,11 @@ enum MiaWireProtocol {
         case "llm":
             if let emotion = object["emotion"] as? String {
                 return .emotion(emotion)
+            }
+            return .other
+        case "error":
+            if let message = object["message"] as? String {
+                return .serverError(message)
             }
             return .other
         default:

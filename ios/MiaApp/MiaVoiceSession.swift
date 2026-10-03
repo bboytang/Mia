@@ -137,6 +137,9 @@ final class MiaVoiceSession: ObservableObject {
             finishSpeechIfPlayed()
         case .userTranscript:
             break
+        case .serverError(let message):
+            errorMessage = message
+            state = .ready
         case .emotion, .other:
             break
         }

@@ -91,4 +91,11 @@ final class MiaWireProtocolTests: XCTestCase {
             .other)
         XCTAssertThrowsError(try MiaWireProtocol.parseServerEvent(Data("{".utf8)))
     }
+
+    func testParsesServerErrorForUserFeedback() throws {
+        let data = Data(#"{"type":"error","message":"没有听清，请再说一次"}"#.utf8)
+
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data),
+                       .serverError("没有听清，请再说一次"))
+    }
 }

@@ -15,3 +15,21 @@ python -m server.mock_xiaozhi
 默认只监听 `127.0.0.1:8765`。iPhone 端要求 `wss://`，所以远程联调还需在服务器上使用带 TLS 证书的反向代理转发到这个本地端口。可设置 `MIA_MOCK_TOKEN` 要求 `Authorization: Bearer <token>`；令牌只放在服务器环境中。不要把这个固定答复服务当作公开生产服务。
 
 本地测试：`python -m unittest discover -s server/tests -v`。
+
+## 正式云语音网关
+
+`server.xiaozhi_gateway` 接收 16 kHz 单声道 Opus，调用云端中文 ASR、对话和 TTS，再发送 24 kHz 原始 Opus。iOS 只收到 Mia 的 TTS 文本，不收到用户 STT 文本。当前默认使用 OpenAI API；相关模型可通过环境变量替换。云服务可能收费，需用户自行开通额度。
+
+在 Ubuntu 上安装上述 Python 依赖后，使用环境变量启动：
+
+```bash
+export MIA_GATEWAY_TOKEN='自行生成的长随机令牌'
+export OPENAI_API_KEY='只存放在服务器上的 API 密钥'
+python -m server.xiaozhi_gateway
+```
+
+可选变量：`MIA_ASR_MODEL`、`MIA_CHAT_MODEL`、`MIA_TTS_MODEL`、`MIA_TTS_VOICE`。客户端设置中的访问令牌填 `MIA_GATEWAY_TOKEN`，服务端地址填 `wss://你的域名/xiaozhi/v1/`。**不能直接把本机监听的 `ws://` 地址填进 iPhone 客户端。**
+
+部署模板位于 `server/deploy/`：将代码放在 `/opt/mia`，建立非 root 用户 `mia` 和虚拟环境；把 `gateway.env` 放到 `/etc/mia/` 并限制权限；用 systemd 启动网关，再让 Caddy 将域名上的 `/xiaozhi/v1/` 转发至本地 `127.0.0.1:8765`。先配置域名 DNS 指向 VPS，并放行 80/443 端口，Caddy 才能申请 TLS 证书。模板中的 `mia.example.com` 必须替换为实际域名。不要把密钥、令牌或真实域名写进仓库。
+
+目前的自动化测试用内存假提供者验证协议与 Opus，不会调用真实 API。需要开通账号并在 VPS 与 iPhone 上实测中文识别、声音、延迟、中断和费用后，才能宣称语音聊天交付完成。

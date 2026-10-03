@@ -1,0 +1,21 @@
+[Unit]
+Description=Mia Xiaozhi WebSocket Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mia
+Group=mia
+WorkingDirectory=/opt/mia
+EnvironmentFile=/etc/mia/gateway.env
+ExecStart=/opt/mia/.venv/bin/python -m server.xiaozhi_gateway --host 127.0.0.1 --port 8765
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

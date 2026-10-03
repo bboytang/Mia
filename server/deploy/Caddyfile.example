@@ -1,0 +1,5 @@
+mia.example.com {
+    handle /xiaozhi/v1/* {
+        reverse_proxy 127.0.0.1:8765
+    }
+}
