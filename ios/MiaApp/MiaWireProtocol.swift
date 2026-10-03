@@ -2,7 +2,11 @@ import Foundation
 
 enum MiaServerEvent: Equatable {
     case hello(sessionID: String?)
+    case ttsStart
     case ttsSentence(String)
+    case ttsStop
+    case userTranscript(String)
+    case emotion(String)
     case other
 }
 
@@ -12,6 +16,30 @@ enum MiaWireError: Error {
 }
 
 enum MiaWireProtocol {
+    static func startListening(sessionID: String?) throws -> Data {
+        try JSONSerialization.data(withJSONObject: [
+            "session_id": sessionID ?? "",
+            "type": "listen",
+            "state": "start",
+            "mode": "manual",
+        ])
+    }
+
+    static func stopListening(sessionID: String?) throws -> Data {
+        try JSONSerialization.data(withJSONObject: [
+            "session_id": sessionID ?? "",
+            "type": "listen",
+            "state": "stop",
+        ])
+    }
+
+    static func abort(sessionID: String?) throws -> Data {
+        try JSONSerialization.data(withJSONObject: [
+            "session_id": sessionID ?? "",
+            "type": "abort",
+        ])
+    }
+
     static func hello() throws -> Data {
         try JSONSerialization.data(withJSONObject: [
             "type": "hello",
@@ -39,9 +67,27 @@ enum MiaWireProtocol {
             }
             return .hello(sessionID: object["session_id"] as? String)
         case "tts":
-            if object["state"] as? String == "sentence_start",
-               let text = object["text"] as? String {
-                return .ttsSentence(text)
+            switch object["state"] as? String {
+            case "start":
+                return .ttsStart
+            case "stop":
+                return .ttsStop
+            case "sentence_start":
+                if let text = object["text"] as? String {
+                    return .ttsSentence(text)
+                }
+            default:
+                break
+            }
+            return .other
+        case "stt":
+            if let text = object["text"] as? String {
+                return .userTranscript(text)
+            }
+            return .other
+        case "llm":
+            if let emotion = object["emotion"] as? String {
+                return .emotion(emotion)
             }
             return .other
         default:
