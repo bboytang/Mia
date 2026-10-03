@@ -45,8 +45,8 @@ flowchart LR
 | 首页视觉 | 联调版完成 | 原创城市背景、选定 Mia 静态立绘、深色字幕板、声波和麦克风；已检查 GitHub 模拟器截图。静态立绘没有 Live2D 动画和口型。 |
 | iPhone 语音管线 | 代码完成，真机待验 | WebSocket 握手、Opus 编解码、麦克风、播放、打断、尾帧补齐与轮次间采集关闭；模拟器测试通过，尚无真实 iPhone 录放反馈。 |
 | 仅 Mia 字幕 | 代码完成，时序待校准 | 用户识别文本被忽略；Mia 字幕按播放回调推进。多句、真实语速和弱网情况待验。 |
-| 百炼网关 | 代码完成，真实 API 待验 | 北京地域 ASR、对话、流式 24 kHz PCM TTS 接入；9 项服务端测试通过，[GitHub 服务端 CI](https://github.com/bboytang/Mia/actions/runs/37089492807) 通过。测试使用假提供者，未消耗真实 API 额度。 |
-| VPS 部署 | 进行中 | 新 VPS 已通过专用 SSH 公钥登录，Caddy TLS 和外网 HTTPS 已通过；源码、服务账号和 Python 依赖已安装，VPS 上 9 项测试通过。百炼 Key、`mia-gateway` 和 WSS 握手待完成。 |
+| 百炼网关 | 代码完成，真实 API 鉴权待修复 | 北京地域 ASR、对话、流式 24 kHz PCM TTS 接入；9 项服务端测试通过，[GitHub 服务端 CI](https://github.com/bboytang/Mia/actions/runs/37089492807) 通过。真实对话请求返回 `401 invalid_api_key`，需要更换当前 Key 后重验。 |
+| VPS 部署 | 网关与 WSS 已验，云鉴权待修复 | 新 VPS 已通过专用 SSH 公钥登录；Caddy TLS、外网 HTTPS、`mia-gateway` 运行和外网 WSS 令牌握手已通过。服务端 9 项测试通过。当前 Key 的北京百炼调用返回 401。 |
 | 正式 Live2D | 输入缺失 | 没有分层源稿、`.cmo3`、`.moc3` 或已绑定授权模型，无法完成 Cubism 运行时与口型验收。 |
 
 ### 2026-10-03 继续开发核对
@@ -67,8 +67,11 @@ flowchart LR
 - 已核对 SSH 主机指纹，并以专用公钥登录 `ubuntu`；`sudo` 可用。服务器为 Ubuntu 24.04.4 LTS，约 2 GB 内存、50 GB 系统盘。
 - VPS 访问 GitHub 超时，已从本地提交 `70db0c8` 将 `server/` 传到 `/home/ubuntu/Mia/server`；创建 `mia` 服务账号和 `/opt/mia/.venv`，安装 `libopus0`、Caddy 与服务端 Python 依赖。虚拟环境 `pip check`、9 项服务端测试和安装脚本语法检查均通过。
 - 已备份 Caddy 的初始配置，并启用仓库的 `8kraw.cloud` 反向代理模板。Caddy 已取得有效 TLS 证书；从外网请求 `https://8kraw.cloud/` 返回 HTTP 200。80/443 在 VPS 上监听。
-- 用户首次输入的北京地域百炼 Key 含点号，旧安装器正则错误拒绝；已允许点号并将修复同步到 VPS。用模拟 Key 验证带点号输入能通过校验、带空格输入仍被拒绝，脚本语法检查通过。真实 Key 尚未写入 VPS。
-- **待完成**：用户在 VPS 终端运行 `sudo bash /home/ubuntu/Mia/server/deploy/install-ubuntu.sh`，隐藏输入北京地域百炼 Key 并自行保存网关令牌；之后验证 `mia-gateway`、WSS 握手和真实百炼语音。当前尚不能宣称步骤 1 完成。
+- 用户首次输入的北京地域百炼 Key 含点号，旧安装器正则错误拒绝；已允许点号并将修复同步到 VPS。用模拟 Key 验证带点号输入能通过校验、带空格输入仍被拒绝，脚本语法检查通过。
+- 用户已在 VPS 隐藏输入 Key 并安装服务；`mia-gateway` 处于运行状态，密钥文件仅 root 可读且权限为 `0600`，Caddy 配置校验通过。通过外网 `wss://8kraw.cloud/xiaozhi/v1/` 完成令牌和小智协议握手；部署计划中网关与 WSS 验收已完成。
+- 最小北京百炼 `qwen-plus` 请求返回 HTTP 401、错误码 `invalid_api_key`。当前 Key 并未证明可用于北京地域按量付费接口；需用户取得对应 Key，在 VPS 隐藏更新且保留已生成的网关令牌，再重验 ASR、对话与 TTS。真机语音联调仍待此项完成。
+- 用户截图确认已在北京地域按量付费 API Key 页面；当前 VPS Key 有新版 `sk-ws` 前缀。使用用户页面显示的业务空间专属地址重试仍返回 `401 invalid_api_key`，排除仅由共享 Base URL 造成的错误。新版 Key 明文只在创建或重置时显示一次；用户需重置该 Key，在弹窗关闭前保存完整值，再用下述短命令更新。
+- 已在现有 VPS 安装 `sudo mia-update-key` 短命令：隐藏读取新 Key，先用北京 `qwen-plus` 验证；只有请求成功才原子替换 `/etc/mia/gateway.env` 中的 Key 并重启网关，保留原网关令牌。脚本语法检查通过，尚待用户输入新 Key。
 
 ## 分阶段执行计划
 
@@ -92,6 +95,6 @@ flowchart LR
 
 ## 当前等待的外部结果
 
-1. 用户在 VPS 终端完成北京地域百炼 Key 的隐藏输入并保存网关令牌；Codex 随后通过 SSH 检查 `mia-gateway` 和 WSS 握手。**不要发送百炼 Key、网关令牌或 SSH 密码**。
+1. 用户取得可用于北京地域按量付费接口的新百炼 Key，在 VPS 终端隐藏更新；Codex 随后重验真实云请求。保留现有网关令牌，**不要发送百炼 Key、网关令牌或 SSH 密码**。
 2. 用户重签并在 iPhone 上测试 GitHub 的 IPA，反馈语音、字幕、耳机切换及 UI 实际表现。
 3. 提供获授权的、已分层绑定的 Mia Cubism 模型。单张概念图无法直接生成真正的 `.moc3`；目前没有可执行绑定的设备或画师。
