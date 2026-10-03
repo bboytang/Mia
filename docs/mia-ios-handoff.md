@@ -1,6 +1,6 @@
 # Mia iOS 跨设备 Codex 交接
 
-最后核对：2026-10-03。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。
+最后核对：2026-10-03。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。最近一次代码、CI 和网络核对结果见路线图的“2026-10-03 继续开发核对”。
 
 ## 在另一台设备上开始
 
@@ -40,7 +40,7 @@ git status --short
 
 ## 下一步顺序与交接所需信息
 
-1. **先部署 VPS**：按[服务端部署说明](../server/README.md)在用户可 SSH 的终端运行 `server/deploy/install-ubuntu.sh`，配置 Caddy，运行 `server/deploy/check_wss.py`。用户只需回报 `systemctl status mia-gateway --no-pager` 与握手检查的结果摘要；不发 Key、网关令牌或 SSH 密码。
+1. **先部署 VPS**：当前域名解析正确，SSH 端口可达但需要用户密码，443 拒绝连接。按[服务端部署说明](../server/README.md)在用户可 SSH 的终端运行 `server/deploy/install-ubuntu.sh`，配置 Caddy，运行 `server/deploy/check_wss.py`。用户只需回报 `systemctl status mia-gateway --no-pager`、`caddy validate --config /etc/caddy/Caddyfile` 与握手检查的结果摘要；不发 Key、网关令牌或 SSH 密码。
 2. **再做真机语音联调**：用户从最新 GitHub 构建取得未签名 IPA，自行重签安装，设置网关令牌。检查中文识别、Mia 人声、仅 Mia 字幕、打断、连续多轮、弱网、耳机路由和费用；根据具体失败修复。
 3. **最后接入真正 Live2D**：收到符合[素材清单](live2d-mia-asset-brief.md)的获授权绑定模型后，接入 Cubism SDK，替换静态图并用播放音量驱动嘴部。没有模型文件时可继续语音、字幕与 UI 工作，但不能宣称 Live2D 完成。
 

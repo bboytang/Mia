@@ -49,6 +49,14 @@ flowchart LR
 | VPS 部署 | 待执行 | 已备安装脚本、systemd/Caddy 模板和 WSS 握手检查工具；还没有 VPS 上的运行结果。 |
 | 正式 Live2D | 输入缺失 | 没有分层源稿、`.cmo3`、`.moc3` 或已绑定授权模型，无法完成 Cubism 运行时与口型验收。 |
 
+### 2026-10-03 继续开发核对
+
+- 已核对本地工作分支 `feature/mia-ios-bootstrap` 与 GitHub 远端均指向 `98c90ed`，核对前工作树干净；三款角色比较图仍以**右侧第三款**为准。
+- [iOS 构建](https://github.com/bboytang/Mia/actions/runs/37089783261)和[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37089492807)的作业步骤均为成功。iOS 的 `Mia-iOS-unsigned-b05b6c99...` 产物尚未过期；其应用代码仍是 `b05b6c99`，后续文档提交不会生成新 IPA。
+- 使用项目 `.venv/bin/python` 运行 `python -m unittest discover -s server/tests -v`，9 项通过；`bash -n server/deploy/install-ubuntu.sh` 和握手脚本的 `py_compile` 通过。受限沙箱内不能创建回环套接字，服务端测试在允许本地套接字的执行环境中重跑后通过。
+- `8kraw.cloud` 解析为 `199.102.217.22`。本环境可连接 VPS 的 SSH 端口，但服务器要求密码；本会话没有登录凭据。HTTPS 443 当前拒绝连接。尚无 `mia-gateway`、Caddy TLS 或 WSS 握手成功的 VPS 证据，步骤 1 仍待执行。
+- 用户目前暂时无法登录 VPS；已有可用于后续联调的 iPhone。待 VPS 可登录时，按[部署说明](../server/README.md)安装、配置 Caddy 并运行握手检查。仅回传 `systemctl status mia-gateway --no-pager`、`caddy validate --config /etc/caddy/Caddyfile` 和 `check_wss.py` 的结果摘要，不传密码、Key 或令牌。步骤 1 成功后再用重签 iPhone IPA 开始步骤 2。
+
 ## 分阶段执行计划
 
 | 顺序 | 工作与交付物 | 完成判定 | 依赖 |
