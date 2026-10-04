@@ -45,8 +45,8 @@ flowchart LR
 | 首页视觉 | 联调版完成 | 原创城市背景、选定 Mia 静态立绘、深色字幕板、声波和麦克风；已检查 GitHub 模拟器截图。静态立绘没有 Live2D 动画和口型。 |
 | iPhone 语音管线 | 代码完成，真机待验 | WebSocket 握手、Opus 编解码、麦克风、播放、打断、尾帧补齐与轮次间采集关闭；模拟器测试通过，尚无真实 iPhone 录放反馈。 |
 | 仅 Mia 字幕 | 代码完成，时序待校准 | 用户识别文本被忽略；Mia 字幕按播放回调推进。多句、真实语速和弱网情况待验。 |
-| 火山网关迁移 | 服务器真实合成语音回合通过，真机待验 | 新 Provider、网关选择及百炼回滚已推送；本地和 VPS 各 23 项服务端测试通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过。火山三条 API 独立验证及新网关公网 WSS 全链路回合均通过。 |
-| VPS 部署 | 新进程、Caddy 与公网 WSS 已验 | 用户已在 VPS 设置两把火山 Key 并重启；新进程和 Caddy 运行。公网 WSS 返回 Mia 字幕、91 帧可解码 Opus；错误令牌被拒绝。环境文件保留原网关令牌、权限 `0600`。 |
+| 火山网关迁移 | 服务器真实合成语音回合通过，外部 TLS 阻塞真机 | 新 Provider、网关选择及百炼回滚已推送；本地和 VPS 各 23 项服务端测试通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过。VPS 自身访问公网域名的真实链路通过，iPhone 仍无法完成 TLS 握手。 |
+| VPS 部署 | 新进程与 Caddy 运行；外部域名访问待恢复 | 用户已在 VPS 设置两把火山 Key 并重启；VPS 自测返回 Mia 字幕、91 帧可解码 Opus。外部 443 在 ClientHello 后被重置；用户确认域名尚未在中国内地备案或接入腾讯云。 |
 | 正式 Live2D | 输入缺失 | 没有分层源稿、`.cmo3`、`.moc3` 或已绑定授权模型，无法完成 Cubism 运行时与口型验收。 |
 
 ### 2026-10-03 继续开发核对
@@ -83,14 +83,20 @@ flowchart LR
 - 新 Provider 使用既定 ASR 二进制 WebSocket、方舟 HTTP 和 TTS 双向 WebSocket；TTS 以 VPS 实测成功脚本为准，在 `TaskRequest` 后发送 `FinishSession`，再接收 `TTSResponse` 音频。第一阶段 LLM 保持非流式。
 - `VOLC_ARK_API_KEY` 仅用于方舟；一把 `VOLC_VOICE_API_KEY` 同时用于 ASR 和 TTS。安装脚本只预置空白字段并保留现有网关令牌；用户要求在代码部署完成后统一设置两把 Key。填 Key 前不得把旧进程的 WSS 成功当成火山网关验收。
 - 提交 `dcc3dbd` 已推送到 `origin/feature/mia-ios-bootstrap`；[GitHub 服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)成功。本地与 VPS 的 23 项服务端测试、VPS `pip check`、Caddy 配置校验均通过。VPS 已备份旧代码及环境文件、安装新代码和空白字段；令牌与旧 Key 值均未变化，文件权限 `0600`，旧服务仍运行且公网 WSS 握手成功。当前仅完成静态部署，火山网关尚未重启或真实联调。
-- 2026-10-04：用户在 VPS 设置两把火山 Key 并重启服务。新进程 `mia-gateway` 和 Caddy 均为 active；用既有 24 kHz TTS 合成音频转 16 kHz、编码 Opus，经公网 WSS 发起一轮真实对话，收到 Mia 回答字幕和 91 帧可解码 Opus（262080 字节 PCM），`tts` 状态为 `start → sentence_start → stop`，全程约 10.6 秒；错误令牌得到 WebSocket 1008。此验证覆盖新网关真实 ASR → LLM → TTS → Opus 链路，不代替 iPhone 麦克风、扬声器和字幕时序的真机验收。
+- 2026-10-04：用户在 VPS 设置两把火山 Key 并重启服务。新进程 `mia-gateway` 和 Caddy 均为 active；用既有 24 kHz TTS 合成音频转 16 kHz、编码 Opus，由**VPS 自身**经公网域名发起一轮真实对话，收到 Mia 回答字幕和 91 帧可解码 Opus（262080 字节 PCM），`tts` 状态为 `start → sentence_start → stop`，全程约 10.6 秒；错误令牌得到 WebSocket 1008。此验证覆盖服务器真实 ASR → LLM → TTS → Opus 链路，不证明外部网络可达。
+
+### 2026-10-04 iPhone TLS 阻塞
+
+- 用户已在 iPhone 填入正确的 `wss://8kraw.cloud/xiaozhi/v1/` 和网关令牌，但 5G 与 Wi‑Fi 均提示 “A TLS error caused the secure connection to fail”，无法进入语音阶段。iPhone Safari 曾对同一域名返回与 Mia 当前 Caddy 站点不一致的 `companion-x` JSON；后续无痕复测因网络中断未完成，不能据此确定手机实际到达哪个服务器。
+- 国内外 DNS A 查询均返回 `43.143.230.174`，无 AAAA；VPS 本机 Caddy 证书链验证通过，`mia-gateway` 仍运行。另一外部环境的 TCP 443 可建立，但 TLS ClientHello 后被重置，服务器抓包显示连接在收到请求后由远端方向复位，没有完成 TLS；服务器本机访问该域名成功。此前的服务器 WSS 自测不能作为真机公网可达的证据。
+- 用户确认 `8kraw.cloud` **尚未完成中国内地 ICP 备案或腾讯云接入备案**。[腾讯云域名故障说明](https://cloud.tencent.com/document/product/242/53667)将未备案/未接入列为中国内地服务器域名无法访问的原因。结合现象，备案限制是当前首要排查方向，但尚无腾讯云控制台拦截记录，不能断言为唯一原因。下一步由用户在腾讯云核对域名与实例的备案/拦截状态，按控制台要求完成备案；完成后重新从 iPhone 与独立外部网络验证 HTTPS/WSS，再继续真机语音。
 
 ## 分阶段执行计划
 
 | 顺序 | 工作与交付物 | 完成判定 | 依赖 |
 | --- | --- | --- | --- |
-| 1 | **部署火山网关**：完成协议测试、旧网关回归、CI、代码和空白配置部署；用户最后在 VPS 统一设置两把火山 Key，重启服务。 | **已完成服务器合成音频验收**：新进程运行；真实 ASR → LLM → TTS → Opus → WSS 链路成功，令牌鉴权和 Caddy TLS 通过。 | 已满足。 |
-| 2 | **真实语音联调**：用已签名 iPhone IPA 测试中文提问、识别、生成、人声播放和打断。记录首响、完整回答时长与单轮费用。 | 连续多轮语音可用；用户的话不显示；断线、超时和 API 错误有可理解的提示；费用记录可核对。 | 步骤 1；用户自行签名安装 IPA。 |
+| 1 | **部署火山网关**：完成协议测试、旧网关回归、CI、代码和配置部署。 | **服务器自测已完成**：新进程运行，真实 ASR → LLM → TTS → Opus → WSS 回合通过；外部域名 TLS 仍待恢复。 | 代码与服务已部署。 |
+| 2 | **真实语音联调**：完成域名备案/接入并恢复外部 TLS 后，用已签名 iPhone IPA 测试中文提问、识别、生成、人声播放和打断。记录首响、完整回答时长与单轮费用。 | 连续多轮语音可用；用户的话不显示；断线、超时和 API 错误有可理解的提示；费用记录可核对。 | 腾讯云备案/拦截状态确认及外部 TLS 恢复；用户自行签名安装 IPA。 |
 | 3 | **字幕和体验收尾**：依据真实 TTS 音频校准字幕速度，处理多句排队、打断、耳机切换、弱网恢复、不同 iPhone 尺寸和辅助功能。功能入口按真机使用反馈定稿。 | 字幕随 Mia 播放平稳推进，不泄露用户识别文本；旋转/前后台/音频路由场景没有阻断性问题。 | 步骤 2 的真机反馈。 |
 | 4 | **正式 Mia Live2D 素材**：按[素材交付说明](live2d-mia-asset-brief.md)制作并取得可随应用分发的分层源稿、Cubism 工程和运行文件。 | `.model3.json` 可在 Cubism 中完整加载；有眨眼、转头、呼吸、动作、表情与连续嘴部开合参数。 | 能完成 Cubism 分层与绑定的 Windows/macOS 环境或画师；当前尚未具备。 |
 | 5 | **Live2D 接入**：在 iOS 工程中接入符合许可的 Cubism SDK，替换静态立绘；按播放音量驱动 `ParamMouthOpenY`，将聆听/思考/说话状态映射到动作。 | iPhone 上角色可正常渲染、眨眼及随 Mia 发声张合嘴；测量帧率、内存、发热和前后台恢复。 | 步骤 4 的合法绑定模型。 |
@@ -107,5 +113,5 @@ flowchart LR
 
 ## 当前等待的外部结果
 
-1. 用户重签并在 iPhone 上测试 GitHub 的 IPA，反馈首次中文问答、声音、Mia 字幕、打断、连续多轮、耳机切换及 UI 实际表现。**不要发送 Key、网关令牌或 SSH 密码**。
+1. 用户在腾讯云确认 `8kraw.cloud` 的 ICP 备案与接入状态，按控制台要求办理；外部 HTTPS/WSS 恢复后，继续使用已安装 IPA 测试首次中文问答、声音、Mia 字幕、打断、连续多轮、耳机切换及 UI。**不要发送 Key、网关令牌或 SSH 密码**。
 2. 提供获授权的、已分层绑定的 Mia Cubism 模型。单张概念图无法直接生成真正的 `.moc3`；目前没有可执行绑定的设备或画师。
