@@ -69,10 +69,10 @@
 - Account token and old shared token both use original Authorization header; account session revalidated before cloud calls. Unauthorized closes 1008 with `未授权`.
 - Empty recording returns original error before debit. Busy rejection never debits. Started failures/interruptions remain charged; global slot always released.
 
-- [ ] Add real WebSocket tests for account recording→ASR→LLM→TTS/Mia-only subtitle, revoked/expired tokens at handshake and on open sockets, wrong tokens, quota persistence, busy rejection, abort and Provider exceptions releasing slots; preserve original tests unchanged.
-- [ ] Run gateway suite, confirm new behavior fails against existing code.
-- [ ] Implement narrow auth/round checks and loopback HTTP lifecycle; provider code unchanged. Bind HTTP only to 127.0.0.1; cleanup runner, hash executor and DB at shutdown.
-- [ ] Run all service tests, expected green, inspect diff and commit/push gateway stage with progress evidence.
+- [x] Add real WebSocket tests for account recording→ASR→LLM→TTS/Mia-only subtitle, revoked/expired tokens at handshake and on open sockets, wrong tokens, quota persistence, busy rejection, abort and Provider exceptions releasing slots; preserve original tests unchanged.
+- [x] Run gateway suite, confirm new behavior fails against existing code.
+- [x] Implement narrow auth/round checks and loopback HTTP lifecycle; provider code unchanged. Bind HTTP only to 127.0.0.1; cleanup runner, hash executor and DB at shutdown.
+- [x] Run all service tests, expected green, inspect diff and commit/push gateway stage with progress evidence.
 
 ### Task 3: iOS registration/login and stored account sessions
 
