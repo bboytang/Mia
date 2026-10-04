@@ -2,6 +2,8 @@ import json
 import base64
 import tempfile
 import sys
+import io
+from contextlib import redirect_stdout
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -12,6 +14,17 @@ from scripts import mia_minimax_video as video
 
 
 class MiniMaxVideoTests(unittest.TestCase):
+    def test_prepare_defaults_use_current_full_body_reference(self):
+        output = io.StringIO()
+        with patch.object(sys, 'argv', ['video', 'prepare']), redirect_stdout(output):
+            video.main()
+        body = json.loads(output.getvalue())
+        url = body['content'][2]['image_url']['url']
+        self.assertTrue(url.startswith('data:image/png;base64,'))
+        self.assertEqual(base64.b64decode(url.split(',', 1)[1]),
+                         (video.ROOT / 'docs/design/launch/mia-full-body-end-reference.png').read_bytes())
+        self.assertIn('both boot soles', body['content'][0]['text'])
+
     def request(self):
         return video.build_request('Mia turns', 'https://example.com/start.png',
                                    'https://example.com/end.png', '768P', 5)

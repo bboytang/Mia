@@ -18,7 +18,6 @@ import httpx
 API = 'https://api.minimax.cn/v2'
 ROOT = Path(__file__).resolve().parents[1]
 KEY_FILE = Path.home() / '.config/mia/minimax.key'
-ASSETS = 'https://raw.githubusercontent.com/bboytang/Mia/feature/mia-ios-bootstrap/docs/design/launch/'
 
 
 class VideoError(Exception):
@@ -179,8 +178,8 @@ def main():
     for name in ('prepare', 'create'):
         command = commands.add_parser(name)
         command.add_argument('--prompt', type=Path, default=ROOT / 'docs/design/launch/mia-minimax-prompt.txt')
-        command.add_argument('--first', default=ASSETS + 'mia-particle-start.png')
-        command.add_argument('--last', default=ASSETS + 'mia-home-end-reference.png')
+        command.add_argument('--first', default=str(ROOT / 'docs/design/launch/mia-particle-start.png'))
+        command.add_argument('--last', default=str(ROOT / 'docs/design/launch/mia-full-body-end-reference.png'))
         command.add_argument('--resolution', choices=['768P', '2K'], default='768P')
         command.add_argument('--duration', type=int, default=5)
         if name == 'create':

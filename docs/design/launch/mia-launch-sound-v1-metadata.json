@@ -1,0 +1,19 @@
+{
+  "method": "original procedural synthesis; no borrowed recording",
+  "duration_seconds": 5,
+  "sample_rate": 48000,
+  "channels": 2,
+  "format": "PCM16 WAV",
+  "peak_dbfs": -13.98,
+  "rms_dbfs": -29.7,
+  "events_seconds": {
+    "particles": [
+      0,
+      2.9
+    ],
+    "materialize": 2.6,
+    "finger_arc": 3.85,
+    "circle": 4.38
+  },
+  "status": "sound_design_preview; alignment to revised video not yet verified"
+}

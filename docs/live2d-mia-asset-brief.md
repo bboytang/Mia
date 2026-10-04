@@ -2,7 +2,7 @@
 
 ## 角色参考
 
-用户在[三款角色比较图](design/mia-three-character-options.png)中选择**右侧第三款**；以[已选首页概念图](design/mia-approved-screen-concept.png)为首要造型参考：紫色短发、紫瞳、黑紫未来街头服饰、晶体发饰，面向镜头，友好而有活力。`ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png` 是当前客户端的静态衍生立绘，不能直接作为 Live2D 模型。正式立绘需要重新绘制分层、补画遮挡部分，并在 Cubism Editor 中绑定。
+用户在[三款角色比较图](design/mia-three-character-options.png)中选择**右侧第三款**；以[已选首页概念图](design/mia-approved-screen-concept.png)为首要造型参考：紫色短发、紫瞳、黑紫未来街头服饰、晶体发饰，面向镜头，友好而有活力。`ios/MiaApp/Assets.xcassets/MiaFullBody.imageset/mia-full-body.png` 是当前客户端的全身静态衍生立绘（按用户反馈优化腿型与身形，保留 V 手势与伸手姿态），不能直接作为 Live2D 模型。正式立绘需要重新绘制分层、补画遮挡部分，并在 Cubism Editor 中绑定。
 
 ## 必需交付物
 
