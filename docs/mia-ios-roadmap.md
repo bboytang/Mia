@@ -39,7 +39,7 @@ flowchart LR
 
 ## 当前进度与证据
 
-2026-10-04 新增 [MiniMax H3 离线生成工具](mia-minimax-video.md)：官方中国 V2 创建/查询协议、首尾帧请求、隐藏 Key 配置、任务等待与下载已实现，14 项离线测试通过。准备请求不联网，实际付费生成需确认；真实鉴权、视频质量与 App 衔接尚未验证。用户选定在当前 Codex 工作环境运行，工具、项目虚拟环境与隐藏配置短入口 `bash /tmp/mia-minimax-key` 已就绪；无鉴权查询探测返回 HTTP 401，HTTPS 可达，真实 Key 待设置。不再依赖 VPS SSH，不改现有 iOS 或火山语音链路。提交 `554c302` 的 [视频工具 CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过；本地 98 项固件测试和 23 项服务端测试也通过。
+2026-10-04 新增 [MiniMax H3 离线生成工具](mia-minimax-video.md)：官方中国 V2 创建/查询协议、首尾帧请求、隐藏 Key 配置、任务等待与下载已实现，14 项离线测试通过。准备请求不联网，实际付费生成需确认；真实鉴权、视频质量与 App 衔接尚未验证。用户选定在当前 Codex 工作环境运行，工具、项目虚拟环境与隐藏配置短入口 `bash /tmp/mia-minimax-key` 已就绪；无鉴权查询探测返回 HTTP 401，HTTPS 可达；用户已隐藏设置 Key，0600 权限已核对。带 Key 查询不存在任务返回 HTTP 500／`server_error`，真实鉴权和生成权限仍未确认，尚未创建任务或扣费。不再依赖 VPS SSH，不改现有 iOS 或火山语音链路。提交 `554c302` 的 [视频工具 CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过；本地 98 项固件测试和 23 项服务端测试也通过。
 
 | 工作项 | 状态 | 已有结果与边界 |
 | --- | --- | --- |
