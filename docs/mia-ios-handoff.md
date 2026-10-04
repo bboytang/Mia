@@ -2,7 +2,7 @@
 
 最后核对：2026-10-04。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。备案期间的角色接入设计见[Live2D 运行时方案](mia-live2d-runtime-plan.md)。
 
-**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器和十项生命周期测试已编写，正式素材缺失时直接进入原首页；新 iOS CI 待运行。不得将预览、测试包的黑色视频或回退录屏写成动画成品通过。下一步先取得用户动作反馈、修正一致性并确认无水印导出条件，再验收素材和两种手机布局的衔接。
+**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器已接入，提交 `b7269de` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37194380347)通过 32 项测试（含十项启动播放测试）、模拟器和真机编译；已检查 16 Pro 与 SE（第三代）首页截图。正式素材缺失时直接进入原首页，应用包不含测试视频。CI 录屏时长/帧数异常，SE 录制就绪晚于应用启动，不能用于启动过程验收；正式素材接入前须等待录制就绪后重验。不得将预览、测试包的黑色视频或回退截图写成动画成品通过。下一步先取得用户动作反馈、修正一致性并确认无水印导出条件，再验收素材和两种手机布局的衔接。
 
 ## 在另一台设备上开始
 
@@ -33,7 +33,7 @@ git status --short
 
 | 模块 | 位置 | 已验证 | 未验证 |
 | --- | --- | --- | --- |
-| iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕 | `ios/MiaApp/`、`ios/MiaTests/` | [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37089783261)通过模拟器测试、真机编译，上传 `Mia-unsigned.ipa`、SHA-256 与首页截图；已目视检查截图。 | 用户重签后在真机上的录放、耳机切换、弱网与字幕时序。 |
+| iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕、启动播放准备 | `ios/MiaApp/`、`ios/MiaTests/` | [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37194380347)通过 32 项测试、模拟器与真机编译，上传未签名 IPA、SHA-256 与两种尺寸截图；已检查截图及应用包。 | 正式启动素材及录屏验收；用户重签后在真机上的录放、耳机切换、弱网与字幕时序。 |
 | 小智兼容网关、火山 Provider、Opus | `server/xiaozhi_gateway.py`、`server/volcengine_provider.py`、`server/tests/` | 23 项服务端测试在本地与 VPS 通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过；VPS 自身经公网域名调用真实云 API，返回 Mia 字幕与 91 帧可解码 Opus。百炼 Provider 保留回滚。 | 外部网络可达后，iPhone 真机录放、打断、连续多轮与弱网。 |
 | Ubuntu 部署材料 | `server/deploy/`、`server/README.md` | 新进程和 Caddy 均运行；VPS 自测真实 WSS 全链路、错误令牌拒绝、受保护配置与令牌保留已验。 | 外部 TLS 在 ClientHello 后被重置；用户称备案正在审核，审核和所需接入完成后须重验。 |
 | 角色 | `docs/design/`、`ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/` | 已选概念图和静态图可在 GitHub 查看，模拟器首页已展示；[运行时方案](mia-live2d-runtime-plan.md)已整理。 | 真正 Cubism 模型制作、许可、SDK 接入和运行时口型。 |
