@@ -90,16 +90,33 @@ jobs:
             xcrun simctl boot "$simulator_id" || true
             xcrun simctl bootstatus "$simulator_id" -b
             xcrun simctl install "$simulator_id" "$RUNNER_TEMP/mia-simulator/Build/Products/Debug-iphonesimulator/Mia.app"
+            mia_record_log="$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.log"
             xcrun simctl io "$simulator_id" recordVideo --codec h264 --mask ignored \
-              "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4" &
+              "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4" > "$mia_record_log" 2>&1 &
             mia_record_pid=$!
-            trap 'kill -INT "$mia_record_pid" 2>/dev/null || true' EXIT
-            sleep 1
+            trap 'kill -TERM "$mia_record_pid" 2>/dev/null || true; cat "$mia_record_log"' EXIT
+            mia_record_deadline=$((SECONDS + 120))
+            while true; do
+              if ! kill -0 "$mia_record_pid" 2>/dev/null; then
+                echo "Recorder exited before recording started for $simulator_id" >&2
+                exit 1
+              fi
+              if grep -Fq "Recording started" "$mia_record_log"; then
+                printf 'Observed "Recording started" for %s; launching Mia.\n' "$simulator_id"
+                break
+              fi
+              if (( SECONDS >= mia_record_deadline )); then
+                echo "Timed out after 120 seconds waiting for recording to start for $simulator_id" >&2
+                exit 1
+              fi
+              sleep 0.1
+            done
             xcrun simctl launch "$simulator_id" com.bboytang.mia
             sleep 8
             xcrun simctl io "$simulator_id" screenshot "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png"
             kill -INT "$mia_record_pid"
             wait "$mia_record_pid"
+            cat "$mia_record_log"
             trap - EXIT
             test -s "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4"
             xcrun simctl shutdown "$simulator_id"
