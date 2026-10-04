@@ -59,4 +59,4 @@ cd /home/ubuntu/Mia && /opt/mia/.venv/bin/python server/deploy/check_wss.py
 
 握手脚本只验证 TLS、令牌及小智协议，不会调用云 API。部署后需另行进行一次真实语音全链路验证；在填入两把 Key 前，不能将新网关视为已投入运行。更新代码重复运行安装脚本不会轮换令牌。
 
-火山三条 API 曾在真实中国 VPS 上分别验证成功：方舟返回 HTTP 200 和 `OK`；Seed-TTS 2.0 双向 WebSocket 生成 171592 字节 24 kHz PCM；ASR 2.0 将转换后的 16 kHz PCM 识别为“你好，我是 Mia。这是实时语音测试。”这属于各 API 独立验证；新 Provider 接入后的网关全链路和 iPhone 真机表现仍待填 Key 后验证。自动化测试使用模拟服务，不会调用真实 API。
+火山三条 API 曾在真实中国 VPS 上分别验证成功：方舟返回 HTTP 200 和 `OK`；Seed-TTS 2.0 双向 WebSocket 生成 171592 字节 24 kHz PCM；ASR 2.0 将转换后的 16 kHz PCM 识别为“你好，我是 Mia。这是实时语音测试。”用户随后在 VPS 设置两把 Key 并重启；新网关已用这段合成语音完成一次公网 WSS 真实全链路回合，返回 Mia 字幕与 91 帧可解码 Opus，错误令牌被拒绝。iPhone 真机录放、字幕时序和打断仍待用户测试。自动化测试使用模拟服务，不会调用真实 API。
