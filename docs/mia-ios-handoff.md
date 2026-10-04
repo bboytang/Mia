@@ -2,15 +2,15 @@
 
 最后核对：2026-10-04。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。备案期间的角色接入设计见[Live2D 运行时方案](mia-live2d-runtime-plan.md)。
 
-**MiniMax 首次生成结果**：用户随后确认开始生成，真实创建返回任务 `448779139891511`，查询 failed、错误码 2013，归类为参考图片读取失败；没有自动重试。已增加直接内嵌本地原图的方案，15 项离线测试及提交 `b388b62` 的 [内嵌图片修正 CI](https://github.com/bboytang/Mia/actions/runs/37203924922)通过，约 6.32 MB 修正请求已准备，真实重试待用户确认；实际费用未核实，尚无视频成品。
+**MiniMax 预览已生成**：用户确认仅重试一次，直接传入两张原图的任务 `448781796409606` succeeded。原片为 768×1376、24 fps、约 5.17 秒、124 帧、含一条音轨；[静音预览](design/launch/mia-minimax-preview-silent.mp4)仅移除音轨，逐帧解码哈希与原片相同。已抽九帧检查：能看到粒子凝聚、侧身转向、V 手势与下方圆环，但侧向幅度大于原定约 35 度，角色尺度/服饰中途变化，约 2.5–3.5 秒人物下沿有明显水平截断。未验收为正式启动素材，未加入 iOS。实际费用待账户核对，未再提交任务。原片、静音版和[清理元数据](design/launch/mia-minimax-preview-metadata.json)已保存。
 
-**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器已接入，提交 `9295439` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37196200664)通过 32 项测试（含十项启动播放测试）、模拟器和真机编译；已检查 16 Pro 与 SE（第三代）录屏首末帧及首页截图。正式素材缺失时直接进入原首页，应用包不含测试视频。旧 CI 的录制就绪竞态已修复；新日志和两段录屏均证明先就绪、后启动，副录屏不再只有一帧。不得将预览、测试包的黑色视频或缺素材回退录屏写成动画成品通过。下一步接收用户在其他平台生成的原始 MP4，检查角色与动作，再验收两种手机布局的衔接。
+**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器已接入，提交 `9295439` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37196200664)通过 32 项测试（含十项启动播放测试）、模拟器和真机编译；已检查 16 Pro 与 SE（第三代）录屏首末帧及首页截图。正式素材缺失时直接进入原首页，应用包不含测试视频。旧 CI 的录制就绪竞态已修复；新日志和两段录屏均证明先就绪、后启动，副录屏不再只有一帧。不得将预览、测试包的黑色视频或缺素材回退录屏写成动画成品通过。下一步先评审已生成的 MiniMax 预览及待修正画面，再验收合格素材与两种手机布局的衔接。
 
-**MiniMax 接入进度**：用户要求接入中国平台 `MiniMax-H3`，已增加独立[离线生成工具](mia-minimax-video.md)，使用现有首尾帧、5 秒 768P，并按官方 V2 嵌套图片字段编码。Key 在交互终端隐藏写入仓库外 0600 文件，不影响火山语音配置。提交 `554c302` 的 [视频工具 CI](https://github.com/bboytang/Mia/actions/runs/37202954070)通过 14 项离线测试和请求准备；本地 98 项固件测试与 23 项服务端测试也通过。首次真实提交结果见上方记录。用户随后选定在当前 Codex 工作环境运行，不依赖 VPS SSH；`/root/projects/Mia` 工具、虚拟环境、离线请求和 MiniMax HTTPS 连通性已检查，短命令 `bash /tmp/mia-minimax-key` 已准备，无鉴权查询返回 HTTP 401。用户已隐藏设置 Key，文件权限 0600；配置后的不存在任务查询返回 HTTP 500／`server_error`。随后真实创建已受理但素材读取失败，内嵌图片重试待确认；不得宣称动画成品完成。
+**MiniMax 接入进度**：用户要求接入中国平台 `MiniMax-H3`，已增加独立[离线生成工具](mia-minimax-video.md)，使用现有首尾帧、5 秒 768P，并按官方 V2 嵌套图片字段编码。Key 在交互终端隐藏写入仓库外 0600 文件，不影响火山语音配置。提交 `554c302` 的 [视频工具 CI](https://github.com/bboytang/Mia/actions/runs/37202954070)通过 14 项离线测试和请求准备；本地 98 项固件测试与 23 项服务端测试也通过。首次真实提交结果见上方记录。用户随后选定在当前 Codex 工作环境运行，不依赖 VPS SSH；`/root/projects/Mia` 工具、虚拟环境、离线请求和 MiniMax HTTPS 连通性已检查，短命令 `bash /tmp/mia-minimax-key` 已准备，无鉴权查询返回 HTTP 401。用户已隐藏设置 Key，文件权限 0600；配置后的不存在任务查询返回 HTTP 500／`server_error`。随后真实创建已受理但素材读取失败，内嵌图片重试已成功，质量待验收；不得宣称动画成品完成。
 
 ## 在另一台设备上开始
 
-**启动视频当前交付方式**：已提供[首末帧与完整提示词交付包](design/launch/mia-launch-external-generation-brief.md)，用户随后要求直接接入 MiniMax H3，按上方进度完成配置和一次生成后验收。收到原始 MP4 后检查角色、真实旋身、指尖光弧、输出参数与首页衔接。录屏就绪修复 `9295439` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37196200664)已成功；两台首帧为 iOS 桌面，末帧与各自原首页截图一致。主录屏约 154.01 秒、47 帧，包含很长的 `simctl launch` 等待；副录屏约 8.21 秒、67 帧。该时长不能用于推断真机启动速度，正式动画仍未收到。
+**启动视频当前交付方式**：已提供[首末帧与完整提示词交付包](design/launch/mia-launch-external-generation-brief.md)，用户随后要求直接接入 MiniMax H3，按上方结果先验收已生成预览的角色、真实旋身、指尖光弧、输出参数，再决定后续制作与首页衔接。录屏就绪修复 `9295439` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37196200664)已成功；两台首帧为 iOS 桌面，末帧与各自原首页截图一致。主录屏约 154.01 秒、47 帧，包含很长的 `simctl launch` 等待；副录屏约 8.21 秒、67 帧。该时长不能用于推断真机启动速度，正式动画仍未收到。
 
 在 Codex 中连接同一个 GitHub 仓库，选择 `feature/mia-ios-bootstrap` 分支；若使用终端，可执行：
 

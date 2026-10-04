@@ -1,6 +1,6 @@
 # Mia 启动动画：MiniMax H3 API 工具
 
-2026-10-04。此工具只用于离线制作启动视频，不接入 iOS、语音网关或火山密钥配置。沿用已确认角色与[分镜](mia-launch-animation-plan.md)，没有替换 Live2D。用户已在当前环境隐藏设置 MiniMax Key，真实创建请求已被受理；首条任务因参考图片读取失败，尚无可验收成品。
+2026-10-04。此工具只用于离线制作启动视频，不接入 iOS、语音网关或火山密钥配置。沿用已确认角色与[分镜](mia-launch-animation-plan.md)，没有替换 Live2D。用户已在当前环境隐藏设置 MiniMax Key，真实创建请求已被受理；首条任务因参考图片读取失败，用户确认的一次内嵌图片重试已成功生成预览；正式成品质量尚未验收。
 
 ## 协议依据与生成参数
 
@@ -67,7 +67,7 @@ bash /tmp/mia-minimax-key
 
 用户要求“开始生成”后，按既定首尾图、5 秒 768P 提交一次，创建返回任务 `448779139891511`。查询状态为 failed，错误码 2013，错误内容归类为参考素材读取/下载失败；没有输出上游错误正文或 Key，也没有自动重试。usage 为空，不能宣称实际已扣或已退多少费用。
 
-为避免平台访问 GitHub 图片地址失败，新增本地 PNG/JPEG 路径输入，按官方 `image_url.url` 支持的 `data:image/png;base64,...` 直接内嵌原图，不修改图片。逐图检查 30 MB 上限、整个请求检查 64 MB 上限；现有两张 PNG 请求约 6.32 MB。15 项离线测试通过，包括原图字节的 Base64 往返；提交 `b388b62` 的 [内嵌图片修正 CI](https://github.com/bboytang/Mia/actions/runs/37203924922)通过 15 项测试及 URL/内嵌两种请求准备；真实内嵌请求尚未提交。
+为避免平台访问 GitHub 图片地址失败，新增本地 PNG/JPEG 路径输入，按官方 `image_url.url` 支持的 `data:image/png;base64,...` 直接内嵌原图，不修改图片。逐图检查 30 MB 上限、整个请求检查 64 MB 上限；现有两张 PNG 请求约 6.32 MB。15 项离线测试通过，包括原图字节的 Base64 往返；提交 `b388b62` 的 [内嵌图片修正 CI](https://github.com/bboytang/Mia/actions/runs/37203924922)通过 15 项测试及 URL/内嵌两种请求准备；用户随后确认一次重试，内嵌图片任务已生成成功（见下方记录）。
 
 准备修正请求（不联网、不收费）：
 
@@ -75,7 +75,7 @@ bash /tmp/mia-minimax-key
 /root/projects/Mia/.venv/bin/python scripts/mia_minimax_video.py prepare --first docs/design/launch/mia-particle-start.png --last docs/design/launch/mia-home-end-reference.png > /tmp/mia-h3-inline-request.json
 ```
 
-重试会创建新任务，需用户确认再提交一次，另用状态文件 `/tmp/mia-h3-task-20261004-inline.json`，保留失败任务记录。模型、时长、清晰度、首尾图和提示词保持原方案。
+用户已确认重试一次，使用新任务与状态文件 `/tmp/mia-h3-task-20261004-inline.json`，保留失败任务记录。模型、时长、清晰度、首尾图和提示词保持原方案。
 
 离线测试覆盖请求字段、鉴权、错误正文隐藏、不重试付费请求、查询、等待终止与超时、下载与文件保护、0600 Key、交互输入以及付费确认与状态保留。CI 不配置真实 Key，不创建付费任务。
 
@@ -85,4 +85,16 @@ bash /tmp/mia-minimax-key
 
 提交 `554c302` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过 14 项测试和离线请求准备。本地另有 98 项固件测试、23 项服务端测试通过（后者需允许绑定本地测试套接字）。
 
-Key 已在当前环境隐藏配置，真实创建已受理；首条任务失败，内嵌图片重试待确认。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
+Key 已在当前环境隐藏配置，真实创建已受理；首条任务失败，用户确认的一次内嵌图片重试成功。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
+
+## 内嵌图片真实生成结果
+
+任务 `448781796409606` 已成功，usage 报告 output_seconds=5、input_image_count=2；账单实际金额未核对。原片 768×1376、24 fps、约 5.167 秒、124 帧、包含一条音轨，与所请求的整 5 秒略有差异。
+
+- [原始视频](design/launch/mia-minimax-preview-source.mp4)：保留平台原输出。
+- [静音预览](design/launch/mia-minimax-preview-silent.mp4)：只重新封装视频流，移除音轨；逐帧 RGB 解码哈希与原片一致，无重画、裁切或水印处理。
+- [清理后的元数据](design/launch/mia-minimax-preview-metadata.json)：尺寸、时长、音轨数、文件与解码帧校验值；没有 Key 或签名下载地址。
+
+九帧检查可见粒子旋绕凝成人物、侧面转向、V 手势与圆环亮起。但侧面角度大于原定约 35 度，约 2.5–3.5 秒人物下沿出现明显水平截断，服饰和人物尺度在中途变化；还不能证明指尖光弧、圆环和所有手机首页衔接满足既定方案。未见所抽帧中出现平台文字水印，不作完整版权或逐帧无水印认证。
+
+该视频只供预览，未验收、未作为 `MiaLaunch.mp4` 加入 iOS。需要继续修正前先取得用户对画面与新一次费用的决定；不自动生成第三条任务。

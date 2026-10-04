@@ -9,6 +9,7 @@
 | [干净城市背景](mia-approved-city-background.png) | 与概念图同方向的无角色背景原图，适合后续重新适配不同 iPhone 尺寸。 |
 | [正面全身透明立绘](mia-full-body-transparent.png) | 用于图生模型 AI 网站的输入参考：1024 × 1536 PNG，已核验透明通道。使用 imagegen 按已选 Mia 造型、正面全身、双臂稍展开、透明背景生成；参考图未展示的鞋靴进行了补全。它是衍生参考，非分层源稿或 Cubism 模型。 |
 | [启动动画动作预览](launch/mia-launch-preview-source.mp4) | 用户选择先用 40 积分生成的 360p、约 5 秒静音预览。包含粒子演变与角色动作，但中段造型有偏差且带 OpenArt 水印；未验收、未加入正式启动资源。分镜、提示词和待修正事项见[制作计划](../mia-launch-animation-plan.md)。 |
+| [MiniMax H3 静音启动预览](launch/mia-minimax-preview-silent.mp4) | 用户确认重试一次后生成，768×1376、24 fps、约 5.17 秒；从含音轨的[原片](launch/mia-minimax-preview-source.mp4)直接封装为静音版，画面帧完全一致。已见转身，但中途造型/尺度变化和人物下沿截断未通过成品验收，未加入 App。[元数据](launch/mia-minimax-preview-metadata.json)。 |
 | [启动动画外部生成交付包](launch/mia-launch-external-generation-brief.md) | 用户自行在其他平台生成用：首末帧链接、角色参考、完整提示词与验收要求。仍沿用既定 Mia，不代表视频成品已经完成。 |
 
 应用当前使用的[透明静态角色立绘](../../ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png)和[背景 JPG](../../ios/MiaApp/Assets.xcassets/CityBackground.imageset/city-background.jpg)是运行资源。静态立绘是已选造型的展示图，并非分层源稿或 Live2D 模型。若衍生图与已选首页概念图在造型或色彩上有差异，正式角色设计以已选首页概念图为准。

@@ -2,7 +2,7 @@
 
 更新日期：2026-10-04。开发分支：`feature/mia-ios-bootstrap`。本文是 iPhone 版 Mia 的统一进度与验收依据；仓库原有 ESP-IDF 固件继续独立存在。
 
-**MiniMax 首次生成结果**：用户随后确认开始生成，真实创建返回任务 `448779139891511`，查询 failed、错误码 2013，归类为参考图片读取失败；没有自动重试。已增加直接内嵌本地原图的方案，15 项离线测试及提交 `b388b62` 的 [内嵌图片修正 CI](https://github.com/bboytang/Mia/actions/runs/37203924922)通过，约 6.32 MB 修正请求已准备，真实重试待用户确认；实际费用未核实，尚无视频成品。
+**MiniMax 预览已生成**：用户确认仅重试一次，直接传入两张原图的任务 `448781796409606` succeeded。原片为 768×1376、24 fps、约 5.17 秒、124 帧、含一条音轨；[静音预览](design/launch/mia-minimax-preview-silent.mp4)仅移除音轨，逐帧解码哈希与原片相同。已抽九帧检查：能看到粒子凝聚、侧身转向、V 手势与下方圆环，但侧向幅度大于原定约 35 度，角色尺度/服饰中途变化，约 2.5–3.5 秒人物下沿有明显水平截断。未验收为正式启动素材，未加入 iOS。实际费用待账户核对，未再提交任务。原片、静音版和[清理元数据](design/launch/mia-minimax-preview-metadata.json)已保存。
 
 跨设备继续开发请先读[Codex 交接说明](mia-ios-handoff.md)和[已确定视觉参考](design/README.md)。
 
@@ -41,13 +41,13 @@ flowchart LR
 
 ## 当前进度与证据
 
-2026-10-04 新增 [MiniMax H3 离线生成工具](mia-minimax-video.md)：官方中国 V2 创建/查询协议、首尾帧请求、隐藏 Key 配置、任务等待与下载已实现，14 项离线测试通过。准备请求不联网，实际付费生成需确认；真实创建已受理，首次任务失败；视频质量与 App 衔接待验。用户选定在当前 Codex 工作环境运行，工具、项目虚拟环境与隐藏配置短入口 `bash /tmp/mia-minimax-key` 已就绪；无鉴权查询探测返回 HTTP 401，HTTPS 可达；用户已隐藏设置 Key，0600 权限已核对。配置后查询不存在任务返回 HTTP 500／`server_error`；随后真实创建已受理但素材读取失败，费用未核实。不再依赖 VPS SSH，不改现有 iOS 或火山语音链路。提交 `554c302` 的 [视频工具 CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过；本地 98 项固件测试和 23 项服务端测试也通过。
+2026-10-04 新增 [MiniMax H3 离线生成工具](mia-minimax-video.md)：官方中国 V2 创建/查询协议、首尾帧请求、隐藏 Key 配置、任务等待与下载已实现，14 项离线测试通过。准备请求不联网，实际付费生成需确认；真实创建已受理，首条任务失败，内嵌图片重试成功；视频质量与 App 衔接待验。用户选定在当前 Codex 工作环境运行，工具、项目虚拟环境与隐藏配置短入口 `bash /tmp/mia-minimax-key` 已就绪；无鉴权查询探测返回 HTTP 401，HTTPS 可达；用户已隐藏设置 Key，0600 权限已核对。配置后查询不存在任务返回 HTTP 500／`server_error`；随后真实创建已受理但素材读取失败，费用未核实。不再依赖 VPS SSH，不改现有 iOS 或火山语音链路。提交 `554c302` 的 [视频工具 CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过；本地 98 项固件测试和 23 项服务端测试也通过。
 
 | 工作项 | 状态 | 已有结果与边界 |
 | --- | --- | --- |
 | iOS 工程与 GitHub 编译 | 已完成 | XcodeGen 工程；构建代码 `9295439` 的 [成功记录](https://github.com/bboytang/Mia/actions/runs/37196200664)：32 项测试、模拟器与真机编译通过，上传未签名 IPA、校验文件及两种尺寸录屏和首页截图；文档更新不会改变该 IPA。 |
 | 首页视觉 | 联调版完成 | 原创城市背景、选定 Mia 静态立绘、深色字幕板、声波和麦克风；已检查 GitHub 模拟器截图。静态立绘没有 Live2D 动画和口型。 |
-| 启动动画 | 360p 动作预览；播放准备通过 CI，MiniMax 工具待真实生成 | [第一条预览](design/launch/mia-launch-preview-source.mp4)约 5.04 秒、24 fps、无音轨；中段造型偏差和 OpenArt 水印未解决，未加入正式应用资源。播放器十项测试通过；录制就绪竞态已修复并检查两台录屏首末帧与缺素材回退截图。已提供[提示词交付包](design/launch/mia-launch-external-generation-brief.md)，并新增 MiniMax H3 首尾帧生成工具；真实生成、正式素材衔接及真机流畅度待验。 |
+| 启动动画 | 360p 动作预览；播放准备通过 CI，MiniMax 预览已生成，质量待验收 | [第一条预览](design/launch/mia-launch-preview-source.mp4)约 5.04 秒、24 fps、无音轨；中段造型偏差和 OpenArt 水印未解决，未加入正式应用资源。播放器十项测试通过；录制就绪竞态已修复并检查两台录屏首末帧与缺素材回退截图。已提供[提示词交付包](design/launch/mia-launch-external-generation-brief.md)，MiniMax H3 内嵌图片重试已输出静音预览；中途造型变化和人物下沿截断未通过验收，正式素材衔接及真机流畅度待验。 |
 | iPhone 语音管线 | 代码完成，真机待验 | WebSocket 握手、Opus 编解码、麦克风、播放、打断、尾帧补齐与轮次间采集关闭；模拟器测试通过，尚无真实 iPhone 录放反馈。 |
 | 仅 Mia 字幕 | 代码完成，时序待校准 | 用户识别文本被忽略；Mia 字幕按播放回调推进。多句、真实语速和弱网情况待验。 |
 | 火山网关迁移 | 服务器真实合成语音回合通过，外部 TLS 阻塞真机 | 新 Provider、网关选择及百炼回滚已推送；本地和 VPS 各 23 项服务端测试通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过。VPS 自身访问公网域名的真实链路通过，iPhone 仍无法完成 TLS 握手。 |

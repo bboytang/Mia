@@ -1,0 +1,36 @@
+{
+  "provider": "MiniMax",
+  "model": "MiniMax-H3",
+  "task_id": "448781796409606",
+  "requested_resolution": "768P",
+  "requested_duration_seconds": 5,
+  "requested_ratio": "adaptive",
+  "input_images": 2,
+  "source": {
+    "width": 768,
+    "height": 1376,
+    "fps": "24/1",
+    "duration_seconds": 5.167,
+    "decoded_frames": 124,
+    "audio_streams": 1,
+    "bytes": 3187824,
+    "sha256": "0bc9c372f4e33100aca584c228fee889384905a78de98e40b1ed02eb210bbb47",
+    "decoded_video_sha256": "aa92dd427ab571373daf7ce4f3c4d315396eea200a97031dd0c5a3f9925960e0",
+    "video_codec": "h264"
+  },
+  "silent_preview": {
+    "width": 768,
+    "height": 1376,
+    "fps": "24/1",
+    "duration_seconds": 5.166667,
+    "decoded_frames": 124,
+    "audio_streams": 0,
+    "bytes": 3098642,
+    "sha256": "c85b60378bfd6aadec635cc04a17c018d13a8ff6682b814038c499b4d95c25a0",
+    "decoded_video_sha256": "aa92dd427ab571373daf7ce4f3c4d315396eea200a97031dd0c5a3f9925960e0",
+    "video_codec": "h264"
+  },
+  "review_status": "preview_only_not_accepted_for_app",
+  "billing": "actual_charge_not_verified",
+  "conversion": "video stream remux only; audio omitted; decoded frames match"
+}
