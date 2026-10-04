@@ -6,6 +6,8 @@
 
 ## 在另一台设备上开始
 
+**启动视频当前交付方式**：用户选择自行在其他平台生成，已提供[首末帧与完整提示词交付包](design/launch/mia-launch-external-generation-brief.md)。不再继续 OpenArt 生成或等待充值；收到原始 MP4 后检查角色、真实旋身、指尖光弧、输出参数与首页衔接。录屏就绪竞态修复已推送为 `9295439`，[新 CI](https://github.com/bboytang/Mia/actions/runs/37196200664)运行中，尚未宣称修复经真实模拟器验证。
+
 在 Codex 中连接同一个 GitHub 仓库，选择 `feature/mia-ios-bootstrap` 分支；若使用终端，可执行：
 
 ```bash

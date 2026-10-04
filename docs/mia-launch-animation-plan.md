@@ -40,6 +40,8 @@
 
 ## 下一次生成前的修正
 
+用户现选择自行在其他平台生成，已整理[外部生成交付包](design/launch/mia-launch-external-generation-brief.md)，包含首末帧、参考图、主提示词、负面提示词与输出要求。OpenArt 后续报价只保留为候选记录，不继续生成；正式视频收到后仍须检查角色、动作与 App 衔接。
+
 2026-10-04 再次只读查询：OpenArt 账户为免费方案、0 积分；既有任务只暴露一个视频，没有无水印下载变体，MCP 没有视频编辑或无水印导出接口。官方[条款第 4.5 节](https://openart.ai/suite/terms)要求免费生成输出保留水印，除非生成时具备相应付费权益或另获平台许可。需要用户准备可用额度和无水印交付方式；本轮未生成或购买。
 
 可用候选为 `kling-3-omni` 的 `element2video`：接受 1–7 张图片 `visualReferences`，可设 `duration=5`、`aspectRatio=9:16`、`generateSound=false`、`multiShot=false`、`resolution=pro`。三个图片参考的实时报价为 175 积分；表单未给 `pro` 的像素尺寸，不能写成已验证的 1080p。图片参考不提供精确首末帧锁定，角色一致性须检查实际生成结果，生成前仍须重新报价。
