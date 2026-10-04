@@ -1,0 +1,31 @@
+name: Test Mia Video Authoring
+
+on:
+  push:
+    paths:
+      - 'scripts/mia_minimax_video.py'
+      - 'scripts/video_tests/test_mia_minimax_video.py'
+      - 'docs/design/launch/mia-minimax-prompt.txt'
+      - '.github/workflows/mia-video.yml'
+  pull_request:
+    paths:
+      - 'scripts/mia_minimax_video.py'
+      - 'scripts/video_tests/test_mia_minimax_video.py'
+      - 'docs/design/launch/mia-minimax-prompt.txt'
+      - '.github/workflows/mia-video.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install httpx==0.28.1
+      - run: python -m unittest scripts.video_tests.test_mia_minimax_video -v
+      - run: python scripts/mia_minimax_video.py prepare > /tmp/mia-minimax-request.json
