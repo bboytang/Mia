@@ -1,0 +1,47 @@
+{
+  "purpose": "360p motion preview",
+  "model": "pixverseV6",
+  "mode": "image2video",
+  "historyId": "vuN9z6KwmzHakZEeOtH9",
+  "status": "COMPLETED",
+  "requested": {
+    "resolution": "360p",
+    "duration": 5,
+    "videoCount": 1,
+    "generateAudio": false
+  },
+  "quotedCredits": 40,
+  "creditsCharged": 40,
+  "creditsRefunded": null,
+  "sourceFrameDimensions": {
+    "width": 933,
+    "height": 1686
+  },
+  "output": {
+    "resourceId": "6UOJoaHTCIFNgNg3QOvE",
+    "width": 360,
+    "height": 640,
+    "duration": 5.041667,
+    "fps": 24,
+    "hasAudio": false,
+    "codec": "h264",
+    "container": "mp4",
+    "fileSizeBytes": 889347,
+    "sha256": "16bba30cb8c7b699a10aae79208149631e58ae9296f23a49bf7bf7db884e682b",
+    "sourcePath": "docs/design/launch/mia-launch-preview-source.mp4"
+  },
+  "verification": {
+    "providerMediaMetadataChecked": true,
+    "downloadSucceeded": true,
+    "visualMotionReview": "Decoded sample frames reviewed; motion preview only, not accepted for production",
+    "sampledFrameTimesSeconds": [0, 0.75, 1.5, 2.25, 3, 3.5, 4, 4.5, 4.916667],
+    "providerWatermarkPresent": true,
+    "characterDesignDriftObserved": true,
+    "homepageHandoffVerified": false,
+    "hardwareValidation": false
+  },
+  "error": null,
+  "errorDisplayCode": null,
+  "failedCode": null,
+  "warning": null
+}

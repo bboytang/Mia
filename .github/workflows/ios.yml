@@ -72,20 +72,39 @@ jobs:
           zip -qr Mia-unsigned.ipa Payload
           shasum -a 256 Mia-unsigned.ipa > SHA256SUMS
 
-      - name: Capture home screen
+      - name: Capture launch and home screens
         run: |
-          simulator_id=$(xcrun simctl list devices available -j | python3 -c '
+          set -euo pipefail
+          simulator_ids=$(xcrun simctl list devices available -j | python3 -c '
           import json, sys
           devices = json.load(sys.stdin)["devices"]
-          print(next(device["udid"] for runtime in devices.values()
-                     for device in runtime if "iPhone" in device["name"]))
+          phones = [device for runtime in devices.values() for device in runtime
+                    if "iPhone" in device["name"]]
+          first = phones[0]
+          alternates = [device for device in phones if device["name"] != first["name"]]
+          second = next((device for device in alternates if "SE" in device["name"]), alternates[0])
+          print(first["udid"], second["udid"])
           ')
-          xcrun simctl boot "$simulator_id" || true
-          xcrun simctl bootstatus "$simulator_id" -b
-          xcrun simctl install "$simulator_id" "$RUNNER_TEMP/mia-simulator/Build/Products/Debug-iphonesimulator/Mia.app"
-          xcrun simctl launch "$simulator_id" com.bboytang.mia
-          sleep 3
-          xcrun simctl io "$simulator_id" screenshot "$RUNNER_TEMP/mia-artifacts/mia-home.png"
+          suffix=""
+          for simulator_id in $simulator_ids; do
+            xcrun simctl boot "$simulator_id" || true
+            xcrun simctl bootstatus "$simulator_id" -b
+            xcrun simctl install "$simulator_id" "$RUNNER_TEMP/mia-simulator/Build/Products/Debug-iphonesimulator/Mia.app"
+            xcrun simctl io "$simulator_id" recordVideo --codec h264 --mask ignored \
+              "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4" &
+            mia_record_pid=$!
+            trap 'kill -INT "$mia_record_pid" 2>/dev/null || true' EXIT
+            sleep 1
+            xcrun simctl launch "$simulator_id" com.bboytang.mia
+            sleep 8
+            xcrun simctl io "$simulator_id" screenshot "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png"
+            kill -INT "$mia_record_pid"
+            wait "$mia_record_pid"
+            trap - EXIT
+            test -s "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4"
+            xcrun simctl shutdown "$simulator_id"
+            suffix="-secondary"
+          done
 
       - name: Upload unsigned iOS app
         uses: actions/upload-artifact@v4
@@ -95,5 +114,6 @@ jobs:
             ${{ runner.temp }}/mia-artifacts/Payload/Mia.app
             ${{ runner.temp }}/mia-artifacts/Mia-unsigned.ipa
             ${{ runner.temp }}/mia-artifacts/SHA256SUMS
-            ${{ runner.temp }}/mia-artifacts/mia-home.png
+            ${{ runner.temp }}/mia-artifacts/mia-home*.png
+            ${{ runner.temp }}/mia-artifacts/mia-launch*.mp4
           if-no-files-found: error

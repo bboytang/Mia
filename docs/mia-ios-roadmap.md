@@ -43,6 +43,7 @@ flowchart LR
 | --- | --- | --- |
 | iOS 工程与 GitHub 编译 | 已完成 | XcodeGen 工程；macOS CI 跑模拟器测试、真机编译，上传未签名 IPA、校验文件和首页截图。最新应用代码 `b05b6c99` 的 [构建成功记录](https://github.com/bboytang/Mia/actions/runs/37089783261)；文档更新不会改变该 IPA。 |
 | 首页视觉 | 联调版完成 | 原创城市背景、选定 Mia 静态立绘、深色字幕板、声波和麦克风；已检查 GitHub 模拟器截图。静态立绘没有 Live2D 动画和口型。 |
+| 启动动画 | 360p 动作预览；播放接入待 CI | 用户确认粒子成形 → Mia 旋身 → 指尖点亮首页；[第一条预览](design/launch/mia-launch-preview-source.mp4)生成并解码检查，约 5.04 秒、24 fps、无音轨。中段造型偏差和 OpenArt 水印未解决，未加入正式应用资源；播放器及生命周期测试已编写，新 CI 待运行。见[制作计划](mia-launch-animation-plan.md)。 |
 | iPhone 语音管线 | 代码完成，真机待验 | WebSocket 握手、Opus 编解码、麦克风、播放、打断、尾帧补齐与轮次间采集关闭；模拟器测试通过，尚无真实 iPhone 录放反馈。 |
 | 仅 Mia 字幕 | 代码完成，时序待校准 | 用户识别文本被忽略；Mia 字幕按播放回调推进。多句、真实语速和弱网情况待验。 |
 | 火山网关迁移 | 服务器真实合成语音回合通过，外部 TLS 阻塞真机 | 新 Provider、网关选择及百炼回滚已推送；本地和 VPS 各 23 项服务端测试通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过。VPS 自身访问公网域名的真实链路通过，iPhone 仍无法完成 TLS 握手。 |

@@ -2,6 +2,8 @@
 
 最后核对：2026-10-04。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。备案期间的角色接入设计见[Live2D 运行时方案](mia-live2d-runtime-plan.md)。
 
+**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器和十项生命周期测试已编写，正式素材缺失时直接进入原首页；新 iOS CI 待运行。不得将预览、测试包的黑色视频或回退录屏写成动画成品通过。下一步先取得用户动作反馈、修正一致性并确认无水印导出条件，再验收素材和两种手机布局的衔接。
+
 ## 在另一台设备上开始
 
 在 Codex 中连接同一个 GitHub 仓库，选择 `feature/mia-ios-bootstrap` 分支；若使用终端，可执行：
