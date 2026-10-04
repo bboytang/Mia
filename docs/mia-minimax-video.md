@@ -65,4 +65,6 @@ VPS 已有 Mia 虚拟环境时，在代码同步后可运行：
 /root/projects/Mia/.venv/bin/python -m unittest scripts.video_tests.test_mia_minimax_video -v
 ```
 
+提交 `554c302` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过 14 项测试和离线请求准备。本地另有 98 项固件测试、23 项服务端测试通过（后者需允许绑定本地测试套接字）。
+
 真实调用待用户在 VPS 隐藏配置 Key，并确认单次预算。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
