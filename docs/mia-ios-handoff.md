@@ -2,11 +2,11 @@
 
 最后核对：2026-10-04。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。备案期间的角色接入设计见[Live2D 运行时方案](mia-live2d-runtime-plan.md)。
 
-**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器已接入，提交 `b7269de` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37194380347)通过 32 项测试（含十项启动播放测试）、模拟器和真机编译；已检查 16 Pro 与 SE（第三代）首页截图。正式素材缺失时直接进入原首页，应用包不含测试视频。CI 录屏时长/帧数异常，SE 录制就绪晚于应用启动，不能用于启动过程验收；正式素材接入前须等待录制就绪后重验。不得将预览、测试包的黑色视频或回退截图写成动画成品通过。下一步先取得用户动作反馈、修正一致性并确认无水印导出条件，再验收素材和两种手机布局的衔接。
+**新增启动动画工作**：用户确认[分镜方案](mia-launch-animation-plan.md)，并选择先用现有 40 积分生成 360p 动作预览。[第一条视频](design/launch/mia-launch-preview-source.mp4)已生成并解码检查：约 5.04 秒、24 fps、H.264、无音轨；中段发饰/服饰有偏差且带 OpenArt 水印，尚未作为正式 `MiaLaunch.mp4` 加入应用。启动播放器已接入，提交 `9295439` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37196200664)通过 32 项测试（含十项启动播放测试）、模拟器和真机编译；已检查 16 Pro 与 SE（第三代）录屏首末帧及首页截图。正式素材缺失时直接进入原首页，应用包不含测试视频。旧 CI 的录制就绪竞态已修复；新日志和两段录屏均证明先就绪、后启动，副录屏不再只有一帧。不得将预览、测试包的黑色视频或缺素材回退录屏写成动画成品通过。下一步接收用户在其他平台生成的原始 MP4，检查角色与动作，再验收两种手机布局的衔接。
 
 ## 在另一台设备上开始
 
-**启动视频当前交付方式**：用户选择自行在其他平台生成，已提供[首末帧与完整提示词交付包](design/launch/mia-launch-external-generation-brief.md)。不再继续 OpenArt 生成或等待充值；收到原始 MP4 后检查角色、真实旋身、指尖光弧、输出参数与首页衔接。录屏就绪竞态修复已推送为 `9295439`，[新 CI](https://github.com/bboytang/Mia/actions/runs/37196200664)运行中，尚未宣称修复经真实模拟器验证。
+**启动视频当前交付方式**：用户选择自行在其他平台生成，已提供[首末帧与完整提示词交付包](design/launch/mia-launch-external-generation-brief.md)，公开下载链接均已核对内容。收到原始 MP4 后检查角色、真实旋身、指尖光弧、输出参数与首页衔接。录屏就绪修复 `9295439` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37196200664)已成功；两台首帧为 iOS 桌面，末帧与各自原首页截图一致。主录屏约 154.01 秒、47 帧，包含很长的 `simctl launch` 等待；副录屏约 8.21 秒、67 帧。该时长不能用于推断真机启动速度，正式动画仍未收到；当前等待用户提供素材。
 
 在 Codex 中连接同一个 GitHub 仓库，选择 `feature/mia-ios-bootstrap` 分支；若使用终端，可执行：
 
@@ -35,7 +35,7 @@ git status --short
 
 | 模块 | 位置 | 已验证 | 未验证 |
 | --- | --- | --- | --- |
-| iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕、启动播放准备 | `ios/MiaApp/`、`ios/MiaTests/` | [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37194380347)通过 32 项测试、模拟器与真机编译，上传未签名 IPA、SHA-256 与两种尺寸截图；已检查截图及应用包。 | 正式启动素材及录屏验收；用户重签后在真机上的录放、耳机切换、弱网与字幕时序。 |
+| iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕、启动播放准备 | `ios/MiaApp/`、`ios/MiaTests/` | [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37196200664)通过 32 项测试、模拟器与真机编译，上传未签名 IPA、SHA-256、两种尺寸录屏与截图；已检查录制顺序、首末帧、截图及应用包。 | 正式启动素材及动画衔接验收；用户重签后在真机上的录放、耳机切换、弱网与字幕时序。 |
 | 小智兼容网关、火山 Provider、Opus | `server/xiaozhi_gateway.py`、`server/volcengine_provider.py`、`server/tests/` | 23 项服务端测试在本地与 VPS 通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过；VPS 自身经公网域名调用真实云 API，返回 Mia 字幕与 91 帧可解码 Opus。百炼 Provider 保留回滚。 | 外部网络可达后，iPhone 真机录放、打断、连续多轮与弱网。 |
 | Ubuntu 部署材料 | `server/deploy/`、`server/README.md` | 新进程和 Caddy 均运行；VPS 自测真实 WSS 全链路、错误令牌拒绝、受保护配置与令牌保留已验。 | 外部 TLS 在 ClientHello 后被重置；用户称备案正在审核，审核和所需接入完成后须重验。 |
 | 角色 | `docs/design/`、`ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/` | 已选概念图和静态图可在 GitHub 查看，模拟器首页已展示；[运行时方案](mia-live2d-runtime-plan.md)已整理。 | 真正 Cubism 模型制作、许可、SDK 接入和运行时口型。 |
