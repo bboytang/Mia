@@ -23,13 +23,17 @@ H3 没有在此协议声明静音参数，提示词要求静音仍须实际检�
 
 只在交互终端提示中粘贴中国 MiniMax 开放平台 API Key。不回显，原子写入仓库外 `~/.config/mia/minimax.key`，权限 0600。重复运行可更新；不会验证鉴权、提交任务或扣费。也支持 `MINIMAX_API_KEY` 环境注入，但不要把值写进命令历史、仓库、聊天或日志。此 Key 不放入 `/etc/mia/gateway.env`。
 
-VPS 已有 Mia 虚拟环境时，在代码同步后可运行：
+## 当前环境部署（用户选定）
+
+用户改为在当前 Codex 工作环境运行工具，路径 `/root/projects/Mia`，不依赖 Mia VPS 的 SSH 授权。已验证项目虚拟环境、离线请求准备和到中国 MiniMax API 的 HTTPS 连通性；无鉴权查询探测返回 HTTP 401，不能据此宣称真实 Key 已通过。
+
+隐藏配置短入口已放在当前环境 `/tmp/mia-minimax-key`（只包装上述 configure，不含 Key、不发生成请求）：
 
 ```bash
-/opt/mia/.venv/bin/python /home/ubuntu/Mia/scripts/mia_minimax_video.py configure
+bash /tmp/mia-minimax-key
 ```
 
-部署者可设置简短命令 `mia-minimax-key`，只包装上述 configure 操作。当前环境的 SSH 公钥须先获得 VPS 授权；部署状态以交接记录为准。
+请在当前工作环境的交互终端运行。临时入口不随 Git 保存；换环境后用上方 Python 完整命令重新配置。密钥仍位于仓库外 `~/.config/mia/minimax.key`，不进入 iOS 或火山语音服务。
 
 ## 准备、提交与恢复
 
@@ -67,4 +71,4 @@ VPS 已有 Mia 虚拟环境时，在代码同步后可运行：
 
 提交 `554c302` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过 14 项测试和离线请求准备。本地另有 98 项固件测试、23 项服务端测试通过（后者需允许绑定本地测试套接字）。
 
-真实调用待用户在 VPS 隐藏配置 Key，并确认单次预算。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
+真实调用待用户在当前环境隐藏配置 Key，并确认单次预算。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
