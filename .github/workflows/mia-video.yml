@@ -29,3 +29,4 @@ jobs:
       - run: python -m pip install httpx==0.28.1
       - run: python -m unittest scripts.video_tests.test_mia_minimax_video -v
       - run: python scripts/mia_minimax_video.py prepare > /tmp/mia-minimax-request.json
+      - run: python scripts/mia_minimax_video.py prepare --first docs/design/launch/mia-particle-start.png --last docs/design/launch/mia-home-end-reference.png > /tmp/mia-minimax-inline-request.json

@@ -1,6 +1,7 @@
 """Offline Mia animation authoring via the documented MiniMax H3 V2 API."""
 
 import argparse
+import base64
 import getpass
 import json
 import os
@@ -31,21 +32,40 @@ def https_url(value):
     return value
 
 
+def image_url(value):
+    if urlsplit(value).scheme:
+        return https_url(value)
+    path = Path(value)
+    if not path.is_file() or path.stat().st_size > 30 * 1024 * 1024:
+        raise VideoError('本地参考图必须存在且不超过 30 MB。')
+    data = path.read_bytes()
+    if data.startswith(b'\x89PNG\r\n\x1a\n'):
+        kind = 'png'
+    elif data.startswith(b'\xff\xd8\xff'):
+        kind = 'jpeg'
+    else:
+        raise VideoError('本地参考图仅支持 PNG/JPEG。')
+    return 'data:image/' + kind + ';base64,' + base64.b64encode(data).decode('ascii')
+
+
 def build_request(prompt, first, last, resolution, duration):
     if not prompt.strip() or len(prompt) > 7000:
         raise VideoError('提示词必须非空且不超过 7000 字符。')
     if resolution not in ('768P', '2K') or not 4 <= duration <= 15:
         raise VideoError('H3 要求 768P/2K 和 4–15 秒整数时长。')
-    return {
+    body = {
         'model': 'MiniMax-H3',
         'content': [
             {'type': 'text', 'text': prompt},
-            {'type': 'image_url', 'image_url': {'url': https_url(first)}, 'role': 'first_frame'},
-            {'type': 'image_url', 'image_url': {'url': https_url(last)}, 'role': 'last_frame'},
+            {'type': 'image_url', 'image_url': {'url': image_url(first)}, 'role': 'first_frame'},
+            {'type': 'image_url', 'image_url': {'url': image_url(last)}, 'role': 'last_frame'},
         ],
         'resolution': resolution, 'duration': duration, 'ratio': 'adaptive',
         'aigc_watermark': False,
     }
+    if len(json.dumps(body).encode()) > 64 * 1024 * 1024:
+        raise VideoError('内嵌参考图导致请求超过 64 MB；请缩小素材。')
+    return body
 
 
 def api_json(client, key, method, path, body=None):

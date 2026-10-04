@@ -1,4 +1,5 @@
 import json
+import base64
 import tempfile
 import sys
 import unittest
@@ -39,6 +40,18 @@ class MiniMaxVideoTests(unittest.TestCase):
                 with self.assertRaises(video.VideoError):
                     video.build_request(prompt, first, 'https://example.com/b.png',
                                         resolution, duration)
+
+    def test_local_png_encoded_inline_without_remote_fetch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            image = Path(directory) / 'frame.png'
+            image.write_bytes(b'\x89PNG\r\n\x1a\nTEST_ONLY')
+            body = video.build_request('Mia', str(image), str(image), '768P', 5)
+            url = body['content'][1]['image_url']['url']
+            self.assertTrue(url.startswith('data:image/png;base64,'))
+            self.assertEqual(base64.b64decode(url.split(',', 1)[1]), image.read_bytes())
+            image.write_bytes(b'not an image')
+            with self.assertRaises(video.VideoError):
+                video.build_request('Mia', str(image), str(image), '768P', 5)
 
     def test_create_and_query_auth_contract(self):
         calls = []

@@ -1,6 +1,6 @@
 # Mia 启动动画：MiniMax H3 API 工具
 
-2026-10-04。此工具只用于离线制作启动视频，不接入 iOS、语音网关或火山密钥配置。沿用已确认角色与[分镜](mia-launch-animation-plan.md)，没有替换 Live2D。用户已在当前环境隐藏设置 MiniMax Key；真实鉴权、生成权限、生成质量与最终 App 衔接尚待验证。
+2026-10-04。此工具只用于离线制作启动视频，不接入 iOS、语音网关或火山密钥配置。沿用已确认角色与[分镜](mia-launch-animation-plan.md)，没有替换 Live2D。用户已在当前环境隐藏设置 MiniMax Key，真实创建请求已被受理；首条任务因参考图片读取失败，尚无可验收成品。
 
 ## 协议依据与生成参数
 
@@ -63,6 +63,20 @@ bash /tmp/mia-minimax-key
 
 ## 验证边界
 
+### 首次真实提交与素材传输修正
+
+用户要求“开始生成”后，按既定首尾图、5 秒 768P 提交一次，创建返回任务 `448779139891511`。查询状态为 failed，错误码 2013，错误内容归类为参考素材读取/下载失败；没有输出上游错误正文或 Key，也没有自动重试。usage 为空，不能宣称实际已扣或已退多少费用。
+
+为避免平台访问 GitHub 图片地址失败，新增本地 PNG/JPEG 路径输入，按官方 `image_url.url` 支持的 `data:image/png;base64,...` 直接内嵌原图，不修改图片。逐图检查 30 MB 上限、整个请求检查 64 MB 上限；现有两张 PNG 请求约 6.32 MB。15 项离线测试通过，包括原图字节的 Base64 往返；真实内嵌请求尚未提交，新 CI 待推送后补充。
+
+准备修正请求（不联网、不收费）：
+
+```bash
+/root/projects/Mia/.venv/bin/python scripts/mia_minimax_video.py prepare --first docs/design/launch/mia-particle-start.png --last docs/design/launch/mia-home-end-reference.png > /tmp/mia-h3-inline-request.json
+```
+
+重试会创建新任务，需用户确认再提交一次，另用状态文件 `/tmp/mia-h3-task-20261004-inline.json`，保留失败任务记录。模型、时长、清晰度、首尾图和提示词保持原方案。
+
 离线测试覆盖请求字段、鉴权、错误正文隐藏、不重试付费请求、查询、等待终止与超时、下载与文件保护、0600 Key、交互输入以及付费确认与状态保留。CI 不配置真实 Key，不创建付费任务。
 
 ```bash
@@ -71,4 +85,4 @@ bash /tmp/mia-minimax-key
 
 提交 `554c302` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37202954070)已通过 14 项测试和离线请求准备。本地另有 98 项固件测试、23 项服务端测试通过（后者需允许绑定本地测试套接字）。
 
-Key 已在当前环境隐藏配置，真实生成待用户确认单次预算。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
+Key 已在当前环境隐藏配置，真实创建已受理；首条任务失败，内嵌图片重试待确认。下载完成后检查实际分辨率、时长、帧率、音轨、水印、Mia 造型和动作，再验证首页衔接。当前无合格正式 `MiaLaunch.mp4`，不得标记启动动画完成。
