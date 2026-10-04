@@ -46,12 +46,24 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.tests
+  MiaUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - MiaUITests
+    dependencies:
+      - target: Mia
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.uitests
 schemes:
   Mia:
     build:
       targets:
         Mia: all
         MiaTests: [test]
+        MiaUITests: [test]
     test:
       targets:
         - MiaTests
+        - MiaUITests

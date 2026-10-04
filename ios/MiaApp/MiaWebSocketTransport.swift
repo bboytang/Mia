@@ -4,12 +4,14 @@ enum MiaConnectionError: LocalizedError {
     case invalidEndpoint
     case unexpectedMessage
     case handshakeTimeout
+    case unauthorized
 
     var errorDescription: String? {
         switch self {
         case .invalidEndpoint: "请输入有效的 wss:// 服务端地址"
         case .unexpectedMessage: "服务端返回了无法识别的消息"
         case .handshakeTimeout: "服务端握手超时"
+        case .unauthorized: "登录已失效，请重新登录"
         }
     }
 }
@@ -48,6 +50,15 @@ enum MiaIncomingFrame {
 final class MiaWebSocketTransport {
     private let socket: URLSessionWebSocketTask
 
+    static func isUnauthorized(code: URLSessionWebSocketTask.CloseCode, reason: Data?) -> Bool {
+        code == .policyViolation && reason.flatMap { String(data: $0, encoding: .utf8) } == "未授权"
+    }
+
+    private func connectionError(_ error: Error) -> Error {
+        Self.isUnauthorized(code: socket.closeCode, reason: socket.closeReason)
+            ? MiaConnectionError.unauthorized : error
+    }
+
     init(configuration: MiaWebSocketConfiguration, session: URLSession = .shared) {
         socket = session.webSocketTask(with: configuration.request)
     }
@@ -73,11 +84,15 @@ final class MiaWebSocketTransport {
     }
 
     func sendOpus(_ frame: Data) async throws {
-        try await socket.send(.data(frame))
+        do { try await socket.send(.data(frame)) }
+        catch { throw connectionError(error) }
     }
 
     func receive() async throws -> MiaIncomingFrame {
-        switch try await socket.receive() {
+        let message: URLSessionWebSocketTask.Message
+        do { message = try await socket.receive() }
+        catch { throw connectionError(error) }
+        switch message {
         case .string(let text):
             return .event(try MiaWireProtocol.parseServerEvent(Data(text.utf8)))
         case .data(let data):
@@ -95,6 +110,7 @@ final class MiaWebSocketTransport {
         guard let text = String(data: data, encoding: .utf8) else {
             throw MiaWireError.invalidMessage
         }
-        try await socket.send(.string(text))
+        do { try await socket.send(.string(text)) }
+        catch { throw connectionError(error) }
     }
 }

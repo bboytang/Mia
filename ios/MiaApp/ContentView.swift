@@ -2,6 +2,10 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showsSettings = false
+    @State private var showsLogin = false
+    @StateObject private var account = MiaAccountAccess()
+    @AppStorage("mia.maintenanceMode") private var maintenanceMode = false
+    @AppStorage("mia.accountMigrationDone") private var accountMigrationDone = false
     @StateObject private var session = MiaVoiceSession()
     @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
 
@@ -50,13 +54,16 @@ struct ContentView: View {
                     Spacer(minLength: 12)
                     captionPanel
                     Button {
-                        if serverURL.isEmpty || MiaTokenStore.read() == nil {
-                            showsSettings = true
-                        } else {
+                        if let token = account.token(endpoint: serverURL, maintenanceMode: maintenanceMode,
+                                                     legacyToken: MiaTokenStore.read()) {
                             Task {
                                 await session.toggleTalk(endpoint: serverURL,
-                                                         token: MiaTokenStore.read())
+                                                         token: token)
                             }
+                        } else if maintenanceMode {
+                            showsSettings = true
+                        } else {
+                            showsLogin = true
                         }
                     } label: {
                         MiaAuroraOrb(level: session.audioLevel)
@@ -69,7 +76,7 @@ struct ContentView: View {
                     .accessibilityHint(session.state == .speaking ? "打断 Mia 并开始说话" : "轻触控制语音对话")
                     .disabled(session.state == .connecting)
                     .padding(.top, 12)
-                    Text(MiaTokenStore.read() == nil ? "先在设置中填写网关令牌" : session.state.rawValue)
+                    Text(account.token(endpoint: serverURL, maintenanceMode: maintenanceMode, legacyToken: MiaTokenStore.read()) == nil ? "轻触登录，与 Mia 对话" : session.state.rawValue)
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.8))
                         .padding(.top, 2)
@@ -83,7 +90,29 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showsSettings) {
-            MiaSettingsView()
+            MiaSettingsView(account: account, session: session)
+        }
+        .sheet(isPresented: $showsLogin) {
+            MiaAccountView(access: account, endpoint: serverURL) {
+                maintenanceMode = false
+                session.disconnect()
+            }
+        }
+        .onAppear {
+            if !accountMigrationDone {
+                maintenanceMode = account.credential == nil && MiaTokenStore.read() != nil
+                accountMigrationDone = true
+            }
+        }
+        .onChange(of: serverURL) { _, _ in session.disconnect() }
+        .onChange(of: maintenanceMode) { _, _ in session.disconnect() }
+        .onChange(of: account.credential) { _, _ in session.disconnect() }
+        .onChange(of: session.authorizationRejected) { _, rejected in
+            if rejected && !maintenanceMode {
+                account.invalidate(endpoint: serverURL)
+                session.errorMessage = nil
+                showsLogin = true
+            }
         }
         .alert("连接出错", isPresented: Binding(
             get: { session.errorMessage != nil },
@@ -146,34 +175,57 @@ struct ContentView: View {
 
 private struct MiaSettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject var account: MiaAccountAccess
+    @ObservedObject var session: MiaVoiceSession
     @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
+    @AppStorage("mia.maintenanceMode") private var maintenanceMode = false
+    @State private var showsLogin = false
+    @State private var signingOut = false
     @State private var accessToken = ""
     @State private var tokenStatus = ""
 
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    TextField("wss://8kraw.cloud/xiaozhi/v1/", text: $serverURL)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.URL)
-                } header: {
-                    Text("服务端")
-                } footer: {
-                    Text("请填写支持小智 WebSocket 协议的安全连接地址。")
-                }
-                Section("访问令牌") {
-                    SecureField("网关访问令牌", text: $accessToken)
-                    Button("保存令牌") {
-                        do {
-                            try MiaTokenStore.save(accessToken)
-                            tokenStatus = "已保存在本机钥匙串"
-                        } catch {
-                            tokenStatus = "保存失败：\(error.localizedDescription)"
+                Section("账号") {
+                    if let credential = account.credential,
+                       credential.usable(endpoint: serverURL) {
+                        LabeledContent("用户名", value: credential.username)
+                        Button("退出登录", role: .destructive) {
+                            signingOut = true
+                            maintenanceMode = false
+                            Task {
+                                await account.logout(endpoint: serverURL, disconnect: session.disconnect)
+                                signingOut = false
+                            }
                         }
+                        .disabled(signingOut)
+                    } else {
+                        Button("登录或注册") { showsLogin = true }
                     }
-                    if !tokenStatus.isEmpty { Text(tokenStatus).font(.footnote) }
+                    if let warning = account.warning { Text(warning).font(.footnote) }
+                }
+                Section {
+                    DisclosureGroup("高级维护") {
+                        Toggle("使用维护令牌", isOn: $maintenanceMode)
+                        TextField("服务端地址", text: $serverURL)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .keyboardType(.URL)
+                        SecureField("网关访问令牌", text: $accessToken)
+                        Button("保存维护令牌") {
+                            do {
+                                try MiaTokenStore.save(accessToken)
+                                session.disconnect()
+                                tokenStatus = "已保存在本机钥匙串"
+                            } catch {
+                                tokenStatus = "保存失败：\(error.localizedDescription)"
+                            }
+                        }
+                        if !tokenStatus.isEmpty { Text(tokenStatus).font(.footnote) }
+                        Text("仅供管理员维护。日常使用请注册或登录账号。")
+                            .font(.footnote)
+                    }
                 }
                 Section("开发进度") {
                     LabeledContent("WebSocket 协议", value: "已接入")
@@ -183,6 +235,12 @@ private struct MiaSettingsView: View {
             }
             .navigationTitle("设置")
             .onAppear { accessToken = MiaTokenStore.read() ?? "" }
+            .sheet(isPresented: $showsLogin) {
+                MiaAccountView(access: account, endpoint: serverURL) {
+                    maintenanceMode = false
+                    session.disconnect()
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("完成") { dismiss() }

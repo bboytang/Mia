@@ -39,7 +39,7 @@ jobs:
             -derivedDataPath "$RUNNER_TEMP/mia-simulator" \
             CODE_SIGNING_ALLOWED=NO build
 
-      - name: Run iOS unit tests
+      - name: Run iOS unit and account UI tests
         working-directory: ios
         run: |
           simulator_id=$(xcrun simctl list devices available -j | python3 -c '
@@ -51,6 +51,7 @@ jobs:
           xcodebuild -project Mia.xcodeproj -scheme Mia -configuration Debug \
             -destination "platform=iOS Simulator,id=$simulator_id" \
             -derivedDataPath "$RUNNER_TEMP/mia-tests" \
+            -resultBundlePath "$RUNNER_TEMP/mia-account-tests.xcresult" \
             CODE_SIGNING_ALLOWED=NO test
 
       - name: Build unsigned device app
@@ -137,4 +138,5 @@ jobs:
             ${{ runner.temp }}/mia-artifacts/SHA256SUMS
             ${{ runner.temp }}/mia-artifacts/mia-home*.png
             ${{ runner.temp }}/mia-artifacts/mia-launch*.mp4
+            ${{ runner.temp }}/mia-account-tests.xcresult
           if-no-files-found: error

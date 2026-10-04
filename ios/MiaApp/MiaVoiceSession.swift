@@ -15,6 +15,7 @@ final class MiaVoiceSession: ObservableObject {
     @Published private(set) var caption = ""
     @Published private(set) var audioLevel: Float = 0
     @Published var errorMessage: String?
+    @Published private(set) var authorizationRejected = false
 
     private var transport: MiaWebSocketTransport?
     private var audio: MiaAudioIO?
@@ -57,6 +58,7 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     func disconnect() {
+        authorizationRejected = false
         connectionGeneration = UUID()
         receiveTask?.cancel()
         receiveTask = nil
@@ -248,6 +250,9 @@ final class MiaVoiceSession: ObservableObject {
     private func fail(_ error: Error) {
         errorMessage = error.localizedDescription
         disconnect()
+        if let error = error as? MiaConnectionError, case .unauthorized = error {
+            authorizationRejected = true
+        }
     }
 
     private func storedClientID() -> UUID {

@@ -2,6 +2,12 @@ import XCTest
 @testable import Mia
 
 final class MiaWebSocketTransportTests: XCTestCase {
+    func testOnlyDefinitiveUnauthorizedCloseInvalidatesLogin() {
+        XCTAssertTrue(MiaWebSocketTransport.isUnauthorized(code: .policyViolation, reason: Data("未授权".utf8)))
+        XCTAssertFalse(MiaWebSocketTransport.isUnauthorized(code: .policyViolation, reason: Data("无效握手".utf8)))
+        XCTAssertFalse(MiaWebSocketTransport.isUnauthorized(code: .normalClosure, reason: Data("未授权".utf8)))
+        XCTAssertFalse(MiaWebSocketTransport.isUnauthorized(code: .invalid, reason: nil))
+    }
     func testRejectsInsecureAndMalformedEndpoints() {
         let id = UUID(uuidString: "11111111-2222-3333-4444-555555555555")!
 
