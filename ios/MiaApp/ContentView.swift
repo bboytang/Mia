@@ -6,28 +6,49 @@ struct ContentView: View {
     @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
 
     var body: some View {
-        GeometryReader { _ in
-            ZStack {
-                LinearGradient(
-                    colors: [.black.opacity(0.32), .clear, .black.opacity(0.58)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
+                starMist(in: geometry)
+
+                Image("MiaPortrait")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: geometry.size.width * 1.16,
+                           height: geometry.size.height * 0.88, alignment: .top)
+                    .mask {
+                        LinearGradient(stops: [
+                            .init(color: .white, location: 0),
+                            .init(color: .white, location: 0.72),
+                            .init(color: .white.opacity(0.25), location: 0.91),
+                            .init(color: .clear, location: 1)
+                        ], startPoint: .top, endPoint: .bottom)
+                    }
+                    .padding(.top, 8)
+                    .accessibilityLabel("Mia 半身角色概念立绘")
+
+                starMist(in: geometry)
+                    .mask {
+                        LinearGradient(stops: [
+                            .init(color: .clear, location: 0),
+                            .init(color: .clear, location: 0.57),
+                            .init(color: .white.opacity(0.18), location: 0.70),
+                            .init(color: .white, location: 0.92)
+                        ], startPoint: .top, endPoint: .bottom)
+                    }
+                    .allowsHitTesting(false)
+
+                LinearGradient(stops: [
+                    .init(color: .clear, location: 0.48),
+                    .init(color: Color(red: 0.12, green: 0.04, blue: 0.24).opacity(0.28), location: 0.68),
+                    .init(color: .black.opacity(0.65), location: 1)
+                ], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
+                .allowsHitTesting(false)
 
                 VStack(spacing: 0) {
                     header
-                    GeometryReader { characterSpace in
-                        Image("MiaFullBody")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: characterSpace.size.width,
-                                   height: characterSpace.size.height)
-                            .accessibilityLabel("Mia 全身角色概念立绘")
-                    }
-                    .padding(.vertical, 10)
+                    Spacer(minLength: 12)
                     captionPanel
-                    waveform.padding(.top, 22)
                     Button {
                         if serverURL.isEmpty || MiaTokenStore.read() == nil {
                             showsSettings = true
@@ -38,40 +59,26 @@ struct ContentView: View {
                             }
                         }
                     } label: {
-                        Image(systemName: "mic.fill")
-                            .font(.system(size: 31, weight: .light))
-                            .foregroundStyle(.white)
-                            .frame(width: 84, height: 84)
-                            .background(
-                                Circle().fill(
-                                    LinearGradient(
-                                        colors: [.indigo, .purple, .cyan],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                            )
-                            .overlay(Circle().stroke(.white.opacity(0.8), lineWidth: 1.5))
-                            .shadow(color: .purple.opacity(0.9), radius: 22)
+                        MiaAuroraOrb(level: session.audioLevel)
+                            .frame(width: geometry.size.height < 700 ? 102 : 118,
+                                   height: geometry.size.height < 700 ? 102 : 118)
+                            .contentShape(Circle())
                     }
-                    .accessibilityLabel(session.state == .listening ? "结束说话" : "开始说话")
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(talkButtonLabel)
+                    .accessibilityHint(session.state == .speaking ? "打断 Mia 并开始说话" : "轻触控制语音对话")
                     .disabled(session.state == .connecting)
                     .padding(.top, 12)
                     Text(MiaTokenStore.read() == nil ? "先在设置中填写网关令牌" : session.state.rawValue)
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.8))
-                        .padding(.top, 14)
+                        .padding(.top, 2)
                 }
                 .padding(.horizontal, 22)
-                .padding(.top, 14)
-                .padding(.bottom, 22)
+                .padding(.top, 8)
+                .padding(.bottom, 18)
             }
-        }
-        .background {
-            Image("CityBackground")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showsSettings) {
@@ -87,16 +94,27 @@ struct ContentView: View {
         }
     }
 
+    private func starMist(in geometry: GeometryProxy) -> some View {
+        Image("StarMistBackground")
+            .resizable()
+            .scaledToFill()
+            .frame(width: geometry.size.width,
+                   height: geometry.size.height + geometry.safeAreaInsets.top + geometry.safeAreaInsets.bottom)
+            .clipped()
+            .offset(y: -geometry.safeAreaInsets.top)
+    }
+
+    private var talkButtonLabel: String {
+        switch session.state {
+        case .connecting: "正在连接"
+        case .listening: "结束说话"
+        case .speaking: "打断并开始说话"
+        case .disconnected, .ready: "开始说话"
+        }
+    }
+
     private var header: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("MIA")
-                    .font(.system(size: 27, weight: .light, design: .rounded))
-                    .tracking(7)
-                Text("你的语音伙伴")
-                    .font(.footnote)
-                    .foregroundStyle(.cyan.opacity(0.85))
-            }
+        HStack {
             Spacer()
             Button {
                 showsSettings = true
@@ -104,11 +122,10 @@ struct ContentView: View {
                 Image(systemName: "gearshape")
                     .font(.title3)
                     .frame(width: 44, height: 44)
-                    .background(.ultraThinMaterial, in: Circle())
             }
             .accessibilityLabel("设置")
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(.white.opacity(0.85))
     }
 
     private var captionPanel: some View {
@@ -120,21 +137,8 @@ struct ContentView: View {
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(.cyan.opacity(0.55), lineWidth: 1)
+                    .stroke(.purple.opacity(0.65), lineWidth: 1)
             )
-    }
-
-    private var waveform: some View {
-        HStack(alignment: .center, spacing: 5) {
-            ForEach(0..<27, id: \.self) { index in
-                Capsule()
-                    .fill(index.isMultiple(of: 2) ? Color.cyan : Color.purple)
-                    .frame(width: 3, height: CGFloat([9, 16, 25, 13, 33, 20, 12][index % 7])
-                           * CGFloat(1 + min(session.audioLevel * 5, 1)))
-            }
-        }
-        .frame(height: 37)
-        .accessibilityHidden(true)
     }
 }
 

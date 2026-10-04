@@ -28,6 +28,15 @@ final class MiaAudioIO {
         engine.attach(player)
     }
 
+    static func level(for samples: [Int16]) -> Float {
+        guard !samples.isEmpty else { return 0 }
+        let sumSquares = samples.reduce(0.0) { sum, sample in
+            let value = Double(sample)
+            return sum + value * value
+        }
+        return Float(sqrt(sumSquares / Double(samples.count)) / 32_768)
+    }
+
     func start(outputSampleRate: Int,
                onMicrophoneFrame: @escaping ([Int16]) -> Void,
                onPlaybackFrame: @escaping (Double, Float) -> Void) throws {

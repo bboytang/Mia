@@ -143,6 +143,7 @@ final class MiaVoiceSession: ObservableObject {
             break
         case .serverError(let message):
             errorMessage = message
+            audioLevel = 0
             state = .ready
         case .emotion, .other:
             break
@@ -181,6 +182,7 @@ final class MiaVoiceSession: ObservableObject {
                 self.audio = audio
             }
             try await transport.startListening(sessionID: sessionID)
+            audioLevel = 0
             audio?.beginMicrophoneCapture()
             state = .listening
         } catch { fail(error) }
@@ -189,6 +191,7 @@ final class MiaVoiceSession: ObservableObject {
     private func stopListening() async {
         let finalFrame = audio?.takeFinalMicrophoneFrame()
         state = .ready
+        audioLevel = 0
         do {
             await sendTask?.value
             if let finalFrame, let codec, let transport {
@@ -200,6 +203,7 @@ final class MiaVoiceSession: ObservableObject {
 
     private func enqueueMicrophone(_ samples: [Int16]) {
         guard state == .listening else { return }
+        audioLevel = MiaAudioIO.level(for: samples)
         pendingMicrophoneFrames.append(samples)
         if pendingMicrophoneFrames.count > 10 {
             pendingMicrophoneFrames.removeFirst()
@@ -225,6 +229,7 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     private func playbackAdvanced(_ duration: Double, level: Float) {
+        guard state == .speaking else { return }
         pendingPlaybackFrames = max(0, pendingPlaybackFrames - 1)
         audioLevel = level
         captionTimeline.advancePlayback(seconds: duration)
