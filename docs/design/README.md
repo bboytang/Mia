@@ -12,7 +12,7 @@
 | [MiniMax H3 静音启动预览](launch/mia-minimax-preview-silent.mp4) | 用户确认重试一次后生成，768×1376、24 fps、约 5.17 秒；从含音轨的[原片](launch/mia-minimax-preview-source.mp4)直接封装为静音版，画面帧完全一致。已见转身，但中途造型/尺度变化和人物下沿截断未通过成品验收，未加入 App。[元数据](launch/mia-minimax-preview-metadata.json)。 |
 | [启动动画外部生成交付包](launch/mia-launch-external-generation-brief.md) | 用户自行在其他平台生成用：首末帧链接、角色参考、完整提示词与验收要求。仍沿用既定 Mia，不代表视频成品已经完成。 |
 
-应用当前使用的[透明静态角色立绘](../../ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png)和[背景 JPG](../../ios/MiaApp/Assets.xcassets/CityBackground.imageset/city-background.jpg)是运行资源。静态立绘是已选造型的展示图，并非分层源稿或 Live2D 模型。若衍生图与已选首页概念图在造型或色彩上有差异，正式角色设计以已选首页概念图为准。
+应用首页当前改用[全身透明立绘](../../ios/MiaApp/Assets.xcassets/MiaFullBody.imageset/mia-full-body.png)，按用户反馈优化腿型与身形，保留已选 Mia 的发饰、脸、服装和 V/伸手姿态。标题与字幕控件之间为独立角色区域，构建与两种尺寸截图待新 CI 核对。[原半身立绘](../../ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png)保留身份参考；[背景 JPG](../../ios/MiaApp/Assets.xcassets/CityBackground.imageset/city-background.jpg)仍为运行资源。两张角色图都是静态图，并非分层源稿或 Live2D 模型。
 
 正式 Live2D 必须另有获授权的分层 PSD/CSP、Cubism 工程 `.cmo3`、运行用 `.model3.json` 与 `.moc3`、贴图及动作/表情文件，至少支持眨眼、头部与身体动作和 `ParamMouthOpenY`。具体交付与验收见[Live2D 素材说明](../live2d-mia-asset-brief.md)。单张 PNG 无法直接变成真正的 `.moc3`。
 

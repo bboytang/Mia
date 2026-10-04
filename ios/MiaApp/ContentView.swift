@@ -6,7 +6,7 @@ struct ContentView: View {
     @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
 
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             ZStack {
                 LinearGradient(
                     colors: [.black.opacity(0.32), .clear, .black.opacity(0.58)],
@@ -15,18 +15,17 @@ struct ContentView: View {
                 )
                 .ignoresSafeArea()
 
-                Image("MiaPortrait")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: geometry.size.width * 1.12,
-                           height: geometry.size.height * 0.75)
-                    .position(x: geometry.size.width / 2,
-                              y: geometry.size.height * 0.49)
-                    .accessibilityLabel("Mia 角色概念立绘")
-
                 VStack(spacing: 0) {
                     header
-                    Spacer()
+                    GeometryReader { characterSpace in
+                        Image("MiaFullBody")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: characterSpace.size.width,
+                                   height: characterSpace.size.height)
+                            .accessibilityLabel("Mia 全身角色概念立绘")
+                    }
+                    .padding(.vertical, 10)
                     captionPanel
                     waveform.padding(.top, 22)
                     Button {
