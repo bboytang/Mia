@@ -1,12 +1,13 @@
 # Mia 已确定的视觉参考
 
-下面三张图片已纳入 GitHub，供其他设备上的 Codex、画师和绑定师查看。请以图片本身作为角色与画面风格的首要参考。
+下面的图片已纳入 GitHub，供其他设备上的 Codex、画师和绑定师查看。请以图片本身作为角色与画面风格的首要参考。
 
 | 文件 | 用途 |
 | --- | --- |
 | [三款角色比较图](mia-three-character-options.png) | 用户明确选择**右侧第三款**。左侧和中间两款均未选定，不应在后续设计中误用。 |
 | [已选首页概念图](mia-approved-screen-concept.png) | 用户选定的第三版方向：紫色短发、紫瞳、黑紫赛博服饰与晶体发饰的 Mia；蓝紫未来都市；底部字幕板、声波和麦克风。右侧功能入口的具体内容尚待设计。 |
 | [干净城市背景](mia-approved-city-background.png) | 与概念图同方向的无角色背景原图，适合后续重新适配不同 iPhone 尺寸。 |
+| [正面全身透明立绘](mia-full-body-transparent.png) | 用于图生模型 AI 网站的输入参考：1024 × 1536 PNG，已核验透明通道。使用 imagegen 按已选 Mia 造型、正面全身、双臂稍展开、透明背景生成；参考图未展示的鞋靴进行了补全。它是衍生参考，非分层源稿或 Cubism 模型。 |
 
 应用当前使用的[透明静态角色立绘](../../ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png)和[背景 JPG](../../ios/MiaApp/Assets.xcassets/CityBackground.imageset/city-background.jpg)是运行资源。静态立绘是已选造型的展示图，并非分层源稿或 Live2D 模型。若衍生图与已选首页概念图在造型或色彩上有差异，正式角色设计以已选首页概念图为准。
 
