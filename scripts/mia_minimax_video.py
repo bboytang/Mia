@@ -179,7 +179,7 @@ def main():
         command = commands.add_parser(name)
         command.add_argument('--prompt', type=Path, default=ROOT / 'docs/design/launch/mia-minimax-prompt.txt')
         command.add_argument('--first', default=str(ROOT / 'docs/design/launch/mia-particle-start.png'))
-        command.add_argument('--last', default=str(ROOT / 'docs/design/launch/mia-full-body-end-reference.png'))
+        command.add_argument('--last', default=str(ROOT / 'docs/design/launch/mia-halfbody-starmist-end-reference.png'))
         command.add_argument('--resolution', choices=['768P', '2K'], default='768P')
         command.add_argument('--duration', type=int, default=5)
         if name == 'create':

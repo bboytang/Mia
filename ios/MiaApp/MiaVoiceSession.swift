@@ -229,8 +229,8 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     private func playbackAdvanced(_ duration: Double, level: Float) {
-        guard state == .speaking else { return }
         pendingPlaybackFrames = max(0, pendingPlaybackFrames - 1)
+        guard state == .speaking else { return }
         audioLevel = level
         captionTimeline.advancePlayback(seconds: duration)
         caption = captionTimeline.visibleText

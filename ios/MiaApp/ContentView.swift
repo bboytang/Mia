@@ -102,6 +102,7 @@ struct ContentView: View {
                    height: geometry.size.height + geometry.safeAreaInsets.top + geometry.safeAreaInsets.bottom)
             .clipped()
             .offset(y: -geometry.safeAreaInsets.top)
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
     }
 
     private var talkButtonLabel: String {

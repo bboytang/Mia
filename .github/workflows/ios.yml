@@ -114,6 +114,10 @@ jobs:
             xcrun simctl launch "$simulator_id" com.bboytang.mia
             sleep 8
             xcrun simctl io "$simulator_id" screenshot "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png"
+            mia_preview="$RUNNER_TEMP/mia-home-preview${suffix}.jpg"
+            sips -s format jpeg -s formatOptions 70 -Z 600 \
+              "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png" --out "$mia_preview" >/dev/null
+            python3 -c 'import base64, pathlib, sys; p = pathlib.Path(sys.argv[1]); print("MIA_UI_PREVIEW:" + p.name + ":" + base64.b64encode(p.read_bytes()).decode())' "$mia_preview"
             kill -INT "$mia_record_pid"
             wait "$mia_record_pid"
             cat "$mia_record_log"

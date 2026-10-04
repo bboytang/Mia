@@ -1,21 +1,22 @@
 # Mia 启动动画：外部平台生成交付包
 
-更新：2026-10-04。当前参考已按用户全身、腿型与比例反馈更新；MiniMax 默认请求已同步，外部平台生成同样使用下列最新参考。本文件提供参考图、首末帧框架和可复制提示词；它不是成品验收记录。沿用已选右侧第三款 Mia，不替换角色或服装。
+更新：2026-10-04。用户已批准半身星雾 UI：取消左上角全部文字，底部使用无麦克风标识的蓝紫粉流光球。此决定取代此前全身城市方案；MiniMax 默认请求与外部生成参考同步为下列版本。本文件提供参考图、首末帧框架和可复制提示词；它不是视频成品或所有设备精确布局的验收记录。沿用已选右侧第三款 Mia，不替换角色或服装。
 
 ## 参考资料与上传顺序
 
 | 文件 | 用途 |
 | --- | --- |
-| [Mia 当前全身立绘](../../../ios/MiaApp/Assets.xcassets/MiaFullBody.imageset/mia-full-body.png) | 唯一当前角色参考：完整头到鞋靴、自然腿型与修长比例、原 V/伸手姿态。与 App 实际资源为同一文件。 |
-| [粒子首帧](mia-particle-start.png) | 开场画面；只含原创蓝紫粒子云，没有角色与 UI。 |
-| [全身闭场参考](mia-full-body-end-reference.png) | 以当前全身立绘生成的城市构图参考，完整鞋靴与下方圆形发光位置；没有文字和麦克风图标。它是参考构图，不是所有 iPhone 尺寸的精确截图。 |
-| [城市背景](../../../ios/MiaApp/Assets.xcassets/CityBackground.imageset/city-background.jpg) | 需要独立背景参考时上传；不要重新生成不同城市。 |
+| [Mia 原半身立绘](../../../ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png) | 当前角色身份参考：原紫色卷短发、晶体发饰、服装与 V/伸手姿态。App 恢复使用此角色资源。 |
+| [粒子首帧](mia-particle-start.png) | 开场画面；933×1686，只含原创蓝紫粒子云，没有角色与 UI。 |
+| [半身星雾闭场参考](mia-halfbody-starmist-end-reference.png) | 941×1672；原半身角色、深蓝紫星雾、永久下沿雾和无图标流光球，没有文字、字幕板或设置图标。它是构图参考，不是所有 iPhone 尺寸的精确截图。 |
+| [批准的 UI 设计稿](../mia-approved-starmist-ui.png) | 941×1672；展示字幕面板与无图标流光球等首页关系，仅作设计依据，不把文字和原生控件生成进视频。 |
+| [星雾背景](../../../ios/MiaApp/Assets.xcassets/StarMistBackground.imageset/star-mist-background.png) | App 当前独立背景；需要背景参考时使用，不使用旧城市地面。 |
 
 用户原视频只参考前段纤维般细密、柔软立体、蓝紫渐变的粒子质感，不照搬后段胶状物或其他作品标识；原附件没有公开上传。
 
-若平台支持，指定粒子图为首帧、闭场图为末帧，并将当前全身立绘加入独立角色参考。多张视觉参考不等于首末帧锁定，平台能力不同，不保证都能同时设置。现有首末参考均为 933×1686；选择 9:16 输出时，对两张图采用一致的裁切/适配，生成后检查构图。
+若平台支持，指定粒子图为首帧、半身星雾闭场图为末帧；只有平台允许时才另外加入原半身角色参考。MiniMax H3 的首末帧模式不能与独立参考媒体混用，本工具只提交两张首末图。首帧 933×1686、末帧 941×1672，尺寸与比例不同；MiniMax 使用已验证字段 `ratio=adaptive`，实际输出尺寸与构图待生成后检查。外部平台选择 9:16 时需核对两张图的裁切/适配，不能猜测自动处理结果。
 
-旧半身 `MiaPortrait`、旧半身末帧和旧 A 姿势全身图保留历史，不再作为本次上传参考；不得混用导致人物形象或比例不同。
+旧城市半身末帧、全身立绘与全身末帧保留历史，当前不用于生成；不得与批准的半身星雾参考混用。原 `MiaPortrait` 重新成为当前身份参考。
 
 ## 输出设置
 
@@ -33,25 +34,25 @@ Vertical portrait opening frame for the Mia app. A deep midnight navy space, wit
 ## 末帧提示词
 
 ```text
-Use the current full-body ending image as the composition reference. Keep the entire head, hair ornaments, hands, complete legs and both boot soles visible. Preserve the refined natural leg alignment and elegant adult proportions of the current Mia full-body image. The exact same Mia from the current full-body character image, with the established detailed 2D anime illustration style, violet eyes, layered wavy lilac bob, large faceted purple crystal ornaments in black angular frames, and every original black-and-purple outfit detail intact. She smiles toward the viewer with the original slight head tilt. The hand on screen right forms the original V gesture beside her face; the other hand reaches toward the viewer in the original open-hand pose. Keep the supplied blue-violet futuristic city, character scale and position. A restrained violet-cyan circle glows at the exact position shown near the lower center, approximately x=0.5, y=0.839 of the frame. Hair and jacket have settled. No lettering, microphone glyph, buttons, extra accessories, new costume or 3D restyling.
+Use the approved half-body star-mist ending image as the composition reference. Preserve the original Mia portrait identity: violet eyes, layered wavy lilac bob, large faceted purple crystal ornaments in black angular frames and original black-and-purple outfit details. Keep her smiling slight head tilt, the screen-right V gesture beside her face and the other hand reaching toward the viewer. Keep the camera, character scale and position supplied in the ending image. Deep blue-violet stars, floating crystals and layered purple foreground mist surround her. The lower portrait edge stays permanently concealed in irregular mist and fine filaments, without a straight crop or visible severed body. A blue-violet-pink flowing aurora orb sits at the supplied lower position, with no microphone glyph. No city, floor, invented legs or boots, lettering, title, logo, subtitle panel, settings icon, new costume or 3D restyling.
 ```
 
 ## 连续视频主提示词
 
 ```text
-Create a single uninterrupted five-second portrait Mia launch animation. Repair priorities: continuous organic particle-to-character formation, and absolutely no straight horizontal cutoff or rectangular pasted character layer. Preserve the character and final pose from the supplied last frame. Use the first frame for the fine violet-cyan filament cloud. The last frame now shows Mia completely from head crystals to both boot soles: preserve her complete natural adult silhouette. Both legs, knees, calves, ankles and boots must remain visible at all times after formation, with clear margin around the entire figure.
+Create one uninterrupted five-second portrait launch animation for Mia. Use the supplied first frame for the airy violet-cyan fine-filament cloud, and the supplied last frame for the approved HALF-BODY Mia, deep blue-violet star mist, floating crystals and icon-free aurora orb. Preserve the same established 2D anime character, wavy lilac bob, violet eyes, faceted purple crystal hair ornaments in black angular frames, black-and-purple outfit, near-face V gesture on screen right and other hand reaching toward the viewer. This is a close half-body portrait, not a full-body scene. Do not invent visible lower legs, boots, a ground plane or a city.
 
-Keep the camera locked and the character at the final frame's scale and screen position from her very first appearance. Hair, crystals, face, jacket and outfit should remain recognizably the supplied Mia; minor natural clothing movement is acceptable. The near-face hand on screen right finishes in the supplied V pose, the other hand reaches toward the viewer. The lower circle keeps its exact supplied center and size. Keep the refined natural leg alignment and elegant adult proportions exactly as shown. No bowed shins, no knee distortion or extra limbs. Keep both entire boots visible above the lower UI area, never crop at the thighs or knees.
+Keep the camera locked, and keep Mia at the last frame's scale and screen position from her first appearance. The lower portrait edge must always remain inside overlapping, irregular layers of dark violet foreground mist, luminous filaments and fine particles. The mist is part of the final composition and stays after the reveal; it must never clear to expose a straight crop or a severed body. Keep the face and hands clear. Do not replace the mist with a flat horizontal strip, a solid pedestal, a scan line or a rectangular pasted layer. The lower aurora orb keeps the position and size supplied in the last frame and never acquires a microphone glyph.
 
-0.0–1.0 seconds: Start exactly on the supplied airy violet-cyan fine-filament cloud. It breathes gently and rotates clockwise. The original city begins to emerge very slowly behind the cloud as faint stationary lights, not as a sudden replacement scene. Keep all particles fine, airy and translucent; they must never become a solid jelly mound, opaque cone or smooth sheet.
+0.0–1.0 seconds: Begin on the supplied fine violet-cyan cloud. It breathes gently and rotates clockwise. Deep blue-violet stars and soft mist begin appearing continuously behind it, with restrained crystal glints. All particles stay airy and translucent, never forming a solid jelly dome, opaque cone or smooth sheet.
 
-1.0–2.6 seconds: Gradually accelerate the SAME clockwise flow. One continuous volumetric cloud stretches into Mia's ENTIRE visible silhouette at its FINAL scale and position: head, shoulders, torso, arms, skirt, complete legs and both boots begin resolving together through translucent filaments. Crystals resolve a little earlier, while the rest resolves gradually at overlapping times. Do not introduce an isolated head or detached upper torso first. Particle density falls smoothly over the WHOLE figure, not as a rising or falling horizontal reveal curtain. All body parts resolve at overlapping times; translucent particles briefly surround the complete legs and boots. Do not expose severed thigh or waist edges at any stage. Residual filaments continuously link the original cloud to the emerging hair, sleeves and boots. The stationary city becomes fully visible through the SAME continuous transition by about 2.6 seconds. No jump in character size, position or lighting, no cut, flash, sudden pop-in or camera zoom.
+1.0–1.6 seconds: Accelerate the SAME clockwise filaments smoothly and draw them toward the lower portrait edge, where a layered violet mist gathers. Light trails spiral upward from this base and naturally carry the motion into character formation. Do not introduce a detached head, face or shoulders above an absent torso.
 
-2.6–3.8 seconds: Mia completes a graceful physical turn from a modest three-quarter angle toward the viewer, with head, shoulders and chest moving together. Hair and loose jacket sleeves trail with gentle inertia. Maintain the full visible figure throughout; no horizontal pedestal, black belt-shaped background obstruction, rectangular overlay or cropped body segment. The emerging character and city already occupy their final composition, so there is no later camera pullback.
+1.6–2.8 seconds: Reveal Mia from the lower portrait edge upward: skirt and waist first, then torso, shoulders and arms, then face, hair and crystal ornaments. These regions resolve at overlapping times through uneven, flowing particle strands, not through a tidy horizontal wipe or scanning curtain. The lower edge stays concealed by foreground mist throughout. Residual particles link the emerging outfit, sleeves and hair to the same original cloud. Maintain a modest three-quarter orientation until the torso and head are coherent. No size jump, camera pullback, flash, hard cut or sudden background replacement.
 
-3.8–4.5 seconds: The hand on screen right makes one small sweep beside the face, a thin crystal trail visibly following the fingertips, then settles into the supplied V gesture. The other hand stays extended toward the viewer. The same light arc flows down to the lower circle and gives it a restrained pulse. Keep the face visible, the city stationary and the complete legs and boots visible, with tiny residual particles around them.
+2.8–4.4 seconds: With the body already coherent, Mia turns gracefully toward the viewer, with head, shoulders and chest moving together. Hair and loose sleeves trail with gentle inertia. The hand on screen right sweeps a small arc beside her face, a thin crystal light trail following the fingertips, then settles into the supplied V gesture. The other hand reaches toward the viewer as in the ending image. Keep the half-body framing and persistent layered mist, and retain the recognizable face and outfit throughout.
 
-4.5–5.0 seconds: Ease into the exact supplied ending pose, scale and composition. Hair, sleeves and particles settle gently. The complete figure stands naturally with both boot soles clearly visible; no body truncation, feathered lower body or disappearing legs. Hold the settled ending for the last 0.3 seconds. No camera movement, no reframing, no body zoom or scale jump, no text, UI symbols, logo, dialogue or music; a separate synchronized launch sound will be added after generation.
+4.4–5.0 seconds: The same fingertip light arc travels into the lower icon-free aurora orb. Violet, cyan and a little pink light flow through it in a restrained pulse, then settle naturally. Ease into the exact supplied ending pose, scale and star-mist composition and hold the last 0.3 seconds. Hair, sleeves and particles slow gently while the lower portrait edge remains concealed. No city, floor, visible cut, detached body, extra limbs, text, logo, lettering, subtitle panel, settings icon or microphone symbol. No dialogue or music; a separate synchronized launch sound will be added after generation.
 ```
 
 ## 可选负面提示词
@@ -59,11 +60,11 @@ Keep the camera locked and the character at the final frame's scale and screen p
 仅在平台有独立负面提示栏时填写；没有时，把关键限制保留在主提示词即可。
 
 ```text
-different character, identity drift, changing face, changing costume, simplified clothes, smooth straight bob, missing crystal ornaments, small silver replacement clips, missing straps or chains, symmetric stockings, extra limbs, extra hands, malformed fingers, both hands pointing at the face, light ribbon before the fingertip gesture, static-image zoom, camera pullback, camera orbit, hard cut, flash transition, flicker, 3D restyling, live action, generated text, UI symbols, logo, audio
+different character, identity drift, changing face, changing costume, simplified clothes, smooth straight bob, missing crystal ornaments, small silver replacement clips, missing straps or chains, full-body scene, invented legs or boots, city, floor, exposed lower crop, detached head, severed torso, horizontal scan wipe, rectangular pasted layer, solid jelly dome, extra limbs, extra hands, malformed fingers, both hands pointing at the face, light ribbon before the fingertip gesture, static-image zoom, camera pullback, camera orbit, hard cut, flash transition, flicker, 3D restyling, live action, generated text, title, microphone glyph, settings icon, subtitle panel, logo, audio
 ```
 
 ## 返回与验收
 
-保留原始 MP4 和平台输出参数。生成后检查：凝成时确实侧向、头肩共同旋身；画 V 的手先画弧，另一手保持伸出；全程原发饰/脸/服装一致；末尾姿态稳定、圆环位置不漂移；无音轨和可合法使用的无水印输出。
+保留原始 MP4 和平台输出参数。生成后检查：从下沿向上按裙腰、肩臂、脸发顺序重叠凝形，没有孤立头部或整齐扫描；永久前景雾始终遮住下沿；身体完整凝形后头肩共同旋身，画 V 的手先画弧，另一手保持伸出；全程原发饰/脸/服装一致；末尾姿态稳定，无图标流光球位置不漂移；无音轨和可合法使用的无水印输出。正式视频仍待后续费用审批、制作和验收，当前只准备参考和离线请求。
 
-如果平台可另导出透明前景或逐帧遮罩，也一并保留，便于不同手机画幅合成；不能为了方便而重画角色。最终 App 衔接仍需在真实布局中对齐、录屏并验收。单一 9:16 视频在 16 Pro 与 SE 的裁切不同，不能仅凭末帧参考或淡出宣称已匹配所有 iPhone。
+如果平台可另导出透明前景或逐帧遮罩，也一并保留，便于不同手机画幅合成；不能为了方便而重画角色。最终 App 衔接仍需在真实布局中对齐、录屏并验收，尤其要检查原生流光球与视频末帧之间的交接。不同手机的裁切与安全区域不同，不能仅凭静态参考或淡出宣称已匹配所有 iPhone。

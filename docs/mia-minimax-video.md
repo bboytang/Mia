@@ -7,8 +7,8 @@
 - [官方创建接口](https://platform.minimax.cn/docs/api-reference/video-generation-v2-create)：`POST https://api.minimax.cn/v2/video_generation`，Bearer 鉴权。
 - [官方查询接口](https://platform.minimax.cn/docs/api-reference/video-generation-v2-query)：`GET /v2/query/video_generation/{task_id}`；查询近七天任务。
 - 图片项使用 `{"type":"image_url","image_url":{"url":"HTTPS 地址"},"role":"first_frame"}`；尾帧 role 为 `last_frame`。首尾帧不能与独立参考媒体混用，本工具仅实现首尾帧模式。
-- 默认 `MiniMax-H3`、5 秒、`768P`、`ratio=adaptive`、`aigc_watermark=false`。使用现有 933×1686 首尾图，不能宣称输出必为严格 9:16；实际比例以查询和下载文件为准。
-- [提示词](design/launch/mia-minimax-prompt.txt)沿用粒子凝聚、35 度旋身、指尖光弧与最终姿态，明确末帧中的 Mia 定义身份。不会把带水印且造型漂移的 OpenArt 预览作为参考。
+- 默认 `MiniMax-H3`、5 秒、`768P`、`ratio=adaptive`、`aigc_watermark=false`。当前首帧为 933×1686 的原粒子图，末帧为 941×1672 的批准半身星雾图，二者尺寸与比例不同；不能宣称输出必为严格 9:16 或推测平台如何适配，实际比例与构图以查询和下载文件为准。
+- [当前提示词](design/launch/mia-minimax-prompt.txt)按用户批准的半身星雾分镜更新：从人物下沿向上重叠凝形、身体完整后旋身、指尖光弧落入无图标流光球。下沿雾永久保留，不生成全身、城市或裸露切口；没有左上角文字或麦克风标识。末帧中的原半身 Mia 定义身份，不把带水印且造型漂移的 OpenArt 预览或历史全身图作为参考。
 - [官方中国平台价格](https://platform.minimax.cn/docs/pricing/overview)：核对当天 H3 768P 为 0.50 元/秒，2K 为 0.80 元/秒，五张以内图片免费。默认单次预估 2.50 元，5 秒 2K 为 4.00 元；以账户实际计费为准。代码不承诺或硬编码账单。
 
 H3 没有在此协议声明静音参数，提示词要求静音仍须实际检查音轨；不发送其他平台的 `generateSound` 字段。输出水印、角色身份、真正转身与自然衔接均需逐帧验收，不能仅凭成功状态认为成品通过。
@@ -99,12 +99,16 @@ Key 已在当前环境隐藏配置，真实创建已受理；首条任务失败�
 
 该视频只供预览，未验收、未作为 `MiaLaunch.mp4` 加入 iOS。需要继续修正前先取得用户对画面与新一次费用的决定；不自动生成第三条任务。
 
-## 当前全身版本与启动音效准备
+## 当前批准半身星雾版本与启动音效准备
 
-用户要求完整头到脚、优化腿型与比例，且要求 App 与生成参考同步。当前 App 权威静态资源是 `ios/MiaApp/Assets.xcassets/MiaFullBody.imageset/mia-full-body.png`；[新版末帧](design/launch/mia-full-body-end-reference.png)以此图生成全身城市构图，保留原手势与鞋靴；只是构图参考，不是两种手机精确首页截图。旧半身/腿部羽化方案不再用于本次生成，旧图保留历史。
+用户已批准[半身星雾 UI](design/mia-approved-starmist-ui.png)，取消左上角全部文字，并将底部控件改为没有麦克风标识的蓝紫粉流光球。当前角色身份参考恢复为 `ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png`；[当前末帧](design/launch/mia-halfbody-starmist-end-reference.png)为 941×1672，包含原半身人物、永久下沿雾和流光球，没有文字、字幕板或设置图标。原生控件由 App 单独绘制；此图只是构图参考，不是两种手机精确首页截图。
 
-脚本默认首帧和末帧都直接内嵌本地文件，末帧默认为新版全身图；[当前提示词](design/launch/mia-minimax-prompt.txt)已更新为全身同步成形、城市渐显、固定尺度、无水平截断。初版提示词保存在 `mia-minimax-preview-prompt.txt`，用于复现既有半身预览。16 项离线测试通过，含默认参考图字节一致性检查；新 CI 待推送核对。准备命令仍为 `prepare`，无需记额外文件参数。
+脚本默认首帧仍为原粒子图，末帧已改为批准的半身星雾图，均直接内嵌本地文件。[当前提示词](design/launch/mia-minimax-prompt.txt)和[外部生成交付包](design/launch/mia-launch-external-generation-brief.md)同步相同角色与分镜：0–1 秒细云旋转，1–1.6 秒提速并向人物下沿汇聚，1.6–2.8 秒按裙腰、肩臂、脸发重叠向上显现，2.8–4.4 秒旋身和手势，4.4–5 秒光弧落入无图标流光球；下沿雾在结尾继续遮住切口，不用整齐扫描、头部先显或城市地面。准备命令仍为 `prepare`，无需额外文件参数；此阶段未调用生成 API。
 
-[原创音效草稿](design/launch/mia-launch-sound-v1.wav)为 5 秒、48 kHz、双声道 PCM16，细粒子声加速、凝聚晶体响、手势轻响、圆环柔和收尾；没有借用录音。峰值约 -13.98 dBFS，起止为零，已检查不削波；节奏以拟定新分镜为基准，新视频生成后还需按实际动作对齐。声音尚未在设备试听或加入启动播放器；不能把音效草稿当成 App 音效已验收。
+本地 16 项离线测试通过，包括默认末帧与文件字节一致性及下沿提示词检查；`prepare` 通过，新请求 5,795,294 字节，首末帧 Base64 还原与源文件完全相同，主提示词 3,698 字符，与外部交付包相同。工作流已更新首末帧触发路径与离线准备命令；当前提交的 GitHub CI 尚待核对，未读取 Key 或发网络请求。
 
-新参考、提示词和音效已准备；修订视频会创建新的 H3 收费任务，仍待用户确认一次生成费用。此前只批准的一次重试已执行，不自动继续付费生成。
+**全身方向历史**：此前按用户全身、腿型与比例要求生成的 `MiaFullBody` 和 `mia-full-body-end-reference.png` 已同步过当时 App 与默认请求。用户随后改为批准原半身星雾方案，因此这些资源保留历史，不再作为当前默认输入。初版提示词继续保存在 `mia-minimax-preview-prompt.txt`，用于复现既有半身城市预览，不能与当前末帧混用。
+
+[原创音效草稿](design/launch/mia-launch-sound-v1.wav)为 5 秒、48 kHz、双声道 PCM16，细粒子声加速、凝聚晶体响、手势轻响、圆环柔和收尾；没有借用录音。峰值约 -13.98 dBFS，起止为零，已检查不削波；需按新版实际动作重新对齐，结尾对应流光球。声音尚未在设备试听或加入启动播放器；不能把音效草稿当成 App 音效已验收。
+
+新版参考和提示词已准备，正式视频尚未生成。修订视频会创建新的 H3 收费任务，仍待后续单次费用审批及画面验收。此前只批准的一次重试已执行，不自动继续付费生成；静态图、离线准备或 API 成功状态均不等于正式成品完成。

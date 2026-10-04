@@ -14,7 +14,7 @@ from scripts import mia_minimax_video as video
 
 
 class MiniMaxVideoTests(unittest.TestCase):
-    def test_prepare_defaults_use_current_full_body_reference(self):
+    def test_prepare_defaults_use_approved_halfbody_starmist_reference(self):
         output = io.StringIO()
         with patch.object(sys, 'argv', ['video', 'prepare']), redirect_stdout(output):
             video.main()
@@ -22,8 +22,8 @@ class MiniMaxVideoTests(unittest.TestCase):
         url = body['content'][2]['image_url']['url']
         self.assertTrue(url.startswith('data:image/png;base64,'))
         self.assertEqual(base64.b64decode(url.split(',', 1)[1]),
-                         (video.ROOT / 'docs/design/launch/mia-full-body-end-reference.png').read_bytes())
-        self.assertIn('both boot soles', body['content'][0]['text'])
+                         (video.ROOT / 'docs/design/launch/mia-halfbody-starmist-end-reference.png').read_bytes())
+        self.assertIn('lower portrait edge', body['content'][0]['text'])
 
     def request(self):
         return video.build_request('Mia turns', 'https://example.com/start.png',

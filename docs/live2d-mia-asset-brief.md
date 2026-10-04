@@ -2,7 +2,7 @@
 
 ## 角色参考
 
-用户在[三款角色比较图](design/mia-three-character-options.png)中选择**右侧第三款**；以[已选首页概念图](design/mia-approved-screen-concept.png)为首要造型参考：紫色短发、紫瞳、黑紫未来街头服饰、晶体发饰，面向镜头，友好而有活力。`ios/MiaApp/Assets.xcassets/MiaFullBody.imageset/mia-full-body.png` 是当前客户端的全身静态衍生立绘（按用户反馈优化腿型与身形，保留 V 手势与伸手姿态），不能直接作为 Live2D 模型。正式立绘需要重新绘制分层、补画遮挡部分，并在 Cubism Editor 中绑定。
+用户在[三款角色比较图](design/mia-three-character-options.png)中选择**右侧第三款**：紫色短发、紫瞳、黑紫未来街头服饰、晶体发饰，面向镜头，友好而有活力。最新[批准首页](design/mia-approved-starmist-ui.png)恢复原半身构图，当前身份素材为 `ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/mia-portrait.png`；全身衍生图保留补充参考，不再用于当前首页。两者都不能直接作为 Live2D 模型。正式立绘需要重新绘制分层、补画遮挡部分，并在 Cubism Editor 中绑定。
 
 ## 必需交付物
 
@@ -10,7 +10,7 @@
 - 分层源文件（PSD 或 Clip Studio 文件），至少分离脸型、前后发、眉、眼白、虹膜、眼睑、上下唇、口腔、牙齿、舌、颈、身体、衣服和前后手臂。头发及衣服需补画转动后会露出的部分。
 - Cubism 工程 `.cmo3`、运行文件 `.model3.json`、`.moc3`、贴图图集、表情和动作文件。素材路径应相对 `.model3.json`，文件名仅用英文和数字。
 - 至少包含 `ParamAngleX/Y/Z`、`ParamEyeLOpen`、`ParamEyeROpen`、`ParamMouthOpenY`、`ParamMouthForm`、`ParamBreath` 以及头发和身体摆动参数。嘴部开合应从闭嘴到张嘴连续、自然地变化，供语音播放音量驱动。
-- 提供静音待机、聆听、思考、说话四种状态的表情或动作组合；屏幕竖向半身构图，不挡字幕与麦克风。
+- 提供静音待机、聆听、思考、说话四种状态的表情或动作组合；屏幕竖向半身构图，不挡字幕与无图标流光球。
 
 ## 验收
 
