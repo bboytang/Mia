@@ -67,6 +67,8 @@ jobs:
           set -euo pipefail
           app="$RUNNER_TEMP/mia-device/Build/Products/Release-iphoneos/Mia.app"
           test -d "$app"
+          test -s "$app/MiaLaunch.mp4"
+          cmp ios/MiaApp/MiaLaunch.mp4 "$app/MiaLaunch.mp4"
           mkdir -p "$RUNNER_TEMP/mia-artifacts/Payload"
           cp -R "$app" "$RUNNER_TEMP/mia-artifacts/Payload/Mia.app"
           cd "$RUNNER_TEMP/mia-artifacts"

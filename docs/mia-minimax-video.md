@@ -114,3 +114,6 @@ Key 已在当前环境隐藏配置，真实创建已受理；首条任务失败�
 2026-10-05 用户重新确认一次 H3、5 秒、768P 任务（预估 2.50 元），任务 `448953378521398` 已成功，未重复提交。保存[星雾原片](design/launch/mia-starmist-preview-source.mp4)、[静音版](design/launch/mia-starmist-preview-silent.mp4)、[带原创音效版](design/launch/mia-starmist-preview-with-sound.mp4)和[元数据](design/launch/mia-starmist-preview-metadata.json)。实际 768×1376、24 fps、5.167 秒、124 帧；原片含 AAC，两种合成版画面解码哈希与原片一致。账单实际金额未核对。
 
 持续下沿星雾遮住旧版裸露切口，但约 2 秒出现较亮的凝形光带，中段角色服饰和尺度仍漂移；未通过正式素材验收，未加入 App。原创草稿已按实际动作分段调整，约 2.167/3.417/4.25 秒对应凝形、手势、流光球；独立 WAV 峰值 −13.99 dBFS、无削波、起止零，真机试听和首页交接仍待验。本地 16 项工具测试和 `pip check` 通过；本阶段没有更改代码或 CI 路径文件，因此未触发新 CI。费用授权已经使用，后续新生成需另行确认。
+
+
+2026-10-05 最新决定：用户取消音效，要求静音版推送。既有静音视频原样接入 `ios/MiaApp/MiaLaunch.mp4`，没有调用新的生成 API；播放器继续静音，音效候选保留历史。新 iOS CI、资源打包和两尺寸启动衔接待核对，详见[接入说明](../ios/README.md)。
