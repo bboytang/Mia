@@ -1,4 +1,9 @@
 8kraw.cloud {
+    handle /api/auth/* {
+        reverse_proxy 127.0.0.1:8766 {
+            header_up X-Mia-Client-IP {remote_host}
+        }
+    }
     handle /xiaozhi/v1/* {
         reverse_proxy 127.0.0.1:8765
     }

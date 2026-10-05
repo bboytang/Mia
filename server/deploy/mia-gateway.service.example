@@ -16,6 +16,9 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
+StateDirectory=mia
+StateDirectoryMode=0700
+UMask=0077
 
 [Install]
 WantedBy=multi-user.target

@@ -25,11 +25,16 @@ runuser -u mia -- /opt/mia/.venv/bin/python -m pip install -r /opt/mia/server/re
 install -d -m 700 /etc/mia
 umask 077
 if [[ ! -f /etc/mia/gateway.env ]]; then
-  gateway_token=$(python3 -c 'import secrets; print(secrets.token_hex(32))')
+  gateway_token=$(/opt/mia/.venv/bin/python -c 'import secrets; print(secrets.token_hex(32))')
   printf 'MIA_GATEWAY_TOKEN=%s\n' "$gateway_token" > /etc/mia/gateway.env
   echo '新网关令牌已生成；请只在私有终端查看 /etc/mia/gateway.env。'
 fi
 for setting in \
+  'MIA_ACCOUNTS_ENABLED=1' \
+  'MIA_ACCOUNT_DB=/var/lib/mia/accounts.sqlite3' \
+  'MIA_MAX_ACCOUNTS=100' \
+  'MIA_DAILY_ROUNDS=30' \
+  'MIA_MAX_CONCURRENT_ROUNDS=2' \
   'MIA_PROVIDER=volcengine' \
   'VOLC_ARK_API_KEY=' \
   'VOLC_VOICE_API_KEY=' \

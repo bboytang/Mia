@@ -6,7 +6,7 @@
 
 构建 `305a45d` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37213166341)通过 35 项测试、模拟器与未签名真机编译。已目视核对 CI 导出的 [16 Pro](design/verification/mia-starmist-16pro-preview.jpg)与 [SE 第三代](design/verification/mia-starmist-se-preview.jpg)首页缩略截图：设置处于安全区域，字幕卡两侧间距与圆角完整，流光球没有图标，人物下沿由星雾承接。真实麦克风音量反馈、播放时流光及打断仍待 iPhone 验收。
 
-**账号接入（已批准，分阶段实施）**：用户回复“按方案实施”，采用[用户名＋密码设计](mia-account-access-plan.md)与[实施计划](superpowers/plans/2026-10-04-mia-account-access.md)。SQLite、受限异步 scrypt、账号 HTTP、本机密码重置及网关会话鉴权/用量已实现；本地全套 46 项服务端测试通过，账号持久化/HTTP 第一阶段 [CI](https://github.com/bboytang/Mia/actions/runs/37244006466)通过。旧共享令牌保留维护回滚，账号会话在连接与新收费回合前重验。iOS 登录及 VPS 账号部署尚未完成；当前 VPS 未更新账号代码，不把模拟语音测试记作真机登录通过。
+**账号接入（已批准，分阶段实施）**：用户回复“按方案实施”，采用[用户名＋密码设计](mia-account-access-plan.md)与[实施计划](superpowers/plans/2026-10-04-mia-account-access.md)。SQLite、受限异步 scrypt、账号 HTTP、本机密码重置及网关会话鉴权/用量已实现；本地全套 46 项服务端测试通过，账号持久化/HTTP 第一阶段 [CI](https://github.com/bboytang/Mia/actions/runs/37244006466)通过。旧共享令牌保留维护回滚，账号会话在连接与新收费回合前重验。iOS 注册/登录、来源绑定 Keychain、取消与离线退出已实现，原生构建/测试正在 CI 验证；部署脚本、Caddy 路由、状态目录与临时账号自测已补齐，本地全套 49 项服务端测试通过。当前 VPS 尚未更新账号代码，不把模拟语音测试记作真机登录通过。
 
 **MiniMax 预览已生成**：用户确认仅重试一次，直接传入两张原图的任务 `448781796409606` succeeded。原片为 768×1376、24 fps、约 5.17 秒、124 帧、含一条音轨；[静音预览](design/launch/mia-minimax-preview-silent.mp4)仅移除音轨，逐帧解码哈希与原片相同。已抽九帧检查：能看到粒子凝聚、侧身转向、V 手势与下方圆环，但侧向幅度大于原定约 35 度，角色尺度/服饰中途变化，约 2.5–3.5 秒人物下沿有明显水平截断。未验收为正式启动素材，未加入 iOS。实际费用待账户核对，未再提交任务。原片、静音版和[清理元数据](design/launch/mia-minimax-preview-metadata.json)已保存。
 
