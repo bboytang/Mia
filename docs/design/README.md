@@ -9,7 +9,7 @@
 | [星雾闭场参考](launch/mia-halfbody-starmist-end-reference.png) | 与最新设计同一身份/背景/流光球，去掉字幕文字和设置等 UI，用于新视频默认末帧。永久前景雾覆盖下沿；不是视频成品或所有设备的精确布局。 |
 | [新版星雾带音效预览](launch/mia-starmist-preview-with-sound.mp4) | 2026-10-05 单次确认后生成，768×1376、24 fps、5.167 秒；原创音效按动作调整并替换平台音轨。下沿雾改善切口，中途造型/尺度和凝形光带仍待验，未加入 App。[静音版](launch/mia-starmist-preview-silent.mp4)、[抽帧](launch/mia-starmist-preview-contact.jpg)、[元数据](launch/mia-starmist-preview-metadata.json)。 |
 | [科幻启动音效独立预览](launch/mia-scifi-sound-v2-preview.mp3) | 历史候选：用户随后取消音效，选择静音视频推送；此音效不合成、不打包到 App。[WAV](launch/mia-scifi-sound-v2-preview.wav)、[参数](launch/mia-scifi-sound-v2-preview.json)。 |
-| [当前静音启动视频](launch/mia-starmist-preview-silent.mp4) | 用户已选择采用，原样接入 `ios/MiaApp/MiaLaunch.mp4`；H.264、768×1376、24 fps、5.167 秒、无音轨。资源打包与两尺寸实际启动衔接等待本次 CI 核对。 |
+| [当前静音启动视频](launch/mia-starmist-preview-silent.mp4) | 用户已选择采用，原样接入 `ios/MiaApp/MiaLaunch.mp4`；H.264、768×1376、24 fps、5.167 秒、无音轨。[CI](https://github.com/bboytang/Mia/actions/runs/37250809373)及资源一致性检查通过；[16 Pro 抽帧](verification/mia-silent-launch-16pro-contact.jpg)、[SE 抽帧](verification/mia-silent-launch-se-contact.jpg)确认播放并进入首页，真机流畅度与最终衔接待验。 |
 | [三款角色比较图](mia-three-character-options.png) | 用户明确选择**右侧第三款**。左侧和中间两款均未选定，不应在后续设计中误用。 |
 | [已选首页概念图](mia-approved-screen-concept.png) | 用户选定的第三版方向：紫色短发、紫瞳、黑紫赛博服饰与晶体发饰的 Mia；蓝紫未来都市；底部字幕板、声波和麦克风。右侧功能入口的具体内容尚待设计。 |
 | [干净城市背景](mia-approved-city-background.png) | 与概念图同方向的无角色背景原图，适合后续重新适配不同 iPhone 尺寸。 |

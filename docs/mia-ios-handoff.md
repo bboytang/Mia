@@ -4,7 +4,7 @@
 
 **半身星雾 UI（已实现，CI 与两尺寸静态截图通过）**：用户最终恢复原版半身 Mia，批准[星雾首页](design/mia-approved-starmist-ui.png)，取消左上全部文字，以无麦克风图标的蓝紫粉流光球替换旧圆按钮和柱状波形。运行资源恢复 `MiaPortrait`，背景改为 `StarMistBackground`；原生 SwiftUI 流光按实际录音/播放音量变化，前景星雾与渐隐承接人物下沿。此前全身资产保留历史，不再用于当前首页或新视频默认参考。新末帧与提示词已同步，16 项视频工具测试通过。2026-10-05 用户确认另一次约 2.50 元 H3 5 秒 768P 生成，任务 `448953378521398` 成功；[带音效预览](design/launch/mia-starmist-preview-with-sound.mp4)与[抽帧](design/launch/mia-starmist-preview-contact.jpg)已保存。实际 768×1376、24 fps、5.167 秒，下沿持续星雾改善切口，但中途造型/尺度漂移和较亮凝形光带仍待验。原创音效按动作调整，视频帧与原片完全一致；实际账单、设备试听和原生首页交接未验。此为生成当时记录；用户随后选择静音视频接入，见下方最新状态。详见[制作记录](mia-launch-animation-plan.md)。
 
-**静音启动版已选择接入**：用户取消音效并要求按静音版推送，现将[星雾静音视频](design/launch/mia-starmist-preview-silent.mp4)原样放入 `ios/MiaApp/MiaLaunch.mp4`。本地检查 H.264、768×1376、24 fps、124 帧、5.167 秒、无音轨，文件与预览哈希一致；播放器保持静音，未修改账号、语音或网关。CI 新增真机包内视频与源文件一致性检查；新构建和两尺寸实际启动录屏待核对，真机衔接待验。音效候选保留制作历史，不再等待音效确认。
+**静音启动版已选择接入**：用户取消音效并要求按静音版推送，现将[星雾静音视频](design/launch/mia-starmist-preview-silent.mp4)原样放入 `ios/MiaApp/MiaLaunch.mp4`。本地检查 H.264、768×1376、24 fps、124 帧、5.167 秒、无音轨，文件与预览哈希一致；播放器保持静音，未修改账号、语音或网关。CI 已加入真机包内资源一致性检查。[静音版 CI](https://github.com/bboytang/Mia/actions/runs/37250809373)（代码 `13dd7ce`）通过 49 项单元测试、2 项 UI 测试、模拟器与未签名真机编译、资源一致性检查；IPA 已上传。已下载核对 App 视频与源文件一致，并抽查 16 Pro/SE 实际录屏均有粒子、Mia 与回到首页。主录屏 177.15 秒、542 帧，SE 22.83 秒、443 帧，均无音轨；时长包含模拟器启动等待，不代表真机速度。结尾角色/流光球与原生布局有位置及尺度变化，未宣称像素级无缝；真机流畅度和衔接待验。音效候选保留制作历史，不再等待音效确认。
 
 构建 `305a45d` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37213166341)通过 35 项测试、模拟器与未签名真机编译。已目视核对 CI 导出的 [16 Pro](design/verification/mia-starmist-16pro-preview.jpg)与 [SE 第三代](design/verification/mia-starmist-se-preview.jpg)首页缩略截图：设置处于安全区域，字幕卡两侧间距与圆角完整，流光球没有图标，人物下沿由星雾承接。真实麦克风音量反馈、播放时流光及打断仍待 iPhone 验收。
 

@@ -1,0 +1,31 @@
+{
+  "ci_run_id": 37250809373,
+  "ci_url": "https://github.com/bboytang/Mia/actions/runs/37250809373",
+  "code_commit": "13dd7ced37a313e912bd9fa003302e4139f48ef4",
+  "artifact_id": 11321195539,
+  "unit_tests": 49,
+  "ui_tests": 2,
+  "test_failures": 0,
+  "app_resource_sha256": "e7f7d8ccdfd50e0d0c76310317c7e3cd2270112a17247432cc10ed1ef73a6426",
+  "recordings": [
+    {
+      "file": "mia-launch.mp4",
+      "width": 1206,
+      "height": 2622,
+      "duration_seconds": 177.15,
+      "frames": 542,
+      "audio_streams": 0,
+      "sha256": "a2067bfac07fd7f697657e7ad2734a979dfb6f2477f6c8e38917e3efaf52057c"
+    },
+    {
+      "file": "mia-launch-secondary.mp4",
+      "width": 750,
+      "height": 1334,
+      "duration_seconds": 22.831667,
+      "frames": 443,
+      "audio_streams": 0,
+      "sha256": "b71729be0cd1410c60c7a9a80223e08e5eb217788204532359b8695f6a29a295"
+    }
+  ],
+  "review": "Both recordings show particle animation, Mia and the native home. Character/orb positions and scale change at handoff; not certified pixel-perfect. Recorded startup black intervals and simulator waiting are not device performance evidence. Real iPhone smoothness and handoff remain unverified."
+}
