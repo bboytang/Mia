@@ -53,6 +53,25 @@ private final class AccountURLProtocol: URLProtocol {
 }
 
 final class MiaAccountAccessTests: XCTestCase {
+    @MainActor
+    func testExpiredLoginStopsActiveVoiceBeforeRequestingLogin() {
+        let access = MiaAccountAccess(read: { self.old }, save: { _ in }, clear: {})
+        var recordingOrPlaying = true
+        let token = access.prepareVoice(endpoint: endpoint, maintenanceMode: false,
+                                        legacyToken: "maintenance-test",
+                                        now: Date(timeIntervalSince1970: 2_000_000_000)) {
+            recordingOrPlaying = false
+        }
+        XCTAssertNil(token)
+        XCTAssertFalse(recordingOrPlaying)
+        XCTAssertEqual(access.credential, old, "Expiry must not erase credentials on a network failure")
+        let activeToken = access.prepareVoice(endpoint: endpoint, maintenanceMode: false,
+                                              legacyToken: nil,
+                                              now: Date(timeIntervalSince1970: 1_900_000_000)) {
+            XCTFail("A valid credential must preserve stop/interrupt routing")
+        }
+        XCTAssertEqual(activeToken, old.token)
+    }
     private let endpoint = "wss://8kraw.cloud/xiaozhi/v1/"
     private let fakeToken = String(repeating: "a", count: 43)
     private var urlSession: URLSession!
