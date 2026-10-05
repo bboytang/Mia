@@ -47,6 +47,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.tests
+        GENERATE_INFOPLIST_FILE: YES
   MiaUITests:
     type: bundle.ui-testing
     platform: iOS
@@ -57,6 +58,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.uitests
+        GENERATE_INFOPLIST_FILE: YES
 schemes:
   Mia:
     build:
