@@ -54,8 +54,9 @@ struct ContentView: View {
                     Spacer(minLength: 12)
                     captionPanel
                     Button {
-                        if let token = account.token(endpoint: serverURL, maintenanceMode: maintenanceMode,
-                                                     legacyToken: MiaTokenStore.read()) {
+                        if let token = account.prepareVoice(endpoint: serverURL, maintenanceMode: maintenanceMode,
+                                                            legacyToken: MiaTokenStore.read(),
+                                                            disconnect: session.disconnect) {
                             Task {
                                 await session.toggleTalk(endpoint: serverURL,
                                                          token: token)

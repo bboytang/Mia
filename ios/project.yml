@@ -36,6 +36,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia
+        CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]: MiaApp/MiaSimulator.entitlements
   MiaTests:
     type: bundle.unit-test
     platform: iOS

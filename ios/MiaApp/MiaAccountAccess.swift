@@ -135,6 +135,14 @@ final class MiaAccountAccess: ObservableObject {
         return credential.token
     }
 
+    func prepareVoice(endpoint: String, maintenanceMode: Bool, legacyToken: String?,
+                      now: Date = Date(), disconnect: () -> Void) -> String? {
+        let available = token(endpoint: endpoint, maintenanceMode: maintenanceMode,
+                              legacyToken: legacyToken, now: now)
+        if available == nil { disconnect() }
+        return available
+    }
+
     func signIn(endpoint: String, username: String, password: String, register: Bool) async throws {
         let generation = UUID()
         loginGeneration = generation
