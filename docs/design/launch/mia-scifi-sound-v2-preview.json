@@ -1,0 +1,47 @@
+{
+  "status": "audio_only_preview_pending_user_approval",
+  "method": "Original local procedural electronic synthesis; no external recordings or paid API.",
+  "duration_seconds": 5.167,
+  "sample_rate": 48000,
+  "channels": 2,
+  "format": "PCM16 WAV",
+  "peak_dbfs": -11.0,
+  "rms_dbfs": -30.03,
+  "clipped_samples": 0,
+  "first_samples": [
+    0,
+    0
+  ],
+  "last_samples": [
+    0,
+    0
+  ],
+  "cues_seconds": {
+    "digital_particles": [
+      0.18,
+      2.03
+    ],
+    "charging_sweep": [
+      0.65,
+      2.3
+    ],
+    "energy_ignition": 2.167,
+    "fingertip_laser": [
+      3.25,
+      3.91
+    ],
+    "orb_settle": 4.25
+  },
+  "video_modified": false,
+  "device_audition_verified": false,
+  "wav_sha256": "c39f489c8e2677db1b6555d05b4a0f66e05ceb6afd51784830d7b7c77a22b80e",
+  "mp3": {
+    "file": "mia-scifi-sound-v2-preview.mp3",
+    "bitrate_kbps": 192,
+    "bytes": 125612,
+    "sha256": "89061273e7daa7df0fa5b27f01919ee9a580add2479c3babecba43ac96d8ed49",
+    "decoded_duration_seconds": 5.167,
+    "decoded_peak_dbfs": -11.24,
+    "clipped_samples": 0
+  }
+}

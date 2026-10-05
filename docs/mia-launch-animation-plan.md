@@ -8,6 +8,8 @@
 
 ## 2026-10-05 星雾新版预览
 
+**最新音效方向**：用户要求改为科幻风格，先单独试听、确认后才合成视频。[独立 MP3 预览](design/launch/mia-scifi-sound-v2-preview.mp3)与[PCM16 原稿](design/launch/mia-scifi-sound-v2-preview.wav)已制作：电子粒子脉冲提速、充能、2.167 秒能量凝聚、3.25–3.91 秒激光掠过、4.25 秒流光球柔和收束。原创本地电子合成，没有人声、音乐或外部录音，没有调用收费 API。时长 5.167 秒、48 kHz 双声道，WAV 峰值 −11 dBFS、无削波、起止为零；MP3 解码检查通过。用户试听及批准待完成，现有三份视频文件哈希未变，未合成新版音效或修改 App。参数和校验值见[元数据](design/launch/mia-scifi-sound-v2-preview.json)。
+
 - H3 5 秒、768P、两张本地首尾图，仅提交一次。实际原片 768×1376、24 fps、5.167 秒、124 帧，包含 AAC 音轨；不是严格 9:16。usage 报告输出 5 秒、输入图片 2 张，实际账单未核对。
 - 保存[平台原片](design/launch/mia-starmist-preview-source.mp4)、[静音版](design/launch/mia-starmist-preview-silent.mp4)、[带音效版](design/launch/mia-starmist-preview-with-sound.mp4)、[抽帧图](design/launch/mia-starmist-preview-contact.jpg)和[元数据](design/launch/mia-starmist-preview-metadata.json)。两种合成版的视频流直接复制，124 帧 RGB 解码哈希与原片完全一致，没有裁切、重画或变速。
 - 目视检查 0–5 秒十个时间点：下沿持续星雾遮挡，未见旧版裸露的水平切口；约 2 秒凝形仍出现较亮的带状边界，转身时服饰和尺度变化，未达到角色一致性与固定尺度要求。结尾可见原半身姿态和无图标流光球，精确原生布局交接未验证。

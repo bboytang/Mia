@@ -4,6 +4,8 @@
 
 **半身星雾 UI（已实现，CI 与两尺寸静态截图通过）**：用户最终恢复原版半身 Mia，批准[星雾首页](design/mia-approved-starmist-ui.png)，取消左上全部文字，以无麦克风图标的蓝紫粉流光球替换旧圆按钮和柱状波形。运行资源恢复 `MiaPortrait`，背景改为 `StarMistBackground`；原生 SwiftUI 流光按实际录音/播放音量变化，前景星雾与渐隐承接人物下沿。此前全身资产保留历史，不再用于当前首页或新视频默认参考。新末帧与提示词已同步，16 项视频工具测试通过。2026-10-05 用户确认另一次约 2.50 元 H3 5 秒 768P 生成，任务 `448953378521398` 成功；[带音效预览](design/launch/mia-starmist-preview-with-sound.mp4)与[抽帧](design/launch/mia-starmist-preview-contact.jpg)已保存。实际 768×1376、24 fps、5.167 秒，下沿持续星雾改善切口，但中途造型/尺度漂移和较亮凝形光带仍待验。原创音效按动作调整，视频帧与原片完全一致；实际账单、设备试听和原生首页交接未验。播放器仍静音，未放入正式启动素材，不自动再生成。详见[制作记录](mia-launch-animation-plan.md)。
 
+**启动音效待试听**：用户要求换成科幻风格并先确认独立音效。[5.167 秒 MP3 预览](design/launch/mia-scifi-sound-v2-preview.mp3)已制作，包含电子脉冲提速、充能、激光掠过和柔和收束；WAV/MP3 解码与零削波检查通过。尚未获音效批准，未合成到视频，既有视频哈希保持。
+
 构建 `305a45d` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37213166341)通过 35 项测试、模拟器与未签名真机编译。已目视核对 CI 导出的 [16 Pro](design/verification/mia-starmist-16pro-preview.jpg)与 [SE 第三代](design/verification/mia-starmist-se-preview.jpg)首页缩略截图：设置处于安全区域，字幕卡两侧间距与圆角完整，流光球没有图标，人物下沿由星雾承接。真实麦克风音量反馈、播放时流光及打断仍待 iPhone 验收。
 
 **账号接入（已实现、已部署，真机待验）**：按已批准的[用户名＋密码设计](mia-account-access-plan.md)和[实施计划](superpowers/plans/2026-10-04-mia-account-access.md)完成注册即登录、来源绑定 Keychain、退出撤销、过期重登录、每日额度与并发限制。新安装无需手填令牌；旧令牌只保留首次升级迁移和显式高级维护。独立审查发现的“会话到期后进入登录页仍录音”已补回归测试并修复。发布代码 `abe1ae4` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37246486540)通过 49 项单元测试（含真实 Keychain）和 2 项 UI 测试、两种构建、截图/录屏及未签名 IPA；[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37246004648)通过 49 项测试。VPS 已部署同一服务端代码并重启，loopback 8765/8766、Caddy 账号路由、数据库 `0700/0600` 验证通过；本机 HTTP 与域名 HTTPS/WSS 均验证注册、登录、握手、退出、撤销后拒绝新回合，临时账号清理完成，没有调用云 API。外部 HTTPS 复测仍被重置，真实 iPhone 账号与语音尚未验收。
