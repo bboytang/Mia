@@ -1,0 +1,91 @@
+{
+  "task_id": "448953378521398",
+  "generation_status": "succeeded",
+  "model": "MiniMax-H3",
+  "requested_duration_seconds": 5,
+  "resolution": "768P",
+  "reference_images": 2,
+  "estimated_fee_cny": 2.5,
+  "billing_verified": false,
+  "video_verified": [
+    {
+      "file": "mia-starmist-preview-source.mp4",
+      "bytes": 2785242,
+      "sha256": "9e9c7a3068064831ee1892a68dc1a1e02b80c29323ac64c1a49433b8ea47f5b2",
+      "decoded_video_sha256": "a34d5c4fd88c83222198eaa24e2b6bd17cb794cf58d1f319fbacce9350ca7ab8",
+      "frames": 124,
+      "width": 768,
+      "height": 1376,
+      "fps": "24/1",
+      "duration_seconds": 5.167,
+      "audio_streams": 1,
+      "audio_codecs": [
+        "aac"
+      ]
+    },
+    {
+      "file": "mia-starmist-preview-silent.mp4",
+      "bytes": 2696626,
+      "sha256": "e7f7d8ccdfd50e0d0c76310317c7e3cd2270112a17247432cc10ed1ef73a6426",
+      "decoded_video_sha256": "a34d5c4fd88c83222198eaa24e2b6bd17cb794cf58d1f319fbacce9350ca7ab8",
+      "frames": 124,
+      "width": 768,
+      "height": 1376,
+      "fps": "24/1",
+      "duration_seconds": 5.166667,
+      "audio_streams": 0,
+      "audio_codecs": []
+    },
+    {
+      "file": "mia-starmist-preview-with-sound.mp4",
+      "bytes": 2802635,
+      "sha256": "c7d76494b4d60278da84976d04dae641196c7c03764da15f131fb1463e8e59f4",
+      "decoded_video_sha256": "a34d5c4fd88c83222198eaa24e2b6bd17cb794cf58d1f319fbacce9350ca7ab8",
+      "frames": 124,
+      "width": 768,
+      "height": 1376,
+      "fps": "24/1",
+      "duration_seconds": 5.167,
+      "audio_streams": 1,
+      "audio_codecs": [
+        "aac"
+      ]
+    }
+  ],
+  "sound": {
+    "sample_rate": 48000,
+    "channels": 2,
+    "duration_seconds": 5.167,
+    "peak_dbfs": -13.99,
+    "clipped_samples": 0,
+    "first_samples": [
+      0,
+      0
+    ],
+    "last_samples": [
+      0,
+      0
+    ]
+  },
+  "sound_method": "Original v1 draft retimed with pitch-preserving atempo and 15 ms crossfades; model audio replaced; approximate cues at 2.167, 3.417 and 4.25 seconds.",
+  "status": "preview_pending_user_review_not_in_app",
+  "review_findings": [
+    "Persistent lower mist conceals portrait cutoff in inspected frames.",
+    "Character scale and outfit drift during the reveal and turn.",
+    "Bright band during lower-to-upper materialization around 2 seconds.",
+    "Sound synchronized provisionally to reveal, hand arc and orb; not device auditioned.",
+    "Native home transition on two iPhone sizes remains unverified."
+  ],
+  "first_frame": {
+    "file": "mia-particle-start.png",
+    "sha256": "97b390b823c08ab93647ff97807642a1d4971945a3733819d1c83febe4a7160f"
+  },
+  "last_frame": {
+    "file": "mia-halfbody-starmist-end-reference.png",
+    "sha256": "e2f57ab60ac49e201fcdc952b5826059dd53aa69bddabbc3055ea656d3fd0933"
+  },
+  "prompt": {
+    "file": "mia-minimax-prompt.txt",
+    "sha256": "5d7489eafdd779f1c876fdf1c2e91fd3decc55d356f3231612c1e6c4e78c785b"
+  }
+}
