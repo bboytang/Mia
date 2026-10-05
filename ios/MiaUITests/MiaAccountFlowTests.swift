@@ -1,4 +1,5 @@
 import XCTest
+import UIKit
 
 final class MiaAccountFlowTests: XCTestCase {
     private func launch() -> XCUIApplication {
@@ -13,6 +14,14 @@ final class MiaAccountFlowTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+        // Empty login/registration forms only; no credentials are entered by these tests.
+        let source = app.screenshot().image
+        let size = CGSize(width: 600 * source.size.width / source.size.height, height: 600)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let preview = renderer.image { _ in source.draw(in: CGRect(origin: .zero, size: size)) }
+        if let data = preview.jpegData(compressionQuality: 0.7) {
+            print("MIA_UI_PREVIEW:" + name + ".jpg:" + data.base64EncodedString())
+        }
     }
 
     func testOrbOpensLoginAndRegistrationWithoutTokenEntry() {
