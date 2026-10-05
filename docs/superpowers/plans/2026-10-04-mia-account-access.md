@@ -1,6 +1,6 @@
 # Mia Account Access Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Friends register with a username/password, automatically log in, and use the existing voice gateway without copying tokens.
 
@@ -90,12 +90,12 @@
 - Account login disables explicit persisted maintenance mode. New installs use account mode; one-time migration permits existing old-token installations to continue maintenance. Logout never automatically enables maintenance.
 - `MiaConnectionError.unauthorized` only for a definitive WebSocket policy close reason `未授权`; VoiceSession publishes auth rejection while preserving other error behavior.
 
-- [ ] Add tests with URLProtocol transport fixtures for exact endpoint/JSON/headers, response validation, no cross-origin redirect, unknown expiry, malformed payload, HTTP 401/429 and TLS distinction.
-- [ ] Add state tests: cancellation and failed save retain old credentials, wrong origin never usable, definite rejection clears, network failure retains, logout captures token before clearing/disconnect and offline failure never restores login/legacy mode. Use fake storage only for controlled failures; verify real Keychain round trip and update.
-- [ ] Push tests first to existing macOS CI and confirm missing-feature failure; local Swift/Xcode unavailable.
-- [ ] Implement account API/storage/state and integrate sheet/settings/home routing. Keep home portrait/orb layout and voice/Opus/caption logic. Normal settings show account/logout; old token/endpoint inside explicit Advanced Maintenance.
-- [ ] Run macOS CI; expected all XCTest, simulator/device builds green. Inspect both native screenshot sizes and login/settings flows; fix actual regressions and document hardware limits.
-- [ ] Inspect diff, update README/handoff/roadmap, commit/push iOS stage.
+- [x] Add tests with URLProtocol transport fixtures for exact endpoint/JSON/headers, response validation, no cross-origin redirect, unknown expiry, malformed payload, HTTP 401/429 and TLS distinction.
+- [x] Add state tests: cancellation and failed save retain old credentials, wrong origin never usable, definite rejection clears, network failure retains, logout captures token before clearing/disconnect and offline failure never restores login/legacy mode. Use fake storage only for controlled failures; verify real Keychain round trip and update.
+- [x] Push tests first to existing macOS CI and confirm missing-feature failure; local Swift/Xcode unavailable.
+- [x] Implement account API/storage/state and integrate sheet/settings/home routing. Keep home portrait/orb layout and voice/Opus/caption logic. Normal settings show account/logout; old token/endpoint inside explicit Advanced Maintenance.
+- [x] Run macOS CI; expected all XCTest, simulator/device builds green. Inspect both native screenshot sizes and login/settings flows; fix actual regressions and document hardware limits.
+- [x] Inspect diff, update README/handoff/roadmap, commit/push iOS stage.
 
 ### Task 4: Protected deployment and real account verification
 
@@ -109,9 +109,15 @@
 - Account check uses a disposable account with randomized test credentials held only in memory; verifies HTTP register/login, WebSocket hello, logout, refusal of new rounds after revoke. No cloud calls, no credential output. Clean only the disposable test user via privileged local DB cleanup after connections close.
 - VPS backup code, service/Caddy configs, env and SQLite using protected paths and sqlite backup before updating; no secrets read back. Rollback preserves account data and existing cloud configuration.
 
-- [ ] Test installer with temporary command doubles and existing protected env/DB: preservation, one-time defaults and no secrets in output; shell syntax check.
-- [ ] Run full server suite, iOS CI, Python compile checks, diff/secret inspection and independent whole-change code review; resolve material findings with regression tests.
-- [ ] Commit/push deploy materials, wait corresponding CI green.
-- [ ] SSH using existing dedicated key and pinned host key. Apply protected backups then install code/config, validate Caddy before reload and restart gateway; verify service and endpoint bindings.
-- [ ] Run VPS service tests and account loopback/HTTPS check; recheck external TLS without weakening trust. If备案 still blocks outside access, document that iPhone account/voice acceptance remains pending.
-- [ ] Update deployed commit, verified results/rollback paths in docs and push; final working tree clean. Do not claim real iPhone validation from VPS self-test.
+- [x] Test installer with temporary command doubles and existing protected env/DB: preservation, one-time defaults and no secrets in output; shell syntax check.
+- [x] Run full server suite, iOS CI, Python compile checks, diff/secret inspection and independent whole-change code review; resolve material findings with regression tests.
+- [x] Commit/push deploy materials, wait corresponding CI green.
+- [x] SSH using existing dedicated key and pinned host key. Apply protected backups then install code/config, validate Caddy before reload and restart gateway; verify service and endpoint bindings.
+- [x] Run VPS service tests and account loopback/HTTPS check; recheck external TLS without weakening trust. If备案 still blocks outside access, document that iPhone account/voice acceptance remains pending.
+- [x] Update deployed commit, verified results/rollback paths in docs and push; final working tree clean. Do not claim real iPhone validation from VPS self-test.
+
+## Completion evidence (2026-10-05)
+
+Server: 49 tests green locally, CI 37246004648 and VPS. iOS: CI 37246486540 green, 49 unit + 2 native UI tests, real Keychain, simulator/device builds and unsigned IPA. Independent review found expiry-before-stop issue, reproduced by missing pre-login disconnect and fixed; regression passed. Inspected five native images including 16 Pro/SE home and empty login/register/settings. Registration title has a partial captured glyph; accessible full title passes, stable rendering remains a phone follow-up and is not claimed verified.
+
+VPS running source abe1ae4, loopback HTTP+WS and own-domain HTTPS/WSS register/login/logout/revocation checks green; temporary accounts cleaned, no cloud calls. Config and old tokens preserved, protected backup recorded in handoff. External TLS still reset, so real iPhone account/voice validation remains explicitly pending.

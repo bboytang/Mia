@@ -29,3 +29,5 @@
 CI 新增账户 API、原生 Keychain、断网/取消/写入失败及来源隔离测试，并通过原生 UI 测试验证首页入口、注册切换、设置默认隐藏令牌。UI 测试不输入真实密码或调用云服务；截图保存在测试结果包中。当前构建结果以 GitHub Actions 为准，VPS 账号部署及真机验收状态见 handoff。备案阻塞解除后，首次安装请注册账号，再测试中文问答、字幕、声音、打断和退出后不能继续使用原会话。
 
 模拟器 CI 使用专属模拟器 application identifier 和临时 ad hoc 签名以测试真实 Keychain；真机产物继续不签名，安装时需由用户的签名工具生成正确的应用/钥匙串权限。模拟器标识不用于真机配置。
+
+账号版构建 `abe1ae4` 的 [成功 CI 与 IPA](https://github.com/bboytang/Mia/actions/runs/37246486540)通过 49 项单元测试、2 项 UI 测试和模拟器/未签名真机编译。VPS 账号接口已经部署并通过本机 HTTP/HTTPS/WSS 验证；真实 iPhone 注册和语音待公网 TLS 恢复。页面与两尺寸首页截图见 [验证图](../docs/design/README.md)。

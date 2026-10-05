@@ -1,12 +1,12 @@
 # Mia iOS 跨设备 Codex 交接
 
-最后核对：2026-10-04。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。备案期间的角色接入设计见[Live2D 运行时方案](mia-live2d-runtime-plan.md)。
+最后核对：2026-10-05。仓库：`bboytang/Mia`，工作分支：`feature/mia-ios-bootstrap`。本文件记录跨设备继续开发所需的定位信息；当前进度和验收顺序以[完整方案与计划](mia-ios-roadmap.md)为准。备案期间的角色接入设计见[Live2D 运行时方案](mia-live2d-runtime-plan.md)。
 
 **半身星雾 UI（已实现，CI 与两尺寸静态截图通过）**：用户最终恢复原版半身 Mia，批准[星雾首页](design/mia-approved-starmist-ui.png)，取消左上全部文字，以无麦克风图标的蓝紫粉流光球替换旧圆按钮和柱状波形。运行资源恢复 `MiaPortrait`，背景改为 `StarMistBackground`；原生 SwiftUI 流光按实际录音/播放音量变化，前景星雾与渐隐承接人物下沿。此前全身资产保留历史，不再用于当前首页或新视频默认参考。新末帧与提示词已同步，默认请求离线准备与 16 项视频测试通过；现有启动播放器仍静音，正式新版视频和音效衔接未验收，未创建新收费任务。
 
 构建 `305a45d` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37213166341)通过 35 项测试、模拟器与未签名真机编译。已目视核对 CI 导出的 [16 Pro](design/verification/mia-starmist-16pro-preview.jpg)与 [SE 第三代](design/verification/mia-starmist-se-preview.jpg)首页缩略截图：设置处于安全区域，字幕卡两侧间距与圆角完整，流光球没有图标，人物下沿由星雾承接。真实麦克风音量反馈、播放时流光及打断仍待 iPhone 验收。
 
-**账号接入（已批准，分阶段实施）**：用户回复“按方案实施”，采用[用户名＋密码设计](mia-account-access-plan.md)与[实施计划](superpowers/plans/2026-10-04-mia-account-access.md)。SQLite、受限异步 scrypt、账号 HTTP、本机密码重置及网关会话鉴权/用量已实现；本地全套 46 项服务端测试通过，账号持久化/HTTP 第一阶段 [CI](https://github.com/bboytang/Mia/actions/runs/37244006466)通过。旧共享令牌保留维护回滚，账号会话在连接与新收费回合前重验。iOS 注册/登录、来源绑定 Keychain、取消与离线退出已实现，原生构建/测试正在 CI 验证；部署脚本、Caddy 路由、状态目录与临时账号自测已补齐，本地全套 49 项服务端测试通过。当前 VPS 尚未更新账号代码，不把模拟语音测试记作真机登录通过。
+**账号接入（已实现、已部署，真机待验）**：按已批准的[用户名＋密码设计](mia-account-access-plan.md)和[实施计划](superpowers/plans/2026-10-04-mia-account-access.md)完成注册即登录、来源绑定 Keychain、退出撤销、过期重登录、每日额度与并发限制。新安装无需手填令牌；旧令牌只保留首次升级迁移和显式高级维护。独立审查发现的“会话到期后进入登录页仍录音”已补回归测试并修复。发布代码 `abe1ae4` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/37246486540)通过 49 项单元测试（含真实 Keychain）和 2 项 UI 测试、两种构建、截图/录屏及未签名 IPA；[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37246004648)通过 49 项测试。VPS 已部署同一服务端代码并重启，loopback 8765/8766、Caddy 账号路由、数据库 `0700/0600` 验证通过；本机 HTTP 与域名 HTTPS/WSS 均验证注册、登录、握手、退出、撤销后拒绝新回合，临时账号清理完成，没有调用云 API。外部 HTTPS 复测仍被重置，真实 iPhone 账号与语音尚未验收。
 
 **MiniMax 预览已生成**：用户确认仅重试一次，直接传入两张原图的任务 `448781796409606` succeeded。原片为 768×1376、24 fps、约 5.17 秒、124 帧、含一条音轨；[静音预览](design/launch/mia-minimax-preview-silent.mp4)仅移除音轨，逐帧解码哈希与原片相同。已抽九帧检查：能看到粒子凝聚、侧身转向、V 手势与下方圆环，但侧向幅度大于原定约 35 度，角色尺度/服饰中途变化，约 2.5–3.5 秒人物下沿有明显水平截断。未验收为正式启动素材，未加入 iOS。实际费用待账户核对，未再提交任务。原片、静音版和[清理元数据](design/launch/mia-minimax-preview-metadata.json)已保存。
 
@@ -45,18 +45,18 @@ git status --short
 
 | 模块 | 位置 | 已验证 | 未验证 |
 | --- | --- | --- | --- |
-| iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕、启动播放准备 | `ios/MiaApp/`、`ios/MiaTests/` | 构建 `305a45d` 的 [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37213166341)通过 35 项测试、模拟器与未签名真机编译；已上传 IPA、SHA-256、两尺寸录屏与截图，目视检查最新两尺寸首页缩略截图。此前 `9295439` 已检查录制顺序、首末帧和缺素材回退。 | 正式启动素材及动画衔接验收；用户重签后在真机上的录放、音量反馈、耳机切换、弱网与字幕时序。 |
-| 小智兼容网关、火山 Provider、Opus | `server/xiaozhi_gateway.py`、`server/volcengine_provider.py`、`server/tests/` | 23 项服务端测试在本地与 VPS 通过，[服务端 CI](https://github.com/bboytang/Mia/actions/runs/37150191264)通过；VPS 自身经公网域名调用真实云 API，返回 Mia 字幕与 91 帧可解码 Opus。百炼 Provider 保留回滚。 | 外部网络可达后，iPhone 真机录放、打断、连续多轮与弱网。 |
-| Ubuntu 部署材料 | `server/deploy/`、`server/README.md` | 新进程和 Caddy 均运行；VPS 自测真实 WSS 全链路、错误令牌拒绝、受保护配置与令牌保留已验。 | 外部 TLS 在 ClientHello 后被重置；用户称备案正在审核，审核和所需接入完成后须重验。 |
+| iOS SwiftUI 首页、设置、Keychain、麦克风、Opus、WebSocket、仅 Mia 字幕、启动播放准备 | `ios/MiaApp/`、`ios/MiaTests/` | 账号版 `abe1ae4` 的 [GitHub iOS 构建](https://github.com/bboytang/Mia/actions/runs/37246486540)通过 49 项单元测试、2 项 UI 测试、模拟器与未签名真机编译；已上传 IPA、SHA-256、两尺寸录屏与截图，核对账号页及两尺寸首页。此前 `9295439` 已检查录制顺序、首末帧和缺素材回退。 | 正式启动素材及动画衔接验收；用户重签后在真机上的录放、音量反馈、耳机切换、弱网与字幕时序。 |
+| 小智兼容网关、火山 Provider、Opus | `server/xiaozhi_gateway.py`、`server/volcengine_provider.py`、`server/tests/` | 49 项服务端测试在本地、[CI](https://github.com/bboytang/Mia/actions/runs/37246004648)与 VPS 通过；账号会话与旧维护令牌回归通过。此前 VPS 自身真实云 API 回合返回 Mia 字幕与 91 帧 Opus；本次账号自测不调用云 API。百炼 Provider 保留回滚。 | 外部网络可达后，iPhone 真机录放、打断、连续多轮与弱网。 |
+| Ubuntu 部署材料 | `server/deploy/`、`server/README.md` | 账号版网关/Caddy 已运行；VPS HTTP/HTTPS/WSS 账号自测、49 项服务端测试、配置/数据权限与原密钥保留已验。 | 外部 TLS 在 ClientHello 后被重置；用户称备案正在审核，审核和所需接入完成后须重验。 |
 | 角色 | `docs/design/`、`ios/MiaApp/Assets.xcassets/MiaPortrait.imageset/` | 已选概念图和静态图可在 GitHub 查看，模拟器首页已展示；[运行时方案](mia-live2d-runtime-plan.md)已整理。 | 真正 Cubism 模型制作、许可、SDK 接入和运行时口型。 |
 
 **测试边界**：自动化服务端测试使用假提供者；真实网关回合使用既有 TTS 合成音频作为输入，并非 iPhone 麦克风。模拟器构建成功和服务器回合成功都不等于 iPhone 真机语音通过。GitHub Actions 产物有有效期，继续开发时用最新成功构建。
 
-**最新部署快照**：提交 `dcc3dbd` 已推送并通过服务端 CI；用户已在 VPS 填写两把火山 Key 并重启。VPS 自身访问公网域名完成一次真实回合：约 3.6 秒合成语音输入，返回 `start → sentence_start → stop`、91 帧 Opus（解码后 262080 字节 PCM），全程约 10.6 秒；错误令牌收到 WebSocket 1008。服务与 Caddy 验证后仍运行。Key 未进入仓库或聊天，网关令牌未改变。部署前代码与环境文件备份为 `/opt/mia/server.before-volc-dcc3dbd`、`/etc/mia/gateway.env.before-volc-dcc3dbd`。
+**最新部署快照（2026-10-05）**：运行代码 `abe1ae4c4f0fe5af6e8679855a8b15bf8e6c56d0`，标记在 `/opt/mia/DEPLOYED_COMMIT`。远端 `/home/ubuntu/Mia` 是源码快照，不是 Git checkout；使用该提交的受审查 git archive 发布。上线前备份为 `/var/backups/mia/before-accounts-abe1ae4c4f0f/`（root `0700`），包含旧 `server/`、`gateway.env`、systemd 服务及 Caddy 配置。部署前没有账号库；之后回滚必须保留 `/var/lib/mia/accounts.sqlite3`，不要以旧备份覆盖新用户数据。原环境文件字节前缀核对一致，Key、旧维护令牌及火山参数保持。安装器在独立 venv 增加 aiohttp，只补缺失的账号配置，Caddy 只增本域名 `/api/auth/*`；服务和 Caddy active，VPS 49 项测试与 pip check 通过。旧火山真实合成语音回合证据仍有效，但本次账号自测不调用付费 API，也不代表外部/iPhone 可达。
 
 ## 下一步顺序与交接所需信息
 
-1. **恢复外部 TLS 访问后真机联调**：用户称 `8kraw.cloud` 的备案正在审核；审核和腾讯云所需接入完成后，先从外部检查 HTTPS/WSS，再用已安装的 IPA 和已有网关令牌检查中文识别、Mia 人声、仅 Mia 字幕、打断、连续多轮、弱网、耳机路由和费用。
+1. **恢复外部 TLS 访问后真机联调**：用户称 `8kraw.cloud` 的备案正在审核；审核和腾讯云所需接入完成后，先从外部检查 HTTPS/WSS，再用账号版 IPA 注册/登录检查中文识别、Mia 人声、仅 Mia 字幕、打断、连续多轮、弱网、耳机路由和费用。
 2. **最后接入真正 Live2D**：运行时方案已定，收到符合[素材清单](live2d-mia-asset-brief.md)的获授权绑定模型和可合法使用的 SDK 后，按[接入方案](mia-live2d-runtime-plan.md)实施、验证，再替换静态图。没有模型文件时可继续语音、字幕与 UI 工作，但不能宣称 Live2D 完成。
 
 每次交接或阶段完成时，更新[路线图](mia-ios-roadmap.md)中的状态、证据和下一步，保留 CI 运行链接，并确认 `git status` 没有遗漏的本地修改。这样即使更换设备或 Codex 会话，也能从仓库恢复同一事实状态。

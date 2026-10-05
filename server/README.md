@@ -98,3 +98,9 @@ sudo -u mia /opt/mia/.venv/bin/python -m server.deploy.check_accounts \
 重复运行安装器保留已有配置、Key、维护令牌和数据库，只补缺失字段。发布前备份代码、systemd/Caddy/环境文件，数据库使用 SQLite backup API（不能在运行中仅复制主文件）。备份目录不得公开或提交 Git。回滚保留账号库，关闭 `MIA_ACCOUNTS_ENABLED=0`、恢复之前服务/代码/Caddy 配置并重启即可使用维护令牌；账号登录将在回滚期间不可用。切勿删除账号库以回滚。
 
 VPS 本机成功不能代替公网或 iPhone 验收：当前域名备案审核期间，仍需独立外部 HTTPS/WSS 和实际注册/语音反馈。
+
+### 当前账号部署验收（2026-10-05）
+
+运行源码 `abe1ae4` 已在 `43.143.230.174` 启用，49 项服务端测试、pip check、Caddy 验证、本机 HTTP 与域名 HTTPS/WSS 的临时账号自测全部通过，测试账号已清理。8765/8766 均只监听 loopback；目录/数据库/环境文件权限分别为 mia `0700`、mia `0600`、root `0600`。旧配置内容逐字保留，现有 Key 和维护令牌没有改变。
+
+旧代码/配置备份：`/var/backups/mia/before-accounts-abe1ae4c4f0f/`，root `0700`；部署前无账号数据库，回滚时必须保留现有账号库。运行提交标记为 `/opt/mia/DEPLOYED_COMMIT`；远端源码是归档快照，不是 Git checkout。外部 HTTPS 仍被重置，待备案恢复后进行真正外部注册和 iPhone 验收。

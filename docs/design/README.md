@@ -20,3 +20,14 @@
 正式 Live2D 必须另有获授权的分层 PSD/CSP、Cubism 工程 `.cmo3`、运行用 `.model3.json` 与 `.moc3`、贴图及动作/表情文件，至少支持眨眼、头部与身体动作和 `ParamMouthOpenY`。具体交付与验收见[Live2D 素材说明](../live2d-mia-asset-brief.md)。单张 PNG 无法直接变成真正的 `.moc3`。
 
 用户最初上传的视频仅用于表达期望的界面和动画效果，原附件不在 GitHub；未经确认不将可能含第三方作品的视频公开上传。跨设备开发以此目录的已选视觉图和仓库内运行资源为准。
+
+## 账号接入原生页面核对（2026-10-05）
+
+来自账号版 `abe1ae4` 的 [成功 CI](https://github.com/bboytang/Mia/actions/runs/37246486540)：
+
+- [登录页](verification/mia-account-login-preview.jpg)：用户名/密码、取消、注册入口，没有令牌输入。
+- [注册页](verification/mia-account-register-preview.jpg)：确认密码、用户名/长度说明、注册即登录和切回登录。大标题截帧局部未完整绘制，完整导航标签测试通过；此帧不作为稳定标题显示的验收，需真机复核。
+- [普通设置](verification/mia-account-settings-preview.jpg)：账号入口与折叠的高级维护，默认不出现维护令牌输入。
+- [16 Pro 首页](verification/mia-account-home-16pro-preview.jpg)与 [SE 第三代首页](verification/mia-account-home-se-preview.jpg)：已批准半身、星雾、无图标流光球保持，登录提示位于球下方；设置、字幕圆角/间距和安全区域未发现截断。
+
+三张账号图取自未输入任何凭据的原生 UI 测试；完整截图保存在 `.xcresult` 产物。测试通过不等于真实网络注册、麦克风、声音及打断验收。
