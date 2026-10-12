@@ -6,6 +6,7 @@ faulthandler.dump_traceback_later(10)
 import asyncio
 import json
 import re
+import socketserver
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -52,6 +53,13 @@ class OTA(BaseHTTPRequestHandler):
 closed_once = set()
 
 
+class LoopbackHTTPServer(ThreadingHTTPServer):
+    def server_bind(self):
+        # The fixture needs no reverse DNS; macOS runners can stall resolving localhost.
+        socketserver.TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address
+
+
 async def websocket(ws):
     headers = ws.request.headers
     if not valid_identity(headers) or headers.get("Authorization") != "Bearer fixture-only":
@@ -93,7 +101,7 @@ async def websocket(ws):
 
 
 async def main():
-    server = ThreadingHTTPServer(("127.0.0.1", 8770), OTA)
+    server = LoopbackHTTPServer(("127.0.0.1", 8770), OTA)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     async with serve(websocket, "127.0.0.1", 8769):
         faulthandler.cancel_dump_traceback_later()
