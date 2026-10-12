@@ -1,4 +1,8 @@
 """Loopback-only protocol fixture. Never connects to a cloud model or real device."""
+import faulthandler
+
+# Keep startup failures visible when a runner stalls before opening the ports.
+faulthandler.dump_traceback_later(10)
 import asyncio
 import json
 import re
@@ -92,6 +96,7 @@ async def main():
     server = ThreadingHTTPServer(("127.0.0.1", 8770), OTA)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     async with serve(websocket, "127.0.0.1", 8769):
+        faulthandler.cancel_dump_traceback_later()
         print("Xiaozhi fixture ready", flush=True)
         await asyncio.Future()
 
