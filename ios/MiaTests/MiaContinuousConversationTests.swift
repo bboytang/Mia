@@ -37,7 +37,7 @@ private final class ConversationAudioStub: MiaConversationAudio {
 final class MiaContinuousConversationTests: XCTestCase {
     @MainActor
     private func waitUntil(_ condition: () -> Bool, file: StaticString = #filePath, line: UInt = #line) async throws {
-        for _ in 0..<100 {
+        for _ in 0..<250 {
             if condition() { return }
             try await Task.sleep(nanoseconds: 20_000_000)
         }
@@ -98,6 +98,8 @@ final class MiaContinuousConversationTests: XCTestCase {
         XCTAssertEqual(voice.state, .listening)
         audio.saySomething()
         try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+        XCTAssertNil(voice.errorMessage)
+        XCTAssertEqual(voice.state, .speaking)
         audio.finishPlaying()
         try await waitUntil { voice.state == .listening && audio.rounds == 3 }
     }

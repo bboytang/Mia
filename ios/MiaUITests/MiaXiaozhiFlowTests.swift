@@ -9,8 +9,8 @@ final class MiaXiaozhiFlowTests: XCTestCase {
                                "-mia.xiaozhi.websocketURL", "wss://example.invalid/xiaozhi/v1/"]
         app.launch()
         XCTAssertTrue(app.buttons["设置"].waitForExistence(timeout: 15))
-        let ready = expectation(for: NSPredicate(format: "isHittable == true"),
-                                evaluatedWith: app.buttons["设置"])
+        let ready = expectation(for: NSPredicate(format: "exists == false"),
+                                evaluatedWith: app.buttons["跳过启动动画"])
         wait(for: [ready], timeout: 15)
         return app
     }
