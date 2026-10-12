@@ -29,7 +29,7 @@ struct MiaWebSocketConfiguration {
         let url = try MiaXiaozhiClient.validatedURL(endpoint, schemes: ["ws", "wss"])
         let device = deviceID ?? MiaXiaozhiIdentity.deviceID(for: clientID)
         guard MiaXiaozhiIdentity.validDeviceID(device) else { throw MiaXiaozhiError.invalidIdentity }
-        guard token == nil || (token!.count <= 4096 && !token!.contains("\r") && !token!.contains("\n")) else {
+        guard token == nil || (token!.count <= 4096 && !token!.unicodeScalars.contains(where: { $0.value == 13 || $0.value == 10 })) else {
             throw MiaConnectionError.invalidEndpoint
         }
 

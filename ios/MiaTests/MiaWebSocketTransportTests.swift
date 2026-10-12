@@ -36,7 +36,9 @@ final class MiaWebSocketTransportTests: XCTestCase {
         XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/", clientID: UUID(), token: nil, deviceID: "ios-invalid"))
         XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://user:pass@example.com/", clientID: UUID(), token: nil))
         XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/?authorization=private", clientID: UUID(), token: nil))
-        XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/", clientID: UUID(), token: "x\r\nInjected: x"))
+        for token in ["x\rInjected: x", "x\nInjected: x", "x\r\nInjected: x"] {
+            XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/", clientID: UUID(), token: token))
+        }
     }
 
     func testCloseReasonRedactsUnknownText() {
