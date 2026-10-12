@@ -135,6 +135,7 @@ final class MiaWebSocketTransport {
         diagnosticDelegate = MiaSocketDiagnosticsDelegate(update: onConnection)
         diagnosticUpdate = onMessage
         socket = session.webSocketTask(with: configuration.request)
+        socket.maximumMessageSize = 65_536
         socket.delegate = diagnosticDelegate
     }
 

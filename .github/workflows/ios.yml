@@ -44,7 +44,24 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/mia-protocol-tests"
           "$RUNNER_TEMP/mia-protocol-tests/bin/python" -m pip install websockets==16.0
           "$RUNNER_TEMP/mia-protocol-tests/bin/python" ios/TestsSupport/xiaozhi_fixture.py > "$RUNNER_TEMP/mia-fixture.log" 2>&1 &
-          python3 -c 'import time, urllib.request; time.sleep(2); assert urllib.request.urlopen("http://127.0.0.1:8770/health", timeout=5).status == 200'
+          if ! python3 - <<'PY'
+          import time, urllib.request
+          opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+          deadline = time.monotonic() + 20
+          while time.monotonic() < deadline:
+              try:
+                  with opener.open("http://127.0.0.1:8770/health", timeout=1) as response:
+                      if response.status == 200:
+                          break
+              except OSError:
+                  time.sleep(.2)
+          else:
+              raise SystemExit("Loopback Xiaozhi fixture did not become ready")
+          PY
+          then
+            cat "$RUNNER_TEMP/mia-fixture.log"
+            exit 1
+          fi
 
       - name: Run iOS unit and Xiaozhi UI tests
         working-directory: ios

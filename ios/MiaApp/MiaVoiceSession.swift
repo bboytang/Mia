@@ -30,6 +30,7 @@ final class MiaVoiceSession: ObservableObject {
     private var handshakeTimeout: Task<Void, Never>?
     private var replyTimeout: Task<Void, Never>?
     private var playbackGeneration = UUID()
+    private var microphoneGeneration: UUID?
 
     private var transport: MiaWebSocketTransport?
     private var audio: MiaAudioIO?
@@ -55,9 +56,9 @@ final class MiaVoiceSession: ObservableObject {
         case .listening:
             await stopListening()
         case .waiting, .speaking:
+            guard let current = transport else { return }
             do {
                 replyTimeout?.cancel()
-                guard let current = transport else { return }
                 try await current.abort(sessionID: sessionID)
                 guard transport === current else { return }
                 playbackGeneration = UUID()
@@ -68,8 +69,9 @@ final class MiaVoiceSession: ObservableObject {
                 audioLevel = 0
                 captionTimeline.interrupt()
                 caption = ""
+                state = .ready
                 await startListening()
-            } catch { fail(error) }
+            } catch { if transport === current { fail(error) } }
         case .connecting:
             break
         }
@@ -86,6 +88,7 @@ final class MiaVoiceSession: ObservableObject {
         replyTimeout?.cancel()
         replyTimeout = nil
         playbackGeneration = UUID()
+        microphoneGeneration = nil
         authorizationRejected = false
         connectionGeneration = UUID()
         receiveTask?.cancel()
@@ -187,6 +190,7 @@ final class MiaVoiceSession: ObservableObject {
             replyTimeout = nil
             recordingTimeout?.cancel()
             _ = audio?.takeFinalMicrophoneFrame()
+            microphoneGeneration = nil
             sendTask?.cancel()
             pendingMicrophoneFrames.removeAll()
             state = .speaking
@@ -224,18 +228,18 @@ final class MiaVoiceSession: ObservableObject {
                 continuation.resume(returning: $0)
             }
         }
+        guard self.transport === transport else { return }
         guard permission else {
-            errorMessage = MiaAudioError.microphoneDenied.localizedDescription
+            fail(MiaAudioError.microphoneDenied)
             return
         }
-        guard self.transport === transport else { return }
         do {
             if audio == nil {
                 let audio = MiaAudioIO()
                 let playback = playbackGeneration
                 try audio.start(outputSampleRate: sampleRate,
-                                onMicrophoneFrame: { [weak self] samples in
-                                    Task { @MainActor in self?.enqueueMicrophone(samples) }
+                                onMicrophoneFrame: { [weak self] samples, generation in
+                                    Task { @MainActor in self?.enqueueMicrophone(samples, generation: generation) }
                                 },
                                 onPlaybackFrame: { [weak self] duration, level in
                                     Task { @MainActor in
@@ -246,8 +250,9 @@ final class MiaVoiceSession: ObservableObject {
                 self.audio = audio
             }
             try await transport.startListening(sessionID: sessionID)
+            guard self.transport === transport else { return }
             audioLevel = 0
-            audio?.beginMicrophoneCapture()
+            microphoneGeneration = audio?.beginMicrophoneCapture()
             state = .listening
             recordingTimeout?.cancel()
             recordingTimeout = Task { [weak self] in
@@ -255,7 +260,7 @@ final class MiaVoiceSession: ObservableObject {
                 guard let self, self.state == .listening else { return }
                 await self.stopListening()
             }
-        } catch { fail(error) }
+        } catch { if self.transport === transport { fail(error) } }
     }
 
     private func stopListening() async {
@@ -263,6 +268,7 @@ final class MiaVoiceSession: ObservableObject {
         recordingTimeout?.cancel()
         recordingTimeout = nil
         let finalFrame = audio?.takeFinalMicrophoneFrame()
+        microphoneGeneration = nil
         state = .waiting
         audioLevel = 0
         replyTimeout?.cancel()
@@ -278,34 +284,35 @@ final class MiaVoiceSession: ObservableObject {
                 try await current.sendOpus(codec.encode(finalFrame))
             }
             try await current.stopListening(sessionID: sessionID)
-        } catch { fail(error) }
+        } catch { if transport === current { fail(error) } }
     }
 
-    private func enqueueMicrophone(_ samples: [Int16]) {
-        guard state == .listening else { return }
+    private func enqueueMicrophone(_ samples: [Int16], generation: UUID) {
+        guard state == .listening, microphoneGeneration == generation else { return }
         audioLevel = MiaAudioIO.level(for: samples)
         pendingMicrophoneFrames.append(samples)
         if pendingMicrophoneFrames.count > 10 {
             pendingMicrophoneFrames.removeFirst()
         }
         guard sendTask == nil else { return }
+        let connection = connectionGeneration
         sendTask = Task { [weak self] in
-            await self?.drainMicrophone()
+            await self?.drainMicrophone(connection: connection)
         }
     }
 
-    private func drainMicrophone() async {
-        while !pendingMicrophoneFrames.isEmpty, !Task.isCancelled {
+    private func drainMicrophone(connection: UUID) async {
+        while connection == connectionGeneration, !pendingMicrophoneFrames.isEmpty, !Task.isCancelled {
             let samples = pendingMicrophoneFrames.removeFirst()
             do {
                 guard let codec, let transport else { break }
                 try await transport.sendOpus(codec.encode(samples))
             } catch {
-                if !Task.isCancelled { fail(error) }
+                if connection == connectionGeneration, !Task.isCancelled { fail(error) }
                 break
             }
         }
-        sendTask = nil
+        if connection == connectionGeneration { sendTask = nil }
     }
 
     private func playbackAdvanced(_ duration: Double, level: Float) {

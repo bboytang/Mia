@@ -2,6 +2,14 @@ import XCTest
 @testable import Mia
 
 final class MiaAudioLevelTests: XCTestCase {
+    func testCaptureRoundsHaveDifferentEpochsAndStopHasNoResidualFrame() {
+        let audio = MiaAudioIO()
+        let first = audio.beginMicrophoneCapture()
+        XCTAssertNil(audio.takeFinalMicrophoneFrame())
+        let second = audio.beginMicrophoneCapture()
+        XCTAssertNotEqual(first, second)
+        XCTAssertNil(audio.takeFinalMicrophoneFrame())
+    }
     func testEmptyAndSilentPCMHaveNoLevel() {
         XCTAssertEqual(MiaAudioIO.level(for: []), 0)
         XCTAssertEqual(MiaAudioIO.level(for: [0, 0, 0, 0]), 0)

@@ -19,7 +19,8 @@ final class MiaAudioIO {
     private var frameBuffer = MiaPCMFrameBuffer()
     private let inputLock = NSLock()
     private var captureEnabled = false
-    private var onMicrophoneFrame: (([Int16]) -> Void)?
+    private var captureGeneration = UUID()
+    private var onMicrophoneFrame: (([Int16], UUID) -> Void)?
     private var onPlaybackFrame: ((Double, Float) -> Void)?
     private var outputSampleRate = 24_000.0
     private var running = false
@@ -38,7 +39,7 @@ final class MiaAudioIO {
     }
 
     func start(outputSampleRate: Int,
-               onMicrophoneFrame: @escaping ([Int16]) -> Void,
+               onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
                onPlaybackFrame: @escaping (Double, Float) -> Void) throws {
         guard !running else { return }
         let audioSession = AVAudioSession.sharedInstance()
@@ -130,11 +131,14 @@ final class MiaAudioIO {
         return frameBuffer.takePaddedFrame()
     }
 
-    func beginMicrophoneCapture() {
+    @discardableResult
+    func beginMicrophoneCapture() -> UUID {
         inputLock.lock()
+        defer { inputLock.unlock() }
         frameBuffer.reset()
+        captureGeneration = UUID()
         captureEnabled = true
-        inputLock.unlock()
+        return captureGeneration
     }
 
     private func handleMicrophone(_ input: AVAudioPCMBuffer, captureFormat: AVAudioFormat) {
@@ -159,7 +163,8 @@ final class MiaAudioIO {
         let samples = Array(UnsafeBufferPointer(start: data, count: Int(output.frameLength)))
         inputLock.lock()
         let frames = captureEnabled ? frameBuffer.append(samples) : []
+        let generation = captureGeneration
         inputLock.unlock()
-        for frame in frames { onMicrophoneFrame?(frame) }
+        for frame in frames { onMicrophoneFrame?(frame, generation) }
     }
 }
