@@ -3,16 +3,29 @@ import AVFoundation
 enum MiaAudioError: LocalizedError {
     case microphoneDenied
     case unsupportedAudioFormat
+    case voiceProcessingUnavailable
 
     var errorDescription: String? {
         switch self {
         case .microphoneDenied: "请在系统设置中允许 Mia 使用麦克风"
         case .unsupportedAudioFormat: "当前设备无法建立语音格式"
+        case .voiceProcessingUnavailable: "当前音频设备无法启用语音处理，请尝试 iPhone 内置麦克风"
         }
     }
 }
 
-final class MiaAudioIO {
+protocol MiaConversationAudio: AnyObject {
+    func start(outputSampleRate: Int, onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
+               onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
+               onSpeechActivity: @escaping (UUID) -> Void) throws
+    func play(_ samples: [Int16], generation: UUID) throws
+    func interruptPlayback()
+    func stop()
+    func takeFinalMicrophoneFrame() -> [Int16]?
+    func beginMicrophoneCapture() -> UUID
+}
+
+final class MiaAudioIO: MiaConversationAudio {
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()
     private var converter: AVAudioConverter?
@@ -21,7 +34,7 @@ final class MiaAudioIO {
     private var captureEnabled = false
     private var captureGeneration = UUID()
     private var onMicrophoneFrame: (([Int16], UUID) -> Void)?
-    private var onPlaybackFrame: ((Double, Float) -> Void)?
+    private var onPlaybackFrame: ((Double, Float, UUID) -> Void)?
     private var outputSampleRate = 24_000.0
     private var running = false
 
@@ -40,7 +53,8 @@ final class MiaAudioIO {
 
     func start(outputSampleRate: Int,
                onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
-               onPlaybackFrame: @escaping (Double, Float) -> Void) throws {
+               onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
+               onSpeechActivity: @escaping (UUID) -> Void) throws {
         guard !running else { return }
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.playAndRecord, mode: .voiceChat,
@@ -48,6 +62,21 @@ final class MiaAudioIO {
         try audioSession.setActive(true)
 
         let input = engine.inputNode
+        do {
+            try input.setVoiceProcessingEnabled(true)
+            guard input.isVoiceProcessingEnabled,
+                  input.setMutedSpeechActivityEventListener({ [weak self] event in
+                      guard event == .started, let self else { return }
+                      self.inputLock.lock()
+                      let generation = self.captureGeneration
+                      self.inputLock.unlock()
+                      onSpeechActivity(generation)
+                  }) else { throw MiaAudioError.voiceProcessingUnavailable }
+        } catch {
+            input.setMutedSpeechActivityEventListener(nil)
+            try? audioSession.setActive(false)
+            throw error
+        }
         let inputFormat = input.outputFormat(forBus: 0)
         guard let captureFormat = AVAudioFormat(commonFormat: .pcmFormatInt16,
                                                 sampleRate: 16_000, channels: 1,
@@ -56,6 +85,7 @@ final class MiaAudioIO {
                                                sampleRate: Double(outputSampleRate), channels: 1,
                                                interleaved: false),
               let converter = AVAudioConverter(from: inputFormat, to: captureFormat) else {
+            input.setMutedSpeechActivityEventListener(nil)
             try? audioSession.setActive(false)
             throw MiaAudioError.unsupportedAudioFormat
         }
@@ -74,6 +104,7 @@ final class MiaAudioIO {
             running = true
         } catch {
             input.removeTap(onBus: 0)
+            input.setMutedSpeechActivityEventListener(nil)
             self.converter = nil
             self.onMicrophoneFrame = nil
             self.onPlaybackFrame = nil
@@ -84,7 +115,7 @@ final class MiaAudioIO {
         }
     }
 
-    func play(_ samples: [Int16]) throws {
+    func play(_ samples: [Int16], generation: UUID) throws {
         guard running, !samples.isEmpty,
               let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
                                          sampleRate: outputSampleRate, channels: 1,
@@ -103,14 +134,22 @@ final class MiaAudioIO {
         }
         let rms = Float(sqrt(sumSquares / Double(samples.count)))
         let duration = Double(samples.count) / outputSampleRate
-        player.scheduleBuffer(buffer, completionCallbackType: .dataPlayedBack) { [weak self] _ in
-            self?.onPlaybackFrame?(duration, rms)
+        let callback = onPlaybackFrame
+        player.scheduleBuffer(buffer, completionCallbackType: .dataPlayedBack) { _ in
+            callback?(duration, rms, generation)
         }
+    }
+
+    func interruptPlayback() {
+        guard running else { return }
+        player.stop()
+        player.play()
     }
 
     func stop() {
         guard running else { return }
         engine.inputNode.removeTap(onBus: 0)
+        engine.inputNode.setMutedSpeechActivityEventListener(nil)
         player.stop()
         engine.stop()
         inputLock.lock()
@@ -126,13 +165,16 @@ final class MiaAudioIO {
 
     func takeFinalMicrophoneFrame() -> [Int16]? {
         inputLock.lock()
-        defer { inputLock.unlock() }
         captureEnabled = false
-        return frameBuffer.takePaddedFrame()
+        let frame = frameBuffer.takePaddedFrame()
+        inputLock.unlock()
+        if running { engine.inputNode.isVoiceProcessingInputMuted = true }
+        return frame
     }
 
     @discardableResult
     func beginMicrophoneCapture() -> UUID {
+        if running { engine.inputNode.isVoiceProcessingInputMuted = false }
         inputLock.lock()
         defer { inputLock.unlock() }
         frameBuffer.reset()

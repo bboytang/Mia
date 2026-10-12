@@ -8,9 +8,9 @@ final class MiaVoiceSession: ObservableObject {
         case disconnected = "未连接"
         case connecting = "正在连接"
         case ready = "点击开始说话"
-        case waiting = "Mia 正在思考，轻触可打断"
-        case listening = "正在聆听，点击结束"
-        case speaking = "Mia 正在回答"
+        case waiting = "Mia 正在思考，开口可打断"
+        case listening = "正在聆听，说完会自动回答"
+        case speaking = "Mia 正在回答，开口可打断"
     }
 
     @Published private(set) var state: State = .disconnected
@@ -26,14 +26,20 @@ final class MiaVoiceSession: ObservableObject {
     private let logger = Logger(subsystem: "com.bboytang.mia", category: "Xiaozhi")
     private var reconnectTask: Task<Void, Never>?
     private var reconnectAttempts = 0
-    private var recordingTimeout: Task<Void, Never>?
+    @Published private(set) var conversationActive = false
+    private var listeningTask: Task<Void, Never>?
+    private var speechMonitorGeneration: UUID?
+    private var sendGeneration = UUID()
+    private var acceptsReply = false
+    private let makeAudio: () -> any MiaConversationAudio
+    private let recordPermission: () async -> Bool
     private var handshakeTimeout: Task<Void, Never>?
     private var replyTimeout: Task<Void, Never>?
     private var playbackGeneration = UUID()
     private var microphoneGeneration: UUID?
 
     private var transport: MiaWebSocketTransport?
-    private var audio: MiaAudioIO?
+    private var audio: (any MiaConversationAudio)?
     private var codec: MiaOpusCodec?
     private var sessionID: String?
     private var sampleRate = 24_000
@@ -46,43 +52,40 @@ final class MiaVoiceSession: ObservableObject {
     private var startWhenConnected = false
     private var connectionGeneration = UUID()
 
+    init(makeAudio: @escaping () -> any MiaConversationAudio = { MiaAudioIO() },
+         recordPermission: @escaping () async -> Bool = {
+             await withCheckedContinuation { continuation in
+                 AVAudioSession.sharedInstance().requestRecordPermission {
+                     continuation.resume(returning: $0)
+                 }
+             }
+         }) {
+        self.makeAudio = makeAudio
+        self.recordPermission = recordPermission
+    }
+
+    func beginConversation() async {
+        guard state == .disconnected || state == .ready else { return }
+        conversationActive = true
+        if state == .ready { await startListening() }
+        else { await connect(startListening: true) }
+    }
+
     func toggleTalk() async {
-        switch state {
-        case .disconnected:
-            startWhenConnected = true
-            await connect(startListening: true)
-        case .ready:
-            await startListening()
-        case .listening:
-            await stopListening()
-        case .waiting, .speaking:
-            guard let current = transport else { return }
-            do {
-                replyTimeout?.cancel()
-                try await current.abort(sessionID: sessionID)
-                guard transport === current else { return }
-                playbackGeneration = UUID()
-                audio?.stop()
-                audio = nil
-                pendingPlaybackFrames = 0
-                speechEnded = false
-                audioLevel = 0
-                captionTimeline.interrupt()
-                caption = ""
-                state = .ready
-                await startListening()
-            } catch { if transport === current { fail(error) } }
-        case .connecting:
-            break
-        }
+        if conversationActive { disconnect() }
+        else { await beginConversation() }
     }
 
     func disconnect() {
         reconnectTask?.cancel()
         reconnectTask = nil
         reconnectAttempts = 0
-        recordingTimeout?.cancel()
-        recordingTimeout = nil
+        conversationActive = false
+        listeningTask?.cancel()
+        listeningTask = nil
+        speechMonitorGeneration = nil
+        acceptsReply = false
+        sendGeneration = UUID()
         handshakeTimeout?.cancel()
         handshakeTimeout = nil
         replyTimeout?.cancel()
@@ -112,7 +115,9 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     func connect(startListening: Bool = false) async {
+        guard state == .disconnected || state == .ready else { return }
         state = .connecting
+        if startListening { conversationActive = true }
         let generation = connectionGeneration
         startWhenConnected = startListening
         diagnostics = MiaConnectionDiagnostics()
@@ -183,28 +188,36 @@ final class MiaVoiceSession: ObservableObject {
             state = .ready
             if startWhenConnected {
                 startWhenConnected = false
-                Task { await startListening() }
+                resumeListening()
             }
         case .ttsStart:
+            guard conversationActive, acceptsReply else { return }
             replyTimeout?.cancel()
             replyTimeout = nil
-            recordingTimeout?.cancel()
-            _ = audio?.takeFinalMicrophoneFrame()
-            microphoneGeneration = nil
-            sendTask?.cancel()
-            pendingMicrophoneFrames.removeAll()
+            pauseForReply()
             state = .speaking
             speechEnded = false
         case .ttsSentence(let text):
+            guard state == .speaking, acceptsReply else { return }
             replyText = text
             captionTimeline.handle(event)
             caption = captionTimeline.visibleText
         case .ttsStop:
-            guard state == .speaking else { break }
+            guard state == .speaking, acceptsReply else { return }
             speechEnded = true
             finishSpeechIfPlayed()
         case .userTranscript(let text):
             lastUserTranscript = text
+            guard conversationActive, state == .listening, !text.isEmpty else { return }
+            acceptsReply = true
+            pauseForReply()
+            state = .waiting
+            replyTimeout?.cancel()
+            replyTimeout = Task { [weak self] in
+                do { try await Task.sleep(nanoseconds: 45_000_000_000) } catch { return }
+                guard let self, self.state == .waiting else { return }
+                self.fail(MiaConnectionError.responseTimeout)
+            }
         case .assistantText(let text):
             replyText = text
         case .serverError:
@@ -218,16 +231,12 @@ final class MiaVoiceSession: ObservableObject {
         guard state == .speaking, let codec, let audio else { return }
         let samples = try codec.decode(payload)
         pendingPlaybackFrames += 1
-        try audio.play(samples)
+        try audio.play(samples, generation: playbackGeneration)
     }
 
     private func startListening() async {
         guard let transport, codec != nil else { return }
-        let permission = await withCheckedContinuation { continuation in
-            AVAudioSession.sharedInstance().requestRecordPermission {
-                continuation.resume(returning: $0)
-            }
-        }
+        let permission = await recordPermission()
         guard self.transport === transport else { return }
         guard permission else {
             fail(MiaAudioError.microphoneDenied)
@@ -235,55 +244,78 @@ final class MiaVoiceSession: ObservableObject {
         }
         do {
             if audio == nil {
-                let audio = MiaAudioIO()
-                let playback = playbackGeneration
+                let audio = makeAudio()
+                let connection = connectionGeneration
                 try audio.start(outputSampleRate: sampleRate,
                                 onMicrophoneFrame: { [weak self] samples, generation in
                                     Task { @MainActor in self?.enqueueMicrophone(samples, generation: generation) }
                                 },
-                                onPlaybackFrame: { [weak self] duration, level in
+                                onPlaybackFrame: { [weak self] duration, level, generation in
                                     Task { @MainActor in
-                                        guard let self, self.playbackGeneration == playback else { return }
+                                        guard let self, self.playbackGeneration == generation else { return }
                                         self.playbackAdvanced(duration, level: level)
+                                    }
+                                },
+                                onSpeechActivity: { [weak self] generation in
+                                    Task { @MainActor in
+                                        guard let self, self.connectionGeneration == connection else { return }
+                                        await self.interruptForSpeech(generation: generation)
                                     }
                                 })
                 self.audio = audio
             }
-            try await transport.startListening(sessionID: sessionID)
+            try await transport.startListening(sessionID: sessionID, automatic: true)
             guard self.transport === transport else { return }
             audioLevel = 0
+            acceptsReply = false
+            speechMonitorGeneration = nil
+            sendGeneration = UUID()
             microphoneGeneration = audio?.beginMicrophoneCapture()
             state = .listening
-            recordingTimeout?.cancel()
-            recordingTimeout = Task { [weak self] in
-                do { try await Task.sleep(nanoseconds: 30_000_000_000) } catch { return }
-                guard let self, self.state == .listening else { return }
-                await self.stopListening()
-            }
         } catch { if self.transport === transport { fail(error) } }
     }
 
-    private func stopListening() async {
-        guard let current = transport else { return }
-        recordingTimeout?.cancel()
-        recordingTimeout = nil
-        let finalFrame = audio?.takeFinalMicrophoneFrame()
-        microphoneGeneration = nil
-        state = .waiting
-        audioLevel = 0
-        replyTimeout?.cancel()
-        replyTimeout = Task { [weak self] in
-            do { try await Task.sleep(nanoseconds: 45_000_000_000) } catch { return }
-            guard let self, self.state == .waiting else { return }
-            self.fail(MiaConnectionError.responseTimeout)
+    private func resumeListening() {
+        let connection = connectionGeneration
+        listeningTask?.cancel()
+        listeningTask = Task { [weak self] in
+            guard let self, self.connectionGeneration == connection,
+                  self.conversationActive, self.state == .ready else { return }
+            await self.startListening()
         }
+    }
+
+    private func pauseForReply() {
+        if let generation = microphoneGeneration {
+            speechMonitorGeneration = generation
+            _ = audio?.takeFinalMicrophoneFrame()
+            microphoneGeneration = nil
+        }
+        sendGeneration = UUID()
+        sendTask?.cancel()
+        sendTask = nil
+        pendingMicrophoneFrames.removeAll()
+        audioLevel = 0
+    }
+
+    private func interruptForSpeech(generation: UUID) async {
+        guard conversationActive, speechMonitorGeneration == generation,
+              state == .speaking || state == .waiting, let current = transport else { return }
+        speechMonitorGeneration = nil
+        acceptsReply = false
+        replyTimeout?.cancel()
+        playbackGeneration = UUID()
+        audio?.interruptPlayback()
+        pendingPlaybackFrames = 0
+        speechEnded = false
+        captionTimeline.interrupt()
+        caption = ""
+        audioLevel = 0
+        state = .ready
         do {
-            await sendTask?.value
-            guard transport === current else { return }
-            if let finalFrame, let codec {
-                try await current.sendOpus(codec.encode(finalFrame))
-            }
-            try await current.stopListening(sessionID: sessionID)
+            try await current.abort(sessionID: sessionID)
+            guard transport === current, conversationActive else { return }
+            await startListening()
         } catch { if transport === current { fail(error) } }
     }
 
@@ -295,24 +327,24 @@ final class MiaVoiceSession: ObservableObject {
             pendingMicrophoneFrames.removeFirst()
         }
         guard sendTask == nil else { return }
-        let connection = connectionGeneration
+        let connection = sendGeneration
         sendTask = Task { [weak self] in
             await self?.drainMicrophone(connection: connection)
         }
     }
 
     private func drainMicrophone(connection: UUID) async {
-        while connection == connectionGeneration, !pendingMicrophoneFrames.isEmpty, !Task.isCancelled {
+        while connection == sendGeneration, !pendingMicrophoneFrames.isEmpty, !Task.isCancelled {
             let samples = pendingMicrophoneFrames.removeFirst()
             do {
                 guard let codec, let transport else { break }
                 try await transport.sendOpus(codec.encode(samples))
             } catch {
-                if connection == connectionGeneration, !Task.isCancelled { fail(error) }
+                if connection == sendGeneration, !Task.isCancelled { fail(error) }
                 break
             }
         }
-        if connection == connectionGeneration { sendTask = nil }
+        if connection == sendGeneration { sendTask = nil }
     }
 
     private func playbackAdvanced(_ duration: Double, level: Float) {
@@ -330,6 +362,7 @@ final class MiaVoiceSession: ObservableObject {
         caption = captionTimeline.visibleText
         audioLevel = 0
         state = .ready
+        resumeListening()
     }
 
     nonisolated static func shouldReconnect(_ error: Error) -> Bool {

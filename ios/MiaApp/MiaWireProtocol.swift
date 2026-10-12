@@ -18,12 +18,12 @@ enum MiaWireError: Error {
 }
 
 enum MiaWireProtocol {
-    static func startListening(sessionID: String?) throws -> Data {
+    static func startListening(sessionID: String?, automatic: Bool = false) throws -> Data {
         try JSONSerialization.data(withJSONObject: [
             "session_id": sessionID ?? "",
             "type": "listen",
             "state": "start",
-            "mode": "manual",
+            "mode": automatic ? "auto" : "manual",
         ])
     }
 

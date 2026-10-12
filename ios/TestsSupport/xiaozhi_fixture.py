@@ -79,14 +79,30 @@ async def websocket(ws):
         await ws.close(code=1001)
         return
     frames = []
+    mode = "manual"
+    response_task = None
+
+    async def automatic_response(packet):
+        await asyncio.sleep(.1)
+        for message in [{"type": "stt", "text": "用户识别文本"},
+                        {"type": "tts", "state": "start"},
+                        {"type": "tts", "state": "sentence_start", "text": "Mia 自动回复"}]:
+            await ws.send(json.dumps(message))
+        await ws.send(packet)
+        await ws.send(json.dumps({"type": "tts", "state": "stop"}))
+
     async for raw in ws:
         if isinstance(raw, bytes):
             frames.append(raw)
+            if mode == "auto" and response_task is None:
+                response_task = asyncio.create_task(automatic_response(raw))
             continue
         event = json.loads(raw)
         assert event.get("session_id") == "fixture-session"
         if event["type"] == "listen" and event["state"] == "start":
-            assert event["mode"] == "manual"
+            assert event["mode"] in ["manual", "auto"]
+            mode = event["mode"]
+            response_task = None
             frames.clear()
         elif event["type"] == "listen" and event["state"] == "stop":
             assert frames
@@ -97,6 +113,9 @@ async def websocket(ws):
                 await ws.send(frame)
             await ws.send(json.dumps({"type": "tts", "state": "stop"}))
         elif event["type"] == "abort":
+            if response_task:
+                response_task.cancel()
+                response_task = None
             frames.clear()
 
 

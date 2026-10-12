@@ -2,6 +2,7 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView: View {
+    var isActive = true
     @State private var showsSettings = false
     @StateObject private var xiaozhi = MiaXiaozhiClient()
     @StateObject private var session = MiaVoiceSession()
@@ -54,7 +55,11 @@ struct ContentView: View {
                     Spacer(minLength: 12)
                     captionPanel
                     Button {
-                        Task { await session.toggleTalk() }
+                        Task {
+                            let stopping = session.conversationActive
+                            await session.toggleTalk()
+                            if stopping { xiaozhi.cancelDiscovery() }
+                        }
                     } label: {
                         MiaAuroraOrb(level: session.audioLevel)
                             .frame(width: geometry.size.height < 700 ? 102 : 118,
@@ -63,8 +68,7 @@ struct ContentView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(talkButtonLabel)
-                    .accessibilityHint(session.state == .speaking ? "打断 Mia 并开始说话" : "轻触控制语音对话")
-                    .disabled(session.state == .connecting)
+                    .accessibilityHint(session.conversationActive ? "结束当前语音对话" : "开启自动语音对话")
                     .padding(.top, 12)
                     Text(xiaozhi.activationCode != nil ? "请在智控台绑定本机" : session.state.rawValue)
                         .font(.caption)
@@ -90,7 +94,9 @@ struct ContentView: View {
                     ota: UserDefaults.standard.string(forKey: "mia.xiaozhi.otaURL") ?? MiaXiaozhiClient.defaultOTA,
                     websocket: UserDefaults.standard.string(forKey: "mia.xiaozhi.websocketURL") ?? MiaXiaozhiClient.defaultWebSocket)
             }
+            startAutomatically()
         }
+        .onChange(of: isActive) { _, _ in startAutomatically() }
         .onChange(of: serverURL) { _, _ in session.disconnect(); xiaozhi.cancel() }
         .onChange(of: otaURL) { _, _ in session.disconnect(); xiaozhi.cancel() }
         .onChange(of: xiaozhi.activationCode) { _, code in
@@ -98,6 +104,7 @@ struct ContentView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { session.disconnect(); xiaozhi.cancelDiscovery() }
+            else if phase == .active { startAutomatically() }
         }
         .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { note in
             if let type = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
@@ -121,6 +128,14 @@ struct ContentView: View {
         }
     }
 
+    private func startAutomatically() {
+        guard isActive, scenePhase == .active,
+              !ProcessInfo.processInfo.arguments.contains("-MiaDisableAutomaticConversation"),
+              session.state == .disconnected, session.errorMessage == nil,
+              xiaozhi.activationCode == nil else { return }
+        Task { await session.beginConversation() }
+    }
+
     private func starMist(in geometry: GeometryProxy) -> some View {
         Image("StarMistBackground")
             .resizable()
@@ -133,12 +148,7 @@ struct ContentView: View {
     }
 
     private var talkButtonLabel: String {
-        switch session.state {
-        case .connecting: "正在连接"
-        case .listening: "结束说话"
-        case .waiting, .speaking: "打断并开始说话"
-        case .disconnected, .ready: "开始说话"
-        }
+        session.conversationActive ? "结束对话" : "开始说话"
     }
 
     private var header: some View {

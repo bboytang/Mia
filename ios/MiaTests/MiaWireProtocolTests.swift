@@ -60,6 +60,15 @@ final class MiaWireProtocolTests: XCTestCase {
         XCTAssertEqual(object["session_id"] as? String, "s-1")
     }
 
+    func testSendsAutomaticListenWithoutAdvertisingAEC() throws {
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(
+            with: MiaWireProtocol.startListening(sessionID: "s-1", automatic: true)) as? [String: Any])
+        XCTAssertEqual(object["mode"] as? String, "auto")
+        XCTAssertEqual(object["session_id"] as? String, "s-1")
+        let hello = try XCTUnwrap(JSONSerialization.jsonObject(with: MiaWireProtocol.hello()) as? [String: Any])
+        XCTAssertNil(hello["features"])
+    }
+
     func testSendsStopAndAbortControl() throws {
         let stop = try XCTUnwrap(JSONSerialization.jsonObject(
             with: MiaWireProtocol.stopListening(sessionID: "s-1")) as? [String: Any])

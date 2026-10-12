@@ -147,8 +147,8 @@ final class MiaWebSocketTransport {
         try await sendText(MiaWireProtocol.hello())
     }
 
-    func startListening(sessionID: String?) async throws {
-        try await sendText(MiaWireProtocol.startListening(sessionID: sessionID))
+    func startListening(sessionID: String?, automatic: Bool = false) async throws {
+        try await sendText(MiaWireProtocol.startListening(sessionID: sessionID, automatic: automatic))
     }
 
     func stopListening(sessionID: String?) async throws {

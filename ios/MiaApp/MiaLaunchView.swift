@@ -8,7 +8,7 @@ struct MiaLaunchView: View {
 
     var body: some View {
         ZStack {
-            ContentView()
+            ContentView(isActive: !launch.isShowing)
                 .allowsHitTesting(!launch.isShowing)
                 .accessibilityHidden(launch.isShowing)
 
