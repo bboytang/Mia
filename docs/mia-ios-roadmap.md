@@ -6,7 +6,7 @@
 
 客户端已实现独立 `MiaXiaozhiClient`、稳定 UUID/逻辑 MAC、OTA/激活界面、WS/WSS、严格 hello、脱敏诊断、有限自动重连及音频异常清理，保留既有 Opus 和仅 Mia 字幕，取消账号 UI 但不删除旧账号代码/数据。WS 配置是实际连接目标，OTA 下发地址用于核对主机与安全级别，令牌仅绑定本机身份；不使用智控台管理密钥。局部 ATS 例外允许当前服务器明文，未全局关闭 ATS。新增原生回环协议测试及 UI 测试，编译和 CI 待核对。
 
-真实语音探测上传仓库中文录音、发送 listen stop 后 90 秒内没有 STT/TTS/音频；延后发送复测同样超时。已请用户提供后台错误摘要。此探测是 Python 客户端，不是 iPhone 麦克风或完整原生验收，不能宣称全链路成功。完整实现、绑定操作和验证边界见[小智集成记录](mia-xiaozhi-integration.md)。
+真实语音探测上传仓库中文录音、发送 listen stop 后 90 秒内没有 STT/TTS/音频；延后发送复测同样超时。用户授权后已 SSH 只读排查，未修改运行中的服务端。日志固定标签确认 ASR 使用 `volc.seedasr.sauc.concurrent`，初始化返回 `quota exceeded for types: concurrency`；这与此前已验证的按时长资源 `volc.seedasr.sauc.duration` 不同。需用户确认可用资源并在智控台调整，或处理并发额度后复测。原生 62 项单测已通过；两项 UI 测试中设置页遇到 AX 自动滚动定位失败，已修复测试等待/点击方式，完整 CI 仍待通过。此探测是 Python 客户端，不是 iPhone 麦克风或完整原生验收，不能宣称全链路成功。完整实现、绑定操作和验证边界见[小智集成记录](mia-xiaozhi-integration.md)。
 
 ## 2026-10-12 自建小智直连方向（最新决定）
 
