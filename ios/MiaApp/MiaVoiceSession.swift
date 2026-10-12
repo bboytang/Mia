@@ -21,6 +21,9 @@ final class MiaVoiceSession: ObservableObject {
 
     var connectionProvider: (() async throws -> MiaWebSocketConfiguration)?
     @Published private(set) var diagnostics = MiaConnectionDiagnostics()
+    @Published private(set) var microphoneFrames = 0
+    @Published private(set) var uploadedFrames = 0
+    @Published private(set) var microphonePeak: Float = 0
     @Published private(set) var lastUserTranscript = ""
     @Published private(set) var replyText = ""
     private let logger = Logger(subsystem: "com.bboytang.mia", category: "Xiaozhi")
@@ -126,6 +129,9 @@ final class MiaVoiceSession: ObservableObject {
         let generation = connectionGeneration
         startWhenConnected = startListening
         diagnostics = MiaConnectionDiagnostics()
+        microphoneFrames = 0
+        uploadedFrames = 0
+        microphonePeak = 0
         do {
             guard let connectionProvider else { throw MiaConnectionError.invalidEndpoint }
             let config = try await connectionProvider()
@@ -331,6 +337,8 @@ final class MiaVoiceSession: ObservableObject {
         guard conversationActive, microphoneGeneration == generation,
               state == .listening || state == .ready else { return }
         audioLevel = MiaAudioIO.level(for: samples)
+        microphoneFrames += 1
+        microphonePeak = max(microphonePeak, audioLevel)
         pendingMicrophoneFrames.append(samples)
         if pendingMicrophoneFrames.count > 10 {
             pendingMicrophoneFrames.removeFirst()
@@ -352,6 +360,7 @@ final class MiaVoiceSession: ObservableObject {
             do {
                 guard let codec, let transport else { break }
                 try await transport.sendOpus(codec.encode(samples))
+                if connection == sendGeneration { uploadedFrames += 1 }
             } catch {
                 if connection == sendGeneration, !Task.isCancelled { fail(error) }
                 break
@@ -391,6 +400,7 @@ final class MiaVoiceSession: ObservableObject {
 
     private func fail(_ error: Error) {
         let attempts = reconnectAttempts
+        let resumeConversation = conversationActive
         let lastDiagnostics = transport?.diagnostics ?? diagnostics
         errorMessage = error.localizedDescription
         disconnect()
@@ -399,13 +409,14 @@ final class MiaVoiceSession: ObservableObject {
             authorizationRejected = true
         }
         guard Self.shouldReconnect(error), attempts < 3 else { return }
+        conversationActive = resumeConversation
         reconnectAttempts = attempts + 1
         let generation = connectionGeneration
         let delay = UInt64(1 << attempts) * 1_000_000_000
         reconnectTask = Task { [weak self] in
             do { try await Task.sleep(nanoseconds: delay) } catch { return }
             guard let self, self.connectionGeneration == generation else { return }
-            await self.connect()
+            await self.connect(startListening: resumeConversation)
         }
     }
 }

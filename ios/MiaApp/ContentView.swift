@@ -230,6 +230,10 @@ private struct MiaSettingsView: View {
                     if let discoveryError { Text(discoveryError).font(.footnote) }
                 }
                 Section("连接诊断（已隐藏凭据）") {
+                    LabeledContent("对话状态", value: session.state.rawValue)
+                    LabeledContent("采集音频帧", value: String(session.microphoneFrames))
+                    LabeledContent("上传音频帧", value: String(session.uploadedFrames))
+                    LabeledContent("输入峰值", value: String(format: "%.1f%%", session.microphonePeak * 100))
                     LabeledContent("HTTP 握手", value: session.diagnostics.httpStatus.map(String.init) ?? "未完成")
                     LabeledContent("关闭码", value: session.diagnostics.closeCode.map(String.init) ?? "未收到")
                     LabeledContent("关闭原因", value: session.diagnostics.closeReason)

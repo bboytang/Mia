@@ -64,6 +64,9 @@ final class MiaContinuousConversationTests: XCTestCase {
         for round in 1...2 {
             audio.saySomething()
             try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+            XCTAssertGreaterThan(voice.microphoneFrames, 0)
+            XCTAssertGreaterThan(voice.uploadedFrames, 0)
+            XCTAssertGreaterThan(voice.microphonePeak, 0)
             XCTAssertTrue(audio.muted)
             XCTAssertEqual(audio.rounds, round)
             XCTAssertFalse(voice.caption.contains("用户识别文本"))
@@ -111,6 +114,42 @@ final class MiaContinuousConversationTests: XCTestCase {
     }
 
     @MainActor
+    func testActiveConversationResumesMicrophoneAfterServerReconnect() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio)
+        let config = try MiaWebSocketConfiguration(endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/?close_once=1",
+                                                  clientID: UUID(), token: "fixture-only")
+        var calls = 0
+        voice.connectionProvider = { calls += 1; return config }
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { calls >= 2 && voice.state == .listening && audio.rounds == 2 }
+        XCTAssertTrue(voice.conversationActive)
+        audio.saySomething()
+        try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+    }
+
+    @MainActor
+    func testExplicitStopCancelsActiveConversationReconnect() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio)
+        let config = try MiaWebSocketConfiguration(endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/?close_once=1",
+                                                  clientID: UUID(), token: "fixture-only")
+        var calls = 0
+        voice.connectionProvider = { calls += 1; return config }
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.errorMessage != nil && voice.state == .disconnected }
+        XCTAssertTrue(voice.conversationActive)
+        await voice.toggleTalk()
+        try await Task.sleep(nanoseconds: 1_200_000_000)
+        XCTAssertEqual(calls, 1)
+        XCTAssertFalse(voice.conversationActive)
+        XCTAssertFalse(voice.allowsAutomaticStart)
+        XCTAssertEqual(audio.rounds, 1)
+    }
+
+    @MainActor
     func testMicrophonePermissionFailureDoesNotStartAudioOrRetry() async throws {
         let audio = ConversationAudioStub()
         let voice = MiaVoiceSession(makeAudio: { audio }, recordPermission: { false })
@@ -123,6 +162,8 @@ final class MiaContinuousConversationTests: XCTestCase {
         XCTAssertEqual(voice.state, .disconnected)
         XCTAssertEqual(audio.rounds, 0)
         XCTAssertFalse(voice.conversationActive)
+        XCTAssertEqual(voice.microphoneFrames, 0)
+        XCTAssertEqual(voice.uploadedFrames, 0)
     }
 
     @MainActor
