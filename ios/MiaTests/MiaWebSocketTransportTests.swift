@@ -8,10 +8,10 @@ final class MiaWebSocketTransportTests: XCTestCase {
         XCTAssertFalse(MiaWebSocketTransport.isUnauthorized(code: .normalClosure, reason: Data("未授权".utf8)))
         XCTAssertFalse(MiaWebSocketTransport.isUnauthorized(code: .invalid, reason: nil))
     }
-    func testRejectsInsecureAndMalformedEndpoints() {
+    func testAcceptsWSButRejectsMalformedAndCredentialURLs() {
         let id = UUID(uuidString: "11111111-2222-3333-4444-555555555555")!
 
-        XCTAssertThrowsError(try MiaWebSocketConfiguration(
+        XCTAssertNoThrow(try MiaWebSocketConfiguration(
             endpoint: "ws://example.com/xiaozhi/v1/", clientID: id, token: nil))
         XCTAssertThrowsError(try MiaWebSocketConfiguration(
             endpoint: "https://example.com/xiaozhi/v1/", clientID: id, token: nil))
@@ -28,8 +28,21 @@ final class MiaWebSocketTransportTests: XCTestCase {
         XCTAssertEqual(request.url?.absoluteString, "wss://example.com/xiaozhi/v1/")
         XCTAssertEqual(request.value(forHTTPHeaderField: "Protocol-Version"), "1")
         XCTAssertEqual(request.value(forHTTPHeaderField: "Client-Id"), id.uuidString.lowercased())
-        XCTAssertEqual(request.value(forHTTPHeaderField: "Device-Id"), "ios-" + id.uuidString.lowercased())
+        XCTAssertEqual(request.value(forHTTPHeaderField: "Device-Id"), "02:11:11:11:11:22")
         XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer secret")
+    }
+
+    func testRejectsInvalidDeviceAndCredentialsInURLOrHeaders() {
+        XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/", clientID: UUID(), token: nil, deviceID: "ios-invalid"))
+        XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://user:pass@example.com/", clientID: UUID(), token: nil))
+        XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/?authorization=private", clientID: UUID(), token: nil))
+        XCTAssertThrowsError(try MiaWebSocketConfiguration(endpoint: "wss://example.com/", clientID: UUID(), token: "x\r\nInjected: x"))
+    }
+
+    func testCloseReasonRedactsUnknownText() {
+        XCTAssertEqual(MiaConnectionDiagnostics.safeReason(Data("private credential".utf8)), "内容已隐藏（18 字节）")
+        XCTAssertEqual(MiaConnectionDiagnostics.safeReason(Data("认证失败".utf8)), "认证失败")
+        XCTAssertEqual(MiaConnectionDiagnostics.safeReason(nil), "无关闭原因")
     }
 
     func testNoAuthorizationHeaderWhenTokenIsAbsent() throws {

@@ -55,6 +55,7 @@ final class MiaAudioIO {
                                                sampleRate: Double(outputSampleRate), channels: 1,
                                                interleaved: false),
               let converter = AVAudioConverter(from: inputFormat, to: captureFormat) else {
+            try? audioSession.setActive(false)
             throw MiaAudioError.unsupportedAudioFormat
         }
 
@@ -73,6 +74,11 @@ final class MiaAudioIO {
         } catch {
             input.removeTap(onBus: 0)
             self.converter = nil
+            self.onMicrophoneFrame = nil
+            self.onPlaybackFrame = nil
+            player.stop()
+            engine.stop()
+            try? audioSession.setActive(false)
             throw error
         }
     }

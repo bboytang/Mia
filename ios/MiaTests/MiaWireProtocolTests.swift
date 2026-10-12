@@ -17,7 +17,7 @@ final class MiaWireProtocolTests: XCTestCase {
     }
 
     func testAcceptsServerHelloWithSessionId() throws {
-        let data = Data(#"{"type":"hello","transport":"websocket","session_id":"s-1"}"#.utf8)
+        let data = Data(#"{"type":"hello","transport":"websocket","session_id":"s-1","audio_params":{"format":"opus","sample_rate":24000,"channels":1,"frame_duration":60}}"#.utf8)
 
         XCTAssertEqual(try MiaWireProtocol.parseServerEvent(data),
                        .hello(sessionID: "s-1", sampleRate: 24_000))
@@ -29,14 +29,19 @@ final class MiaWireProtocolTests: XCTestCase {
         XCTAssertThrowsError(try MiaWireProtocol.parseServerEvent(data))
     }
 
-    func testReadsServerSampleRateAndFallsBackForInvalidValue() throws {
-        let valid = Data(#"{"type":"hello","transport":"websocket","audio_params":{"sample_rate":16000}}"#.utf8)
-        let invalid = Data(#"{"type":"hello","transport":"websocket","audio_params":{"sample_rate":-1}}"#.utf8)
-
-        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(valid),
-                       .hello(sessionID: nil, sampleRate: 16_000))
-        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(invalid),
-                       .hello(sessionID: nil, sampleRate: 24_000))
+    func testRequiresSessionAndSupportedAudioParameters() throws {
+        let valid = Data(#"{"type":"hello","transport":"websocket","session_id":"s","audio_params":{"format":"opus","sample_rate":16000,"channels":1,"frame_duration":60}}"#.utf8)
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(valid), .hello(sessionID: "s", sampleRate: 16_000))
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: valid) as? [String: Any])
+        object.removeValue(forKey: "session_id")
+        XCTAssertThrowsError(try MiaWireProtocol.parseServerEvent(JSONSerialization.data(withJSONObject: object)))
+        object["session_id"] = "s"
+        for audio in [["format": "pcm", "sample_rate": 16000, "channels": 1, "frame_duration": 60],
+                      ["format": "opus", "sample_rate": -1, "channels": 1, "frame_duration": 60],
+                      ["format": "opus", "sample_rate": 16000, "channels": 2, "frame_duration": 60]] as [[String: Any]] {
+            object["audio_params"] = audio
+            XCTAssertThrowsError(try MiaWireProtocol.parseServerEvent(JSONSerialization.data(withJSONObject: object)))
+        }
     }
 
     func testParsesMiaSpeechSentence() throws {
@@ -68,6 +73,9 @@ final class MiaWireProtocolTests: XCTestCase {
     }
 
     func testParsesSpeechLifecycleAndEmotion() throws {
+        XCTAssertEqual(
+            try MiaWireProtocol.parseServerEvent(Data(#"{"type":"llm","text":"Mia 回复文本"}"#.utf8)),
+            .assistantText("Mia 回复文本"))
         XCTAssertEqual(
             try MiaWireProtocol.parseServerEvent(Data(#"{"type":"tts","state":"start"}"#.utf8)),
             .ttsStart)

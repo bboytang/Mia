@@ -39,7 +39,14 @@ jobs:
             -derivedDataPath "$RUNNER_TEMP/mia-simulator" \
             CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- build
 
-      - name: Run iOS unit and account UI tests
+      - name: Start loopback Xiaozhi protocol fixture
+        run: |
+          python3 -m venv "$RUNNER_TEMP/mia-protocol-tests"
+          "$RUNNER_TEMP/mia-protocol-tests/bin/python" -m pip install websockets==16.0
+          "$RUNNER_TEMP/mia-protocol-tests/bin/python" ios/TestsSupport/xiaozhi_fixture.py > "$RUNNER_TEMP/mia-fixture.log" 2>&1 &
+          python3 -c 'import time, urllib.request; time.sleep(2); assert urllib.request.urlopen("http://127.0.0.1:8770/health", timeout=5).status == 200'
+
+      - name: Run iOS unit and Xiaozhi UI tests
         working-directory: ios
         run: |
           simulator_id=$(xcrun simctl list devices available -j | python3 -c '

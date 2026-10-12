@@ -7,6 +7,7 @@ enum MiaServerEvent: Equatable {
     case ttsStop
     case userTranscript(String)
     case emotion(String)
+    case assistantText(String)
     case serverError(String)
     case other
 }
@@ -67,9 +68,12 @@ enum MiaWireProtocol {
                 throw MiaWireError.invalidTransport
             }
             let audio = object["audio_params"] as? [String: Any]
-            let advertisedRate = audio?["sample_rate"] as? Int
-            let sampleRate = advertisedRate.flatMap { $0 > 0 ? $0 : nil } ?? 24_000
-            return .hello(sessionID: object["session_id"] as? String,
+            guard let id = object["session_id"] as? String, !id.isEmpty, id.count <= 256,
+                  let sampleRate = audio?["sample_rate"] as? Int,
+                  [8_000, 12_000, 16_000, 24_000, 48_000].contains(sampleRate),
+                  audio?["format"] as? String == "opus", audio?["channels"] as? Int == 1,
+                  audio?["frame_duration"] as? Int == 60 else { throw MiaWireError.invalidMessage }
+            return .hello(sessionID: id,
                           sampleRate: sampleRate)
         case "tts":
             switch object["state"] as? String {
@@ -91,6 +95,7 @@ enum MiaWireProtocol {
             }
             return .other
         case "llm":
+            if let text = object["text"] as? String { return .assistantText(text) }
             if let emotion = object["emotion"] as? String {
                 return .emotion(emotion)
             }

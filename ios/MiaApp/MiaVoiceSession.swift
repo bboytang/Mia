@@ -1,5 +1,6 @@
 import AVFoundation
 import Foundation
+import os
 
 @MainActor
 final class MiaVoiceSession: ObservableObject {
@@ -7,6 +8,7 @@ final class MiaVoiceSession: ObservableObject {
         case disconnected = "未连接"
         case connecting = "正在连接"
         case ready = "点击开始说话"
+        case waiting = "Mia 正在思考，轻触可打断"
         case listening = "正在聆听，点击结束"
         case speaking = "Mia 正在回答"
     }
@@ -16,6 +18,18 @@ final class MiaVoiceSession: ObservableObject {
     @Published private(set) var audioLevel: Float = 0
     @Published var errorMessage: String?
     @Published private(set) var authorizationRejected = false
+
+    var connectionProvider: (() async throws -> MiaWebSocketConfiguration)?
+    @Published private(set) var diagnostics = MiaConnectionDiagnostics()
+    @Published private(set) var lastUserTranscript = ""
+    @Published private(set) var replyText = ""
+    private let logger = Logger(subsystem: "com.bboytang.mia", category: "Xiaozhi")
+    private var reconnectTask: Task<Void, Never>?
+    private var reconnectAttempts = 0
+    private var recordingTimeout: Task<Void, Never>?
+    private var handshakeTimeout: Task<Void, Never>?
+    private var replyTimeout: Task<Void, Never>?
+    private var playbackGeneration = UUID()
 
     private var transport: MiaWebSocketTransport?
     private var audio: MiaAudioIO?
@@ -31,18 +45,22 @@ final class MiaVoiceSession: ObservableObject {
     private var startWhenConnected = false
     private var connectionGeneration = UUID()
 
-    func toggleTalk(endpoint: String, token: String?) async {
+    func toggleTalk() async {
         switch state {
         case .disconnected:
             startWhenConnected = true
-            await connect(endpoint: endpoint, token: token)
+            await connect(startListening: true)
         case .ready:
             await startListening()
         case .listening:
             await stopListening()
-        case .speaking:
+        case .waiting, .speaking:
             do {
-                try await transport?.abort(sessionID: sessionID)
+                replyTimeout?.cancel()
+                guard let current = transport else { return }
+                try await current.abort(sessionID: sessionID)
+                guard transport === current else { return }
+                playbackGeneration = UUID()
                 audio?.stop()
                 audio = nil
                 pendingPlaybackFrames = 0
@@ -58,6 +76,16 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     func disconnect() {
+        reconnectTask?.cancel()
+        reconnectTask = nil
+        reconnectAttempts = 0
+        recordingTimeout?.cancel()
+        recordingTimeout = nil
+        handshakeTimeout?.cancel()
+        handshakeTimeout = nil
+        replyTimeout?.cancel()
+        replyTimeout = nil
+        playbackGeneration = UUID()
         authorizationRejected = false
         connectionGeneration = UUID()
         receiveTask?.cancel()
@@ -80,27 +108,46 @@ final class MiaVoiceSession: ObservableObject {
         state = .disconnected
     }
 
-    private func connect(endpoint: String, token: String?) async {
+    func connect(startListening: Bool = false) async {
         state = .connecting
+        let generation = connectionGeneration
+        startWhenConnected = startListening
+        diagnostics = MiaConnectionDiagnostics()
         do {
-            let clientID = storedClientID()
-            let config = try MiaWebSocketConfiguration(endpoint: endpoint,
-                                                       clientID: clientID, token: token)
-            let connection = MiaWebSocketTransport(configuration: config)
-            let generation = connectionGeneration
+            guard let connectionProvider else { throw MiaConnectionError.invalidEndpoint }
+            let config = try await connectionProvider()
+            guard generation == connectionGeneration, state == .connecting else { return }
+            let connection = MiaWebSocketTransport(configuration: config, onConnection: { [weak self] status, code, reason in
+                Task { @MainActor [weak self] in
+                    guard let self, self.connectionGeneration == generation else { return }
+                    if let status { self.diagnostics.httpStatus = status }
+                    if let code {
+                        self.diagnostics.closeCode = code
+                        self.diagnostics.closeReason = MiaConnectionDiagnostics.safeReason(reason)
+                    }
+                    self.logger.info("WS HTTP=\(status ?? 0) close=\(code ?? 0)")
+                }
+            }, onMessage: { [weak self] kind, value in
+                Task { @MainActor [weak self] in
+                    guard let self, self.connectionGeneration == generation else { return }
+                    if kind == "error" { self.diagnostics.exception = value }
+                    else { self.diagnostics.lastMessage = value }
+                    self.logger.debug("WS \(kind, privacy: .public): \(value, privacy: .public)")
+                }
+            })
             transport = connection
             connection.open()
             try await connection.sendHello()
             receiveTask = Task { [weak self] in
                 await self?.receiveLoop(connection)
             }
-            Task { [weak self] in
-                try? await Task.sleep(nanoseconds: 10_000_000_000)
+            handshakeTimeout = Task { [weak self] in
+                do { try await Task.sleep(nanoseconds: 10_000_000_000) } catch { return }
                 guard let self, self.connectionGeneration == generation,
                       self.state == .connecting else { return }
                 self.fail(MiaConnectionError.handshakeTimeout)
             }
-        } catch { fail(error) }
+        } catch { if generation == connectionGeneration { fail(error) } }
     }
 
     private func receiveLoop(_ connection: MiaWebSocketTransport) async {
@@ -123,6 +170,10 @@ final class MiaVoiceSession: ObservableObject {
     private func handle(_ event: MiaServerEvent) throws {
         switch event {
         case .hello(let id, let rate):
+            handshakeTimeout?.cancel()
+            handshakeTimeout = nil
+            reconnectAttempts = 0
+            errorMessage = nil
             sessionID = id
             sampleRate = rate
             codec = try MiaOpusCodec(inputSampleRate: 16_000, outputSampleRate: rate)
@@ -132,28 +183,35 @@ final class MiaVoiceSession: ObservableObject {
                 Task { await startListening() }
             }
         case .ttsStart:
+            replyTimeout?.cancel()
+            replyTimeout = nil
+            recordingTimeout?.cancel()
+            _ = audio?.takeFinalMicrophoneFrame()
+            sendTask?.cancel()
+            pendingMicrophoneFrames.removeAll()
             state = .speaking
             speechEnded = false
-        case .ttsSentence:
+        case .ttsSentence(let text):
+            replyText = text
             captionTimeline.handle(event)
             caption = captionTimeline.visibleText
         case .ttsStop:
             guard state == .speaking else { break }
             speechEnded = true
             finishSpeechIfPlayed()
-        case .userTranscript:
-            break
-        case .serverError(let message):
-            errorMessage = message
-            audioLevel = 0
-            state = .ready
+        case .userTranscript(let text):
+            lastUserTranscript = text
+        case .assistantText(let text):
+            replyText = text
+        case .serverError:
+            fail(MiaConnectionError.upstreamError)
         case .emotion, .other:
             break
         }
     }
 
     private func handleAudio(_ payload: Data) throws {
-        guard let codec, let audio else { return }
+        guard state == .speaking, let codec, let audio else { return }
         let samples = try codec.decode(payload)
         pendingPlaybackFrames += 1
         try audio.play(samples)
@@ -174,12 +232,16 @@ final class MiaVoiceSession: ObservableObject {
         do {
             if audio == nil {
                 let audio = MiaAudioIO()
+                let playback = playbackGeneration
                 try audio.start(outputSampleRate: sampleRate,
                                 onMicrophoneFrame: { [weak self] samples in
                                     Task { @MainActor in self?.enqueueMicrophone(samples) }
                                 },
                                 onPlaybackFrame: { [weak self] duration, level in
-                                    Task { @MainActor in self?.playbackAdvanced(duration, level: level) }
+                                    Task { @MainActor in
+                                        guard let self, self.playbackGeneration == playback else { return }
+                                        self.playbackAdvanced(duration, level: level)
+                                    }
                                 })
                 self.audio = audio
             }
@@ -187,19 +249,35 @@ final class MiaVoiceSession: ObservableObject {
             audioLevel = 0
             audio?.beginMicrophoneCapture()
             state = .listening
+            recordingTimeout?.cancel()
+            recordingTimeout = Task { [weak self] in
+                do { try await Task.sleep(nanoseconds: 30_000_000_000) } catch { return }
+                guard let self, self.state == .listening else { return }
+                await self.stopListening()
+            }
         } catch { fail(error) }
     }
 
     private func stopListening() async {
+        guard let current = transport else { return }
+        recordingTimeout?.cancel()
+        recordingTimeout = nil
         let finalFrame = audio?.takeFinalMicrophoneFrame()
-        state = .ready
+        state = .waiting
         audioLevel = 0
+        replyTimeout?.cancel()
+        replyTimeout = Task { [weak self] in
+            do { try await Task.sleep(nanoseconds: 45_000_000_000) } catch { return }
+            guard let self, self.state == .waiting else { return }
+            self.fail(MiaConnectionError.responseTimeout)
+        }
         do {
             await sendTask?.value
-            if let finalFrame, let codec, let transport {
-                try await transport.sendOpus(codec.encode(finalFrame))
+            guard transport === current else { return }
+            if let finalFrame, let codec {
+                try await current.sendOpus(codec.encode(finalFrame))
             }
-            try await transport?.stopListening(sessionID: sessionID)
+            try await current.stopListening(sessionID: sessionID)
         } catch { fail(error) }
     }
 
@@ -223,7 +301,7 @@ final class MiaVoiceSession: ObservableObject {
                 guard let codec, let transport else { break }
                 try await transport.sendOpus(codec.encode(samples))
             } catch {
-                fail(error)
+                if !Task.isCancelled { fail(error) }
                 break
             }
         }
@@ -247,20 +325,34 @@ final class MiaVoiceSession: ObservableObject {
         state = .ready
     }
 
+    nonisolated static func shouldReconnect(_ error: Error) -> Bool {
+        if let error = error as? MiaConnectionError {
+            switch error {
+            case .serverClosed, .handshakeTimeout: return true
+            default: return false
+            }
+        }
+        return (error as NSError).domain == NSURLErrorDomain
+            && ![NSURLErrorCancelled, NSURLErrorAppTransportSecurityRequiresSecureConnection].contains((error as NSError).code)
+    }
+
     private func fail(_ error: Error) {
+        let attempts = reconnectAttempts
+        let lastDiagnostics = transport?.diagnostics ?? diagnostics
         errorMessage = error.localizedDescription
         disconnect()
+        diagnostics = lastDiagnostics
         if let error = error as? MiaConnectionError, case .unauthorized = error {
             authorizationRejected = true
         }
-    }
-
-    private func storedClientID() -> UUID {
-        let key = "mia.clientID"
-        if let value = UserDefaults.standard.string(forKey: key),
-           let id = UUID(uuidString: value) { return id }
-        let id = UUID()
-        UserDefaults.standard.set(id.uuidString, forKey: key)
-        return id
+        guard Self.shouldReconnect(error), attempts < 3 else { return }
+        reconnectAttempts = attempts + 1
+        let generation = connectionGeneration
+        let delay = UInt64(1 << attempts) * 1_000_000_000
+        reconnectTask = Task { [weak self] in
+            do { try await Task.sleep(nanoseconds: delay) } catch { return }
+            guard let self, self.connectionGeneration == generation else { return }
+            await self.connect()
+        }
     }
 }

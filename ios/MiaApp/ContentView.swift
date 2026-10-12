@@ -1,13 +1,13 @@
 import SwiftUI
+import AVFoundation
 
 struct ContentView: View {
     @State private var showsSettings = false
-    @State private var showsLogin = false
-    @StateObject private var account = MiaAccountAccess()
-    @AppStorage("mia.maintenanceMode") private var maintenanceMode = false
-    @AppStorage("mia.accountMigrationDone") private var accountMigrationDone = false
+    @StateObject private var xiaozhi = MiaXiaozhiClient()
     @StateObject private var session = MiaVoiceSession()
-    @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
+    @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("mia.xiaozhi.websocketURL") private var serverURL = MiaXiaozhiClient.defaultWebSocket
+    @AppStorage("mia.xiaozhi.otaURL") private var otaURL = MiaXiaozhiClient.defaultOTA
 
     var body: some View {
         GeometryReader { geometry in
@@ -54,18 +54,7 @@ struct ContentView: View {
                     Spacer(minLength: 12)
                     captionPanel
                     Button {
-                        if let token = account.prepareVoice(endpoint: serverURL, maintenanceMode: maintenanceMode,
-                                                            legacyToken: MiaTokenStore.read(),
-                                                            disconnect: session.disconnect) {
-                            Task {
-                                await session.toggleTalk(endpoint: serverURL,
-                                                         token: token)
-                            }
-                        } else if maintenanceMode {
-                            showsSettings = true
-                        } else {
-                            showsLogin = true
-                        }
+                        Task { await session.toggleTalk() }
                     } label: {
                         MiaAuroraOrb(level: session.audioLevel)
                             .frame(width: geometry.size.height < 700 ? 102 : 118,
@@ -77,7 +66,7 @@ struct ContentView: View {
                     .accessibilityHint(session.state == .speaking ? "打断 Mia 并开始说话" : "轻触控制语音对话")
                     .disabled(session.state == .connecting)
                     .padding(.top, 12)
-                    Text(account.token(endpoint: serverURL, maintenanceMode: maintenanceMode, legacyToken: MiaTokenStore.read()) == nil ? "轻触登录，与 Mia 对话" : session.state.rawValue)
+                    Text(xiaozhi.activationCode != nil ? "请在智控台绑定本机" : session.state.rawValue)
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.8))
                         .padding(.top, 2)
@@ -91,32 +80,39 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showsSettings) {
-            MiaSettingsView(account: account, session: session)
-        }
-        .sheet(isPresented: $showsLogin) {
-            MiaAccountView(access: account, endpoint: serverURL) {
-                maintenanceMode = false
-                session.disconnect()
-            }
+            MiaSettingsView(xiaozhi: xiaozhi, session: session)
         }
         .onAppear {
-            if !accountMigrationDone {
-                maintenanceMode = account.credential == nil && MiaTokenStore.read() != nil
-                accountMigrationDone = true
+            let client = xiaozhi
+            session.connectionProvider = { [weak client] in
+                guard let client else { throw CancellationError() }
+                return try await client.discover(
+                    ota: UserDefaults.standard.string(forKey: "mia.xiaozhi.otaURL") ?? MiaXiaozhiClient.defaultOTA,
+                    websocket: UserDefaults.standard.string(forKey: "mia.xiaozhi.websocketURL") ?? MiaXiaozhiClient.defaultWebSocket)
             }
         }
-        .onChange(of: serverURL) { _, _ in session.disconnect() }
-        .onChange(of: maintenanceMode) { _, _ in session.disconnect() }
-        .onChange(of: account.credential) { _, _ in session.disconnect() }
-        .onChange(of: session.authorizationRejected) { _, rejected in
-            if rejected && !maintenanceMode {
-                account.invalidate(endpoint: serverURL)
-                session.errorMessage = nil
-                showsLogin = true
-            }
+        .onChange(of: serverURL) { _, _ in session.disconnect(); xiaozhi.cancel() }
+        .onChange(of: otaURL) { _, _ in session.disconnect(); xiaozhi.cancel() }
+        .onChange(of: xiaozhi.activationCode) { _, code in
+            if code != nil { showsSettings = true }
         }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .background { session.disconnect(); xiaozhi.cancelDiscovery() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { note in
+            if let type = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+               type == AVAudioSession.InterruptionType.began.rawValue { session.disconnect() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.routeChangeNotification)) { note in
+            if let reason = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
+               reason == AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue { session.disconnect() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.mediaServicesWereResetNotification)) { _ in
+            session.disconnect()
+        }
+        .onDisappear { session.disconnect(); xiaozhi.cancelDiscovery() }
         .alert("连接出错", isPresented: Binding(
-            get: { session.errorMessage != nil },
+            get: { session.errorMessage != nil && xiaozhi.activationCode == nil },
             set: { if !$0 { session.errorMessage = nil } }
         )) {
             Button("知道了") { session.errorMessage = nil }
@@ -140,7 +136,7 @@ struct ContentView: View {
         switch session.state {
         case .connecting: "正在连接"
         case .listening: "结束说话"
-        case .speaking: "打断并开始说话"
+        case .waiting, .speaking: "打断并开始说话"
         case .disconnected, .ready: "开始说话"
         }
     }
@@ -176,76 +172,58 @@ struct ContentView: View {
 
 private struct MiaSettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var account: MiaAccountAccess
+    @ObservedObject var xiaozhi: MiaXiaozhiClient
     @ObservedObject var session: MiaVoiceSession
-    @AppStorage("mia.serverURL") private var serverURL = "wss://8kraw.cloud/xiaozhi/v1/"
-    @AppStorage("mia.maintenanceMode") private var maintenanceMode = false
-    @State private var showsLogin = false
-    @State private var signingOut = false
-    @State private var accessToken = ""
-    @State private var tokenStatus = ""
+    @AppStorage("mia.xiaozhi.websocketURL") private var serverURL = MiaXiaozhiClient.defaultWebSocket
+    @AppStorage("mia.xiaozhi.otaURL") private var otaURL = MiaXiaozhiClient.defaultOTA
+    @State private var discoveryError: String?
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("账号") {
-                    if let credential = account.credential,
-                       credential.usable(endpoint: serverURL) {
-                        LabeledContent("用户名", value: credential.username)
-                        Button("退出登录", role: .destructive) {
-                            signingOut = true
-                            maintenanceMode = false
-                            Task {
-                                await account.logout(endpoint: serverURL, disconnect: session.disconnect)
-                                signingOut = false
-                            }
-                        }
-                        .disabled(signingOut)
-                    } else {
-                        Button("登录或注册") { showsLogin = true }
-                    }
-                    if let warning = account.warning { Text(warning).font(.footnote) }
-                }
-                Section {
-                    DisclosureGroup("高级维护") {
-                        Toggle("使用维护令牌", isOn: $maintenanceMode)
-                        TextField("服务端地址", text: $serverURL)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .keyboardType(.URL)
-                        SecureField("网关访问令牌", text: $accessToken)
-                        Button("保存维护令牌") {
-                            do {
-                                try MiaTokenStore.save(accessToken)
-                                session.disconnect()
-                                tokenStatus = "已保存在本机钥匙串"
-                            } catch {
-                                tokenStatus = "保存失败：\(error.localizedDescription)"
-                            }
-                        }
-                        if !tokenStatus.isEmpty { Text(tokenStatus).font(.footnote) }
-                        Text("仅供管理员维护。日常使用请注册或登录账号。")
+                Section("小智服务端") {
+                    TextField("WebSocket 地址", text: $serverURL)
+                        .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                        .accessibilityLabel("WebSocket 地址")
+                    TextField("OTA 地址", text: $otaURL)
+                        .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
+                        .accessibilityLabel("OTA 地址")
+                    if serverURL.hasPrefix("ws://") || otaURL.hasPrefix("http://") {
+                        Text("当前为明文连接，语音和设备令牌可能被网络中间人读取。正式部署请使用 HTTPS / WSS。")
                             .font(.footnote)
                     }
                 }
-                Section("开发进度") {
-                    LabeledContent("WebSocket 协议", value: "已接入")
-                    LabeledContent("语音收发", value: "等待真机联调")
-                    LabeledContent("Live2D 角色", value: "等待模型素材")
+                Section("设备绑定") {
+                    LabeledContent("设备标识", value: xiaozhi.identity.deviceID)
+                        .textSelection(.enabled)
+                    if let code = xiaozhi.activationCode {
+                        LabeledContent("激活码", value: code).textSelection(.enabled)
+                        Text("在你的智控台打开目标智能体，进入设备管理／添加设备，输入激活码。绑定后点击下方检查，再回首页开始说话。")
+                            .font(.footnote)
+                    }
+                    Text(xiaozhi.status)
+                    Button("检查设备绑定") {
+                        session.disconnect()
+                        discoveryError = nil
+                        Task {
+                            do { _ = try await xiaozhi.discover(ota: otaURL, websocket: serverURL) }
+                            catch { discoveryError = error.localizedDescription }
+                        }
+                    }
+                    .disabled(xiaozhi.checking)
+                    if let discoveryError { Text(discoveryError).font(.footnote) }
+                }
+                Section("连接诊断（已隐藏凭据）") {
+                    LabeledContent("HTTP 握手", value: session.diagnostics.httpStatus.map(String.init) ?? "未完成")
+                    LabeledContent("关闭码", value: session.diagnostics.closeCode.map(String.init) ?? "未收到")
+                    LabeledContent("关闭原因", value: session.diagnostics.closeReason)
+                    LabeledContent("最后消息", value: session.diagnostics.lastMessage)
+                    LabeledContent("异常", value: session.diagnostics.exception)
                 }
             }
             .navigationTitle("设置")
-            .onAppear { accessToken = MiaTokenStore.read() ?? "" }
-            .sheet(isPresented: $showsLogin) {
-                MiaAccountView(access: account, endpoint: serverURL) {
-                    maintenanceMode = false
-                    session.disconnect()
-                }
-            }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("完成") { dismiss() }
-                }
+                ToolbarItem(placement: .topBarTrailing) { Button("完成") { dismiss() } }
             }
         }
     }

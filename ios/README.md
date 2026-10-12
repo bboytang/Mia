@@ -1,5 +1,11 @@
 # Mia iOS
 
+## 当前接入：自建小智 0.9.7
+
+按用户要求暂不使用账号 UI，设置改为可配置 OTA / WebSocket 和设备绑定。Mia 先请求 OTA 获取本机设备令牌，未激活时显示验证码，用户在智控台将设备关联智能体；激活后才建立 hello/session_id 和打开麦克风。不会把旧账号令牌发给小智。WS 配置是实际目标，OTA 用于核对主机和安全级别；HTTPS/WSS 正常验证证书，当前 IP 的明文例外只用于用户选定的自建服务器。
+
+[协议、文件改动、激活步骤与测试记录](../docs/mia-xiaozhi-integration.md)。旧账号说明是历史回滚参考，当前界面不提供注册/登录；代码和钥匙串数据保留。当前 GitHub 编译和新增 XCTest 尚待核对，真实服务器已通过绑定及 hello，但测试录音上传后尚无 STT/TTS，真机端到端未通过。
+
 `ios/project.yml` 是 XcodeGen 工程定义。GitHub Actions 的 `Build iOS App` 工作流在 macOS runner 上生成 Xcode 工程，并分别编译模拟器和未签名的真机应用。
 
 工作流上传 `Mia-unsigned.ipa`、`Mia.app` 和 SHA-256 校验文件。IPA **没有 Apple 签名，不能直接安装**；使用你自己的签名方式重签后才能安装到 iPhone。无需在仓库中保存签名证书或服务器密钥。
