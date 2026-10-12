@@ -14,8 +14,8 @@
 - `MiaXiaozhiClient.swift`：复用持久化 UUID，保存本机逻辑 MAC（不是 iPhone 的硬件 MAC），执行 OTA POST，解析配置和激活码。WS 设置作为实际连接目标，OTA 下发地址用于核对主机与安全级别。令牌只用于本次连接，保存在内存；每次重连重新发现，不复用旧 Mia 账号/维护令牌。拒绝 OTA 重定向、跨主机凭据转发和 WSS 降级。地址修改或后台中止在途发现，迟到响应不能恢复旧配置。
 - `MiaWebSocketTransport.swift`：WS/WSS、稳定身份头、协议 v1、Bearer 设备令牌。记录 HTTP 状态、关闭码、脱敏关闭原因、最后消息类别及 NSError domain/code；不记录地址中的参数、身份、语音文本或凭据。识别服务端非 JSON 的认证失败消息。
 - `MiaWireProtocol.swift`：hello 必须有 session_id 和已支持的 Opus 参数；不声明 MCP/AEC。解析 STT、TTS、LLM 文本/情绪。STT 保留内存状态，不显示在 Mia 字幕。
-- `MiaVoiceSession.swift`：复用 16 kHz mono PCM、60 ms Opus、实际服务端采样率播放和现有字幕推进。手动 listen/stop、尾帧补齐、思考/播放期间 abort、30 秒录音上限、45 秒无回复超时、有限断线重连（1/2/4 秒）。重连只恢复连接，不自动打开麦克风。断线/后台/中断停止音频；旧播放回调不能影响新回合。
-- `ContentView.swift`：首页不再访问账号接口。设置提供 WS、OTA、设备绑定与脱敏诊断；角色、背景、无图标流光球和静音启动片不变。旧账号实现及本机数据保留，未修改服务端账号库。
+- `MiaVoiceSession.swift`：复用 16 kHz mono PCM、60 ms Opus、实际服务端采样率播放和现有字幕推进。默认 `listen mode=auto`，由服务端判断说完；播放结束后继续聆听。启用 iOS Voice Processing 和 muted speech activity 回调，思考/播放期间讲话可触发本地清理与 abort，控制消息等待期间有界暂存新录音。45 秒无回复超时、有限断线重连（1/2/4 秒）。重连只恢复连接，不自动打开麦克风。断线/后台/中断停止音频；旧播放回调不能影响新回合。
+- `ContentView.swift`：首页不再访问账号接口。启动动画结束后前台自动连接/录音，首次由系统请求麦克风权限。流光球结束/重新开启整段对话；显式结束后不因前台变化恢复录音。设置提供 WS、OTA、设备绑定与脱敏诊断；角色、背景、无图标流光球和静音启动片不变。旧账号实现及本机数据保留，未修改服务端账号库。
 - `project.yml`：只为当前 IP 和回环测试地址设置 ATS 例外，不启用 `NSAllowsArbitraryLoads`。iOS 17 支持 IP 例外，见 [Apple 说明](https://developer.apple.com/documentation/bundleresources/information-property-list/nsapptransportsecurity/nsexceptiondomains)。明文 HTTP/WS 的令牌和语音仍可被中间人读取；正式部署改用 HTTPS/WSS。其他明文公网主机需单独审查并调整例外，HTTPS/WSS 地址可在设置中配置。
 
 ## iPhone 激活操作
@@ -23,7 +23,7 @@
 1. 安装新版未签名 IPA（需自行重签），打开设置核对 OTA 和 WebSocket 地址。
 2. 点击“检查设备绑定”。首次安装显示本机激活码，不打开麦克风。
 3. 在自己的智控台打开目标智能体 → 设备管理／添加设备，输入该码，确认智能体的 ASR、LLM 和 TTS 配置。
-4. 返回 Mia 点击“检查设备绑定”；配置就绪后回首页点击流光球，允许麦克风并说中文，点击结束；等待 Mia 语音和字幕。思考/说话时再次点击会打断并开始新录音。
+4. 返回 Mia 点击“检查设备绑定”；配置就绪后回首页点击流光球开启（后续已绑定启动会自动开启），允许麦克风并说中文；说完自动等待 Mia 语音和字幕，播放完后继续下一句。思考/说话时开口打断，再次点击流光球结束整段对话。
 
 联调脚本的设备与 iPhone 本机身份不同；绑定联调设备不能代替绑定 iPhone。App 不登录智控台、不索取管理密钥，不下载 OTA 中的 ESP 固件。
 
@@ -38,4 +38,6 @@
 - 用户已将 TTS 资源改为 `seed-tts-2.0`，新连接只读配置核对确认生效且未再出现先前 HTTP 403；复测仍只收到 STT、TTS start、LLM 事件，90 秒内没有音频。差异化配置中智能体 `private_voice` 覆盖了默认音色，实际仍为旧版 `_moon_bigtts` 音色；[官方双向流式说明](https://docs.volcengine.com/docs/DoubaoVoice/WebSocketBidirectionalStreaming-V3?lang=zh)要求 2.0 资源配 2.0 音色。已请用户将智能体与模型默认音色统一为此前 Mia 实测的 `zh_female_vv_uranus_bigtts` 后复测。未修改服务端源码，未将音色调整前的无音频结果写成成功。
 - 用户新增/切换音色后管理页试听失败。只读官方 `TtsModel.vue`/`AudioPlayer.vue` 确认音色管理试听播放 `voiceDemo` 示例地址，不等价于实际 TTS 请求。实际连接仍无音频；差异化配置中智能体覆盖编码以 `zh_` 开头、无空白，但缺少完整 `_bigtts` 结尾，默认音色仍是旧版小何。已核对服务端日志脱敏函数不截断音色字段，已请用户检查新增记录的音色编码、智能体选择和模型默认音色。未输出任意配置/日志原文或凭据。
 - 最新真实服务复测通过：完整音色编码替换后，差异化配置确认 `zh_female_vv_uranus_bigtts` 与 `seed-tts-2.0` 生效。Python 脚本上传仓库中文录音，收到 `stt → tts:start → llm → tts:sentence_start → Opus → tts:stop`，80 个 Opus 音频包成功解码为 16 kHz mono PCM，153600 字节（4.8 秒），RMS 2709.39，非静音。这证明真实服务端识别、回复字幕和合成音频的联调链路可用；使用的是现有诊断脚本（hello 后等待 3 秒再发录音），不是 iPhone 原生麦克风、播放或延迟验收。未继续增加无必要的云调用。
-- 尚未执行 iPhone 真机麦克风 → 真实 ASR → LLM → TTS → Mia 播放。不能把协议夹具、Python 合成录音测试、模拟器构建或单元测试当成这一完整验收。
+- 自动对话新版 [CI](https://github.com/bboytang/Mia/actions/runs/38314950163) 已通过：67 项单测、3 项 UI 测试、模拟器/设备编译、两尺寸屏幕录制与 IPA 打包上传。[安装包](https://github.com/bboytang/Mia/actions/runs/38314950163/artifacts/11776614004) 对应代码提交 `448e787`。回环原生测试涵盖连续两轮、等待实际播放完成再恢复采集、讲话事件触发 abort、旧播放/讲话回调丢弃、控制等待时暂存新录音、明确停止不允许自动重启及拒绝麦克风；UI 测试覆盖无点击自动 OTA 激活页面。
+- 新版真实后端协议验证：`listen mode=auto`、无 `listen.stop`，静音后自动回复收到 59 个 Opus 包（PCM 113280 字节）；第一轮音频开始后发 abort，同一连接继续第二轮，收到第二次 STT、110 个 Opus 包（PCM 211200 字节）及 TTS stop。只读固定日志标签确认两次大模型收到用户消息，未见 LLM 处理错误，完成第二轮语音合成。均为 Python 协议脚本，不是 iPhone 的系统讲话检测实验。
+- 用户旧版真机反馈能与 Mia 说话并听到回复，但每轮需点击发送、播放期间讲话不能打断。自动对话新版的 iPhone 麦克风、外放回声、首字完整性、系统语音打断及字幕实际推进仍待用户反馈；不能把回环音频替身/协议脚本当作该项验收。自定义后台/锁屏唤醒仅完成[限制评估](mia-voice-wakeup-assessment.md)，没有新增常驻录音、关键词模型或 Siri 入口。
