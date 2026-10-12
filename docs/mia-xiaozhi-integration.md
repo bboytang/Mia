@@ -32,6 +32,6 @@
 - 开发前本地 49 项服务端回归通过，未改动该服务端。Linux 无 Swift/Xcode，iOS 编译、XCTest 和原生 URLSession 网络测试使用既有 GitHub macOS CI。
 - 新增回环协议夹具，必须校验设备 ID、协议版本和模拟设备令牌。原生测试覆盖 OTA、激活、重定向/HTTP 错误/取消、请求头、严格 hello、双向 Opus、STT/LLM/TTS 顺序、认证失败和主动断开后的恢复。夹具不连接真实云服务。CI 结果待实际构建核对。
 - 本地已检查夹具 OTA → hello → listen → Opus → STT/LLM/TTS 顺序与 Opus 回环；脚本编译检查通过。此项不是 iOS 原生测试或真实模型验收。
-- CI 首轮 App 编译通过，但协议夹具启动阻塞。启动堆栈确认 `HTTPServer.server_bind` 的本机反向 DNS 查询停滞；夹具现直接绑定回环地址，已本地验证禁止反向 DNS 时仍可绑定。修复后的 [CI](https://github.com/bboytang/Mia/actions/runs/38301157333) 尚在运行，不能据此宣称 XCTest 已通过。
+- CI 首轮 App 编译通过，但协议夹具启动阻塞。启动堆栈确认 `HTTPServer.server_bind` 的本机反向 DNS 查询停滞；夹具现直接绑定回环地址，已本地验证禁止反向 DNS 时仍可绑定。[复测](https://github.com/bboytang/Mia/actions/runs/38301157333) 已通过夹具启动、全部原生 OTA/Opus/消息顺序/重连测试和两项 UI 测试，但 62 项单测中一项请求头 CRLF 校验失败。Swift 将 CRLF 视作一个字符，逐个 `contains` 检查会漏掉；现改为 Unicode 标量检查，并补测 CR、LF、CRLF。[完整复测](https://github.com/bboytang/Mia/actions/runs/38302201785) 尚在运行。
 - 实际服务：OTA 200、绑定完成、带设备令牌的 101/hello/session_id 成功。上传仓库中文录音后 90 秒内无 STT/TTS/音频，延后开始发送的复测也超时；没有证明 ASR → LLM → TTS 成功。已请用户提供对应设备的后台错误摘要，未改运行中的服务端。
 - 尚未执行 iPhone 真机麦克风 → 真实 ASR → LLM → TTS → Mia 播放。不能把协议夹具、Python 合成录音测试、模拟器构建或单元测试当成这一完整验收。
