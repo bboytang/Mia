@@ -73,6 +73,8 @@ schemes:
         MiaTests: [test]
         MiaUITests: [test]
     test:
+      commandLineArguments:
+        "-MiaDisableAutomaticConversation": true
       targets:
         - MiaTests
         - MiaUITests
