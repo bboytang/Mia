@@ -207,7 +207,12 @@ private struct MiaSettingsView: View {
                     LabeledContent("设备标识", value: xiaozhi.identity.deviceID)
                         .textSelection(.enabled)
                     if let code = xiaozhi.activationCode {
-                        LabeledContent("激活码", value: code).textSelection(.enabled)
+                        LabeledContent("激活码", value: code)
+                            .textSelection(.enabled)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("激活码")
+                            .accessibilityValue(code)
+                            .accessibilityIdentifier("xiaozhi-activation-code")
                         Text("在你的智控台打开目标智能体，进入设备管理／添加设备，输入激活码。绑定后点击下方检查，再回首页开始说话。")
                             .font(.footnote)
                     }

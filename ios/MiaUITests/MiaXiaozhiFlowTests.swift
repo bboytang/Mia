@@ -39,6 +39,8 @@ final class MiaXiaozhiFlowTests: XCTestCase {
                                "-mia.xiaozhi.websocketURL", "ws://127.0.0.1:8769/xiaozhi/v1/"]
         app.launch()
         XCTAssertTrue(app.textFields["OTA 地址"].waitForExistence(timeout: 20))
-        XCTAssertTrue(app.staticTexts["123456"].exists)
+        let code = app.descendants(matching: .any)["xiaozhi-activation-code"]
+        XCTAssertTrue(code.waitForExistence(timeout: 5))
+        XCTAssertEqual(code.value as? String, "123456")
     }
 }
