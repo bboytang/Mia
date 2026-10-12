@@ -272,6 +272,12 @@ final class MiaVoiceSession: ObservableObject {
                                         guard let self, self.connectionGeneration == connection else { return }
                                         await self.interruptForSpeech(generation: generation)
                                     }
+                                },
+                                onAudioError: { [weak self] error in
+                                    Task { @MainActor in
+                                        guard let self, self.connectionGeneration == connection else { return }
+                                        self.fail(error)
+                                    }
                                 })
                 self.audio = audio
             }
@@ -388,6 +394,7 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     nonisolated static func shouldReconnect(_ error: Error) -> Bool {
+        if let error = error as? MiaAudioError, case .configurationChanged = error { return true }
         if let error = error as? MiaConnectionError {
             switch error {
             case .serverClosed, .handshakeTimeout: return true

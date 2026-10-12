@@ -5,6 +5,7 @@ private final class ConversationAudioStub: MiaConversationAudio {
     var microphone: (([Int16], UUID) -> Void)?
     var playback: ((Double, Float, UUID) -> Void)?
     var speech: ((UUID) -> Void)?
+    var audioError: ((Error) -> Void)?
     var capture = UUID()
     var rounds = 0
     var muted = false
@@ -14,8 +15,10 @@ private final class ConversationAudioStub: MiaConversationAudio {
 
     func start(outputSampleRate: Int, onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
                onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
-               onSpeechActivity: @escaping (UUID) -> Void) throws {
+               onSpeechActivity: @escaping (UUID) -> Void,
+               onAudioError: @escaping (Error) -> Void) throws {
         microphone = onMicrophoneFrame; playback = onPlaybackFrame; speech = onSpeechActivity
+        audioError = onAudioError
     }
     func play(_ samples: [Int16], generation: UUID) throws { completions.append(generation) }
     func interruptPlayback() { interruptions += 1 }
@@ -147,6 +150,23 @@ final class MiaContinuousConversationTests: XCTestCase {
         XCTAssertFalse(voice.conversationActive)
         XCTAssertFalse(voice.allowsAutomaticStart)
         XCTAssertEqual(audio.rounds, 1)
+    }
+
+    @MainActor
+    func testStoppedAudioEngineRestartsConversationAndRejectsOldAudioErrors() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio)
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        let oldError = audio.audioError
+        oldError?(MiaAudioError.configurationChanged)
+        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
+        oldError?(MiaAudioError.configurationChanged)
+        audio.saySomething()
+        try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+        XCTAssertEqual(audio.rounds, 2)
+        XCTAssertNil(voice.errorMessage)
     }
 
     @MainActor
