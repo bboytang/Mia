@@ -2,13 +2,15 @@
 
 ## 2026-10-12 小智 0.9.7 正式集成（实施中）
 
+最新验收（真实服务链路通过，iPhone 待验）：用户替换完整音色编码后，新连接确认有效音色 `zh_female_vv_uranus_bigtts` 与资源 `seed-tts-2.0`。Python 联调脚本上传仓库中文录音，经真实小智服务收到 `stt → tts:start → llm → tts:sentence_start → Opus → tts:stop`；共 80 个 Opus 包，解码为 16 kHz 单声道 PCM，153600 字节、4.8 秒，音频非静音。此结果不是原生 iPhone 麦克风/播放验收；下一步安装已通过 CI 的 IPA，绑定 iPhone 自己的激活码，确认声音、仅 Mia 字幕、字幕推进及打断。
+
 用户补充实际运行 Debian 13.2 / 小智 0.9.7，并要求完成正式 OTA、设备绑定及双向语音。已对照官方 v0.9.7 源码，正常 OTA 获取设备令牌后完成联调设备绑定，获得 hello/session_id；不带令牌的连接仍以 1000 关闭。此前缺少 OTA 认证、MAC 格式身份和激活流程是已定位的问题，旧 App 另有仅 WSS/账号入口限制。
 
 客户端已实现独立 `MiaXiaozhiClient`、稳定 UUID/逻辑 MAC、OTA/激活界面、WS/WSS、严格 hello、脱敏诊断、有限自动重连及音频异常清理，保留既有 Opus 和仅 Mia 字幕，取消账号 UI 但不删除旧账号代码/数据。WS 配置是实际连接目标，OTA 下发地址用于核对主机与安全级别，令牌仅绑定本机身份；不使用智控台管理密钥。局部 ATS 例外允许当前服务器明文，未全局关闭 ATS。新增原生回环协议测试及 UI 测试，编译和 CI 已通过（见下方验证边界）。
 
-真实语音探测上传仓库中文录音、发送 listen stop 后 90 秒内没有 STT/TTS/音频；延后发送复测同样超时。用户授权后已 SSH 只读排查，未修改运行中的服务端。日志固定标签确认 ASR 使用 `volc.seedasr.sauc.concurrent`，初始化返回 `quota exceeded for types: concurrency`；这与此前已验证的按时长资源 `volc.seedasr.sauc.duration` 不同。用户已在智控台改为按时长资源，并明确批准仅重启语音容器；其他容器未动。已读源码确认 ASR 更新判定仅比较模块名称/类型，修改同模型资源 ID 需要重载。重启后复测收到 STT、TTS start、LLM 事件，但没有音频；当前 TTS HTTP 403，双流端点正确但实际资源为 `volc.service_type.10029`，与已实测的 `seed-tts-2.0` 不同。用户已调整 TTS 资源，新连接确认生效且未再见 403，但仍无音频；智能体 `private_voice` 仍覆盖为旧版 `_moon_bigtts` 音色，已请用户将智能体和模型默认音色统一为已实测的 `zh_female_vv_uranus_bigtts` 后复测。客户端 [CI](https://github.com/bboytang/Mia/actions/runs/38303047948) 全部通过：62 项单测、2 项 UI 测试、模拟器/设备编译、两尺寸录制及未签名 IPA 打包上传。此探测是 Python 客户端，不是 iPhone 麦克风或完整原生验收，不能宣称全链路成功。完整实现、绑定操作和验证边界见[小智集成记录](mia-xiaozhi-integration.md)。
+真实语音探测上传仓库中文录音、发送 listen stop 后 90 秒内没有 STT/TTS/音频；延后发送复测同样超时。用户授权后已 SSH 只读排查，未修改运行中的服务端。日志固定标签确认 ASR 使用 `volc.seedasr.sauc.concurrent`，初始化返回 `quota exceeded for types: concurrency`；这与此前已验证的按时长资源 `volc.seedasr.sauc.duration` 不同。用户已在智控台改为按时长资源，并明确批准仅重启语音容器；其他容器未动。已读源码确认 ASR 更新判定仅比较模块名称/类型，修改同模型资源 ID 需要重载。重启后复测收到 STT、TTS start、LLM 事件，但没有音频；当时 TTS HTTP 403，双流端点正确但实际资源为 `volc.service_type.10029`，与已实测的 `seed-tts-2.0` 不同。用户已调整 TTS 资源，新连接确认生效且未再见 403，但仍无音频；智能体 `private_voice` 仍覆盖为旧版 `_moon_bigtts` 音色，已请用户将智能体和模型默认音色统一为已实测的 `zh_female_vv_uranus_bigtts` 后复测。客户端 [CI](https://github.com/bboytang/Mia/actions/runs/38303047948) 全部通过：62 项单测、2 项 UI 测试、模拟器/设备编译、两尺寸录制及未签名 IPA 打包上传。此探测是 Python 客户端，不是 iPhone 麦克风或完整原生验收，不能宣称全链路成功。完整实现、绑定操作和验证边界见[小智集成记录](mia-xiaozhi-integration.md)。
 
-最新音色复测：用户新增/切换音色后，管理页试听失败。音色管理试听使用独立 `voiceDemo` 示例地址；实际语音复测仍无音频。已确认下发的智能体音色覆盖编码缺少完整 `_bigtts` 结尾，默认音色仍为旧版小何；已请用户核对音色编码及智能体选中记录，不能据此宣称链路完成。
+历史音色排查：用户新增/切换音色后，管理页试听失败。音色管理试听使用独立 `voiceDemo` 示例地址；实际语音复测仍无音频。已确认下发的智能体音色覆盖编码缺少完整 `_bigtts` 结尾，默认音色仍为旧版小何；已请用户核对音色编码及智能体选中记录，不能据此宣称链路完成。
 
 ## 2026-10-12 自建小智直连方向（最新决定）
 
