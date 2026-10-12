@@ -27,6 +27,7 @@ final class MiaVoiceSession: ObservableObject {
     private var reconnectTask: Task<Void, Never>?
     private var reconnectAttempts = 0
     @Published private(set) var conversationActive = false
+    @Published private(set) var allowsAutomaticStart = true
     private var listeningTask: Task<Void, Never>?
     private var speechMonitorGeneration: UUID?
     private var sendGeneration = UUID()
@@ -66,13 +67,17 @@ final class MiaVoiceSession: ObservableObject {
 
     func beginConversation() async {
         guard state == .disconnected || state == .ready else { return }
+        allowsAutomaticStart = true
         conversationActive = true
         if state == .ready { await startListening() }
         else { await connect(startListening: true) }
     }
 
     func toggleTalk() async {
-        if conversationActive { disconnect() }
+        if conversationActive {
+            disconnect()
+            allowsAutomaticStart = false
+        }
         else { await beginConversation() }
     }
 

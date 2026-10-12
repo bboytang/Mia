@@ -131,6 +131,7 @@ struct ContentView: View {
     private func startAutomatically() {
         guard isActive, scenePhase == .active,
               !ProcessInfo.processInfo.arguments.contains("-MiaDisableAutomaticConversation"),
+              session.allowsAutomaticStart,
               session.state == .disconnected, session.errorMessage == nil,
               xiaozhi.activationCode == nil else { return }
         Task { await session.beginConversation() }

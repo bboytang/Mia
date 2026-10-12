@@ -75,6 +75,12 @@ final class MiaContinuousConversationTests: XCTestCase {
         XCTAssertEqual(voice.state, .disconnected)
         XCTAssertFalse(voice.conversationActive)
         XCTAssertTrue(audio.stopped)
+        XCTAssertFalse(voice.allowsAutomaticStart)
+        voice.disconnect()
+        XCTAssertFalse(voice.allowsAutomaticStart)
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        XCTAssertTrue(voice.allowsAutomaticStart)
     }
 
     @MainActor
