@@ -6,7 +6,7 @@
 
 客户端已实现独立 `MiaXiaozhiClient`、稳定 UUID/逻辑 MAC、OTA/激活界面、WS/WSS、严格 hello、脱敏诊断、有限自动重连及音频异常清理，保留既有 Opus 和仅 Mia 字幕，取消账号 UI 但不删除旧账号代码/数据。WS 配置是实际连接目标，OTA 下发地址用于核对主机与安全级别，令牌仅绑定本机身份；不使用智控台管理密钥。局部 ATS 例外允许当前服务器明文，未全局关闭 ATS。新增原生回环协议测试及 UI 测试，编译和 CI 已通过（见下方验证边界）。
 
-真实语音探测上传仓库中文录音、发送 listen stop 后 90 秒内没有 STT/TTS/音频；延后发送复测同样超时。用户授权后已 SSH 只读排查，未修改运行中的服务端。日志固定标签确认 ASR 使用 `volc.seedasr.sauc.concurrent`，初始化返回 `quota exceeded for types: concurrency`；这与此前已验证的按时长资源 `volc.seedasr.sauc.duration` 不同。用户已在智控台改为按时长资源，并明确批准仅重启语音容器；其他容器未动。已读源码确认 ASR 更新判定仅比较模块名称/类型，修改同模型资源 ID 需要重载。重启后复测收到 STT、TTS start、LLM 事件，但没有音频；当前 TTS HTTP 403，双流端点正确但实际资源为 `volc.service_type.10029`，与已实测的 `seed-tts-2.0` 不同，待用户调整后复测。客户端 [CI](https://github.com/bboytang/Mia/actions/runs/38303047948) 全部通过：62 项单测、2 项 UI 测试、模拟器/设备编译、两尺寸录制及未签名 IPA 打包上传。此探测是 Python 客户端，不是 iPhone 麦克风或完整原生验收，不能宣称全链路成功。完整实现、绑定操作和验证边界见[小智集成记录](mia-xiaozhi-integration.md)。
+真实语音探测上传仓库中文录音、发送 listen stop 后 90 秒内没有 STT/TTS/音频；延后发送复测同样超时。用户授权后已 SSH 只读排查，未修改运行中的服务端。日志固定标签确认 ASR 使用 `volc.seedasr.sauc.concurrent`，初始化返回 `quota exceeded for types: concurrency`；这与此前已验证的按时长资源 `volc.seedasr.sauc.duration` 不同。用户已在智控台改为按时长资源，并明确批准仅重启语音容器；其他容器未动。已读源码确认 ASR 更新判定仅比较模块名称/类型，修改同模型资源 ID 需要重载。重启后复测收到 STT、TTS start、LLM 事件，但没有音频；当前 TTS HTTP 403，双流端点正确但实际资源为 `volc.service_type.10029`，与已实测的 `seed-tts-2.0` 不同。用户已调整 TTS 资源，新连接确认生效且未再见 403，但仍无音频；智能体 `private_voice` 仍覆盖为旧版 `_moon_bigtts` 音色，已请用户将智能体和模型默认音色统一为已实测的 `zh_female_vv_uranus_bigtts` 后复测。客户端 [CI](https://github.com/bboytang/Mia/actions/runs/38303047948) 全部通过：62 项单测、2 项 UI 测试、模拟器/设备编译、两尺寸录制及未签名 IPA 打包上传。此探测是 Python 客户端，不是 iPhone 麦克风或完整原生验收，不能宣称全链路成功。完整实现、绑定操作和验证边界见[小智集成记录](mia-xiaozhi-integration.md)。
 
 ## 2026-10-12 自建小智直连方向（最新决定）
 
