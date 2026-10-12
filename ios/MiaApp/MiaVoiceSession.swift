@@ -270,8 +270,9 @@ final class MiaVoiceSession: ObservableObject {
             acceptsReply = false
             speechMonitorGeneration = nil
             sendGeneration = UUID()
-            microphoneGeneration = audio?.beginMicrophoneCapture()
+            if microphoneGeneration == nil { microphoneGeneration = audio?.beginMicrophoneCapture() }
             state = .listening
+            sendPendingMicrophoneFrames()
         } catch { if self.transport === transport { fail(error) } }
     }
 
@@ -312,6 +313,8 @@ final class MiaVoiceSession: ObservableObject {
         caption = ""
         audioLevel = 0
         state = .ready
+        // Capture the new utterance while abort/listen control waits on the network.
+        microphoneGeneration = audio?.beginMicrophoneCapture()
         do {
             try await current.abort(sessionID: sessionID)
             guard transport === current, conversationActive else { return }
@@ -320,13 +323,18 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     private func enqueueMicrophone(_ samples: [Int16], generation: UUID) {
-        guard state == .listening, microphoneGeneration == generation else { return }
+        guard conversationActive, microphoneGeneration == generation,
+              state == .listening || state == .ready else { return }
         audioLevel = MiaAudioIO.level(for: samples)
         pendingMicrophoneFrames.append(samples)
         if pendingMicrophoneFrames.count > 10 {
             pendingMicrophoneFrames.removeFirst()
         }
-        guard sendTask == nil else { return }
+        if state == .listening { sendPendingMicrophoneFrames() }
+    }
+
+    private func sendPendingMicrophoneFrames() {
+        guard sendTask == nil, !pendingMicrophoneFrames.isEmpty else { return }
         let connection = sendGeneration
         sendTask = Task { [weak self] in
             await self?.drainMicrophone(connection: connection)

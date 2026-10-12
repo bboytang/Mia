@@ -116,4 +116,38 @@ final class MiaContinuousConversationTests: XCTestCase {
         XCTAssertEqual(audio.rounds, 0)
         XCTAssertFalse(voice.conversationActive)
     }
+
+    @MainActor
+    func testSpeechOnsetIsBufferedWhileInterruptResumesListening() async throws {
+        let audio = ConversationAudioStub()
+        var permissionCalls = 0
+        var resume: CheckedContinuation<Bool, Never>?
+        let voice = MiaVoiceSession(makeAudio: { audio }, recordPermission: {
+            permissionCalls += 1
+            if permissionCalls == 2 {
+                return await withCheckedContinuation { resume = $0 }
+            }
+            return true
+        })
+        voice.connectionProvider = {
+            try MiaWebSocketConfiguration(endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/",
+                                          clientID: UUID(), token: "fixture-only")
+        }
+        defer { resume?.resume(returning: false); voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        audio.saySomething()
+        try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+        audio.speech?(audio.capture)
+        try await waitUntil { resume != nil }
+        XCTAssertFalse(audio.muted)
+        audio.saySomething()
+        // Deliver the captured frame before allowing the listen control to continue.
+        try await Task.sleep(nanoseconds: 50_000_000)
+        let continuation = resume
+        resume = nil
+        continuation?.resume(returning: true)
+        try await waitUntil { voice.state == .speaking && audio.rounds == 2 }
+        XCTAssertEqual(audio.interruptions, 1)
+    }
 }
