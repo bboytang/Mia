@@ -130,6 +130,18 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         await self.provider.save_memory([source])
         self.assertEqual(len(model.inputs), 1)
 
+    async def test_old_connection_started_after_deletion_cannot_reextract_history(self):
+        source = message("我喜欢海边")
+        self.store.clear(self.provider.owner)
+        await self.provider.save_memory([source])
+        self.assertEqual(self.model.inputs, [])
+        self.conn.dialogue.dialogue = [message("system", "system"), source]
+        self.store.clear(self.provider.owner)
+        mia.begin_turn(self.conn, "这是新的话题")
+        self.assertEqual([m.role for m in self.conn.dialogue.dialogue], ["system"])
+        await self.provider.save_memory([message("我喜欢新的话题")])
+        self.assertEqual(self.store.list_memories(self.provider.owner)[0]["content"], "我喜欢新的话题")
+
     async def test_failure_and_paused_memory_leave_conversation_available(self):
         self.store.set_paused(self.provider.owner, True)
         await self.provider.save_memory([message("我喜欢蓝色")])

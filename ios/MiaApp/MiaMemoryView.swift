@@ -78,7 +78,10 @@ struct MiaMemoryView: View {
         .disabled(working)
         .overlay { if working { ProgressView() } }
         .navigationTitle("记忆与成长")
-        .task { await perform("list") }
+        .task {
+            MiaConversationController.shared.stop()
+            await perform("list")
+        }
         .sheet(item: $editing) { memory in
             NavigationStack {
                 Form { TextEditor(text: $content).frame(minHeight: 160) }

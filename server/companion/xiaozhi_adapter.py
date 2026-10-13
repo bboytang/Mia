@@ -125,6 +125,7 @@ class MiaMemoryProvider:
         self.suppressed = False
         self.notice = None
         self.force_checkpoint = False
+        self.revision = store.snapshot(owner)["revision"]
 
     def set_llm(self, llm):
         self.llm = llm
@@ -146,6 +147,12 @@ class MiaMemoryProvider:
 
     def _take_batch(self, excerpts, final):
         with self.lock:
+            state = self.store.snapshot(self.owner)
+            if state["revision"] != self.revision:
+                self.pending.clear()
+                self.seen = deque((marker for marker, _ in excerpts), maxlen=80)
+                self.revision = state["revision"]
+                return None
             for marker, content in excerpts:
                 if marker not in self.seen:
                     self.seen.append(marker)
@@ -155,7 +162,6 @@ class MiaMemoryProvider:
             self.force_checkpoint = False
             if self.saving or not self.pending or (len(self.pending) < 10 and not self.final_requested):
                 return None
-            state = self.store.snapshot(self.owner)
             if state["paused"] or self.suppressed:
                 self.pending.clear()
                 return None
@@ -203,6 +209,7 @@ class MiaMemoryProvider:
             if request["action"] not in {"list", "personality"}:
                 self.pending.clear()
                 self.seen = deque((marker for marker, _ in _user_excerpts(messages)), maxlen=80)
+                self.revision = self.store.snapshot(self.owner)["revision"]
             return result
 
 
@@ -220,6 +227,12 @@ def begin_turn(conn, query):
         return
     command = query.strip().rstrip("。.!！ ")
     with provider.lock:
+        state = provider.store.snapshot(provider.owner)
+        if state["revision"] != provider.revision:
+            provider.pending.clear()
+            provider.seen = deque((marker for marker, _ in _user_excerpts(conn.dialogue.dialogue)), maxlen=80)
+            provider.revision = state["revision"]
+            _trim_dialogue(conn, clear=True)
         provider.notice = None
         if command in {"这段别记", "这段不要记", "米娅，这段别记"}:
             provider.suppressed = True
