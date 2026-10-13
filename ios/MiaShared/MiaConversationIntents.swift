@@ -12,8 +12,8 @@ struct EndMiaConversationIntent: LiveActivityIntent {
         throw MiaIntentRoutingError.openApp
         #else
         MiaConversationController.shared.stop()
-        return .result()
         #endif
+        return .result()
     }
 }
 
