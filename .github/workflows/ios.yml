@@ -95,6 +95,16 @@ jobs:
           test -d "$extension"
           test -s "$extension/MiaActivity"
           test ! -e "$app/MiaLaunch.mp4"
+          python3 - "$app" <<'PY'
+          import json, pathlib, sys
+          metadata = pathlib.Path(sys.argv[1]) / "Metadata.appintents" / "extract.actionsdata"
+          data = json.loads(metadata.read_text())
+          expected = {"StartMiaConversationIntent", "EndMiaConversationIntent", "OpenMiaConversationIntent"}
+          assert expected <= data["actions"].keys(), "Missing Mia conversation actions"
+          assert expected <= {item["actionIdentifier"] for item in data["autoShortcuts"]}, "Missing Mia shortcuts"
+          assert all(data["actions"][name]["isDiscoverable"] for name in expected), "Hidden Mia action"
+          print("Mia start/end/open actions and shortcuts are packaged and discoverable")
+          PY
           /usr/libexec/PlistBuddy -c 'Print :NSSupportsLiveActivities' "$app/Info.plist" | grep -qx true
           /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$extension/Info.plist" | grep -qx com.apple.widgetkit-extension
           mkdir -p "$RUNNER_TEMP/mia-artifacts/Payload"

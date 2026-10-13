@@ -241,7 +241,7 @@ def begin_turn(conn, query):
             provider.notice = "本会话不再提炼新记忆，下次聊天恢复；已有记忆未删除。"
         elif command in {"忘掉这件事", "米娅，忘掉这件事"}:
             provider.notice = "未确定要删除的记忆。询问具体内容，或请用户在记忆设置中选择；尚未删除。"
-        elif re.match(r"^(?:米娅[，, ]*)?记住[：:，, ]", command):
+        elif re.match(r"^(?:你好[，, ]*)?(?:米娅[，, ]*)?(?:请|帮我)?记住(?!了吗|了没|没|吗|\?|？).+", command):
             provider.force_checkpoint = True
             provider.notice = "用户明确要求记忆；将在本轮结束提炼，尚未保存，不可声称已完成。"
         else:

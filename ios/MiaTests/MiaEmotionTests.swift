@@ -40,4 +40,15 @@ final class MiaEmotionTests: XCTestCase {
         XCTAssertGreaterThan(strong.gazeX, subtle.gazeX)
         XCTAssertLessThan(strong.gazeY, subtle.gazeY)
     }
+
+    func testFacialFeaturesDistinguishComfortSadnessAndSurprise() {
+        let caring = MiaOrbExpression(emotion: .caring, intensity: 0.65)
+        let sad = MiaOrbExpression(emotion: .sad, intensity: 0.65)
+        let surprise = MiaOrbExpression(emotion: .surprised, intensity: 0.65)
+        XCTAssertGreaterThan(caring.mouthCurve, 0)
+        XCTAssertLessThan(sad.mouthCurve, 0)
+        XCTAssertGreaterThan(sad.browTilt, caring.browTilt)
+        XCTAssertGreaterThan(surprise.eyeWidth, caring.eyeWidth)
+        XCTAssertGreaterThan(surprise.mouthOpen, 0.04)
+    }
 }

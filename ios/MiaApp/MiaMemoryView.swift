@@ -15,6 +15,8 @@ struct MiaMemoryView: View {
             Section {
                 Text("Mia 会提炼重要内容，敏感记忆需你确认。使用云端模型时，相关记忆会随聊天请求发送给模型服务。")
                     .font(.footnote)
+                Text("普通聊天每十轮或结束后整理；可说「请记住我喜欢……」提前整理，随后刷新查看。只有实际保存的内容才能跨会话使用。")
+                    .font(.footnote).foregroundStyle(.secondary)
                 if let snapshot {
                     Toggle("自动记住重要内容", isOn: Binding(
                         get: { !snapshot.paused },
@@ -119,12 +121,20 @@ struct MiaMemoryView: View {
 }
 
 struct MiaWakeGuideView: View {
+    @Environment(\.openURL) private var openURL
+
     var body: some View {
         List {
             Section("声音唤醒") {
                 Text("先在 Mia 点小球，完成设备绑定和麦克风授权。")
                 Text("在系统「设置 → 辅助功能 → 声音快捷指令」中添加动作「开始与 Mia 聊天」，训练口令「你好，米娅」。")
                 Text("如果后台启动受系统限制，改选「打开 Mia 开始聊天」。首次调用可能需要解锁或确认。")
+            }
+            Section("动作列表里找不到 Mia") {
+                Text("先打开「快捷指令」App，添加快捷指令，搜索 Mia 的「开始与 Mia 聊天」操作，保存为「呼叫 Mia」。再回到声音快捷指令，选择已保存的「呼叫 Mia」并训练口令。")
+                Text("如果快捷指令 App 也找不到 Mia 操作：新建快捷指令，添加「URL」并填入 mia://conversation/start，再添加「打开 URL」，保存为「呼叫 Mia」。这个备用动作会打开 Mia 开始聊天。")
+                Button("打开快捷指令") { openURL(URL(string: "shortcuts://")!) }
+                Text("未添加动作和训练口令前，待呼叫状态不会响应「你好，米娅」。锁屏调用可能要求先解锁；解锁本身不会自动开始录音。")
             }
             Section("麦克风与灵动岛") {
                 Text("Mia 待机和结束聊天后不录音；系统声音快捷指令会继续使用麦克风在本机识别口令。")

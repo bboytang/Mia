@@ -2,13 +2,13 @@
 
 ## 情绪伙伴升级（2026-10-13；预览IPA已验证交付，生产记忆/真机待验）
 
-[直接下载预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)，约7.5MB，需重签App和Widget。代码0d9a7cf的85单测、4UI、两种编译与扩展打包[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441414)，服务端79项[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441408)。生产记忆未部署，不将其称为已上线。
+[直接下载预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)，约7.5MB，需重签App和Widget。代码0d9a7cf的85单测、4UI、两种编译与扩展打包[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441414)，服务端修复40c715d的81项[CI通过](https://github.com/bboytang/Mia/actions/runs/38401621395)。生产记忆已部署并联调，真机长期记忆效果仍待验。
 
 首页改为原创玻璃流体小球、八种动态表情与深色背景，取消启动视频、人物和字幕。首次进入待呼叫，不自动录音或发现设备；点小球开始/结束。系统声音快捷指令可调用后台录音动作，另有打开 App 的回退动作；待呼叫期间只有系统口令监听可能使用麦克风。
 
 新增 Live Activity/灵动岛扩展，IPA 重签必须同时保留并签名 `PlugIns/MiaActivity.appex`。锁屏停止使用公开保护数据事件，不能保证精确锁屏时机；后台启动、系统音频交接、发热耗电和扩展重签须真机验收。
 
-设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。实际小智服务尚未部署扩展时会明确超时提示；不能把本地模块视为已上线长期记忆。
+设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。声音唤醒必须在系统中添加动作并训练口令；动作列表没有 Mia 时，先保存快捷指令「呼叫 Mia」，或用打开 URL `mia://conversation/start` 的动作作为前台回退。
 
 [批准方案](../docs/mia-companion-plan.md)、[实施计划](../docs/mia-companion-implementation.md)、[逐步工作记录](../docs/mia-companion-worklog.md)、[交接](../docs/mia-companion-handoff.md)。以下为旧版本历史。
 

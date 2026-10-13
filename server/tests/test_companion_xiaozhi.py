@@ -200,6 +200,25 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         await self.provider.checkpoint(mia._user_excerpts([message("我喜欢海边")]))
         self.assertEqual(len(self.model.inputs), 1)
 
+    async def test_natural_remember_request_saves_and_is_retrieved_in_next_session(self):
+        for command in ["记住我喜欢海边", "请记住我喜欢海边", "米娅，请记住我喜欢海边",
+                        "你好，米娅，帮我记住我喜欢海边", "记住这个"]:
+            with self.subTest(command=command):
+                mia.begin_turn(self.conn, command)
+                self.assertTrue(self.provider.force_checkpoint)
+                self.assertIn("尚未保存", self.provider.notice)
+        await self.provider.checkpoint(mia._user_excerpts([message("我喜欢海边")]))
+        next_session = mia.MiaMemoryProvider(self.store, self.provider.owner, self.model, "next")
+        context = json.loads(await next_session.query_memory("我喜欢哪里"))
+        self.assertEqual(context["mia_context"]["memories"][0]["content"], "我喜欢海边")
+
+    async def test_discussing_or_negating_remember_does_not_force_save(self):
+        for command in ["不要记住我的信息", "请不要记住", "如果我说记住这个会怎样",
+                        "他说‘记住我喜欢海边’", "记住了吗", "你记住我喜欢什么了吗"]:
+            with self.subTest(command=command):
+                mia.begin_turn(self.conn, command)
+                self.assertFalse(self.provider.force_checkpoint)
+
     async def test_explicit_topic_forgetting_is_unique_and_removes_short_context(self):
         source = message("我喜欢海边")
         await self.provider.save_memory([source])

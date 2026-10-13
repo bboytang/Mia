@@ -78,7 +78,7 @@ struct ContentView: View {
     private var status: String {
         if xiaozhi.activationCode != nil { return "请在智控台绑定 Mia" }
         if controller.isStarting || session.state == .connecting { return "正在连接" }
-        if !session.conversationActive { return "点小球，或说「你好，米娅」" }
+        if !session.conversationActive { return "点小球开始 · 声音唤醒需先设置" }
         switch session.state {
         case .listening: return "在听"
         case .waiting: return "想一想"
