@@ -11,6 +11,9 @@ private final class ConversationAudioStub: MiaConversationAudio {
     var muted = false
     var stopped = false
     var interruptions = 0
+    var engineStopped = false
+    var recoveries = 0
+    var recoveryFails = false
     var completions: [UUID] = []
 
     func start(outputSampleRate: Int, onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
@@ -22,6 +25,13 @@ private final class ConversationAudioStub: MiaConversationAudio {
     }
     func play(_ samples: [Int16], generation: UUID) throws { completions.append(generation) }
     func interruptPlayback() { interruptions += 1 }
+    func recoverConfiguration() throws -> Bool {
+        guard engineStopped else { return false }
+        if recoveryFails { throw MiaAudioError.captureRecoveryFailed }
+        engineStopped = false
+        recoveries += 1
+        return true
+    }
     func stop() { stopped = true; muted = true }
     func takeFinalMicrophoneFrame() -> [Int16]? { muted = true; return nil }
     func beginMicrophoneCapture() -> UUID {
@@ -153,20 +163,90 @@ final class MiaContinuousConversationTests: XCTestCase {
     }
 
     @MainActor
-    func testStoppedAudioEngineRestartsConversationAndRejectsOldAudioErrors() async throws {
+    func testAudioConfigurationRecoversInPlaceWithoutReconnectionOrPopup() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio)
+        let config = try MiaWebSocketConfiguration(endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/",
+                                                  clientID: UUID(), token: "fixture-only")
+        var connections = 0
+        voice.connectionProvider = { connections += 1; return config }
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        for _ in 0..<3 { audio.audioError?(MiaAudioError.configurationChanged) }
+        try await Task.sleep(nanoseconds: 20_000_000)
+        XCTAssertEqual(audio.recoveries, 0)
+        audio.engineStopped = true
+        audio.audioError?(MiaAudioError.configurationChanged)
+        try await waitUntil { audio.recoveries == 1 }
+        XCTAssertEqual(voice.state, .listening)
+        XCTAssertNil(voice.errorMessage)
+        audio.saySomething()
+        try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+        XCTAssertEqual(connections, 1)
+        XCTAssertEqual(audio.rounds, 1)
+        XCTAssertNil(voice.errorMessage)
+    }
+
+    @MainActor
+    func testAudioRecoveryDuringPlaybackDiscardsOldAudioAndResumesOnSameConnection() async throws {
         let audio = ConversationAudioStub()
         let voice = session(audio: audio)
         defer { voice.disconnect() }
         await voice.beginConversation()
         try await waitUntil { voice.state == .listening }
-        let oldError = audio.audioError
-        oldError?(MiaAudioError.configurationChanged)
-        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
-        oldError?(MiaAudioError.configurationChanged)
         audio.saySomething()
         try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
-        XCTAssertEqual(audio.rounds, 2)
+        audio.engineStopped = true
+        audio.audioError?(MiaAudioError.configurationChanged)
+        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
+        audio.finishPlaying()
+        XCTAssertEqual(voice.state, .listening)
+        XCTAssertEqual(audio.interruptions, 1)
         XCTAssertNil(voice.errorMessage)
+        audio.saySomething()
+        try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+    }
+
+    @MainActor
+    func testUnrecoverableAudioStopsOnceWithoutReconnecting() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio)
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        audio.engineStopped = true
+        audio.recoveryFails = true
+        audio.audioError?(MiaAudioError.configurationChanged)
+        try await waitUntil { voice.state == .disconnected }
+        XCTAssertEqual(voice.errorMessage, MiaAudioError.captureRecoveryFailed.localizedDescription)
+        try await Task.sleep(nanoseconds: 1_200_000_000)
+        XCTAssertEqual(audio.rounds, 1)
+        XCTAssertFalse(voice.conversationActive)
+    }
+
+    @MainActor
+    func testBindingRecheckClearsOldActivationErrorBeforeReturningHome() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio)
+        let client = MiaXiaozhiClient()
+        var bound = false
+        voice.connectionProvider = {
+            try await client.discover(ota: "http://127.0.0.1:8770/ota/" + (bound ? "" : "?activation=1"),
+                                      websocket: "ws://127.0.0.1:8769/xiaozhi/v1/")
+        }
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        XCTAssertNotNil(voice.errorMessage)
+        XCTAssertNotNil(client.activationCode)
+        bound = true
+        try await voice.checkDeviceBinding()
+        XCTAssertNil(client.activationCode)
+        XCTAssertNil(voice.errorMessage)
+        XCTAssertEqual(client.status, "设备配置已就绪")
+        XCTAssertEqual(audio.rounds, 0)
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
     }
 
     @MainActor

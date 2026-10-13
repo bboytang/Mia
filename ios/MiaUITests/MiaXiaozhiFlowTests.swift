@@ -2,11 +2,12 @@ import XCTest
 import UIKit
 
 final class MiaXiaozhiFlowTests: XCTestCase {
-    private func launch() -> XCUIApplication {
+    private func launch(ota: String = "https://example.invalid/ota/",
+                        websocket: String = "wss://example.invalid/xiaozhi/v1/") -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-MiaDisableAutomaticConversation",
-                               "-mia.xiaozhi.otaURL", "https://example.invalid/ota/",
-                               "-mia.xiaozhi.websocketURL", "wss://example.invalid/xiaozhi/v1/"]
+                               "-mia.xiaozhi.otaURL", ota,
+                               "-mia.xiaozhi.websocketURL", websocket]
         app.launch()
         XCTAssertTrue(app.buttons["设置"].waitForExistence(timeout: 15))
         let ready = expectation(for: NSPredicate(format: "exists == false"),
@@ -42,5 +43,17 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         let code = app.descendants(matching: .any)["xiaozhi-activation-code"]
         XCTAssertTrue(code.waitForExistence(timeout: 5))
         XCTAssertEqual(code.value as? String, "123456")
+    }
+
+    func testBindingRecheckSuccessDoesNotShowOldActivationAlertOnHome() {
+        let app = launch(ota: "http://127.0.0.1:8770/ota/?activation_once=1",
+                         websocket: "ws://127.0.0.1:8769/xiaozhi/v1/")
+        app.buttons["开始说话"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(app.descendants(matching: .any)["xiaozhi-activation-code"].waitForExistence(timeout: 10))
+        app.buttons["检查设备绑定"].tap()
+        XCTAssertTrue(app.staticTexts["设备配置已就绪"].waitForExistence(timeout: 5))
+        app.buttons["完成"].tap()
+        XCTAssertTrue(app.buttons["开始说话"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.alerts["连接出错"].exists)
     }
 }

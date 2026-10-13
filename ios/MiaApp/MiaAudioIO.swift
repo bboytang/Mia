@@ -5,6 +5,7 @@ enum MiaAudioError: LocalizedError {
     case unsupportedAudioFormat
     case voiceProcessingUnavailable
     case configurationChanged
+    case captureRecoveryFailed
 
     var errorDescription: String? {
         switch self {
@@ -12,6 +13,7 @@ enum MiaAudioError: LocalizedError {
         case .unsupportedAudioFormat: "当前设备无法建立语音格式"
         case .voiceProcessingUnavailable: "当前音频设备无法启用语音处理，请尝试 iPhone 内置麦克风"
         case .configurationChanged: "音频设备发生变化，正在恢复对话"
+        case .captureRecoveryFailed: "无法恢复麦克风，请重新开始对话"
         }
     }
 }
@@ -23,6 +25,7 @@ protocol MiaConversationAudio: AnyObject {
                onAudioError: @escaping (Error) -> Void) throws
     func play(_ samples: [Int16], generation: UUID) throws
     func interruptPlayback()
+    func recoverConfiguration() throws -> Bool
     func stop()
     func takeFinalMicrophoneFrame() -> [Int16]?
     func beginMicrophoneCapture() -> UUID
@@ -158,6 +161,17 @@ final class MiaAudioIO: MiaConversationAudio {
         guard running else { return }
         player.stop()
         player.play()
+    }
+
+    func recoverConfiguration() throws -> Bool {
+        guard running, !engine.isRunning else { return false }
+        // Keep the active session and Voice Processing unit; rebuilding them retriggers route changes.
+        player.stop()
+        converter = nil
+        engine.prepare()
+        try engine.start()
+        player.play()
+        return true
     }
 
     func stop() {

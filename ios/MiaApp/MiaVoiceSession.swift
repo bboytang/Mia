@@ -84,6 +84,13 @@ final class MiaVoiceSession: ObservableObject {
         else { await beginConversation() }
     }
 
+    func checkDeviceBinding() async throws {
+        disconnect()
+        errorMessage = nil
+        guard let connectionProvider else { throw MiaConnectionError.invalidEndpoint }
+        _ = try await connectionProvider()
+    }
+
     func disconnect() {
         reconnectTask?.cancel()
         reconnectTask = nil
@@ -276,7 +283,7 @@ final class MiaVoiceSession: ObservableObject {
                                 onAudioError: { [weak self] error in
                                     Task { @MainActor in
                                         guard let self, self.connectionGeneration == connection else { return }
-                                        self.fail(error)
+                                        await self.handleAudioError(error)
                                     }
                                 })
                 self.audio = audio
@@ -300,6 +307,23 @@ final class MiaVoiceSession: ObservableObject {
             guard let self, self.connectionGeneration == connection,
                   self.conversationActive, self.state == .ready else { return }
             await self.startListening()
+        }
+    }
+
+    private func handleAudioError(_ error: Error) async {
+        guard let audioError = error as? MiaAudioError, case .configurationChanged = audioError else {
+            fail(error)
+            return
+        }
+        do {
+            guard let audio, try audio.recoverConfiguration() else { return }
+            if let generation = speechMonitorGeneration {
+                await interruptForSpeech(generation: generation)
+            }
+        } catch {
+            let detail = error as NSError
+            logger.error("Audio recovery failed: \(detail.domain, privacy: .public) / \(detail.code)")
+            fail(MiaAudioError.captureRecoveryFailed)
         }
     }
 
@@ -394,7 +418,6 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     nonisolated static func shouldReconnect(_ error: Error) -> Bool {
-        if let error = error as? MiaAudioError, case .configurationChanged = error { return true }
         if let error = error as? MiaConnectionError {
             switch error {
             case .serverClosed, .handshakeTimeout: return true

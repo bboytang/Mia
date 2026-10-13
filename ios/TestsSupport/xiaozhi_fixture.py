@@ -19,6 +19,9 @@ def valid_identity(headers):
     return bool(re.fullmatch(r"([0-9a-f]{2}:){5}[0-9a-f]{2}", headers.get("Device-Id", "")))
 
 
+activation_once = set()
+
+
 class OTA(BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass  # Requests contain identities; never log them.
@@ -45,8 +48,11 @@ class OTA(BaseHTTPRequestHandler):
         assert body.get("mac_address") == self.headers.get("Device-Id")
         assert body.get("uuid") == self.headers.get("Client-Id")
         result = {"websocket": {"url": "ws://127.0.0.1:8769/xiaozhi/v1/", "token": "fixture-only"}}
-        if "activation" in params:
+        device = self.headers.get("Device-Id")
+        if "activation" in params or ("activation_once" in params and device not in activation_once):
             result["activation"] = {"code": "123456"}
+            if "activation_once" in params:
+                activation_once.add(device)
         self.wfile.write(json.dumps(result).encode())
 
 

@@ -83,7 +83,7 @@ struct ContentView: View {
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .preferredColorScheme(.dark)
-        .sheet(isPresented: $showsSettings) {
+        .sheet(isPresented: $showsSettings, onDismiss: { startAutomatically() }) {
             MiaSettingsView(xiaozhi: xiaozhi, session: session)
         }
         .onAppear {
@@ -219,10 +219,9 @@ private struct MiaSettingsView: View {
                     }
                     Text(xiaozhi.status)
                     Button("检查设备绑定") {
-                        session.disconnect()
                         discoveryError = nil
                         Task {
-                            do { _ = try await xiaozhi.discover(ota: otaURL, websocket: serverURL) }
+                            do { try await session.checkDeviceBinding() }
                             catch { discoveryError = error.localizedDescription }
                         }
                     }
