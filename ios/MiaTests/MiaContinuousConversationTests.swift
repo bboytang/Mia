@@ -4,7 +4,6 @@ import XCTest
 private final class ConversationAudioStub: MiaConversationAudio {
     var microphone: (([Int16], UUID) -> Void)?
     var playback: ((Double, Float, UUID) -> Void)?
-    var speech: ((UUID) -> Void)?
     var audioError: ((Error) -> Void)?
     var capture = UUID()
     var rounds = 0
@@ -18,9 +17,8 @@ private final class ConversationAudioStub: MiaConversationAudio {
 
     func start(outputSampleRate: Int, onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
                onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
-               onSpeechActivity: @escaping (UUID) -> Void,
                onAudioError: @escaping (Error) -> Void) throws {
-        microphone = onMicrophoneFrame; playback = onPlaybackFrame; speech = onSpeechActivity
+        microphone = onMicrophoneFrame; playback = onPlaybackFrame
         audioError = onAudioError
     }
     func play(_ samples: [Int16], generation: UUID) throws { completions.append(generation) }
@@ -113,19 +111,19 @@ final class MiaContinuousConversationTests: XCTestCase {
     }
 
     @MainActor
-    func testInterruptingQueuedSentencesDiscardsOldCaptionCallbacks() async throws {
+    func testAudioRecoveryDiscardsOldCaptionCallbacks() async throws {
         let audio = ConversationAudioStub()
         let voice = session(audio: audio, endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/?subtitles=queued")
         defer { voice.disconnect() }
         await voice.beginConversation()
         try await waitUntil { voice.state == .listening }
-        let oldCapture = audio.capture
         audio.saySomething()
         try await waitUntil { audio.completions.count == 4 }
         let oldPacket = audio.finishPlaybackFrame()
         try await waitUntil { voice.caption == "第一句回复" }
 
-        audio.speech?(oldCapture)
+        audio.engineStopped = true
+        audio.audioError?(MiaAudioError.configurationChanged)
         try await waitUntil { voice.state == .listening && audio.rounds == 2 }
         XCTAssertEqual(voice.caption, "")
         audio.finishPlaying()
@@ -179,30 +177,64 @@ final class MiaContinuousConversationTests: XCTestCase {
     }
 
     @MainActor
-    func testVoiceInterruptDiscardsOldPlaybackAndSpeechCallbacks() async throws {
+    func testMicrophoneDuringReplyDoesNotInterruptOrUploadAndListeningResumes() async throws {
         let audio = ConversationAudioStub()
         let voice = session(audio: audio)
         defer { voice.disconnect() }
         await voice.beginConversation()
         try await waitUntil { voice.state == .listening }
-        let oldCapture = audio.capture
         audio.saySomething()
         try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
-        audio.speech?(oldCapture)
-        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
-        XCTAssertEqual(audio.interruptions, 1)
-        XCTAssertEqual(voice.caption, "")
-        audio.finishPlaying()
-        audio.speech?(oldCapture)
+        let captured = voice.microphoneFrames
+        let uploaded = voice.uploadedFrames
+        XCTAssertTrue(audio.muted)
+        // Simulate late microphone callbacks even though the input is muted.
+        audio.microphone?([Int16](repeating: .max, count: 960), audio.capture)
+        audio.saySomething()
         try await Task.sleep(nanoseconds: 100_000_000)
-        XCTAssertEqual(audio.rounds, 2)
-        XCTAssertEqual(voice.state, .listening)
+        XCTAssertEqual(voice.state, .speaking)
+        XCTAssertEqual(audio.interruptions, 0)
+        XCTAssertEqual(audio.rounds, 1)
+        XCTAssertEqual(voice.microphoneFrames, captured)
+        XCTAssertEqual(voice.uploadedFrames, uploaded)
+        audio.finishPlaying()
+        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
+        XCTAssertFalse(audio.muted)
         audio.saySomething()
         try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
         XCTAssertNil(voice.errorMessage)
-        XCTAssertEqual(voice.state, .speaking)
+        await voice.toggleTalk()
+        XCTAssertEqual(voice.state, .disconnected)
+        XCTAssertTrue(audio.stopped)
         audio.finishPlaying()
-        try await waitUntil { voice.state == .listening && audio.rounds == 3 }
+        audio.saySomething()
+        try await Task.sleep(nanoseconds: 50_000_000)
+        XCTAssertEqual(voice.state, .disconnected)
+        XCTAssertEqual(voice.caption, "")
+    }
+
+    @MainActor
+    func testMicrophoneWhileThinkingDoesNotRestartListeningOrUpload() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio, endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/?thinking=delayed")
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        audio.saySomething()
+        try await waitUntil { voice.state == .waiting }
+        let captured = voice.microphoneFrames
+        let uploaded = voice.uploadedFrames
+        XCTAssertTrue(audio.muted)
+        audio.saySomething()
+        try await Task.sleep(nanoseconds: 100_000_000)
+        XCTAssertEqual(voice.state, .waiting)
+        XCTAssertEqual(audio.interruptions, 0)
+        XCTAssertEqual(audio.rounds, 1)
+        XCTAssertEqual(voice.microphoneFrames, captured)
+        XCTAssertEqual(voice.uploadedFrames, uploaded)
+        try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
+        audio.finishPlaying()
+        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
     }
 
     @MainActor
@@ -346,7 +378,7 @@ final class MiaContinuousConversationTests: XCTestCase {
     }
 
     @MainActor
-    func testSpeechOnsetIsBufferedWhileInterruptResumesListening() async throws {
+    func testSpeechOnsetIsBufferedWhileAudioRecoveryResumesListening() async throws {
         let audio = ConversationAudioStub()
         var permissionCalls = 0
         var resume: CheckedContinuation<Bool, Never>?
@@ -366,7 +398,8 @@ final class MiaContinuousConversationTests: XCTestCase {
         try await waitUntil { voice.state == .listening }
         audio.saySomething()
         try await waitUntil { voice.state == .speaking && !audio.completions.isEmpty }
-        audio.speech?(audio.capture)
+        audio.engineStopped = true
+        audio.audioError?(MiaAudioError.configurationChanged)
         try await waitUntil { resume != nil }
         XCTAssertFalse(audio.muted)
         audio.saySomething()

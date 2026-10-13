@@ -21,7 +21,6 @@ enum MiaAudioError: LocalizedError {
 protocol MiaConversationAudio: AnyObject {
     func start(outputSampleRate: Int, onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
                onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
-               onSpeechActivity: @escaping (UUID) -> Void,
                onAudioError: @escaping (Error) -> Void) throws
     func play(_ samples: [Int16], generation: UUID) throws
     func interruptPlayback()
@@ -62,27 +61,19 @@ final class MiaAudioIO: MiaConversationAudio {
     func start(outputSampleRate: Int,
                onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
                onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
-               onSpeechActivity: @escaping (UUID) -> Void,
                onAudioError: @escaping (Error) -> Void) throws {
         guard !running else { return }
         let audioSession = AVAudioSession.sharedInstance()
+        // Allow media-only Bluetooth outputs as well as hands-free headsets.
         try audioSession.setCategory(.playAndRecord, mode: .voiceChat,
-                                     options: [.defaultToSpeaker, .allowBluetooth])
+                                     options: [.allowBluetooth, .allowBluetoothA2DP])
         try audioSession.setActive(true)
 
         let input = engine.inputNode
         do {
             try input.setVoiceProcessingEnabled(true)
-            guard input.isVoiceProcessingEnabled,
-                  input.setMutedSpeechActivityEventListener({ [weak self] event in
-                      guard event == .started, let self else { return }
-                      self.inputLock.lock()
-                      let generation = self.captureGeneration
-                      self.inputLock.unlock()
-                      onSpeechActivity(generation)
-                  }) else { throw MiaAudioError.voiceProcessingUnavailable }
+            guard input.isVoiceProcessingEnabled else { throw MiaAudioError.voiceProcessingUnavailable }
         } catch {
-            input.setMutedSpeechActivityEventListener(nil)
             try? audioSession.setActive(false)
             throw error
         }
@@ -92,7 +83,6 @@ final class MiaAudioIO: MiaConversationAudio {
               let outputFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
                                                sampleRate: Double(outputSampleRate), channels: 1,
                                                interleaved: false) else {
-            input.setMutedSpeechActivityEventListener(nil)
             try? audioSession.setActive(false)
             throw MiaAudioError.unsupportedAudioFormat
         }
@@ -114,11 +104,15 @@ final class MiaAudioIO: MiaConversationAudio {
         do {
             engine.prepare()
             try engine.start()
+            // Use speakerphone only for the built-in receiver route. Accessory route
+            // changes clear this temporary override, unlike defaultToSpeaker.
+            if audioSession.currentRoute.outputs.contains(where: { $0.portType == .builtInReceiver }) {
+                try audioSession.overrideOutputAudioPort(.speaker)
+            }
             player.play()
             running = true
         } catch {
             input.removeTap(onBus: 0)
-            input.setMutedSpeechActivityEventListener(nil)
             self.converter = nil
             self.onMicrophoneFrame = nil
             self.onPlaybackFrame = nil
@@ -179,7 +173,6 @@ final class MiaAudioIO: MiaConversationAudio {
         if let configurationObserver { NotificationCenter.default.removeObserver(configurationObserver) }
         configurationObserver = nil
         engine.inputNode.removeTap(onBus: 0)
-        engine.inputNode.setMutedSpeechActivityEventListener(nil)
         player.stop()
         engine.stop()
         inputLock.lock()

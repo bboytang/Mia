@@ -84,7 +84,7 @@ struct ContentView: View {
         switch session.state {
         case .listening: return "在听"
         case .waiting: return "想一想"
-        case .speaking: return "开口可打断"
+        case .speaking: return "Mia 正在回答"
         default: return "待呼叫"
         }
     }

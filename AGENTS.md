@@ -74,6 +74,7 @@ The build script changes local `sdkconfig` and build state. Do not assume the bu
 
 ## Validation
 
+- Run all automated tests and builds on GitHub Actions, as requested by the user. Use results for the exact changed commit and report the workflow/run link; local toolchain availability is not a reason to leave GitHub verification undone. Physical-device validation remains separate.
 - Board-only change: build affected variants and smoke-test changed hardware.
 - Core, common-board, audio, protocol, display, dependency, Kconfig, or CMake change: run host tests and build representative affected chip/network paths.
 - Protocol changes: verify WebSocket and MQTT/UDP when shared behavior changes.

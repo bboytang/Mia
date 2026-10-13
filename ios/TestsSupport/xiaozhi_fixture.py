@@ -97,9 +97,10 @@ async def websocket(ws):
 
     async def automatic_response(packet):
         await asyncio.sleep(.1)
-        for message in [{"type": "stt", "text": "用户识别文本"},
-                        {"type": "tts", "state": "start"}]:
-            await ws.send(json.dumps(message))
+        await ws.send(json.dumps({"type": "stt", "text": "用户识别文本"}))
+        if params.get("thinking") == ["delayed"]:
+            await asyncio.sleep(.5)
+        await ws.send(json.dumps({"type": "tts", "state": "start"}))
         sentences = ["第一句回复", "下一句回复"] if queued_subtitles else ["Mia 自动回复"]
         for index, text in enumerate(sentences):
             sentence = {"type": "tts", "state": "sentence_start", "text": text}

@@ -191,3 +191,18 @@
 - 发现测试型号TTS_HuoshanDoubleStreamTTS使用seed-tts-2.0但27条声音多数是旧版编码；既有TTS_HSDSTTS_V2型号已启用、含40条兼容音色，但appid/access_token仍是占位。备份原配置到同目录 `backup/tts-v2-original-config.json`（600），仅将这两项字段复用现有有效配置，其他参数逐项保持，删除目标型号配置/名称缓存，不改当前智能体的Vivi选择。
 - 独立TTS探针初次缺Opus编码器初始化而失败，补全探针后真实湾湾小何返回50个Opus包/7845字节、阳光青年46个包/7199字节；生产TTS源码未改。其余38种未逐一合成，实际iPhone播放仍待用户切换验证。按官方接口，seed-tts-2.0需匹配2.0音色。
 - 用户操作：进入绑定Mia设备的智能体配置，将TTS选为“豆包语音合成2.0(流式)”，选对话语言和“声音音色(Voice)”，保存后在Mia结束并重新开聊。无需新IPA；记忆通过App“设置→记忆与成长”管理。已更新部署指南、实施计划和交接；长期记忆质量/后台唤醒等原真机待验项保持。
+
+## 2026-10-13：蓝牙耳机播放路由配置补丁（未编译、真机待验）
+
+- 用户反馈其他应用能通过蓝牙耳机播放，但Mia语音从手机扬声器输出。检查发现Mia的playAndRecord会话仅启用allowBluetooth（HFP），未启用allowBluetoothA2DP；这是已确认的配置缺口，尚不能确认是当前耳机问题的唯一根因。
+- MiaAudioIO新增allowBluetoothA2DP，允许蓝牙媒体输出；保留既有HFP、voiceChat、Voice Processing及无耳机时的扬声器默认行为。Apple文档说明同时支持HFP/A2DP的设备仍优先HFP：https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/allowbluetootha2dp 。不强制选择输入设备或反复重建音频会话。
+- 本地Linux无Swift/Xcode，无法运行iOS编译及XCTest；仅完成差异与空白检查，未生成新IPA。需macOS原生编译/测试，再用用户的耳机确认已连接后开始对话的播放、录音、打断、对话中连接耳机后的引擎恢复、断开耳机时安全停止，以及无耳机外放。voiceChat/Voice Processing与具体耳机路由兼容性仍待真机确认。
+
+## 2026-10-13：取消语音打断、补充蓝牙路由修复（原生编译、真机待验）
+
+- 用户先选择仅本人声音打断、本地声纹，随后明确取消打断功能；后者为当前要求。撤销本轮临时添加的FluidAudio依赖，未增加声纹模型、录入页面、存储或上传。
+- 移除静音语音活动监听、音频接口的onSpeechActivity与会话的语音打断入口；思考/回答时沿用Voice Processing输入静音、暂停PCM上传，实际播放完后继续聆听。首页和会话状态不再提示开口打断。点小球结束、系统中断停止及音频配置恢复保留；恢复时仍需清空失效播放并通知服务端abort，与声音触发无关。
+- 保留原工作区allowBluetoothA2DP补丁；移除会话defaultToSpeaker，仅当前输出为内置听筒时使用临时speaker override。Apple当前[选项文档](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/defaulttospeaker)与归档[QA1754](https://developer.apple.com/library/archive/qa/qa1754/_index.html)对defaultToSpeaker是否尊重耳机手势的表述不同，因此不认定它是已证实的唯一根因。临时override由路由变化清除，具体voiceChat/Voice Processing与耳机兼容性仍须真机验收。
+- 更新原生回归覆盖回答期间迟到/高音量输入不打断、不上传，播完恢复，手动结束后旧输入/播放回调失效；新增延迟思考夹具与等待期间不打断回归。旧语音打断测试改用真实音频配置恢复入口，继续检查字幕/表情的旧回调隔离及恢复时首句缓冲。
+- 已通过Python夹具语法检查、普通/多句回复各两轮回环消息顺序回归，以及延迟思考两轮回归（STT后至少400ms才收到TTS）；原生XCTest/模拟器及设备编译无法在本地Linux运行（无Swift/Xcode）。未生成新IPA，未推送、发布或修改生产服务。需macOS完成上述测试，再用实际耳机检查开始对话前已连接、对话中连接、断开停止、无耳机外放、思考/回答不被声音打断及回答后继续聆听。
+- 用户随后要求今后所有测试和构建在GitHub进行，已写入AGENTS.md；本次音频改动也提交当前开发分支并用Build iOS App工作流验证，结果待核对后补记。上述本地验证为此前历史，不替代GitHub原生测试、构建与打包。

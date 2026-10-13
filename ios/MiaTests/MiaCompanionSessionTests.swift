@@ -4,7 +4,8 @@ import XCTest
 private final class CompanionAudioStub: MiaConversationAudio {
     var microphone: (([Int16], UUID) -> Void)?
     var playback: ((Double, Float, UUID) -> Void)?
-    var speech: ((UUID) -> Void)?
+    var audioError: ((Error) -> Void)?
+    var engineStopped = false
     var capture = UUID()
     var starts = 0
     var rounds = 0
@@ -12,14 +13,18 @@ private final class CompanionAudioStub: MiaConversationAudio {
 
     func start(outputSampleRate: Int, onMicrophoneFrame: @escaping ([Int16], UUID) -> Void,
                onPlaybackFrame: @escaping (Double, Float, UUID) -> Void,
-               onSpeechActivity: @escaping (UUID) -> Void,
                onAudioError: @escaping (Error) -> Void) throws {
         starts += 1
-        microphone = onMicrophoneFrame; playback = onPlaybackFrame; speech = onSpeechActivity
+        microphone = onMicrophoneFrame; playback = onPlaybackFrame
+        audioError = onAudioError
     }
     func play(_ samples: [Int16], generation: UUID) throws { packets.append(generation) }
     func interruptPlayback() { }
-    func recoverConfiguration() throws -> Bool { false }
+    func recoverConfiguration() throws -> Bool {
+        guard engineStopped else { return false }
+        engineStopped = false
+        return true
+    }
     func stop() { }
     func takeFinalMicrophoneFrame() -> [Int16]? { nil }
     func beginMicrophoneCapture() -> UUID { capture = UUID(); rounds += 1; return capture }
@@ -95,18 +100,18 @@ final class MiaCompanionSessionTests: XCTestCase {
     }
 
     @MainActor
-    func testInterruptionDiscardsExpressionsAndLatePlaybackCallbacks() async throws {
+    func testAudioRecoveryDiscardsExpressionsAndLatePlaybackCallbacks() async throws {
         let audio = CompanionAudioStub()
         let voice = session(audio: audio, query: "?subtitles=queued")
         defer { voice.disconnect() }
         await voice.beginConversation()
         try await waitUntil { voice.state == .listening }
-        let capture = audio.capture
         audio.saySomething()
         try await waitUntil { audio.packets.count == 4 }
         audio.finishPacket()
         try await waitUntil { voice.expression.emotion == .happy }
-        audio.speech?(capture)
+        audio.engineStopped = true
+        audio.audioError?(MiaAudioError.configurationChanged)
         try await waitUntil { voice.state == .listening && audio.rounds == 2 }
         XCTAssertEqual(voice.expression.emotion, .calm)
         let late = try XCTUnwrap(audio.finishPacket())

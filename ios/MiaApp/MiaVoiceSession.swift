@@ -8,9 +8,9 @@ final class MiaVoiceSession: ObservableObject {
         case disconnected = "未连接"
         case connecting = "正在连接"
         case ready = "点击开始说话"
-        case waiting = "Mia 正在思考，开口可打断"
+        case waiting = "Mia 正在思考"
         case listening = "正在聆听，说完会自动回答"
-        case speaking = "Mia 正在回答，开口可打断"
+        case speaking = "Mia 正在回答"
     }
 
     @Published private(set) var state: State = .disconnected
@@ -33,7 +33,6 @@ final class MiaVoiceSession: ObservableObject {
     @Published private(set) var conversationActive = false
     @Published private(set) var allowsAutomaticStart = true
     private var listeningTask: Task<Void, Never>?
-    private var speechMonitorGeneration: UUID?
     private var sendGeneration = UUID()
     private var acceptsReply = false
     private let makeAudio: () -> any MiaConversationAudio
@@ -107,7 +106,6 @@ final class MiaVoiceSession: ObservableObject {
         conversationActive = false
         listeningTask?.cancel()
         listeningTask = nil
-        speechMonitorGeneration = nil
         acceptsReply = false
         sendGeneration = UUID()
         handshakeTimeout?.cancel()
@@ -308,12 +306,6 @@ final class MiaVoiceSession: ObservableObject {
                                         self?.playbackAdvanced(level: level, frameID: generation)
                                     }
                                 },
-                                onSpeechActivity: { [weak self] generation in
-                                    Task { @MainActor in
-                                        guard let self, self.connectionGeneration == connection else { return }
-                                        await self.interruptForSpeech(generation: generation)
-                                    }
-                                },
                                 onAudioError: { [weak self] error in
                                     Task { @MainActor in
                                         guard let self, self.connectionGeneration == connection else { return }
@@ -326,7 +318,6 @@ final class MiaVoiceSession: ObservableObject {
             guard self.transport === transport else { return }
             audioLevel = 0
             acceptsReply = false
-            speechMonitorGeneration = nil
             sendGeneration = UUID()
             if microphoneGeneration == nil { microphoneGeneration = audio?.beginMicrophoneCapture() }
             state = .listening
@@ -351,8 +342,8 @@ final class MiaVoiceSession: ObservableObject {
         }
         do {
             guard let audio, try audio.recoverConfiguration() else { return }
-            if let generation = speechMonitorGeneration {
-                await interruptForSpeech(generation: generation)
+            if state == .speaking || state == .waiting {
+                await resumeAfterAudioRecovery()
             }
         } catch {
             let detail = error as NSError
@@ -362,8 +353,7 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     private func pauseForReply() {
-        if let generation = microphoneGeneration {
-            speechMonitorGeneration = generation
+        if microphoneGeneration != nil {
             _ = audio?.takeFinalMicrophoneFrame()
             microphoneGeneration = nil
         }
@@ -374,10 +364,9 @@ final class MiaVoiceSession: ObservableObject {
         audioLevel = 0
     }
 
-    private func interruptForSpeech(generation: UUID) async {
-        guard conversationActive, speechMonitorGeneration == generation,
+    private func resumeAfterAudioRecovery() async {
+        guard conversationActive,
               state == .speaking || state == .waiting, let current = transport else { return }
-        speechMonitorGeneration = nil
         acceptsReply = false
         replyTimeout?.cancel()
         pendingPlaybackFrames.removeAll()
@@ -388,7 +377,7 @@ final class MiaVoiceSession: ObservableObject {
         audioLevel = 0
         resetExpression()
         state = .ready
-        // Capture the new utterance while abort/listen control waits on the network.
+        // Resume capture while abort/listen control waits on the network after recovery.
         microphoneGeneration = audio?.beginMicrophoneCapture()
         do {
             try await current.abort(sessionID: sessionID)
