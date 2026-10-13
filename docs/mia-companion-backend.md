@@ -47,14 +47,14 @@ python3 -m server.companion.install_xiaozhi /path/to/xiaozhi-esp32-server --appl
 响应：`{"type":"mia_memory","request_id":"UUID","result":{"memories":[],"paused":false,"personality":{"version":0,"traits":[]}}}`；错误为 error 对象，不回显凭据。
 App 管理回复上限1MiB，记录最多200条，每条内容/来源512字；普通协议消息仍64KiB。
 
-自动提炼每十轮或结束时执行；“记住：…”提前触发本轮 checkpoint。“这段别记”暂停本会话提炼；“忘掉关于…的记忆”只在唯一匹配时删除，模糊的“忘掉这件事”先澄清，不能虚称已删除。
+自动提炼每十轮或结束时执行；“记住：…”、“请记住……”和“米娅，请记住……”提前触发本轮 checkpoint。“这段别记”暂停本会话提炼；“忘掉关于…的记忆”只在唯一匹配时删除，模糊的“忘掉这件事”先澄清，不能虚称已删除。
 敏感候选在 App 中确认后才用于检索/成长。App 删除清理当前数据库与衍生依据；旧服务器备份需管理员另行处理。
 
 ## 2026-10-13 实际部署状态
 
 `root@43.143.230.174`，目录 `/opt/xiaozhi-server`。现有设备认证与manager绑定查询保留。原Python源码和Java目标class核对一致；原Java完整构建与生产class一致，补丁再次完整构建后仅替换原JAR目标class，保留其他配置/依赖/迁移文件。
 
-运行镜像 `mia-xiaozhi-server:companion-40c715d`、`mia-xiaozhi-web:companion-0d9a7cf`。握手后管理有限等待初始化，兼容完整JSON代码块，无证据性格不成长。完整81项CI成功，真实管理/模型保存/删除、三情绪、ASR/VAD/TTS及重启持久验证通过。
+运行镜像 `mia-xiaozhi-server:companion-memory-2d153d4`、`mia-xiaozhi-web:companion-0d9a7cf`。自然记忆口令补丁已部署，完整83项服务端回归通过；真实自然口令在当前连接结束前保存、重连读取及 provider 检索通过，临时记录已删除，原有9条记忆保留。此前已验证管理/删除、三情绪、ASR/VAD/TTS及重启持久化。
 
 维护启动须使用三份文件，避免遗漏Mia覆盖：
 
@@ -71,3 +71,15 @@ docker compose -f docker-compose_all.yml -f docker-compose.lowmem.yml -f mia-dep
 ```
 
 回滚不删除SQLite或绑定；重新部署使用上方Mia覆盖。沿用原模型供应商，长期提炼准确率、成本和成长质量仍需观察，后台/锁屏与系统口令需iPhone真机验收。
+
+## 自然记忆补丁与音色选择（2026-10-13）
+
+补丁部署目录 `/opt/xiaozhi-server/mia-memory-natural-20261013-2d153d4`，`backup` 保存部署前 Compose、适配器和 SQLite backup API 热备。新镜像以 `companion-40c715d` 为父镜像，仅替换适配器；管理后台、MySQL、Redis及其他Python源码不变。回滚这次记忆补丁时，使用该目录 `backup/docker-compose.mia.yml` 作为第三份 Compose 覆盖，只重建 `xiaozhi-esp32-server`，不恢复旧SQLite覆盖现有记忆。
+
+绑定设备的服务端配置仍为 `Memory_nomem`。这是小智原生记忆提供者的选择；Mia根据服务端认证归属另行初始化自己的提供者，并覆盖原生提供者。因此使用Mia记忆无需将截图中的“记忆模式”改为本地短期记忆、Mem0AI或PowerMem。Mia App的“设置→记忆与成长”管理记录、敏感确认和暂停状态。
+
+当前测试智能体仍选用 `TTS_HuoshanDoubleStreamTTS` / Vivi，App未写死音色。这个测试型号资源是 `seed-tts-2.0`，但其27条音色多数仍为旧版编码。自由选择时，应在绑定Mia设备的智能体配置里将“语音合成(TTS)”切换为“豆包语音合成2.0(流式)”（`TTS_HSDSTTS_V2`），再选择对话语言和“声音音色(Voice)”，保存配置，然后在Mia结束并重新开始对话。
+
+后台已有该2.0型号的40条音色。其appid/access_token原为占位内容，本次仅复用现有有效型号的两项凭据，保留其他参数及当前智能体选择；原配置备份为 `backup/tts-v2-original-config.json`（权限600），已按上游缓存规则删除该型号的配置/名称缓存。无需新密钥或重装App。
+
+真实2.0合成验证：湾湾小何返回50个Opus包/7845字节；阳光青年返回46个Opus包/7199字节。其他38种未逐一合成，也未验收iPhone播放。2.0资源应使用2.0音色，见[火山双向流式接口](https://docs.volcengine.com/docs/DoubaoVoice/WebSocketBidirectionalStreaming-V3?lang=zh)。缺少所需音色时，可在“模型配置→语音合成→对应型号的音色管理”添加官方兼容编码，再回智能体选择；只改模型默认speaker不会覆盖智能体已选的private_voice。

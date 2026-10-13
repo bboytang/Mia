@@ -181,3 +181,13 @@
 - cb07db038e4d05d6f35413a2c5758ca43b23b645的CI38447444188第一次：91单元、新皮肤选择/重启UI及其他三UI通过，唯一原有绑定UI测试在launch阶段进程ID未及时建立；随后同代码第二次完整复核成功，91单元/5UI、模拟器/真机/扩展编译、快捷动作打包、两个尺寸新皮肤截图录屏全部通过。没有通过改断言或业务代码掩盖启动失败。
 - 下载实际IPA验证ZIP/校验、Asset.car内两个皮肤名称、Widget及可发现后台开始动作；未包含ForegroundContinuable。两个尺寸实际截图已查看，无明显裁切，保存design/mia-holographic-home-cb07db0.jpg及secondary版。实际输入/播放嘴形及耳环幅度、长期帧率/发热/耗电、后台交接与误触发频率仍需真机；不将模拟器零输入录屏当作麦克风联调。
 - 标签mia-ios-cb07db038e4d及独立IPA分发CI38453438889成功，直接链接 https://github.com/bboytang/Mia/releases/download/mia-ios-cb07db038e4d/Mia-unsigned.ipa ，10,778,899字节，SHA256 0d343cdeda7eb0168aebbe5eeb8fc3b7dbe863f1c8547d4232d4ab4dbda23aba。本次无生产服务/数据库/绑定改动，记忆补丁部署状态保持原记录。
+
+## 2026-10-13：自然记忆补丁部署与自由选择音色
+
+- 用户明确要求部署记忆补丁，并询问小智记忆模式和音色切换。工作树开始为空，核对线上适配器与本地只有自然“请记住……”的正则差异；当前绑定设备配置为Memory_nomem，但服务端认证归属正常，Mia独立提供者覆盖原生记忆，无需改该下拉框。
+- 部署前SQLite backup API热备、integrity_check通过，已有9条记忆；原Compose、适配器、热备留在 `/opt/xiaozhi-server/mia-memory-natural-20261013-2d153d4/backup`。离线构建父镜像40c715d的单文件补丁镜像 `mia-xiaozhi-server:companion-memory-2d153d4`，运行文件SHA256为 `67c404c5fb78e876f227a2f15d0f374adb7104cd2639fb7b7ac40e082e200a3d`。只重建Python语音服务，web/MySQL/Redis不重启。
+- 普通Python缺依赖，受限环境的线程/本机通信测试停滞；改用既有.venv在允许通信的环境运行，34项记忆核心/适配测试与完整83项服务端回归通过（25.131秒）。停滞的三个重复测试进程已清理，不将其记作通过。
+- 第一次真实探针收到66个语音包，但连接内等待列表超时，关闭连接后确认标记已保存、provider检索通过并清理；未将该次记作本轮即时保存成功。第二次自然“米娅，请记住……”探针收到136个语音包，在连接结束前保存1条，独立重连读取及实际MiaMemoryProvider检索通过。两个探针均仅删除各自新增且唯一标记匹配的记录；最终原有9条ID保留，SQLite integrity_check通过。未使用iPhone麦克风。
+- 发现测试型号TTS_HuoshanDoubleStreamTTS使用seed-tts-2.0但27条声音多数是旧版编码；既有TTS_HSDSTTS_V2型号已启用、含40条兼容音色，但appid/access_token仍是占位。备份原配置到同目录 `backup/tts-v2-original-config.json`（600），仅将这两项字段复用现有有效配置，其他参数逐项保持，删除目标型号配置/名称缓存，不改当前智能体的Vivi选择。
+- 独立TTS探针初次缺Opus编码器初始化而失败，补全探针后真实湾湾小何返回50个Opus包/7845字节、阳光青年46个包/7199字节；生产TTS源码未改。其余38种未逐一合成，实际iPhone播放仍待用户切换验证。按官方接口，seed-tts-2.0需匹配2.0音色。
+- 用户操作：进入绑定Mia设备的智能体配置，将TTS选为“豆包语音合成2.0(流式)”，选对话语言和“声音音色(Voice)”，保存后在Mia结束并重新开聊。无需新IPA；记忆通过App“设置→记忆与成长”管理。已更新部署指南、实施计划和交接；长期记忆质量/后台唤醒等原真机待验项保持。
