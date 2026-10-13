@@ -1,6 +1,6 @@
 # Mia 升级交接
 
-更新：2026-10-13。主入口：[批准方案](mia-companion-plan.md)、[分步计划](mia-companion-implementation.md)、[工作记录](mia-companion-worklog.md)。
+更新：2026-10-14。主入口：[批准方案](mia-companion-plan.md)、[分步计划](mia-companion-implementation.md)、[工作记录](mia-companion-worklog.md)。
 
 ## 用户已确定
 
@@ -11,7 +11,9 @@
 
 ## 当前进度
 
-最新音频包：[440f9ed IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-440f9ede6351/Mia-unsigned.ipa)，10,777,871字节，含蓝牙媒体输出/路由调整及取消语音打断，不增加声纹；实际播放完成后继续聆听，点小球仍可结束。GitHub构建38473856782通过92单元/5UI、模拟器/设备编译与扩展打包；发布38477642148通过校验和回下载比对。需同时重签App与MiaActivity.appex；用户实际耳机播放及无打断行为尚待真机确认。之后测试和构建统一在GitHub Actions进行。
+最新音频包：[717e2b1 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-717e2b119001/Mia-unsigned.ipa)，10,792,848字节。用户确认440f9ed仍外放；本版去掉已无打断需求的voiceChat/Voice Processing，启动时清除外放override，并在输出仍为手机且有HFP/LE耳机时选择耳机输入；保留既选A2DP/有线/USB路由。设置提供实际输入/输出、系统路由选择器、最近识别文本和丢帧计数。GitHub构建38479760899通过94单元/5UI、模拟器/设备与扩展编译；发布38485671232通过校验和回下载比对。需同时重签App与MiaActivity.appex；苹果耳机输出、降噪、后台和播完恢复聆听仍须真机，不能再据CI成功断言蓝牙问题已解决。所有自动化测试/构建在GitHub进行。
+
+歌曲误播：用户请求张学友《偷心》，生产日志确认ASR和工具参数正确，实际三首本地歌曲中没有偷心；旧插件匹配失败会随机换歌。6f78f48音乐补丁的CI38480040295通过90项回归，用户批准后只读挂载到现有语音镜像并仅重建语音服务；插件校验/运行和零启动错误已核对。缺歌或歧义提示不可用，不再替换，明确随机请求保留；未新增音乐源或获取偷心。备份/回滚目录mia-music-6f78f48，原三份Compose继续适用，详见[部署指南](mia-companion-backend.md)。实际缺歌语音提示仍待用户验收，不把本例识别正确概括为所有ASR均准确。
 
 最新服务端：用户要求部署自然记忆补丁，已将Python更新为 `mia-xiaozhi-server:companion-memory-2d153d4`。83项服务端测试通过，真实“米娅，请记住……”无需冒号，在本轮结束前保存、重连读取和实际provider检索通过，测试记录清理后原有9条记忆保留。热备/回滚目录 `mia-memory-natural-20261013-2d153d4`。无需在小智管理页面改变 `Memory_nomem`；Mia认证记忆独立启用。
 

@@ -83,3 +83,13 @@ docker compose -f docker-compose_all.yml -f docker-compose.lowmem.yml -f mia-dep
 后台已有该2.0型号的40条音色。其appid/access_token原为占位内容，本次仅复用现有有效型号的两项凭据，保留其他参数及当前智能体选择；原配置备份为 `backup/tts-v2-original-config.json`（权限600），已按上游缓存规则删除该型号的配置/名称缓存。无需新密钥或重装App。
 
 真实2.0合成验证：湾湾小何返回50个Opus包/7845字节；阳光青年返回46个Opus包/7199字节。其他38种未逐一合成，也未验收iPhone播放。2.0资源应使用2.0音色，见[火山双向流式接口](https://docs.volcengine.com/docs/DoubaoVoice/WebSocketBidirectionalStreaming-V3?lang=zh)。缺少所需音色时，可在“模型配置→语音合成→对应型号的音色管理”添加官方兼容编码，再回智能体选择；只改模型默认speaker不会覆盖智能体已选的private_voice。
+
+## 指定歌曲缺失时不再换歌（2026-10-14）
+
+用户请求张学友《偷心》，生产ASR与工具日志显示识别正确，但本地曲库仅三首歌且没有《偷心》。v0.9.7插件会在匹配失败时随机播放；本次修复为仅唯一准确匹配才播放，指定歌手保留歌手-歌名，缺歌/歧义明确返回不可用，明确随机播放仍保留。未接入新音乐源或下载歌曲，不能声称已经能播放《偷心》。
+
+源码补丁入口为 `python -m server.companion.install_music /path/to/play_music.py --check` 或 `--apply`；严格校验原始v0.9.7的SHA256并保留原文件，不覆盖自定义插件。GitHub [服务端回归](https://github.com/bboytang/Mia/actions/runs/38480040295)的90项测试通过，产物为已打补丁的完整插件。
+
+用户在部署方案明确说明后回复“继续”，已备份并将该GitHub产物只读挂载到语音容器，保留原镜像 `mia-xiaozhi-server:companion-memory-2d153d4`。插件路径 `/opt/xiaozhi-server/mia-music-6f78f48/play_music.py`，SHA256 `6fe21451135ceb3cad6131a99e60a9cb1eee042bab4b3006cab954ee62b4ead5`；`docker-compose.mia.yml`增加单文件挂载，原三份Compose启动命令继续适用。只重建Python语音容器，web/MySQL/Redis不重启，数据卷与记忆保留；容器运行、挂载/校验值和无启动错误已核对，用户实际音乐请求仍待验。
+
+备份在同目录 `backup/`，包含原插件和原 `docker-compose.mia.yml`。回滚时恢复后者，再用原三份Compose仅重建语音服务；移除挂载后恢复原镜像插件，无需覆盖记忆数据库。所有自动化回归和产物生成在GitHub进行，本次服务器未进行镜像构建。
