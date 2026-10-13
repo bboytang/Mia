@@ -48,10 +48,11 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         }
         XCTAssertTrue(entry.waitForExistence(timeout: 5))
         entry.tap()
+        XCTAssertTrue(app.navigationBars["个性化皮肤"].waitForExistence(timeout: 5))
         let skin = app.buttons["mia-skin-holographic"]
         XCTAssertTrue(skin.waitForExistence(timeout: 5))
         skin.tap()
-        XCTAssertEqual(skin.value as? String, "已选")
+        XCTAssertTrue(skin.isSelected)
         app.terminate()
         app.launch()
         let avatar = app.buttons["mia-avatar"]

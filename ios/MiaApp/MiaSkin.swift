@@ -54,12 +54,13 @@ struct MiaSkinView: View {
                         Spacer(minLength: 0)
                         if skin == candidate { Image(systemName: "checkmark.circle.fill").foregroundStyle(.cyan) }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(candidate.title)
+                    .accessibilityValue(skin == candidate ? "已选" : "未选")
+                    .accessibilityAddTraits(skin == candidate ? [.isButton, .isSelected] : .isButton)
+                    .accessibilityIdentifier("mia-skin-" + candidate.rawValue)
                 }
                 .buttonStyle(.plain)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(candidate.title)
-                .accessibilityValue(skin == candidate ? "已选" : "未选")
-                .accessibilityIdentifier("mia-skin-" + candidate.rawValue)
             }
             Section {
                 Text("选择后立即应用，下次打开 Mia 也会保留。")
