@@ -1,0 +1,57 @@
+import XCTest
+@testable import Mia
+
+final class MiaActivityTests: XCTestCase {
+    func testStandbyDoesNotClaimMiaIsListening() throws {
+        XCTAssertEqual(MiaActivityAttributes.Phase.standby.title, "待呼叫")
+        XCTAssertNotEqual(MiaActivityAttributes.Phase.standby.symbol, "mic.fill")
+        let state = MiaActivityAttributes.ContentState(phase: .standby)
+        let decoded = try JSONDecoder().decode(MiaActivityAttributes.ContentState.self,
+                                              from: JSONEncoder().encode(state))
+        XCTAssertEqual(decoded, state)
+    }
+
+    func testActivityRejectsUnknownOrUnboundedEmotion() {
+        let state = MiaActivityAttributes.ContentState(phase: .speaking, emotion: "unknown", intensity: .nan)
+        XCTAssertEqual(state.emotion, "calm")
+        XCTAssertEqual(state.intensity, 0)
+        XCTAssertEqual(MiaActivityAttributes.ContentState(phase: .speaking, intensity: 9).intensity, 1)
+    }
+
+    @MainActor
+    func testStoppingIsIdempotentAndNeverRequestsMicrophone() {
+        var permissionRequests = 0
+        let controller = MiaConversationController(requestRecordPermission: {
+            permissionRequests += 1
+            return true
+        })
+        controller.stop()
+        controller.stop()
+        XCTAssertEqual(permissionRequests, 0)
+        XCTAssertFalse(controller.isStarting)
+        XCTAssertFalse(controller.session.conversationActive)
+        XCTAssertEqual(controller.session.state, .disconnected)
+    }
+
+    @MainActor
+    func testStopCancelsStartWhilePermissionIsPending() async throws {
+        var permission: CheckedContinuation<Bool, Never>?
+        let controller = MiaConversationController(requestRecordPermission: {
+            await withCheckedContinuation { permission = $0 }
+        })
+        let starting = Task { try await controller.start() }
+        for _ in 0..<100 {
+            if permission != nil { break }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        let pending = try XCTUnwrap(permission)
+        controller.stop()
+        pending.resume(returning: true)
+        do {
+            try await starting.value
+            XCTFail("A stopped pending start must not reopen the microphone")
+        } catch is CancellationError { }
+        XCTAssertFalse(controller.session.conversationActive)
+        XCTAssertEqual(controller.session.state, .disconnected)
+    }
+}

@@ -1,13 +1,17 @@
 import Foundation
+import CoreFoundation
 
 enum MiaServerEvent: Equatable {
     case hello(sessionID: String?, sampleRate: Int)
     case ttsStart
     case ttsSentence(String)
+    case expressiveSentence(String, emotion: String, intensity: Double)
     case ttsStop
     case userTranscript(String)
     case emotion(String)
     case assistantText(String)
+    case expressiveText(String, emotion: String, intensity: Double)
+    case memoryResponse(requestID: String, payload: Data)
     case serverError(String)
     case other
 }
@@ -83,6 +87,10 @@ enum MiaWireProtocol {
                 return .ttsStop
             case "sentence_start":
                 if let text = object["text"] as? String {
+                    if let emotion = object["emotion"] as? String {
+                        return .expressiveSentence(text, emotion: emotion,
+                                                   intensity: safeIntensity(object["intensity"]))
+                    }
                     return .ttsSentence(text)
                 }
             default:
@@ -95,11 +103,21 @@ enum MiaWireProtocol {
             }
             return .other
         case "llm":
-            if let text = object["text"] as? String { return .assistantText(text) }
+            if let text = object["text"] as? String {
+                if let emotion = object["emotion"] as? String {
+                    return .expressiveText(text, emotion: emotion,
+                                           intensity: safeIntensity(object["intensity"]))
+                }
+                return .assistantText(text)
+            }
             if let emotion = object["emotion"] as? String {
                 return .emotion(emotion)
             }
             return .other
+        case "mia_memory":
+            guard let requestID = object["request_id"] as? String,
+                  UUID(uuidString: requestID) != nil else { return .other }
+            return .memoryResponse(requestID: requestID, payload: data)
         case "error":
             if let message = object["message"] as? String {
                 return .serverError(message)
@@ -108,5 +126,11 @@ enum MiaWireProtocol {
         default:
             return .other
         }
+    }
+
+    private static func safeIntensity(_ value: Any?) -> Double {
+        guard let number = value as? NSNumber,
+              CFGetTypeID(number) != CFBooleanGetTypeID(), number.doubleValue.isFinite else { return 0.5 }
+        return min(max(number.doubleValue, 0), 1)
     }
 }

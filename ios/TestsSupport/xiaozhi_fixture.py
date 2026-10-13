@@ -9,6 +9,7 @@ import re
 import socketserver
 import threading
 import time
+import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
@@ -68,7 +69,8 @@ class LoopbackHTTPServer(ThreadingHTTPServer):
 
 async def websocket(ws):
     headers = ws.request.headers
-    queued_subtitles = parse_qs(urlsplit(ws.request.path).query).get("subtitles") == ["queued"]
+    params = parse_qs(urlsplit(ws.request.path).query)
+    queued_subtitles = params.get("subtitles") == ["queued"]
     if not valid_identity(headers) or headers.get("Authorization") != "Bearer fixture-only":
         await ws.send("认证失败")
         await ws.close()
@@ -88,6 +90,10 @@ async def websocket(ws):
     frames = []
     mode = "manual"
     response_task = None
+    memory = {"memories": [{"id": "fixture-memory", "category": "preference", "content": "喜欢直接的反馈",
+                           "source": "请直接指出问题", "session_id": "earlier-session", "confirmed": True,
+                           "created_at": 1800000000, "updated_at": 1800000000}],
+              "paused": False, "personality": {"version": 0, "traits": []}}
 
     async def automatic_response(packet):
         await asyncio.sleep(.1)
@@ -95,8 +101,11 @@ async def websocket(ws):
                         {"type": "tts", "state": "start"}]:
             await ws.send(json.dumps(message))
         sentences = ["第一句回复", "下一句回复"] if queued_subtitles else ["Mia 自动回复"]
-        for text in sentences:
-            await ws.send(json.dumps({"type": "tts", "state": "sentence_start", "text": text}))
+        for index, text in enumerate(sentences):
+            sentence = {"type": "tts", "state": "sentence_start", "text": text}
+            if queued_subtitles:
+                sentence.update(emotion="happy" if index == 0 else "caring", intensity=.8 if index == 0 else .6)
+            await ws.send(json.dumps(sentence))
             for _ in range(2 if queued_subtitles else 1):
                 await ws.send(packet)
         await ws.send(json.dumps({"type": "tts", "state": "stop"}))
@@ -109,7 +118,37 @@ async def websocket(ws):
             continue
         event = json.loads(raw)
         assert event.get("session_id") == "fixture-session"
-        if event["type"] == "listen" and event["state"] == "start":
+        if event["type"] == "mia_memory":
+            request_id = event["request_id"]
+            assert str(uuid.UUID(request_id)).lower() == request_id.lower()
+            if params.get("memory") == ["wrong_id_first"]:
+                await ws.send(json.dumps({"type": "mia_memory", "request_id": str(uuid.uuid4()),
+                                          "result": {"memories": [], "paused": True,
+                                                     "personality": {"version": 99, "traits": []}}}))
+                await asyncio.sleep(.1)
+            if params.get("memory") == ["delayed"]:
+                await asyncio.sleep(.5)
+            action = event["action"]
+            if action == "pause":
+                memory["paused"] = event["paused"]
+            elif action == "update":
+                for item in memory["memories"]:
+                    if item["id"] == event["id"]:
+                        item["content"] = event["content"]
+                        item["confirmed"] = event.get("confirmed", item["confirmed"])
+            elif action == "delete":
+                memory["memories"] = [item for item in memory["memories"] if item["id"] != event["id"]]
+            elif action == "clear":
+                memory["memories"] = []
+                memory["personality"] = {"version": memory["personality"]["version"] + 1, "traits": []}
+            elif action == "reset_personality":
+                memory["personality"] = {"version": memory["personality"]["version"] + 1, "traits": []}
+            elif action not in ["list", "personality"]:
+                await ws.send(json.dumps({"type": "mia_memory", "request_id": request_id,
+                                          "error": {"code": "invalid_input", "message": "Unknown action"}}))
+                continue
+            await ws.send(json.dumps({"type": "mia_memory", "request_id": request_id, "result": memory}))
+        elif event["type"] == "listen" and event["state"] == "start":
             assert event["mode"] in ["manual", "auto"]
             mode = event["mode"]
             response_task = None

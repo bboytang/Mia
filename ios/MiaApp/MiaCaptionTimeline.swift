@@ -8,7 +8,11 @@ struct MiaCaptionTimeline {
     private(set) var visibleText = ""
 
     mutating func handle(_ event: MiaServerEvent) {
-        guard case .ttsSentence(let text) = event else { return }
+        let text: String
+        switch event {
+        case .ttsSentence(let value), .expressiveSentence(let value, _, _): text = value
+        default: return
+        }
         receivingSentenceID = nextSentenceID
         sentences[nextSentenceID] = text
         nextSentenceID += 1

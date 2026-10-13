@@ -135,7 +135,8 @@ final class MiaWebSocketTransport {
         diagnosticDelegate = MiaSocketDiagnosticsDelegate(update: onConnection)
         diagnosticUpdate = onMessage
         socket = session.webSocketTask(with: configuration.request)
-        socket.maximumMessageSize = 65_536
+        // Memory management can return 200 bounded records; audio frames stay capped below.
+        socket.maximumMessageSize = 1_048_576
         socket.delegate = diagnosticDelegate
     }
 
@@ -164,20 +165,33 @@ final class MiaWebSocketTransport {
         catch { throw connectionError(error) }
     }
 
+    func manageMemory(sessionID: String?, requestID: String, action: String,
+                      fields: [String: Any]) async throws {
+        var object = fields
+        object["type"] = "mia_memory"
+        object["session_id"] = sessionID ?? ""
+        object["request_id"] = requestID
+        object["action"] = action
+        let data = try JSONSerialization.data(withJSONObject: object)
+        guard data.count <= 8_192 else { throw MiaWireError.invalidMessage }
+        try await sendText(data)
+    }
+
     func receive() async throws -> MiaIncomingFrame {
         let message: URLSessionWebSocketTask.Message
         do { message = try await socket.receive() }
         catch { throw connectionError(error) }
         switch message {
         case .string(let text):
-            guard text.utf8.count <= 65_536 else { throw MiaConnectionError.unexpectedMessage }
+            guard text.utf8.count <= 1_048_576 else { throw MiaConnectionError.unexpectedMessage }
             if text == "认证失败" || text == "未授权" {
                 record("message", "认证失败文本")
                 record("error", "服务端设备认证失败")
                 throw MiaConnectionError.unauthorized
             }
             let type = (try? JSONSerialization.jsonObject(with: Data(text.utf8)) as? [String: Any])?["type"] as? String
-            let known = ["hello", "stt", "tts", "llm", "error"]
+            guard type == "mia_memory" || text.utf8.count <= 65_536 else { throw MiaConnectionError.unexpectedMessage }
+            let known = ["hello", "stt", "tts", "llm", "error", "mia_memory"]
             record("message", known.contains(type ?? "") ? type! : "未知文本消息")
             return .event(try MiaWireProtocol.parseServerEvent(Data(text.utf8)))
         case .data(let data):

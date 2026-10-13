@@ -1,183 +1,125 @@
 import SwiftUI
-import AVFoundation
 
 struct ContentView: View {
-    var isActive = true
+    @ObservedObject private var controller = MiaConversationController.shared
+    @ObservedObject private var xiaozhi = MiaConversationController.shared.xiaozhi
+    @ObservedObject private var session = MiaConversationController.shared.session
     @State private var showsSettings = false
-    @StateObject private var xiaozhi = MiaXiaozhiClient()
-    @StateObject private var session = MiaVoiceSession()
-    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("mia.xiaozhi.websocketURL") private var serverURL = MiaXiaozhiClient.defaultWebSocket
     @AppStorage("mia.xiaozhi.otaURL") private var otaURL = MiaXiaozhiClient.defaultOTA
 
     var body: some View {
         GeometryReader { geometry in
-            ZStack(alignment: .top) {
-                starMist(in: geometry)
-
-                Image("MiaPortrait")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: geometry.size.width * 1.16,
-                           height: geometry.size.height * 0.88, alignment: .top)
-                    .mask {
-                        LinearGradient(stops: [
-                            .init(color: .white, location: 0),
-                            .init(color: .white, location: 0.72),
-                            .init(color: .white.opacity(0.25), location: 0.91),
-                            .init(color: .clear, location: 1)
-                        ], startPoint: .top, endPoint: .bottom)
-                    }
-                    .padding(.top, 8)
-                    .accessibilityLabel("Mia 半身角色概念立绘")
-
-                starMist(in: geometry)
-                    .mask {
-                        LinearGradient(stops: [
-                            .init(color: .clear, location: 0),
-                            .init(color: .clear, location: 0.57),
-                            .init(color: .white.opacity(0.18), location: 0.70),
-                            .init(color: .white, location: 0.92)
-                        ], startPoint: .top, endPoint: .bottom)
-                    }
-                    .allowsHitTesting(false)
-
-                LinearGradient(stops: [
-                    .init(color: .clear, location: 0.48),
-                    .init(color: Color(red: 0.12, green: 0.04, blue: 0.24).opacity(0.28), location: 0.68),
-                    .init(color: .black.opacity(0.65), location: 1)
-                ], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-
-                VStack(spacing: 0) {
-                    header
-                    Spacer(minLength: 12)
-                    captionPanel
-                    Button {
-                        Task {
-                            let stopping = session.conversationActive
-                            await session.toggleTalk()
-                            if stopping { xiaozhi.cancelDiscovery() }
-                        }
-                    } label: {
-                        MiaAuroraOrb(level: session.audioLevel)
-                            .frame(width: geometry.size.height < 700 ? 102 : 118,
-                                   height: geometry.size.height < 700 ? 102 : 118)
-                            .contentShape(Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(talkButtonLabel)
-                    .accessibilityHint(session.conversationActive ? "结束当前语音对话" : "开启自动语音对话")
-                    .padding(.top, 12)
-                    Text(xiaozhi.activationCode != nil ? "请在智控台绑定本机" : session.state.rawValue)
-                        .font(.caption)
-                        .foregroundStyle(.white.opacity(0.8))
-                        .padding(.top, 2)
+            ZStack {
+                MiaCompanionBackground()
+                Button { Task { await controller.toggle() } } label: {
+                    MiaCompanionOrb(emotion: session.expression.emotion, state: orbState,
+                                    intensity: session.expression.intensity, level: session.audioLevel)
+                        .frame(width: geometry.size.width * 0.76, height: geometry.size.width * 0.76)
+                        .contentShape(Circle())
                 }
-                .padding(.horizontal, 22)
-                .padding(.top, 8)
-                .padding(.bottom, 18)
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                .buttonStyle(.plain)
+                .accessibilityLabel(session.conversationActive || controller.isStarting ? "结束对话" : "开始说话")
+                .accessibilityValue(session.expression.emotion.displayName)
+                .accessibilityHint("点小球开始或结束与 Mia 的聊天")
+                .offset(y: -geometry.size.height * 0.06)
+
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button { showsSettings = true } label: {
+                            Image(systemName: "gearshape")
+                                .font(.title3).frame(width: 44, height: 44)
+                        }
+                        .accessibilityLabel("设置")
+                    }
+                    Spacer()
+                    Text(status)
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.55))
+                        .padding(.bottom, 36)
+                }
+                .padding(.horizontal, 22).padding(.top, 8)
             }
-            .frame(width: geometry.size.width, height: geometry.size.height)
         }
+        .foregroundStyle(.white.opacity(0.8))
         .preferredColorScheme(.dark)
-        .sheet(isPresented: $showsSettings, onDismiss: { startAutomatically() }) {
-            MiaSettingsView(xiaozhi: xiaozhi, session: session)
-        }
-        .onAppear {
-            let client = xiaozhi
-            session.connectionProvider = { [weak client] in
-                guard let client else { throw CancellationError() }
-                return try await client.discover(
-                    ota: UserDefaults.standard.string(forKey: "mia.xiaozhi.otaURL") ?? MiaXiaozhiClient.defaultOTA,
-                    websocket: UserDefaults.standard.string(forKey: "mia.xiaozhi.websocketURL") ?? MiaXiaozhiClient.defaultWebSocket)
+        .onAppear { controller.showStandby() }
+        .sheet(isPresented: $showsSettings) { MiaSettingsView(xiaozhi: xiaozhi, session: session) }
+        .onChange(of: serverURL) { _, _ in controller.settingsChanged() }
+        .onChange(of: otaURL) { _, _ in controller.settingsChanged() }
+        .onChange(of: xiaozhi.activationCode) { _, code in if code != nil { showsSettings = true } }
+        .onOpenURL { url in
+            guard url.scheme == "mia", url.host == "conversation" else { return }
+            if url.path == "/start" {
+                Task {
+                    do { try await controller.startInForeground() }
+                    catch { session.errorMessage = error.localizedDescription }
+                }
             }
-            startAutomatically()
         }
-        .onChange(of: isActive) { _, _ in startAutomatically() }
-        .onChange(of: serverURL) { _, _ in session.disconnect(); xiaozhi.cancel() }
-        .onChange(of: otaURL) { _, _ in session.disconnect(); xiaozhi.cancel() }
-        .onChange(of: xiaozhi.activationCode) { _, code in
-            if code != nil { showsSettings = true }
-        }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .background { session.disconnect(); xiaozhi.cancelDiscovery() }
-            else if phase == .active { startAutomatically() }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.interruptionNotification)) { note in
-            if let type = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
-               type == AVAudioSession.InterruptionType.began.rawValue { session.disconnect() }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.routeChangeNotification)) { note in
-            if let reason = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
-               reason == AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue { session.disconnect() }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: AVAudioSession.mediaServicesWereResetNotification)) { _ in
-            session.disconnect()
-        }
-        .onDisappear { session.disconnect(); xiaozhi.cancelDiscovery() }
         .alert("连接出错", isPresented: Binding(
             get: { session.errorMessage != nil && xiaozhi.activationCode == nil },
             set: { if !$0 { session.errorMessage = nil } }
         )) {
             Button("知道了") { session.errorMessage = nil }
-        } message: {
-            Text(session.errorMessage ?? "未知错误")
+        } message: { Text(session.errorMessage ?? "未知错误") }
+    }
+
+    private var orbState: MiaOrbState {
+        switch session.state {
+        case .listening: .listening
+        case .waiting, .connecting: .thinking
+        case .speaking: .speaking
+        default: .idle
         }
     }
 
-    private func startAutomatically() {
-        guard isActive, scenePhase == .active,
-              !ProcessInfo.processInfo.arguments.contains("-MiaDisableAutomaticConversation"),
-              session.allowsAutomaticStart,
-              session.state == .disconnected, session.errorMessage == nil,
-              xiaozhi.activationCode == nil else { return }
-        Task { await session.beginConversation() }
+    private var status: String {
+        if xiaozhi.activationCode != nil { return "请在智控台绑定 Mia" }
+        if controller.isStarting || session.state == .connecting { return "正在连接" }
+        if !session.conversationActive { return "点小球，或说「你好，米娅」" }
+        switch session.state {
+        case .listening: return "在听"
+        case .waiting: return "想一想"
+        case .speaking: return "开口可打断"
+        default: return "待呼叫"
+        }
     }
+}
 
-    private func starMist(in geometry: GeometryProxy) -> some View {
-        Image("StarMistBackground")
-            .resizable()
-            .scaledToFill()
-            .frame(width: geometry.size.width,
-                   height: geometry.size.height + geometry.safeAreaInsets.top + geometry.safeAreaInsets.bottom)
-            .clipped()
-            .offset(y: -geometry.safeAreaInsets.top)
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
-    }
+private struct MiaCompanionBackground: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
-    private var talkButtonLabel: String {
-        session.conversationActive ? "结束对话" : "开始说话"
-    }
-
-    private var header: some View {
-        HStack {
-            Spacer()
-            Button {
-                showsSettings = true
-            } label: {
-                Image(systemName: "gearshape")
-                    .font(.title3)
-                    .frame(width: 44, height: 44)
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 12,
+                                paused: reduceMotion || scenePhase != .active)) { timeline in
+            let phase = reduceMotion ? 0 : timeline.date.timeIntervalSinceReferenceDate
+                .truncatingRemainder(dividingBy: 120) / 120 * Double.pi * 2
+            GeometryReader { geometry in
+                ZStack {
+                    LinearGradient(colors: [Color(red: 0.012, green: 0.025, blue: 0.065),
+                                            Color(red: 0.025, green: 0.015, blue: 0.07), .black],
+                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                    Ellipse().fill(.blue.opacity(0.13)).blur(radius: 70)
+                        .frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.45)
+                        .offset(x: sin(phase) * 22, y: -geometry.size.height * 0.12)
+                    Ellipse().fill(.purple.opacity(0.08)).blur(radius: 80)
+                        .frame(width: geometry.size.width, height: geometry.size.height * 0.3)
+                        .offset(x: -sin(phase) * 15, y: geometry.size.height * 0.2)
+                    Path { path in
+                        path.move(to: CGPoint(x: -20, y: geometry.size.height * 0.7))
+                        path.addCurve(to: CGPoint(x: geometry.size.width + 20, y: geometry.size.height * 0.33),
+                                      control1: CGPoint(x: geometry.size.width * 0.1, y: geometry.size.height * 0.55),
+                                      control2: CGPoint(x: geometry.size.width * 0.8, y: geometry.size.height * 0.65))
+                    }
+                    .stroke(.cyan.opacity(0.06), lineWidth: 1)
+                    .offset(y: sin(phase) * 12)
+                }
             }
-            .accessibilityLabel("设置")
         }
-        .foregroundStyle(.white.opacity(0.85))
-    }
-
-    private var captionPanel: some View {
-        Text(session.caption.isEmpty ? "Mia 的回答会显示在这里" : session.caption)
-            .font(.system(size: 17, weight: .regular, design: .rounded))
-            .foregroundStyle(.white.opacity(0.85))
-            .frame(maxWidth: .infinity, minHeight: 80)
-            .padding(.horizontal, 14)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(.purple.opacity(0.65), lineWidth: 1)
-            )
+        .ignoresSafeArea().allowsHitTesting(false).accessibilityHidden(true)
     }
 }
 
@@ -227,6 +169,11 @@ private struct MiaSettingsView: View {
                     }
                     .disabled(xiaozhi.checking)
                     if let discoveryError { Text(discoveryError).font(.footnote) }
+                }
+                Section("Mia") {
+                    NavigationLink("记忆与成长") { MiaMemoryView(session: session) }
+                    NavigationLink("设置声音唤醒") { MiaWakeGuideView() }
+                    Button("关闭 Mia 对话") { MiaConversationController.shared.stop() }
                 }
                 Section("连接诊断（已隐藏凭据）") {
                     LabeledContent("对话状态", value: session.state.rawValue)

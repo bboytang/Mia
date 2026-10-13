@@ -10,9 +10,7 @@ final class MiaXiaozhiFlowTests: XCTestCase {
                                "-mia.xiaozhi.websocketURL", websocket]
         app.launch()
         XCTAssertTrue(app.buttons["设置"].waitForExistence(timeout: 15))
-        let ready = expectation(for: NSPredicate(format: "exists == false"),
-                                evaluatedWith: app.buttons["跳过启动动画"])
-        wait(for: [ready], timeout: 15)
+        XCTAssertFalse(app.buttons["跳过启动动画"].exists)
         return app
     }
 
@@ -34,11 +32,15 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         XCTAssertFalse(app.secureTextFields["网关访问令牌"].exists)
     }
 
-    func testLaunchAutomaticallyDiscoversAndShowsDeviceActivation() {
+    func testHomeWaitsForTapBeforeDeviceDiscoveryAndActivation() {
         let app = XCUIApplication()
         app.launchArguments = ["-mia.xiaozhi.otaURL", "http://127.0.0.1:8770/ota/?activation=1",
                                "-mia.xiaozhi.websocketURL", "ws://127.0.0.1:8769/xiaozhi/v1/"]
         app.launch()
+        XCTAssertTrue(app.buttons["开始说话"].waitForExistence(timeout: 15))
+        XCTAssertFalse(app.textFields["OTA 地址"].waitForExistence(timeout: 2))
+        XCTAssertFalse(app.descendants(matching: .any)["xiaozhi-activation-code"].exists)
+        app.buttons["开始说话"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         XCTAssertTrue(app.textFields["OTA 地址"].waitForExistence(timeout: 20))
         let code = app.descendants(matching: .any)["xiaozhi-activation-code"]
         XCTAssertTrue(code.waitForExistence(timeout: 5))

@@ -2,11 +2,11 @@ import SwiftUI
 
 @main
 struct MiaApp: App {
-    @StateObject private var launch = MiaLaunchPlayback()
+    @StateObject private var conversation = MiaConversationController.shared
 
     var body: some Scene {
         WindowGroup {
-            MiaLaunchView(launch: launch)
+            ContentView()
         }
     }
 }

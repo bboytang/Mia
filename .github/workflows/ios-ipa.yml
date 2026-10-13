@@ -44,8 +44,9 @@ jobs:
           shasum -a 256 -c SHA256SUMS
           cat > "$RUNNER_TEMP/mia-release-notes.md" <<EOF
           未签名 Mia IPA，需要自行重签，建议保持原签名与 Bundle ID 覆盖升级。
+          重签工具必须保留并签名 PlugIns/MiaActivity.appex，灵动岛扩展使用 com.bboytang.mia.activity。
           构建验证：$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$MIA_BUILD_RUN
-          真机麦克风、外放回声及打断效果仍需安装后验证。
+          声音快捷指令后台录音、锁屏停止时机、灵动岛与真机音频仍需安装后验证。
           EOF
           if ! gh release view "$mia_tag" >/dev/null 2>&1; then
             gh release create "$mia_tag" Mia-unsigned.ipa --verify-tag --prerelease --latest=false \

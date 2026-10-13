@@ -1,5 +1,15 @@
 # Mia iOS
 
+## 情绪伙伴升级（2026-10-13；开发验证中）
+
+首页改为原创玻璃流体小球、八种动态表情与深色背景，取消启动视频、人物和字幕。首次进入待呼叫，不自动录音或发现设备；点小球开始/结束。系统声音快捷指令可调用后台录音动作，另有打开 App 的回退动作；待呼叫期间只有系统口令监听可能使用麦克风。
+
+新增 Live Activity/灵动岛扩展，IPA 重签必须同时保留并签名 `PlugIns/MiaActivity.appex`。锁屏停止使用公开保护数据事件，不能保证精确锁屏时机；后台启动、系统音频交接、发热耗电和扩展重签须真机验收。
+
+设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。实际小智服务尚未部署扩展时会明确超时提示；不能把本地模块视为已上线长期记忆。
+
+[批准方案](../docs/mia-companion-plan.md)、[实施计划](../docs/mia-companion-implementation.md)、[逐步工作记录](../docs/mia-companion-worklog.md)、[交接](../docs/mia-companion-handoff.md)。以下为旧版本历史。
+
 ## 按播放显示整句字幕（2026-10-13）
 
 [直接下载字幕修复 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-b9e534672920/Mia-unsigned.ipa)，约 14 MB，需自行重签覆盖升级。发布 CI 已回下载比对，文件与通过测试的构建产物一致。

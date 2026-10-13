@@ -16,6 +16,7 @@ final class MiaVoiceSession: ObservableObject {
     @Published private(set) var state: State = .disconnected
     @Published private(set) var caption = ""
     @Published private(set) var audioLevel: Float = 0
+    @Published private(set) var expression = MiaReplyExpression()
     @Published var errorMessage: String?
     @Published private(set) var authorizationRejected = false
 
@@ -54,6 +55,10 @@ final class MiaVoiceSession: ObservableObject {
     private var speechEnded = false
     private var startWhenConnected = false
     private var connectionGeneration = UUID()
+    private var pendingExpression = MiaReplyExpression()
+    private var sentenceExpressions: [Int: MiaReplyExpression] = [:]
+    private var memoryRequest: (id: String, continuation: CheckedContinuation<Data, Error>)?
+    private var memoryTimeout: Task<Void, Never>?
 
     init(makeAudio: @escaping () -> any MiaConversationAudio = { MiaAudioIO() },
          recordPermission: @escaping () async -> Bool = {
@@ -91,6 +96,11 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     func disconnect() {
+        memoryTimeout?.cancel()
+        memoryTimeout = nil
+        let request = memoryRequest
+        memoryRequest = nil
+        request?.continuation.resume(throwing: CancellationError())
         reconnectTask?.cancel()
         reconnectTask = nil
         reconnectAttempts = 0
@@ -122,6 +132,7 @@ final class MiaVoiceSession: ObservableObject {
         speechEnded = false
         startWhenConnected = false
         captionTimeline.interrupt()
+        resetExpression()
         caption = ""
         audioLevel = 0
         state = .disconnected
@@ -217,7 +228,14 @@ final class MiaVoiceSession: ObservableObject {
             guard state == .speaking, acceptsReply else { return }
             replyText = text
             captionTimeline.handle(event)
+            if let id = captionTimeline.receivingSentenceID { sentenceExpressions[id] = pendingExpression }
             caption = captionTimeline.visibleText
+        case .expressiveSentence(let text, let emotion, let intensity):
+            guard state == .speaking, acceptsReply else { return }
+            replyText = text
+            pendingExpression = MiaReplyExpression(emotion: emotion, intensity: intensity)
+            captionTimeline.handle(event)
+            if let id = captionTimeline.receivingSentenceID { sentenceExpressions[id] = pendingExpression }
         case .ttsStop:
             guard state == .speaking, acceptsReply else { return }
             speechEnded = true
@@ -227,6 +245,7 @@ final class MiaVoiceSession: ObservableObject {
             guard conversationActive, state == .listening, !text.isEmpty else { return }
             pendingPlaybackFrames.removeAll()
             captionTimeline.interrupt()
+            resetExpression()
             caption = ""
             acceptsReply = true
             pauseForReply()
@@ -238,10 +257,24 @@ final class MiaVoiceSession: ObservableObject {
                 self.fail(MiaConnectionError.responseTimeout)
             }
         case .assistantText(let text):
+            guard conversationActive, acceptsReply else { return }
             replyText = text
+        case .expressiveText(let text, let emotion, let intensity):
+            guard conversationActive, acceptsReply else { return }
+            replyText = text
+            pendingExpression = MiaReplyExpression(emotion: emotion, intensity: intensity)
+        case .emotion(let emotion):
+            guard conversationActive, acceptsReply else { return }
+            pendingExpression = MiaReplyExpression(emotion: emotion)
+        case .memoryResponse(let id, let payload):
+            guard let request = memoryRequest, request.id == id else { return }
+            memoryRequest = nil
+            memoryTimeout?.cancel()
+            memoryTimeout = nil
+            request.continuation.resume(returning: payload)
         case .serverError:
             fail(MiaConnectionError.upstreamError)
-        case .emotion, .other:
+        case .other:
             break
         }
     }
@@ -353,6 +386,7 @@ final class MiaVoiceSession: ObservableObject {
         captionTimeline.interrupt()
         caption = ""
         audioLevel = 0
+        resetExpression()
         state = .ready
         // Capture the new utterance while abort/listen control waits on the network.
         microphoneGeneration = audio?.beginMicrophoneCapture()
@@ -404,8 +438,71 @@ final class MiaVoiceSession: ObservableObject {
         guard state == .speaking else { return }
         audioLevel = level
         captionTimeline.advancePlayback(sentenceID: sentenceID)
+        if let current = sentenceExpressions[sentenceID] {
+            expression = current
+            sentenceExpressions = sentenceExpressions.filter { $0.key >= sentenceID }
+        }
         caption = captionTimeline.visibleText
         finishSpeechIfPlayed()
+    }
+
+    private func resetExpression() {
+        pendingExpression = MiaReplyExpression()
+        expression = MiaReplyExpression()
+        sentenceExpressions.removeAll()
+    }
+
+    func manageMemory(action: String, fields: [String: Any] = [:]) async throws -> MiaMemorySnapshot {
+        guard memoryRequest == nil else { throw MiaMemoryError.busy }
+        if state == .disconnected { await connect() }
+        for _ in 0..<220 {
+            if state != .connecting { break }
+            try await Task.sleep(nanoseconds: 50_000_000)
+        }
+        guard let connection = transport, sessionID != nil else { throw MiaMemoryError.unavailable }
+        guard memoryRequest == nil else { throw MiaMemoryError.busy }
+        let requestID = UUID().uuidString
+        try Task.checkCancellation()
+        let payload = try await withTaskCancellationHandler(operation: {
+          try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
+            guard !Task.isCancelled else { continuation.resume(throwing: CancellationError()); return }
+            memoryRequest = (requestID, continuation)
+            memoryTimeout = Task { [weak self] in
+                do { try await Task.sleep(nanoseconds: 8_000_000_000) } catch { return }
+                guard let self, self.memoryRequest?.id == requestID else { return }
+                let request = self.memoryRequest
+                self.memoryRequest = nil
+                request?.continuation.resume(throwing: MiaMemoryError.unavailable)
+            }
+            Task { [weak self] in
+                guard let self, self.memoryRequest?.id == requestID else { return }
+                do { try await connection.manageMemory(sessionID: self.sessionID, requestID: requestID,
+                                                        action: action, fields: fields) }
+                catch {
+                    guard self.memoryRequest?.id == requestID else { return }
+                    let request = self.memoryRequest
+                    self.memoryRequest = nil
+                    self.memoryTimeout?.cancel()
+                    request?.continuation.resume(throwing: error)
+                }
+            }
+          }
+        }, onCancel: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self, self.memoryRequest?.id == requestID else { return }
+                let request = self.memoryRequest
+                self.memoryRequest = nil
+                self.memoryTimeout?.cancel()
+                self.memoryTimeout = nil
+                request?.continuation.resume(throwing: CancellationError())
+            }
+        })
+        guard let object = try JSONSerialization.jsonObject(with: payload) as? [String: Any],
+              object["error"] == nil, let result = object["result"] as? [String: Any] else {
+            throw MiaMemoryError.rejected
+        }
+        return try JSONDecoder().decode(MiaMemorySnapshot.self,
+                                        from: JSONSerialization.data(withJSONObject: result))
     }
 
     private func finishSpeechIfPlayed() {

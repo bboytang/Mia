@@ -91,15 +91,19 @@ jobs:
           set -euo pipefail
           app="$RUNNER_TEMP/mia-device/Build/Products/Release-iphoneos/Mia.app"
           test -d "$app"
-          test -s "$app/MiaLaunch.mp4"
-          cmp ios/MiaApp/MiaLaunch.mp4 "$app/MiaLaunch.mp4"
+          extension="$app/PlugIns/MiaActivity.appex"
+          test -d "$extension"
+          test -s "$extension/MiaActivity"
+          test ! -e "$app/MiaLaunch.mp4"
+          /usr/libexec/PlistBuddy -c 'Print :NSSupportsLiveActivities' "$app/Info.plist" | grep -qx true
+          /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$extension/Info.plist" | grep -qx com.apple.widgetkit-extension
           mkdir -p "$RUNNER_TEMP/mia-artifacts/Payload"
           cp -R "$app" "$RUNNER_TEMP/mia-artifacts/Payload/Mia.app"
           cd "$RUNNER_TEMP/mia-artifacts"
           zip -qr Mia-unsigned.ipa Payload
           shasum -a 256 Mia-unsigned.ipa > SHA256SUMS
 
-      - name: Capture launch and home screens
+      - name: Capture home screens and orb preview
         run: |
           set -euo pipefail
           simulator_ids=$(xcrun simctl list devices available -j | python3 -c '
@@ -117,9 +121,9 @@ jobs:
             xcrun simctl boot "$simulator_id" || true
             xcrun simctl bootstatus "$simulator_id" -b
             xcrun simctl install "$simulator_id" "$RUNNER_TEMP/mia-simulator/Build/Products/Debug-iphonesimulator/Mia.app"
-            mia_record_log="$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.log"
+            mia_record_log="$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.log"
             xcrun simctl io "$simulator_id" recordVideo --codec h264 --mask ignored \
-              "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4" > "$mia_record_log" 2>&1 &
+              "$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.mp4" > "$mia_record_log" 2>&1 &
             mia_record_pid=$!
             trap 'kill -TERM "$mia_record_pid" 2>/dev/null || true; cat "$mia_record_log"' EXIT
             mia_record_deadline=$((SECONDS + 120))
@@ -149,7 +153,7 @@ jobs:
             wait "$mia_record_pid"
             cat "$mia_record_log"
             trap - EXIT
-            test -s "$RUNNER_TEMP/mia-artifacts/mia-launch${suffix}.mp4"
+            test -s "$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.mp4"
             xcrun simctl shutdown "$simulator_id"
             suffix="-secondary"
           done
@@ -163,6 +167,6 @@ jobs:
             ${{ runner.temp }}/mia-artifacts/Mia-unsigned.ipa
             ${{ runner.temp }}/mia-artifacts/SHA256SUMS
             ${{ runner.temp }}/mia-artifacts/mia-home*.png
-            ${{ runner.temp }}/mia-artifacts/mia-launch*.mp4
+            ${{ runner.temp }}/mia-artifacts/mia-orb*.mp4
             ${{ runner.temp }}/mia-account-tests.xcresult
           if-no-files-found: error
