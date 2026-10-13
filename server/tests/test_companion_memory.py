@@ -81,6 +81,18 @@ class MemoryStoreTests(unittest.TestCase):
             parse_extraction({"trait": {"name": "记得密码", "description": "不要保存", "evidence_ids": ["x"]}})
         self.assertEqual(self.store.list_memories("alice"), [])
 
+    def test_fenced_json_saves_memory_without_unsupported_trait(self):
+        data = {"memories": [{"category": "preference", "content": "喜欢蓝色", "source_index": 0}],
+                "trait": {"name": "审美偏好", "description": "喜欢蓝色", "evidence_ids": []}}
+        result = self.store.apply_extraction("alice", "one", 0, ["我喜欢蓝色"],
+            "```json\n" + json.dumps(data) + "\n```", "fenced")
+        self.assertEqual(len(result["memories"]), 1)
+        self.assertFalse(result["trait_updated"])
+        self.assertEqual(self.store.personality("alice"), {"version": 0, "traits": []})
+        for wrapped in ["prose\n```json\n{}\n```", "```json\n{}\n```\nprose"]:
+            with self.assertRaises(MemoryError):
+                parse_extraction(wrapped)
+
     def test_extraction_validation_is_atomic_and_bounded(self):
         valid = {"category": "fact", "content": "喜欢天空", "source_index": 0}
         invalid = [None, "not JSON", "x" * 24001, [], {"memories": {}},

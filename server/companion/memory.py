@@ -32,10 +32,11 @@ Return JSON {"memories":[{"category":"fact|preference|goal|experience|agreement"
 "trait":{"name":"optional stable habit", "description":"evidence-based description",
 "evidence_ids":["existing memory ids"]}}. source_index refers only to supplied actual
 user excerpts. A trait needs evidence from at least three distinct sessions and excerpts;
-propose at most one small change. Do not invent lived experiences, claim feelings are
-human subjective experiences, infer dependency or intimacy scores, or copy every user
-preference into Mia's identity. Omit trait without adequate evidence. Maximum 16 memories,
-512 characters per memory and source excerpt. Never include full conversations.
+propose at most one small change. Return trait:null without adequate evidence. Do not invent
+lived experiences, claim feelings are human subjective experiences, infer dependency or
+intimacy scores, or copy every user preference into Mia's identity. Maximum 16 memories,
+512 characters per memory and source excerpt. Return only JSON, without Markdown or prose.
+Never include full conversations.
 """
 
 
@@ -73,6 +74,9 @@ def parse_extraction(value):
     if isinstance(value, str):
         if len(value) > 24000:
             raise MemoryError("invalid_input", "Extraction is too large")
+        fenced = re.fullmatch(r"```(?:json)?[ \t]*\r?\n(.*?)\r?\n```", value.strip(), re.DOTALL | re.I)
+        if fenced:
+            value = fenced.group(1)
         try:
             value = json.loads(value)
         except (ValueError, RecursionError):
@@ -103,7 +107,7 @@ def parse_extraction(value):
         if not isinstance(trait, dict):
             raise MemoryError("invalid_input", "Invalid trait")
         ids = trait.get("evidence_ids")
-        if not isinstance(ids, list) or not 1 <= len(ids) <= 16:
+        if not isinstance(ids, list) or len(ids) > 16:
             raise MemoryError("invalid_input", "Invalid evidence")
         result["trait"] = {"name": _safe_text(trait.get("name"), 32, "trait name"),
                            "description": _safe_text(trait.get("description"), 256, "trait description"),
@@ -216,7 +220,7 @@ class MemoryStore:
                 self.db.execute("UPDATE owners SET version=version+1 WHERE owner=?", (owner,))
 
     def _trait(self, owner, trait, now):
-        if trait is None:
+        if trait is None or not trait["evidence_ids"]:
             return False
         if SENSITIVE.search(trait["name"] + trait["description"]):
             return False

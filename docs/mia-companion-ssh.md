@@ -1,8 +1,8 @@
 # 当前 Mia 工作环境的 SSH 授权恢复
 
-2026-10-13：连接 `ubuntu@43.143.230.174` 仍返回 publickey/password 拒绝，未跳过既有主机校验。当前私钥对应的公钥指纹已核对一致：`SHA256:nOfXTTs+SJGvYLEs7+AWaWiShWUZOC5S4CDj+s24ic4`。
+2026-10-13：用户明确登录账户应为 `root`，现已成功连接 `root@43.143.230.174:22`，保留既有主机校验。此前 `ubuntu` 账户拒绝公钥。当前私钥对应的公钥指纹已核对一致：`SHA256:nOfXTTs+SJGvYLEs7+AWaWiShWUZOC5S4CDj+s24ic4`。
 
-用户要求的授权指令：在服务器控制台、有 sudo 权限的账户执行，追加当前公钥，不覆盖已有授权。
+以下是此前针对 ubuntu 的授权指令，仅留作历史记录；当前使用 root 已授权身份，无需重复执行。
 
 ```bash
 mia_pubkey='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMewNYfAXUntR7J/w5jZ4G7bEi46fVZhfzOH6R/dfbbN mia-server'

@@ -284,6 +284,13 @@ async def handle_message(conn, message):
         request_id = request.get("request_id")
         if not isinstance(request_id, str) or len(request_id) != 36 or str(uuid.UUID(request_id)) != request_id.lower():
             raise MemoryError("invalid_input", "Invalid request_id")
+        # Upstream sends hello before its background configuration/components finish.
+        for _ in range(100):
+            provider = getattr(conn, "_mia_memory", None)
+            if (provider or not conn.read_config_from_api or getattr(conn, "need_bind", False)
+                    or getattr(conn, "_mia_owner", True) is None):
+                break
+            await asyncio.sleep(0.05)
         provider = getattr(conn, "_mia_memory", None)
         if not provider:
             raise MemoryError("unavailable", "Persistent memory is not available on this server")

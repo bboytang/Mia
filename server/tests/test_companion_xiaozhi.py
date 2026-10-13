@@ -111,6 +111,19 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         await self.provider.save_memory([original])
         self.assertEqual(self.store.list_memories(self.provider.owner), [])
 
+    async def test_management_waits_for_background_memory_initialization(self):
+        self.conn._mia_memory = None
+        self.conn._mia_owner = "user:1:agent:one"
+
+        async def initialize():
+            await asyncio.sleep(0.02)
+            self.conn._mia_memory = self.provider
+
+        task = asyncio.create_task(initialize())
+        await mia.handle_message(self.conn, json.dumps({"type": "mia_memory", "request_id": str(uuid.uuid4()), "action": "list"}))
+        await task
+        self.assertIn("result", self.conn.websocket.sent[-1])
+
     async def test_inflight_extraction_cannot_resurrect_deleted_memory(self):
         started, release = threading.Event(), threading.Event()
         model = self.model
@@ -152,6 +165,7 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.store.list_memories(self.provider.owner), [])
         self.assertIn("mia_context", json.loads(await self.provider.query_memory("喜欢")))
         self.conn._mia_memory = None
+        self.conn._mia_owner = None
         await mia.handle_message(self.conn, json.dumps({"type": "mia_memory", "request_id": str(uuid.uuid4()), "action": "list"}))
         self.assertEqual(self.conn.websocket.sent[-1]["error"]["code"], "unavailable")
 
