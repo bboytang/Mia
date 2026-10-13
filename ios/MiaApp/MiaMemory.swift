@@ -12,7 +12,12 @@ struct MiaPersonality: Decodable {
     struct Trait: Decodable, Identifiable {
         let name: String
         let description: String
+        let evidenceIDs: [String]
         var id: String { name }
+        enum CodingKeys: String, CodingKey {
+            case name, description
+            case evidenceIDs = "evidence_ids"
+        }
     }
     let version: Int
     let traits: [Trait]

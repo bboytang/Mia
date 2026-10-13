@@ -62,6 +62,10 @@ struct MiaMemoryView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text(trait.name).font(.headline)
                             Text(trait.description)
+                            ForEach(snapshot.memories.filter { trait.evidenceIDs.contains($0.id) }) { memory in
+                                Text("成长依据：" + memory.content)
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
                         }
                     }
                     Button("恢复基础性格", role: .destructive) { resetRequested = true }
@@ -125,7 +129,7 @@ struct MiaWakeGuideView: View {
                 Text("后台录音需允许实时活动；灵动岛展示状态和表情，显示时长由系统决定。")
             }
             Section("当前验证边界") {
-                Text("后台启动、锁屏停止时机、解锁恢复和系统录音交接需在真机确认。保护数据事件不能保证精确检测锁屏。")
+                Text("后台唤醒与锁屏停止仍需在你的手机验证。系统不允许后台启动时，可选「打开 Mia 开始聊天」。")
             }
         }.navigationTitle("声音唤醒")
     }

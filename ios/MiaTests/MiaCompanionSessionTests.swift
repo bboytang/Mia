@@ -36,6 +36,13 @@ private final class CompanionAudioStub: MiaConversationAudio {
 }
 
 final class MiaCompanionSessionTests: XCTestCase {
+    func testPersonalityIncludesTheMemoriesBehindItsGrowth() throws {
+        let data = Data(#"{"version":1,"traits":[{"name":"坦率","description":"会直接表达判断","evidence_ids":["one","two","three"]}]}"#.utf8)
+        let personality = try JSONDecoder().decode(MiaPersonality.self, from: data)
+        XCTAssertEqual(personality.version, 1)
+        XCTAssertEqual(personality.traits.first?.evidenceIDs, ["one", "two", "three"])
+    }
+
     @MainActor
     private func waitUntil(_ condition: () -> Bool, file: StaticString = #filePath, line: UInt = #line) async throws {
         for _ in 0..<250 {
