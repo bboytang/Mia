@@ -207,3 +207,4 @@
 - 已通过Python夹具语法检查、普通/多句回复各两轮回环消息顺序回归，以及延迟思考两轮回归（STT后至少400ms才收到TTS）；原生XCTest/模拟器及设备编译无法在本地Linux运行（无Swift/Xcode）。未生成新IPA，未推送、发布或修改生产服务。需macOS完成上述测试，再用实际耳机检查开始对话前已连接、对话中连接、断开停止、无耳机外放、思考/回答不被声音打断及回答后继续聆听。
 - 用户随后要求今后所有测试和构建在GitHub进行，已写入AGENTS.md；本次音频改动也提交当前开发分支并用Build iOS App工作流验证，结果待核对后补记。上述本地验证为此前历史，不替代GitHub原生测试、构建与打包。
 - 提交 `440f9ede6351893c0f846a4f4834e5f19bfa5d46` 的[GitHub Actions](https://github.com/bboytang/Mia/actions/runs/38473856782)成功，完整日志核对92项单元测试/5项UI零失败，新增思考/回答期间输入不打断回归均通过；模拟器/未签名真机编译成功，App Intents与扩展打包检查通过，IPA/校验文件/两尺寸截图录屏已上传到产物11852469830。GitHub曾返回部分步骤的滞后状态，因此以完成日志及产物存在交叉核对，未只依赖任务总状态。尚未发布单独IPA，未更新生产服务器；蓝牙输出和无打断行为仍须用户耳机与iPhone真机验收。
+- 用户询问最新IPA，已使用既有发布工作流将上述成功构建发布为[单独IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-440f9ede6351/Mia-unsigned.ipa)，10,777,871字节。[发布CI38477642148](https://github.com/bboytang/Mia/actions/runs/38477642148)成功，SHA256校验与回下载逐字节比对通过；未重新编译或修改服务器。需同时重签App与MiaActivity.appex，蓝牙及无打断真机验收仍待用户安装。

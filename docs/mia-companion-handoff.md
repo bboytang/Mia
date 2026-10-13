@@ -11,6 +11,8 @@
 
 ## 当前进度
 
+最新音频包：[440f9ed IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-440f9ede6351/Mia-unsigned.ipa)，10,777,871字节，含蓝牙媒体输出/路由调整及取消语音打断，不增加声纹；实际播放完成后继续聆听，点小球仍可结束。GitHub构建38473856782通过92单元/5UI、模拟器/设备编译与扩展打包；发布38477642148通过校验和回下载比对。需同时重签App与MiaActivity.appex；用户实际耳机播放及无打断行为尚待真机确认。之后测试和构建统一在GitHub Actions进行。
+
 最新服务端：用户要求部署自然记忆补丁，已将Python更新为 `mia-xiaozhi-server:companion-memory-2d153d4`。83项服务端测试通过，真实“米娅，请记住……”无需冒号，在本轮结束前保存、重连读取和实际provider检索通过，测试记录清理后原有9条记忆保留。热备/回滚目录 `mia-memory-natural-20261013-2d153d4`。无需在小智管理页面改变 `Memory_nomem`；Mia认证记忆独立启用。
 
 音色：已将后台现有“豆包语音合成2.0(流式)”型号的占位appid/access_token替换为当前有效型号的两项凭据，原配置受保护备份，保留其他参数和当前智能体的Vivi选择。该型号已有40条音色；湾湾小何和阳光青年真实返回音频。用户在绑定Mia的智能体配置中选择该型号及“声音音色”，保存后结束/重开对话即可。不要从旧测试型号的旧版音色列表任选，因为当前资源是seed-tts-2.0；其余音色和iPhone播放未逐一验证。详见[部署与音色指南](mia-companion-backend.md)。
