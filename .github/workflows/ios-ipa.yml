@@ -1,0 +1,54 @@
+name: Publish standalone IPA
+
+on:
+  push:
+    branches: [feature/mia-ios-bootstrap]
+    paths: ['.github/workflows/ios-ipa.yml']
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Successful Build iOS App run to distribute
+        required: true
+        default: '38332993004'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      MIA_BUILD_RUN: ${{ inputs.build_run_id || '38332993004' }}
+    steps:
+      - name: Publish only the verified IPA
+        run: |
+          set -euo pipefail
+          [[ "$MIA_BUILD_RUN" =~ ^[0-9]+$ ]]
+          mia_sha=$(gh run view "$MIA_BUILD_RUN" --json headSha,headBranch,workflowName,status,conclusion \
+            --jq 'select(.workflowName == "Build iOS App" and .headBranch == "feature/mia-ios-bootstrap" and .status == "completed" and .conclusion == "success").headSha')
+          [[ "$mia_sha" =~ ^[0-9a-f]{40}$ ]]
+          mia_package="$RUNNER_TEMP/mia-package"
+          gh run download "$MIA_BUILD_RUN" --name "Mia-iOS-unsigned-$mia_sha" --dir "$mia_package"
+          mapfile -t mia_ipas < <(find "$mia_package" -type f -name Mia-unsigned.ipa)
+          [[ "${#mia_ipas[@]}" == 1 ]]
+          cd "$(dirname "${mia_ipas[0]}")"
+          shasum -a 256 -c SHA256SUMS
+          mia_tag="mia-ios-${mia_sha:0:12}"
+          cat > "$RUNNER_TEMP/mia-release-notes.md" <<EOF
+          未签名 Mia IPA，需要自行重签，建议保持原签名与 Bundle ID 覆盖升级。
+          构建验证：$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$MIA_BUILD_RUN
+          真机麦克风、外放回声及打断效果仍需安装后验证。
+          EOF
+          if ! gh release view "$mia_tag" >/dev/null 2>&1; then
+            gh release create "$mia_tag" Mia-unsigned.ipa --target "$mia_sha" --prerelease --latest=false \
+              --title "Mia iOS ${mia_sha:0:7}" --notes-file "$RUNNER_TEMP/mia-release-notes.md"
+          fi
+          gh release download "$mia_tag" --pattern Mia-unsigned.ipa --dir "$RUNNER_TEMP/mia-download-check"
+          cmp Mia-unsigned.ipa "$RUNNER_TEMP/mia-download-check/Mia-unsigned.ipa"
+          printf 'IPA: %s/%s/releases/download/%s/Mia-unsigned.ipa\n' \
+            "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$mia_tag" >> "$GITHUB_STEP_SUMMARY"
