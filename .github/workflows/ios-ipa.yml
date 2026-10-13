@@ -9,7 +9,7 @@ on:
       build_run_id:
         description: Successful Build iOS App run to distribute
         required: true
-        default: '38332993004'
+        default: '38335899635'
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      MIA_BUILD_RUN: ${{ inputs.build_run_id || '38332993004' }}
+      MIA_BUILD_RUN: ${{ inputs.build_run_id || '38335899635' }}
     steps:
       - name: Publish only the verified IPA
         run: |
