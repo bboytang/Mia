@@ -50,6 +50,24 @@ App 管理回复上限1MiB，记录最多200条，每条内容/来源512字；�
 自动提炼每十轮或结束时执行；“记住：…”提前触发本轮 checkpoint。“这段别记”暂停本会话提炼；“忘掉关于…的记忆”只在唯一匹配时删除，模糊的“忘掉这件事”先澄清，不能虚称已删除。
 敏感候选在 App 中确认后才用于检索/成长。App 删除清理当前数据库与衍生依据；旧服务器备份需管理员另行处理。
 
-## 当前状态
+## 2026-10-13 实际部署状态
 
-本地源码预检和离线模块测试可验证，不代表实际服务器已部署或 manager 已构建。真实云模型的提炼质量、语音情绪一致性和成本需部署后观察；使用现有模型，没有增加付费 API 或自动训练任务。
+`root@43.143.230.174`，目录 `/opt/xiaozhi-server`。现有设备认证与manager绑定查询保留。原Python源码和Java目标class核对一致；原Java完整构建与生产class一致，补丁再次完整构建后仅替换原JAR目标class，保留其他配置/依赖/迁移文件。
+
+运行镜像 `mia-xiaozhi-server:companion-40c715d`、`mia-xiaozhi-web:companion-0d9a7cf`。握手后管理有限等待初始化，兼容完整JSON代码块，无证据性格不成长。完整81项CI成功，真实管理/模型保存/删除、三情绪、ASR/VAD/TTS及重启持久验证通过。
+
+维护启动须使用三份文件，避免遗漏Mia覆盖：
+
+```sh
+cd /opt/xiaozhi-server
+docker compose -f docker-compose_all.yml -f docker-compose.lowmem.yml -f docker-compose.mia.yml up -d --no-deps xiaozhi-esp32-server-web xiaozhi-esp32-server
+```
+
+原镜像/源码/JAR/配置/MySQL一致性导出及SQLite热备保存在受保护目录 `/opt/xiaozhi-server/mia-deploy-20261013/backup`。固定原镜像回滚：
+
+```sh
+cd /opt/xiaozhi-server
+docker compose -f docker-compose_all.yml -f docker-compose.lowmem.yml -f mia-deploy-20261013/rollback.yml up -d --no-deps xiaozhi-esp32-server-web xiaozhi-esp32-server
+```
+
+回滚不删除SQLite或绑定；重新部署使用上方Mia覆盖。沿用原模型供应商，长期提炼准确率、成本和成长质量仍需观察，后台/锁屏与系统口令需iPhone真机验收。

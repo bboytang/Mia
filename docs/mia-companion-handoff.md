@@ -10,16 +10,17 @@
 
 ## 当前进度
 
-实施已授权。工作树起始干净，步骤 0 完成；系统入口/视觉/记忆存储代码已完成，主任务集成与验证中。
-记忆核心/小智适配器29项专门单测通过；公开0.9.7四文件安装补丁预检通过，部署步骤见[服务端指南](mia-companion-backend.md)。
-App/Widget模拟器与设备编译、84项原生单测、4UI、IPA打包、两种尺寸截图已通过（d2d5da4/CI38393944549）。实际截图保存[首页](design/mia-companion-home.jpg)和[第二尺寸](design/mia-companion-home-secondary.jpg)。
-最终0d9a7cf包含成长依据、管理先停旧对话和跨连接删除保护；其服务端CI38395441408（79测试）和原生CI38395441414（85单测/4UI、两种编译、扩展、打包和截图）全部成功。
-已验证代码标签 mia-ios-0d9a7cf43a91已推送，[发布工作流38397708736](https://github.com/bboytang/Mia/actions/runs/38397708736)成功。
-[单独预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)：7,476,764字节；SHA256 `11bef6b50fffe56022f8629099f524beb473f771a7095fab476ce81d9b928ed2`。回下载包含Widget/Metal、无启动视频。必须同时重签扩展。
-没有将旧网关当实际服务。用户纠正登录账户后，root SSH 已恢复；生产预检与备份完成，管理服务隔离构建中，尚未切换生产。
-用户要求授权命令，已提供当前环境公钥追加脚本；公钥指纹 SHA256:nOfXTTs+SJGvYLEs7+AWaWiShWUZOC5S4CDj+s24ic4，已通过 root 账户登录。
-完整命令见[SSH恢复说明](mia-companion-ssh.md)。
-本地 Linux 无 Xcode；原生 CI 已成功，设备测试尚待运行。
+客户端和生产后端已实现，真机验收未完成。
+
+- 客户端 `0d9a7cf43a91` 成功CI38395441414：85单测/4UI、模拟器/设备/Widget编译、打包/截图通过。[实际首页](design/mia-companion-home.jpg)、[第二尺寸](design/mia-companion-home-secondary.jpg)。同代码重复标签构建38397666792曾一项ready等待超时，第二次运行单元/UI/设备打包已通过，截图采集进行中，见工作记录。
+- [预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)：7,476,764字节；SHA256 `11bef6b50fffe56022f8629099f524beb473f771a7095fab476ce81d9b928ed2`。包含Widget/Metal，无启动视频；必须同时重签App/扩展。
+- 服务端修复 `40c715de13a020bdea40ee3b466e7678f34df89a`，CI38401621395完整81项成功；真实联调发现的初始化时序和模型代码块格式已修复。
+- 已通过原授权密钥与主机校验登录 `root@43.143.230.174:22`。生产Python源码与v0.9.7匹配，原Java目标class与原源码构建逐字节一致；补丁JAR只改变目标class。
+- 运行 `mia-xiaozhi-server:companion-40c715d` / `mia-xiaozhi-web:companion-0d9a7cf`，原MySQL/Redis/认证/密钥/绑定保留。持久DB `/opt/xiaozhi-server/data/mia-memory.sqlite3`，权限600。
+- 真实绑定设备即时管理、现有模型提炼、重连读取、暂停/恢复、删除通过；独立owner重启持久验证通过，临时记录已清理。ASR/VAD自动断句/TTS通过，未用iPhone麦克风。
+- 三合成情境实际返回 caring/sad/calm；测试期间暂停记忆、每轮恢复，不训练合成性格。此前长连接探针正常关闭，改独立连接后完成，不当作八情绪人工验收。
+- 暂存/构建/回滚 `/opt/xiaozhi-server/mia-deploy-20261013`；backup内保留原JAR/core/compose/配置/MySQL导出和SQLite热备。维护需同时使用原compose、lowmem和mia覆盖文件，见[部署指南](mia-companion-backend.md)。
+- 本地Linux无Xcode；[30分钟真机清单](mia-companion-device-check.md)仍待iPhone14 Pro Max/iOS27执行。
 
 ## 接续规则
 
@@ -32,5 +33,5 @@ App/Widget模拟器与设备编译、84项原生单测、4UI、IPA打包、两�
 
 ## 下一步
 
-IPA发布与校验已记录；root SSH已恢复，生产预检/备份完成，隔离管理构建进行中。暂存目录 `/opt/xiaozhi-server/mia-deploy-20261013`，先验证原始class一致，再编译补丁并仅替换一份class，随后构建镜像、按原compose启动与联调。原生/服务端代码已验证，不需重复重写。
-生产记忆未部署，后台/锁屏/语音交接与[30分钟真机清单](mia-companion-device-check.md)未验；不得标为全部完成。
+记录重复原生job剩余截图步骤结果；已发布IPA无需因服务端修复重新打包。用户覆盖安装后按真机清单验收后台/锁屏/声音快捷指令、情绪、发热和耗电。不得把服务部署或模拟器成功称为这些系统行为已满足。
+正常维护保留 `docker-compose.mia.yml`；回滚只切换两服务原镜像，不清除记忆和绑定。

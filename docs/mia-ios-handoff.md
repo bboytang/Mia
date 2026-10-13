@@ -4,9 +4,9 @@
 
 用户已批准玻璃小球替代人物、取消启动动画和字幕、系统声音快捷指令＋灵动岛、自动长期记忆与自然性格成长。持续状态统一记录在 [新交接](mia-companion-handoff.md)、[工作记录](mia-companion-worklog.md)、[实施计划](mia-companion-implementation.md)，不要按下方历史版本恢复自动录音或字幕。
 
-最新[情绪伙伴预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)已通过85单测/4UI/79服务端测试及打包并回下载验证。只交付预览，生产记忆与真机后台/锁屏仍未验；后续授权见[SSH说明](mia-companion-ssh.md)。
+最新[情绪伙伴预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)原成功构建85单测/4UI及打包已通过并回下载验证；最新81项服务端测试通过且生产记忆已部署/联调。真机后台/锁屏仍未验，重复标签复核单元/UI已通过，截图状态见新交接。
 
-当前服务器 SSH 身份鉴权失败（用户确认地址/用户名未变化），不得绕过认证部署。原生 CI 和真机验收状态以新记录为准。
+服务器SSH已使用用户指定root账户恢复并完成备份部署。原生CI和真机验收状态以新记录为准。
 
 ## 2026-10-13 真机语音已正常；整句字幕修复 CI 通过（字幕真机待验）
 
