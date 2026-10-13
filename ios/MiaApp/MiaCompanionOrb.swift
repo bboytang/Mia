@@ -109,8 +109,10 @@ private struct MiaOrbEye: Shape {
         let spread = abs(curve)
         let start = CGPoint(x: rect.minX, y: rect.midY + rect.height * 0.25 * curve)
         let end = CGPoint(x: rect.maxX, y: start.y)
-        let upper = rect.midY - rect.height * 0.65 - rect.height * 0.25 * curve
-        let lower = upper + rect.height * 1.3 * (1 - spread * 0.8)
+        let center = rect.midY - rect.height * 0.45 * curve
+        let thickness = rect.height * 0.65 * (1 - spread * 0.8)
+        let upper = center - thickness
+        let lower = center + thickness
         var path = Path()
         path.move(to: start)
         path.addCurve(to: end,
