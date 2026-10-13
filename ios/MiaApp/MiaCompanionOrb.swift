@@ -97,7 +97,7 @@ struct MiaCompanionOrb: View {
     }
 }
 
-private struct MiaOrbEye: Shape {
+struct MiaOrbEye: Shape {
     var curve: Double
 
     var animatableData: Double {
@@ -126,7 +126,7 @@ private struct MiaOrbEye: Shape {
     }
 }
 
-private struct MiaOrbMouth: Shape {
+struct MiaOrbMouth: Shape {
     var curve: Double
     var animatableData: Double {
         get { curve }

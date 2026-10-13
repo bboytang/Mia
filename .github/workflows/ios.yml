@@ -155,7 +155,7 @@ jobs:
               fi
               sleep 0.1
             done
-            xcrun simctl launch "$simulator_id" com.bboytang.mia -MiaDisableAutomaticConversation
+            xcrun simctl launch "$simulator_id" com.bboytang.mia -MiaDisableAutomaticConversation -mia.appearance.skin holographic
             sleep 8
             xcrun simctl io "$simulator_id" screenshot "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png"
             mia_preview="$RUNNER_TEMP/mia-home-preview${suffix}.jpg"

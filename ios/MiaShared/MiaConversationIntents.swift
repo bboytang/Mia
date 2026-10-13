@@ -31,7 +31,7 @@ struct StartMiaConversationIntent: AudioRecordingIntent, LiveActivityIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        try await MiaConversationController.shared.start(requiresLiveActivity: true)
+        try await MiaConversationController.shared.startFromSystemAction()
         return .result()
     }
 }

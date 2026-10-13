@@ -24,6 +24,9 @@ final class MiaConversationController: ObservableObject {
     let session: MiaVoiceSession
     let xiaozhi: MiaXiaozhiClient
     @Published private(set) var isStarting = false
+    @Published private(set) var systemActionCount: Int
+    @Published private(set) var lastSystemActionAt: Date?
+    private let preferences: UserDefaults
     private let activity = MiaLiveActivityController()
     private let requestRecordPermission: () async -> Bool
     private var observations: Set<AnyCancellable> = []
@@ -34,6 +37,7 @@ final class MiaConversationController: ObservableObject {
     private var authorizationTask: Task<Void, Never>?
 
     init(session: MiaVoiceSession? = nil, xiaozhi: MiaXiaozhiClient? = nil,
+         preferences: UserDefaults = .standard,
          requestRecordPermission: @escaping () async -> Bool = {
              await withCheckedContinuation { continuation in
                  AVAudioSession.sharedInstance().requestRecordPermission {
@@ -45,6 +49,10 @@ final class MiaConversationController: ObservableObject {
         let xiaozhi = xiaozhi ?? MiaXiaozhiClient()
         self.session = session
         self.xiaozhi = xiaozhi
+        self.preferences = preferences
+        systemActionCount = preferences.integer(forKey: "mia.shortcuts.invocationCount")
+        let lastInvocation = preferences.double(forKey: "mia.shortcuts.lastInvocation")
+        lastSystemActionAt = lastInvocation > 0 ? Date(timeIntervalSince1970: lastInvocation) : nil
         self.requestRecordPermission = requestRecordPermission
         session.connectionProvider = { [weak xiaozhi] in
             guard let xiaozhi else { throw CancellationError() }
@@ -93,6 +101,17 @@ final class MiaConversationController: ObservableObject {
     }
 
     deinit { authorizationTask?.cancel() }
+
+    func startFromSystemAction() async throws {
+        systemActionCount += 1
+        let now = Date()
+        lastSystemActionAt = now
+        preferences.set(systemActionCount, forKey: "mia.shortcuts.invocationCount")
+        preferences.set(now.timeIntervalSince1970, forKey: "mia.shortcuts.lastInvocation")
+        // A repeated system invocation must not disturb an existing or pending conversation.
+        guard !session.conversationActive, !isStarting else { return }
+        try await start(requiresLiveActivity: true)
+    }
 
     func start(requiresLiveActivity: Bool = false) async throws {
         guard UIApplication.shared.isProtectedDataAvailable else { throw MiaConversationStartError.locked }

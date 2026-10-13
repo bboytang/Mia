@@ -38,6 +38,28 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         XCTAssertFalse(app.secureTextFields["网关访问令牌"].exists)
     }
 
+    func testSkinSelectionAppliesAndSurvivesAppRelaunch() {
+        let app = launch()
+        app.buttons["设置"].tap()
+        let entry = app.buttons["个性化皮肤"]
+        for _ in 0..<3 {
+            if entry.isHittable { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.tap()
+        let skin = app.buttons["mia-skin-holographic"]
+        XCTAssertTrue(skin.waitForExistence(timeout: 5))
+        skin.tap()
+        XCTAssertEqual(skin.value as? String, "已选")
+        app.terminate()
+        app.launch()
+        let avatar = app.buttons["mia-avatar"]
+        XCTAssertTrue(avatar.waitForExistence(timeout: 15))
+        XCTAssertTrue((avatar.value as? String ?? "").contains("蓝金星环"))
+        XCTAssertTrue(app.buttons["开始说话"].exists)
+    }
+
     func testHomeWaitsForTapBeforeDeviceDiscoveryAndActivation() {
         let app = XCUIApplication()
         app.launchArguments = ["-mia.xiaozhi.otaURL", "http://127.0.0.1:8770/ota/?activation=1",

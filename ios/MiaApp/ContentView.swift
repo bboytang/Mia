@@ -5,6 +5,7 @@ struct ContentView: View {
     @ObservedObject private var xiaozhi = MiaConversationController.shared.xiaozhi
     @ObservedObject private var session = MiaConversationController.shared.session
     @State private var showsSettings = false
+    @AppStorage(MiaSkin.storageKey) private var skin: MiaSkin = .glass
     @AppStorage("mia.xiaozhi.websocketURL") private var serverURL = MiaXiaozhiClient.defaultWebSocket
     @AppStorage("mia.xiaozhi.otaURL") private var otaURL = MiaXiaozhiClient.defaultOTA
 
@@ -13,14 +14,15 @@ struct ContentView: View {
             ZStack {
                 MiaCompanionBackground()
                 Button { Task { await controller.toggle() } } label: {
-                    MiaCompanionOrb(emotion: session.expression.emotion, state: orbState,
-                                    intensity: session.expression.intensity, level: session.audioLevel)
+                    MiaAvatarView(skin: skin, emotion: session.expression.emotion, state: orbState,
+                                  intensity: session.expression.intensity, level: session.audioLevel)
                         .frame(width: geometry.size.width * 0.76, height: geometry.size.width * 0.76)
                         .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(session.conversationActive || controller.isStarting ? "结束对话" : "开始说话")
-                .accessibilityValue(session.expression.emotion.displayName)
+                .accessibilityValue(skin.title + " · " + session.expression.emotion.displayName)
+                .accessibilityIdentifier("mia-avatar")
                 .accessibilityHint("点小球开始或结束与 Mia 的聊天")
                 .offset(y: -geometry.size.height * 0.06)
 
@@ -125,6 +127,7 @@ private struct MiaCompanionBackground: View {
 
 private struct MiaSettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var controller = MiaConversationController.shared
     @ObservedObject var xiaozhi: MiaXiaozhiClient
     @ObservedObject var session: MiaVoiceSession
     @AppStorage("mia.xiaozhi.websocketURL") private var serverURL = MiaXiaozhiClient.defaultWebSocket
@@ -171,11 +174,14 @@ private struct MiaSettingsView: View {
                     if let discoveryError { Text(discoveryError).font(.footnote) }
                 }
                 Section("Mia") {
+                    NavigationLink("个性化皮肤") { MiaSkinView() }
                     NavigationLink("记忆与成长") { MiaMemoryView(session: session) }
                     NavigationLink("设置声音唤醒") { MiaWakeGuideView() }
                     Button("关闭 Mia 对话") { MiaConversationController.shared.stop() }
                 }
                 Section("连接诊断（已隐藏凭据）") {
+                    LabeledContent("系统开始动作次数", value: String(controller.systemActionCount))
+                    LabeledContent("最近系统动作", value: controller.lastSystemActionAt?.formatted(date: .abbreviated, time: .standard) ?? "未调用")
                     LabeledContent("对话状态", value: session.state.rawValue)
                     LabeledContent("采集音频帧", value: String(session.microphoneFrames))
                     LabeledContent("上传音频帧", value: String(session.uploadedFrames))

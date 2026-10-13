@@ -54,4 +54,36 @@ final class MiaActivityTests: XCTestCase {
         XCTAssertFalse(controller.session.conversationActive)
         XCTAssertEqual(controller.session.state, .disconnected)
     }
+
+    @MainActor
+    func testRepeatedSystemActionDoesNotRestartPendingConversationAndRecordsItsTime() async throws {
+        let suite = "MiaShortcutTest." + UUID().uuidString
+        let preferences = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { preferences.removePersistentDomain(forName: suite) }
+        var permission: CheckedContinuation<Bool, Never>?
+        var permissionRequests = 0
+        let controller = MiaConversationController(preferences: preferences, requestRecordPermission: {
+            permissionRequests += 1
+            return await withCheckedContinuation { permission = $0 }
+        })
+        let starting = Task { try await controller.start() }
+        for _ in 0..<100 {
+            if permission != nil { break }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        let pending = try XCTUnwrap(permission)
+        try await controller.startFromSystemAction()
+        XCTAssertEqual(permissionRequests, 1)
+        XCTAssertTrue(controller.isStarting)
+        XCTAssertEqual(controller.systemActionCount, 1)
+        XCTAssertNotNil(controller.lastSystemActionAt)
+        let restored = MiaConversationController(preferences: preferences)
+        XCTAssertEqual(restored.systemActionCount, 1)
+        XCTAssertEqual(try XCTUnwrap(restored.lastSystemActionAt).timeIntervalSince1970,
+                       try XCTUnwrap(controller.lastSystemActionAt).timeIntervalSince1970, accuracy: 0.001)
+        controller.stop()
+        pending.resume(returning: true)
+        do { try await starting.value; XCTFail("Stopped start must be cancelled") }
+        catch is CancellationError { }
+    }
 }
