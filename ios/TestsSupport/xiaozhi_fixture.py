@@ -68,6 +68,7 @@ class LoopbackHTTPServer(ThreadingHTTPServer):
 
 async def websocket(ws):
     headers = ws.request.headers
+    queued_subtitles = parse_qs(urlsplit(ws.request.path).query).get("subtitles") == ["queued"]
     if not valid_identity(headers) or headers.get("Authorization") != "Bearer fixture-only":
         await ws.send("认证失败")
         await ws.close()
@@ -91,10 +92,13 @@ async def websocket(ws):
     async def automatic_response(packet):
         await asyncio.sleep(.1)
         for message in [{"type": "stt", "text": "用户识别文本"},
-                        {"type": "tts", "state": "start"},
-                        {"type": "tts", "state": "sentence_start", "text": "Mia 自动回复"}]:
+                        {"type": "tts", "state": "start"}]:
             await ws.send(json.dumps(message))
-        await ws.send(packet)
+        sentences = ["第一句回复", "下一句回复"] if queued_subtitles else ["Mia 自动回复"]
+        for text in sentences:
+            await ws.send(json.dumps({"type": "tts", "state": "sentence_start", "text": text}))
+            for _ in range(2 if queued_subtitles else 1):
+                await ws.send(packet)
         await ws.send(json.dumps({"type": "tts", "state": "stop"}))
 
     async for raw in ws:

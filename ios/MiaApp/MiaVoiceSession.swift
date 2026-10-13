@@ -39,7 +39,6 @@ final class MiaVoiceSession: ObservableObject {
     private let recordPermission: () async -> Bool
     private var handshakeTimeout: Task<Void, Never>?
     private var replyTimeout: Task<Void, Never>?
-    private var playbackGeneration = UUID()
     private var microphoneGeneration: UUID?
 
     private var transport: MiaWebSocketTransport?
@@ -51,7 +50,7 @@ final class MiaVoiceSession: ObservableObject {
     private var sendTask: Task<Void, Never>?
     private var pendingMicrophoneFrames: [[Int16]] = []
     private var captionTimeline = MiaCaptionTimeline()
-    private var pendingPlaybackFrames = 0
+    private var pendingPlaybackFrames: [UUID: Int] = [:]
     private var speechEnded = false
     private var startWhenConnected = false
     private var connectionGeneration = UUID()
@@ -105,7 +104,7 @@ final class MiaVoiceSession: ObservableObject {
         handshakeTimeout = nil
         replyTimeout?.cancel()
         replyTimeout = nil
-        playbackGeneration = UUID()
+        pendingPlaybackFrames.removeAll()
         microphoneGeneration = nil
         authorizationRejected = false
         connectionGeneration = UUID()
@@ -120,7 +119,6 @@ final class MiaVoiceSession: ObservableObject {
         codec = nil
         sessionID = nil
         pendingMicrophoneFrames.removeAll()
-        pendingPlaybackFrames = 0
         speechEnded = false
         startWhenConnected = false
         captionTimeline.interrupt()
@@ -227,6 +225,9 @@ final class MiaVoiceSession: ObservableObject {
         case .userTranscript(let text):
             lastUserTranscript = text
             guard conversationActive, state == .listening, !text.isEmpty else { return }
+            pendingPlaybackFrames.removeAll()
+            captionTimeline.interrupt()
+            caption = ""
             acceptsReply = true
             pauseForReply()
             state = .waiting
@@ -248,8 +249,9 @@ final class MiaVoiceSession: ObservableObject {
     private func handleAudio(_ payload: Data) throws {
         guard state == .speaking, let codec, let audio else { return }
         let samples = try codec.decode(payload)
-        pendingPlaybackFrames += 1
-        try audio.play(samples, generation: playbackGeneration)
+        let frameID = UUID()
+        pendingPlaybackFrames[frameID] = captionTimeline.receivingSentenceID ?? -1
+        try audio.play(samples, generation: frameID)
     }
 
     private func startListening() async {
@@ -268,10 +270,9 @@ final class MiaVoiceSession: ObservableObject {
                                 onMicrophoneFrame: { [weak self] samples, generation in
                                     Task { @MainActor in self?.enqueueMicrophone(samples, generation: generation) }
                                 },
-                                onPlaybackFrame: { [weak self] duration, level, generation in
+                                onPlaybackFrame: { [weak self] _, level, generation in
                                     Task { @MainActor in
-                                        guard let self, self.playbackGeneration == generation else { return }
-                                        self.playbackAdvanced(duration, level: level)
+                                        self?.playbackAdvanced(level: level, frameID: generation)
                                     }
                                 },
                                 onSpeechActivity: { [weak self] generation in
@@ -346,9 +347,8 @@ final class MiaVoiceSession: ObservableObject {
         speechMonitorGeneration = nil
         acceptsReply = false
         replyTimeout?.cancel()
-        playbackGeneration = UUID()
+        pendingPlaybackFrames.removeAll()
         audio?.interruptPlayback()
-        pendingPlaybackFrames = 0
         speechEnded = false
         captionTimeline.interrupt()
         caption = ""
@@ -399,19 +399,17 @@ final class MiaVoiceSession: ObservableObject {
         if connection == sendGeneration { sendTask = nil }
     }
 
-    private func playbackAdvanced(_ duration: Double, level: Float) {
-        pendingPlaybackFrames = max(0, pendingPlaybackFrames - 1)
+    private func playbackAdvanced(level: Float, frameID: UUID) {
+        guard let sentenceID = pendingPlaybackFrames.removeValue(forKey: frameID) else { return }
         guard state == .speaking else { return }
         audioLevel = level
-        captionTimeline.advancePlayback(seconds: duration)
+        captionTimeline.advancePlayback(sentenceID: sentenceID)
         caption = captionTimeline.visibleText
         finishSpeechIfPlayed()
     }
 
     private func finishSpeechIfPlayed() {
-        guard speechEnded, pendingPlaybackFrames == 0 else { return }
-        captionTimeline.finishSentence()
-        caption = captionTimeline.visibleText
+        guard speechEnded, pendingPlaybackFrames.isEmpty else { return }
         audioLevel = 0
         state = .ready
         resumeListening()

@@ -45,6 +45,13 @@ private final class ConversationAudioStub: MiaConversationAudio {
         let pending = completions; completions.removeAll()
         for generation in pending { playback?(0.06, 0.2, generation) }
     }
+    @discardableResult
+    func finishPlaybackFrame() -> UUID? {
+        guard !completions.isEmpty else { return nil }
+        let generation = completions.removeFirst()
+        playback?(0.06, 0.2, generation)
+        return generation
+    }
 }
 
 final class MiaContinuousConversationTests: XCTestCase {
@@ -58,13 +65,85 @@ final class MiaContinuousConversationTests: XCTestCase {
     }
 
     @MainActor
-    private func session(audio: ConversationAudioStub) -> MiaVoiceSession {
+    private func session(audio: ConversationAudioStub,
+                         endpoint: String = "ws://127.0.0.1:8769/xiaozhi/v1/") -> MiaVoiceSession {
         let voice = MiaVoiceSession(makeAudio: { audio }, recordPermission: { true })
         voice.connectionProvider = {
-            try MiaWebSocketConfiguration(endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/",
+            try MiaWebSocketConfiguration(endpoint: endpoint,
                                           clientID: UUID(), token: "fixture-only")
         }
         return voice
+    }
+
+    @MainActor
+    func testQueuedSentencesFollowPlaybackAndClearBetweenReplies() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio, endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/?subtitles=queued")
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        audio.saySomething()
+        try await waitUntil { audio.completions.count == 4 && voice.replyText == "下一句回复" }
+        XCTAssertEqual(voice.caption, "")
+
+        let oldPacket = audio.finishPlaybackFrame()
+        try await waitUntil { voice.caption == "第一句回复" }
+        audio.finishPlaybackFrame()
+        try await Task.sleep(nanoseconds: 20_000_000)
+        XCTAssertEqual(voice.caption, "第一句回复")
+        XCTAssertEqual(voice.state, .speaking)
+        audio.finishPlaybackFrame()
+        try await waitUntil { voice.caption == "下一句回复" }
+        audio.finishPlaybackFrame()
+        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
+        XCTAssertEqual(voice.caption, "下一句回复")
+
+        audio.saySomething()
+        try await waitUntil { audio.completions.count == 4 && voice.state == .speaking }
+        XCTAssertEqual(voice.caption, "")
+        if let oldPacket { audio.playback?(0.06, 0.2, oldPacket) }
+        try await Task.sleep(nanoseconds: 20_000_000)
+        XCTAssertEqual(voice.caption, "")
+        XCTAssertEqual(voice.state, .speaking)
+        audio.finishPlaybackFrame()
+        try await waitUntil { voice.caption == "第一句回复" }
+        audio.finishPlaying()
+        try await waitUntil { voice.state == .listening && audio.rounds == 3 }
+        XCTAssertEqual(voice.caption, "下一句回复")
+    }
+
+    @MainActor
+    func testInterruptingQueuedSentencesDiscardsOldCaptionCallbacks() async throws {
+        let audio = ConversationAudioStub()
+        let voice = session(audio: audio, endpoint: "ws://127.0.0.1:8769/xiaozhi/v1/?subtitles=queued")
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.state == .listening }
+        let oldCapture = audio.capture
+        audio.saySomething()
+        try await waitUntil { audio.completions.count == 4 }
+        let oldPacket = audio.finishPlaybackFrame()
+        try await waitUntil { voice.caption == "第一句回复" }
+
+        audio.speech?(oldCapture)
+        try await waitUntil { voice.state == .listening && audio.rounds == 2 }
+        XCTAssertEqual(voice.caption, "")
+        audio.finishPlaying()
+        try await Task.sleep(nanoseconds: 20_000_000)
+        XCTAssertEqual(voice.caption, "")
+        XCTAssertEqual(voice.state, .listening)
+
+        audio.saySomething()
+        try await waitUntil { audio.completions.count == 4 && voice.state == .speaking }
+        if let oldPacket { audio.playback?(0.06, 0.2, oldPacket) }
+        try await Task.sleep(nanoseconds: 20_000_000)
+        XCTAssertEqual(voice.caption, "")
+        audio.finishPlaybackFrame()
+        try await waitUntil { voice.caption == "第一句回复" }
+        audio.finishPlaying()
+        try await waitUntil { voice.state == .listening && audio.rounds == 3 }
+        XCTAssertEqual(voice.caption, "下一句回复")
+        XCTAssertNil(voice.errorMessage)
     }
 
     @MainActor
