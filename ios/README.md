@@ -1,6 +1,8 @@
 # Mia iOS
 
-## 情绪伙伴升级（2026-10-13；开发验证中）
+## 情绪伙伴升级（2026-10-13；预览IPA已验证交付，生产记忆/真机待验）
+
+[直接下载预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)，约7.5MB，需重签App和Widget。代码0d9a7cf的85单测、4UI、两种编译与扩展打包[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441414)，服务端79项[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441408)。生产记忆未部署，不将其称为已上线。
 
 首页改为原创玻璃流体小球、八种动态表情与深色背景，取消启动视频、人物和字幕。首次进入待呼叫，不自动录音或发现设备；点小球开始/结束。系统声音快捷指令可调用后台录音动作，另有打开 App 的回退动作；待呼叫期间只有系统口令监听可能使用麦克风。
 

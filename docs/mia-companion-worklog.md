@@ -70,3 +70,19 @@
 - 实际查看两张缩略截图，确认玻璃流体球和眼睛渲染正常，旧人物/字幕/启动动画消失，设置与待呼叫提示在安全区域内；保存为 [首页](design/mia-companion-home.jpg)、[第二尺寸](design/mia-companion-home-secondary.jpg)。这些截图对应渲染代码未改的 d2d5da4，不将其算作真机验收或四情绪人工验收。
 - 服务端81cb934 CI准确通过78项测试；新增旧连接删除回归的0d9a7cf服务端CI也已成功，最终数量待日志核对。
 - 最终前端0d9a7cf原生CI38395441414进行中，成长依据展示和管理停止交接均在该提交。生产部署继续等待SSH授权恢复。
+
+## 2026-10-13：步骤 6 最终源码验证全部通过
+
+- 最终代码 `0d9a7cf43a91` 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/38395441414) 成功：85原生单测、4UI、模拟器/设备/Widget编译、扩展/无启动视频检查、IPA打包与截图录屏。
+- 同一提交的 [服务端 CI](https://github.com/bboytang/Mia/actions/runs/38395441408) 成功：79项完整回归，15.242秒；另在临时公开0.9.7副本实际安装验证导入、20轮对话裁剪、literal反斜杠记忆和原文件备份，均通过。
+- 整体差异与工作树检查通过。已创建并推送已验证代码标签 `mia-ios-0d9a7cf43a91`，启动独立IPA工作流，只交付预览包，不宣称记忆已上线/真机已通过。
+- 首次复合发布命令的自动权限审核超时，命令未执行；拆分为日志读取、标签和工作流后已执行。不是安全拒绝，未要求用户重复批准。
+- 再次SSH只读连接仍鉴权失败；已确认实际私钥对应的公钥指纹与提供的授权公钥一致，不输出私钥。生产源码/Java构建/部署仍未验证。
+
+## 2026-10-13：步骤 6 独立预览 IPA 交付完成
+
+- [发布工作流](https://github.com/bboytang/Mia/actions/runs/38397708736) 成功，产物源代码0d9a7cf43a91；工作流自校验输出 `Mia-unsigned.ipa: OK`。
+- [直接下载IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)，7,476,764字节；回下载得到 SHA-256 `11bef6b50fffe56022f8629099f524beb473f771a7095fab476ce81d9b928ed2`，核对包含 `MiaActivity.appex/MiaActivity` 和 `default.metallib`、无 `MiaLaunch.mp4`。
+- 发布说明明确标为预览：需同时重签App/扩展，生产记忆尚未部署，后台/锁屏/耗电需真机验收。没有将UI管理入口称为记忆已上线。
+- 方案、计划、工作记录、交接、部署指南、真机清单和实际截图均已写入仓库。授权指令也存为[SSH恢复说明](mia-companion-ssh.md)。
+- 步骤7仍受SSH鉴权阻塞；未改生产配置/源码、未构建生产Java、未调用真实云模型、未跑真机30分钟验收。代码实现与自动验证完成，不标记整项生产升级完成。
