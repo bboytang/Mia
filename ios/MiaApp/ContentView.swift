@@ -1,4 +1,5 @@
 import SwiftUI
+import MediaPlayer
 
 struct ContentView: View {
     @ObservedObject private var controller = MiaConversationController.shared
@@ -179,7 +180,26 @@ private struct MiaSettingsView: View {
                     NavigationLink("设置声音唤醒") { MiaWakeGuideView() }
                     Button("关闭 Mia 对话") { MiaConversationController.shared.stop() }
                 }
+                Section("声音设备") {
+                    LabeledContent("麦克风", value: controller.inputDevice)
+                    LabeledContent("播放设备", value: controller.outputDevice)
+                    HStack {
+                        Text("选择播放设备")
+                        Spacer()
+                        MiaAudioRoutePicker().frame(width: 44, height: 44)
+                    }
+                    Text("开始对话后可在这里确认耳机是否被选中。")
+                        .font(.footnote)
+                }
+                Section("最近一次语音识别") {
+                    Text(session.lastUserTranscript.isEmpty ? "尚未收到识别结果" : session.lastUserTranscript)
+                        .textSelection(.enabled)
+                    Text("先核对识别文字是否符合原话；若文字正确而回复或歌曲不对，应检查回复或音乐服务。这里只显示，不保存为诊断日志。")
+                        .font(.footnote)
+                }
                 Section("连接诊断（已隐藏凭据）") {
+                    LabeledContent("设备采样率", value: String(format: "%.0f Hz", controller.hardwareSampleRate))
+                    LabeledContent("上传前丢弃帧", value: String(session.droppedMicrophoneFrames))
                     LabeledContent("系统开始动作次数", value: String(controller.systemActionCount))
                     LabeledContent("最近系统动作", value: controller.lastSystemActionAt?.formatted(date: .abbreviated, time: .standard) ?? "未调用")
                     LabeledContent("对话状态", value: session.state.rawValue)
@@ -193,6 +213,7 @@ private struct MiaSettingsView: View {
                     LabeledContent("异常", value: session.diagnostics.exception)
                 }
             }
+            .onAppear { controller.refreshAudioRoute() }
             .navigationTitle("设置")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) { Button("完成") { dismiss() } }
@@ -203,4 +224,15 @@ private struct MiaSettingsView: View {
 
 #Preview {
     ContentView()
+}
+
+private struct MiaAudioRoutePicker: UIViewRepresentable {
+    func makeUIView(context: Context) -> MPVolumeView {
+        let view = MPVolumeView(frame: .zero)
+        view.showsVolumeSlider = false
+        view.accessibilityLabel = "选择播放设备"
+        return view
+    }
+
+    func updateUIView(_ uiView: MPVolumeView, context: Context) { }
 }

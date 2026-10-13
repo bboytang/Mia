@@ -24,6 +24,7 @@ final class MiaVoiceSession: ObservableObject {
     @Published private(set) var diagnostics = MiaConnectionDiagnostics()
     @Published private(set) var microphoneFrames = 0
     @Published private(set) var uploadedFrames = 0
+    @Published private(set) var droppedMicrophoneFrames = 0
     @Published private(set) var microphonePeak: Float = 0
     @Published private(set) var lastUserTranscript = ""
     @Published private(set) var replyText = ""
@@ -145,6 +146,8 @@ final class MiaVoiceSession: ObservableObject {
         diagnostics = MiaConnectionDiagnostics()
         microphoneFrames = 0
         uploadedFrames = 0
+        droppedMicrophoneFrames = 0
+        lastUserTranscript = ""
         microphonePeak = 0
         do {
             guard let connectionProvider else { throw MiaConnectionError.invalidEndpoint }
@@ -394,6 +397,7 @@ final class MiaVoiceSession: ObservableObject {
         microphonePeak = max(microphonePeak, audioLevel)
         pendingMicrophoneFrames.append(samples)
         if pendingMicrophoneFrames.count > 10 {
+            droppedMicrophoneFrames += 1
             pendingMicrophoneFrames.removeFirst()
         }
         if state == .listening { sendPendingMicrophoneFrames() }

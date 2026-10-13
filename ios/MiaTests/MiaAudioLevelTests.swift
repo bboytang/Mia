@@ -3,12 +3,30 @@ import AVFoundation
 @testable import Mia
 
 final class MiaAudioLevelTests: XCTestCase {
+    func testConnectedHeadsetIsPreferredWhenOutputStayedOnPhone() {
+        XCTAssertEqual(MiaAudioIO.preferredBluetoothInputIndex(
+            available: [.builtInMic, .bluetoothHFP], outputs: [.builtInSpeaker]), 1)
+        XCTAssertEqual(MiaAudioIO.preferredBluetoothInputIndex(
+            available: [.bluetoothLE, .builtInMic], outputs: [.builtInReceiver]), 0)
+        XCTAssertNil(MiaAudioIO.preferredBluetoothInputIndex(
+            available: [.builtInMic], outputs: [.builtInReceiver]))
+    }
+
+    func testSelectedAccessoryRouteIsPreserved() {
+        for output in [AVAudioSession.Port.bluetoothA2DP, .bluetoothHFP, .headphones, .usbAudio] {
+            XCTAssertNil(MiaAudioIO.preferredBluetoothInputIndex(
+                available: [.builtInMic, .bluetoothHFP], outputs: [output]))
+        }
+        XCTAssertNil(MiaAudioIO.preferredBluetoothInputIndex(
+            available: [.bluetoothHFP], outputs: []))
+    }
+
     func testNativeConversionTracksChangingCaptureFormatsAndProducesAudibleOpus() throws {
         let audio = MiaAudioIO()
         let target = try XCTUnwrap(AVAudioFormat(commonFormat: .pcmFormatInt16,
                                                sampleRate: 16_000, channels: 1, interleaved: true))
         let codec = try MiaOpusCodec(inputSampleRate: 16_000, outputSampleRate: 16_000)
-        for (rate, channels) in [(48_000.0, 1), (44_100.0, 2), (16_000.0, 1), (48_000.0, 1)] {
+        for (rate, channels) in [(48_000.0, 1), (44_100.0, 2), (8_000.0, 1), (24_000.0, 1), (16_000.0, 1), (48_000.0, 1)] {
             let format = try XCTUnwrap(AVAudioFormat(commonFormat: .pcmFormatFloat32,
                                                    sampleRate: rate, channels: AVAudioChannelCount(channels),
                                                    interleaved: false))

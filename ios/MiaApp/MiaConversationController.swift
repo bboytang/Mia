@@ -23,6 +23,9 @@ final class MiaConversationController: ObservableObject {
 
     let session: MiaVoiceSession
     let xiaozhi: MiaXiaozhiClient
+    @Published private(set) var inputDevice = "未建立音频路由"
+    @Published private(set) var outputDevice = "未建立音频路由"
+    @Published private(set) var hardwareSampleRate = 0.0
     @Published private(set) var isStarting = false
     @Published private(set) var systemActionCount: Int
     @Published private(set) var lastSystemActionAt: Date?
@@ -68,6 +71,7 @@ final class MiaConversationController: ObservableObject {
             .sink { [weak self] state, active in
                 // @Published emits before the stored property changes.
                 self?.refreshActivity(state: state, active: active)
+                self?.refreshAudioRoute()
             }.store(in: &observations)
         session.$expression
             .sink { [weak self] expression in
@@ -86,6 +90,7 @@ final class MiaConversationController: ObservableObject {
         center.publisher(for: AVAudioSession.routeChangeNotification)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] note in
+                self?.refreshAudioRoute()
                 if let reason = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
                    reason == AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue { self?.stop() }
             }.store(in: &observations)
@@ -194,6 +199,13 @@ final class MiaConversationController: ObservableObject {
         emotion = "calm"
         intensity = 0
         refreshActivity(state: .disconnected, active: false)
+    }
+
+    func refreshAudioRoute() {
+        let audio = AVAudioSession.sharedInstance()
+        inputDevice = audio.currentRoute.inputs.map(\.portName).joined(separator: "、")
+        outputDevice = audio.currentRoute.outputs.map(\.portName).joined(separator: "、")
+        hardwareSampleRate = audio.sampleRate
     }
 
     func settingsChanged() {

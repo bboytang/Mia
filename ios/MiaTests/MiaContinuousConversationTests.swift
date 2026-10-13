@@ -157,6 +157,7 @@ final class MiaContinuousConversationTests: XCTestCase {
             XCTAssertGreaterThan(voice.microphoneFrames, 0)
             XCTAssertGreaterThan(voice.uploadedFrames, 0)
             XCTAssertGreaterThan(voice.microphonePeak, 0)
+            XCTAssertEqual(voice.lastUserTranscript, "用户识别文本")
             XCTAssertTrue(audio.muted)
             XCTAssertEqual(audio.rounds, round)
             XCTAssertFalse(voice.caption.contains("用户识别文本"))

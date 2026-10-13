@@ -3,7 +3,6 @@ import AVFoundation
 enum MiaAudioError: LocalizedError {
     case microphoneDenied
     case unsupportedAudioFormat
-    case voiceProcessingUnavailable
     case configurationChanged
     case captureRecoveryFailed
 
@@ -11,7 +10,6 @@ enum MiaAudioError: LocalizedError {
         switch self {
         case .microphoneDenied: "请在系统设置中允许 Mia 使用麦克风"
         case .unsupportedAudioFormat: "当前设备无法建立语音格式"
-        case .voiceProcessingUnavailable: "当前音频设备无法启用语音处理，请尝试 iPhone 内置麦克风"
         case .configurationChanged: "音频设备发生变化，正在恢复对话"
         case .captureRecoveryFailed: "无法恢复麦克风，请重新开始对话"
         }
@@ -49,6 +47,15 @@ final class MiaAudioIO: MiaConversationAudio {
         engine.attach(player)
     }
 
+    // Prefer a connected headset at startup only when output stayed on the phone.
+    // Preserve already selected wired and Bluetooth media routes.
+    static func preferredBluetoothInputIndex(available: [AVAudioSession.Port],
+                                            outputs: [AVAudioSession.Port]) -> Int? {
+        guard !outputs.isEmpty,
+              outputs.allSatisfy({ $0 == .builtInReceiver || $0 == .builtInSpeaker }) else { return nil }
+        return available.firstIndex { $0 == .bluetoothHFP || $0 == .bluetoothLE }
+    }
+
     static func level(for samples: [Int16]) -> Float {
         guard !samples.isEmpty else { return 0 }
         let sumSquares = samples.reduce(0.0) { sum, sample in
@@ -65,18 +72,22 @@ final class MiaAudioIO: MiaConversationAudio {
         guard !running else { return }
         let audioSession = AVAudioSession.sharedInstance()
         // Allow media-only Bluetooth outputs as well as hands-free headsets.
-        try audioSession.setCategory(.playAndRecord, mode: .voiceChat,
+        try audioSession.setCategory(.playAndRecord, mode: .default,
                                      options: [.allowBluetooth, .allowBluetoothA2DP])
         try audioSession.setActive(true)
 
-        let input = engine.inputNode
         do {
-            try input.setVoiceProcessingEnabled(true)
-            guard input.isVoiceProcessingEnabled else { throw MiaAudioError.voiceProcessingUnavailable }
+            try audioSession.overrideOutputAudioPort(.none)
+            let inputs = audioSession.availableInputs ?? []
+            if let index = Self.preferredBluetoothInputIndex(
+                available: inputs.map(\.portType), outputs: audioSession.currentRoute.outputs.map(\.portType)) {
+                try audioSession.setPreferredInput(inputs[index])
+            }
         } catch {
             try? audioSession.setActive(false)
             throw error
         }
+        let input = engine.inputNode
         guard let captureFormat = AVAudioFormat(commonFormat: .pcmFormatInt16,
                                                 sampleRate: 16_000, channels: 1,
                                                 interleaved: true),
@@ -159,7 +170,7 @@ final class MiaAudioIO: MiaConversationAudio {
 
     func recoverConfiguration() throws -> Bool {
         guard running, !engine.isRunning else { return false }
-        // Keep the active session and Voice Processing unit; rebuilding them retriggers route changes.
+        // Keep the active session; rebuilding it retriggers route changes.
         player.stop()
         converter = nil
         engine.prepare()
@@ -192,13 +203,11 @@ final class MiaAudioIO: MiaConversationAudio {
         captureEnabled = false
         let frame = frameBuffer.takePaddedFrame()
         inputLock.unlock()
-        if running { engine.inputNode.isVoiceProcessingInputMuted = true }
         return frame
     }
 
     @discardableResult
     func beginMicrophoneCapture() -> UUID {
-        if running { engine.inputNode.isVoiceProcessingInputMuted = false }
         inputLock.lock()
         defer { inputLock.unlock() }
         frameBuffer.reset()
@@ -211,7 +220,7 @@ final class MiaAudioIO: MiaConversationAudio {
         guard input.format.sampleRate > 0, input.format.channelCount > 0 else {
             throw MiaAudioError.unsupportedAudioFormat
         }
-        // Voice Processing can renegotiate the format after graph setup.
+        // Audio routes can renegotiate the capture format after graph setup.
         if converter?.inputFormat != input.format {
             converter = AVAudioConverter(from: input.format, to: captureFormat)
         }
@@ -240,6 +249,10 @@ final class MiaAudioIO: MiaConversationAudio {
     }
 
     private func handleMicrophone(_ input: AVAudioPCMBuffer, captureFormat: AVAudioFormat) {
+        inputLock.lock()
+        let enabled = captureEnabled
+        inputLock.unlock()
+        guard enabled else { return }
         let samples: [Int16]
         do { samples = try microphoneSamples(from: input, captureFormat: captureFormat) }
         catch { onAudioError?(error); return }
