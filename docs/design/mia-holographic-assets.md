@@ -6,6 +6,8 @@
 
 参考图片仅用于素材生成，不直接打包整张参考照片。球壳边缘仍包含部分静态侧面反射，独立耳环覆盖并做音量响应；流动荧光采用有界粒子绘制，不能将静态高光称为流动动画。后台暂停绘制；减少动态效果关闭眨眼/摇摆/时间流动，保留音量亮度和嘴形反馈。
 
+增加主题时，在 `MiaSkin` 添加稳定的raw值、标题和说明，在 `MiaAvatarView` 路由到对应视图；选择页根据 `CaseIterable` 显示，不需要新增皮肤框架。已发布raw值不要重命名，以免丢失用户选择。
+
 ## 球壳提示词（内置 imagegen，透明背景）
 
 Use case: precise-object-edit. Asset type: a production iOS animated character's static shell layer, RGBA transparent PNG. Edit the reference image into ONE front-facing, perfectly symmetrical spherical shell only. Preserve the reference's very high quality glossy 3D glass, polished dark metallic shell segments, intense electric-blue and warm gold illuminated outer rings, photoreal specular reflections. REMOVE BOTH SIDE EAR DISCS completely (they will be separate animated native layers), remove the pedestal, floor, light beam and black background outside the sphere. REMOVE ALL eyes, eyebrows, mouth, nose and facial marks: the central front inner face area must be smooth dark navy/black, blank and clean so animated facial layers can be drawn there. Remove discrete interior glowing particle dots; retain polished shell bands/reflection texture mainly around the OUTER 20 percent of sphere, keep middle 60 percent blank dark face. Sphere silhouette entirely round, not an ellipse. Center the sphere, fill exactly approximately 88 percent of square canvas width and height, leave even transparent margin. Genuine alpha outside sphere. No ears, no face, no pedestal, no text, no watermark, no additional objects. This is a layered character asset, not a finished illustration: do not put any facial features back. Render at 1024x1024.

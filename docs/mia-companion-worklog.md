@@ -170,3 +170,14 @@
 - 下载实际IPA核对ZIP、Bundle ID、Widget和Metal；开始动作包含AudioRecording/SessionStarting系统协议，isDiscoverable=true、openAppWhenRun=false，不含ForegroundContinuable。两个尺寸实际首页已查看，CI原始JPEG预览分别保存design/mia-companion-home-e46c1d0.jpg和secondary版本；不将平静首页截图视为八情绪语境验收。
 - 建立已验证代码标签mia-ios-e46c1d098c96，沿用独立IPA分发工作流38421792253成功。直接链接 https://github.com/bboytang/Mia/releases/download/mia-ios-e46c1d098c96/Mia-unsigned.ipa ，7,488,973字节；SHA256 b2b826f727d28a4d71f7d4c2eee48ddb90782bd611480683ee89f8d6fa8bb3ff。发布后再次回下载与CI产物cmp一致，说明标为测试预发布及真机未验。
 - 更新README/交接：后台待机/结束再呼叫/解锁后呼叫与系统麦克风交接需安装后验收；用户尚未回答快捷指令App是否能发现开始动作。不得把构建通过描述为这些实际唤醒行为已实现，也不再推荐打开App作为替代。
+
+
+## 2026-10-13：个性化皮肤与完全退出后的系统误触发诊断
+
+- 用户报告未说口令也被声音快捷指令唤醒，补充为Mia完全退出时发生。按现有无App本地KWS的实现更符合系统识别/其他自动化调用，未声称已确认唯一来源或可修改iOS阈值。新增本机后台开始动作次数/最近时间（跨进程重启保留）、活动/启动中重复调用保护及系统重训/自动化检查指引；不新增常驻录音、声纹、二次确认或前台回退。
+- 设置→个性化皮肤新增玻璃流体/蓝金星环，默认原主题，AppStorage稳定raw值保存选择；新增主题只需枚举/对应视图。切换不更改OTA/WS地址、绑定或语音会话。
+- 使用内置imagegen根据用户正面参考生成RGBA球壳与独立耳环，均1254×1254；源码资源/完整提示词见design/mia-holographic-assets.md。角落alpha=0验证通过。动态脸沿用共用情绪参数，嘴形跟输入/播放音量；耳环跟聆听中的麦克风音量；30fps TimelineView驱动眨眼、左右俯仰/偏移、有界96粒子及光轨，后台暂停时间动画，Reduce Motion保留声音反馈。
+- 初次95ad3ea构建CI38445432293：模拟器编译和91单元通过，新增皮肤UI查询不到列表按钮标识。修正可访问性信息到列表实际内容层，加入标准按钮/选中traits，继续验证真正选择和重启保留，未跳过UI测试。
+- cb07db038e4d05d6f35413a2c5758ca43b23b645的CI38447444188第一次：91单元、新皮肤选择/重启UI及其他三UI通过，唯一原有绑定UI测试在launch阶段进程ID未及时建立；随后同代码第二次完整复核成功，91单元/5UI、模拟器/真机/扩展编译、快捷动作打包、两个尺寸新皮肤截图录屏全部通过。没有通过改断言或业务代码掩盖启动失败。
+- 下载实际IPA验证ZIP/校验、Asset.car内两个皮肤名称、Widget及可发现后台开始动作；未包含ForegroundContinuable。两个尺寸实际截图已查看，无明显裁切，保存design/mia-holographic-home-cb07db0.jpg及secondary版。实际输入/播放嘴形及耳环幅度、长期帧率/发热/耗电、后台交接与误触发频率仍需真机；不将模拟器零输入录屏当作麦克风联调。
+- 标签mia-ios-cb07db038e4d及独立IPA分发CI38453438889成功，直接链接 https://github.com/bboytang/Mia/releases/download/mia-ios-cb07db038e4d/Mia-unsigned.ipa ，10,778,899字节，SHA256 0d343cdeda7eb0168aebbe5eeb8fc3b7dbe863f1c8547d4232d4ab4dbda23aba。本次无生产服务/数据库/绑定改动，记忆补丁部署状态保持原记录。

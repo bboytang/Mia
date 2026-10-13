@@ -1,5 +1,13 @@
 # Mia iOS
 
+## 个性化皮肤与声音快捷指令诊断（2026-10-13）
+
+[下载蓝金星环测试 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-cb07db038e4d/Mia-unsigned.ipa)，约10.8MB，需同时重签App与灵动岛扩展。设置新增「个性化皮肤」，玻璃流体/蓝金星环可切换并保留选择。新球体有眨眼、音量嘴形、上下左右摇摆、麦克风音量耳环响应和流动荧光粒子；后台暂停时间动画，支持减少动态效果。
+
+源码cb07db0的[iOS CI](https://github.com/bboytang/Mia/actions/runs/38447444188)最终完整复核通过91单元/5UI、模拟器/设备/扩展编译、打包与两尺寸截图录屏。初次皮肤UI标识失败已修正；同代码第一次复核有原有UI测试启动进程ID超时，第二次复核通过。实际语音动效幅度和长期发热耗电仍需真机验收。[实际首页](../docs/design/mia-holographic-home-cb07db0.jpg)、[第二尺寸](../docs/design/mia-holographic-home-cb07db0-secondary.jpg)、[素材及生成提示词](../docs/design/mia-holographic-assets.md)。
+
+完全退出后声音快捷指令仍由系统识别。本版记录后台开始动作次数/最近时间，重复调用不会重新启动已开始或正在连接的对话；不能调整iOS识别阈值或承诺消除首次误识别。设置中的声音唤醒指引新增重新训练独特长口令和检查其他自动化的步骤。未新增常驻识别引擎，未更新生产服务器或清除绑定、记忆。
+
 ## 后台直接唤醒入口与表情修复（2026-10-13；真机待验）
 
 [下载测试 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-e46c1d098c96/Mia-unsigned.ipa)，7,488,973字节，需同时重签 App 和 `MiaActivity.appex`。源码 e46c1d0 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/38417464788) 通过86单元/4UI、两种编译、扩展/快捷动作打包及两尺寸截图；[服务端CI](https://github.com/bboytang/Mia/actions/runs/38417464718)83项通过。发布回下载与CI产物逐字节相同。
