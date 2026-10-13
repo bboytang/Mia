@@ -103,6 +103,9 @@ jobs:
           assert expected <= data["actions"].keys(), "Missing Mia conversation actions"
           assert expected <= {item["actionIdentifier"] for item in data["autoShortcuts"]}, "Missing Mia shortcuts"
           assert all(data["actions"][name]["isDiscoverable"] for name in expected), "Hidden Mia action"
+          start = data["actions"]["StartMiaConversationIntent"]
+          assert not start["openAppWhenRun"], "Mia background start must not open the app"
+          assert "com.apple.link.systemProtocol.ForegroundContinuable" not in start["systemProtocols"], "Mia start must not request foreground fallback"
           print("Mia start/end/open actions and shortcuts are packaged and discoverable")
           PY
           /usr/libexec/PlistBuddy -c 'Print :NSSupportsLiveActivities' "$app/Info.plist" | grep -qx true

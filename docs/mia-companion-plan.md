@@ -1,6 +1,7 @@
 # Mia 情绪伙伴升级：批准方案
 
 2026-10-13。用户已批准实施；主要验收设备 iPhone 14 Pro Max / iOS 27。
+2026-10-13最新要求覆盖下文历史回退方案：说口令后直接在后台开始聊天，不能打开App替代。若系统动作失败或需切前台，后台直接唤醒验收失败。
 实施计划见 [分步计划](mia-companion-implementation.md)，事实进展见 [工作记录](mia-companion-worklog.md)，接续入口见 [交接记录](mia-companion-handoff.md)。
 
 ## 目标与产品行为

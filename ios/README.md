@@ -8,7 +8,7 @@
 
 新增 Live Activity/灵动岛扩展，IPA 重签必须同时保留并签名 `PlugIns/MiaActivity.appex`。锁屏停止使用公开保护数据事件，不能保证精确锁屏时机；后台启动、系统音频交接、发热耗电和扩展重签须真机验收。
 
-设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。声音唤醒必须在系统中添加动作并训练口令；动作列表没有 Mia 时，先保存快捷指令「呼叫 Mia」，或用打开 URL `mia://conversation/start` 的动作作为前台回退。
+设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。声音唤醒必须在系统中添加动作并训练口令；动作列表没有 Mia 时，先在快捷指令 App 保存只含「开始与 Mia 聊天」操作的「呼叫 Mia」。当前验收要求是后台直接开聊，不接受打开 App 替代；开始动作失败时不再自动切前台。新版代码尚未通过原生编译及真机验证。
 
 [批准方案](../docs/mia-companion-plan.md)、[实施计划](../docs/mia-companion-implementation.md)、[逐步工作记录](../docs/mia-companion-worklog.md)、[交接](../docs/mia-companion-handoff.md)。以下为旧版本历史。
 

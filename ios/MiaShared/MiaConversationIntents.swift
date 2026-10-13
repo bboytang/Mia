@@ -24,21 +24,14 @@ enum MiaIntentRoutingError: Error, CustomLocalizedStringResourceConvertible {
 
 #if !MIA_WIDGET_EXTENSION
 @available(iOS 18.0, *)
-struct StartMiaConversationIntent: AudioRecordingIntent, LiveActivityIntent, ForegroundContinuableIntent {
+struct StartMiaConversationIntent: AudioRecordingIntent, LiveActivityIntent {
     static var title: LocalizedStringResource = "开始与 Mia 聊天"
-    static var description = IntentDescription("尝试在后台开始语音对话；系统不允许时，请继续到 Mia。锁屏时不会开启 Mia 录音。")
+    static var description = IntentDescription("在后台开始与 Mia 的语音对话，不打开 App 界面。需先完成设备绑定、麦克风授权并允许实时活动；锁屏时不会开启 Mia 录音。")
     static var openAppWhenRun = false
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        do { try await MiaConversationController.shared.start(requiresLiveActivity: true) }
-        catch is CancellationError { throw CancellationError() }
-        catch {
-            guard !Task.isCancelled else { throw error }
-            throw needsToContinueInForegroundError("请打开 Mia 继续开始聊天。") {
-                try await MiaConversationController.shared.startInForeground(requiresLiveActivity: true)
-            }
-        }
+        try await MiaConversationController.shared.start(requiresLiveActivity: true)
         return .result()
     }
 }

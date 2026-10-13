@@ -150,3 +150,13 @@
 
 - 本地提交2d153d4后准备推送当前开发分支以运行macOS CI。自动审批拒绝推送：当前可信用户内容尚未确认远程仓库所有权/信任及明确推送授权，可能向外披露源码。未执行推送，不使用其他工具绕过；等待用户允许推送至bboytang/Mia。
 - 安装包元数据检查脚本语法及旧IPA实际元数据schema通过；新版本原生编译、表情视觉及声音快捷动作注册均未验证。随后修正眼形曲线，使开心上弯/失落下弯连续变化，差异检查通过。生产仅只读检查，无新部署；未发布新版IPA。
+
+
+## 2026-10-13：用户明确要求后台直接唤醒
+
+- 用户要求后台口令直接开始语音聊天，拒绝打开App后再聊；此要求覆盖原方案的前台回退验收。原锁屏停止/解锁后可呼叫规则保持。
+- 已移除StartMiaConversationIntent的ForegroundContinuableIntent及needsToContinueInForegroundError分支，保留AudioRecordingIntent/LiveActivityIntent与openAppWhenRun=false，失败直接报告；未将删掉回退当作后台录音已经验证。
+- 指引不再推荐URL或打开App作为唤醒替代，只允许保存含后台「开始与Mia聊天」动作的快捷指令。已询问用户快捷指令App能否发现该动作，尚待回复；此诊断与系统声音快捷指令的动作列表不同。
+- CI安装包检查新增开始动作不打开App、不包含ForegroundContinuable系统协议的门禁；检查脚本语法通过，旧IPA元数据确认包含前台续行协议，不能把旧包描述为新版行为。
+- Apple官方AudioRecordingIntent文档要求录音时保持Live Activity；ActivityKit官方文档允许系统触发LiveActivityIntent在后台开始活动。采用此现有路径继续验证，不根据论坛普通用户回复断言所有后台启动都不可能，也不保证当前手机音频交接一定成功。
+- 差异检查通过；无本地Swift/Xcode，新原生编译和真机后台待机/结束再呼叫/解锁后呼叫仍未验收。上次推送自动审批拒绝尚无明确授权，不重试、不绕过；没有新IPA或生产部署。
