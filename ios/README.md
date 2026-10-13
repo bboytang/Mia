@@ -1,5 +1,13 @@
 # Mia iOS
 
+## 后台直接唤醒入口与表情修复（2026-10-13；真机待验）
+
+[下载测试 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-e46c1d098c96/Mia-unsigned.ipa)，7,488,973字节，需同时重签 App 和 `MiaActivity.appex`。源码 e46c1d0 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/38417464788) 通过86单元/4UI、两种编译、扩展/快捷动作打包及两尺寸截图；[服务端CI](https://github.com/bboytang/Mia/actions/runs/38417464718)83项通过。发布回下载与CI产物逐字节相同。
+
+开始动作保持后台执行，移除自动切前台回退，首开/回前台刷新快捷动作。辅助功能列表没有 Mia 时，先在快捷指令 App 保存只含「开始与 Mia 聊天」动作的快捷指令，再选它训练系统口令；若快捷指令 App 也没有动作，需继续定位。后台待机、结束后再次呼叫、解锁后呼叫和系统麦克风交接尚未真机验收，不把编译成功当作唤醒成功。
+
+表情增强眼形、嘴形、眉形、注视和眨眼；[实际首页](../docs/design/mia-companion-home-e46c1d0.jpg)、[第二尺寸](../docs/design/mia-companion-home-e46c1d0-secondary.jpg)。八情绪的语境准确性仍待真机观察。自然「请记住……」服务端补丁已通过回归但尚未部署；生产仍使用40c715d，本次没有更新服务器。
+
 ## 情绪伙伴升级（2026-10-13；预览IPA已验证交付，生产记忆/真机待验）
 
 [直接下载预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)，约7.5MB，需重签App和Widget。代码0d9a7cf的85单测、4UI、两种编译与扩展打包[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441414)，服务端修复40c715d的81项[CI通过](https://github.com/bboytang/Mia/actions/runs/38401621395)。生产记忆已部署并联调，真机长期记忆效果仍待验。
@@ -8,7 +16,7 @@
 
 新增 Live Activity/灵动岛扩展，IPA 重签必须同时保留并签名 `PlugIns/MiaActivity.appex`。锁屏停止使用公开保护数据事件，不能保证精确锁屏时机；后台启动、系统音频交接、发热耗电和扩展重签须真机验收。
 
-设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。声音唤醒必须在系统中添加动作并训练口令；动作列表没有 Mia 时，先在快捷指令 App 保存只含「开始与 Mia 聊天」操作的「呼叫 Mia」。当前验收要求是后台直接开聊，不接受打开 App 替代；开始动作失败时不再自动切前台。新版代码尚未通过原生编译及真机验证。
+设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。声音唤醒必须在系统中添加动作并训练口令；动作列表没有 Mia 时，先在快捷指令 App 保存只含「开始与 Mia 聊天」操作的「呼叫 Mia」。当前验收要求是后台直接开聊，不接受打开 App 替代；开始动作失败时不再自动切前台。新版原生验证结果见上节，后台唤醒仍待真机验证。
 
 [批准方案](../docs/mia-companion-plan.md)、[实施计划](../docs/mia-companion-implementation.md)、[逐步工作记录](../docs/mia-companion-worklog.md)、[交接](../docs/mia-companion-handoff.md)。以下为旧版本历史。
 

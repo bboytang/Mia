@@ -160,3 +160,13 @@
 - CI安装包检查新增开始动作不打开App、不包含ForegroundContinuable系统协议的门禁；检查脚本语法通过，旧IPA元数据确认包含前台续行协议，不能把旧包描述为新版行为。
 - Apple官方AudioRecordingIntent文档要求录音时保持Live Activity；ActivityKit官方文档允许系统触发LiveActivityIntent在后台开始活动。采用此现有路径继续验证，不根据论坛普通用户回复断言所有后台启动都不可能，也不保证当前手机音频交接一定成功。
 - 差异检查通过；无本地Swift/Xcode，新原生编译和真机后台待机/结束再呼叫/解锁后呼叫仍未验收。上次推送自动审批拒绝尚无明确授权，不重试、不绕过；没有新IPA或生产部署。
+
+
+## 2026-10-13：用户允许推送，修复测试 IPA 验证交付
+
+- 用户明确「允许推送」，已推送当前开发分支e46c1d098c96c717d5df31e8d634bae131158968，不再受此前推送审批阻塞。
+- iOS CI38417464788完整成功：86单元/4UI、模拟器/未签名真机/扩展编译、快捷动作元数据门禁、打包及两尺寸截图通过。原生测试步骤含模拟器启动约10分钟，截图约12分钟；未跳过检查或放宽断言。
+- 服务端CI38417464718的83项23.127秒通过。新自然记忆命令补丁只在源码/回归中，本次未部署，生产仍为40c715d。
+- 下载实际IPA核对ZIP、Bundle ID、Widget和Metal；开始动作包含AudioRecording/SessionStarting系统协议，isDiscoverable=true、openAppWhenRun=false，不含ForegroundContinuable。两个尺寸实际首页已查看，CI原始JPEG预览分别保存design/mia-companion-home-e46c1d0.jpg和secondary版本；不将平静首页截图视为八情绪语境验收。
+- 建立已验证代码标签mia-ios-e46c1d098c96，沿用独立IPA分发工作流38421792253成功。直接链接 https://github.com/bboytang/Mia/releases/download/mia-ios-e46c1d098c96/Mia-unsigned.ipa ，7,488,973字节；SHA256 b2b826f727d28a4d71f7d4c2eee48ddb90782bd611480683ee89f8d6fa8bb3ff。发布后再次回下载与CI产物cmp一致，说明标为测试预发布及真机未验。
+- 更新README/交接：后台待机/结束再呼叫/解锁后呼叫与系统麦克风交接需安装后验收；用户尚未回答快捷指令App是否能发现开始动作。不得把构建通过描述为这些实际唤醒行为已实现，也不再推荐打开App作为替代。
