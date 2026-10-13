@@ -29,7 +29,7 @@ class MusicSelectionTests(unittest.IsolatedAsyncioTestCase):
         async def play(conn, specific_file=None):
             self.played.append(specific_file)
 
-        self.namespace = {"os": os, "re": re, "time": time, "MUSIC_CACHE": self.cache,
+        self.namespace = {"os": os, "re": re, "time": time, "TAG": "music_fixture", "MUSIC_CACHE": self.cache,
                           "initialize_music_handler": lambda conn: self.cache,
                           "play_local_music": play, "ActionResponse": SimpleNamespace,
                           "Action": SimpleNamespace(RESPONSE="response", RECORD="record")}
