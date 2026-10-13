@@ -2,6 +2,12 @@ import XCTest
 import UIKit
 
 final class MiaXiaozhiFlowTests: XCTestCase {
+    private func startConversation(_ app: XCUIApplication) {
+        app.buttons["开始说话"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        let permission = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.buttons["Allow"]
+        if permission.waitForExistence(timeout: 3) { permission.tap() }
+    }
+
     private func launch(ota: String = "https://example.invalid/ota/",
                         websocket: String = "wss://example.invalid/xiaozhi/v1/") -> XCUIApplication {
         let app = XCUIApplication()
@@ -40,7 +46,7 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         XCTAssertTrue(app.buttons["开始说话"].waitForExistence(timeout: 15))
         XCTAssertFalse(app.textFields["OTA 地址"].waitForExistence(timeout: 2))
         XCTAssertFalse(app.descendants(matching: .any)["xiaozhi-activation-code"].exists)
-        app.buttons["开始说话"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        startConversation(app)
         XCTAssertTrue(app.textFields["OTA 地址"].waitForExistence(timeout: 20))
         let code = app.descendants(matching: .any)["xiaozhi-activation-code"]
         XCTAssertTrue(code.waitForExistence(timeout: 5))
@@ -50,7 +56,7 @@ final class MiaXiaozhiFlowTests: XCTestCase {
     func testBindingRecheckSuccessDoesNotShowOldActivationAlertOnHome() {
         let app = launch(ota: "http://127.0.0.1:8770/ota/?activation_once=1",
                          websocket: "ws://127.0.0.1:8769/xiaozhi/v1/")
-        app.buttons["开始说话"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        startConversation(app)
         XCTAssertTrue(app.descendants(matching: .any)["xiaozhi-activation-code"].waitForExistence(timeout: 10))
         app.buttons["检查设备绑定"].tap()
         XCTAssertTrue(app.staticTexts["设备配置已就绪"].waitForExistence(timeout: 5))
