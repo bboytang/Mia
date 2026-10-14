@@ -6,7 +6,7 @@
 
 当前用户要求：**“开始计划吧，每完成一步就写交接和进度”。** 已授权按 V1.2 和完整计划开始开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”的限制已由本次开始执行指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
-P00—P04 已完成：方案与计划已远程保存并独立检出；环境、基线及工程验收指标已固定。P05 契约准备中，P06 真实 embedding 实验入口已编写，尚未运行。生产功能代码、身份整改和本任务部署尚未开始；精确基础提交的既有服务端 GitHub 回归通过，不作为 V1.2 新能力的验收。
+P00—P05 已完成：持久计划、环境、基线、工程指标与开发契约已固定。P06 首轮真实实验完成但四候选均不合格，正在修正一般性问题并用新留出样本验证；未选定模型。生产功能代码、身份整改和本任务部署尚未开始；新实验提交的 90 项服务端 GitHub 回归通过，不作为八项新能力的验收。
 
 四项不可削减要求：核心机制完整、真正向量＋关联＋四维 RAG、必要身份链整改而非系统重构、八项真实行为验收。保持单回复链、单事实库、可信 Scope、统一上下文和轻量持久任务；长期情绪默认关闭。
 
@@ -21,9 +21,9 @@ P00—P04 已完成：方案与计划已远程保存并独立检出；环境、�
 
 ## 下一步
 
-当前步骤：**P05 契约与 P06 embedding 比较**。P04 的 20 条合成记忆／72 条中文查询及 [D08／D09 指标](verification/mia-persona-memory/acceptance.md)已冻结；测试数据不作为生产种子。
+当前步骤：**P06 embedding 比较**。P05 [开发契约](verification/mia-persona-memory/contracts.md)已明确，用户已选智控台一次性授权码；公网可信 IP 或域名证书均可，实际 TLS 部署尚未执行。
 
-下一步：运行 [P06 实验](verification/mia-persona-memory/embedding-experiment.md)，依据 eligible 和指标决定选型；workflow success 不是选型通过。P05 的私有凭据迁移方式与公网 HTTPS/WSS 入口已询问用户，相关工作保留待决。用户已确认的情绪窗口／保留／停用语义保持。
+下一步：用新独立 v2 留出集运行修正后的 [P06 实验](verification/mia-persona-memory/embedding-experiment.md)，依据 eligible、原始模型一致性和指标决定选型；workflow success 不是选型通过。保留首轮失败证据，不降低门槛或回退 FTS。
 
 ## 步骤状态
 
@@ -34,8 +34,8 @@ P00—P04 已完成：方案与计划已远程保存并独立检出；环境、�
 | P02 | 完成 | [环境与访问](verification/mia-persona-memory/environment.md)已核实；后续真实模型／真机缺项分别记录 |
 | P03 | 完成 | [固定基线](verification/mia-persona-memory/baseline.md)及运行文件／Java class 校验值已保存 |
 | P04 | 完成 | [验收 v1](verification/mia-persona-memory/acceptance.md)：样本、质量／资源／时间门槛已固定；不是测量结果 |
-| P05 | 进行中 | 契约准备；D02 迁移方式／TLS 入口待用户答复 |
-| P06 | 进行中 | 固定 BGE small／base FP32／INT8，真实实验入口待运行 |
+| P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
+| P06 | 进行中 | 首轮四候选 eligible=false；修正原查询／扩展评分及一致性检查，v2 待运行 |
 | P07 | 未开始 | 基线已有证据；必要真实 Java／Provider 集成入口尚未完成 |
 | P08—P10 | 未开始 | 身份链、Scope 与 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
@@ -61,7 +61,7 @@ P00—P04 已完成：方案与计划已远程保存并独立检出；环境、�
 
 ## 待决与访问状态
 
-D01、D08、D09 已冻结；D07 的窗口、保留和停用语义已获用户确认。D03／D04 仍是候选和基线，未依据实验选型。当前没有新的 embedding 测量、真实身份链验收或长期趋势观察结果。
+D01／D02／D05／D06／D07／D08／D09／D10 契约已确定，用户已确认授权码和情绪保留。D03／D04 尚未选型；首轮 [真实测量](verification/mia-persona-memory/embedding-results-v1.json)均未合格。真实身份链安全及长期趋势行为仍未验收。
 
 GitHub 读取／推送、Actions 和服务器严格主机校验下的只读 SSH 已验证；未改变任何凭据。仓库 Actions secrets 当前为空，不能推断组织或环境 secrets 的状态。真实聊天模型 job 的凭据来源和真机／签名仍未确认；不影响无密钥本地 embedding 候选在 GitHub 的实验。新环境须重新验证实际访问，不复制秘密进交接。
 

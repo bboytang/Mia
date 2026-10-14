@@ -45,11 +45,20 @@ def main():
                           opset_version=17, do_constant_folding=True, dynamo=False)
     quantized = args.output / 'model-int8.onnx'
     quantize_dynamic(str(path), str(quantized), weight_type=QuantType.QInt8,
-                     op_types_to_quantize=['MatMul', 'Gemm'])
+                     op_types_to_quantize=['MatMul', 'Gemm'],
+                     extra_options={'MatMulConstBOnly': True})
     metadata = {'model': args.model, 'revision': args.revision,
                 'dimension': model.config.hidden_size, 'max_tokens': 512,
                 'query_prefix': '为这个句子生成表示以用于检索相关文章：',
-                'pooling': 'CLS', 'normalized': True, 'models': {}}
+                'pooling': 'CLS', 'normalized': True, 'models': {}, 'reference_vectors': []}
+    for text in ['测试文字', '雨后的树林很安静。', '出行之前要检查天气。', '喝热水还是冷水？']:
+        for query in [False, True]:
+            encoded = tokenizer((metadata['query_prefix'] if query else '') + text,
+                                return_tensors='pt', truncation=True, max_length=512)
+            with torch.no_grad():
+                vector = model(**encoded).last_hidden_state[0, 0]
+                vector = torch.nn.functional.normalize(vector, dim=0)
+            metadata['reference_vectors'].append({'text': text, 'query': query, 'vector': vector.tolist()})
     for item in [path, quantized]:
         metadata['models'][item.name] = {'sha256': hashlib.sha256(item.read_bytes()).hexdigest(),
                                         'bytes': item.stat().st_size}

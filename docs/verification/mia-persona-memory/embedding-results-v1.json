@@ -1,0 +1,3746 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38585421342",
+  "results": [
+    {
+      "code_sha": "3e4ffc6a2794abfb64c70df41ed00c4fa47e5b16",
+      "dataset_version": "1",
+      "dataset_sha256": "10908a3a6efde5657bbee3e44caf9bcd103fb56886b21647dcc7c0095a10be8c",
+      "model": {
+        "model": "BAAI/bge-base-zh-v1.5",
+        "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+        "dimension": 768,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+            "bytes": 406939356
+          },
+          "model-int8.onnx": {
+            "sha256": "08e692d802c54d89dbfe1f965157df25389d3582816b8a3a79feeecc6b3b4fee",
+            "bytes": 152319196
+          }
+        }
+      },
+      "variant": "model-int8.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 366.5929109999979,
+      "peak_rss_mib": 725.8671875,
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 60.87878299999261,
+        "p95_ms": 98.29695249998167
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 5.6830969999737135,
+          "p95_ms": 6.83164840002064,
+          "database_bytes": 8269824
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 49.191487000030065,
+          "p95_ms": 53.86232480000217,
+          "database_bytes": 82575360
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 233.66935600000716,
+          "p95_ms": 266.57378239999616,
+          "database_bytes": 412995584
+        }
+      },
+      "threshold": 0.5200000000000002,
+      "semantic_floor": 0.7750000000000004,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 0.9375,
+        "top1": 0.875,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.84375,
+        "top1": 0.8125,
+        "empty_recall": 0.875
+      },
+      "pure_vector_positive_recall_at_4": 0.9375,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 31,
+        "lexical": 11,
+        "association": 0,
+        "emotion": 16
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "failed_holdout_cases": [
+        {
+          "id": "q-02",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "如果我要一杯拿铁，哪种奶更合适？",
+          "expected": [
+            "a-lactose"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.8148861527442932,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.7949076294898987,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.7894399166107178,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.7786992788314819,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7766034603118896,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.7753945589065552,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.7750899791717529,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7708840370178223,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7656391859054565,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.7612321376800537,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.7612059116363525,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7563568353652954,
+                0.0,
+                0.0,
+                0.6
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-03",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "推荐今晚的饭菜时，我的口味有什么限制？",
+          "expected": [
+            "a-food"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.8440139293670654,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.8323319554328918,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.8321214914321899,
+                0.05641025641025641,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.8298996686935425,
+                0.08979591836734693,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.8111040592193604,
+                0.04313725490196079,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.8005233407020569,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7913065552711487,
+                0.09361702127659575,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7908018231391907,
+                0.04782608695652174,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.7814545631408691,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7782258987426758,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7759535312652588,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.7322074174880981,
+                0.0,
+                0.0,
+                0.3
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-high-emotion"
+          ]
+        },
+        {
+          "id": "n-12",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "工作角色中我要求你说什么语言？",
+          "expected": [],
+          "type": "scope-negative",
+          "expansion": [
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-work",
+              "signals": [
+                0.8721989393234253,
+                1.0,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.8528518080711365,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.8315321207046509,
+                0.03283582089552239,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.8043496608734131,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.8028069138526917,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7980365753173828,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.7920632362365723,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.7890762090682983,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7789300084114075,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7785351276397705,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7605889439582825,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.7117178440093994,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-work"
+          ]
+        },
+        {
+          "id": "q-26",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "外卖菜单里哪类口味需要排除？",
+          "expected": [
+            "a-food"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.8118704557418823,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.7888625860214233,
+                0.06470588235294118,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.7807067036628723,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.7690934538841248,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.7590574026107788,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7507271766662598,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.7472310066223145,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7416487336158752,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7390891313552856,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.7359292507171631,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7018283009529114,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.6961901783943176,
+                0.0,
+                0.0,
+                0.3
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-27",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "规划远程通勤时为什么不要选大巴？",
+          "expected": [
+            "a-transit"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.8390995264053345,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.8080028891563416,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.8008413910865784,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.799889326095581,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7989082932472229,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.7821953892707825,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.7724580764770508,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7655090093612671,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.7647649049758911,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7641966342926025,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7205518484115601,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.7073203921318054,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-47",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "去外地工作我容易在路上不舒服，住处又想离办公室近，如何安排？",
+          "expected": [
+            "a-transit",
+            "a-hotel"
+          ],
+          "type": "association",
+          "expansion": [
+            "住宿距离",
+            "酒店",
+            "步行十分钟",
+            "工作地点",
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-work",
+              "signals": [
+                0.8510794639587402,
+                0.9275862068965517,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.8498371839523315,
+                0.9719101123595506,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.834219217300415,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.8099202513694763,
+                0.024444444444444446,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.7981882095336914,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.7967108488082886,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.7946847677230835,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7911015748977661,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7775914669036865,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7702400088310242,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.7396177053451538,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7148292064666748,
+                0.0,
+                0.0,
+                0.6
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-work",
+            "a-hotel",
+            "a-high-emotion"
+          ]
+        },
+        {
+          "id": "n-24",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "我去过的最北城市是哪座？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "居住城市",
+            "苏州",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "a-city",
+              "signals": [
+                0.8013218641281128,
+                0.8044444444444445,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.797783374786377,
+                0.041509433962264156,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.793518602848053,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.7864183783531189,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.7849248051643372,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.7837409377098083,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.7741608023643494,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.767582893371582,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.7571354508399963,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.7560690641403198,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.7500378489494324,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.7351787090301514,
+                0.0,
+                0.0,
+                0.6
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-city"
+          ]
+        }
+      ]
+    },
+    {
+      "code_sha": "3e4ffc6a2794abfb64c70df41ed00c4fa47e5b16",
+      "dataset_version": "1",
+      "dataset_sha256": "10908a3a6efde5657bbee3e44caf9bcd103fb56886b21647dcc7c0095a10be8c",
+      "model": {
+        "model": "BAAI/bge-base-zh-v1.5",
+        "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+        "dimension": 768,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+            "bytes": 406939356
+          },
+          "model-int8.onnx": {
+            "sha256": "08e692d802c54d89dbfe1f965157df25389d3582816b8a3a79feeecc6b3b4fee",
+            "bytes": 152319196
+          }
+        }
+      },
+      "variant": "model.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 899.1517560000091,
+      "peak_rss_mib": 968.609375,
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 85.66720900002167,
+        "p95_ms": 142.83587485000453
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 4.206088999978874,
+          "p95_ms": 4.872856600002251,
+          "database_bytes": 8269824
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 47.20518300001686,
+          "p95_ms": 51.68235559997356,
+          "database_bytes": 82575360
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 229.51102199999696,
+          "p95_ms": 262.09569300001476,
+          "database_bytes": 412995584
+        }
+      },
+      "threshold": 0.35000000000000003,
+      "semantic_floor": 0.4500000000000001,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 0.9375,
+        "top1": 0.9375,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.75,
+        "top1": 0.78125,
+        "empty_recall": 0.875
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 22,
+        "lexical": 3,
+        "association": 0,
+        "emotion": 2
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "failed_holdout_cases": [
+        {
+          "id": "q-02",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "如果我要一杯拿铁，哪种奶更合适？",
+          "expected": [
+            "a-lactose"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.37171173095703125,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.206014484167099,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.20060251653194427,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.19674378633499146,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.16438230872154236,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.10436395555734634,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.1005268469452858,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.09409399330615997,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.08140803873538971,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.06315633654594421,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.05299869552254677,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.0526123009622097,
+                0.0,
+                0.0,
+                0.7
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-03",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "推荐今晚的饭菜时，我的口味有什么限制？",
+          "expected": [
+            "a-food"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-food",
+              "signals": [
+                0.5154236555099487,
+                0.05641025641025641,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.3165985345840454,
+                0.08979591836734693,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.2954946756362915,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.2892024517059326,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.27619749307632446,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.25321799516677856,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.21447327733039856,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.18686997890472412,
+                0.09361702127659575,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.17296291887760162,
+                0.04313725490196079,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.1648903787136078,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.16177304089069366,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.15037547051906586,
+                0.04782608695652174,
+                0.0,
+                0.7
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-09",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "晚间几点之后不该再聊职场任务？",
+          "expected": [
+            "a-work"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-work",
+              "signals": [
+                0.4672934114933014,
+                0.05238095238095238,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.3181217312812805,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.3158012628555298,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.24146856367588043,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.2230023443698883,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.22058513760566711,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.2040221095085144,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.18415312469005585,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.1670612394809723,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.12740753591060638,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.05265440046787262,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.04323001205921173,
+                0.0,
+                0.0,
+                0.7
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-15",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "周末给小绿补水之前先做什么？",
+          "expected": [
+            "a-plant"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-plant",
+              "signals": [
+                0.4417017698287964,
+                0.3957894736842106,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.2992982268333435,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.28993234038352966,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.28136375546455383,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.25771480798721313,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.23619204759597778,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.20512008666992188,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.2034526765346527,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.1921408772468567,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.18996497988700867,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.15416060388088226,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.11452159285545349,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "n-12",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "工作角色中我要求你说什么语言？",
+          "expected": [],
+          "type": "scope-negative",
+          "expansion": [
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-work",
+              "signals": [
+                0.5412629842758179,
+                1.0,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.3497462272644043,
+                0.03283582089552239,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.315034419298172,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.2814173400402069,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.250582218170166,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.24756407737731934,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.20080001652240753,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.18460969626903534,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.17017149925231934,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.146553173661232,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.12390138953924179,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.11214915663003922,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-work"
+          ]
+        },
+        {
+          "id": "q-26",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "外卖菜单里哪类口味需要排除？",
+          "expected": [
+            "a-food"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-food",
+              "signals": [
+                0.500030517578125,
+                0.06470588235294118,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.3589698076248169,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.324898362159729,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.25722363591194153,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.2466321885585785,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.23254093527793884,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.1706312596797943,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.16970017552375793,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.1466992050409317,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.12546198070049286,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.11776493489742279,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.09970439970493317,
+                0.0,
+                0.0,
+                0.6
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-27",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "规划远程通勤时为什么不要选大巴？",
+          "expected": [
+            "a-transit"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-transit",
+              "signals": [
+                0.4370163679122925,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.3215988874435425,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.2736166715621948,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.19172140955924988,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.16997188329696655,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.16948188841342926,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.1669408231973648,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.15930010378360748,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.15823256969451904,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.09893815964460373,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.08814020454883575,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.08142697811126709,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-35",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "上回野外过夜天气变坏时用了什么防雨？",
+          "expected": [
+            "a-rain"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-rain",
+              "signals": [
+                0.5007994174957275,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.2565750777721405,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.2541620135307312,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.24845480918884277,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.22829240560531616,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.21487769484519958,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.2032569795846939,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.18233217298984528,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.18222959339618683,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.16978329420089722,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.1672515869140625,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.15794064104557037,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-47",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "去外地工作我容易在路上不舒服，住处又想离办公室近，如何安排？",
+          "expected": [
+            "a-transit",
+            "a-hotel"
+          ],
+          "type": "association",
+          "expansion": [
+            "住宿距离",
+            "酒店",
+            "步行十分钟",
+            "工作地点",
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.6676909923553467,
+                0.9719101123595506,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.46207284927368164,
+                0.024444444444444446,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.45215529203414917,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.45210763812065125,
+                0.9275862068965517,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.340165913105011,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.31664082407951355,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.30511659383773804,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.30470409989356995,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.30004823207855225,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.26506897807121277,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.22608241438865662,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.20271846652030945,
+                0.0,
+                0.0,
+                0.7
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-hotel",
+            "a-work"
+          ]
+        },
+        {
+          "id": "n-24",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "我去过的最北城市是哪座？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "居住城市",
+            "苏州",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "a-city",
+              "signals": [
+                0.46900683641433716,
+                0.8044444444444445,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.2563357353210449,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.2499811351299286,
+                0.041509433962264156,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.22973281145095825,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.18721827864646912,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.1532309353351593,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.14985254406929016,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.1317611038684845,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.12593168020248413,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.10620996356010437,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.10418432205915451,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.09715920686721802,
+                0.0,
+                0.0,
+                0.4
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-city"
+          ]
+        }
+      ]
+    },
+    {
+      "code_sha": "3e4ffc6a2794abfb64c70df41ed00c4fa47e5b16",
+      "dataset_version": "1",
+      "dataset_sha256": "10908a3a6efde5657bbee3e44caf9bcd103fb56886b21647dcc7c0095a10be8c",
+      "model": {
+        "model": "BAAI/bge-small-zh-v1.5",
+        "revision": "7999e1d3359715c523056ef9478215996d62a620",
+        "dimension": 512,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "6d65414b517dbf2922a52181dd6eb7c8b44769f21d427c09b7884c356ea7040f",
+            "bytes": 94846908
+          },
+          "model-int8.onnx": {
+            "sha256": "19b72a5fda9b554c7db5049035bbc7bf24a0a687644395606109fd8b338b000d",
+            "bytes": 57159840
+          }
+        }
+      },
+      "variant": "model-int8.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 127.62656199998901,
+      "peak_rss_mib": 472.8515625,
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 4.1671009999930675,
+        "p95_ms": 7.876193100020146
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 5.792366999997967,
+          "p95_ms": 6.7520908000176405,
+          "database_bytes": 8269824
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 47.351673999997956,
+          "p95_ms": 59.96247219998736,
+          "database_bytes": 82575360
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 216.9176289999939,
+          "p95_ms": 238.68985720001774,
+          "database_bytes": 412995584
+        }
+      },
+      "threshold": 0.33,
+      "semantic_floor": 0.47500000000000014,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 0.9375,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.90625,
+        "top1": 0.90625,
+        "empty_recall": 0.875
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 22,
+        "lexical": 2,
+        "association": 0,
+        "emotion": 1
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "failed_holdout_cases": [
+        {
+          "id": "q-02",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "如果我要一杯拿铁，哪种奶更合适？",
+          "expected": [
+            "a-lactose"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.4679107666015625,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.373929500579834,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.36228176951408386,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.3497316241264343,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.321431428194046,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.3210536539554596,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.29347509145736694,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.2674599289894104,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.26205119490623474,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.25078892707824707,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.24010547995567322,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.23937968909740448,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "n-12",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "工作角色中我要求你说什么语言？",
+          "expected": [],
+          "type": "scope-negative",
+          "expansion": [
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-work",
+              "signals": [
+                0.6470179557800293,
+                1.0,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.4750276207923889,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.4508357048034668,
+                0.03283582089552239,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.42179152369499207,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.37228697538375854,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.3638068437576294,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.3313455879688263,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.3144891858100891,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.3036934435367584,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.290006160736084,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.28317928314208984,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.24717530608177185,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-work"
+          ]
+        },
+        {
+          "id": "q-27",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "规划远程通勤时为什么不要选大巴？",
+          "expected": [
+            "a-transit"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-transit",
+              "signals": [
+                0.4704417586326599,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.45159319043159485,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.3875102996826172,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.3669432997703552,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.36465275287628174,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.3606266677379608,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.29746386408805847,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.2969196140766144,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.2945835590362549,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.26072627305984497,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.25545287132263184,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.24170824885368347,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-47",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "去外地工作我容易在路上不舒服，住处又想离办公室近，如何安排？",
+          "expected": [
+            "a-transit",
+            "a-hotel"
+          ],
+          "type": "association",
+          "expansion": [
+            "住宿距离",
+            "酒店",
+            "步行十分钟",
+            "工作地点",
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.664594292640686,
+                0.9719101123595506,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.5922593474388123,
+                0.9275862068965517,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.5019049048423767,
+                0.024444444444444446,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.4946669936180115,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.46943289041519165,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.4339858591556549,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.42053619027137756,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.4105289578437805,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.39349111914634705,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.3768932819366455,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.37562429904937744,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.3491935133934021,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-hotel",
+            "a-work"
+          ]
+        },
+        {
+          "id": "n-24",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "我去过的最北城市是哪座？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "居住城市",
+            "苏州",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "a-city",
+              "signals": [
+                0.6115975379943848,
+                0.8044444444444445,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.3870503306388855,
+                0.041509433962264156,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.3790116310119629,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.3312609791755676,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.3228432238101959,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.3077101409435272,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.30019113421440125,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.2981271743774414,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.2918985188007355,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.27220389246940613,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.2645263671875,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.26102274656295776,
+                0.0,
+                0.0,
+                0.3
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-city"
+          ]
+        }
+      ]
+    },
+    {
+      "code_sha": "3e4ffc6a2794abfb64c70df41ed00c4fa47e5b16",
+      "dataset_version": "1",
+      "dataset_sha256": "10908a3a6efde5657bbee3e44caf9bcd103fb56886b21647dcc7c0095a10be8c",
+      "model": {
+        "model": "BAAI/bge-small-zh-v1.5",
+        "revision": "7999e1d3359715c523056ef9478215996d62a620",
+        "dimension": 512,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "6d65414b517dbf2922a52181dd6eb7c8b44769f21d427c09b7884c356ea7040f",
+            "bytes": 94846908
+          },
+          "model-int8.onnx": {
+            "sha256": "19b72a5fda9b554c7db5049035bbc7bf24a0a687644395606109fd8b338b000d",
+            "bytes": 57159840
+          }
+        }
+      },
+      "variant": "model.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 209.8084330000063,
+      "peak_rss_mib": 508.953125,
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 7.667809499992018,
+        "p95_ms": 13.675963300001115
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 3.984831999986227,
+          "p95_ms": 4.7008631999972295,
+          "database_bytes": 8269824
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 43.578326999977435,
+          "p95_ms": 47.682057600007965,
+          "database_bytes": 82575360
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 216.92969400001516,
+          "p95_ms": 240.9083484000064,
+          "database_bytes": 412995584
+        }
+      },
+      "threshold": 0.3,
+      "semantic_floor": 0.47500000000000014,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 0.9375,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.90625,
+        "top1": 0.90625,
+        "empty_recall": 0.875
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 16,
+        "lexical": 1,
+        "association": 0,
+        "emotion": 1
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "failed_holdout_cases": [
+        {
+          "id": "q-02",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "如果我要一杯拿铁，哪种奶更合适？",
+          "expected": [
+            "a-lactose"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.4404321610927582,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.3672217130661011,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.34546393156051636,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.2996312081813812,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.2892000675201416,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.28477463126182556,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.27242064476013184,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.24115297198295593,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.23812714219093323,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.2270447015762329,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.2147763967514038,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.1924104541540146,
+                0.0,
+                0.0,
+                0.5
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "n-12",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "工作角色中我要求你说什么语言？",
+          "expected": [],
+          "type": "scope-negative",
+          "expansion": [
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-work",
+              "signals": [
+                0.6275922656059265,
+                1.0,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.43869659304618835,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.4151720702648163,
+                0.03283582089552239,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.37336307764053345,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.3279752731323242,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.32416388392448425,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.28597164154052734,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.2633994221687317,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.2550092935562134,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.23626708984375,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-gift",
+              "signals": [
+                0.2199448198080063,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.1863330751657486,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-work"
+          ]
+        },
+        {
+          "id": "q-27",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "规划远程通勤时为什么不要选大巴？",
+          "expected": [
+            "a-transit"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "a-transit",
+              "signals": [
+                0.46372881531715393,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.43474918603897095,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.35461992025375366,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.33950743079185486,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.3299767076969147,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.31620022654533386,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.266235888004303,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.2572137117385864,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.24204911291599274,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.23423385620117188,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.20996904373168945,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.2065959870815277,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "q-47",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "去外地工作我容易在路上不舒服，住处又想离办公室近，如何安排？",
+          "expected": [
+            "a-transit",
+            "a-hotel"
+          ],
+          "type": "association",
+          "expansion": [
+            "住宿距离",
+            "酒店",
+            "步行十分钟",
+            "工作地点",
+            "休息边界",
+            "九点后",
+            "不讨论工作",
+            "休息"
+          ],
+          "candidates": [
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.6480304598808289,
+                0.9719101123595506,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.5482727289199829,
+                0.9275862068965517,
+                0.35,
+                0.4
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.46528202295303345,
+                0.024444444444444446,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.4530022144317627,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.4238666296005249,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.4048866629600525,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-city",
+              "signals": [
+                0.38088157773017883,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.36851966381073,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.34477442502975464,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.32210850715637207,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.30971911549568176,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.2895198464393616,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-hotel",
+            "a-work"
+          ]
+        },
+        {
+          "id": "n-24",
+          "split": "holdout",
+          "scope": "A/travel/mia",
+          "query": "我去过的最北城市是哪座？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "居住城市",
+            "苏州",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "a-city",
+              "signals": [
+                0.573556661605835,
+                0.8044444444444445,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "a-hotel",
+              "signals": [
+                0.3667480945587158,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-project",
+              "signals": [
+                0.3646279573440552,
+                0.041509433962264156,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "a-friend",
+              "signals": [
+                0.2875779867172241,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "a-transit",
+              "signals": [
+                0.27474427223205566,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-feedback",
+              "signals": [
+                0.2520536780357361,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-rain",
+              "signals": [
+                0.25162139534950256,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "a-work",
+              "signals": [
+                0.24681922793388367,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "a-food",
+              "signals": [
+                0.23449118435382843,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-plant",
+              "signals": [
+                0.23055662214756012,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "a-high-emotion",
+              "signals": [
+                0.22064006328582764,
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "a-lactose",
+              "signals": [
+                0.2083970308303833,
+                0.0,
+                0.0,
+                0.3
+              ]
+            }
+          ],
+          "retrieved": [
+            "a-city"
+          ]
+        }
+      ]
+    }
+  ]
+}

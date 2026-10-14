@@ -1,0 +1,1033 @@
+{
+  "version": "2",
+  "purpose": "Independent synthetic holdout frozen before running the corrected general retrieval algorithm; v1 outcomes preserved. Never seed production.",
+  "reference_scope": "C/home/mia",
+  "memories": [
+    {
+      "id": "c-peanut",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "零食禁忌",
+      "content": "我对花生过敏，点心不能放花生；杏仁我可以吃。",
+      "keywords": [
+        "花生",
+        "过敏",
+        "杏仁"
+      ],
+      "triggers": [
+        "点心",
+        "零食",
+        "坚果"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "c-sleep",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "睡眠安排",
+      "content": "我平时晚上十点半准备睡觉，睡前不看刺激的悬疑片。",
+      "keywords": [
+        "十点半",
+        "睡觉",
+        "悬疑片"
+      ],
+      "triggers": [
+        "睡前",
+        "晚间",
+        "电影"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "c-commute",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "上班通勤",
+      "content": "我上班喜欢骑自行车，不喜欢挤在拥堵的地铁里。",
+      "keywords": [
+        "自行车",
+        "地铁",
+        "拥堵"
+      ],
+      "triggers": [
+        "上班",
+        "通勤",
+        "交通"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-stay",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "出差房间",
+      "content": "出差住旅馆时，我选靠近公园的安静房间，不要临街房。",
+      "keywords": [
+        "公园",
+        "安静",
+        "不临街"
+      ],
+      "triggers": [
+        "出差",
+        "旅馆",
+        "住宿"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-books",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "阅读计划",
+      "content": "我今年的阅读目标是每个月读完两本历史书。",
+      "keywords": [
+        "历史书",
+        "每月两本"
+      ],
+      "triggers": [
+        "读书",
+        "阅读",
+        "目标"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-tea",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "饮茶习惯",
+      "content": "白天我喝茉莉花茶，下午四点后不喝含咖啡因的饮料。",
+      "keywords": [
+        "茉莉花茶",
+        "四点后",
+        "咖啡因"
+      ],
+      "triggers": [
+        "喝茶",
+        "饮料",
+        "下午"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "c-friend",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "顾青复习",
+      "content": "好友顾青正在准备法语B2考试，我们约定每周三一起学习。",
+      "keywords": [
+        "顾青",
+        "法语B2",
+        "周三"
+      ],
+      "triggers": [
+        "顾青",
+        "复习",
+        "周三"
+      ],
+      "weight": 5
+    },
+    {
+      "id": "c-focus",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "专注时间",
+      "content": "我工作时会把早上九点到十一点留给专注写作，不接非紧急电话。",
+      "keywords": [
+        "九点到十一点",
+        "写作",
+        "非紧急电话"
+      ],
+      "triggers": [
+        "专注",
+        "写作",
+        "电话"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-feedback",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "讨论方式",
+      "content": "讨论难题时，我希望先听两个可行选项，再一起比较取舍。",
+      "keywords": [
+        "两个选项",
+        "比较取舍"
+      ],
+      "triggers": [
+        "难题",
+        "选项",
+        "讨论"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-gift",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "爸爸礼物",
+      "content": "我给爸爸买过一副登山杖，因为他喜欢周末去徒步。",
+      "keywords": [
+        "爸爸",
+        "登山杖",
+        "周末徒步"
+      ],
+      "triggers": [
+        "爸爸",
+        "礼物",
+        "徒步"
+      ],
+      "weight": 6
+    },
+    {
+      "id": "c-hike",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "徒步装备",
+      "content": "上次山路徒步忘了带头灯，返程摸黑很不方便；下次会把头灯放进背包。",
+      "keywords": [
+        "头灯",
+        "摸黑",
+        "背包"
+      ],
+      "triggers": [
+        "徒步",
+        "装备",
+        "返程"
+      ],
+      "weight": 7
+    },
+    {
+      "id": "c-city",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "现居城市",
+      "content": "我从扬州搬到了镇江，现在居住在镇江。",
+      "keywords": [
+        "镇江",
+        "搬家"
+      ],
+      "triggers": [
+        "居住",
+        "城市",
+        "住址"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-high-emotion",
+      "scope": "C/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "丢失的胸针",
+      "content": "我弄丢了外婆留给我的银色胸针，提起这件事非常伤心。",
+      "keywords": [
+        "外婆",
+        "胸针",
+        "银色"
+      ],
+      "triggers": [
+        "胸针",
+        "外婆"
+      ],
+      "weight": 10
+    },
+    {
+      "id": "c-city-old",
+      "scope": "C/home/mia",
+      "state": "superseded",
+      "source": "synthetic-test-user-statement",
+      "entity": "现居城市",
+      "content": "我现在住在扬州。",
+      "keywords": [
+        "扬州"
+      ],
+      "triggers": [
+        "城市"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-deleted",
+      "scope": "C/home/mia",
+      "state": "deleted",
+      "source": "synthetic-test-user-statement",
+      "entity": "备用钥匙",
+      "content": "我的备用钥匙放在衣帽间的黑色盒子里。",
+      "keywords": [
+        "钥匙",
+        "衣帽间",
+        "盒子"
+      ],
+      "triggers": [
+        "钥匙"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-other-agent",
+      "scope": "C/study/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "学习角色称呼",
+      "content": "在学习角色里，请叫我小树。",
+      "keywords": [
+        "小树",
+        "称呼"
+      ],
+      "triggers": [
+        "称呼"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "c-other-persona",
+      "scope": "C/home/tutor",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "导师练习",
+      "content": "在导师角色里，我每天练习二十分钟口琴。",
+      "keywords": [
+        "口琴",
+        "二十分钟"
+      ],
+      "triggers": [
+        "练习"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "d-peanut",
+      "scope": "D/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "零食习惯",
+      "content": "我每天吃花生，没有食物过敏。",
+      "keywords": [
+        "花生"
+      ],
+      "triggers": [
+        "零食"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "d-city",
+      "scope": "D/home/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "现居城市",
+      "content": "我现在住在青岛。",
+      "keywords": [
+        "青岛"
+      ],
+      "triggers": [
+        "城市"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "c-pending",
+      "scope": "C/home/mia",
+      "state": "pending",
+      "source": "unconfirmed-synthetic-extraction",
+      "entity": "婚姻情况",
+      "content": "我正在筹备婚礼。",
+      "keywords": [
+        "婚礼"
+      ],
+      "triggers": [
+        "结婚"
+      ],
+      "weight": 4
+    }
+  ],
+  "queries": [
+    {
+      "id": "v2-q-1",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我选点心的时候必须避开什么？",
+      "expected": [
+        "c-peanut"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-2",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "哪种坚果会让我过敏？",
+      "expected": [
+        "c-peanut"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-3",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "给我挑果仁零食时，什么可以吃什么不能吃？",
+      "expected": [
+        "c-peanut"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-4",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "做饼干时能加入花生吗？",
+      "expected": [
+        "c-peanut"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-5",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我通常什么时候准备上床？",
+      "expected": [
+        "c-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-6",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "临睡前我会避开哪种电影？",
+      "expected": [
+        "c-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-7",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "晚上安排活动时应该考虑我的什么作息？",
+      "expected": [
+        "c-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-8",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "十点三十分我一般打算做什么？",
+      "expected": [
+        "c-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-9",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "上下班路上我喜欢用什么交通工具？",
+      "expected": [
+        "c-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-10",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我愿不愿意搭乘特别拥挤的地铁？",
+      "expected": [
+        "c-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-11",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "规划工作日出行时，可以考虑我的哪种偏好？",
+      "expected": [
+        "c-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-12",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "通勤时我更喜欢骑车还是挤地铁？",
+      "expected": [
+        "c-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-13",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "帮我订出差的房间有什么要求？",
+      "expected": [
+        "c-stay"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-14",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我旅行工作时希望住处旁边有什么？",
+      "expected": [
+        "c-stay"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-15",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "如果酒店窗户正对吵闹道路，适合我吗？",
+      "expected": [
+        "c-stay"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-16",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "旅馆的位置和噪音方面，我偏好什么？",
+      "expected": [
+        "c-stay"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-17",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我今年读书打算保持什么进度？",
+      "expected": [
+        "c-books"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-18",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "阅读计划里主要选择哪个类别？",
+      "expected": [
+        "c-books"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-19",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "每个月我要读完多少本书？",
+      "expected": [
+        "c-books"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-20",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的长期阅读安排是什么？",
+      "expected": [
+        "c-books"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-21",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我白天常喝哪种茶？",
+      "expected": [
+        "c-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-22",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "四点过后我会避免什么饮品成分？",
+      "expected": [
+        "c-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-23",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "如果傍晚给我买饮料，要注意什么？",
+      "expected": [
+        "c-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-24",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "下午晚些时候还能给我点含咖啡因的茶吗？",
+      "expected": [
+        "c-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-25",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我和顾青什么时候一起复习？",
+      "expected": [
+        "c-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-26",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "朋友正在准备哪门语言考试？",
+      "expected": [
+        "c-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-27",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "星期三的共同学习约定和谁有关？",
+      "expected": [
+        "c-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-28",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "为顾青的复习准备材料，应该是什么级别和语言？",
+      "expected": [
+        "c-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-29",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的写作专注时段是几点？",
+      "expected": [
+        "c-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-30",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "不紧急的电话适合在上午专注时段打给我吗？",
+      "expected": [
+        "c-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-31",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "上午哪段时间我希望不被打扰？",
+      "expected": [
+        "c-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-32",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "九点到十一点我主要想做什么？",
+      "expected": [
+        "c-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-33",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "一起解决难题时，我希望先听什么？",
+      "expected": [
+        "c-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-34",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我喜欢直接只给一个方案还是比较两个可行方案？",
+      "expected": [
+        "c-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-35",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "给我分析选择应该按什么顺序？",
+      "expected": [
+        "c-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-36",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "讨论复杂问题时要先准备几个候选？",
+      "expected": [
+        "c-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-37",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "给爸爸买的那件户外用品是什么？",
+      "expected": [
+        "c-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-38",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "家人周末的哪项爱好让我选了登山杖？",
+      "expected": [
+        "c-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-39",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "上次送爸爸的礼物是为了什么活动？",
+      "expected": [
+        "c-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-40",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "爸爸喜欢的周末运动是什么？",
+      "expected": [
+        "c-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-41",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "下次徒步我特别需要补上哪件装备？",
+      "expected": [
+        "c-hike"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-42",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "为什么我现在打包户外背包会注意头灯？",
+      "expected": [
+        "c-hike"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-43",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "上次山路走回来有什么不便？",
+      "expected": [
+        "c-hike"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-44",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "如果预计走到天黑，提醒我带上什么？",
+      "expected": [
+        "c-hike"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-45",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我目前住在哪座城市？",
+      "expected": [
+        "c-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-46",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "搬家之后现居地点在哪里？",
+      "expected": [
+        "c-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-47",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "给我写收件城市应该填什么？",
+      "expected": [
+        "c-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-q-48",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我已经离开扬州，现在住哪里？",
+      "expected": [
+        "c-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v2-n-1",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我的车牌号码是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-2",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的身份证号码是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-3",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我小学读哪所学校？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-4",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我喜欢的篮球队叫什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-5",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我养的宠物叫什么名字？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-6",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的工作职位是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-7",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我最喜欢哪款电子游戏？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-8",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我常用的电脑是什么品牌？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-9",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我出生的城市在哪里？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-10",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我去过的最高海拔地区在哪里？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-11",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我读大学时住在哪座城市？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-12",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的身高是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-13",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我的生日是几月几日？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-14",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "学习角色中我要求你怎么称呼我？",
+      "expected": [],
+      "type": "scope-or-lifecycle-negative"
+    },
+    {
+      "id": "v2-n-15",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "导师角色中我每天练什么乐器？",
+      "expected": [],
+      "type": "scope-or-lifecycle-negative"
+    },
+    {
+      "id": "v2-n-16",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我什么时候举办婚礼？",
+      "expected": [],
+      "type": "scope-or-lifecycle-negative"
+    },
+    {
+      "id": "v2-n-17",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的驾照考试是哪一年通过的？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-18",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我最爱的流行歌手是谁？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-19",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我的工资是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-20",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的信用卡到期月份是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-21",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我今天的飞机座位号是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-22",
+      "split": "calibration",
+      "scope": "C/home/mia",
+      "query": "我买的汽车是什么颜色？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-23",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我小学第一次旅行去了哪里？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v2-n-24",
+      "split": "holdout",
+      "scope": "C/home/mia",
+      "query": "我的宠物生日是哪一天？",
+      "expected": [],
+      "type": "irrelevant"
+    }
+  ]
+}

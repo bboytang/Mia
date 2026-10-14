@@ -4,13 +4,13 @@ on:
     paths:
       - 'scripts/ci/*mia*embedding*'
       - 'scripts/ci/mia-embedding-runtime.Dockerfile'
-      - 'server/tests/fixtures/persona_memory_retrieval_zh.json'
+      - 'server/tests/fixtures/persona_memory_retrieval_zh*.json'
       - '.github/workflows/mia-memory-embedding.yml'
   pull_request:
     paths:
       - 'scripts/ci/*mia*embedding*'
       - 'scripts/ci/mia-embedding-runtime.Dockerfile'
-      - 'server/tests/fixtures/persona_memory_retrieval_zh.json'
+      - 'server/tests/fixtures/persona_memory_retrieval_zh*.json'
       - '.github/workflows/mia-memory-embedding.yml'
   workflow_dispatch:
 permissions:
@@ -58,7 +58,7 @@ jobs:
               -v "$RUNNER_TEMP/mia-embedding-model:/model:ro" \
               -v "$RUNNER_TEMP/mia-embedding-results:/results" \
               mia-embedding-experiment --model-dir /model --variant "$variant" \
-              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh.json \
+              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh_v2.json \
               --output "/results/${variant}.json"
           done
       - uses: actions/upload-artifact@v4

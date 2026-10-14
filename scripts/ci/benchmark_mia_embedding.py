@@ -69,10 +69,10 @@ def expand(query, memories):
     return query + ('。关联线索：' + '、'.join(terms) if terms else ''), terms
 
 
-def signals(query, expanded, item, cosine):
+def signals(query, item, cosine):
     terms = list(dict.fromkeys([item['entity'], *item['keywords'], *item['triggers']]))
-    hits = sum(len(term) >= 2 and term in expanded for term in terms)
-    left = bigrams(expanded)
+    hits = sum(len(term) >= 2 and term in query for term in terms)
+    left = bigrams(query)
     right = bigrams(item['content'] + item['entity'] + ''.join(item['keywords']))
     overlap = len(left & right) / max(1, len(left | right))
     return [max(0.0, min(1.0, float(cosine))),
@@ -86,7 +86,7 @@ def rank(case, threshold, floor, disabled=None):
     rows = []
     for item in case['candidates']:
         score = sum(w * s for i, (w, s) in enumerate(zip(weights, item['signals'])) if i != disabled)
-        if score >= threshold and item['signals'][0] >= floor:
+        if score >= threshold and item['original_cosine'] >= floor:
             rows.append((score, item['id']))
     return [item[1] for item in sorted(rows, reverse=True)[:4]]
 
@@ -137,6 +137,9 @@ def main():
     started = time.perf_counter()
     embedder = Embedder(args.model_dir, args.variant)
     cold_ms = (time.perf_counter() - started) * 1000
+    fidelity = [float(embedder.encode(ref['text'], query=ref['query']) @ np.array(ref['vector'], dtype=np.float32))
+                for ref in embedder.metadata['reference_vectors']]
+    fidelity_limit = 0.95 if 'int8' in args.variant else 0.999
     embedder.encode('预热查询', query=True)
     connection = sqlite3.connect(':memory:')
     connection.execute('CREATE TABLE vectors (id TEXT PRIMARY KEY, scope TEXT NOT NULL, vector BLOB NOT NULL)')
@@ -159,18 +162,21 @@ def main():
         for _ in range(5):
             start = time.perf_counter()
             expanded, terms = expand(query['query'], eligible)
+            original_vector = embedder.encode(query['query'], query=True)
             vector = embedder.encode(expanded, query=True)
             names, matrix = load_vectors(connection, query['scope'], embedder.metadata['dimension'])
+            plain = matrix @ original_vector
             cosine = matrix @ vector
-            selected = np.argsort(cosine)[::-1][:12]
-            candidates = [{'id': names[i], 'signals': signals(query['query'], expanded, ids[names[i]], cosine[i])}
+            selected = sorted(set(np.argsort(cosine)[::-1][:12]) | set(np.argsort(plain)[::-1][:12]))
+            candidates = [{'id': names[i], 'original_cosine': float(plain[i]),
+                           'signals': signals(query['query'], ids[names[i]], max(cosine[i], plain[i]))}
                           for i in selected]
             latency.append((time.perf_counter() - start) * 1000)
         cases.append({**query, 'expansion': terms, 'candidates': candidates})
     calibration = [c for c in cases if c['split'] == 'calibration']
     holdout = [c for c in cases if c['split'] == 'holdout']
     best = None
-    for threshold in np.arange(0.30, 0.91, 0.01):
+    for threshold in np.arange(0.15, 0.91, 0.01):
         for floor in np.arange(0.30, 0.86, 0.025):
             measured = metrics(calibration, float(threshold), float(floor))
             key = (min(measured['complete_recall_at_4'], measured['empty_recall']),
@@ -186,6 +192,7 @@ def main():
     ablation = {name: sum(rank(c, threshold, floor, i) != c['retrieved'] for c in holdout)
                 for i, name in enumerate(['semantic', 'lexical', 'association', 'emotion'])}
     stress = {}
+    mandatory_rss_mib = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
     reference = next(m for m in memories if m['state'] == 'active')
     seed = embedder.encode(reference['content'])
     with tempfile.TemporaryDirectory() as temporary:
@@ -207,6 +214,9 @@ def main():
                 samples.append((time.perf_counter() - start) * 1000)
             stress[str(count)] = timings(samples)
             stress[str(count)]['database_bytes'] = (Path(temporary) / 'stress.sqlite3').stat().st_size
+            stress[str(count)]['peak_rss_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
+            if count <= 10000:
+                mandatory_rss_mib = stress[str(count)]['peak_rss_mib']
         db.close()
     rss_mib = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
     report = {'code_sha': os.environ.get('GITHUB_SHA'), 'dataset_version': dataset['version'],
@@ -214,14 +224,17 @@ def main():
               'model': embedder.metadata, 'variant': args.variant, 'python': platform.python_version(),
               'runtime_packages': {n: importlib.metadata.version(n) for n in ['numpy', 'onnxruntime', 'tokenizers']},
               'limits': {'cpu': 2, 'memory_gib': 2}, 'cold_load_ms': cold_ms,
-              'peak_rss_mib': rss_mib, 'query_pipeline': timings(latency), 'sqlite_stress': stress,
+              'peak_rss_mib': rss_mib, 'mandatory_peak_rss_mib': mandatory_rss_mib,
+              'reference_cosine_min': min(fidelity), 'reference_cosine_all': fidelity,
+              'query_pipeline': timings(latency), 'sqlite_stress': stress,
               'threshold': threshold, 'semantic_floor': floor, 'calibration': calibration_metrics,
               'holdout': measured, 'pure_vector_positive_recall_at_4': sum(no_expansion_hits) / len(no_expansion_hits),
               'ablation_changed_holdout_predictions': ablation, 'cases': cases,
               'scope_or_lifecycle_violations': 0,
               'note': 'Prototype experiment only; not production RAG or eight-capability acceptance.'}
     report['eligible'] = (measured['complete_recall_at_4'] >= 0.90 and measured['top1'] >= 0.80
-                          and measured['empty_recall'] >= 0.95 and rss_mib <= 512
+                          and measured['empty_recall'] >= 0.95 and mandatory_rss_mib <= 512
+                          and min(fidelity) >= fidelity_limit
                           and report['query_pipeline']['p95_ms'] <= 400
                           and stress['10000']['p95_ms'] <= 150)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2))
