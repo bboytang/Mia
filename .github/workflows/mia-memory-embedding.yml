@@ -58,7 +58,7 @@ jobs:
               -v "$RUNNER_TEMP/mia-embedding-model:/model:ro" \
               -v "$RUNNER_TEMP/mia-embedding-results:/results" \
               mia-embedding-experiment --model-dir /model --variant "$variant" \
-              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh_v3.json \
+              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh_v4.json \
               --output "/results/${variant}.json"
           done
       - uses: actions/upload-artifact@v4

@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +31,9 @@ import xiaozhi.modules.security.service.SysUserTokenService;
 import xiaozhi.modules.sys.redis.SysParamsRedis;
 
 /** Reproduces known unsafe baseline behavior on disposable CI data, NOT security acceptance. */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "server.servlet.context-path=/xiaozhi")
+@ActiveProfiles("dev")
 class MiaIdentityBaselineTest {
     private static final long USER_A = 910000001L;
     private static final long USER_B = 910000002L;

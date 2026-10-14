@@ -45,12 +45,15 @@ def main():
                           opset_version=17, do_constant_folding=True, dynamo=False)
     quantized = args.output / 'model-int8.onnx'
     quantize_dynamic(str(path), str(quantized), weight_type=QuantType.QInt8,
+                     per_channel=True, reduce_range=True,
                      op_types_to_quantize=['MatMul', 'Gemm'],
                      extra_options={'MatMulConstBOnly': True})
     metadata = {'model': args.model, 'revision': args.revision,
                 'dimension': model.config.hidden_size, 'max_tokens': 512,
                 'query_prefix': '为这个句子生成表示以用于检索相关文章：',
-                'pooling': 'CLS', 'normalized': True, 'models': {}, 'reference_vectors': []}
+                'pooling': 'CLS', 'normalized': True,
+                'quantization': {'format': 'U8S8', 'per_channel': True, 'reduce_range': True},
+                'models': {}, 'reference_vectors': []}
     model.eval()
     for text in ['测试文字', '雨后的树林很安静。', '出行之前要检查天气。', '喝热水还是冷水？']:
         for query in [False, True]:

@@ -37,6 +37,9 @@ class Embedder:
         options = ort.SessionOptions()
         options.intra_op_num_threads = 2
         options.inter_op_num_threads = 1
+        options.enable_cpu_mem_arena = False
+        options.enable_mem_pattern = False
+        options.add_session_config_entry('session.disable_prepacking', '1')
         self.session = ort.InferenceSession(str(path), options, providers=['CPUExecutionProvider'])
         self.inputs = {item.name for item in self.session.get_inputs()}
 
@@ -238,7 +241,10 @@ def main():
               'dataset_sha256': hashlib.sha256(args.dataset.read_bytes()).hexdigest(),
               'model': embedder.metadata, 'variant': args.variant, 'python': platform.python_version(),
               'runtime_packages': {n: importlib.metadata.version(n) for n in ['numpy', 'onnxruntime', 'tokenizers']},
-              'limits': {'cpu': 2, 'memory_gib': 2}, 'cold_load_ms': cold_ms,
+              'limits': {'cpu': 2, 'memory_gib': 2},
+              'runtime_options': {'cpu_mem_arena': False, 'mem_pattern': False, 'prepacking': False},
+              'cpu_info': Path('/proc/cpuinfo').read_text().split('\n\n')[0],
+              'cold_load_ms': cold_ms,
               'peak_rss_mib': rss_mib, 'mandatory_peak_rss_mib': mandatory_rss_mib,
               'reference_cosine_min': min(fidelity), 'reference_cosine_all': fidelity,
               'query_pipeline': timings(latency), 'sqlite_stress': stress,

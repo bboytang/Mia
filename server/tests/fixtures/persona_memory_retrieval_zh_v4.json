@@ -1,0 +1,1432 @@
+{
+  "version": "4",
+  "purpose": "独立新语料及留出；v3失败保留；运行内存及通用量化修正验证，不降低指标",
+  "memories": [
+    {
+      "id": "j-diet",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我吃扇贝会过敏，但龙虾可以正常吃。",
+      "entity": "扇贝",
+      "keywords": [
+        "过敏",
+        "龙虾"
+      ],
+      "triggers": [
+        "海鲜",
+        "饮食",
+        "点菜"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "j-sleep",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我晚上十点准备睡觉，睡前不玩手机游戏。",
+      "entity": "睡觉",
+      "keywords": [
+        "十点",
+        "手机游戏"
+      ],
+      "triggers": [
+        "作息",
+        "夜间",
+        "睡前"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-commute",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "工作日我坐地铁上班，不乘公交车。",
+      "entity": "地铁",
+      "keywords": [
+        "上班",
+        "公交车"
+      ],
+      "triggers": [
+        "通勤",
+        "工作日",
+        "出门"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "j-rooms",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "订酒店时我希望房间没有地毯，并且离电梯远一点。",
+      "entity": "酒店",
+      "keywords": [
+        "地毯",
+        "电梯"
+      ],
+      "triggers": [
+        "住宿",
+        "订房",
+        "房间"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "j-writing",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我每周六写一篇四百字的生活随笔。",
+      "entity": "随笔",
+      "keywords": [
+        "周六",
+        "四百字"
+      ],
+      "triggers": [
+        "写作",
+        "文字",
+        "周末"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-coffee",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我喜欢低因咖啡，下午三点后不喝咖啡。",
+      "entity": "咖啡",
+      "keywords": [
+        "低因",
+        "三点"
+      ],
+      "triggers": [
+        "饮料",
+        "咖啡因",
+        "下午"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-friend",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "丁南是我的朋友，做建筑设计，我们周日一起练网球。",
+      "entity": "丁南",
+      "keywords": [
+        "建筑设计",
+        "周日",
+        "网球"
+      ],
+      "triggers": [
+        "朋友",
+        "球友",
+        "运动"
+      ],
+      "weight": 5
+    },
+    {
+      "id": "j-focus",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我上午九点到十一点专注画设计稿，不接非紧急电话。",
+      "entity": "设计稿",
+      "keywords": [
+        "九点",
+        "十一点",
+        "电话"
+      ],
+      "triggers": [
+        "专注",
+        "工作时间",
+        "来电"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "j-feedback",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我需要建议时，希望先给具体操作步骤，再解释原因。",
+      "entity": "建议",
+      "keywords": [
+        "操作步骤",
+        "原因"
+      ],
+      "triggers": [
+        "反馈",
+        "讲解",
+        "指导"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-gift",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我准备在七夕送姑姑一个电子阅读器。",
+      "entity": "姑姑",
+      "keywords": [
+        "七夕",
+        "电子阅读器"
+      ],
+      "triggers": [
+        "礼物",
+        "送人",
+        "购买"
+      ],
+      "weight": 6
+    },
+    {
+      "id": "j-plants",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我在阳台养薄荷，浇水之前先检查土壤是否干燥。",
+      "entity": "薄荷",
+      "keywords": [
+        "阳台",
+        "土壤"
+      ],
+      "triggers": [
+        "植物",
+        "浇水",
+        "种植"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "j-city",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "我已从宁波搬到嘉兴，目前住在嘉兴。",
+      "entity": "嘉兴",
+      "keywords": [
+        "宁波",
+        "搬家"
+      ],
+      "triggers": [
+        "城市",
+        "住址",
+        "居住"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-loss",
+      "scope": "J/daily/mia",
+      "state": "active",
+      "content": "母亲留下的旧手表对我十分重要，我常想起她。",
+      "entity": "母亲",
+      "keywords": [
+        "手表",
+        "想念"
+      ],
+      "triggers": [
+        "母亲",
+        "手表"
+      ],
+      "weight": 10
+    },
+    {
+      "id": "j-city-old",
+      "scope": "J/daily/mia",
+      "state": "superseded",
+      "content": "我现在住在宁波。",
+      "entity": "宁波",
+      "keywords": [
+        "居住"
+      ],
+      "triggers": [
+        "城市"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-deleted",
+      "scope": "J/daily/mia",
+      "state": "invalidated",
+      "content": "备用钥匙放在鞋柜底层。",
+      "entity": "钥匙",
+      "keywords": [
+        "鞋柜"
+      ],
+      "triggers": [
+        "钥匙"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-pending",
+      "scope": "J/daily/mia",
+      "state": "pending",
+      "content": "我可能五月二十日举办婚礼，尚未确定。",
+      "entity": "婚礼",
+      "keywords": [
+        "五月"
+      ],
+      "triggers": [
+        "婚礼"
+      ],
+      "weight": 5
+    },
+    {
+      "id": "j-other-agent",
+      "scope": "J/study/mia",
+      "state": "active",
+      "content": "我上课时希望被称为小松。",
+      "entity": "小松",
+      "keywords": [
+        "称呼"
+      ],
+      "triggers": [
+        "称呼"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "j-other-persona",
+      "scope": "J/daily/tutor",
+      "state": "active",
+      "content": "我每天练习手风琴二十分钟。",
+      "entity": "手风琴",
+      "keywords": [
+        "练习"
+      ],
+      "triggers": [
+        "乐器"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "k-diet",
+      "scope": "K/daily/mia",
+      "state": "active",
+      "content": "我能吃扇贝但吃龙虾过敏。",
+      "entity": "龙虾",
+      "keywords": [
+        "过敏"
+      ],
+      "triggers": [
+        "海鲜"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "k-city",
+      "scope": "K/daily/mia",
+      "state": "active",
+      "content": "我已从嘉兴搬到宁波，现住宁波。",
+      "entity": "宁波",
+      "keywords": [
+        "嘉兴"
+      ],
+      "triggers": [
+        "住址"
+      ],
+      "weight": 2
+    }
+  ],
+  "queries": [
+    {
+      "id": "v4-q-1",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "点海鲜时我需要避开哪些东西？",
+      "expected": [
+        "j-diet"
+      ]
+    },
+    {
+      "id": "v4-q-2",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的饮食过敏是什么？",
+      "expected": [
+        "j-diet"
+      ]
+    },
+    {
+      "id": "v4-q-3",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "扇贝适合我吃吗？",
+      "expected": [
+        "j-diet"
+      ]
+    },
+    {
+      "id": "v4-q-4",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "给我安排海鲜餐有什么限制？",
+      "expected": [
+        "j-diet"
+      ]
+    },
+    {
+      "id": "v4-q-5",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我能吃龙虾吗？",
+      "expected": [
+        "j-diet"
+      ]
+    },
+    {
+      "id": "v4-q-6",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "哪个贝类是我明确不能碰的？",
+      "expected": [
+        "j-diet"
+      ]
+    },
+    {
+      "id": "v4-q-7",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的睡前安排是什么？",
+      "expected": [
+        "j-sleep"
+      ]
+    },
+    {
+      "id": "v4-q-8",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我通常什么时候准备睡觉？",
+      "expected": [
+        "j-sleep"
+      ]
+    },
+    {
+      "id": "v4-q-9",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "晚上二十二点我打算做什么？",
+      "expected": [
+        "j-sleep"
+      ]
+    },
+    {
+      "id": "v4-q-10",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "睡觉之前我避开什么娱乐？",
+      "expected": [
+        "j-sleep"
+      ]
+    },
+    {
+      "id": "v4-q-11",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "手机游戏适合放进我的临睡活动吗？",
+      "expected": [
+        "j-sleep"
+      ]
+    },
+    {
+      "id": "v4-q-12",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我给自己定的就寝时间是什么？",
+      "expected": [
+        "j-sleep"
+      ]
+    },
+    {
+      "id": "v4-q-13",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我工作日通常怎样去公司？",
+      "expected": [
+        "j-commute"
+      ]
+    },
+    {
+      "id": "v4-q-14",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的通勤方式是什么？",
+      "expected": [
+        "j-commute"
+      ]
+    },
+    {
+      "id": "v4-q-15",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "上班路上我选择哪个交通工具？",
+      "expected": [
+        "j-commute"
+      ]
+    },
+    {
+      "id": "v4-q-16",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "公交车是我的工作日出行选择吗？",
+      "expected": [
+        "j-commute"
+      ]
+    },
+    {
+      "id": "v4-q-17",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我要去单位的时候一般乘什么？",
+      "expected": [
+        "j-commute"
+      ]
+    },
+    {
+      "id": "v4-q-18",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "给我规划上班出行应该优先选什么？",
+      "expected": [
+        "j-commute"
+      ]
+    },
+    {
+      "id": "v4-q-19",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "帮我订酒店时要留意哪些偏好？",
+      "expected": [
+        "j-rooms"
+      ]
+    },
+    {
+      "id": "v4-q-20",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的住宿要求是什么？",
+      "expected": [
+        "j-rooms"
+      ]
+    },
+    {
+      "id": "v4-q-21",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我选酒店房间有哪些条件？",
+      "expected": [
+        "j-rooms"
+      ]
+    },
+    {
+      "id": "v4-q-22",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "地毯房和无地毯房我偏向哪一种？",
+      "expected": [
+        "j-rooms"
+      ]
+    },
+    {
+      "id": "v4-q-23",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "房间靠近电梯适合我的要求吗？",
+      "expected": [
+        "j-rooms"
+      ]
+    },
+    {
+      "id": "v4-q-24",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "预订客房应该满足我的哪两点要求？",
+      "expected": [
+        "j-rooms"
+      ]
+    },
+    {
+      "id": "v4-q-25",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的固定写作习惯是什么？",
+      "expected": [
+        "j-writing"
+      ]
+    },
+    {
+      "id": "v4-q-26",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我周末一般写什么文字？",
+      "expected": [
+        "j-writing"
+      ]
+    },
+    {
+      "id": "v4-q-27",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我在哪一天写生活随笔？",
+      "expected": [
+        "j-writing"
+      ]
+    },
+    {
+      "id": "v4-q-28",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我的随笔篇幅通常多长？",
+      "expected": [
+        "j-writing"
+      ]
+    },
+    {
+      "id": "v4-q-29",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "周六我安排了哪种文字记录？",
+      "expected": [
+        "j-writing"
+      ]
+    },
+    {
+      "id": "v4-q-30",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我定下的每周写作任务是什么？",
+      "expected": [
+        "j-writing"
+      ]
+    },
+    {
+      "id": "v4-q-31",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我喜欢哪一类咖啡？",
+      "expected": [
+        "j-coffee"
+      ]
+    },
+    {
+      "id": "v4-q-32",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的喝咖啡习惯是什么？",
+      "expected": [
+        "j-coffee"
+      ]
+    },
+    {
+      "id": "v4-q-33",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "下午十五点之后给我安排咖啡合适吗？",
+      "expected": [
+        "j-coffee"
+      ]
+    },
+    {
+      "id": "v4-q-34",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我喝咖啡的时间限制是什么？",
+      "expected": [
+        "j-coffee"
+      ]
+    },
+    {
+      "id": "v4-q-35",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "选择咖啡因含量时我的偏好是什么？",
+      "expected": [
+        "j-coffee"
+      ]
+    },
+    {
+      "id": "v4-q-36",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我下午什么时候开始避开咖啡？",
+      "expected": [
+        "j-coffee"
+      ]
+    },
+    {
+      "id": "v4-q-37",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我周末练网球的伙伴是谁？",
+      "expected": [
+        "j-friend"
+      ]
+    },
+    {
+      "id": "v4-q-38",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "丁南从事什么工作？",
+      "expected": [
+        "j-friend"
+      ]
+    },
+    {
+      "id": "v4-q-39",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我的朋友丁南是做什么的？",
+      "expected": [
+        "j-friend"
+      ]
+    },
+    {
+      "id": "v4-q-40",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我和球友在哪一天练习？",
+      "expected": [
+        "j-friend"
+      ]
+    },
+    {
+      "id": "v4-q-41",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "谁会在周日陪我练网球？",
+      "expected": [
+        "j-friend"
+      ]
+    },
+    {
+      "id": "v4-q-42",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我与丁南的共同活动是什么？",
+      "expected": [
+        "j-friend"
+      ]
+    },
+    {
+      "id": "v4-q-43",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我的专注工作时段是什么？",
+      "expected": [
+        "j-focus"
+      ]
+    },
+    {
+      "id": "v4-q-44",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我在上午集中做哪项工作？",
+      "expected": [
+        "j-focus"
+      ]
+    },
+    {
+      "id": "v4-q-45",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "非紧急电话应该避开我的哪个时段？",
+      "expected": [
+        "j-focus"
+      ]
+    },
+    {
+      "id": "v4-q-46",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "九点到十一点我主要忙什么？",
+      "expected": [
+        "j-focus"
+      ]
+    },
+    {
+      "id": "v4-q-47",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "给我安排电话沟通要考虑哪个习惯？",
+      "expected": [
+        "j-focus"
+      ]
+    },
+    {
+      "id": "v4-q-48",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我画稿时对普通来电有什么安排？",
+      "expected": [
+        "j-focus"
+      ]
+    },
+    {
+      "id": "v4-q-49",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "你给我建议时应该按什么顺序？",
+      "expected": [
+        "j-feedback"
+      ]
+    },
+    {
+      "id": "v4-q-50",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我偏好的指导方式是什么？",
+      "expected": [
+        "j-feedback"
+      ]
+    },
+    {
+      "id": "v4-q-51",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "解释原因和列操作步骤哪一个应先来？",
+      "expected": [
+        "j-feedback"
+      ]
+    },
+    {
+      "id": "v4-q-52",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "给我提供帮助时怎么组织内容？",
+      "expected": [
+        "j-feedback"
+      ]
+    },
+    {
+      "id": "v4-q-53",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我希望怎样接收具体建议？",
+      "expected": [
+        "j-feedback"
+      ]
+    },
+    {
+      "id": "v4-q-54",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "先讲道理还是先告诉我怎么做更合我的习惯？",
+      "expected": [
+        "j-feedback"
+      ]
+    },
+    {
+      "id": "v4-q-55",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我准备送姑姑什么东西？",
+      "expected": [
+        "j-gift"
+      ]
+    },
+    {
+      "id": "v4-q-56",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我计划的七夕礼物是什么？",
+      "expected": [
+        "j-gift"
+      ]
+    },
+    {
+      "id": "v4-q-57",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "电子阅读器要送给谁？",
+      "expected": [
+        "j-gift"
+      ]
+    },
+    {
+      "id": "v4-q-58",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我为姑姑选了哪个礼物？",
+      "expected": [
+        "j-gift"
+      ]
+    },
+    {
+      "id": "v4-q-59",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我打算什么时候送出阅读器？",
+      "expected": [
+        "j-gift"
+      ]
+    },
+    {
+      "id": "v4-q-60",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我最近计划的送礼内容是什么？",
+      "expected": [
+        "j-gift"
+      ]
+    },
+    {
+      "id": "v4-q-61",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我在家养了哪种植物？",
+      "expected": [
+        "j-plants"
+      ]
+    },
+    {
+      "id": "v4-q-62",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我浇水前有什么习惯？",
+      "expected": [
+        "j-plants"
+      ]
+    },
+    {
+      "id": "v4-q-63",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我家薄荷放在哪里？",
+      "expected": [
+        "j-plants"
+      ]
+    },
+    {
+      "id": "v4-q-64",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "是否应该直接给我的植物浇水？",
+      "expected": [
+        "j-plants"
+      ]
+    },
+    {
+      "id": "v4-q-65",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我判断薄荷需不需要水的依据是什么？",
+      "expected": [
+        "j-plants"
+      ]
+    },
+    {
+      "id": "v4-q-66",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "阳台上我养着什么？",
+      "expected": [
+        "j-plants"
+      ]
+    },
+    {
+      "id": "v4-q-67",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我现在住在哪个城市？",
+      "expected": [
+        "j-city"
+      ]
+    },
+    {
+      "id": "v4-q-68",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "paraphrase",
+      "query": "我从哪个地方搬到哪个地方？",
+      "expected": [
+        "j-city"
+      ]
+    },
+    {
+      "id": "v4-q-69",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我目前的常住地是哪？",
+      "expected": [
+        "j-city"
+      ]
+    },
+    {
+      "id": "v4-q-70",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "宁波还是嘉兴是我的现居地？",
+      "expected": [
+        "j-city"
+      ]
+    },
+    {
+      "id": "v4-q-71",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "我搬家之后在哪落脚？",
+      "expected": [
+        "j-city"
+      ]
+    },
+    {
+      "id": "v4-q-72",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "paraphrase",
+      "query": "给我寄东西要选哪个居住城市？",
+      "expected": [
+        "j-city"
+      ]
+    },
+    {
+      "id": "v4-n-1",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "我保存的银行账户号码是什么？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-2",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "明天欧洲航班在哪个登机口？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-3",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "我的护照什么时候到期？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-4",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "今天的美元汇率是多少？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-5",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "我的医保卡编号是什么？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-6",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "我小学毕业那年考了多少分？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-7",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "巴黎明天会下雨吗？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-8",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "irrelevant",
+      "query": "我的行李箱密码是什么？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-9",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "明年的春节是哪一天？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-10",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我上次乘飞机坐了哪个座位？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-11",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "这个月的黄金价格是多少？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-12",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我的社保缴费编号是什么？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-13",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我的驾照有效期到哪一天？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-14",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "太阳系里哪颗行星最大？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-15",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "海水为什么是咸的？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-16",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我最近一次体检的血压数值是什么？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-17",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我的宠物出生在哪天？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-18",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我在小学获得过什么奖？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-19",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我的银行卡有效期是多久？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-20",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "今晚比赛的最终比分是多少？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-21",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我的家庭固定电话是多少？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-22",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我小学老师的名字是什么？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-23",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我的备用钥匙放在哪里？",
+      "expected": []
+    },
+    {
+      "id": "v4-n-24",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "irrelevant",
+      "query": "我已经确定的婚礼日期是哪天？",
+      "expected": []
+    },
+    {
+      "id": "v4-r-1",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "我出生在哪个城市？",
+      "expected": [],
+      "allowed_related": [
+        "j-city"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-2",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "丁南多大年纪？",
+      "expected": [],
+      "allowed_related": [
+        "j-friend"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-3",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "姑姑的生日是哪天？",
+      "expected": [],
+      "allowed_related": [
+        "j-gift"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-4",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "我的旧手表是什么品牌？",
+      "expected": [],
+      "allowed_related": [
+        "j-loss"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-5",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "我的咖啡来自哪个产区？",
+      "expected": [],
+      "allowed_related": [
+        "j-coffee"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-6",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "我设计稿用什么软件画？",
+      "expected": [],
+      "allowed_related": [
+        "j-focus"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-7",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "我家阳台的面积是多少？",
+      "expected": [],
+      "allowed_related": [
+        "j-plants"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-8",
+      "scope": "J/daily/mia",
+      "split": "calibration",
+      "type": "related_unanswerable",
+      "query": "我网球教练叫什么名字？",
+      "expected": [],
+      "allowed_related": [
+        "j-friend"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-9",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "我大学在哪个城市上学？",
+      "expected": [],
+      "allowed_related": [
+        "j-city"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-10",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "丁南在哪里读的大学？",
+      "expected": [],
+      "allowed_related": [
+        "j-friend"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-11",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "姑姑最喜欢哪个作者？",
+      "expected": [],
+      "allowed_related": [
+        "j-gift"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-12",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "母亲留下的手表型号是什么？",
+      "expected": [],
+      "allowed_related": [
+        "j-loss"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-13",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "我低因咖啡豆的品牌是什么？",
+      "expected": [],
+      "allowed_related": [
+        "j-coffee"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-14",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "我目前工作单位叫什么？",
+      "expected": [],
+      "allowed_related": [
+        "j-focus"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-15",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "我养薄荷的花盆直径是多少？",
+      "expected": [],
+      "allowed_related": [
+        "j-plants"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    },
+    {
+      "id": "v4-r-16",
+      "scope": "J/daily/mia",
+      "split": "holdout",
+      "type": "related_unanswerable",
+      "query": "我的网球拍是什么牌子？",
+      "expected": [],
+      "allowed_related": [
+        "j-friend"
+      ],
+      "response_expectation": "明确信息不足，不从相关事实推断缺失属性"
+    }
+  ]
+}

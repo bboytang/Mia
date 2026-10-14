@@ -13,3 +13,5 @@
 首版复现的断言故意证明旧缺口存在：匿名 OTA 可为伪造 client 签旧 token；A 可手工添加／激活设备指向 B 的 Agent；A 解绑 B 设备时设备仍在但 B 通讯录被删除。**复现测试通过意味着旧缺口得到运行证实，绝不意味着安全通过。** 尚未运行新增复现，生产整改 P08／P09 未开始。后续修复验收需另列拒绝伪造／跨用户及合法路径的真实测试。
 
 换环境只需从任务提交运行 `Verify Mia manager baseline` Actions。脚本、固定源码、临时服务和测试入口均在仓库，不依赖旧 `/tmp`、生产密钥或原 Codex 账号。制品包含 Surefire 与 class-comparison；必要结论同步此目录和交接。
+
+首轮新增复现 `d8690e3aee1a34b953020d8cc194693f03fdd646`，[38593101882](https://github.com/bboytang/Mia/actions/runs/38593101882)：4 个复現用例在 Spring 启动阶段 error，没有执行到缺口断言。test resources 覆盖主 application，未激活 dev 导致未确定数据源 driver；改用既有 dev profile 并显式测试 context-path。四类对照仍通过，完整上游回归仍仅同一既有失败；修正后须复核，不能称身份运行复现已成功。

@@ -114,6 +114,13 @@
 - 编写真实 HTTP／Shiro／MySQL／Redis 合成身份复现入口，覆盖匿名签发、外人 Agent 的手工添加／激活、越权解绑通讯录影响。仅验证既有不安全行为；复现成功不等于安全通过。未运行、P08 未开始。
 - CI 完整回归的失败继续可见；身份复现和类字节检查在该既有失败之后独立运行。无生产改动，已同步交接。
 
+## 2026-10-14：P06 v3 不合格，P07 复现入口环境修正
+
+- v3 run [38592420655](https://github.com/bboytang/Mia/actions/runs/38592420655) success 仅代表实验运行；四候选全部 eligible=false，保存 `embedding-results-v3.json`。base FP32 质量通过但必测 RSS 571.42 MiB；small 仍有无关误召回；base INT8 参考余弦 0.37205，实际量化失真未解决。
+- 不修改质量／资源门槛或 v3 失败。按官方 ORT 文档修正通用 INT8 逐通道／reduce-range、关闭资源预分配／预打包，并新增独立 v4 留出。同类样本数量和相关不可回答规则保持；未运行、不作选型。
+- `d8690e3aee1a34b953020d8cc194693f03fdd646` 身份基线 run [38593101882](https://github.com/bboytang/Mia/actions/runs/38593101882)：复现 4 用例 error，原因是缺既有 dev profile 导致 Spring datasource driver 不可确定；未到行为断言，未证实运行缺口。四类对照通过；完整上游回归仍为同一既有失败。
+- 新增测试明确使用 dev 与隔离 context-path，等待 GitHub 复核。没有扩展生产改动，交接同步下一步。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

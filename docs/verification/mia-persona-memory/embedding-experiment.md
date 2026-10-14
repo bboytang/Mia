@@ -6,6 +6,10 @@ v2 仍无合格候选，原报告保留。v3 修正 exporter 包装及参考生�
 
 v3 置信度实验在校准集比较原始余弦底线和原查询第一候选相对第二候选的分差；最低原始余弦 0.25，分差不能使高情绪无关候选跳过语义检查。校准并列选择中间参数组合，不使用留出反馈挑参数。数值质量及资源门槛保持，报告继续以 eligible 判定，不预先认可该探索为生产实现。
 
+v3 [38592420655](https://github.com/bboytang/Mia/actions/runs/38592420655) 四候选仍不合格，见 [v3 报告](embedding-results-v3.json)。base FP32 Recall／Top1 0.95833、空召回 1.0，但必测峰值 571.42 MiB；small INT8 Recall 1.0、Top1 0.95833、空召回 0.9375；small FP32 空召回 0.875。修正 dropout 后 FP32 参考最低余弦约 1.0，base INT8 仍为 0.37205，属于实际量化精度问题。
+
+v4 不改变检索逻辑或质量门槛，新增独立 J／K 合成语料（仍为 20 记忆／112 查询，同 v3 划分），验证关闭 ONNX 内存 arena／pattern／预打包的资源影响；参考原始向量继续检查。INT8 改逐通道及 reduce-range：这是针对大精度损失的通用候选修正，依据 [ONNX Runtime 官方量化说明](https://onnxruntime.ai/docs/performance/model-optimizations/quantization.html) 的 U8S8 饱和与逐通道指引，是否解决须实测。预打包配置依据 [固定 ORT 1.23.2 源码](https://github.com/microsoft/onnxruntime/blob/v1.23.2/include/onnxruntime/core/session/onnxruntime_session_options_config_keys.h)。报告补 CPU 指令集／型号，不能假定 runner 与服务器指令集相同。
+
 ## 候选及官方依据
 
 - BAAI/bge-small-zh-v1.5，revision `7999e1d3359715c523056ef9478215996d62a620`，512 维。
