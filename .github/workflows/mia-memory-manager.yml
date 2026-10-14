@@ -1,0 +1,61 @@
+name: Verify Mia manager baseline
+on:
+  push:
+    paths:
+      - 'scripts/ci/verify_mia_manager_baseline.py'
+      - 'server/companion/**'
+      - 'docs/verification/mia-persona-memory/manager-baseline-20261014.json'
+      - '.github/workflows/mia-memory-manager.yml'
+  pull_request:
+    paths:
+      - 'scripts/ci/verify_mia_manager_baseline.py'
+      - 'server/companion/**'
+      - 'docs/verification/mia-persona-memory/manager-baseline-20261014.json'
+      - '.github/workflows/mia-memory-manager.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: upstream/main/manager-api/pom.xml
+      - name: Reconstruct existing Mia manager patch on pinned source
+        run: |
+          mkdir -p "$RUNNER_TEMP/mia-manager-results"
+          python -m server.companion.install_xiaozhi upstream --check > "$RUNNER_TEMP/mia-manager-results/current-companion.patch"
+          python -m server.companion.install_xiaozhi upstream --apply
+          java -version
+          mvn --version
+      - name: Compile and run existing real Java regressions
+        working-directory: upstream/main/manager-api
+        run: mvn --batch-mode test package
+      - name: Verify exact deployed class baseline
+        run: |
+          python scripts/ci/verify_mia_manager_baseline.py \
+            --classes upstream/main/manager-api/target/classes \
+            --baseline docs/verification/mia-persona-memory/manager-baseline-20261014.json \
+            --output "$RUNNER_TEMP/mia-manager-results/class-comparison.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Mia-manager-baseline-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/mia-manager-results
+            upstream/main/manager-api/target/surefire-reports
+          if-no-files-found: warn

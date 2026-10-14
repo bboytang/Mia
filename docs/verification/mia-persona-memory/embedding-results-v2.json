@@ -1,0 +1,4763 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38587797504",
+  "results": [
+    {
+      "code_sha": "0449dd6cfdd405aba59d77bc6ddc3ed77631187e",
+      "dataset_version": "2",
+      "dataset_sha256": "74ec58012972e5c7ae159e5ce0040d01aeb8857e05f70ef52de5585bb29c46a9",
+      "variant": "model-int8.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 370.700950000014,
+      "peak_rss_mib": 727.0390625,
+      "mandatory_peak_rss_mib": 329.046875,
+      "reference_cosine_min": 0.3979908227920532,
+      "reference_cosine_all": [
+        0.626695990562439,
+        0.42710375785827637,
+        0.6243134140968323,
+        0.43329888582229614,
+        0.6355040073394775,
+        0.3979908227920532,
+        0.6147434711456299,
+        0.4246465563774109
+      ],
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 90.60907899998938,
+        "p95_ms": 115.11943605000283
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 4.063672999990331,
+          "p95_ms": 5.921919799993702,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 281.0078125
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 47.92934200000332,
+          "p95_ms": 49.58956480000438,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 329.046875
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 228.3201730000144,
+          "p95_ms": 265.10695680000254,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 727.0390625
+        }
+      },
+      "threshold": 0.5400000000000004,
+      "semantic_floor": 0.7500000000000004,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 0.8125,
+        "top1": 0.8125,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.71875,
+        "top1": 0.71875,
+        "empty_recall": 0.75
+      },
+      "pure_vector_positive_recall_at_4": 0.71875,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 28,
+        "lexical": 21,
+        "association": 1,
+        "emotion": 10
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "model": {
+        "model": "BAAI/bge-base-zh-v1.5",
+        "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+        "dimension": 768,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+            "bytes": 406939356
+          },
+          "model-int8.onnx": {
+            "sha256": "08e692d802c54d89dbfe1f965157df25389d3582816b8a3a79feeecc6b3b4fee",
+            "bytes": 152319196
+          }
+        }
+      },
+      "failed_holdout_cases": [
+        {
+          "id": "v2-q-5",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我通常什么时候准备上床？",
+          "expected": [
+            "c-sleep"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.7220640182495117,
+              "signals": [
+                0.7220640182495117,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7995520830154419,
+              "signals": [
+                0.7995520830154419,
+                0.05500000000000001,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7587718963623047,
+              "signals": [
+                0.7587718963623047,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.8070594668388367,
+              "signals": [
+                0.8070594668388367,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8151876926422119,
+              "signals": [
+                0.8151876926422119,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7533696293830872,
+              "signals": [
+                0.7533696293830872,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.815861701965332,
+              "signals": [
+                0.815861701965332,
+                0.05238095238095238,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8356326818466187,
+              "signals": [
+                0.8356326818466187,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.816879391670227,
+              "signals": [
+                0.816879391670227,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7763444185256958,
+              "signals": [
+                0.7763444185256958,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7719972133636475,
+              "signals": [
+                0.7719972133636475,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.8080506324768066,
+              "signals": [
+                0.8080506324768066,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-8",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "十点三十分我一般打算做什么？",
+          "expected": [
+            "c-sleep"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.8251252174377441,
+              "signals": [
+                0.8251252174377441,
+                0.05238095238095238,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7542312145233154,
+              "signals": [
+                0.7542312145233154,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.7880828976631165,
+              "signals": [
+                0.7880828976631165,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8107898831367493,
+              "signals": [
+                0.8107898831367493,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.752546489238739,
+              "signals": [
+                0.752546489238739,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8149818181991577,
+              "signals": [
+                0.8149818181991577,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8551956415176392,
+              "signals": [
+                0.8551956415176392,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8437039256095886,
+              "signals": [
+                0.8437039256095886,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7643070220947266,
+              "signals": [
+                0.7643070220947266,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7947314977645874,
+              "signals": [
+                0.7947314977645874,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7443146705627441,
+              "signals": [
+                0.7443146705627441,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7994686365127563,
+              "signals": [
+                0.7994686365127563,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-11",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "规划工作日出行时，可以考虑我的哪种偏好？",
+          "expected": [
+            "c-commute"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7949219942092896,
+              "signals": [
+                0.7949219942092896,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7705179452896118,
+              "signals": [
+                0.7705179452896118,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.8161450028419495,
+              "signals": [
+                0.8161450028419495,
+                0.04583333333333334,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8126574754714966,
+              "signals": [
+                0.8126574754714966,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7583116292953491,
+              "signals": [
+                0.7583116292953491,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8183775544166565,
+              "signals": [
+                0.8183775544166565,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8438577651977539,
+              "signals": [
+                0.8438577651977539,
+                0.04230769230769231,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8510493636131287,
+              "signals": [
+                0.8510493636131287,
+                0.044897959183673466,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7759686708450317,
+              "signals": [
+                0.7759686708450317,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.8091661930084229,
+              "signals": [
+                0.8091661930084229,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7231568098068237,
+              "signals": [
+                0.7231568098068237,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7953883409500122,
+              "signals": [
+                0.7953883409500122,
+                0.044897959183673466,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-14",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我旅行工作时希望住处旁边有什么？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7965335845947266,
+              "signals": [
+                0.7965335845947266,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7807750701904297,
+              "signals": [
+                0.7807750701904297,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.8454760313034058,
+              "signals": [
+                0.8454760313034058,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.819434404373169,
+              "signals": [
+                0.819434404373169,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7527116537094116,
+              "signals": [
+                0.7527116537094116,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8225988745689392,
+              "signals": [
+                0.8225988745689392,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8278441429138184,
+              "signals": [
+                0.8278441429138184,
+                0.09361702127659575,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.846829354763031,
+              "signals": [
+                0.846829354763031,
+                0.04888888888888889,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7901780605316162,
+              "signals": [
+                0.7901780605316162,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7976850271224976,
+              "signals": [
+                0.7976850271224976,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7460889220237732,
+              "signals": [
+                0.7460889220237732,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.8257061243057251,
+              "signals": [
+                0.8257061243057251,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-15",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果酒店窗户正对吵闹道路，适合我吗？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.7267228364944458,
+              "signals": [
+                0.7267228364944458,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7838451862335205,
+              "signals": [
+                0.7838451862335205,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7563665509223938,
+              "signals": [
+                0.7563665509223938,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.8266987204551697,
+              "signals": [
+                0.8266987204551697,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.7830266952514648,
+              "signals": [
+                0.7830266952514648,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7406812906265259,
+              "signals": [
+                0.7406812906265259,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.804567813873291,
+              "signals": [
+                0.804567813873291,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8110737800598145,
+              "signals": [
+                0.8110737800598145,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8222615718841553,
+              "signals": [
+                0.8222615718841553,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7420769333839417,
+              "signals": [
+                0.7420769333839417,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7872279286384583,
+              "signals": [
+                0.7872279286384583,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.801566481590271,
+              "signals": [
+                0.801566481590271,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-21",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我白天常喝哪种茶？",
+          "expected": [
+            "c-tea"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.7404478788375854,
+              "signals": [
+                0.7404478788375854,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7807500958442688,
+              "signals": [
+                0.7807500958442688,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7373148202896118,
+              "signals": [
+                0.7373148202896118,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.782934844493866,
+              "signals": [
+                0.782934844493866,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8061866760253906,
+              "signals": [
+                0.8061866760253906,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7936912178993225,
+              "signals": [
+                0.7936912178993225,
+                0.05945945945945947,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8012621402740479,
+              "signals": [
+                0.8012621402740479,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8021407723426819,
+              "signals": [
+                0.8021407723426819,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8118814826011658,
+              "signals": [
+                0.8118814826011658,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7610828280448914,
+              "signals": [
+                0.7610828280448914,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7729917764663696,
+              "signals": [
+                0.7729917764663696,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7780779600143433,
+              "signals": [
+                0.7780779600143433,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-35",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "给我分析选择应该按什么顺序？",
+          "expected": [
+            "c-feedback"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.71717768907547,
+              "signals": [
+                0.71717768907547,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7660580277442932,
+              "signals": [
+                0.7660580277442932,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7280738353729248,
+              "signals": [
+                0.7280738353729248,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.7827257513999939,
+              "signals": [
+                0.7827257513999939,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8155555725097656,
+              "signals": [
+                0.8155555725097656,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7436838150024414,
+              "signals": [
+                0.7436838150024414,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.80915766954422,
+              "signals": [
+                0.80915766954422,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8265589475631714,
+              "signals": [
+                0.8265589475631714,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.872732400894165,
+              "signals": [
+                0.872732400894165,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7376840114593506,
+              "signals": [
+                0.7376840114593506,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7636496424674988,
+              "signals": [
+                0.7636496424674988,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7724312543869019,
+              "signals": [
+                0.7724312543869019,
+                0.051162790697674425,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-44",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果预计走到天黑，提醒我带上什么？",
+          "expected": [
+            "c-hike"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.7379798889160156,
+              "signals": [
+                0.7379798889160156,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.8066214323043823,
+              "signals": [
+                0.8066214323043823,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7630003690719604,
+              "signals": [
+                0.7630003690719604,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.8095182180404663,
+              "signals": [
+                0.8095182180404663,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8114375472068787,
+              "signals": [
+                0.8114375472068787,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7707868218421936,
+              "signals": [
+                0.7707868218421936,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8137788772583008,
+              "signals": [
+                0.8137788772583008,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8459041714668274,
+              "signals": [
+                0.8459041714668274,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8467973470687866,
+              "signals": [
+                0.8467973470687866,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.772637665271759,
+              "signals": [
+                0.772637665271759,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.8219187259674072,
+              "signals": [
+                0.8219187259674072,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.826551079750061,
+              "signals": [
+                0.826551079750061,
+                0.04782608695652174,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "c-high-emotion"
+          ]
+        },
+        {
+          "id": "v2-q-47",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "给我写收件城市应该填什么？",
+          "expected": [
+            "c-city"
+          ],
+          "type": "semantic",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7484560012817383,
+              "signals": [
+                0.7894716858863831,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7365925312042236,
+              "signals": [
+                0.7415108680725098,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.788304328918457,
+              "signals": [
+                0.7903969287872314,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8136717081069946,
+              "signals": [
+                0.8136717081069946,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7260520458221436,
+              "signals": [
+                0.7409398555755615,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8004536628723145,
+              "signals": [
+                0.8004536628723145,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8120708465576172,
+              "signals": [
+                0.829033374786377,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8180490136146545,
+              "signals": [
+                0.8180490136146545,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7468287944793701,
+              "signals": [
+                0.7505530714988708,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7557557821273804,
+              "signals": [
+                0.8007774353027344,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7377718687057495,
+              "signals": [
+                0.7847071886062622,
+                0.20470588235294118,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7860573530197144,
+              "signals": [
+                0.7908459901809692,
+                0.05238095238095238,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-n-9",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我出生的城市在哪里？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.6995226740837097,
+              "signals": [
+                0.706574022769928,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7310687303543091,
+              "signals": [
+                0.7634146809577942,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7394037842750549,
+              "signals": [
+                0.7422933578491211,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.7783865928649902,
+              "signals": [
+                0.782117486000061,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.7953640222549438,
+              "signals": [
+                0.7953640222549438,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.6976406574249268,
+              "signals": [
+                0.7113547325134277,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8009342551231384,
+              "signals": [
+                0.8009342551231384,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.7884616851806641,
+              "signals": [
+                0.802473247051239,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.7770928740501404,
+              "signals": [
+                0.7858028411865234,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.750637412071228,
+              "signals": [
+                0.7521423101425171,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7277084589004517,
+              "signals": [
+                0.768364429473877,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7658554911613464,
+              "signals": [
+                0.816741943359375,
+                0.2109677419354839,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7659945487976074,
+              "signals": [
+                0.7794342041015625,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "c-city"
+          ]
+        },
+        {
+          "id": "v2-n-11",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我读大学时住在哪座城市？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7330916523933411,
+              "signals": [
+                0.7718610763549805,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.743174135684967,
+              "signals": [
+                0.7484656572341919,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.7794387340545654,
+              "signals": [
+                0.7875230312347412,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8126091957092285,
+              "signals": [
+                0.8126091957092285,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7074851393699646,
+              "signals": [
+                0.7250012159347534,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8148261308670044,
+              "signals": [
+                0.8148261308670044,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.786556601524353,
+              "signals": [
+                0.8069246411323547,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.7817455530166626,
+              "signals": [
+                0.79112708568573,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7468361854553223,
+              "signals": [
+                0.7553824782371521,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7367777824401855,
+              "signals": [
+                0.7810671925544739,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7604552507400513,
+              "signals": [
+                0.8100305199623108,
+                0.2775,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.7685046195983887,
+              "signals": [
+                0.779642641544342,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "c-city"
+          ]
+        },
+        {
+          "id": "v2-n-12",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我的身高是多少？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7719283699989319,
+              "signals": [
+                0.7719283699989319,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7486405372619629,
+              "signals": [
+                0.7486405372619629,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.7851765155792236,
+              "signals": [
+                0.7851765155792236,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.826441764831543,
+              "signals": [
+                0.826441764831543,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.731682538986206,
+              "signals": [
+                0.731682538986206,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8128201365470886,
+              "signals": [
+                0.8128201365470886,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8135324120521545,
+              "signals": [
+                0.8135324120521545,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.8032842874526978,
+              "signals": [
+                0.8032842874526978,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7760486602783203,
+              "signals": [
+                0.7760486602783203,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7632271647453308,
+              "signals": [
+                0.7632271647453308,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.7399357557296753,
+              "signals": [
+                0.7399357557296753,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.8136902451515198,
+              "signals": [
+                0.8136902451515198,
+                0.05945945945945947,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "c-high-emotion"
+          ]
+        },
+        {
+          "id": "v2-n-20",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我的信用卡到期月份是什么？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.7250550985336304,
+              "signals": [
+                0.7250550985336304,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.7518345713615417,
+              "signals": [
+                0.7518345713615417,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.7477352023124695,
+              "signals": [
+                0.7477352023124695,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.784365713596344,
+              "signals": [
+                0.784365713596344,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.8200404644012451,
+              "signals": [
+                0.8200404644012451,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.7312898635864258,
+              "signals": [
+                0.7312898635864258,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.8047357797622681,
+              "signals": [
+                0.8047357797622681,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.8148483037948608,
+              "signals": [
+                0.8148483037948608,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.7889230251312256,
+              "signals": [
+                0.7889230251312256,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.7446396350860596,
+              "signals": [
+                0.7446396350860596,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.7635178565979004,
+              "signals": [
+                0.7635178565979004,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.8071689605712891,
+              "signals": [
+                0.8071689605712891,
+                0.05238095238095238,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "c-high-emotion"
+          ]
+        }
+      ]
+    },
+    {
+      "code_sha": "0449dd6cfdd405aba59d77bc6ddc3ed77631187e",
+      "dataset_version": "2",
+      "dataset_sha256": "74ec58012972e5c7ae159e5ce0040d01aeb8857e05f70ef52de5585bb29c46a9",
+      "variant": "model.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 852.5387389999963,
+      "peak_rss_mib": 968.859375,
+      "mandatory_peak_rss_mib": 570.7734375,
+      "reference_cosine_min": 0.9130800366401672,
+      "reference_cosine_all": [
+        0.9462041854858398,
+        0.9308130145072937,
+        0.9397457838058472,
+        0.9236340522766113,
+        0.963167130947113,
+        0.938873827457428,
+        0.9234638810157776,
+        0.9130800366401672
+      ],
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 131.25467099999355,
+        "p95_ms": 172.29963929998178
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 4.9635560000069745,
+          "p95_ms": 6.14862600002084,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 522.01953125
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 46.897879999988845,
+          "p95_ms": 51.24931779999997,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 570.7734375
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 225.4971170000033,
+          "p95_ms": 257.5496871999974,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 968.859375
+        }
+      },
+      "threshold": 0.27000000000000013,
+      "semantic_floor": 0.37500000000000006,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 1.0,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.8125,
+        "top1": 0.8125,
+        "empty_recall": 0.9375
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 27,
+        "lexical": 0,
+        "association": 0,
+        "emotion": 4
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "model": {
+        "model": "BAAI/bge-base-zh-v1.5",
+        "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+        "dimension": 768,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+            "bytes": 406939356
+          },
+          "model-int8.onnx": {
+            "sha256": "08e692d802c54d89dbfe1f965157df25389d3582816b8a3a79feeecc6b3b4fee",
+            "bytes": 152319196
+          }
+        }
+      },
+      "failed_holdout_cases": [
+        {
+          "id": "v2-q-5",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我通常什么时候准备上床？",
+          "expected": [
+            "c-sleep"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.3302905559539795,
+              "signals": [
+                0.3302905559539795,
+                0.05500000000000001,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.1822032332420349,
+              "signals": [
+                0.1822032332420349,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.24632960557937622,
+              "signals": [
+                0.24632960557937622,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.22837966680526733,
+              "signals": [
+                0.22837966680526733,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.22471480071544647,
+              "signals": [
+                0.22471480071544647,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.22763365507125854,
+              "signals": [
+                0.22763365507125854,
+                0.05238095238095238,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.3550635576248169,
+              "signals": [
+                0.3550635576248169,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.173797607421875,
+              "signals": [
+                0.173797607421875,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.2076943814754486,
+              "signals": [
+                0.2076943814754486,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.1769426465034485,
+              "signals": [
+                0.1769426465034485,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.14421245455741882,
+              "signals": [
+                0.14421245455741882,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.17698124051094055,
+              "signals": [
+                0.17698124051094055,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-11",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "规划工作日出行时，可以考虑我的哪种偏好？",
+          "expected": [
+            "c-commute"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.1811627894639969,
+              "signals": [
+                0.1811627894639969,
+                0.05,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.2921880781650543,
+              "signals": [
+                0.2921880781650543,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.3867571949958801,
+              "signals": [
+                0.3867571949958801,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.3464279770851135,
+              "signals": [
+                0.3464279770851135,
+                0.04583333333333334,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.2235049456357956,
+              "signals": [
+                0.2235049456357956,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.2905750870704651,
+              "signals": [
+                0.2905750870704651,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.270768404006958,
+              "signals": [
+                0.270768404006958,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.37781649827957153,
+              "signals": [
+                0.37781649827957153,
+                0.04230769230769231,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.3659934997558594,
+              "signals": [
+                0.3659934997558594,
+                0.044897959183673466,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.26267242431640625,
+              "signals": [
+                0.26267242431640625,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.3105306923389435,
+              "signals": [
+                0.3105306923389435,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.1714690774679184,
+              "signals": [
+                0.1714690774679184,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-15",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果酒店窗户正对吵闹道路，适合我吗？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.2181394398212433,
+              "signals": [
+                0.2181394398212433,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.23555441200733185,
+              "signals": [
+                0.23555441200733185,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.18099430203437805,
+              "signals": [
+                0.18099430203437805,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.3723112940788269,
+              "signals": [
+                0.3723112940788269,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.16265366971492767,
+              "signals": [
+                0.16265366971492767,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.16794654726982117,
+              "signals": [
+                0.16794654726982117,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.194453626871109,
+              "signals": [
+                0.194453626871109,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.2459612488746643,
+              "signals": [
+                0.2459612488746643,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.16496127843856812,
+              "signals": [
+                0.16496127843856812,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.2608475685119629,
+              "signals": [
+                0.2608475685119629,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.12252987921237946,
+              "signals": [
+                0.12252987921237946,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.11487497389316559,
+              "signals": [
+                0.11487497389316559,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-18",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "阅读计划里主要选择哪个类别？",
+          "expected": [
+            "c-books"
+          ],
+          "type": "semantic",
+          "expansion": [
+            "阅读计划",
+            "历史书",
+            "每月两本"
+          ],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.1172465905547142,
+              "signals": [
+                0.1469893455505371,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.19625316560268402,
+              "signals": [
+                0.215865358710289,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.11356376111507416,
+              "signals": [
+                0.14215239882469177,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.19545193016529083,
+              "signals": [
+                0.20435044169425964,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.3373681604862213,
+              "signals": [
+                0.5677760243415833,
+                0.4633333333333334,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.18135184049606323,
+              "signals": [
+                0.19220535457134247,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.1813095510005951,
+              "signals": [
+                0.23316262662410736,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.21120700240135193,
+              "signals": [
+                0.21120700240135193,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.31246256828308105,
+              "signals": [
+                0.34408795833587646,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.13965819776058197,
+              "signals": [
+                0.18003055453300476,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.1713973730802536,
+              "signals": [
+                0.22672852873802185,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.06603018939495087,
+              "signals": [
+                0.07740975171327591,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.050841204822063446,
+              "signals": [
+                0.08467963337898254,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-35",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "给我分析选择应该按什么顺序？",
+          "expected": [
+            "c-feedback"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.14286555349826813,
+              "signals": [
+                0.14286555349826813,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.2188698798418045,
+              "signals": [
+                0.2188698798418045,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.12501980364322662,
+              "signals": [
+                0.12501980364322662,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.24624602496623993,
+              "signals": [
+                0.24624602496623993,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.1844864785671234,
+              "signals": [
+                0.1844864785671234,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.1965814083814621,
+              "signals": [
+                0.1965814083814621,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.18783611059188843,
+              "signals": [
+                0.18783611059188843,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.21777929365634918,
+              "signals": [
+                0.21777929365634918,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.43216854333877563,
+              "signals": [
+                0.43216854333877563,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.1567055881023407,
+              "signals": [
+                0.1567055881023407,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.19321125745773315,
+              "signals": [
+                0.19321125745773315,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.12562668323516846,
+              "signals": [
+                0.12562668323516846,
+                0.0,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-47",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "给我写收件城市应该填什么？",
+          "expected": [
+            "c-city"
+          ],
+          "type": "semantic",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.130107581615448,
+              "signals": [
+                0.21585695445537567,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.1464914083480835,
+              "signals": [
+                0.20088082551956177,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.20222817361354828,
+              "signals": [
+                0.26743850111961365,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.15578633546829224,
+              "signals": [
+                0.16810700297355652,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.1288548856973648,
+              "signals": [
+                0.18221594393253326,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.17812320590019226,
+              "signals": [
+                0.19083446264266968,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.278915673494339,
+              "signals": [
+                0.2851340174674988,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.1893337368965149,
+              "signals": [
+                0.2259238362312317,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.14761556684970856,
+              "signals": [
+                0.1794416308403015,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.18798553943634033,
+              "signals": [
+                0.2769697606563568,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.267013818025589,
+              "signals": [
+                0.5272787809371948,
+                0.20470588235294118,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.15955564379692078,
+              "signals": [
+                0.1889134645462036,
+                0.05238095238095238,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-n-11",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我读大学时住在哪座城市？",
+          "expected": [],
+          "type": "irrelevant",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.1430329978466034,
+              "signals": [
+                0.2300679087638855,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.19724231958389282,
+              "signals": [
+                0.23328649997711182,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.23930297791957855,
+              "signals": [
+                0.26715075969696045,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.19009260833263397,
+              "signals": [
+                0.1944514811038971,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.1386500746011734,
+              "signals": [
+                0.1902650147676468,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.18381831049919128,
+              "signals": [
+                0.19845879077911377,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.1815357208251953,
+              "signals": [
+                0.21334320306777954,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.11678029596805573,
+              "signals": [
+                0.17564372718334198,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.1824321299791336,
+              "signals": [
+                0.21336159110069275,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.13099108636379242,
+              "signals": [
+                0.2494482398033142,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.37565407156944275,
+              "signals": [
+                0.6348282098770142,
+                0.2775,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.20923945307731628,
+              "signals": [
+                0.23303060233592987,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "c-city"
+          ]
+        }
+      ]
+    },
+    {
+      "code_sha": "0449dd6cfdd405aba59d77bc6ddc3ed77631187e",
+      "dataset_version": "2",
+      "dataset_sha256": "74ec58012972e5c7ae159e5ce0040d01aeb8857e05f70ef52de5585bb29c46a9",
+      "variant": "model-int8.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 132.71572099999673,
+      "peak_rss_mib": 473.390625,
+      "mandatory_peak_rss_mib": 201.2421875,
+      "reference_cosine_min": 0.8877776861190796,
+      "reference_cosine_all": [
+        0.903672456741333,
+        0.8974772095680237,
+        0.9209001064300537,
+        0.9058623313903809,
+        0.9162077903747559,
+        0.9021407961845398,
+        0.9010787010192871,
+        0.8877776861190796
+      ],
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 8.033111500004964,
+        "p95_ms": 11.098443449994022
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 4.064251999992052,
+          "p95_ms": 5.568383999997195,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 165.95703125
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 45.93273499999384,
+          "p95_ms": 52.422539600004825,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 201.2421875
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 224.8213910000061,
+          "p95_ms": 247.37196359999984,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 473.390625
+        }
+      },
+      "threshold": 0.3400000000000002,
+      "semantic_floor": 0.47500000000000014,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 1.0,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.8125,
+        "top1": 0.78125,
+        "empty_recall": 1.0
+      },
+      "pure_vector_positive_recall_at_4": 0.96875,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 26,
+        "lexical": 1,
+        "association": 0,
+        "emotion": 3
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "model": {
+        "model": "BAAI/bge-small-zh-v1.5",
+        "revision": "7999e1d3359715c523056ef9478215996d62a620",
+        "dimension": 512,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "6d65414b517dbf2922a52181dd6eb7c8b44769f21d427c09b7884c356ea7040f",
+            "bytes": 94846908
+          },
+          "model-int8.onnx": {
+            "sha256": "19b72a5fda9b554c7db5049035bbc7bf24a0a687644395606109fd8b338b000d",
+            "bytes": 57159840
+          }
+        }
+      },
+      "failed_holdout_cases": [
+        {
+          "id": "v2-q-5",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我通常什么时候准备上床？",
+          "expected": [
+            "c-sleep"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.2866029441356659,
+              "signals": [
+                0.2866029441356659,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.487223356962204,
+              "signals": [
+                0.487223356962204,
+                0.05500000000000001,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.3487764000892639,
+              "signals": [
+                0.3487764000892639,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.3705844283103943,
+              "signals": [
+                0.3705844283103943,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.34010136127471924,
+              "signals": [
+                0.34010136127471924,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.4386459290981293,
+              "signals": [
+                0.4386459290981293,
+                0.05238095238095238,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.46637827157974243,
+              "signals": [
+                0.46637827157974243,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.39405620098114014,
+              "signals": [
+                0.39405620098114014,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.37332606315612793,
+              "signals": [
+                0.37332606315612793,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.35917866230010986,
+              "signals": [
+                0.35917866230010986,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.3406635522842407,
+              "signals": [
+                0.3406635522842407,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.35549384355545044,
+              "signals": [
+                0.35549384355545044,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-11",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "规划工作日出行时，可以考虑我的哪种偏好？",
+          "expected": [
+            "c-commute"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.38525933027267456,
+              "signals": [
+                0.38525933027267456,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.44989892840385437,
+              "signals": [
+                0.44989892840385437,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.489652544260025,
+              "signals": [
+                0.489652544260025,
+                0.04583333333333334,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.4273383915424347,
+              "signals": [
+                0.4273383915424347,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.3299682140350342,
+              "signals": [
+                0.3299682140350342,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.46462881565093994,
+              "signals": [
+                0.46462881565093994,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.49252068996429443,
+              "signals": [
+                0.49252068996429443,
+                0.04230769230769231,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.5348879098892212,
+              "signals": [
+                0.5348879098892212,
+                0.044897959183673466,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.44104519486427307,
+              "signals": [
+                0.44104519486427307,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.48395806550979614,
+              "signals": [
+                0.48395806550979614,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.3311735689640045,
+              "signals": [
+                0.3311735689640045,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.3113566040992737,
+              "signals": [
+                0.3113566040992737,
+                0.044897959183673466,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-14",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我旅行工作时希望住处旁边有什么？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.33299654722213745,
+              "signals": [
+                0.33299654722213745,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.3504941463470459,
+              "signals": [
+                0.3504941463470459,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.5181598663330078,
+              "signals": [
+                0.5181598663330078,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.31618642807006836,
+              "signals": [
+                0.31618642807006836,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.2802642583847046,
+              "signals": [
+                0.2802642583847046,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.3223297595977783,
+              "signals": [
+                0.3223297595977783,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.3560793995857239,
+              "signals": [
+                0.3560793995857239,
+                0.09361702127659575,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.4145802855491638,
+              "signals": [
+                0.4145802855491638,
+                0.04888888888888889,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3766968846321106,
+              "signals": [
+                0.3766968846321106,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.40367668867111206,
+              "signals": [
+                0.40367668867111206,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.34896519780158997,
+              "signals": [
+                0.34896519780158997,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.33665981888771057,
+              "signals": [
+                0.33665981888771057,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-15",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果酒店窗户正对吵闹道路，适合我吗？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.3673279285430908,
+              "signals": [
+                0.3673279285430908,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.4229166507720947,
+              "signals": [
+                0.4229166507720947,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.3942677676677704,
+              "signals": [
+                0.3942677676677704,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.5362716913223267,
+              "signals": [
+                0.5362716913223267,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.35197317600250244,
+              "signals": [
+                0.35197317600250244,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.3292273283004761,
+              "signals": [
+                0.3292273283004761,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.38517123460769653,
+              "signals": [
+                0.38517123460769653,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.45414090156555176,
+              "signals": [
+                0.45414090156555176,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3516126275062561,
+              "signals": [
+                0.3516126275062561,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.42608606815338135,
+              "signals": [
+                0.42608606815338135,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.3337506353855133,
+              "signals": [
+                0.3337506353855133,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.38045889139175415,
+              "signals": [
+                0.38045889139175415,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-44",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果预计走到天黑，提醒我带上什么？",
+          "expected": [
+            "c-hike"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.3167450428009033,
+              "signals": [
+                0.3167450428009033,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.4523586630821228,
+              "signals": [
+                0.4523586630821228,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.3272673189640045,
+              "signals": [
+                0.3272673189640045,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.45143741369247437,
+              "signals": [
+                0.45143741369247437,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.3223397135734558,
+              "signals": [
+                0.3223397135734558,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.37524303793907166,
+              "signals": [
+                0.37524303793907166,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.4523695707321167,
+              "signals": [
+                0.4523695707321167,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.40314263105392456,
+              "signals": [
+                0.40314263105392456,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3526366949081421,
+              "signals": [
+                0.3526366949081421,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.5109325647354126,
+              "signals": [
+                0.5109325647354126,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.32189464569091797,
+              "signals": [
+                0.32189464569091797,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.39824187755584717,
+              "signals": [
+                0.39824187755584717,
+                0.04782608695652174,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-47",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "给我写收件城市应该填什么？",
+          "expected": [
+            "c-city"
+          ],
+          "type": "semantic",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.23127682507038116,
+              "signals": [
+                0.26500141620635986,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.2940322160720825,
+              "signals": [
+                0.3468639850616455,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.2847824692726135,
+              "signals": [
+                0.33829331398010254,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.39831316471099854,
+              "signals": [
+                0.46274423599243164,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.3293834626674652,
+              "signals": [
+                0.37726256251335144,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.27299827337265015,
+              "signals": [
+                0.29811030626296997,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.3892306089401245,
+              "signals": [
+                0.43942156434059143,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.3721765875816345,
+              "signals": [
+                0.4209396243095398,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3125828802585602,
+              "signals": [
+                0.34689897298812866,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.3377911448478699,
+              "signals": [
+                0.39194047451019287,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.36928847432136536,
+              "signals": [
+                0.5944198966026306,
+                0.20470588235294118,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.351887583732605,
+              "signals": [
+                0.3978370130062103,
+                0.05238095238095238,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        }
+      ]
+    },
+    {
+      "code_sha": "0449dd6cfdd405aba59d77bc6ddc3ed77631187e",
+      "dataset_version": "2",
+      "dataset_sha256": "74ec58012972e5c7ae159e5ce0040d01aeb8857e05f70ef52de5585bb29c46a9",
+      "variant": "model.onnx",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "cold_load_ms": 209.23069900000257,
+      "peak_rss_mib": 508.69921875,
+      "mandatory_peak_rss_mib": 236.6171875,
+      "reference_cosine_min": 0.9159662127494812,
+      "reference_cosine_all": [
+        0.9177510738372803,
+        0.9206781983375549,
+        0.9427465200424194,
+        0.9278082847595215,
+        0.9394243955612183,
+        0.9388072490692139,
+        0.9224907159805298,
+        0.9159662127494812
+      ],
+      "query_pipeline": {
+        "count": 360,
+        "p50_ms": 14.241882500002134,
+        "p95_ms": 18.525984599990863
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 4.0359369999976025,
+          "p95_ms": 4.692735600008291,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 200.6796875
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 44.57429499998966,
+          "p95_ms": 50.05858719999878,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 236.6171875
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 223.65273599999114,
+          "p95_ms": 250.86091859999726,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 508.69921875
+        }
+      },
+      "threshold": 0.3300000000000002,
+      "semantic_floor": 0.4500000000000001,
+      "calibration": {
+        "positive_count": 16,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 1.0,
+        "empty_recall": 1.0
+      },
+      "holdout": {
+        "positive_count": 32,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.8125,
+        "top1": 0.78125,
+        "empty_recall": 1.0
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 26,
+        "lexical": 1,
+        "association": 0,
+        "emotion": 1
+      },
+      "scope_or_lifecycle_violations": 0,
+      "eligible": false,
+      "model": {
+        "model": "BAAI/bge-small-zh-v1.5",
+        "revision": "7999e1d3359715c523056ef9478215996d62a620",
+        "dimension": 512,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "models": {
+          "model.onnx": {
+            "sha256": "6d65414b517dbf2922a52181dd6eb7c8b44769f21d427c09b7884c356ea7040f",
+            "bytes": 94846908
+          },
+          "model-int8.onnx": {
+            "sha256": "19b72a5fda9b554c7db5049035bbc7bf24a0a687644395606109fd8b338b000d",
+            "bytes": 57159840
+          }
+        }
+      },
+      "failed_holdout_cases": [
+        {
+          "id": "v2-q-5",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我通常什么时候准备上床？",
+          "expected": [
+            "c-sleep"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.4597749412059784,
+              "signals": [
+                0.4597749412059784,
+                0.05500000000000001,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.23339979350566864,
+              "signals": [
+                0.23339979350566864,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.30873334407806396,
+              "signals": [
+                0.30873334407806396,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.3244165778160095,
+              "signals": [
+                0.3244165778160095,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.2860669791698456,
+              "signals": [
+                0.2860669791698456,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.40858834981918335,
+              "signals": [
+                0.40858834981918335,
+                0.05238095238095238,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.42254042625427246,
+              "signals": [
+                0.42254042625427246,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.3282456398010254,
+              "signals": [
+                0.3282456398010254,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3346921503543854,
+              "signals": [
+                0.3346921503543854,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.3056413531303406,
+              "signals": [
+                0.3056413531303406,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.2953942120075226,
+              "signals": [
+                0.2953942120075226,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.31635820865631104,
+              "signals": [
+                0.31635820865631104,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-11",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "规划工作日出行时，可以考虑我的哪种偏好？",
+          "expected": [
+            "c-commute"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.3452499210834503,
+              "signals": [
+                0.3452499210834503,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.4403301477432251,
+              "signals": [
+                0.4403301477432251,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.47515007853507996,
+              "signals": [
+                0.47515007853507996,
+                0.04583333333333334,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.3587855100631714,
+              "signals": [
+                0.3587855100631714,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.2511134743690491,
+              "signals": [
+                0.2511134743690491,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.4104137718677521,
+              "signals": [
+                0.4104137718677521,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.44960999488830566,
+              "signals": [
+                0.44960999488830566,
+                0.04230769230769231,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.5104759931564331,
+              "signals": [
+                0.5104759931564331,
+                0.044897959183673466,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.401798278093338,
+              "signals": [
+                0.401798278093338,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.4300997257232666,
+              "signals": [
+                0.4300997257232666,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.2915135324001312,
+              "signals": [
+                0.2915135324001312,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.26157402992248535,
+              "signals": [
+                0.26157402992248535,
+                0.044897959183673466,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-14",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "我旅行工作时希望住处旁边有什么？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.2801648676395416,
+              "signals": [
+                0.2801648676395416,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.3375561237335205,
+              "signals": [
+                0.3375561237335205,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.4959397315979004,
+              "signals": [
+                0.4959397315979004,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.2565671503543854,
+              "signals": [
+                0.2565671503543854,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.2164297103881836,
+              "signals": [
+                0.2164297103881836,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.27120691537857056,
+              "signals": [
+                0.27120691537857056,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.3006475269794464,
+              "signals": [
+                0.3006475269794464,
+                0.09361702127659575,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.34167274832725525,
+              "signals": [
+                0.34167274832725525,
+                0.04888888888888889,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3363693952560425,
+              "signals": [
+                0.3363693952560425,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.36250630021095276,
+              "signals": [
+                0.36250630021095276,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.3293534815311432,
+              "signals": [
+                0.3293534815311432,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.2909093499183655,
+              "signals": [
+                0.2909093499183655,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-15",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果酒店窗户正对吵闹道路，适合我吗？",
+          "expected": [
+            "c-stay"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.31773847341537476,
+              "signals": [
+                0.31773847341537476,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.3760085105895996,
+              "signals": [
+                0.3760085105895996,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.37303876876831055,
+              "signals": [
+                0.37303876876831055,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.506770670413971,
+              "signals": [
+                0.506770670413971,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.28121474385261536,
+              "signals": [
+                0.28121474385261536,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.285636305809021,
+              "signals": [
+                0.285636305809021,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.34795236587524414,
+              "signals": [
+                0.34795236587524414,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.40904346108436584,
+              "signals": [
+                0.40904346108436584,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.29860854148864746,
+              "signals": [
+                0.29860854148864746,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.36784422397613525,
+              "signals": [
+                0.36784422397613525,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.29841458797454834,
+              "signals": [
+                0.29841458797454834,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.3337734341621399,
+              "signals": [
+                0.3337734341621399,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-44",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "如果预计走到天黑，提醒我带上什么？",
+          "expected": [
+            "c-hike"
+          ],
+          "type": "semantic",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.4295186996459961,
+              "signals": [
+                0.4295186996459961,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.3050239384174347,
+              "signals": [
+                0.3050239384174347,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.42005783319473267,
+              "signals": [
+                0.42005783319473267,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.2630685567855835,
+              "signals": [
+                0.2630685567855835,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-tea",
+              "original_cosine": 0.33341184258461,
+              "signals": [
+                0.33341184258461,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.2606794536113739,
+              "signals": [
+                0.2606794536113739,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.42958754301071167,
+              "signals": [
+                0.42958754301071167,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.3309914469718933,
+              "signals": [
+                0.3309914469718933,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.3200734257698059,
+              "signals": [
+                0.3200734257698059,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.4908076524734497,
+              "signals": [
+                0.4908076524734497,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.2706579566001892,
+              "signals": [
+                0.2706579566001892,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.3560640513896942,
+              "signals": [
+                0.3560640513896942,
+                0.04782608695652174,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v2-q-47",
+          "split": "holdout",
+          "scope": "C/home/mia",
+          "query": "给我写收件城市应该填什么？",
+          "expected": [
+            "c-city"
+          ],
+          "type": "semantic",
+          "expansion": [
+            "现居城市",
+            "镇江",
+            "搬家"
+          ],
+          "candidates": [
+            {
+              "id": "c-peanut",
+              "original_cosine": 0.15813487768173218,
+              "signals": [
+                0.2052929699420929,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "c-sleep",
+              "original_cosine": 0.23582646250724792,
+              "signals": [
+                0.29766955971717834,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "c-commute",
+              "original_cosine": 0.2573543190956116,
+              "signals": [
+                0.31832918524742126,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-stay",
+              "original_cosine": 0.3589528799057007,
+              "signals": [
+                0.43492406606674194,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-books",
+              "original_cosine": 0.27930542826652527,
+              "signals": [
+                0.32714805006980896,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-friend",
+              "original_cosine": 0.2249826192855835,
+              "signals": [
+                0.25793859362602234,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "c-focus",
+              "original_cosine": 0.3551361560821533,
+              "signals": [
+                0.40519964694976807,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-feedback",
+              "original_cosine": 0.3305467367172241,
+              "signals": [
+                0.37736421823501587,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "c-gift",
+              "original_cosine": 0.27130067348480225,
+              "signals": [
+                0.3022077977657318,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "c-hike",
+              "original_cosine": 0.2730604410171509,
+              "signals": [
+                0.338532030582428,
+                0.0,
+                0.0,
+                0.7
+              ]
+            },
+            {
+              "id": "c-city",
+              "original_cosine": 0.3284127116203308,
+              "signals": [
+                0.549985408782959,
+                0.20470588235294118,
+                0.35,
+                0.2
+              ]
+            },
+            {
+              "id": "c-high-emotion",
+              "original_cosine": 0.3165643513202667,
+              "signals": [
+                0.3535349369049072,
+                0.05238095238095238,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        }
+      ]
+    }
+  ]
+}
