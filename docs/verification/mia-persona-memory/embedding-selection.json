@@ -1,0 +1,114 @@
+{
+  "status": "initial_candidate_selected_P06_not_production_acceptance",
+  "decision_ids": [
+    "D03",
+    "D04"
+  ],
+  "code_sha": "75286114be811700edba9c4f21e3335e391590cd",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38613934295",
+  "dataset_sha256": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+  "model": {
+    "model": "BAAI/bge-base-zh-v1.5",
+    "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+    "dimension": 768,
+    "max_tokens": 512,
+    "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+    "pooling": "CLS",
+    "normalized": true,
+    "quantization": {
+      "format": "U8U8",
+      "per_channel": true,
+      "reduce_range": false
+    },
+    "models": {
+      "model.onnx": {
+        "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+        "bytes": 406939356
+      },
+      "model-uint8.onnx": {
+        "sha256": "dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+        "bytes": 152775624
+      },
+      "model.ort": {
+        "sha256": "ff5c89842b1ba43c2fd617f41babacec95481fa64a467ca679fa6f1c0e072de5",
+        "bytes": 407030432
+      },
+      "model-uint8.ort": {
+        "sha256": "176329a80654f42bbab3b59e81678222c4b9ac07abb85823870637075d72af57",
+        "bytes": 152829704
+      }
+    }
+  },
+  "variant": "model-uint8.onnx",
+  "dimension": 768,
+  "runtime_packages": {
+    "numpy": "1.26.4",
+    "onnxruntime": "1.23.2",
+    "tokenizers": "0.21.1"
+  },
+  "runtime_options": {
+    "cpu_mem_arena": false,
+    "mem_pattern": false,
+    "prepacking": false
+  },
+  "score_weights": {
+    "semantic": 0.58,
+    "lexical": 0.28,
+    "association": 0.08,
+    "emotion": 0.06
+  },
+  "threshold": 0.2,
+  "original_semantic_floor": 0.35,
+  "distinct_margin_floor": null,
+  "top_k": 4,
+  "storage": "SQLite real normalized vectors, Scope-first exact cosine",
+  "selection_metrics": {
+    "holdout": {
+      "positive_count": 48,
+      "negative_count": 16,
+      "complete_recall_at_4": 0.9791666666666666,
+      "top1": 0.9791666666666666,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 8,
+      "related_unanswerable_with_recall": 7,
+      "related_unanswerable_expected_fact_recalled": 7,
+      "answer_abstention": "not_executed_requires_real_chat_provider"
+    },
+    "reference_cosine_min": 0.9589616060256958,
+    "mandatory_peak_rss_mib": 323.640625,
+    "query_pipeline": {
+      "count": 560,
+      "p50_ms": 33.77733450000164,
+      "p95_ms": 67.8433024500059
+    },
+    "sqlite_stress": {
+      "1000": {
+        "count": 5,
+        "p50_ms": 3.5828020000110428,
+        "p95_ms": 5.265586599995231,
+        "database_bytes": 8269824,
+        "peak_rss_mib": 283.22265625
+      },
+      "10000": {
+        "count": 5,
+        "p50_ms": 36.7470330000117,
+        "p95_ms": 42.64599480001152,
+        "database_bytes": 82575360,
+        "peak_rss_mib": 323.640625
+      },
+      "50000": {
+        "count": 5,
+        "p50_ms": 189.04052600001364,
+        "p95_ms": 220.88880259998973,
+        "database_bytes": 412995584,
+        "peak_rss_mib": 721.47265625
+      }
+    }
+  },
+  "remaining": [
+    "Production RAG and controlled four-signal/association acceptance",
+    "Real provider response abstention",
+    "Integrated TTFT/resources/concurrency",
+    "Migration, reconstruction, failures and revocation"
+  ]
+}

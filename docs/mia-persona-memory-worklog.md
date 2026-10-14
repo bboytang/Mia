@@ -144,6 +144,14 @@
 - 新补丁尚未编译／运行，见 `binding-authorization.md`；P08 整体未完成，授权码及私有凭据／撤销等仍待实现。GitHub 将执行完整回归、新行为、窄范围 class 对照及构建；既有脱敏失败继续报告，未部署。
 - 交接同步在途动作和下一步，推送后读取精确新提交的 CI，不在本地或生产运行自动化测试／构建。
 
+## 2026-10-14：P06 初选完成，P08 绑定部分验证完成
+
+- 代码 `75286114be811700edba9c4f21e3335e391590cd`；模型 [38613934295](https://github.com/bboytang/Mia/actions/runs/38613934295) base U8U8 eligible=true、small false。留出 Recall@4／Top1 47/48、无关空召回16/16，最低参考余弦0.958962，必测RSS323.64MiB、全查询p95 67.84ms、10kScope SQLite p95 42.65ms。
+- P06 完成初选 D03／D04：BGE base 中文固定revision、768维／CLS归一化／U8U8 ONNX；SQLite真向量Scope内精确检索，权重58/28/8/6、阈值0.20、原语义底线0.35、Top4。规格及SHA写入 `embedding-selection.json`，失败与新结果均保留；未降低任何数值门槛。
+- 这只是初选：生产完整RAG、分项受控作用、真实信息不足回答、集成TTFT／竞争资源及迁移／重建仍未验收，不能将P06当B02／B04完工。
+- 绑定 [38613934248](https://github.com/bboytang/Mia/actions/runs/38613934248)：四个真实新行为、只改目标DeviceService类／另三类保持、JAR构建通过。完整154测试153通过、唯一既有脱敏失败，workflow仍failure；保存 `binding-authorization-results.json`、JAR SHA及已审核真实diff。
+- P08 仅绑定部分完成；授权码、私有签发／旧凭据区分及Scope／撤销等仍待实施，未部署。已同步交接，下一步完整必要凭据链。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

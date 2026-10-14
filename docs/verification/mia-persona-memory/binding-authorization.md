@@ -1,6 +1,8 @@
 # P08 必要绑定授权整改（阶段记录）
 
-状态：补丁及真实验收入口已编写，GitHub 尚未执行；P08 整体未完成，未部署。
+状态：最小绑定补丁已验证，四个真实用例、必要类范围和 JAR 构建通过；完整回归 153／154，唯一既有脱敏失败继续报告。P08 整体未完成，未部署。
+
+代码 `75286114be811700edba9c4f21e3335e391590cd`，run [38613934248](https://github.com/bboytang/Mia/actions/runs/38613934248)。持久证据及构建 SHA 见 [结果](binding-authorization-results.json)；总 workflow 为 failure，不能称全量回归通过。实际生成的 Java diff 已检查，仅 DeviceService 改变，另外三类与现网基线字节一致。
 
 对应固定运行复现 [38594888061](https://github.com/bboytang/Mia/actions/runs/38594888061) 的三项缺口：
 

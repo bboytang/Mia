@@ -1,6 +1,6 @@
 # P06 真实 embedding 候选实验
 
-状态：首轮四个候选均未达到全部门槛，尚未确认选型。首轮实际结果见 [v1 报告](embedding-results-v1.json)，run `38585421342`。改正一般性检索与测量问题后，用新的 v2 留出样本验证；P04 的质量门槛保持。
+状态：P06 初选完成，D03／D04 选择固定 BGE base 中文 U8U8 ONNX，SQLite Scope 内真实向量精确检索；规格见 [选择记录](embedding-selection.json)。初选不代表生产 RAG／八项行为通过。v1—v5 的原失败报告保留，数值门槛没有降低。
 
 v2 仍无合格候选，原报告保留。v3 修正 exporter 包装及参考生成时的 eval 状态，避免参考向量带 dropout；新增独立语料及留出。用户确认同主题缺属性允许相关召回、回答必须明确未知，故 v3 把相关不可回答与真正无关分别报告，实际回答尚未执行。
 
@@ -19,6 +19,12 @@ v5 保留 v4 事实及校准输入，新增独立 48 正向／16 无关／8 相�
 v5 [38595630806](https://github.com/bboytang/Mia/actions/runs/38595630806) 仍无 eligible，见 [v5 报告](embedding-results-v5.json)。base 两变体正向／Top1 0.97917、无关空召回 1.0；FP32 ORT 必测 RSS 990.82 MiB，INT8 444.61 MiB 但最低参考余弦 0.93648。small 空召回仍 0.875。ORT 格式在本实验增大峰值，不能当已验证的省内存方案。
 
 下一项仅比较通用量化表示候选 U8U8，使用同一已冻结 v5 数据／检索逻辑／校准规则；不调整质量门槛或使用留出反馈调检索。U8U8 为官方针对 U8S8 大精度损失建议的替代，保留新的 `model-uint8.onnx` 名称和元数据，不覆盖旧实验结果。运行使用 ONNX 而非未达预期的 ORT 表示；若仍失败，继续保持未选型。
+
+实际 [38613934295](https://github.com/bboytang/Mia/actions/runs/38613934295)，代码 `75286114be811700edba9c4f21e3335e391590cd`：base U8U8 eligible=true，small 仍 false；见 [U8U8 报告](embedding-results-v5-u8u8.json)。base 留出完整 Recall@4／Top1 47／48＝97.9167%，无关空召回16／16＝100%，Scope／生命周期违规0；最低参考余弦0.958962（门槛0.95）；2 CPU 必测 peak RSS323.64 MiB、query p95 67.84ms、10k Scope SQLite p95 42.65ms。
+
+选 BGE base revision `f03589ceff5aac7111bd60cfc7d497ca17ecac65`、768维、CLS／归一化和官方中文 query prefix；ONNX Runtime1.23.2，U8U8逐通道／full-range，不使用未达资源预期的 ORT。初始四维58／28／8／6，阈值0.20、原查询语义底线0.35、Top4、不启用额外分差分支；均由校准集得出。SQLite 精确召回满足初选容量，不引入第二事实库或 Chroma。
+
+单例有界前台／后台集成、真实完整提取／关联分项、TTFT、实际服务资源竞争、迁移／重建／错误及最终用户语料留出仍在 P12—P24 验证；related_unanswerable 的真实 Provider 信息不足回答尚未执行。不能根据小样本及重复向量压力把这些标为通过。
 
 ## 候选及官方依据
 
