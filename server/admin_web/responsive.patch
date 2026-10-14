@@ -6,7 +6,7 @@ index 3cd3bb7..43c1357 100644
 -  <meta name="viewport" content="width=device-width,initial-scale=1.0">
 +  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 diff --git a/main/manager-web/src/App.vue b/main/manager-web/src/App.vue
-index 9f3d665..e2ab744 100644
+index f101e15..6c474a3 100644
 --- a/main/manager-web/src/App.vue
 +++ b/main/manager-web/src/App.vue
 @@ -68,6 +67,0 @@ export default {
@@ -22,6 +22,10 @@ index 9f3d665..e2ab744 100644
 -      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 -    },
 -    
+@@ -179 +168 @@ export default {
+-</script>
+\ No newline at end of file
++</script>
 diff --git a/main/manager-web/src/components/CustomPagination.vue b/main/manager-web/src/components/CustomPagination.vue
 index 013839a..18af647 100644
 --- a/main/manager-web/src/components/CustomPagination.vue
@@ -259,6 +263,86 @@ index 395272a..ea27074 100644
 +import { installResponsive } from './utils/responsive';
 @@ -17,0 +20 @@ Vue.use(ElementUI);
 +installResponsive(Vue);
+diff --git a/main/manager-web/src/router/index.js b/main/manager-web/src/router/index.js
+index bb45b91..a47f1b4 100644
+--- a/main/manager-web/src/router/index.js
++++ b/main/manager-web/src/router/index.js
+@@ -84,4 +83,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '参数管理'
+@@ -95,4 +90,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '知识库管理'
+@@ -106,4 +97,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '服务端管理'
+@@ -117,4 +104,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: 'OTA管理'
+@@ -128,4 +111,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '音色资源开通'
+@@ -139,4 +118,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '音色克隆管理'
+@@ -181,4 +156,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '功能配置'
+@@ -193,4 +164,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '替换词管理'
+@@ -205,4 +172,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '通讯录管理'
+@@ -231,2 +195,2 @@ VueRouter.prototype.push = function push(location) {
+-// 需要登录才能访问的路由
+-const protectedRoutes = ['home', 'RoleConfig', 'DeviceManagement', 'UserManagement', 'ModelConfig', 'KnowledgeBaseManagement', 'KnowledgeFileUpload', 'AddressBookManagement']
++// 匿名可访问的路由白名单
++const anonRouteNames = new Set(['login', 'Register', 'RetrievePassword', 'welcome'])
+@@ -236,9 +200,6 @@ router.beforeEach((to, from, next) => {
+-  // 检查是否是需要保护的路由
+-  if (protectedRoutes.includes(to.name)) {
+-    // 从localStorage获取token
+-    const token = localStorage.getItem('token')
+-    if (!token) {
+-      // 未登录，跳转到登录页
+-      next({ name: 'login', query: { redirect: to.fullPath } })
+-      return
+-    }
++  const token = localStorage.getItem('token');
++  const isAnonRoute = anonRouteNames.has(to.name);
++
++  if (isAnonRoute && token) {
++    next({ name: 'home', replace: true })
++    return
+@@ -245,0 +207,9 @@ router.beforeEach((to, from, next) => {
++
++  if (!isAnonRoute && !token) {
++    next({
++      name: 'login',
++      replace: true
++    })
++    return
++  }
++
 diff --git a/main/manager-web/src/styles/responsive.scss b/main/manager-web/src/styles/responsive.scss
 new file mode 100644
 index 0000000..c821f46

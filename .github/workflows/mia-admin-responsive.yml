@@ -69,7 +69,7 @@ jobs:
       - name: Inspect reconstructed desktop build
         run: |
           npm ci --no-audit --no-fund --prefix server/admin_web/tests
-          MIA_ANALYSIS_PACKAGE="$GITHUB_WORKSPACE/server/admin_web/tests/package.json" node server/admin_web/compare_builds.cjs --compare server/admin_web/production-build.json admin-artifacts/baseline > admin-artifacts/baseline/semantic-comparison.json || true
+          MIA_ANALYSIS_PACKAGE="$GITHUB_WORKSPACE/server/admin_web/tests/package.json" node server/admin_web/compare_builds.cjs --compare server/admin_web/production-build.json admin-artifacts/baseline > admin-artifacts/baseline/semantic-comparison.json
       - name: Run existing frontend regressions
         working-directory: /app
         run: |

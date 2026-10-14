@@ -2,8 +2,8 @@
 
 本目录是现有管理后台的源码补丁和验证工具，不是第二套后台。
 
-现网编译产物包含 v0.9.7 后的桌面弹窗调整。`production-dialogs.patch` 合入已核对的官方主分支前端修复并恢复现网全屏样式；`responsive.patch` 在这个基线上扩展三端布局。发布前必须核对桌面基线的编译模块、依赖关系和CSS规则，不能直接以未定制上游原版替换生产。目标源码为
-`xiaozhi-esp32-server` v0.9.7 / `87c6df77b0220ddbd8fc804f984f83f69f3225e5`，沿用 Vue 2、Element UI、Vue CLI，API 路径、认证机制和数据库不变；登录路由合入官方守卫修复。官方对照详见 [差异清单](../upstream_fixes/README.md)。
+现网编译产物包含 v0.9.7 后的桌面弹窗调整。`production-dialogs.patch` 合入已核对的官方主分支前端修复及组件自身的全屏样式；`responsive.patch` 在这个基线上扩展三端布局。发布前必须核对桌面基线的编译模块、依赖关系和CSS规则，不能直接以未定制上游原版替换生产。目标源码为
+`xiaozhi-esp32-server` v0.9.7 / `87c6df77b0220ddbd8fc804f984f83f69f3225e5`，沿用 Vue 2、Element UI、Vue CLI，API 路径、认证机制和数据库不变；现网桌面基线保留原路由，`responsive.patch` 另合入官方登录守卫修复。官方对照详见 [差异清单](../upstream_fixes/README.md)。
 
 ## 构建与源码
 
@@ -27,7 +27,7 @@ python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
 - `src/main.js`、`src/utils/responsive.js`、`src/styles/responsive.scss`：统一宽度断点、视觉视口、页面布局、表单、弹窗、抽屉和触控规则。
 - `HeaderBar.vue`：复用原导航项及权限判断，紧凑屏幕折叠菜单。
 - `CustomTable.vue`、`CustomPagination.vue`：手机卡片复用字段插槽、操作与选择；分页按钮调整。
-- `CustomDialog.vue`及现有调用者、`App.vue`和`global.scss`：恢复已核对的现网桌面弹窗定制，保留原有size接口与尺寸。
+- `CustomDialog.vue`及现有调用者、`CacheViewer.vue`、`AgentSnapshotDialog.vue`和`global.scss`：恢复已核对的现网桌面弹窗定制，保留原有size接口与尺寸。
 - `DeviceItem.vue`：触控操作和完整提示词查看。
 - `MacAddressMask.vue`：保持默认遮罩，触屏点击可展开或收起MAC地址。
 - `ProviderDialog.vue`、`TtsModel.vue`、`ModelConfig.vue`：宽表格列最小宽度与触屏详情。

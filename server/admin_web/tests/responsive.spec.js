@@ -110,7 +110,7 @@ test('mobile pagination reaches arbitrary pages and keeps page-size selection', 
   await jump.press('Enter');
   await expect.poll(() => requests.at(-1)?.get('page')).toBe('88');
   await pagination.locator('.el-select').click();
-  await page.locator('.el-select-dropdown:visible').getByText('50条/页', { exact: true }).click();
+  await page.locator('.el-select-dropdown:visible').getByText(/50\s*条\/页/).click();
   await expect.poll(() => requests.at(-1)?.get('limit')).toBe('50');
   expect(requests.at(-1).get('page')).toBe('1');
   await assertFits(page, 'page-size selection');
