@@ -293,6 +293,30 @@ class MiaPrivateAuthorizationTest {
     }
 
     @Test
+    void pythonScopeUsesActualManagerProofAndRejectsRevokedSnapshots() throws Exception {
+        db.update("UPDATE ai_agent SET system_prompt=? WHERE id=?", "CI private prompt marker", AGENT_B);
+        JsonNode value = grant();
+        String script = System.getenv("MIA_SCOPE_INTEGRATION_SCRIPT");
+        assertNotNull(script, "The identity workflow must provide the actual Python integration entry");
+        ProcessBuilder process = new ProcessBuilder("python", script).redirectErrorStream(true);
+        var env = process.environment();
+        env.put("MIA_SCOPE_MANAGER_URL", http.getRootUri().replace("localhost", "127.0.0.1") + "/");
+        env.put("MIA_SCOPE_SERVER_SECRET", params.getValue("server.secret", false));
+        env.put("MIA_SCOPE_DEVICE", DEVICE_B);
+        env.put("MIA_SCOPE_CLIENT", CLIENT);
+        env.put("MIA_SCOPE_CREDENTIAL", value.path("private_credential").asText());
+        env.put("MIA_SCOPE_USER_TOKEN", userToken(USER_B));
+        Process running = process.start();
+        if (!running.waitFor(30, TimeUnit.SECONDS)) {
+            running.destroyForcibly();
+            fail("Python manager Scope integration timed out");
+        }
+        String output = new String(running.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        assertEquals(0, running.exitValue(), output);
+        assertTrue(output.contains("\"manager_python_scope_pass\": true"), output);
+    }
+
+    @Test
     void forwardedHeaderCannotBypassBoundedExchangeRateLimit() throws Exception {
         long second = Instant.now().getEpochSecond() % 60;
         if (second > 55) Thread.sleep((60 - second) * 1000 + 100);

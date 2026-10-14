@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import tempfile
@@ -10,6 +11,7 @@ from unittest.mock import patch
 
 from server.companion import MemoryStore
 from server.companion import xiaozhi_adapter as mia
+from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.install_xiaozhi import install, replace_once
 
 
@@ -37,13 +39,30 @@ class WebSocket:
         self.sent.append(json.loads(message))
 
 
+class AuthorizationFixture:
+    """Synthetic policy fixture; real manager proof runs in identity Actions."""
+    def __init__(self):
+        self.active = True
+
+    async def require(self, scope, permission):
+        if not self.active or not isinstance(scope, AuthenticatedScope) or permission not in scope.permissions:
+            raise PrivateAuthorizationRequired()
+        return scope
+
+
 class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.store = MemoryStore(Path(self.temp.name) / "memory.db")
         self.model = Model()
-        self.provider = mia.MiaMemoryProvider(self.store, "user:1:agent:one", self.model, "session")
+        self.scope = AuthenticatedScope("user:1:agent:one", 1, 1, "one", "mia", "verified-device", "client",
+                                        1, 1, datetime.now(timezone.utc) + timedelta(days=1),
+                                        frozenset({"memory:read", "memory:write", "memory:manage"}))
+        self.authorization = AuthorizationFixture()
+        self.provider = mia.MiaMemoryProvider(self.store, "user:1:agent:one", self.model, "session",
+                                             self.scope, self.authorization)
         self.conn = SimpleNamespace(_mia_memory=self.provider, websocket=WebSocket(),
+                                    _mia_scope=self.scope, _mia_authorization=self.authorization,
                                     dialogue=SimpleNamespace(dialogue=[]), read_config_from_api=True,
                                     device_id="verified-device", headers={"authorization": "Bearer good", "client-id": "client"},
                                     server=SimpleNamespace(auth_enable=True,
@@ -81,19 +100,40 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(all(len(source) <= 512 for source in sources))
         self.assertTrue(all("password" not in source and "验证码" not in source for source in sources))
 
-    async def test_manager_owner_and_bearer_are_both_required(self):
+    async def test_legacy_bearer_and_owner_string_cannot_replace_private_scope(self):
         mia.attach_private_config(self.conn, {"mia_owner": "user:1:agent:one"})
         self.assertEqual(self.conn._mia_owner, "user:1:agent:one")
         for config in [{}, {"mia_owner": "client-chosen"}, {"mia_owner": "user:null:agent:one"}]:
             mia.attach_private_config(self.conn, config)
             self.assertIsNone(self.conn._mia_owner)
-        self.conn.server.auth_enable = False
+        self.conn._mia_scope = None
         mia.attach_private_config(self.conn, {"mia_owner": "user:1:agent:one"})
         self.assertIsNone(self.conn._mia_owner)
-        self.conn.server.auth_enable = True
-        self.conn.headers["authorization"] = "Bearer forged"
-        mia.attach_private_config(self.conn, {"mia_owner": "user:1:agent:one"})
-        self.assertIsNone(self.conn._mia_owner)
+
+    async def test_revocation_stops_lookup_management_and_background_commit(self):
+        def revoke_during_model(system, user):
+            self.authorization.active = False
+            return Model.response_no_stream(self.model, system, user)
+        self.model.response_no_stream = revoke_during_model
+        await self.provider.save_memory([message("我喜欢海边")])
+        self.assertEqual(self.store.list_memories(self.provider.owner), [])
+        with self.assertRaises(PrivateAuthorizationRequired):
+            await self.provider.query_memory("喜欢哪里")
+        await mia.handle_message(self.conn, json.dumps({"type": "mia_memory", "request_id": str(uuid.uuid4()), "action": "list"}))
+        self.assertEqual(self.conn.websocket.sent[-1]["error"]["code"], "authorization_required")
+        self.assertNotIn("result", self.conn.websocket.sent[-1])
+
+    async def test_private_memory_never_falls_back_to_legacy_provider(self):
+        self.conn._mia_owner = None
+        self.conn.memory = object()
+        self.assertTrue(mia.initialize_memory(self.conn))
+        self.assertIsNone(self.conn.memory)
+        self.conn._mia_owner = self.scope.owner
+        self.conn.llm = self.model
+        self.conn.session_id = "fixture"
+        with patch("server.companion.xiaozhi_adapter._store", side_effect=OSError("fixture")):
+            self.assertTrue(mia.initialize_memory(self.conn))
+        self.assertIsNone(self.conn.memory)
 
     async def test_management_uses_server_owner_and_clears_extractable_context(self):
         original = message("我喜欢蓝色")
@@ -208,7 +248,8 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
                 self.assertTrue(self.provider.force_checkpoint)
                 self.assertIn("尚未保存", self.provider.notice)
         await self.provider.checkpoint(mia._user_excerpts([message("我喜欢海边")]))
-        next_session = mia.MiaMemoryProvider(self.store, self.provider.owner, self.model, "next")
+        next_session = mia.MiaMemoryProvider(self.store, self.provider.owner, self.model, "next",
+                                             self.scope, self.authorization)
         context = json.loads(await next_session.query_memory("我喜欢哪里"))
         self.assertEqual(context["mia_context"]["memories"][0]["content"], "我喜欢海边")
 

@@ -189,6 +189,14 @@
 - 新增第11个私有真实HTTP用例，合计16个身份用例，待GitHub执行；未在本地测试或生产修改。语音端仍需接入此门禁和可信Scope；不称P09已完成。
 - 前一提交 `20b49dfe852470e838656d5e5ee3255dc559c4cf` 的 [38622999533](https://github.com/bboytang/Mia/actions/runs/38622999533) 已完成：身份专项核验及JAR构建成功，全量测试step失败；制品下载进行中，确切失败分类与计数待核查后入证据。
 
+## 2026-10-14：P09 manager门禁验证及语音Scope补丁
+
+- `20b49df...`／[38622999533](https://github.com/bboytang/Mia/actions/runs/38622999533)：15身份用例通过、JAR构建／类范围通过，165全量164通过／1既有脱敏失败、0error／skip；证据 `scope-snapshot-results.json`。同SHA服务Actions [38622999508](https://github.com/bboytang/Mia/actions/runs/38622999508)成功。
+- `c2ffe05...`／[38623444884](https://github.com/bboytang/Mia/actions/runs/38623444884)：16身份用例通过、构建／类范围通过，166全量165通过／同一既有失败、0error／skip；证据 `private-config-results.json`。manager私有配置与可信快照子步骤完成，P09整体未完成。
+- 增加真实manager来源Scope／无明文快照恢复、单次3秒RPC、HTTPS／loopback限制、原生TLS私有头校验；上游单回复及递归、工具执行、TTS文本／音频包、记忆查询／管理／后台提交前置守卫。保留hello／ID／绑定，缺授权仅提示，无公共语音回退，header日志只留名称。
+- 存储失败不回退旧设备记忆；固定人格提示不依赖存储初始化。完整PersonaAgent／真RAG／持久任务尚待P11—P16，不以现有Prompt／FTS／checkpoint冒充完工。
+- 新增实际Java端口驱动Python的身份集成用例与有界机制负例；当前本提交未实跑，软件验证仅在GitHub。每包Scope核验的音频／TTFT成本、TLS代理、全服务并发撤销、App事件／Keychain及真机仍待验；详见 `trusted-scope.md`。本地仅审diff与整理制品，未部署或读取生产秘密，交接同步。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

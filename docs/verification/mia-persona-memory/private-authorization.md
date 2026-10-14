@@ -24,3 +24,5 @@ GitHub入口增加9个实际HTTP／Shiro／MySQL／Redis私有授权用例和1�
 P09补充：新增内部 `/config/mia-auth/check-scope`，沿用 server-secret，按已验证快照中的设备／client／owner／operator／绑定版本／凭据版本重新检查当前账号、角色、绑定、撤销及期限。持久任务不保存明文私有凭据；客户端不能自行提交快照代替凭据。新增第10个私有授权用例覆盖错误调用者、owner／版本篡改、非整数版本、撤销和新授权不复活旧任务；尚待 GitHub 执行，原14个结果保持原提交事实。
 
 私有配置门禁：扩展固定源码补丁到 ConfigController 和两个请求DTO；server-base保持原实现。agent-models 与 correct-words 在原 server-secret 之外验证设备私有凭据和 client；配置读取事务保持设备及授权行锁，返回的 mia_owner 必须与已核验 Scope 一致，附带服务端 mia_scope。旧设备 ID／绑定不变，无凭据不加载个性化配置。新增第11个私有用例验证旧弱凭据拒绝、真实授权恢复 prompt／summary、服务端密钥边界、错误client、撤销及绑定不变；尚待本次提交GitHub实跑。
+
+已实跑：`20b49dfe852470e838656d5e5ee3255dc559c4cf` 的 [38622999533](https://github.com/bboytang/Mia/actions/runs/38622999533) 15身份用例及构建通过，全量165中164通过／1既有脱敏失败；见 `scope-snapshot-results.json`。`c2ffe05e357fc4b801fccfff3177ef681f654808` 的 [38623444884](https://github.com/bboytang/Mia/actions/runs/38623444884) 16身份用例及构建通过，全量166中165通过／同一既有失败；见 `private-config-results.json`。均0error／skip，OTA／ConfigService类字节不变，workflow整体failure保持可见。未部署。

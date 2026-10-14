@@ -26,10 +26,38 @@ def replace_once(text, before, after):
 
 def patch_connection(text):
     text = replace_once(text, "from core.utils.dialogue import Message, Dialogue\n",
-                        "from core.utils.dialogue import Message, Dialogue\nfrom mia_companion import xiaozhi_adapter as mia\n")
+                        "from core.utils.dialogue import Message, Dialogue\nfrom mia_companion import xiaozhi_adapter as mia\n"
+                        "from mia_companion import authorization as mia_auth\n")
+    text = replace_once(text, 'f"{self.client_ip} conn - Headers: {self.headers}"',
+                        'f"{self.client_ip} conn - Header names: {sorted(self.headers)}"')
+    text = replace_once(text, 'from config.config_loader import get_private_config_from_api\n', '')
+    text = replace_once(text, '            private_config = await get_private_config_from_api(\n'
+                        '                self.config,\n                self.headers.get("device-id"),\n'
+                        '                self.headers.get("client-id", self.headers.get("device-id")),\n            )',
+                        '            private_config = await mia_auth.load_private_config(self)')
     text = replace_once(text, '            private_config["delete_audio"] = bool(self.config.get("delete_audio", True))\n',
                         '            mia.attach_private_config(self, private_config)\n'
                         '            private_config["delete_audio"] = bool(self.config.get("delete_audio", True))\n')
+    text = replace_once(text, '        except DeviceNotFoundException as e:\n',
+                        '        except mia_auth.PrivateAuthorizationRequired:\n'
+                        '            self.need_bind = False\n'
+                        '            self._mia_authorization_required = True\n'
+                        '            self.bind_completed_event.set()\n'
+                        '            self.report_asr_enable = False\n'
+                        '            self.report_tts_enable = False\n'
+                        '            await mia_auth.prompt_authorization(self)\n'
+                        '            return\n'
+                        '        except DeviceNotFoundException as e:\n')
+    text = replace_once(text, '            # 在线程池中初始化组件\n',
+                        '            if getattr(self, "_mia_authorization_required", False):\n                return\n'
+                        '            # 在线程池中初始化组件\n')
+    text = replace_once(text, '        # 已经获取到真实状态，检查是否需要绑定\n',
+                        '        if getattr(self, "_mia_authorization_required", False):\n'
+                        '            await mia_auth.route_required(self, message)\n            return\n\n'
+                        '        # 已经获取到真实状态，检查是否需要绑定\n')
+    text = replace_once(text, '                # 超时仍未获取到真实状态，丢弃消息\n'
+                        '                await self._discard_message_with_bind_prompt()\n                return',
+                        '                # 身份结果未就绪时不误报为需要重新绑定。\n                return')
     text = replace_once(text, "    def _initialize_memory(self):\n        if self.memory is None:\n",
                         "    def _initialize_memory(self):\n        if mia.initialize_memory(self):\n            return\n        if self.memory is None:\n")
     text = replace_once(text, "            self._init_prompt_enhancement()\n",
@@ -42,12 +70,25 @@ def patch_connection(text):
                         "                if emotion_flag and content is not None and content.strip():\n                    mia.remember_emotion(self, content)\n")
     text = replace_once(text, "        if depth == 0:\n            self.tts.tts_text_queue.put(\n",
                         "        if depth == 0:\n            mia.checkpoint(self)\n            self.tts.tts_text_queue.put(\n")
+    text = replace_once(text, '    def chat(self, query, depth=0):\n',
+                        '    def chat(self, query, depth=0):\n'
+                        '        if not mia_auth.allow_generation(self):\n            return\n')
+    text = replace_once(text, '                        self.func_handler.handle_llm_function_call(\n'
+                        '                            self, tool_call_data\n                        ),',
+                        '                        mia_auth.execute_tool(self, tool_call_data),')
     return text
 
 
 def patch_tts(text):
     text = replace_once(text, "from core.utils import textUtils\n",
-                        "from core.utils import textUtils\nfrom mia_companion import xiaozhi_adapter as mia\n")
+                        "from core.utils import textUtils\nfrom mia_companion import xiaozhi_adapter as mia\n"
+                        "from mia_companion import authorization as mia_auth\n")
+    text = replace_once(text, '    packet_index = flow_control.get("packet_count", 0)\n',
+                        '    if not await mia_auth.allow_output(conn):\n        return\n'
+                        '    packet_index = flow_control.get("packet_count", 0)\n')
+    text = replace_once(text, '    message = {"type": "tts", "state": state, "session_id": conn.session_id}\n',
+                        '    if not await mia_auth.allow_output(conn):\n        return\n'
+                        '    message = {"type": "tts", "state": state, "session_id": conn.session_id}\n')
     return replace_once(text, '    if text is not None:\n        message["text"] = textUtils.check_emoji(text)\n',
                         '    if text is not None:\n        message["text"] = textUtils.check_emoji(text)\n'
                         '    if state == "sentence_start":\n        message.update(mia.tts_emotion(conn, text))\n')
@@ -99,7 +140,7 @@ def install(root, changes):
         shutil.copy2(root / relative, root / (relative + ".mia-original"))
     destination.mkdir(mode=0o700)
     try:
-        for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py"]:
+        for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")

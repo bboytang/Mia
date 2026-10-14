@@ -12,12 +12,12 @@ import unicodedata
 import uuid
 
 from .memory import EXTRACTION_INSTRUCTIONS, MemoryError, MemoryStore, SECRET
+from .authorization import AuthenticatedScope, PrivateAuthorizationRequired, require_connection
 
 
 logger = logging.getLogger(__name__)
 _stores = {}
 _stores_lock = threading.Lock()
-OWNER = re.compile(r"user:[0-9]+:agent:[A-Za-z0-9_-]{1,128}\Z")
 EMOTIONS = {
     "😌": "calm", "😶": "calm", "🙂": "happy", "😂": "happy", "😆": "happy",
     "🤔": "curious", "😲": "surprised", "😱": "surprised", "🙄": "confused",
@@ -48,37 +48,36 @@ def _store():
 
 
 def attach_private_config(conn, private_config):
-    """Only the manager's successful binding lookup may supply the owner."""
+    """Config lookup must already have verified the independent private grant."""
     conn._mia_owner = None
     if not conn.read_config_from_api or not isinstance(private_config, dict):
         return
-    owner = private_config.get("mia_owner")
-    if not isinstance(owner, str) or not OWNER.fullmatch(owner):
+    scope = getattr(conn, "_mia_scope", None)
+    if not isinstance(scope, AuthenticatedScope) or private_config.get("mia_owner") != scope.owner:
         return
-    server = conn.server
-    headers = conn.headers or {}
-    token = headers.get("authorization", "")
-    if not server or not server.auth_enable or not isinstance(token, str) or not token.startswith("Bearer "):
-        return
-    if not server.auth.verify_token(token[7:], client_id=headers.get("client-id"), username=conn.device_id):
-        return
-    conn._mia_owner = owner
+    conn._mia_owner = scope.owner
 
 
 def initialize_memory(conn):
+    conn._mia_memory = None
     if not getattr(conn, "_mia_owner", None):
+        if conn.read_config_from_api:
+            conn.memory = None
+            return True
         return False
     try:
-        conn.memory = MiaMemoryProvider(_store(), conn._mia_owner, conn.llm, conn.session_id)
+        conn.memory = MiaMemoryProvider(_store(), conn._mia_owner, conn.llm, conn.session_id,
+                                       conn._mia_scope, conn._mia_authorization)
         conn._mia_memory = conn.memory
         return True
     except Exception as error:
         logger.warning("Mia memory initialization skipped (%s)", type(error).__name__)
-        return False
+        conn.memory = None
+        return True
 
 
 def apply_persona_prompt(conn):
-    if not getattr(conn, "_mia_memory", None):
+    if not getattr(conn, "_mia_scope", None):
         return
     prompt = conn.prompt or conn.config.get("prompt", "")
     if "<memory>" not in prompt:
@@ -115,8 +114,11 @@ def bounded_history(messages):
 class MiaMemoryProvider:
     """Implements the upstream memory provider protocol using the configured LLM."""
 
-    def __init__(self, store, owner, llm, session_id):
+    def __init__(self, store, owner, llm, session_id, scope, authorization):
+        if not isinstance(scope, AuthenticatedScope) or scope.owner != owner:
+            raise PrivateAuthorizationRequired()
         self.store, self.owner, self.llm, self.session_id = store, owner, llm, session_id
+        self.scope, self.authorization = scope, authorization
         self.lock = threading.RLock()
         self.pending = deque(maxlen=20)
         self.seen = deque(maxlen=80)
@@ -131,6 +133,7 @@ class MiaMemoryProvider:
         self.llm = llm
 
     async def query_memory(self, query):
+        await self.authorization.require(self.scope, "memory:read")
         try:
             def context():
                 with self.lock:
@@ -140,7 +143,11 @@ class MiaMemoryProvider:
                         "memory_status": self.notice,
                         "session_memory_paused": self.suppressed,
                     }}
-            return json.dumps(await asyncio.to_thread(context), ensure_ascii=False, separators=(",", ":"))
+            result = await asyncio.to_thread(context)
+            await self.authorization.require(self.scope, "memory:read")
+            return json.dumps(result, ensure_ascii=False, separators=(",", ":"))
+        except PrivateAuthorizationRequired:
+            raise
         except Exception as error:
             logger.warning("Mia memory lookup skipped (%s)", type(error).__name__)
             return ""
@@ -172,6 +179,12 @@ class MiaMemoryProvider:
             return sources, state["revision"], uuid.uuid4().hex
 
     async def checkpoint(self, excerpts, final=False):
+        try:
+            await self.authorization.require(self.scope, "memory:write")
+        except PrivateAuthorizationRequired:
+            with self.lock:
+                self.pending.clear()
+            return
         batch = await asyncio.to_thread(self._take_batch, excerpts, final)
         if batch is None:
             return
@@ -184,8 +197,14 @@ class MiaMemoryProvider:
                            "personality": self.store.personality(self.owner)}
                 output = self.llm.response_no_stream(EXTRACTION_INSTRUCTIONS,
                     json.dumps(context, ensure_ascii=False))
-                return self.store.apply_extraction(self.owner, self.session_id, revision, sources, output, checkpoint_id)
-            await asyncio.to_thread(extract)
+                return output
+            output = await asyncio.to_thread(extract)
+            await self.authorization.require(self.scope, "memory:write")
+            await asyncio.to_thread(self.store.apply_extraction, self.owner, self.session_id,
+                                    revision, sources, output, checkpoint_id)
+        except PrivateAuthorizationRequired:
+            with self.lock:
+                self.pending.clear()
         except Exception as error:
             logger.warning("Mia memory extraction skipped (%s)", type(error).__name__)
             with self.lock:
@@ -294,9 +313,14 @@ async def handle_message(conn, message):
         provider = getattr(conn, "_mia_memory", None)
         if not provider:
             raise MemoryError("unavailable", "Persistent memory is not available on this server")
+        await require_connection(conn, "memory:manage")
         response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
+        await require_connection(conn, "memory:manage")
         if request["action"] not in {"list", "personality"}:
             _trim_dialogue(conn, clear=True)
+    except PrivateAuthorizationRequired:
+        response.pop("result", None)
+        response["error"] = {"code": "authorization_required", "message": "请用智控台授权码完成授权"}
     except MemoryError as error:
         response["error"] = {"code": error.code, "message": str(error)}
     except (ValueError, TypeError, AttributeError):
