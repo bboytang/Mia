@@ -9,3 +9,5 @@ GitHub生成两天有效的隔离CA、带localhost／127.0.0.1 SAN的测试证�
 此项是实际manager HTTPS、Scope与WSS传输边界验收，WSS harness不是真实ConnectionHandler的ASR／LLM／TTS运行，也不是iOS平台信任／授权码兑换整链或八项行为。生产可信证书、续期、OTA／manager／语音入口、内网通道和真机仍需发布前核实。公网域名或可信IP证书均可，未申请证书、开放端口或部署。
 
 当前：代码／真实TLS用例待本提交GitHub验证，不能提前标通过。已完成的非TLS Scope [38626866860](https://github.com/bboytang/Mia/actions/runs/38626866860) 和JAR校验值已归档 `trusted-scope-results.json`。
+
+首次TLS workflow [38629243576](https://github.com/bboytang/Mia/actions/runs/38629243576) 在定义校验阶段失败，jobs为空，没有执行或构建TLS用例；cde3395相同定义的38629858973亦未执行。原因是新路径误用runner.temp于job.env；按 [GitHub context范围](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#context-availability)移到step.env，再通过GITHUB_ENV向后续真实测试传递路径。证书／私钥不作为环境内容，仅传文件路径。修正提交待GitHub实跑，不能把定义失败记成TLS行为失败或通过。

@@ -35,10 +35,6 @@ jobs:
       SPRING_DATA_REDIS_HOST: 127.0.0.1
       MIA_SCOPE_INTEGRATION_SCRIPT: ${{ github.workspace }}/scripts/ci/verify_mia_scope_integration.py
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
-      MIA_SCOPE_KEYSTORE: file:${{ runner.temp }}/mia-test-tls/server.p12
-      MIA_SCOPE_CA: ${{ runner.temp }}/mia-test-tls/ca.pem
-      MIA_TLS_CERT_FILE: ${{ runner.temp }}/mia-test-tls/server.pem
-      MIA_TLS_KEY_FILE: ${{ runner.temp }}/mia-test-tls/server.key
     services:
       mysql:
         image: mysql:8.4
@@ -76,6 +72,11 @@ jobs:
       - name: Install existing manager client dependency for real Python Scope integration
         run: python -m pip install httpx==0.28.1 websockets==14.2
       - name: Prepare isolated TLS certificates and explicit test trust
+        env:
+          MIA_SCOPE_KEYSTORE: file:${{ runner.temp }}/mia-test-tls/server.p12
+          MIA_SCOPE_CA: ${{ runner.temp }}/mia-test-tls/ca.pem
+          MIA_TLS_CERT_FILE: ${{ runner.temp }}/mia-test-tls/server.pem
+          MIA_TLS_KEY_FILE: ${{ runner.temp }}/mia-test-tls/server.key
         run: |
           mkdir -p "$RUNNER_TEMP/mia-test-tls"
           openssl req -x509 -newkey rsa:2048 -nodes -days 2 \
@@ -87,6 +88,9 @@ jobs:
           import certifi, os
           from pathlib import Path
           root = Path(os.environ['RUNNER_TEMP']) / 'mia-test-tls'
+          with Path(os.environ['GITHUB_ENV']).open('a') as environment:
+              for name in ['MIA_SCOPE_KEYSTORE', 'MIA_SCOPE_CA', 'MIA_TLS_CERT_FILE', 'MIA_TLS_KEY_FILE']:
+                  environment.write(name + '=' + os.environ[name] + '\n')
           (root / 'server.ext').write_text('subjectAltName=DNS:localhost,IP:127.0.0.1\nextendedKeyUsage=serverAuth\n')
           with Path(certifi.where()).open('ab') as trust:
               trust.write(b'\n' + Path(os.environ['MIA_SCOPE_CA']).read_bytes())
