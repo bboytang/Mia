@@ -2,6 +2,13 @@ import XCTest
 @testable import Mia
 
 final class MiaWireProtocolTests: XCTestCase {
+    func testPrivateAuthorizationPromptIsIndependentOfDeviceBindingAndUntrustedMessage() throws {
+        let required = Data(#"{"type":"mia_authorization","status":"required","message":"untrusted replacement"}"#.utf8)
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(required), .privateAuthorizationRequired)
+        XCTAssertEqual(MiaConnectionError.privateAuthorizationRequired.localizedDescription, "请用智控台授权码完成授权")
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(Data(#"{"type":"mia_authorization","status":"other"}"#.utf8)), .other)
+    }
+
     func testHelloAdvertisesWebSocketAndOpus() throws {
         let data = try MiaWireProtocol.hello()
         let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])

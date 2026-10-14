@@ -41,6 +41,21 @@ private final class CompanionAudioStub: MiaConversationAudio {
 }
 
 final class MiaCompanionSessionTests: XCTestCase {
+    @MainActor
+    func testMissingPrivateGrantPromptsAuthorizationBeforeStartingPersonalizedAudio() async throws {
+        let audio = CompanionAudioStub()
+        let voice = session(audio: audio, query: "?private_auth=required")
+        defer { voice.disconnect() }
+        await voice.beginConversation()
+        try await waitUntil { voice.errorMessage != nil }
+        XCTAssertEqual(voice.errorMessage, "请用智控台授权码完成授权")
+        XCTAssertEqual(voice.state, .disconnected)
+        XCTAssertFalse(voice.conversationActive)
+        XCTAssertFalse(voice.authorizationRejected)
+        XCTAssertEqual(audio.starts, 0)
+        XCTAssertEqual(audio.rounds, 0)
+    }
+
     func testPersonalityIncludesTheMemoriesBehindItsGrowth() throws {
         let data = Data(#"{"version":1,"traits":[{"name":"坦率","description":"会直接表达判断","evidence_ids":["one","two","three"]}]}"#.utf8)
         let personality = try JSONDecoder().decode(MiaPersonality.self, from: data)

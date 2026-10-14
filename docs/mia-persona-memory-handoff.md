@@ -38,7 +38,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P06 | 完成：初选 | [固定规格](verification/mia-persona-memory/embedding-selection.json)，U8U8 base 达初选门槛；生产集成和行为未验收 |
 | P07 | 进行中 | 身份基线部分完成：编译／四类对照及4真实旧缺口复现通过；完整回归149/150，1既有失败；Provider等入口未完成 |
 | P08 | 进行中 | manager授权链14真实用例／构建通过；App、最小管理入口和实际TLS未完成，完整运行链未验收 |
-| P09 | 进行中 | check-scope与私有配置门禁16真实用例／构建通过、证据已保存；Python可信Scope与上游语音／工具／输出补丁、本提交第17个身份集成用例待CI |
+| P09 | 进行中 | check-scope与配置门禁16真实用例／构建通过；967fdaa服务CI通过、manager→Python集成在途。App授权提示接入待iOS CI；Keychain／兑换／实际WSS及并发／性能仍待完成 |
 | P10 | 未开始 | 记忆 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |

@@ -197,6 +197,13 @@
 - 存储失败不回退旧设备记忆；固定人格提示不依赖存储初始化。完整PersonaAgent／真RAG／持久任务尚待P11—P16，不以现有Prompt／FTS／checkpoint冒充完工。
 - 新增实际Java端口驱动Python的身份集成用例与有界机制负例；当前本提交未实跑，软件验证仅在GitHub。每包Scope核验的音频／TTFT成本、TLS代理、全服务并发撤销、App事件／Keychain及真机仍待验；详见 `trusted-scope.md`。本地仅审diff与整理制品，未部署或读取生产秘密，交接同步。
 
+## 2026-10-14：P08／P09 App授权提示接入
+
+- App识别 `mia_authorization/required`，固定显示用户确认提示“请用智控台授权码完成授权”；不显示服务端任意message，也不误判为OTA绑定失败或启动旧账户登录。
+- 收到提示停止连接／录音并保持设备身份；新增协议负例与真实loopback WebSocket会话fixture，验证授权前不启动音频。仅为App必要迁移事件，不改现有语音／账户体系。
+- 当前补丁待GitHub iOS simulator／device构建及全部软件回归；物理iPhone与实际WSS仍未验。授权码兑换、Keychain及WSS凭据发送继续实施。
+- Scope实现 `967fdaa598f063038c01854c9206fcd45eba9bc2` 的服务端 [38624863353](https://github.com/bboytang/Mia/actions/runs/38624863353)成功；身份 [38624863160](https://github.com/bboytang/Mia/actions/runs/38624863160)在途，先检查实际结果后再归档。交接同步，无部署。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

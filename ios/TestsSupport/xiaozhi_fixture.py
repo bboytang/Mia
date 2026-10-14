@@ -80,6 +80,10 @@ async def websocket(ws):
     assert hello["type"] == "hello" and hello["version"] == 1
     assert not hello.get("features")
     assert hello["audio_params"] == {"format": "opus", "sample_rate": 16000, "channels": 1, "frame_duration": 60}
+    if params.get("private_auth") == ["required"]:
+        await ws.send(json.dumps({"type": "mia_authorization", "status": "required"}))
+        await ws.wait_closed()
+        return
     await ws.send(json.dumps({"type": "hello", "transport": "websocket", "session_id": "fixture-session", "audio_params": hello["audio_params"]}))
     device = headers["Device-Id"]
     if "close_once" in ws.request.path and device not in closed_once:

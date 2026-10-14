@@ -12,6 +12,7 @@ enum MiaServerEvent: Equatable {
     case assistantText(String)
     case expressiveText(String, emotion: String, intensity: Double)
     case memoryResponse(requestID: String, payload: Data)
+    case privateAuthorizationRequired
     case serverError(String)
     case other
 }
@@ -118,6 +119,8 @@ enum MiaWireProtocol {
             guard let requestID = object["request_id"] as? String,
                   UUID(uuidString: requestID) != nil else { return .other }
             return .memoryResponse(requestID: requestID, payload: data)
+        case "mia_authorization":
+            return object["status"] as? String == "required" ? .privateAuthorizationRequired : .other
         case "error":
             if let message = object["message"] as? String {
                 return .serverError(message)

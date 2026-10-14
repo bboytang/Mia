@@ -275,6 +275,8 @@ final class MiaVoiceSession: ObservableObject {
             request.continuation.resume(returning: payload)
         case .serverError:
             fail(MiaConnectionError.upstreamError)
+        case .privateAuthorizationRequired:
+            fail(MiaConnectionError.privateAuthorizationRequired)
         case .other:
             break
         }

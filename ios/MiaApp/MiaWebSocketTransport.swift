@@ -5,6 +5,7 @@ enum MiaConnectionError: LocalizedError {
     case unexpectedMessage
     case handshakeTimeout
     case unauthorized
+    case privateAuthorizationRequired
     case serverClosed
     case upstreamError
     case responseTimeout
@@ -15,6 +16,7 @@ enum MiaConnectionError: LocalizedError {
         case .unexpectedMessage: "服务端返回了无法识别的消息"
         case .handshakeTimeout: "服务端握手超时"
         case .unauthorized: "小智设备认证失败，请重新检查 OTA 和设备绑定"
+        case .privateAuthorizationRequired: "请用智控台授权码完成授权"
         case .serverClosed: "小智服务端已关闭连接"
         case .upstreamError: "小智服务端报告语音处理错误，请查看智控台日志"
         case .responseTimeout: "小智未在规定时间内返回语音，请检查智能体的 ASR、LLM 和 TTS 配置"
@@ -191,7 +193,7 @@ final class MiaWebSocketTransport {
             }
             let type = (try? JSONSerialization.jsonObject(with: Data(text.utf8)) as? [String: Any])?["type"] as? String
             guard type == "mia_memory" || text.utf8.count <= 65_536 else { throw MiaConnectionError.unexpectedMessage }
-            let known = ["hello", "stt", "tts", "llm", "error", "mia_memory"]
+            let known = ["hello", "stt", "tts", "llm", "error", "mia_memory", "mia_authorization"]
             record("message", known.contains(type ?? "") ? type! : "未知文本消息")
             return .event(try MiaWireProtocol.parseServerEvent(Data(text.utf8)))
         case .data(let data):
