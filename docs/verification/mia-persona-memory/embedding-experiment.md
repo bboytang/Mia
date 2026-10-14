@@ -16,6 +16,10 @@ v5 保留 v4 事实及校准输入，新增独立 48 正向／16 无关／8 相�
 
 在模型导出阶段使用固定 ORT 1.23.2 将 ONNX 保存为 ORT（仅 BASIC 图优化），比较模型载入内存；导出开销仍不计为推理结果。各源模型与派生模型有 SHA，真实原始向量一致性继续作为硬门槛。不以“格式更轻”声称内存已经合格，必须读取新的隔离报告。依据同版本 [保存格式配置](https://github.com/microsoft/onnxruntime/blob/v1.23.2/include/onnxruntime/core/session/onnxruntime_session_options_config_keys.h)。
 
+v5 [38595630806](https://github.com/bboytang/Mia/actions/runs/38595630806) 仍无 eligible，见 [v5 报告](embedding-results-v5.json)。base 两变体正向／Top1 0.97917、无关空召回 1.0；FP32 ORT 必测 RSS 990.82 MiB，INT8 444.61 MiB 但最低参考余弦 0.93648。small 空召回仍 0.875。ORT 格式在本实验增大峰值，不能当已验证的省内存方案。
+
+下一项仅比较通用量化表示候选 U8U8，使用同一已冻结 v5 数据／检索逻辑／校准规则；不调整质量门槛或使用留出反馈调检索。U8U8 为官方针对 U8S8 大精度损失建议的替代，保留新的 `model-uint8.onnx` 名称和元数据，不覆盖旧实验结果。运行使用 ONNX 而非未达预期的 ORT 表示；若仍失败，继续保持未选型。
+
 ## 候选及官方依据
 
 - BAAI/bge-small-zh-v1.5，revision `7999e1d3359715c523056ef9478215996d62a620`，512 维。

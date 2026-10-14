@@ -1,0 +1,6385 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38595630806",
+  "results": [
+    {
+      "code_sha": "bb0d2b40e0fc809759731f963cc4228d602be346",
+      "dataset_version": "5",
+      "dataset_sha256": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+      "model": {
+        "model": "BAAI/bge-base-zh-v1.5",
+        "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+        "dimension": 768,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "quantization": {
+          "format": "U8S8",
+          "per_channel": true,
+          "reduce_range": true
+        },
+        "models": {
+          "model.onnx": {
+            "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+            "bytes": 406939356
+          },
+          "model-int8.onnx": {
+            "sha256": "80e900725cc8b9708b71383f856cb2ad2f84288c913b7017ac0c6c308e4e7a5f",
+            "bytes": 152734276
+          },
+          "model.ort": {
+            "sha256": "7798e6af2e3b60efa9745bed71b05c6812db114beff2a9de4e945880c1c2b687",
+            "bytes": 407030432
+          },
+          "model-int8.ort": {
+            "sha256": "652ef3e16d07da8641d83b5504f202da04d8223cd7985cc209d33afa7938f507",
+            "bytes": 152829704
+          }
+        }
+      },
+      "variant": "model-int8.ort",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "runtime_options": {
+        "cpu_mem_arena": false,
+        "mem_pattern": false,
+        "prepacking": false
+      },
+      "cpu_info": "processor\t: 0\nvendor_id\t: GenuineIntel\ncpu family\t: 6\nmodel\t\t: 173\nmodel name\t: Intel(R) Xeon(R) 6973P-C\nstepping\t: 1\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 3599.819\ncache size\t: 491520 KB\nphysical id\t: 0\nsiblings\t: 4\ncore id\t\t: 0\ncpu cores\t: 2\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 36\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 vnmi avx512vbmi umip waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid cldemote movdiri movdir64b fsrm serialize tsxldtrk ibt amx_bf16 avx512_fp16 amx_tile amx_int8 arch_capabilities\nvmx flags\t: vnmi invvpid ept_x_only ept_ad ept_1gb ept_5level tsc_offset vtpr ept vpid unrestricted_guest ept_mode_based_exec tsc_scaling usr_wait_pause\nbugs\t\t: spectre_v1 spectre_v2 spec_store_bypass swapgs retbleed bhi spectre_v2_user its\nbogomips\t: 5200.00\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 57 bits virtual\npower management:",
+      "cold_load_ms": 279.97201199997335,
+      "peak_rss_mib": 721.00390625,
+      "mandatory_peak_rss_mib": 444.609375,
+      "reference_cosine_min": 0.9364822506904602,
+      "reference_cosine_all": [
+        0.9772375822067261,
+        0.9364822506904602,
+        0.9768427014350891,
+        0.9574781656265259,
+        0.977794885635376,
+        0.9528483152389526,
+        0.9629905223846436,
+        0.9406687021255493
+      ],
+      "query_pipeline": {
+        "count": 560,
+        "p50_ms": 84.50189050003587,
+        "p95_ms": 92.84941555001751
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 3.033322000021599,
+          "p95_ms": 3.8617254000200774,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 444.609375
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 34.8076270000206,
+          "p95_ms": 40.36902340001234,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 444.609375
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 198.64596500002563,
+          "p95_ms": 217.17983740001046,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 721.00390625
+        }
+      },
+      "threshold": 0.19000000000000003,
+      "semantic_floor": 0.35000000000000003,
+      "distinct_margin_floor": 0.15,
+      "calibration_min_signed_margin": 0.036854600906372104,
+      "calibration": {
+        "positive_count": 24,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 1.0,
+        "empty_recall": 1.0,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 7,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "holdout": {
+        "positive_count": 48,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.9791666666666666,
+        "top1": 0.9791666666666666,
+        "empty_recall": 1.0,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 8,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 52,
+        "lexical": 0,
+        "association": 0,
+        "emotion": 1
+      },
+      "cases": [
+        {
+          "id": "v5-q-commute-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "paraphrase",
+          "query": "回忆一下我平日怎么到公司。",
+          "expected": [
+            "j-commute"
+          ],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.23333483934402466,
+              "original_margin": -0.10542020201683044,
+              "signals": [
+                0.23333483934402466,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.23927024006843567,
+              "original_margin": -0.09948480129241943,
+              "signals": [
+                0.23927024006843567,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.3387550413608551,
+              "original_margin": 0.016124218702316284,
+              "signals": [
+                0.3387550413608551,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2807126045227051,
+              "original_margin": -0.058042436838150024,
+              "signals": [
+                0.2807126045227051,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.2179713398218155,
+              "original_margin": -0.12078370153903961,
+              "signals": [
+                0.2179713398218155,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3226308226585388,
+              "original_margin": -0.016124218702316284,
+              "signals": [
+                0.3226308226585388,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.24616314470767975,
+              "original_margin": -0.09259189665317535,
+              "signals": [
+                0.24616314470767975,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2947274446487427,
+              "original_margin": -0.04402759671211243,
+              "signals": [
+                0.2947274446487427,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.26258477568626404,
+              "original_margin": -0.07617026567459106,
+              "signals": [
+                0.26258477568626404,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.24831853806972504,
+              "original_margin": -0.09043650329113007,
+              "signals": [
+                0.24831853806972504,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.25019264221191406,
+              "original_margin": -0.08856239914894104,
+              "signals": [
+                0.25019264221191406,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.23992738127708435,
+              "original_margin": -0.09882766008377075,
+              "signals": [
+                0.23992738127708435,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v5-r-1",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我出生在宁波还是嘉兴？",
+          "expected": [],
+          "allowed_related": [
+            "j-city"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.26641178131103516,
+              "original_margin": -0.32393717765808105,
+              "signals": [
+                0.26641178131103516,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.21035175025463104,
+              "original_margin": -0.379997193813324,
+              "signals": [
+                0.21035175025463104,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.18769541382789612,
+              "original_margin": -0.4026535451412201,
+              "signals": [
+                0.18769541382789612,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.20367848873138428,
+              "original_margin": -0.38667047023773193,
+              "signals": [
+                0.20367848873138428,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.16408587992191315,
+              "original_margin": -0.42626309394836426,
+              "signals": [
+                0.16408587992191315,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.23319944739341736,
+              "original_margin": -0.35714951157569885,
+              "signals": [
+                0.23319944739341736,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.16602791845798492,
+              "original_margin": -0.4243210554122925,
+              "signals": [
+                0.16602791845798492,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.20974093675613403,
+              "original_margin": -0.3806080222129822,
+              "signals": [
+                0.20974093675613403,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.2575550079345703,
+              "original_margin": -0.3327939510345459,
+              "signals": [
+                0.2575550079345703,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2369992434978485,
+              "original_margin": -0.3533497154712677,
+              "signals": [
+                0.2369992434978485,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.5903489589691162,
+              "original_margin": 0.32393717765808105,
+              "signals": [
+                0.5903489589691162,
+                0.44923076923076927,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.1843213587999344,
+              "original_margin": -0.406027615070343,
+              "signals": [
+                0.1843213587999344,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-city"
+          ]
+        },
+        {
+          "id": "v5-r-2",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "丁南是哪一年出生的？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.1843259632587433,
+              "original_margin": -0.18528535962104797,
+              "signals": [
+                0.1843259632587433,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.11931373924016953,
+              "original_margin": -0.25029757618904114,
+              "signals": [
+                0.11931373924016953,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.11309105157852173,
+              "original_margin": -0.25652027130126953,
+              "signals": [
+                0.11309105157852173,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.17626717686653137,
+              "original_margin": -0.1933441460132599,
+              "signals": [
+                0.17626717686653137,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.10969696938991547,
+              "original_margin": -0.2599143385887146,
+              "signals": [
+                0.10969696938991547,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.36961132287979126,
+              "original_margin": 0.14370429515838623,
+              "signals": [
+                0.36961132287979126,
+                0.26941176470588235,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.11134424805641174,
+              "original_margin": -0.2582670748233795,
+              "signals": [
+                0.11134424805641174,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.14417308568954468,
+              "original_margin": -0.22543823719024658,
+              "signals": [
+                0.14417308568954468,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.22590702772140503,
+              "original_margin": -0.14370429515838623,
+              "signals": [
+                0.22590702772140503,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.11655588448047638,
+              "original_margin": -0.2530554533004761,
+              "signals": [
+                0.11655588448047638,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.15688908100128174,
+              "original_margin": -0.21272224187850952,
+              "signals": [
+                0.15688908100128174,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.12788695096969604,
+              "original_margin": -0.24172437191009521,
+              "signals": [
+                0.12788695096969604,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        },
+        {
+          "id": "v5-r-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "姑姑生日在几月？",
+          "expected": [],
+          "allowed_related": [
+            "j-gift"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.18047359585762024,
+              "original_margin": -0.18977496027946472,
+              "signals": [
+                0.18047359585762024,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.16184261441230774,
+              "original_margin": -0.20840594172477722,
+              "signals": [
+                0.16184261441230774,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.16903793811798096,
+              "original_margin": -0.201210618019104,
+              "signals": [
+                0.16903793811798096,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2683308720588684,
+              "original_margin": -0.10191768407821655,
+              "signals": [
+                0.2683308720588684,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.11636210978031158,
+              "original_margin": -0.25388646125793457,
+              "signals": [
+                0.11636210978031158,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.20844662189483643,
+              "original_margin": -0.16180193424224854,
+              "signals": [
+                0.20844662189483643,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.14380137622356415,
+              "original_margin": -0.2264471799135208,
+              "signals": [
+                0.14380137622356415,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.14536459743976593,
+              "original_margin": -0.22488395869731903,
+              "signals": [
+                0.14536459743976593,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.37024855613708496,
+              "original_margin": 0.10191768407821655,
+              "signals": [
+                0.37024855613708496,
+                0.22800000000000004,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.17000576853752136,
+              "original_margin": -0.2002427875995636,
+              "signals": [
+                0.17000576853752136,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.21199049055576324,
+              "original_margin": -0.15825806558132172,
+              "signals": [
+                0.21199049055576324,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.2081316113471985,
+              "original_margin": -0.16211694478988647,
+              "signals": [
+                0.2081316113471985,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-gift"
+          ]
+        },
+        {
+          "id": "v5-r-4",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "母亲那块手表是哪个厂家制造的？",
+          "expected": [],
+          "allowed_related": [
+            "j-loss"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [
+            "母亲",
+            "手表",
+            "想念"
+          ],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.12342104315757751,
+              "original_margin": -0.331184983253479,
+              "signals": [
+                0.14864206314086914,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.11780978739261627,
+              "original_margin": -0.33679622411727905,
+              "signals": [
+                0.14982183277606964,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.09321589767932892,
+              "original_margin": -0.3613901138305664,
+              "signals": [
+                0.13926367461681366,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.10607469081878662,
+              "original_margin": -0.3485313355922699,
+              "signals": [
+                0.1312006115913391,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.08629924803972244,
+              "original_margin": -0.3683067858219147,
+              "signals": [
+                0.13586674630641937,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.14585037529468536,
+              "original_margin": -0.30875563621520996,
+              "signals": [
+                0.19462768733501434,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.11874115467071533,
+              "original_margin": -0.3358648717403412,
+              "signals": [
+                0.16857247054576874,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.10654912143945694,
+              "original_margin": -0.3480569124221802,
+              "signals": [
+                0.16400498151779175,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.19559335708618164,
+              "original_margin": -0.2590126693248749,
+              "signals": [
+                0.242125004529953,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.08803516626358032,
+              "original_margin": -0.3665708601474762,
+              "signals": [
+                0.11832276731729507,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.16105696558952332,
+              "original_margin": -0.2935490608215332,
+              "signals": [
+                0.19309771060943604,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.4546060264110565,
+              "original_margin": 0.2590126693248749,
+              "signals": [
+                0.4834789037704468,
+                0.40222222222222226,
+                0.7,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss"
+          ]
+        },
+        {
+          "id": "v5-r-5",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我常喝的低因咖啡产自哪国？",
+          "expected": [],
+          "allowed_related": [
+            "j-coffee"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.1848486065864563,
+              "original_margin": -0.21944978833198547,
+              "signals": [
+                0.1848486065864563,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.16582424938678741,
+              "original_margin": -0.23847414553165436,
+              "signals": [
+                0.16582424938678741,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.12866750359535217,
+              "original_margin": -0.2756308913230896,
+              "signals": [
+                0.12866750359535217,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.12627916038036346,
+              "original_margin": -0.2780192494392395,
+              "signals": [
+                0.12627916038036346,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.4042983949184418,
+              "original_margin": 0.21944978833198547,
+              "signals": [
+                0.4042983949184418,
+                0.5157142857142858,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.15219581127166748,
+              "original_margin": -0.2521025836467743,
+              "signals": [
+                0.15219581127166748,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.13535870611667633,
+              "original_margin": -0.26893967390060425,
+              "signals": [
+                0.13535870611667633,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.1716732382774353,
+              "original_margin": -0.23262515664100647,
+              "signals": [
+                0.1716732382774353,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.16335274279117584,
+              "original_margin": -0.24094565212726593,
+              "signals": [
+                0.16335274279117584,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.16507187485694885,
+              "original_margin": -0.23922652006149292,
+              "signals": [
+                0.16507187485694885,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.1694517284631729,
+              "original_margin": -0.23484666645526886,
+              "signals": [
+                0.1694517284631729,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.15718883275985718,
+              "original_margin": -0.2471095621585846,
+              "signals": [
+                0.15718883275985718,
+                0.06285714285714286,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-coffee"
+          ]
+        },
+        {
+          "id": "v5-r-6",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我工作的公司具体叫什么名字？",
+          "expected": [],
+          "allowed_related": [
+            "j-focus"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.24540556967258453,
+              "original_margin": -0.10974107682704926,
+              "signals": [
+                0.24540556967258453,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.21562764048576355,
+              "original_margin": -0.13951900601387024,
+              "signals": [
+                0.21562764048576355,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.3551466464996338,
+              "original_margin": 0.03288066387176514,
+              "signals": [
+                0.3551466464996338,
+                0.07586206896551724,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.255500853061676,
+              "original_margin": -0.09964579343795776,
+              "signals": [
+                0.255500853061676,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.18707233667373657,
+              "original_margin": -0.16807430982589722,
+              "signals": [
+                0.18707233667373657,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.32226598262786865,
+              "original_margin": -0.03288066387176514,
+              "signals": [
+                0.32226598262786865,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.233250230550766,
+              "original_margin": -0.1218964159488678,
+              "signals": [
+                0.233250230550766,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2931024730205536,
+              "original_margin": -0.0620441734790802,
+              "signals": [
+                0.2931024730205536,
+                0.05789473684210526,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.209929421544075,
+              "original_margin": -0.14521722495555878,
+              "signals": [
+                0.209929421544075,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.23081128299236298,
+              "original_margin": -0.12433536350727081,
+              "signals": [
+                0.23081128299236298,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.2710631489753723,
+              "original_margin": -0.08408349752426147,
+              "signals": [
+                0.2710631489753723,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.16919535398483276,
+              "original_margin": -0.18595129251480103,
+              "signals": [
+                0.16919535398483276,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-commute"
+          ]
+        },
+        {
+          "id": "v5-r-7",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我阳台有多少平方米？",
+          "expected": [],
+          "allowed_related": [
+            "j-plants"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.1689116358757019,
+              "original_margin": -0.23685503005981445,
+              "signals": [
+                0.1689116358757019,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.20276063680648804,
+              "original_margin": -0.20300602912902832,
+              "signals": [
+                0.20276063680648804,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.16099904477596283,
+              "original_margin": -0.24476762115955353,
+              "signals": [
+                0.16099904477596283,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2341861128807068,
+              "original_margin": -0.17158055305480957,
+              "signals": [
+                0.2341861128807068,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.28876543045043945,
+              "original_margin": -0.1170012354850769,
+              "signals": [
+                0.28876543045043945,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3030250668525696,
+              "original_margin": -0.10274159908294678,
+              "signals": [
+                0.3030250668525696,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.16380751132965088,
+              "original_margin": -0.24195915460586548,
+              "signals": [
+                0.16380751132965088,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.22739405930042267,
+              "original_margin": -0.1783726066350937,
+              "signals": [
+                0.22739405930042267,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.23112323880195618,
+              "original_margin": -0.17464342713356018,
+              "signals": [
+                0.23112323880195618,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.40576666593551636,
+              "original_margin": 0.10274159908294678,
+              "signals": [
+                0.40576666593551636,
+                0.20875000000000002,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.28302258253097534,
+              "original_margin": -0.12274408340454102,
+              "signals": [
+                0.28302258253097534,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.18753695487976074,
+              "original_margin": -0.21822971105575562,
+              "signals": [
+                0.18753695487976074,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-plants"
+          ]
+        },
+        {
+          "id": "v5-r-8",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我用的是哪个牌子的网球拍？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.15137726068496704,
+              "original_margin": -0.1990763545036316,
+              "signals": [
+                0.15137726068496704,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.1682029813528061,
+              "original_margin": -0.18225063383579254,
+              "signals": [
+                0.1682029813528061,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.12197181582450867,
+              "original_margin": -0.22848179936408997,
+              "signals": [
+                0.12197181582450867,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.14924632012844086,
+              "original_margin": -0.20120729506015778,
+              "signals": [
+                0.14924632012844086,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.14450576901435852,
+              "original_margin": -0.2059478461742401,
+              "signals": [
+                0.14450576901435852,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.35045361518859863,
+              "original_margin": 0.15647844970226288,
+              "signals": [
+                0.35045361518859863,
+                0.1978947368421053,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.13543909788131714,
+              "original_margin": -0.2150145173072815,
+              "signals": [
+                0.13543909788131714,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.11150438338518143,
+              "original_margin": -0.2389492392539978,
+              "signals": [
+                0.11150438338518143,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.19397516548633575,
+              "original_margin": -0.15647844970226288,
+              "signals": [
+                0.19397516548633575,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.18550747632980347,
+              "original_margin": -0.16494613885879517,
+              "signals": [
+                0.18550747632980347,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.1730651557445526,
+              "original_margin": -0.17738845944404602,
+              "signals": [
+                0.1730651557445526,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.16737648844718933,
+              "original_margin": -0.1830771267414093,
+              "signals": [
+                0.16737648844718933,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        }
+      ],
+      "scope_or_lifecycle_violations": 0,
+      "note": "Prototype experiment only; not production RAG or eight-capability acceptance.",
+      "eligible": false,
+      "persisted_cases": "holdout failures and related_unanswerable; full report in linked artifact, reproducible from pinned code"
+    },
+    {
+      "code_sha": "bb0d2b40e0fc809759731f963cc4228d602be346",
+      "dataset_version": "5",
+      "dataset_sha256": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+      "model": {
+        "model": "BAAI/bge-base-zh-v1.5",
+        "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+        "dimension": 768,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "quantization": {
+          "format": "U8S8",
+          "per_channel": true,
+          "reduce_range": true
+        },
+        "models": {
+          "model.onnx": {
+            "sha256": "ee1aaed1a5c73718337504961598cf66e98ad6495a9dc0e0c904bf50c2d2bd64",
+            "bytes": 406939356
+          },
+          "model-int8.onnx": {
+            "sha256": "80e900725cc8b9708b71383f856cb2ad2f84288c913b7017ac0c6c308e4e7a5f",
+            "bytes": 152734276
+          },
+          "model.ort": {
+            "sha256": "7798e6af2e3b60efa9745bed71b05c6812db114beff2a9de4e945880c1c2b687",
+            "bytes": 407030432
+          },
+          "model-int8.ort": {
+            "sha256": "652ef3e16d07da8641d83b5504f202da04d8223cd7985cc209d33afa7938f507",
+            "bytes": 152829704
+          }
+        }
+      },
+      "variant": "model.ort",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "runtime_options": {
+        "cpu_mem_arena": false,
+        "mem_pattern": false,
+        "prepacking": false
+      },
+      "cpu_info": "processor\t: 0\nvendor_id\t: GenuineIntel\ncpu family\t: 6\nmodel\t\t: 173\nmodel name\t: Intel(R) Xeon(R) 6973P-C\nstepping\t: 1\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 4100.041\ncache size\t: 491520 KB\nphysical id\t: 0\nsiblings\t: 4\ncore id\t\t: 0\ncpu cores\t: 2\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 36\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 vnmi avx512vbmi umip waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid cldemote movdiri movdir64b fsrm serialize tsxldtrk ibt amx_bf16 avx512_fp16 amx_tile amx_int8 arch_capabilities\nvmx flags\t: vnmi invvpid ept_x_only ept_ad ept_1gb ept_5level tsc_offset vtpr ept vpid unrestricted_guest ept_mode_based_exec tsc_scaling usr_wait_pause\nbugs\t\t: spectre_v1 spectre_v2 spec_store_bypass swapgs retbleed bhi spectre_v2_user its\nbogomips\t: 5200.00\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 57 bits virtual\npower management:",
+      "cold_load_ms": 687.6462520000075,
+      "peak_rss_mib": 990.82421875,
+      "mandatory_peak_rss_mib": 990.82421875,
+      "reference_cosine_min": 0.9999999403953552,
+      "reference_cosine_all": [
+        1.0000001192092896,
+        1.0,
+        0.9999999403953552,
+        1.0,
+        1.0,
+        1.0,
+        0.9999999403953552,
+        1.0
+      ],
+      "query_pipeline": {
+        "count": 560,
+        "p50_ms": 175.22505249999654,
+        "p95_ms": 192.20205679998512
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 3.3723669999972117,
+          "p95_ms": 4.385083200008921,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 990.82421875
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 36.70889199997873,
+          "p95_ms": 40.195405999998,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 990.82421875
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 188.68530400004602,
+          "p95_ms": 196.7255841999986,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 990.82421875
+        }
+      },
+      "threshold": 0.18000000000000002,
+      "semantic_floor": 0.325,
+      "distinct_margin_floor": null,
+      "calibration_min_signed_margin": 0.06249881982803346,
+      "calibration": {
+        "positive_count": 24,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 1.0,
+        "empty_recall": 1.0,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 6,
+        "related_unanswerable_expected_fact_recalled": 6,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "holdout": {
+        "positive_count": 48,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.9791666666666666,
+        "top1": 0.9791666666666666,
+        "empty_recall": 1.0,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 7,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 51,
+        "lexical": 1,
+        "association": 0,
+        "emotion": 0
+      },
+      "cases": [
+        {
+          "id": "v5-q-commute-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "paraphrase",
+          "query": "回忆一下我平日怎么到公司。",
+          "expected": [
+            "j-commute"
+          ],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.19357706606388092,
+              "original_margin": -0.11568836867809296,
+              "signals": [
+                0.19357706606388092,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.2220316380262375,
+              "original_margin": -0.08723379671573639,
+              "signals": [
+                0.2220316380262375,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.3092654347419739,
+              "original_margin": 0.03680616617202759,
+              "signals": [
+                0.3092654347419739,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2724592685699463,
+              "original_margin": -0.03680616617202759,
+              "signals": [
+                0.2724592685699463,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.16647662222385406,
+              "original_margin": -0.1427888125181198,
+              "signals": [
+                0.16647662222385406,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.2638493776321411,
+              "original_margin": -0.045416057109832764,
+              "signals": [
+                0.2638493776321411,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.21229073405265808,
+              "original_margin": -0.0969747006893158,
+              "signals": [
+                0.21229073405265808,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.27172142267227173,
+              "original_margin": -0.03754401206970215,
+              "signals": [
+                0.27172142267227173,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.21659895777702332,
+              "original_margin": -0.09266647696495056,
+              "signals": [
+                0.21659895777702332,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.21463149785995483,
+              "original_margin": -0.09463393688201904,
+              "signals": [
+                0.21463149785995483,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.23430266976356506,
+              "original_margin": -0.07496276497840881,
+              "signals": [
+                0.23430266976356506,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.22849035263061523,
+              "original_margin": -0.08077508211135864,
+              "signals": [
+                0.22849035263061523,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v5-r-1",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我出生在宁波还是嘉兴？",
+          "expected": [],
+          "allowed_related": [
+            "j-city"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.25421783328056335,
+              "original_margin": -0.35746780037879944,
+              "signals": [
+                0.25421783328056335,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.20603494346141815,
+              "original_margin": -0.40565067529678345,
+              "signals": [
+                0.20603494346141815,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.167441725730896,
+              "original_margin": -0.4442439079284668,
+              "signals": [
+                0.167441725730896,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.18247415125370026,
+              "original_margin": -0.42921149730682373,
+              "signals": [
+                0.18247415125370026,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.15955042839050293,
+              "original_margin": -0.45213520526885986,
+              "signals": [
+                0.15955042839050293,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.18408739566802979,
+              "original_margin": -0.427598237991333,
+              "signals": [
+                0.18408739566802979,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.1791830062866211,
+              "original_margin": -0.4325026273727417,
+              "signals": [
+                0.1791830062866211,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2000638246536255,
+              "original_margin": -0.4116218090057373,
+              "signals": [
+                0.2000638246536255,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.2459387183189392,
+              "original_margin": -0.3657469153404236,
+              "signals": [
+                0.2459387183189392,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.20790404081344604,
+              "original_margin": -0.40378159284591675,
+              "signals": [
+                0.20790404081344604,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.6116856336593628,
+              "original_margin": 0.35746780037879944,
+              "signals": [
+                0.6116856336593628,
+                0.44923076923076927,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.1541317105293274,
+              "original_margin": -0.4575539231300354,
+              "signals": [
+                0.1541317105293274,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-city"
+          ]
+        },
+        {
+          "id": "v5-r-2",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "丁南是哪一年出生的？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.1551407426595688,
+              "original_margin": -0.22747300565242767,
+              "signals": [
+                0.1551407426595688,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.07987047731876373,
+              "original_margin": -0.30274325609207153,
+              "signals": [
+                0.07987047731876373,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.07147364318370819,
+              "original_margin": -0.31114012002944946,
+              "signals": [
+                0.07147364318370819,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.1397150307893753,
+              "original_margin": -0.24289871752262115,
+              "signals": [
+                0.1397150307893753,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.07286228239536285,
+              "original_margin": -0.3097514510154724,
+              "signals": [
+                0.07286228239536285,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.38261374831199646,
+              "original_margin": 0.20260560512542725,
+              "signals": [
+                0.38261374831199646,
+                0.26941176470588235,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.0888989046216011,
+              "original_margin": -0.29371485114097595,
+              "signals": [
+                0.0888989046216011,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.10258407145738602,
+              "original_margin": -0.28002968430519104,
+              "signals": [
+                0.10258407145738602,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.1800081431865692,
+              "original_margin": -0.20260560512542725,
+              "signals": [
+                0.1800081431865692,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.07446228712797165,
+              "original_margin": -0.3081514537334442,
+              "signals": [
+                0.07446228712797165,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.12420613318681717,
+              "original_margin": -0.2584076225757599,
+              "signals": [
+                0.12420613318681717,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.08816961199045181,
+              "original_margin": -0.29444414377212524,
+              "signals": [
+                0.08816961199045181,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        },
+        {
+          "id": "v5-r-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "姑姑生日在几月？",
+          "expected": [],
+          "allowed_related": [
+            "j-gift"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.14511831104755402,
+              "original_margin": -0.25580471754074097,
+              "signals": [
+                0.14511831104755402,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.1324739009141922,
+              "original_margin": -0.2684491276741028,
+              "signals": [
+                0.1324739009141922,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.10466140508651733,
+              "original_margin": -0.29626160860061646,
+              "signals": [
+                0.10466140508651733,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2098742574453354,
+              "original_margin": -0.1910487562417984,
+              "signals": [
+                0.2098742574453354,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.07087168842554092,
+              "original_margin": -0.33005133271217346,
+              "signals": [
+                0.07087168842554092,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.13893741369247437,
+              "original_margin": -0.2619855999946594,
+              "signals": [
+                0.13893741369247437,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.12144458293914795,
+              "original_margin": -0.27947843074798584,
+              "signals": [
+                0.12144458293914795,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.09122760593891144,
+              "original_margin": -0.30969542264938354,
+              "signals": [
+                0.09122760593891144,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.4009230136871338,
+              "original_margin": 0.1910487562417984,
+              "signals": [
+                0.4009230136871338,
+                0.22800000000000004,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.10388084501028061,
+              "original_margin": -0.2970421612262726,
+              "signals": [
+                0.10388084501028061,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.19693268835544586,
+              "original_margin": -0.20399032533168793,
+              "signals": [
+                0.19693268835544586,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.16124582290649414,
+              "original_margin": -0.23967719078063965,
+              "signals": [
+                0.16124582290649414,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-gift"
+          ]
+        },
+        {
+          "id": "v5-r-4",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "母亲那块手表是哪个厂家制造的？",
+          "expected": [],
+          "allowed_related": [
+            "j-loss"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [
+            "母亲",
+            "手表",
+            "想念"
+          ],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.08024972677230835,
+              "original_margin": -0.3891860246658325,
+              "signals": [
+                0.09326541423797607,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.08460201323032379,
+              "original_margin": -0.38483375310897827,
+              "signals": [
+                0.09572021663188934,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.042930107563734055,
+              "original_margin": -0.4265056550502777,
+              "signals": [
+                0.06646689027547836,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.07657136768102646,
+              "original_margin": -0.3928643763065338,
+              "signals": [
+                0.10579946637153625,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.05966752767562866,
+              "original_margin": -0.4097682237625122,
+              "signals": [
+                0.09423986822366714,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.11598517000675201,
+              "original_margin": -0.35345059633255005,
+              "signals": [
+                0.13637679815292358,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.10148020833730698,
+              "original_margin": -0.3679555356502533,
+              "signals": [
+                0.14106425642967224,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.07264618575572968,
+              "original_margin": -0.39678955078125,
+              "signals": [
+                0.132658913731575,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.18676722049713135,
+              "original_margin": -0.2826685309410095,
+              "signals": [
+                0.22704356908798218,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.05788108706474304,
+              "original_margin": -0.4115546643733978,
+              "signals": [
+                0.09375657141208649,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.13231544196605682,
+              "original_margin": -0.33712029457092285,
+              "signals": [
+                0.15045654773712158,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.46943575143814087,
+              "original_margin": 0.2826685309410095,
+              "signals": [
+                0.5207068920135498,
+                0.40222222222222226,
+                0.7,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss"
+          ]
+        },
+        {
+          "id": "v5-r-5",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我常喝的低因咖啡产自哪国？",
+          "expected": [],
+          "allowed_related": [
+            "j-coffee"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.13560861349105835,
+              "original_margin": -0.29428938031196594,
+              "signals": [
+                0.13560861349105835,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.1380169838666916,
+              "original_margin": -0.2918810248374939,
+              "signals": [
+                0.1380169838666916,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.09315404295921326,
+              "original_margin": -0.33674395084381104,
+              "signals": [
+                0.09315404295921326,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.10282335430383682,
+              "original_margin": -0.32707464694976807,
+              "signals": [
+                0.10282335430383682,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.4298979938030243,
+              "original_margin": 0.28011777997016907,
+              "signals": [
+                0.4298979938030243,
+                0.5157142857142858,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.10817369073629379,
+              "original_margin": -0.3217242956161499,
+              "signals": [
+                0.10817369073629379,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.12115772813558578,
+              "original_margin": -0.3087402582168579,
+              "signals": [
+                0.12115772813558578,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.14978021383285522,
+              "original_margin": -0.28011777997016907,
+              "signals": [
+                0.14978021383285522,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.12667924165725708,
+              "original_margin": -0.3032187521457672,
+              "signals": [
+                0.12667924165725708,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.12302498519420624,
+              "original_margin": -0.30687302350997925,
+              "signals": [
+                0.12302498519420624,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.14189285039901733,
+              "original_margin": -0.28800514340400696,
+              "signals": [
+                0.14189285039901733,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.11276322603225708,
+              "original_margin": -0.3171347677707672,
+              "signals": [
+                0.11276322603225708,
+                0.06285714285714286,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-coffee"
+          ]
+        },
+        {
+          "id": "v5-r-6",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我工作的公司具体叫什么名字？",
+          "expected": [],
+          "allowed_related": [
+            "j-focus"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.15728040039539337,
+              "original_margin": -0.13744868338108063,
+              "signals": [
+                0.15728040039539337,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.17425283789634705,
+              "original_margin": -0.12047624588012695,
+              "signals": [
+                0.17425283789634705,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.294729083776474,
+              "original_margin": 0.04988832771778107,
+              "signals": [
+                0.294729083776474,
+                0.07586206896551724,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.1922420710325241,
+              "original_margin": -0.10248701274394989,
+              "signals": [
+                0.1922420710325241,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.13207009434700012,
+              "original_margin": -0.16265898942947388,
+              "signals": [
+                0.13207009434700012,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.24484075605869293,
+              "original_margin": -0.04988832771778107,
+              "signals": [
+                0.24484075605869293,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.19553881883621216,
+              "original_margin": -0.09919026494026184,
+              "signals": [
+                0.19553881883621216,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.22511351108551025,
+              "original_margin": -0.06961557269096375,
+              "signals": [
+                0.22511351108551025,
+                0.05789473684210526,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.16870588064193726,
+              "original_margin": -0.12602320313453674,
+              "signals": [
+                0.16870588064193726,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.14640383422374725,
+              "original_margin": -0.14832524955272675,
+              "signals": [
+                0.14640383422374725,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.22256672382354736,
+              "original_margin": -0.07216235995292664,
+              "signals": [
+                0.22256672382354736,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.11747077107429504,
+              "original_margin": -0.17725831270217896,
+              "signals": [
+                0.11747077107429504,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": []
+        },
+        {
+          "id": "v5-r-7",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我阳台有多少平方米？",
+          "expected": [],
+          "allowed_related": [
+            "j-plants"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.11433838307857513,
+              "original_margin": -0.25569117069244385,
+              "signals": [
+                0.11433838307857513,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.15475234389305115,
+              "original_margin": -0.21527719497680664,
+              "signals": [
+                0.15475234389305115,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.10650374740362167,
+              "original_margin": -0.2635257840156555,
+              "signals": [
+                0.10650374740362167,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.19261622428894043,
+              "original_margin": -0.17741331458091736,
+              "signals": [
+                0.19261622428894043,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.24433282017707825,
+              "original_margin": -0.12569671869277954,
+              "signals": [
+                0.24433282017707825,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.24386578798294067,
+              "original_margin": -0.12616375088691711,
+              "signals": [
+                0.24386578798294067,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.14052437245845795,
+              "original_margin": -0.22950516641139984,
+              "signals": [
+                0.14052437245845795,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.1982085406780243,
+              "original_margin": -0.1718209981918335,
+              "signals": [
+                0.1982085406780243,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.18204820156097412,
+              "original_margin": -0.18798133730888367,
+              "signals": [
+                0.18204820156097412,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.3700295388698578,
+              "original_margin": 0.12569671869277954,
+              "signals": [
+                0.3700295388698578,
+                0.20875000000000002,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.21681252121925354,
+              "original_margin": -0.15321701765060425,
+              "signals": [
+                0.21681252121925354,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.14903342723846436,
+              "original_margin": -0.22099611163139343,
+              "signals": [
+                0.14903342723846436,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-plants"
+          ]
+        },
+        {
+          "id": "v5-r-8",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我用的是哪个牌子的网球拍？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.11056211590766907,
+              "original_margin": -0.22022759914398193,
+              "signals": [
+                0.11056211590766907,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.13845030963420868,
+              "original_margin": -0.19233940541744232,
+              "signals": [
+                0.13845030963420868,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.08288145065307617,
+              "original_margin": -0.24790826439857483,
+              "signals": [
+                0.08288145065307617,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.1411672830581665,
+              "original_margin": -0.1896224319934845,
+              "signals": [
+                0.1411672830581665,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.12094604969024658,
+              "original_margin": -0.20984366536140442,
+              "signals": [
+                0.12094604969024658,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.330789715051651,
+              "original_margin": 0.16162076592445374,
+              "signals": [
+                0.330789715051651,
+                0.1978947368421053,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.13641533255577087,
+              "original_margin": -0.19437438249588013,
+              "signals": [
+                0.13641533255577087,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.0864771381020546,
+              "original_margin": -0.244312584400177,
+              "signals": [
+                0.0864771381020546,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.16916894912719727,
+              "original_margin": -0.16162076592445374,
+              "signals": [
+                0.16916894912719727,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.14711478352546692,
+              "original_margin": -0.18367493152618408,
+              "signals": [
+                0.14711478352546692,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.13052543997764587,
+              "original_margin": -0.20026427507400513,
+              "signals": [
+                0.13052543997764587,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.14352913200855255,
+              "original_margin": -0.18726058304309845,
+              "signals": [
+                0.14352913200855255,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        }
+      ],
+      "scope_or_lifecycle_violations": 0,
+      "note": "Prototype experiment only; not production RAG or eight-capability acceptance.",
+      "eligible": false,
+      "persisted_cases": "holdout failures and related_unanswerable; full report in linked artifact, reproducible from pinned code"
+    },
+    {
+      "code_sha": "bb0d2b40e0fc809759731f963cc4228d602be346",
+      "dataset_version": "5",
+      "dataset_sha256": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+      "model": {
+        "model": "BAAI/bge-small-zh-v1.5",
+        "revision": "7999e1d3359715c523056ef9478215996d62a620",
+        "dimension": 512,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "quantization": {
+          "format": "U8S8",
+          "per_channel": true,
+          "reduce_range": true
+        },
+        "models": {
+          "model.onnx": {
+            "sha256": "6d65414b517dbf2922a52181dd6eb7c8b44769f21d427c09b7884c356ea7040f",
+            "bytes": 94846908
+          },
+          "model-int8.onnx": {
+            "sha256": "3faf0526deb11c7fc8202cb3606b43d4c55e533e6ae3706b49b132ff82fda5ed",
+            "bytes": 57252120
+          },
+          "model.ort": {
+            "sha256": "f602a3371b4af99732f85d240b5ba96908ddc681b11000f5184f7ddb44a0d8ce",
+            "bytes": 94883120
+          },
+          "model-int8.ort": {
+            "sha256": "0093db8ba0c44662647b96f42271813d5cf6928fe03a8126c177f61cf36890b2",
+            "bytes": 57288472
+          }
+        }
+      },
+      "variant": "model-int8.ort",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "runtime_options": {
+        "cpu_mem_arena": false,
+        "mem_pattern": false,
+        "prepacking": false
+      },
+      "cpu_info": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 25\nmodel\t\t: 1\nmodel name\t: AMD EPYC 7763 64-Core Processor\nstepping\t: 1\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 3243.922\ncache size\t: 512 KB\nphysical id\t: 0\nsiblings\t: 4\ncore id\t\t: 0\ncpu cores\t: 2\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nbugs\t\t: sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass srso spectre_v2_user tsa\nbogomips\t: 4890.85\nTLB size\t: 2560 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 48 bits virtual\npower management:",
+      "cold_load_ms": 137.38505499998155,
+      "peak_rss_mib": 470.4296875,
+      "mandatory_peak_rss_mib": 223.86328125,
+      "reference_cosine_min": 0.9941096305847168,
+      "reference_cosine_all": [
+        0.994600236415863,
+        0.9945470690727234,
+        0.9961283206939697,
+        0.9947661757469177,
+        0.9953181743621826,
+        0.9941096305847168,
+        0.9949983954429626,
+        0.9942590594291687
+      ],
+      "query_pipeline": {
+        "count": 560,
+        "p50_ms": 10.464323499988382,
+        "p95_ms": 12.561103199981005
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 3.7038779999818416,
+          "p95_ms": 5.9096596000131285,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 223.86328125
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 42.08967599998914,
+          "p95_ms": 48.85830160000069,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 223.86328125
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 209.7052549999887,
+          "p95_ms": 233.18108680001615,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 470.4296875
+        }
+      },
+      "threshold": 0.2600000000000001,
+      "semantic_floor": 0.37500000000000006,
+      "distinct_margin_floor": null,
+      "calibration_min_signed_margin": 0.007106512784957941,
+      "calibration": {
+        "positive_count": 24,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 0.9583333333333334,
+        "empty_recall": 1.0,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 7,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "holdout": {
+        "positive_count": 48,
+        "negative_count": 16,
+        "complete_recall_at_4": 0.9791666666666666,
+        "top1": 0.9583333333333334,
+        "empty_recall": 0.875,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 8,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 58,
+        "lexical": 2,
+        "association": 0,
+        "emotion": 20
+      },
+      "cases": [
+        {
+          "id": "v5-q-commute-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "paraphrase",
+          "query": "回忆一下我平日怎么到公司。",
+          "expected": [
+            "j-commute"
+          ],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.27788877487182617,
+              "original_margin": -0.1554177701473236,
+              "signals": [
+                0.27788877487182617,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.4097527861595154,
+              "original_margin": -0.0235537588596344,
+              "signals": [
+                0.4097527861595154,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2963992655277252,
+              "original_margin": -0.13690727949142456,
+              "signals": [
+                0.2963992655277252,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.43153542280197144,
+              "original_margin": -0.0017711222171783447,
+              "signals": [
+                0.43153542280197144,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.2774626314640045,
+              "original_margin": -0.15584391355514526,
+              "signals": [
+                0.2774626314640045,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3656332194805145,
+              "original_margin": -0.06767332553863525,
+              "signals": [
+                0.3656332194805145,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.3908224105834961,
+              "original_margin": -0.042484134435653687,
+              "signals": [
+                0.3908224105834961,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.37370675802230835,
+              "original_margin": -0.05959978699684143,
+              "signals": [
+                0.37370675802230835,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.4333065450191498,
+              "original_margin": 0.0017711222171783447,
+              "signals": [
+                0.4333065450191498,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.29946252703666687,
+              "original_margin": -0.1338440179824829,
+              "signals": [
+                0.29946252703666687,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.3131673336029053,
+              "original_margin": -0.1201392114162445,
+              "signals": [
+                0.3131673336029053,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.40982964634895325,
+              "original_margin": -0.023476898670196533,
+              "signals": [
+                0.40982964634895325,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss",
+            "j-gift",
+            "j-writing"
+          ]
+        },
+        {
+          "id": "v5-n-7",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "irrelevant",
+          "query": "我昨晚买的彩票中奖了吗？",
+          "expected": [],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2712993919849396,
+              "original_margin": -0.1668853461742401,
+              "signals": [
+                0.2712993919849396,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.4381847381591797,
+              "original_margin": 0.0230066180229187,
+              "signals": [
+                0.4381847381591797,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.3113703727722168,
+              "original_margin": -0.1268143653869629,
+              "signals": [
+                0.3113703727722168,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.3462539315223694,
+              "original_margin": -0.0919308066368103,
+              "signals": [
+                0.3462539315223694,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.33465978503227234,
+              "original_margin": -0.10352495312690735,
+              "signals": [
+                0.33465978503227234,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.37562137842178345,
+              "original_margin": -0.06256335973739624,
+              "signals": [
+                0.37562137842178345,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3621598482131958,
+              "original_margin": -0.07602488994598389,
+              "signals": [
+                0.3621598482131958,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.415178120136261,
+              "original_margin": -0.0230066180229187,
+              "signals": [
+                0.415178120136261,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.35224592685699463,
+              "original_margin": -0.08593881130218506,
+              "signals": [
+                0.35224592685699463,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.37489259243011475,
+              "original_margin": -0.06329214572906494,
+              "signals": [
+                0.37489259243011475,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2817549705505371,
+              "original_margin": -0.15642976760864258,
+              "signals": [
+                0.2817549705505371,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.3614113926887512,
+              "original_margin": -0.07677334547042847,
+              "signals": [
+                0.3614113926887512,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-sleep"
+          ]
+        },
+        {
+          "id": "v5-n-11",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "irrelevant",
+          "query": "我小时候获得过哪些奖状？",
+          "expected": [],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2209746539592743,
+              "original_margin": -0.16095593571662903,
+              "signals": [
+                0.2209746539592743,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.31066933274269104,
+              "original_margin": -0.07126125693321228,
+              "signals": [
+                0.31066933274269104,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.21320022642612457,
+              "original_margin": -0.16873036324977875,
+              "signals": [
+                0.21320022642612457,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2105136513710022,
+              "original_margin": -0.17141693830490112,
+              "signals": [
+                0.2105136513710022,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.33762994408607483,
+              "original_margin": -0.04430064558982849,
+              "signals": [
+                0.33762994408607483,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.2626425623893738,
+              "original_margin": -0.11928802728652954,
+              "signals": [
+                0.2626425623893738,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.32715827226638794,
+              "original_margin": -0.05477231740951538,
+              "signals": [
+                0.32715827226638794,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.25876525044441223,
+              "original_margin": -0.12316533923149109,
+              "signals": [
+                0.25876525044441223,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2917022705078125,
+              "original_margin": -0.09022831916809082,
+              "signals": [
+                0.2917022705078125,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.28007569909095764,
+              "original_margin": -0.10185489058494568,
+              "signals": [
+                0.28007569909095764,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2500208020210266,
+              "original_margin": -0.1319097876548767,
+              "signals": [
+                0.2500208020210266,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.3819305896759033,
+              "original_margin": 0.04430064558982849,
+              "signals": [
+                0.3819305896759033,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss"
+          ]
+        },
+        {
+          "id": "v5-r-1",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我出生在宁波还是嘉兴？",
+          "expected": [],
+          "allowed_related": [
+            "j-city"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.32862144708633423,
+              "original_margin": -0.3414401412010193,
+              "signals": [
+                0.32862144708633423,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.23308858275413513,
+              "original_margin": -0.4369730055332184,
+              "signals": [
+                0.23308858275413513,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.27312809228897095,
+              "original_margin": -0.39693349599838257,
+              "signals": [
+                0.27312809228897095,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.23269721865653992,
+              "original_margin": -0.4373643696308136,
+              "signals": [
+                0.23269721865653992,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3728264570236206,
+              "original_margin": -0.2972351312637329,
+              "signals": [
+                0.3728264570236206,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.28013986349105835,
+              "original_margin": -0.38992172479629517,
+              "signals": [
+                0.28013986349105835,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3339763283729553,
+              "original_margin": -0.3360852599143982,
+              "signals": [
+                0.3339763283729553,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.27082559466362,
+              "original_margin": -0.3992359936237335,
+              "signals": [
+                0.27082559466362,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.31142690777778625,
+              "original_margin": -0.35863468050956726,
+              "signals": [
+                0.31142690777778625,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.2940879762172699,
+              "original_margin": -0.3759736120700836,
+              "signals": [
+                0.2940879762172699,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2578820288181305,
+              "original_margin": -0.412179559469223,
+              "signals": [
+                0.2578820288181305,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.6700615882873535,
+              "original_margin": 0.2972351312637329,
+              "signals": [
+                0.6700615882873535,
+                0.44923076923076927,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-city"
+          ]
+        },
+        {
+          "id": "v5-r-2",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "丁南是哪一年出生的？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.24527214467525482,
+              "original_margin": -0.2512918710708618,
+              "signals": [
+                0.24527214467525482,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.19180414080619812,
+              "original_margin": -0.3047598898410797,
+              "signals": [
+                0.19180414080619812,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.1975809931755066,
+              "original_margin": -0.29898303747177124,
+              "signals": [
+                0.1975809931755066,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2797170579433441,
+              "original_margin": -0.21684697270393372,
+              "signals": [
+                0.2797170579433441,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.17700687050819397,
+              "original_margin": -0.31955716013908386,
+              "signals": [
+                0.17700687050819397,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.49656403064727783,
+              "original_margin": 0.1915110945701599,
+              "signals": [
+                0.49656403064727783,
+                0.26941176470588235,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.1894189566373825,
+              "original_margin": -0.30714505910873413,
+              "signals": [
+                0.1894189566373825,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.20079177618026733,
+              "original_margin": -0.2957722544670105,
+              "signals": [
+                0.20079177618026733,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.24187809228897095,
+              "original_margin": -0.2546859383583069,
+              "signals": [
+                0.24187809228897095,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.3050529360771179,
+              "original_margin": -0.1915110945701599,
+              "signals": [
+                0.3050529360771179,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.18424445390701294,
+              "original_margin": -0.3123195767402649,
+              "signals": [
+                0.18424445390701294,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.26554954051971436,
+              "original_margin": -0.23101449012756348,
+              "signals": [
+                0.26554954051971436,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        },
+        {
+          "id": "v5-r-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "姑姑生日在几月？",
+          "expected": [],
+          "allowed_related": [
+            "j-gift"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.21098452806472778,
+              "original_margin": -0.3207656741142273,
+              "signals": [
+                0.21098452806472778,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.1999393254518509,
+              "original_margin": -0.3318108916282654,
+              "signals": [
+                0.1999393254518509,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.22006380558013916,
+              "original_margin": -0.3116863965988159,
+              "signals": [
+                0.22006380558013916,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2605123221874237,
+              "original_margin": -0.27123787999153137,
+              "signals": [
+                0.2605123221874237,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3380131125450134,
+              "original_margin": -0.19373708963394165,
+              "signals": [
+                0.3380131125450134,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.2587748169898987,
+              "original_margin": -0.2729753851890564,
+              "signals": [
+                0.2587748169898987,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.2938213348388672,
+              "original_margin": -0.2379288673400879,
+              "signals": [
+                0.2938213348388672,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2033323049545288,
+              "original_margin": -0.32841789722442627,
+              "signals": [
+                0.2033323049545288,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.5317502021789551,
+              "original_margin": 0.17883598804473877,
+              "signals": [
+                0.5317502021789551,
+                0.22800000000000004,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.22131875157356262,
+              "original_margin": -0.31043145060539246,
+              "signals": [
+                0.22131875157356262,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.23068895936012268,
+              "original_margin": -0.3010612428188324,
+              "signals": [
+                0.23068895936012268,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.3529142141342163,
+              "original_margin": -0.17883598804473877,
+              "signals": [
+                0.3529142141342163,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-gift"
+          ]
+        },
+        {
+          "id": "v5-r-4",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "母亲那块手表是哪个厂家制造的？",
+          "expected": [],
+          "allowed_related": [
+            "j-loss"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [
+            "母亲",
+            "手表",
+            "想念"
+          ],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.14313051104545593,
+              "original_margin": -0.4633704125881195,
+              "signals": [
+                0.14313051104545593,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.14903020858764648,
+              "original_margin": -0.45747071504592896,
+              "signals": [
+                0.18943575024604797,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.15104974806308746,
+              "original_margin": -0.45545119047164917,
+              "signals": [
+                0.16982175409793854,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.22522854804992676,
+              "original_margin": -0.3812723755836487,
+              "signals": [
+                0.24103710055351257,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2218315452337265,
+              "original_margin": -0.38466936349868774,
+              "signals": [
+                0.2647450566291809,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.28098174929618835,
+              "original_margin": -0.3255191743373871,
+              "signals": [
+                0.28098174929618835,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.19316351413726807,
+              "original_margin": -0.4133374094963074,
+              "signals": [
+                0.2510577440261841,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2311021238565445,
+              "original_margin": -0.37539881467819214,
+              "signals": [
+                0.27912256121635437,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.28499749302864075,
+              "original_margin": -0.3215034306049347,
+              "signals": [
+                0.33668026328086853,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.24131573736667633,
+              "original_margin": -0.3651852011680603,
+              "signals": [
+                0.25568801164627075,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.1761043220758438,
+              "original_margin": -0.4303966164588928,
+              "signals": [
+                0.1761043220758438,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.6065009236335754,
+              "original_margin": 0.3215034306049347,
+              "signals": [
+                0.660760223865509,
+                0.40222222222222226,
+                0.7,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss"
+          ]
+        },
+        {
+          "id": "v5-r-5",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我常喝的低因咖啡产自哪国？",
+          "expected": [],
+          "allowed_related": [
+            "j-coffee"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2807805836200714,
+              "original_margin": -0.35057660937309265,
+              "signals": [
+                0.2807805836200714,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.26443013548851013,
+              "original_margin": -0.36692705750465393,
+              "signals": [
+                0.26443013548851013,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.26756662130355835,
+              "original_margin": -0.3637905716896057,
+              "signals": [
+                0.26756662130355835,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.27817291021347046,
+              "original_margin": -0.3531842827796936,
+              "signals": [
+                0.27817291021347046,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3006911277770996,
+              "original_margin": -0.33066606521606445,
+              "signals": [
+                0.3006911277770996,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.6313571929931641,
+              "original_margin": 0.33066606521606445,
+              "signals": [
+                0.6313571929931641,
+                0.5157142857142858,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.21379557251930237,
+              "original_margin": -0.4175616204738617,
+              "signals": [
+                0.21379557251930237,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2869010865688324,
+              "original_margin": -0.34445610642433167,
+              "signals": [
+                0.2869010865688324,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.24935992062091827,
+              "original_margin": -0.381997287273407,
+              "signals": [
+                0.24935992062091827,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2990829646587372,
+              "original_margin": -0.3322742283344269,
+              "signals": [
+                0.2990829646587372,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.28361132740974426,
+              "original_margin": -0.3477458655834198,
+              "signals": [
+                0.28361132740974426,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.2363434135913849,
+              "original_margin": -0.3950137794017792,
+              "signals": [
+                0.2363434135913849,
+                0.06285714285714286,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-coffee"
+          ]
+        },
+        {
+          "id": "v5-r-6",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我工作的公司具体叫什么名字？",
+          "expected": [],
+          "allowed_related": [
+            "j-focus"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.2089163213968277,
+              "original_margin": -0.22812367975711823,
+              "signals": [
+                0.2089163213968277,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.4370400011539459,
+              "original_margin": 0.07243010401725769,
+              "signals": [
+                0.4370400011539459,
+                0.07586206896551724,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.26493361592292786,
+              "original_margin": -0.17210638523101807,
+              "signals": [
+                0.26493361592292786,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3639490604400635,
+              "original_margin": -0.07309094071388245,
+              "signals": [
+                0.3639490604400635,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.2640705704689026,
+              "original_margin": -0.17296943068504333,
+              "signals": [
+                0.2640705704689026,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3500332832336426,
+              "original_margin": -0.08700671792030334,
+              "signals": [
+                0.3500332832336426,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.3311418294906616,
+              "original_margin": -0.1058981716632843,
+              "signals": [
+                0.3311418294906616,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.36460989713668823,
+              "original_margin": -0.07243010401725769,
+              "signals": [
+                0.36460989713668823,
+                0.05789473684210526,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.31712353229522705,
+              "original_margin": -0.11991646885871887,
+              "signals": [
+                0.31712353229522705,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2844933271408081,
+              "original_margin": -0.15254667401313782,
+              "signals": [
+                0.2844933271408081,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.282876193523407,
+              "original_margin": -0.15416380763053894,
+              "signals": [
+                0.282876193523407,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.3576315641403198,
+              "original_margin": -0.0794084370136261,
+              "signals": [
+                0.3576315641403198,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-commute"
+          ]
+        },
+        {
+          "id": "v5-r-7",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我阳台有多少平方米？",
+          "expected": [],
+          "allowed_related": [
+            "j-plants"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2084885686635971,
+              "original_margin": -0.21445496380329132,
+              "signals": [
+                0.2084885686635971,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.23328979313373566,
+              "original_margin": -0.18965373933315277,
+              "signals": [
+                0.23328979313373566,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.2522003650665283,
+              "original_margin": -0.1707431674003601,
+              "signals": [
+                0.2522003650665283,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.39362969994544983,
+              "original_margin": -0.0293138325214386,
+              "signals": [
+                0.39362969994544983,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.32945021986961365,
+              "original_margin": -0.09349331259727478,
+              "signals": [
+                0.32945021986961365,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.39009469747543335,
+              "original_margin": -0.03284883499145508,
+              "signals": [
+                0.39009469747543335,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.2586393356323242,
+              "original_margin": -0.1643041968345642,
+              "signals": [
+                0.2586393356323242,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2463333159685135,
+              "original_margin": -0.17661021649837494,
+              "signals": [
+                0.2463333159685135,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.3224635124206543,
+              "original_margin": -0.10048002004623413,
+              "signals": [
+                0.3224635124206543,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.4229435324668884,
+              "original_margin": 0.0293138325214386,
+              "signals": [
+                0.4229435324668884,
+                0.20875000000000002,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.3172636330127716,
+              "original_margin": -0.10567989945411682,
+              "signals": [
+                0.3172636330127716,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.3346406817436218,
+              "original_margin": -0.0883028507232666,
+              "signals": [
+                0.3346406817436218,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-plants"
+          ]
+        },
+        {
+          "id": "v5-r-8",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我用的是哪个牌子的网球拍？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2503463327884674,
+              "original_margin": -0.30253705382347107,
+              "signals": [
+                0.2503463327884674,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.2808573842048645,
+              "original_margin": -0.272026002407074,
+              "signals": [
+                0.2808573842048645,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.19940899312496185,
+              "original_margin": -0.35347437858581543,
+              "signals": [
+                0.19940899312496185,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2302611619234085,
+              "original_margin": -0.32262223958969116,
+              "signals": [
+                0.2302611619234085,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.27155792713165283,
+              "original_margin": -0.28132545948028564,
+              "signals": [
+                0.27155792713165283,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.5528833866119385,
+              "original_margin": 0.25222617387771606,
+              "signals": [
+                0.5528833866119385,
+                0.1978947368421053,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.28731510043144226,
+              "original_margin": -0.2655682861804962,
+              "signals": [
+                0.28731510043144226,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.22426825761795044,
+              "original_margin": -0.32861512899398804,
+              "signals": [
+                0.22426825761795044,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.3006572127342224,
+              "original_margin": -0.25222617387771606,
+              "signals": [
+                0.3006572127342224,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2708011865615845,
+              "original_margin": -0.282082200050354,
+              "signals": [
+                0.2708011865615845,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.2631549537181854,
+              "original_margin": -0.28972843289375305,
+              "signals": [
+                0.2631549537181854,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.25941428542137146,
+              "original_margin": -0.293469101190567,
+              "signals": [
+                0.25941428542137146,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        }
+      ],
+      "scope_or_lifecycle_violations": 0,
+      "note": "Prototype experiment only; not production RAG or eight-capability acceptance.",
+      "eligible": false,
+      "persisted_cases": "holdout failures and related_unanswerable; full report in linked artifact, reproducible from pinned code"
+    },
+    {
+      "code_sha": "bb0d2b40e0fc809759731f963cc4228d602be346",
+      "dataset_version": "5",
+      "dataset_sha256": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+      "model": {
+        "model": "BAAI/bge-small-zh-v1.5",
+        "revision": "7999e1d3359715c523056ef9478215996d62a620",
+        "dimension": 512,
+        "max_tokens": 512,
+        "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+        "pooling": "CLS",
+        "normalized": true,
+        "quantization": {
+          "format": "U8S8",
+          "per_channel": true,
+          "reduce_range": true
+        },
+        "models": {
+          "model.onnx": {
+            "sha256": "6d65414b517dbf2922a52181dd6eb7c8b44769f21d427c09b7884c356ea7040f",
+            "bytes": 94846908
+          },
+          "model-int8.onnx": {
+            "sha256": "3faf0526deb11c7fc8202cb3606b43d4c55e533e6ae3706b49b132ff82fda5ed",
+            "bytes": 57252120
+          },
+          "model.ort": {
+            "sha256": "f602a3371b4af99732f85d240b5ba96908ddc681b11000f5184f7ddb44a0d8ce",
+            "bytes": 94883120
+          },
+          "model-int8.ort": {
+            "sha256": "0093db8ba0c44662647b96f42271813d5cf6928fe03a8126c177f61cf36890b2",
+            "bytes": 57288472
+          }
+        }
+      },
+      "variant": "model.ort",
+      "python": "3.10.22",
+      "runtime_packages": {
+        "numpy": "1.26.4",
+        "onnxruntime": "1.23.2",
+        "tokenizers": "0.21.1"
+      },
+      "limits": {
+        "cpu": 2,
+        "memory_gib": 2
+      },
+      "runtime_options": {
+        "cpu_mem_arena": false,
+        "mem_pattern": false,
+        "prepacking": false
+      },
+      "cpu_info": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 25\nmodel\t\t: 1\nmodel name\t: AMD EPYC 7763 64-Core Processor\nstepping\t: 1\nmicrocode\t: 0xffffffff\ncpu MHz\t\t: 3242.829\ncache size\t: 512 KB\nphysical id\t: 0\nsiblings\t: 4\ncore id\t\t: 0\ncpu cores\t: 2\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nbugs\t\t: sysret_ss_attrs null_seg spectre_v1 spectre_v2 spec_store_bypass srso spectre_v2_user tsa\nbogomips\t: 4890.85\nTLB size\t: 2560 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 48 bits virtual\npower management:",
+      "cold_load_ms": 191.9880020000022,
+      "peak_rss_mib": 505.66796875,
+      "mandatory_peak_rss_mib": 304.69140625,
+      "reference_cosine_min": 0.9999999403953552,
+      "reference_cosine_all": [
+        1.0,
+        0.9999999403953552,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "query_pipeline": {
+        "count": 560,
+        "p50_ms": 19.94531799999777,
+        "p95_ms": 23.375520649997128
+      },
+      "sqlite_stress": {
+        "1000": {
+          "count": 5,
+          "p50_ms": 3.7084550000088257,
+          "p95_ms": 4.319788600008678,
+          "database_bytes": 8269824,
+          "peak_rss_mib": 304.69140625
+        },
+        "10000": {
+          "count": 5,
+          "p50_ms": 45.02350199999228,
+          "p95_ms": 45.79515799998717,
+          "database_bytes": 82575360,
+          "peak_rss_mib": 304.69140625
+        },
+        "50000": {
+          "count": 5,
+          "p50_ms": 212.5634580000053,
+          "p95_ms": 237.73556380001537,
+          "database_bytes": 412995584,
+          "peak_rss_mib": 505.66796875
+        }
+      },
+      "threshold": 0.2600000000000001,
+      "semantic_floor": 0.37500000000000006,
+      "distinct_margin_floor": null,
+      "calibration_min_signed_margin": 0.018562227487564142,
+      "calibration": {
+        "positive_count": 24,
+        "negative_count": 8,
+        "complete_recall_at_4": 1.0,
+        "top1": 0.9583333333333334,
+        "empty_recall": 1.0,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 7,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "holdout": {
+        "positive_count": 48,
+        "negative_count": 16,
+        "complete_recall_at_4": 1.0,
+        "top1": 0.9583333333333334,
+        "empty_recall": 0.875,
+        "related_unanswerable_count": 8,
+        "related_unanswerable_with_recall": 8,
+        "related_unanswerable_expected_fact_recalled": 7,
+        "answer_abstention": "not_executed_requires_real_chat_provider"
+      },
+      "pure_vector_positive_recall_at_4": 1.0,
+      "ablation_changed_holdout_predictions": {
+        "semantic": 58,
+        "lexical": 2,
+        "association": 0,
+        "emotion": 20
+      },
+      "cases": [
+        {
+          "id": "v5-n-7",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "irrelevant",
+          "query": "我昨晚买的彩票中奖了吗？",
+          "expected": [],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2748144567012787,
+              "original_margin": -0.15627437829971313,
+              "signals": [
+                0.2748144567012787,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.4310888350009918,
+              "original_margin": 0.023945122957229614,
+              "signals": [
+                0.4310888350009918,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.3240923285484314,
+              "original_margin": -0.10699650645256042,
+              "signals": [
+                0.3240923285484314,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.3383302092552185,
+              "original_margin": -0.09275862574577332,
+              "signals": [
+                0.3383302092552185,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.35417062044143677,
+              "original_margin": -0.07691821455955505,
+              "signals": [
+                0.35417062044143677,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.38078877329826355,
+              "original_margin": -0.05030006170272827,
+              "signals": [
+                0.38078877329826355,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.35517942905426025,
+              "original_margin": -0.07590940594673157,
+              "signals": [
+                0.35517942905426025,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.4071437120437622,
+              "original_margin": -0.023945122957229614,
+              "signals": [
+                0.4071437120437622,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.363380491733551,
+              "original_margin": -0.0677083432674408,
+              "signals": [
+                0.363380491733551,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.3724525272846222,
+              "original_margin": -0.05863630771636963,
+              "signals": [
+                0.3724525272846222,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.29120326042175293,
+              "original_margin": -0.1398855745792389,
+              "signals": [
+                0.29120326042175293,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.35935112833976746,
+              "original_margin": -0.07173770666122437,
+              "signals": [
+                0.35935112833976746,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-sleep"
+          ]
+        },
+        {
+          "id": "v5-n-11",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "irrelevant",
+          "query": "我小时候获得过哪些奖状？",
+          "expected": [],
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.22249536216259003,
+              "original_margin": -0.15626956522464752,
+              "signals": [
+                0.22249536216259003,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.31392696499824524,
+              "original_margin": -0.06483796238899231,
+              "signals": [
+                0.31392696499824524,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.22124218940734863,
+              "original_margin": -0.15752273797988892,
+              "signals": [
+                0.22124218940734863,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.21096199750900269,
+              "original_margin": -0.16780292987823486,
+              "signals": [
+                0.21096199750900269,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.338025838136673,
+              "original_margin": -0.040739089250564575,
+              "signals": [
+                0.338025838136673,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.26424461603164673,
+              "original_margin": -0.11452031135559082,
+              "signals": [
+                0.26424461603164673,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.32369741797447205,
+              "original_margin": -0.0550675094127655,
+              "signals": [
+                0.32369741797447205,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.2581245005130768,
+              "original_margin": -0.12064042687416077,
+              "signals": [
+                0.2581245005130768,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.30339565873146057,
+              "original_margin": -0.07536926865577698,
+              "signals": [
+                0.30339565873146057,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.2830212712287903,
+              "original_margin": -0.09574365615844727,
+              "signals": [
+                0.2830212712287903,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.253084659576416,
+              "original_margin": -0.12568026781082153,
+              "signals": [
+                0.253084659576416,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.37876492738723755,
+              "original_margin": 0.040739089250564575,
+              "signals": [
+                0.37876492738723755,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss"
+          ]
+        },
+        {
+          "id": "v5-r-1",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我出生在宁波还是嘉兴？",
+          "expected": [],
+          "allowed_related": [
+            "j-city"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.32731854915618896,
+              "original_margin": -0.35675156116485596,
+              "signals": [
+                0.32731854915618896,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.2250799834728241,
+              "original_margin": -0.4589901268482208,
+              "signals": [
+                0.2250799834728241,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.26619797945022583,
+              "original_margin": -0.4178721308708191,
+              "signals": [
+                0.26619797945022583,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2287069857120514,
+              "original_margin": -0.45536312460899353,
+              "signals": [
+                0.2287069857120514,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.367536723613739,
+              "original_margin": -0.3165333867073059,
+              "signals": [
+                0.367536723613739,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.27320390939712524,
+              "original_margin": -0.4108662009239197,
+              "signals": [
+                0.27320390939712524,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.32077157497406006,
+              "original_margin": -0.36329853534698486,
+              "signals": [
+                0.32077157497406006,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.26559486985206604,
+              "original_margin": -0.4184752404689789,
+              "signals": [
+                0.26559486985206604,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.30362120270729065,
+              "original_margin": -0.3804489076137543,
+              "signals": [
+                0.30362120270729065,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.2855851352214813,
+              "original_margin": -0.3984849750995636,
+              "signals": [
+                0.2855851352214813,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2526351809501648,
+              "original_margin": -0.4314349293708801,
+              "signals": [
+                0.2526351809501648,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.6840701103210449,
+              "original_margin": 0.3165333867073059,
+              "signals": [
+                0.6840701103210449,
+                0.44923076923076927,
+                0.0,
+                0.2
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-city"
+          ]
+        },
+        {
+          "id": "v5-r-2",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "丁南是哪一年出生的？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.22775602340698242,
+              "original_margin": -0.26332926750183105,
+              "signals": [
+                0.22775602340698242,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.18308085203170776,
+              "original_margin": -0.3080044388771057,
+              "signals": [
+                0.18308085203170776,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.18515048921108246,
+              "original_margin": -0.3059347867965698,
+              "signals": [
+                0.18515048921108246,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2671518921852112,
+              "original_margin": -0.2239333987236023,
+              "signals": [
+                0.2671518921852112,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.16251274943351746,
+              "original_margin": -0.328572541475296,
+              "signals": [
+                0.16251274943351746,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.4910852909088135,
+              "original_margin": 0.19789540767669678,
+              "signals": [
+                0.4910852909088135,
+                0.26941176470588235,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.1792256385087967,
+              "original_margin": -0.311859667301178,
+              "signals": [
+                0.1792256385087967,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.18506209552288055,
+              "original_margin": -0.30602318048477173,
+              "signals": [
+                0.18506209552288055,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.23797062039375305,
+              "original_margin": -0.2531146705150604,
+              "signals": [
+                0.23797062039375305,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2931898832321167,
+              "original_margin": -0.19789540767669678,
+              "signals": [
+                0.2931898832321167,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.17185986042022705,
+              "original_margin": -0.3192254304885864,
+              "signals": [
+                0.17185986042022705,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.25455036759376526,
+              "original_margin": -0.23653492331504822,
+              "signals": [
+                0.25455036759376526,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        },
+        {
+          "id": "v5-r-3",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "姑姑生日在几月？",
+          "expected": [],
+          "allowed_related": [
+            "j-gift"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.19418442249298096,
+              "original_margin": -0.32190144062042236,
+              "signals": [
+                0.19418442249298096,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.1938084065914154,
+              "original_margin": -0.3222774565219879,
+              "signals": [
+                0.1938084065914154,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.21752725541591644,
+              "original_margin": -0.2985585927963257,
+              "signals": [
+                0.21752725541591644,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.24801990389823914,
+              "original_margin": -0.2680659592151642,
+              "signals": [
+                0.24801990389823914,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3261721730232239,
+              "original_margin": -0.18991369009017944,
+              "signals": [
+                0.3261721730232239,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.24963130056858063,
+              "original_margin": -0.2664545774459839,
+              "signals": [
+                0.24963130056858063,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.2872440218925476,
+              "original_margin": -0.2288418412208557,
+              "signals": [
+                0.2872440218925476,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.20328426361083984,
+              "original_margin": -0.3128015995025635,
+              "signals": [
+                0.20328426361083984,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.5160858631134033,
+              "original_margin": 0.17242538928985596,
+              "signals": [
+                0.5160858631134033,
+                0.22800000000000004,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2183050811290741,
+              "original_margin": -0.2977807819843292,
+              "signals": [
+                0.2183050811290741,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.2315860092639923,
+              "original_margin": -0.284499853849411,
+              "signals": [
+                0.2315860092639923,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.34366047382354736,
+              "original_margin": -0.17242538928985596,
+              "signals": [
+                0.34366047382354736,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-gift"
+          ]
+        },
+        {
+          "id": "v5-r-4",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "母亲那块手表是哪个厂家制造的？",
+          "expected": [],
+          "allowed_related": [
+            "j-loss"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [
+            "母亲",
+            "手表",
+            "想念"
+          ],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.1256035566329956,
+              "original_margin": -0.4745824933052063,
+              "signals": [
+                0.1256035566329956,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.13623563945293427,
+              "original_margin": -0.46395039558410645,
+              "signals": [
+                0.17947734892368317,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.1425085961818695,
+              "original_margin": -0.4576774537563324,
+              "signals": [
+                0.16266268491744995,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2044089138507843,
+              "original_margin": -0.3957771360874176,
+              "signals": [
+                0.2286614328622818,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.20699617266654968,
+              "original_margin": -0.3931898772716522,
+              "signals": [
+                0.2519586384296417,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.27719247341156006,
+              "original_margin": -0.32299357652664185,
+              "signals": [
+                0.2802712023258209,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.18352264165878296,
+              "original_margin": -0.41666340827941895,
+              "signals": [
+                0.2501303255558014,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2160198986530304,
+              "original_margin": -0.3841661512851715,
+              "signals": [
+                0.2676053047180176,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.27688536047935486,
+              "original_margin": -0.32330068945884705,
+              "signals": [
+                0.3292933404445648,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.23862333595752716,
+              "original_margin": -0.36156272888183594,
+              "signals": [
+                0.25660261511802673,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.17061704397201538,
+              "original_margin": -0.4295690059661865,
+              "signals": [
+                0.17520099878311157,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.6001860499382019,
+              "original_margin": 0.32299357652664185,
+              "signals": [
+                0.6561559438705444,
+                0.40222222222222226,
+                0.7,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-loss"
+          ]
+        },
+        {
+          "id": "v5-r-5",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我常喝的低因咖啡产自哪国？",
+          "expected": [],
+          "allowed_related": [
+            "j-coffee"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.2612047791481018,
+              "original_margin": -0.3459542989730835,
+              "signals": [
+                0.2612047791481018,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.2296878844499588,
+              "original_margin": -0.3774712085723877,
+              "signals": [
+                0.2296878844499588,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.24437159299850464,
+              "original_margin": -0.36278748512268066,
+              "signals": [
+                0.24437159299850464,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2579996585845947,
+              "original_margin": -0.3491594195365906,
+              "signals": [
+                0.2579996585845947,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.2684500217437744,
+              "original_margin": -0.3387090563774109,
+              "signals": [
+                0.2684500217437744,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.6071590781211853,
+              "original_margin": 0.3266242742538452,
+              "signals": [
+                0.6071590781211853,
+                0.5157142857142858,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.18792323768138885,
+              "original_margin": -0.41923582553863525,
+              "signals": [
+                0.18792323768138885,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.25707554817199707,
+              "original_margin": -0.35008352994918823,
+              "signals": [
+                0.25707554817199707,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.22625106573104858,
+              "original_margin": -0.3809080123901367,
+              "signals": [
+                0.22625106573104858,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.2805348038673401,
+              "original_margin": -0.3266242742538452,
+              "signals": [
+                0.2805348038673401,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.2603772282600403,
+              "original_margin": -0.346781849861145,
+              "signals": [
+                0.2603772282600403,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.2238955944776535,
+              "original_margin": -0.3832634687423706,
+              "signals": [
+                0.2238955944776535,
+                0.06285714285714286,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-coffee"
+          ]
+        },
+        {
+          "id": "v5-r-6",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我工作的公司具体叫什么名字？",
+          "expected": [],
+          "allowed_related": [
+            "j-focus"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.19718357920646667,
+              "original_margin": -0.23061561584472656,
+              "signals": [
+                0.19718357920646667,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.42779919505119324,
+              "original_margin": 0.06242796778678894,
+              "signals": [
+                0.42779919505119324,
+                0.07586206896551724,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2476014643907547,
+              "original_margin": -0.18019773066043854,
+              "signals": [
+                0.2476014643907547,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3570772409439087,
+              "original_margin": -0.07072195410728455,
+              "signals": [
+                0.3570772409439087,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-coffee",
+              "original_cosine": 0.24306944012641907,
+              "original_margin": -0.18472975492477417,
+              "signals": [
+                0.24306944012641907,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3561307489871979,
+              "original_margin": -0.07166844606399536,
+              "signals": [
+                0.3561307489871979,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.3186388313770294,
+              "original_margin": -0.10916036367416382,
+              "signals": [
+                0.3186388313770294,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.36184239387512207,
+              "original_margin": -0.06595680117607117,
+              "signals": [
+                0.36184239387512207,
+                0.05789473684210526,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.3100670576095581,
+              "original_margin": -0.11773213744163513,
+              "signals": [
+                0.3100670576095581,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.29128599166870117,
+              "original_margin": -0.13651320338249207,
+              "signals": [
+                0.29128599166870117,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.29871225357055664,
+              "original_margin": -0.1290869414806366,
+              "signals": [
+                0.29871225357055664,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.3653712272644043,
+              "original_margin": -0.06242796778678894,
+              "signals": [
+                0.3653712272644043,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-commute"
+          ]
+        },
+        {
+          "id": "v5-r-7",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我阳台有多少平方米？",
+          "expected": [],
+          "allowed_related": [
+            "j-plants"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.1895940899848938,
+              "original_margin": -0.23965194821357727,
+              "signals": [
+                0.1895940899848938,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.20978944003582,
+              "original_margin": -0.21945659816265106,
+              "signals": [
+                0.20978944003582,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.23991574347019196,
+              "original_margin": -0.1893302947282791,
+              "signals": [
+                0.23991574347019196,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.3748222291469574,
+              "original_margin": -0.05442380905151367,
+              "signals": [
+                0.3748222291469574,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.3133447468280792,
+              "original_margin": -0.11590129137039185,
+              "signals": [
+                0.3133447468280792,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.3780653476715088,
+              "original_margin": -0.05118069052696228,
+              "signals": [
+                0.3780653476715088,
+                0.0,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.25051578879356384,
+              "original_margin": -0.17873024940490723,
+              "signals": [
+                0.25051578879356384,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.23179155588150024,
+              "original_margin": -0.19745448231697083,
+              "signals": [
+                0.23179155588150024,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.3095131516456604,
+              "original_margin": -0.11973288655281067,
+              "signals": [
+                0.3095131516456604,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.42924603819847107,
+              "original_margin": 0.05118069052696228,
+              "signals": [
+                0.42924603819847107,
+                0.20875000000000002,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.3136083483695984,
+              "original_margin": -0.11563768982887268,
+              "signals": [
+                0.3136083483695984,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.31816595792770386,
+              "original_margin": -0.11108008027076721,
+              "signals": [
+                0.31816595792770386,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-plants"
+          ]
+        },
+        {
+          "id": "v5-r-8",
+          "scope": "J/daily/mia",
+          "split": "holdout",
+          "type": "related_unanswerable",
+          "query": "我用的是哪个牌子的网球拍？",
+          "expected": [],
+          "allowed_related": [
+            "j-friend"
+          ],
+          "response_expectation": "明确信息不足，不推断未知属性",
+          "expansion": [],
+          "candidates": [
+            {
+              "id": "j-diet",
+              "original_cosine": 0.241083025932312,
+              "original_margin": -0.3181178569793701,
+              "signals": [
+                0.241083025932312,
+                0.0,
+                0.0,
+                0.4
+              ]
+            },
+            {
+              "id": "j-sleep",
+              "original_cosine": 0.26692715287208557,
+              "original_margin": -0.29227373003959656,
+              "signals": [
+                0.26692715287208557,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-commute",
+              "original_cosine": 0.19816642999649048,
+              "original_margin": -0.36103445291519165,
+              "signals": [
+                0.19816642999649048,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-rooms",
+              "original_cosine": 0.2237546592950821,
+              "original_margin": -0.33544623851776123,
+              "signals": [
+                0.2237546592950821,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-writing",
+              "original_cosine": 0.26851189136505127,
+              "original_margin": -0.29068899154663086,
+              "signals": [
+                0.26851189136505127,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-friend",
+              "original_cosine": 0.5592008829116821,
+              "original_margin": 0.2585325241088867,
+              "signals": [
+                0.5592008829116821,
+                0.1978947368421053,
+                0.0,
+                0.5
+              ]
+            },
+            {
+              "id": "j-focus",
+              "original_cosine": 0.2844078838825226,
+              "original_margin": -0.27479299902915955,
+              "signals": [
+                0.2844078838825226,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-feedback",
+              "original_cosine": 0.2339426577091217,
+              "original_margin": -0.3252582252025604,
+              "signals": [
+                0.2339426577091217,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-gift",
+              "original_cosine": 0.3006683588027954,
+              "original_margin": -0.2585325241088867,
+              "signals": [
+                0.3006683588027954,
+                0.0,
+                0.0,
+                0.6
+              ]
+            },
+            {
+              "id": "j-plants",
+              "original_cosine": 0.28029024600982666,
+              "original_margin": -0.27891063690185547,
+              "signals": [
+                0.28029024600982666,
+                0.0,
+                0.0,
+                0.3
+              ]
+            },
+            {
+              "id": "j-city",
+              "original_cosine": 0.26208633184432983,
+              "original_margin": -0.2971145510673523,
+              "signals": [
+                0.26208633184432983,
+                0.0,
+                0.0,
+                0.2
+              ]
+            },
+            {
+              "id": "j-loss",
+              "original_cosine": 0.25156140327453613,
+              "original_margin": -0.307639479637146,
+              "signals": [
+                0.25156140327453613,
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "retrieved": [
+            "j-friend"
+          ]
+        }
+      ],
+      "scope_or_lifecycle_violations": 0,
+      "note": "Prototype experiment only; not production RAG or eight-capability acceptance.",
+      "eligible": false,
+      "persisted_cases": "holdout failures and related_unanswerable; full report in linked artifact, reproducible from pinned code"
+    }
+  ]
+}
