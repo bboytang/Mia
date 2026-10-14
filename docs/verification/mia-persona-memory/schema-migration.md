@@ -1,6 +1,6 @@
 # P10：兼容 schema 与原子迁移
 
-状态：实现／用例已编写，待本提交 GitHub Actions。未执行生产迁移，不据表存在认定 RAG／Worker／事件／趋势已实现。
+状态：426d8c4fd1ce5bc0d7e31b255834c8b8a1bd0330／[服务CI 38656910711](https://github.com/bboytang/Mia/actions/runs/38656910711) 的6项兼容迁移及全部104服务测试通过；[身份CI 38656908156](https://github.com/bboytang/Mia/actions/runs/38656908156) 的23身份／实际TLS及构建、类范围通过，全量173中172通过／1既有脱敏失败。[迁移报告](schema-results.json)及[身份报告](schema-identity-results.json)已归档。未执行生产迁移，不据表存在认定 RAG／Worker／事件／趋势已实现。
 
 ## 唯一事实与兼容
 
@@ -20,4 +20,4 @@
 
 用该真实旧MemoryStore创建活跃／敏感候选及来源，升级比对原五表完整数据与列顺序；再用同一旧代码修改、查询、新写入、跨owner保留和清空，重开新版验证一致。另验重复迁移、未知schema／checksum拒绝、关联／事件证据隔离，以及子进程在创建向量表时os._exit(77)：重开数据库必须无任何半成品mia_*对象且原数据相同，再迁移成功。测试中的零Blob明确为合成约束fixture，不是embedding结果。
 
-所有自动测试与构建仅在GitHub Actions。接续先读本提交run／SHA及完整服务回归结果，归档后才将P10标完成；生产、实际向量、持久任务执行和八项行为均另行验收。
+所有自动测试与构建仅在GitHub Actions。P10兼容基础完成，下一步P11／P12读取本报告的精确SHA和范围；生产、实际向量、持久任务执行和八项行为均另行验收。

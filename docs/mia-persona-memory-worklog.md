@@ -287,6 +287,14 @@
 - 服务CI增加固定a30旧源独立checkout／SHA验证，6项实际SQLite升级、重复、旧代码回滚读写、进程硬退出恢复、未知schema及Scope关联约束测试待本提交实跑。安装器复制必要schema文件；不在本地测试，不迁移生产。
 - 仅schema与兼容基础，未宣称真向量／关联／持久Worker／事件／情绪已实现；完整派生生命周期按P12—P20及P24继续验收。已检查diff并同步交接／schema-migration.md。
 
+## 2026-10-14：P10兼容基础完成并交接P11
+
+- 426d8c4fd1ce5bc0d7e31b255834c8b8a1bd0330／[38656910711](https://github.com/bboytang/Mia/actions/runs/38656910711)服务整体success，104测试／23.129秒，6项实际SQLite／固定旧源码兼容用例全部通过，包括子进程DDL中途硬退出／无半成品／恢复后再迁移。schema-results.json含具体用例、代码与SQL SHA，未本地自动测试。
+- 同提交[38656908156](https://github.com/bboytang/Mia/actions/runs/38656908156)的23身份／实际TLS、当前安装包Scope／SQLite、JAR与类范围通过；完整173中172通过、1既有脱敏失败、0error／skip，schema-identity-results.json保存真实JAR SHA。整体workflow failure如实保留。
+- P10只标基础schema与真实旧代码必要读写回滚完成，不标未来完整派生回滚或八项行为；P12—P20接入生命周期，P24联动回归仍待做。未生产迁移／部署。
+- 接续入口更新P11：已读固定路遥persona／guardrails及原connection／adapter，尚未编写P11，独立机制保留核心但不复制未授权业务源码／固定剧情。最新专用Secret名称仍0，无真实模型调用，独立机制可继续、真实行为单列。
+- 最终差异仅必要代码与本任务文档，交接／进度及可移植JSON证据同步保存到任务分支；下次先核对最新SHA／工作树和Actions。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

@@ -1,0 +1,41 @@
+{
+  "code_sha": "426d8c4fd1ce5bc0d7e31b255834c8b8a1bd0330",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38656910711",
+  "workflow_conclusion": "success",
+  "service_tests": 104,
+  "service_test_seconds": 23.129,
+  "migration_cases": [
+    {
+      "name": "test_actual_old_code_can_write_edit_retrieve_and_delete_after_upgrade",
+      "result": "ok"
+    },
+    {
+      "name": "test_cross_owner_associations_and_event_evidence_cannot_be_inserted",
+      "result": "ok"
+    },
+    {
+      "name": "test_process_exit_mid_ddl_rolls_back_without_partial_migration",
+      "result": "ok"
+    },
+    {
+      "name": "test_repeated_upgrade_changes_neither_legacy_data_nor_metadata",
+      "result": "ok"
+    },
+    {
+      "name": "test_unknown_schema_and_checksum_are_refused_without_rewriting_facts",
+      "result": "ok"
+    },
+    {
+      "name": "test_upgrade_preserves_real_legacy_values_and_unknown_provenance",
+      "result": "ok"
+    }
+  ],
+  "legacy_code_sha": "a30a5081bfa3c08e7387b9f5d9be77bd957e8175",
+  "legacy_source_sha256": "e7b24984ad682f767d76498b9b249e6dac5362ffad8ac453c793d2c6fde47ef5",
+  "schema_sql_sha256": "accf91e60b23086405c262d916cc7d97d13902eb3b4da332fd6c0307da2a8ab0",
+  "schema_version": 1,
+  "real_embedding": "not_executed",
+  "worker_events_trend_behavior": "not_executed",
+  "production_migration": "not_executed",
+  "note": "Actual frozen legacy source executes necessary upgrade/rollback writes; schema-only result is not full V1.2 behavior or full advanced-feature rollback acceptance."
+}
