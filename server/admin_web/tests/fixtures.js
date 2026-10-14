@@ -16,7 +16,7 @@ export const pubConfig = { version: 'test', allowUserRegister: true, systemWebMe
 
 export async function mockBackend(page, superAdmin = true) {
   await page.addInitScript(({ config, admin }) => {
-    localStorage.setItem('token', 'synthetic-test-token');
+    localStorage.setItem('token', JSON.stringify({ token: 'synthetic-test-token' }));
     localStorage.setItem('userLanguage', 'zh_CN');
     localStorage.setItem('userInfo', JSON.stringify({ username: '响应式测试', superAdmin: admin }));
     localStorage.setItem('pubConfig', JSON.stringify(config));

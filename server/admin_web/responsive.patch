@@ -260,10 +260,10 @@ index 395272a..ea27074 100644
 +installResponsive(Vue);
 diff --git a/main/manager-web/src/styles/responsive.scss b/main/manager-web/src/styles/responsive.scss
 new file mode 100644
-index 0000000..33f54e3
+index 0000000..a5a1e1f
 --- /dev/null
 +++ b/main/manager-web/src/styles/responsive.scss
-@@ -0,0 +1,308 @@
+@@ -0,0 +1,314 @@
 +// One layout system layered over the existing desktop design. Page-level selectors
 +// deliberately outrank scoped desktop styles without hiding horizontal overflow.
 +:root {
@@ -572,6 +572,12 @@ index 0000000..33f54e3
 +}
 +
 +@media (max-width: 1180px) { .mac-address-wrapper { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; } }
++
++@media (max-width: 1180px) {
++  #app .page-address-book-management {
++    .page-content, .left-panel, .right-panel { box-sizing: border-box; }
++  }
++}
 diff --git a/main/manager-web/src/utils/responsive.js b/main/manager-web/src/utils/responsive.js
 new file mode 100644
 index 0000000..462429b

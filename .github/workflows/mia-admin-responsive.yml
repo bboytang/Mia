@@ -33,15 +33,20 @@ jobs:
       - name: Install unchanged frontend dependencies
         working-directory: upstream/main/manager-web
         run: npm ci --no-audit --no-fund
+      - name: Reproduce the original Docker frontend build directory
+        run: |
+          sudo mkdir -p /app
+          sudo chown "$(id -u):$(id -g)" /app
+          cp -a upstream/main/manager-web/. /app/
       - name: Build original frontend for production comparison
-        working-directory: upstream/main/manager-web
+        working-directory: /app
         env:
           VUE_APP_USE_CDN: 'false'
         run: |
           npm run build
-          mkdir -p ../../../admin-artifacts/baseline
-          cp dist/index.html ../../../admin-artifacts/baseline/
-          (cd dist && find css js -type f ! -name '*.gz' ! -name '*.LICENSE.txt' -exec sha256sum {} \;) > ../../../admin-artifacts/baseline/static.sha256
+          mkdir -p "$GITHUB_WORKSPACE/admin-artifacts/baseline"
+          cp -a dist/index.html dist/css dist/js "$GITHUB_WORKSPACE/admin-artifacts/baseline/"
+          (cd dist && find css js -type f ! -name '*.gz' ! -name '*.LICENSE.txt' -exec sha256sum {} \;) > "$GITHUB_WORKSPACE/admin-artifacts/baseline/static.sha256"
       - name: Compare original static files with production snapshot
         run: |
           python3 - <<'PY'
@@ -56,21 +61,24 @@ jobs:
           print(report)
           PY
       - name: Check and apply source patch
-        run: python3 server/admin_web/apply.py upstream --apply
+        run: |
+          python3 server/admin_web/apply.py upstream --apply
+          cp -a upstream/main/manager-web/src/. /app/src/
+          cp upstream/main/manager-web/public/index.html /app/public/index.html
       - name: Run existing frontend regressions
-        working-directory: upstream/main/manager-web
+        working-directory: /app
         run: |
           npm test
           npm run test:snapshot
       - name: Build responsive frontend
-        working-directory: upstream/main/manager-web
+        working-directory: /app
         env:
           VUE_APP_USE_CDN: 'false'
         run: npm run build
       - name: Prepare reviewable source and static artifacts
         run: |
           mkdir -p admin-artifacts/responsive
-          cp -a upstream/main/manager-web/dist/. admin-artifacts/responsive/
+          cp -a /app/dist/. admin-artifacts/responsive/
           tar --exclude=node_modules --exclude=dist --exclude=.webpack_cache -czf admin-artifacts/manager-web-source.tar.gz -C upstream main/manager-web
           cp server/admin_web/README.md admin-artifacts/
           printf '%s\n' "$GITHUB_SHA" > admin-artifacts/MIA_COMMIT
@@ -83,7 +91,7 @@ jobs:
       - name: Test every route and responsive interactions
         working-directory: server/admin_web/tests
         env:
-          MIA_ADMIN_DIST: ${{ github.workspace }}/upstream/main/manager-web/dist
+          MIA_ADMIN_DIST: /app/dist
         run: npm test
       - name: Upload source, build and regression evidence
         if: always()
