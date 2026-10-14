@@ -204,6 +204,12 @@
 - 当前补丁待GitHub iOS simulator／device构建及全部软件回归；物理iPhone与实际WSS仍未验。授权码兑换、Keychain及WSS凭据发送继续实施。
 - Scope实现 `967fdaa598f063038c01854c9206fcd45eba9bc2` 的服务端 [38624863353](https://github.com/bboytang/Mia/actions/runs/38624863353)成功；身份 [38624863160](https://github.com/bboytang/Mia/actions/runs/38624863160)在途，先检查实际结果后再归档。交接同步，无部署。
 
+## 2026-10-14：P09 实际集成发现旧绑定初始版本兼容问题
+
+- `967fdaa...`／[38624863160](https://github.com/bboytang/Mia/actions/runs/38624863160)：真实Python集成失败，167全量165通过／2失败（新增集成＋已知脱敏），构建通过；不能把它归为只有既有失败。服务端全部机制回归已通过。
+- 核对实际迁移与签发源码：保留的旧设备授权行 `binding_version` 初始为0，而Python错误要求所有ID／版本都大于0。修正仅允许绑定版本非负；用户／操作者／已签发凭据版本仍必须正整数，float／bool／负数继续拒绝。可信来源与当前manager复核保持，不更改既有绑定版本或降低权限要求。
+- 补充旧绑定版本0兼容机制负例，准备新的精确提交GitHub实跑。App提示 `b3a677bcddcf0beadd674ebc25b326147ff8022f` 的 iOS [38625280022](https://github.com/bboytang/Mia/actions/runs/38625280022) 在途；交接同步，无本地测试／部署。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

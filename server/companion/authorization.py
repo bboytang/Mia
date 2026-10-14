@@ -37,7 +37,8 @@ class AuthenticatedScope:
 def _manager_scope(data):
     try:
         integers = ("operator_id", "user_id", "binding_version", "credential_version")
-        if any(type(data[name]) is not int or data[name] < 1 for name in integers):
+        if any(type(data[name]) is not int or data[name] < (0 if name == "binding_version" else 1)
+               for name in integers):
             raise ValueError()
         for name in ("agent_id", "device_id", "client_id"):
             if not isinstance(data[name], str) or not re.fullmatch(r"[A-Za-z0-9_:.-]{1,128}", data[name]):
