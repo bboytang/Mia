@@ -160,6 +160,20 @@
 - 新增9个真实私有授权及1个默认传输用例，原4绑定与全部回归继续；代码未编译／运行。详见 `private-authorization.md`，P08整体及P09、App、实际TLS仍未完成，未部署。
 - 每个已有文件完整preimage校验及独立备份，payload拒绝覆盖。下一步GitHub运行、核实实际结果／diff；交接同步，不以编写完成冒充行为通过。
 
+## 2026-10-14：P08 manager授权链部分验证完成
+
+- 代码 `7798936eb9a6f578d02b43778f55247ec2a8eb9a`，[38618373002](https://github.com/bboytang/Mia/actions/runs/38618373002)：9私有＋1默认传输＋4绑定全部真实通过，完整164测试163通过、唯一既有脱敏失败，0error／skip。总workflow保持failure，不称全量通过。
+- JAR构建及必要类范围通过，实际生成diff已审核：仅DeviceService生命周期／DeviceDao锁／Shiro两条精确路由／追加迁移／两个授权payload。持久 `private-authorization-results.json`含精确代码／run／JAR SHA，不含密钥和用户事实。
+- 同提交服务端 [38618373179](https://github.com/bboytang/Mia/actions/runs/38618373179) success。没有本地／生产自动化测试、部署或生产密钥操作。
+- P08 manager部分完成；P08整体、P09工具／语音／后台持续Scope、App凭据迁移／管理入口／实际TLS及八项行为仍未完成。下一步贯通可信Scope与必要客户端，专用Provider测试Secret入口独立准备；交接同步。
+
+## 2026-10-14：P07 专用真实Provider入口准备
+
+- 建立仅手动真实调用的 `mia-memory-live-provider.yml` 与stdlib probe；push／PR只做GitHub语法检查，不声称模型通过。
+- 专用repository Secret：`MIA_TEST_LLM_API_KEY`／`MIA_TEST_LLM_BASE_URL`／`MIA_TEST_LLM_MODEL`，由GitHub安全界面配置，见 `live-provider.md`。保留现有Mia Provider类型，不读取／迁移生产密钥。
+- 初始最多1请求／128输出tokens／30秒／0重试；强制HTTPS且拒绝重定向；记录脱敏状态、代码／配置版本、响应与usage。缺配置不发请求，未把短probe当8项真实行为。
+- 当前入口尚未经过GitHub语法检查，测试秘密配置未核实、未调用Provider；Scope／客户端独立工作继续。交接同步。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。
