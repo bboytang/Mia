@@ -51,6 +51,12 @@ final class MiaPrivateAuthorizationTests: XCTestCase {
         let grant = try MiaPrivateAuthorizationClient.parse(response(identity: identity), ota: ota, websocket: voice, identity: identity)
         XCTAssertTrue(grant.matches(ota: ota, websocket: voice, identity: identity))
         XCTAssertFalse(grant.matches(ota: ota, websocket: voice, identity: identity, now: grant.expiresAt))
+        var managerResponse = try XCTUnwrap(JSONSerialization.jsonObject(with: response(identity: identity)) as? [String: Any])
+        var managerGrant = try XCTUnwrap(managerResponse["data"] as? [String: Any])
+        managerGrant["expires_in"] = "3600"
+        managerResponse["data"] = managerGrant
+        XCTAssertNoThrow(try MiaPrivateAuthorizationClient.parse(JSONSerialization.data(withJSONObject: managerResponse),
+                                                                ota: ota, websocket: voice, identity: identity))
         let config = try MiaWebSocketConfiguration(endpoint: voice, clientID: identity.clientID,
             token: "legacy-fixture", deviceID: identity.deviceID, privateGrant: grant)
         XCTAssertEqual(config.request.value(forHTTPHeaderField: "Mia-Private-Credential"), token)

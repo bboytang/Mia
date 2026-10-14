@@ -217,6 +217,13 @@
 - `7f1834b36f605913fc194f503f6fd0b4de589a26`／[38625458527](https://github.com/bboytang/Mia/actions/runs/38625458527)：Java→Python实际集成仍失败，167全量仍为165通过／2失败。绑定初始版本0确须兼容，但不能据此声称已解决全部集成问题；新增只留endpoint／返回类型／字段类型的脱敏诊断，继续查因。
 - 同SHA服务 [38625458539](https://github.com/bboytang/Mia/actions/runs/38625458539)成功；iOS授权提示 [38625280022](https://github.com/bboytang/Mia/actions/runs/38625280022)仍在途，先核实。已审核必要补丁，未本地测试／部署或读取生产秘密，交接同步。
 
+## 2026-10-14：P09 定位真实manager序列化契约
+
+- `e2a046028e4d25717118072bf34f4929926fab72`／[38626261881](https://github.com/bboytang/Mia/actions/runs/38626261881) 脱敏trace证明 verify 已返回dict，但全部Java Long字段实际是字符串；与固定上游WebMvcConfig的Long→ToStringSerializer一致。Python误用严格int-only造成新增集成失败，167全量仍165通过／2失败。
+- 仅在已核验manager响应规范化精确十进制字符串或整数，保留64位精度和绑定版本0；拒绝bool／float／负版本／前导零／溢出，不修改成熟manager全局序列化策略。App签发的 expires_in 亦为Long字符串，补兼容及测试，原数值fixture继续。
+- 初次私有核验与配置读取整体3秒、身份等待4秒，避免新增多次RPC使原1秒路由丢失hello；失败仍提示授权且不加载私有配置，不放宽TLS／权限。新增软件负例待新提交GitHub验证。
+- App `b3a677b...` 的 [38625280022](https://github.com/bboytang/Mia/actions/runs/38625280022) 已完成Simulator构建／全部测试，device构建在途；e2a0460的 [38626262073](https://github.com/bboytang/Mia/actions/runs/38626262073) Simulator构建通过、测试在途。完整成功尚待复核，不宣称真机或真实TLS通过。交接已同步，无部署。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

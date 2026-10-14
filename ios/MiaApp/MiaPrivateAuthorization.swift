@@ -98,6 +98,21 @@ enum MiaPrivateAuthorizationClient {
             let privateCredential: String
             let expiresIn: Int
             let scope: Scope
+
+            enum CodingKeys: String, CodingKey { case privateCredential, expiresIn, scope }
+            init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                privateCredential = try container.decode(String.self, forKey: .privateCredential)
+                scope = try container.decode(Scope.self, forKey: .scope)
+                if let number = try? container.decode(Int.self, forKey: .expiresIn) {
+                    expiresIn = number
+                } else {
+                    let text = try container.decode(String.self, forKey: .expiresIn)
+                    guard text.range(of: "^[1-9][0-9]{0,6}$", options: .regularExpression) != nil,
+                          let number = Int(text) else { throw MiaPrivateAuthorizationError.invalidResponse }
+                    expiresIn = number
+                }
+            }
         }
         struct Response: Decodable { let code: Int; let data: Grant? }
         guard data.count <= 65_536 else { throw MiaPrivateAuthorizationError.invalidResponse }

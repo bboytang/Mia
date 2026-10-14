@@ -36,8 +36,16 @@ class AuthenticatedScope:
 
 def _manager_scope(data):
     try:
+        data = dict(data)
         integers = ("operator_id", "user_id", "binding_version", "credential_version")
+        # The existing manager deliberately serializes Java Long as decimal text.
+        # Normalize only exact canonical integers from the verified response.
+        for name in integers:
+            value = data[name]
+            if isinstance(value, str) and re.fullmatch(r"0|[1-9][0-9]{0,18}", value):
+                data[name] = int(value)
         if any(type(data[name]) is not int or data[name] < (0 if name == "binding_version" else 1)
+               or data[name] > 2**63 - 1
                for name in integers):
             raise ValueError()
         for name in ("agent_id", "device_id", "client_id"):
@@ -144,8 +152,11 @@ async def load_private_config(conn):
         raise PrivateAuthorizationRequired()
     device = headers.get("device-id")
     client = headers.get("client-id", device)
-    scope, config = await conn._mia_authorization.private_config(
-        device, client, credential, conn.config["selected_module"])
+    try:
+        scope, config = await asyncio.wait_for(conn._mia_authorization.private_config(
+            device, client, credential, conn.config["selected_module"]), timeout=3)
+    except asyncio.TimeoutError:
+        raise PrivateAuthorizationRequired() from None
     conn._mia_scope = scope
     conn._mia_owner = scope.owner
     return config

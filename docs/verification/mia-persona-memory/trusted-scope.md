@@ -4,7 +4,9 @@
 
 Scope 仅从 manager 的真实私有凭据核验和配置门禁取得，强校验 owner／用户／Agent／固定 mia／设备／client／operator／版本／权限／期限的一致性。任务持久快照无明文凭据，恢复时须经 server-secret check-scope 重新验证；客户端 owner／JSON 快照不作证明。
 
-manager RPC 复用原客户端和 server-secret，每次最多一个请求、总3秒、无6次重试链。当前允许HTTPS和字面loopback；生产内部HTTP通道未审核，暂不放行。私有连接头只接受服务端可证实的原生TLS，消费后从连接headers移除；不信任任意 X-Forwarded-Proto。若最终TLS在反向代理终止，必须先核实代理／源地址／监听隔离，再实现必要的可信入口，不能在发布时绕过此限制。
+manager RPC 复用原客户端和 server-secret，每次最多一个请求、总3秒、无6次重试链；连接初次核验与配置读取整体也限定3秒，身份等待4秒以内，不再因原1秒等待丢失合法hello。当前允许HTTPS和字面loopback；生产内部HTTP通道未审核，暂不放行。私有连接头只接受服务端可证实的原生TLS，消费后从连接headers移除；不信任任意 X-Forwarded-Proto。若最终TLS在反向代理终止，必须先核实代理／源地址／监听隔离，再实现必要的可信入口，不能在发布时绕过此限制。
+
+manager既有WebMvcConfig将Java Long序列化为十进制字符串以保留精度，Python仅从已核验响应接受规范十进制整数或整数，并按Long范围严格归一化；旧绑定初始版本0有效，用户／operator／已签发凭据版本必须正值。bool／浮点／非规范字符串／负版本／溢出不被截断转换。App同样接受实际签发返回的字符串 expires_in，不修改既有全局序列化器。
 
 旧设备缺授权时，标记独立的 authorization_required，发送 `mia_authorization/required` 提示，保留 hello 和设备ID／绑定，不初始化个性化模型或上报私有对话，不使用公共语音回退。等待身份结果期间不误报为重新绑定。App 尚需识别该事件并实现授权码兑换／Keychain／WSS迁移。
 

@@ -58,6 +58,8 @@ def patch_connection(text):
     text = replace_once(text, '                # 超时仍未获取到真实状态，丢弃消息\n'
                         '                await self._discard_message_with_bind_prompt()\n                return',
                         '                # 身份结果未就绪时不误报为需要重新绑定。\n                return')
+    text = replace_once(text, 'await asyncio.wait_for(self.bind_completed_event.wait(), timeout=1)',
+                        'await asyncio.wait_for(self.bind_completed_event.wait(), timeout=4)')
     text = replace_once(text, "    def _initialize_memory(self):\n        if self.memory is None:\n",
                         "    def _initialize_memory(self):\n        if mia.initialize_memory(self):\n            return\n        if self.memory is None:\n")
     text = replace_once(text, "            self._init_prompt_enhancement()\n",

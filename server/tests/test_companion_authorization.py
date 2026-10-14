@@ -19,8 +19,13 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
     async def test_rejects_malformed_proof_and_expired_permission_before_any_request(self):
         valid = scope_data()
         self.assertEqual(auth._manager_scope(dict(valid, binding_version=0)).binding_version, 0)
+        serialized = dict(valid, **{key: str(valid[key]) for key in (
+            "operator_id", "user_id", "binding_version", "credential_version")})
+        self.assertEqual(auth._manager_scope(serialized), auth._manager_scope(valid))
         for key, invalid in [("owner", "user:2:agent:one"), ("operator_id", True),
                              ("binding_version", 0.5), ("credential_version", 0),
+                             ("binding_version", "0.5"), ("binding_version", "-1"),
+                             ("operator_id", "9223372036854775808"), ("user_id", "01"),
                              ("persona_id", "other"), ("permissions", ["root"]),
                              ("expires_at", "2020-01-01T00:00:00Z")]:
             with self.subTest(key=key), self.assertRaises(auth.PrivateAuthorizationRequired):
