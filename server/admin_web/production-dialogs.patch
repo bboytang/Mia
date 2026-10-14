@@ -25,22 +25,464 @@ index f101e15..9f3d665 100644
 +  overflow-y: auto;
 +}
 +</style>
+diff --git a/main/manager-web/src/apis/module/device.js b/main/manager-web/src/apis/module/device.js
+index b4db9a3..4b250ad 100644
+--- a/main/manager-web/src/apis/module/device.js
++++ b/main/manager-web/src/apis/module/device.js
+@@ -6 +6 @@ export default {
+-    getAgentBindDevices(agentId, callback) {
++    getAgentBindDevices(agentId, callback, failCallback) {
+@@ -13,0 +14,6 @@ export default {
++            .fail((err) => {
++                RequestService.clearRequestTime();
++                if (failCallback) {
++                    failCallback(err);
++                }
++            })
+@@ -17 +23 @@ export default {
+-                    this.getAgentBindDevices(agentId, callback);
++                    this.getAgentBindDevices(agentId, callback, failCallback);
+@@ -22 +28 @@ export default {
+-    unbindDevice(device_id, callback) {
++    unbindDevice(device_id, callback, failCallback) {
+@@ -30,0 +37,6 @@ export default {
++            .fail((err) => {
++                RequestService.clearRequestTime();
++                if (failCallback) {
++                    failCallback(err);
++                }
++            })
+@@ -34 +46 @@ export default {
+-                    this.unbindDevice(device_id, callback);
++                    this.unbindDevice(device_id, callback, failCallback);
+@@ -39 +51 @@ export default {
+-    bindDevice(agentId, deviceCode, callback) {
++    bindDevice(agentId, deviceCode, callback, failCallback) {
+@@ -46,0 +59,6 @@ export default {
++            .fail((err) => {
++                RequestService.clearRequestTime();
++                if (failCallback) {
++                    failCallback(err);
++                }
++            })
+@@ -50 +68 @@ export default {
+-                    this.bindDevice(agentId, deviceCode, callback);
++                    this.bindDevice(agentId, deviceCode, callback, failCallback);
+@@ -54 +72 @@ export default {
+-    updateDeviceInfo(id, payload, callback) {
++    updateDeviceInfo(id, payload, callback, failCallback) {
+@@ -62,0 +81,6 @@ export default {
++            .fail((err) => {
++                RequestService.clearRequestTime();
++                if (failCallback) {
++                    failCallback(err);
++                }
++            })
+@@ -67 +91 @@ export default {
+-                    this.updateDeviceInfo(id, payload, callback)
++                    this.updateDeviceInfo(id, payload, callback, failCallback)
+@@ -72 +96 @@ export default {
+-    manualAddDevice(params, callback) {
++    manualAddDevice(params, callback, failCallback) {
+@@ -80,0 +105,6 @@ export default {
++            .fail((err) => {
++                RequestService.clearRequestTime();
++                if (failCallback) {
++                    failCallback(err);
++                }
++            })
+@@ -84 +114 @@ export default {
+-                    this.manualAddDevice(params, callback);
++                    this.manualAddDevice(params, callback, failCallback);
+@@ -89 +119 @@ export default {
+-    getDeviceStatus(agentId, callback) {
++    getDeviceStatus(agentId, callback, failCallback) {
+@@ -98,2 +128,5 @@ export default {
+-            .fail((res) => {
+-                callback(res);
++            .fail((err) => {
++                RequestService.clearRequestTime();
++                if (failCallback) {
++                    failCallback(err);
++                }
+@@ -104 +137 @@ export default {
+-                    this.getDeviceStatus(agentId, callback);
++                    this.getDeviceStatus(agentId, callback, failCallback);
+@@ -108 +141 @@ export default {
+-}
+\ No newline at end of file
++}
+diff --git a/main/manager-web/src/apis/module/user.js b/main/manager-web/src/apis/module/user.js
+index 39f0707..33730cd 100755
+--- a/main/manager-web/src/apis/module/user.js
++++ b/main/manager-web/src/apis/module/user.js
+@@ -22 +22 @@ export default {
+-                    this.login(loginForm, callback)
++                    this.login(loginForm, callback, failCallback)
+diff --git a/main/manager-web/src/components/AddDeviceDialog.vue b/main/manager-web/src/components/AddDeviceDialog.vue
+index 29b9cf3..142979f 100644
+--- a/main/manager-web/src/components/AddDeviceDialog.vue
++++ b/main/manager-web/src/components/AddDeviceDialog.vue
+@@ -2,6 +2,15 @@
+-  <el-dialog :visible="visible" @close="handleClose" width="24%" center>
+-    <div
+-      style="margin: 0 10px 10px;display: flex;align-items: center;gap: 10px;font-weight: 700;font-size: 20px;text-align: left;color: #3d4566;">
+-      <div
+-        style="width: 40px;height: 40px;border-radius: 50%;background: #5778ff;display: flex;align-items: center;justify-content: center;">
+-        <img src="@/assets/home/equipment.png" alt="" style="width: 18px;height: 15px;" />
++  <CustomDialog
++    :title="$t('device.dialogTitle')"
++    :visible.sync="visible"
++    width="420px"
++    :confirmLoading="loading"
++    @confirm="confirm"
++    @cancel="cancel"
++    @close="handleClose"
++    :confirmText="$t('device.confirmButton')"
++    :cancelText="$t('device.cancelButton')"
++  >
++    <div class="add-device-body">
++      <div class="add-device-label">
++        <span class="required">*</span>
++        {{ $t('device.verificationCode') }}
+@@ -9 +18,6 @@
+-      {{ $t('device.dialogTitle') }}
++      <el-input
++        :placeholder="$t('device.verificationCodePlaceholder')"
++        v-model="deviceCode"
++        class="add-device-input"
++        @keyup.enter.native="confirm"
++      />
+@@ -11,19 +25 @@
+-    <div style="height: 1px;background: #e8f0ff;" />
+-    <div style="margin: 22px 15px;">
+-      <div style="font-weight: 400;font-size: 14px;text-align: left;color: #3d4566;">
+-        <div style="color: red;display: inline-block;">*</div>
+-        <span style="font-size: 11px"> {{ $t('device.verificationCode') }}</span>
+-      </div>
+-      <div class="input-46" style="margin-top: 12px;">
+-        <el-input :placeholder="$t('device.verificationCodePlaceholder')" v-model="deviceCode" @keyup.enter.native="confirm" />
+-      </div>
+-    </div>
+-    <div style="display: flex;margin: 15px 15px;gap: 7px;">
+-      <div class="dialog-btn" @click="confirm">
+-        {{ $t('device.confirmButton') }}
+-      </div>
+-      <div class="dialog-btn" style="background: #e6ebff;border: 1px solid #adbdff;color: #5778ff;" @click="cancel">
+-        {{ $t('device.cancelButton') }}
+-      </div>
+-    </div>
+-  </el-dialog>
++  </CustomDialog>
+@@ -33,0 +30 @@ import Api from '@/apis/api';
++import CustomDialog from './CustomDialog.vue';
+@@ -36,0 +34 @@ export default {
++  components: { CustomDialog },
+@@ -56 +54,2 @@ export default {
+-        this.deviceCode, ({ data }) => {
++        this.deviceCode,
++        ({ data }) => {
+@@ -70,0 +70,8 @@ export default {
++        },
++        (err) => {
++          this.loading = false;
++          const msg = err && err.data && err.data.msg;
++          this.$message.error({
++            message: msg || this.$t('device.bindFailed'),
++            showClose: true
++          });
+@@ -75 +82 @@ export default {
+-      this.$emit('update:visible', false);
++      this.loading = false;
+@@ -77 +84 @@ export default {
+-
++      this.$emit('update:visible', false);
+@@ -80,2 +87 @@ export default {
+-      this.$emit('update:visible', false)
+-      this.deviceCode = ""
++      this.closeDialog();
+@@ -84,2 +90,2 @@ export default {
+-      this.$emit('update:visible', false);
+-    },
++      this.closeDialog();
++    }
+@@ -91,4 +97,2 @@ export default {
+-.input-46 {
+-  border: 1px solid #e4e6ef;
+-  background: #f6f8fb;
+-  border-radius: 10px;
++.add-device-body {
++  padding: 6px 4px 4px;
+@@ -97,11 +101,5 @@ export default {
+-.dialog-btn {
+-  cursor: pointer;
+-  flex: 1;
+-  border-radius: 23px;
+-  background: #5778ff;
+-  height: 40px;
+-  font-weight: 500;
+-  font-size: 12px;
+-  color: #fff;
+-  line-height: 40px;
+-  text-align: center;
++.add-device-label {
++  font-size: 14px;
++  color: #475569;
++  text-align: left;
++  margin-bottom: 12px;
+@@ -110,3 +108,3 @@ export default {
+-::v-deep .el-dialog {
+-  border-radius: 15px;
+-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
++.add-device-label .required {
++  color: #f56c6c;
++  margin-right: 2px;
+@@ -115,10 +113,5 @@ export default {
+-::v-deep .el-dialog__headerbtn {
+-  display: none;
+-}
+-
+-::v-deep .el-dialog__body {
+-  padding: 4px 6px;
+-}
+-
+-::v-deep .el-dialog__header {
+-  padding: 10px;
++.add-device-input ::v-deep(.el-input__inner) {
++  height: 40px;
++  border-radius: 8px;
++  border-color: #e2e8f0;
++  font-size: 14px;
 diff --git a/main/manager-web/src/components/AddModelDialog.vue b/main/manager-web/src/components/AddModelDialog.vue
-index b331480..6396b32 100644
+index b331480..c9e91a6 100644
 --- a/main/manager-web/src/components/AddModelDialog.vue
 +++ b/main/manager-web/src/components/AddModelDialog.vue
-@@ -5 +5 @@
+@@ -5 +5,2 @@
 -    width="57%"
-+    width="960px" size="large"
++    width="960px"
++    size="large"
+diff --git a/main/manager-web/src/components/AddWisdomBodyDialog.vue b/main/manager-web/src/components/AddWisdomBodyDialog.vue
+index 2c88652..877c673 100644
+--- a/main/manager-web/src/components/AddWisdomBodyDialog.vue
++++ b/main/manager-web/src/components/AddWisdomBodyDialog.vue
+@@ -2,6 +2,15 @@
+-  <el-dialog :visible="visible" @close="handleClose"  width="25%" center @open="handleOpen">
+-    <div
+-      style="margin: 0 10px 10px;display: flex;align-items: center;gap: 10px;font-weight: 700;font-size: 20px;text-align: left;color: #3d4566;">
+-      <div
+-        style="width: 40px;height: 40px;border-radius: 50%;background: #5778ff;display: flex;align-items: center;justify-content: center;">
+-        <img loading="lazy" src="@/assets/home/equipment.png" alt="" style="width: 18px;height: 15px;" />
++  <CustomDialog
++    :title="$t('addAgentDialog.title')"
++    :visible.sync="visible"
++    width="420px"
++    @confirm="confirm"
++    @cancel="cancel"
++    @close="handleClose"
++    :confirmText="$t('addAgentDialog.confirm')"
++    :cancelText="$t('addAgentDialog.cancel')"
++    @open="handleOpen"
++  >
++    <div class="add-agent-body">
++      <div class="add-agent-label">
++        <span class="required">*</span>
++        {{ $t('addAgentDialog.agentName') }}
+@@ -9 +18,8 @@
+-      {{ $t('addAgentDialog.title') }}
++      <el-input
++        maxLength="64"
++        ref="inputRef"
++        :placeholder="$t('addAgentDialog.placeholder')"
++        v-model="wisdomBodyName"
++        class="add-agent-input"
++        @keyup.enter.native="confirm"
++      />
+@@ -11,18 +27 @@
+-    <div style="height: 1px;background: #e8f0ff;" />
+-    <div style="margin: 22px 15px;">
+-      <div style="font-weight: 400;text-align: left;color: #3d4566;">
+-        <div style="color: red;display: inline-block;">*</div> {{ $t('addAgentDialog.agentName') }}：
+-      </div>
+-      <div class="input-46" style="margin-top: 12px;">
+-        <el-input maxLength="64" ref="inputRef" :placeholder="$t('addAgentDialog.placeholder')" v-model="wisdomBodyName" @keyup.enter.native="confirm" />
+-      </div>
+-    </div>
+-    <div style="display: flex;margin: 15px 15px;gap: 7px;">
+-      <div class="dialog-btn" @click="confirm">
+-        {{ $t('addAgentDialog.confirm') }}
+-      </div>
+-      <div class="dialog-btn" style="background: #e6ebff;border: 1px solid #adbdff;color: #5778ff;" @click="cancel">
+-        {{ $t('addAgentDialog.cancel') }}
+-      </div>
+-    </div>
+-  </el-dialog>
++  </CustomDialog>
+@@ -32,0 +32 @@ import Api from '@/apis/api';
++import CustomDialog from './CustomDialog.vue';
+@@ -35,0 +36 @@ export default {
++  components: { CustomDialog },
+@@ -41,2 +42 @@ export default {
+-      wisdomBodyName: "",
+-      inputRef: null
++      wisdomBodyName: ""
+@@ -48 +48,3 @@ export default {
+-        this.$refs.inputRef.focus();
++        if (this.$refs.inputRef && this.$refs.inputRef.focus) {
++          this.$refs.inputRef.focus();
++        }
+@@ -67,4 +69 @@ export default {
+-      this.$emit('update:visible', false)
+-      this.wisdomBodyName = ""
+-    },
+-    handleClose() {
++      this.wisdomBodyName = "";
+@@ -72,0 +72,3 @@ export default {
++    handleClose() {
++      this.cancel();
++    }
+@@ -78,22 +80,2 @@ export default {
+-.input-46 {
+-  border: 1px solid #e4e6ef;
+-  background: #f6f8fb;
+-  border-radius: 15px;
+-}
+-
+-.dialog-btn {
+-  cursor: pointer;
+-  flex: 1;
+-  border-radius: 23px;
+-  background: #5778ff;
+-  height: 40px;
+-  font-weight: 500;
+-  font-size: 12px;
+-  color: #fff;
+-  line-height: 40px;
+-  text-align: center;
+-}
+-
+-::v-deep .el-dialog {
+-  border-radius: 15px;
+-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
++.add-agent-body {
++  padding: 6px 4px 4px;
+@@ -102,2 +84,5 @@ export default {
+-::v-deep .el-dialog__headerbtn {
+-  display: none;
++.add-agent-label {
++  font-size: 14px;
++  color: #475569;
++  text-align: left;
++  margin-bottom: 12px;
+@@ -106,2 +91,3 @@ export default {
+-::v-deep .el-dialog__body {
+-  padding: 4px 6px;
++.add-agent-label .required {
++  color: #f56c6c;
++  margin-right: 2px;
+@@ -110,2 +96,5 @@ export default {
+-::v-deep .el-dialog__header {
+-  padding: 10px;
++.add-agent-input ::v-deep(.el-input__inner) {
++  height: 40px;
++  border-radius: 8px;
++  border-color: #e2e8f0;
++  font-size: 14px;
+diff --git a/main/manager-web/src/components/AgentSnapshotDialog.vue b/main/manager-web/src/components/AgentSnapshotDialog.vue
+index 2671003..b89ad40 100644
+--- a/main/manager-web/src/components/AgentSnapshotDialog.vue
++++ b/main/manager-web/src/components/AgentSnapshotDialog.vue
+@@ -2118 +2118 @@ export default {
+-  margin: 32px auto !important;
++  margin: 10px auto !important;
+@@ -2121 +2121,2 @@ export default {
+-  max-height: calc(100vh - 64px);
++  height: calc(100vh - 20px);
++  max-height: calc(100vh - 20px);
+@@ -2126 +2127 @@ export default {
+-  align-items: center;
++  align-items: stretch;
+@@ -2128 +2129 @@ export default {
+-  overflow: auto;
++  overflow: hidden;
+@@ -2285,3 +2286 @@ export default {
+-  max-height: 62vh;
+-  overflow: auto;
+-  @include scrollbar-style;
++  min-height: 420px;
+@@ -2331,3 +2330 @@ export default {
+-  min-height: 220px;
+-  max-height: 68vh;
+-  overflow: auto;
++  min-height: 420px;
+@@ -2335 +2331,0 @@ export default {
+-  @include scrollbar-style;
+diff --git a/main/manager-web/src/components/CacheViewer.vue b/main/manager-web/src/components/CacheViewer.vue
+index 5bd234e..fa4873a 100644
+--- a/main/manager-web/src/components/CacheViewer.vue
++++ b/main/manager-web/src/components/CacheViewer.vue
+@@ -5 +5 @@
+-    width="70%"
++    width="80%"
+@@ -206,0 +207,20 @@ h3 {
++
++::v-deep .el-dialog {
++  margin: 10px auto !important;
++  height: calc(100vh - 20px);
++  max-height: calc(100vh - 20px);
++  border-radius: 10px;
++  display: flex;
++  flex-direction: column;
++  max-width: 1280px;
++}
++
++::v-deep .el-dialog__wrapper {
++  align-items: stretch;
++}
++
++::v-deep .el-dialog__body {
++  flex: 1;
++  max-height: calc(100vh - 20px - 130px);
++  overflow-y: auto;
++}
 diff --git a/main/manager-web/src/components/ChatHistoryDialog.vue b/main/manager-web/src/components/ChatHistoryDialog.vue
-index 2846b97..9087cb4 100644
+index 2846b97..3992f62 100644
 --- a/main/manager-web/src/components/ChatHistoryDialog.vue
 +++ b/main/manager-web/src/components/ChatHistoryDialog.vue
-@@ -5 +5 @@
--        width="80%"
-+        width="80%" size="large"
+@@ -5,0 +6 @@
++        size="large"
+@@ -416 +417,2 @@ export default {
+-    height: 100%;
++    flex: 1;
++    min-height: 0;
+@@ -613,4 +614,0 @@ export default {
+-    position: absolute;
+-    bottom: 0;
+-    left: 0;
+-    right: 0;
+@@ -627,2 +624,0 @@ export default {
+-    display: flex;
+-    flex-direction: column;
+@@ -630,6 +625,0 @@ export default {
+-    margin: 0 !important;
+-    position: absolute;
+-    top: 50%;
+-    left: 50%;
+-    transform: translate(-50%, -50%);
+-    height: 98vh;
+@@ -637,2 +627,2 @@ export default {
+-    border-radius: 12px;
+-    overflow: hidden;
++    /* 兜底，防止 size="large" 那个 height 没有生效时弹框缩成内容高度 */
++    height: calc(100vh - 20px) !important;
+@@ -644,2 +634,4 @@ export default {
+-    height: calc(90vh - 54px);
+-    /* 减去标题栏的高度 */
++    display: flex;
++    flex-direction: column;
++    /* 顶开 size="large" 默认的 100vh - 130px，让 body 真正撑到弹框底部，flex: 1 会自动填满 */
++    max-height: calc(100vh - 74px) !important;
 diff --git a/main/manager-web/src/components/ContextProviderDialog.vue b/main/manager-web/src/components/ContextProviderDialog.vue
-index 84eae4a..97882a2 100644
+index 84eae4a..9c6edf5 100644
 --- a/main/manager-web/src/components/ContextProviderDialog.vue
 +++ b/main/manager-web/src/components/ContextProviderDialog.vue
 @@ -2,3 +2 @@
@@ -48,30 +490,63 @@ index 84eae4a..97882a2 100644
 -    :visible.sync="dialogVisible"
 -    width="900px"
 +  <CustomDialog
-@@ -6,3 +4,7 @@
+@@ -6,3 +4,8 @@
 -    :close-on-click-modal="false"
 -    custom-class="context-provider-dialog"
 -    append-to-body
 +    :visible.sync="dialogVisible"
 +    width="960px"
 +    size="large"
++    class="context-provider-dialog"
 +    :closeOnClickModal="false"
 +    :confirmText="$t('contextProviderDialog.confirm')"
 +    :cancelText="$t('contextProviderDialog.cancel')"
 +    @confirm="handleConfirm"
-@@ -108,5 +110 @@
+@@ -54 +57 @@
+-                
++
+@@ -107,6 +110 @@
+-
 -    <span slot="footer" class="dialog-footer">
 -      <el-button @click="dialogVisible = false">{{ $t('contextProviderDialog.cancel') }}</el-button>
 -      <el-button type="primary" @click="handleConfirm">{{ $t('contextProviderDialog.confirm') }}</el-button>
 -    </span>
 -  </el-dialog>
 +  </CustomDialog>
-@@ -115,0 +114 @@
+@@ -115,0 +114,2 @@
 +import CustomDialog from './CustomDialog.vue';
-@@ -117,0 +117 @@ export default {
++
+@@ -117,0 +118 @@ export default {
 +  components: { CustomDialog },
+@@ -160 +161 @@ export default {
+-      
++
+@@ -196 +197 @@ export default {
+-      
++
+@@ -198 +199 @@ export default {
+-      this.dialogVisible = false;
++      this.$emit('update:visible', false);
+@@ -204,0 +206,3 @@ export default {
++.context-provider-dialog ::v-deep .el-dialog__body {
++  padding: 16px 20px;
++}
+@@ -206 +210 @@ export default {
+-  max-height: 60vh;
++  max-height: calc(100vh - 280px);
+@@ -208 +212 @@ export default {
+-  padding: 20px 25px;
++  padding: 0 5px;
+@@ -233 +237 @@ export default {
+-  border-left: 4px solid #409EFF; /* 左侧强调色 */
++  border-left: 4px solid #409EFF;
+@@ -264 +268 @@ export default {
+-  line-height: 32px; /* 垂直居中对齐 */
++  line-height: 32px;
+@@ -329,0 +334 @@ export default {
++
 diff --git a/main/manager-web/src/components/CustomDialog.vue b/main/manager-web/src/components/CustomDialog.vue
-index 429b21a..e76fc5c 100644
+index 429b21a..6c91b13 100644
 --- a/main/manager-web/src/components/CustomDialog.vue
 +++ b/main/manager-web/src/components/CustomDialog.vue
 @@ -10 +10 @@
@@ -84,7 +559,7 @@ index 429b21a..e76fc5c 100644
 +    size: {
 +      type: String,
 +      default: "small",
-+      validator: value => ["small", "large"].includes(value)
++      validator: (val) => ["small", "large"].includes(val),
 +    },
 @@ -96,0 +102,9 @@ export default {
 +  computed: {
@@ -94,72 +569,349 @@ index 429b21a..e76fc5c 100644
 +      if (this.size === "large") classes.push("custom-dialog--large");
 +      if (String(this.width).includes("%")) classes.push("custom-dialog--fluid");
 +      return classes.join(" ");
-+    }
++    },
 +  },
-@@ -127,2 +141,2 @@ export default {
+@@ -127,6 +141,10 @@ export default {
 -.custom-dialog {
 -  ::v-deep .el-dialog {
-+::v-deep {
-+  .el-dialog.custom-dialog {
-@@ -131,0 +146,4 @@ export default {
-+    margin: 5vh auto !important;
-+    display: flex;
-+    flex-direction: column;
-+    max-height: 90vh;
-@@ -134 +152 @@ export default {
+-    border-radius: 10px;
+-    overflow: hidden;
+-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+-  }
++/* 大档与小档通过 .custom-dialog--large 区分 */
++::v-deep .el-dialog.custom-dialog {
++  border-radius: 10px;
++  overflow: hidden;
++  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
++  margin: 5vh auto !important;
++  display: flex;
++  flex-direction: column;
++  max-height: calc(100vh - 10vh);
++}
+@@ -134,5 +152,18 @@ export default {
 -  ::v-deep .el-dialog__header {
-+  .el-dialog__header {
-@@ -140 +158 @@ export default {
--  ::v-deep .el-dialog__title {
-+  .el-dialog__title {
-@@ -162 +180 @@ export default {
--  ::v-deep .el-dialog__headerbtn {
-+  .el-dialog__headerbtn {
-@@ -192 +210,3 @@ export default {
--  ::v-deep .el-dialog__body {
-+  .el-dialog__body {
-+    max-height: calc(100vh - 220px);
-+    overflow-y: auto;
-@@ -196 +216 @@ export default {
--  ::v-deep .el-dialog__footer {
-+  .el-dialog__footer {
-@@ -231,0 +252,15 @@ export default {
-+  .el-dialog.custom-dialog.custom-dialog--large {
-+    margin: 10px auto !important;
-+    height: calc(100vh - 20px);
-+    max-height: calc(100vh - 20px);
-+    border-radius: 10px;
-+  }
-+  .el-dialog.custom-dialog.custom-dialog--large.custom-dialog--fluid {
-+    max-width: var(--dialog-table-max);
-+  }
-+  .el-dialog.custom-dialog--large .el-dialog__body {
-+    max-height: calc(100vh - 20px - 110px);
-+    flex: 1;
-+    min-height: 0;
-+  }
+-    padding: 16px 20px 12px;
+-    background: linear-gradient(135deg, #e2eeff, #edeafe);
+-    text-align: left;
+-  }
++::v-deep .el-dialog__body {
++  max-height: calc(100vh - 220px);
++  overflow-y: auto;
++  padding: 20px;
++}
 +
++/* .v-modal 样式由 global.scss 全局定义 */
++::v-deep .el-dialog__header {
++  padding: 16px 20px 12px;
++  background: linear-gradient(135deg, #e2eeff, #edeafe);
++  text-align: left;
++}
++
++::v-deep .el-dialog__title {
++  font-size: 16px;
++  font-weight: 500;
++  color: #1a1a1a;
++}
+@@ -140,2 +171,6 @@ export default {
+-  ::v-deep .el-dialog__title {
+-    font-size: 16px;
++::v-deep .dialog-title {
++  font-size: 18px;
++  display: inline-flex;
++  align-items: center;
++  > span {
++    line-height: 18px;
+@@ -143 +177,0 @@ export default {
+-    color: #1a1a1a;
+@@ -144,0 +179 @@ export default {
++}
+@@ -146,9 +181,18 @@ export default {
+-  .dialog-title {
+-    font-size: 18px;
+-    display: inline-flex;
+-    align-items: center;
+-    > span {
+-      line-height: 18px;
+-      font-weight: 500;
+-    }
+-  }
++::v-deep .title-icon {
++  width: 24px;
++  height: 24px;
++  margin-right: 8px;
++}
++
++::v-deep .el-dialog__headerbtn {
++  top: 12px;
++  right: 16px;
++  width: 32px;
++  height: 32px;
++  border: none;
++  border-radius: 50%;
++  background: #fff;
++  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
++  display: flex;
++  align-items: center;
++  justify-content: center;
+@@ -156,4 +200,5 @@ export default {
+-  .title-icon {
+-    width: 24px;
+-    height: 24px;
+-    margin-right: 8px;
++  .el-dialog__close {
++    font-size: 18px;
++    color: #666;
++    position: static;
++    transform: none;
+@@ -162,7 +207 @@ export default {
+-  ::v-deep .el-dialog__headerbtn {
+-    top: 12px;
+-    right: 16px;
+-    width: 32px;
+-    height: 32px;
+-    border: none;
+-    border-radius: 50%;
++  &:hover {
+@@ -170,4 +209 @@ export default {
+-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
++    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+@@ -176,13 +212 @@ export default {
+-      font-size: 18px;
+-      color: #666;
+-      position: static;
+-      transform: none;
+-    }
+-
+-    &:hover {
+-      background: #fff;
+-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+-
+-      .el-dialog__close {
+-        color: #333;
+-      }
++      color: #333;
+@@ -190,0 +215 @@ export default {
++}
+@@ -192,3 +217,3 @@ export default {
+-  ::v-deep .el-dialog__body {
+-    padding: 20px;
+-  }
++::v-deep .el-dialog__footer {
++  padding: 12px 20px 16px;
++}
+@@ -196,3 +221,3 @@ export default {
+-  ::v-deep .el-dialog__footer {
+-    padding: 12px 20px 16px;
+-  }
++::v-deep .dialog-footer {
++  display: flex;
++  justify-content: flex-end;
+@@ -200 +225,2 @@ export default {
+-  .dialog-footer {
++  .el-button {
++    padding: 10px 20px;
+@@ -202 +228,2 @@ export default {
+-    justify-content: flex-end;
++    align-items: center;
++  }
+@@ -204,5 +231,3 @@ export default {
+-    .el-button {
+-      padding: 10px 20px;
+-      display: flex;
+-      align-items: center;
+-    }
++  .el-button--primary {
++    background: linear-gradient(to right, #4a7cfd, #8154fc);
++    border: none;
+@@ -210 +235,2 @@ export default {
+-    .el-button--primary {
++    &:hover,
++    &:focus {
+@@ -212,7 +238 @@ export default {
+-      border: none;
+-
+-      &:hover,
+-      &:focus {
+-        background: linear-gradient(to right, #4a7cfd, #8154fc);
+-        opacity: 0.85;
+-      }
++      opacity: 0.85;
+@@ -219,0 +240 @@ export default {
++  }
+@@ -221,4 +242,4 @@ export default {
+-    .confirm-inner {
+-      display: inline-flex;
+-      align-items: center;
+-    }
++  .confirm-inner {
++    display: inline-flex;
++    align-items: center;
++  }
+@@ -226,5 +247,4 @@ export default {
+-    .confirm-icon {
+-      width: 16px;
+-      height: 16px;
+-      margin-right: 4px;
+-    }
++  .confirm-icon {
++    width: 16px;
++    height: 16px;
++    margin-right: 4px;
+@@ -232,0 +253,18 @@ export default {
++
++/* 大档：上下各留 10px 让边框和圆角可见 */
++::v-deep .el-dialog.custom-dialog.custom-dialog--large {
++  margin: 10px auto !important;
++  height: calc(100vh - 20px);
++  max-height: calc(100vh - 20px);
++  border-radius: 10px;
++}
++
++::v-deep .el-dialog.custom-dialog.custom-dialog--large.custom-dialog--fluid {
++  max-width: var(--dialog-table-max);
++}
++
++::v-deep .el-dialog.custom-dialog--large .el-dialog__body {
++  max-height: calc(100vh - 20px - 110px);
++  flex: 1;
++  min-height: 0;
++}
+diff --git a/main/manager-web/src/components/FirmwareDialog.vue b/main/manager-web/src/components/FirmwareDialog.vue
+index fab0412..d73b318 100644
+--- a/main/manager-web/src/components/FirmwareDialog.vue
++++ b/main/manager-web/src/components/FirmwareDialog.vue
+@@ -113,0 +114,4 @@ export default {
++          // 兜底：父组件若未在回调内重置 saving，3 秒后强制释放加载状态
++          setTimeout(() => {
++            this.saving = false
++          }, 3000)
+diff --git a/main/manager-web/src/components/ManualAddDeviceDialog.vue b/main/manager-web/src/components/ManualAddDeviceDialog.vue
+index 00490de..c313316 100644
+--- a/main/manager-web/src/components/ManualAddDeviceDialog.vue
++++ b/main/manager-web/src/components/ManualAddDeviceDialog.vue
+@@ -12 +12 @@
+-        <el-select v-model="deviceForm.board" :placeholder="$t('manualAddDeviceDialog.deviceTypePlaceholder')" style="width: 100%">
++        <el-select v-model="deviceForm.board" :placeholder="$t('manualAddDeviceDialog.deviceTypePlaceholder')" style="width: 100%" filterable>
 diff --git a/main/manager-web/src/components/ModelEditDialog.vue b/main/manager-web/src/components/ModelEditDialog.vue
-index ac6b18e..e8c0631 100644
+index ac6b18e..adf1937 100644
 --- a/main/manager-web/src/components/ModelEditDialog.vue
 +++ b/main/manager-web/src/components/ModelEditDialog.vue
-@@ -5 +5 @@
+@@ -5 +5,2 @@
 -    width="57%"
-+    width="960px" size="large"
++    width="960px"
++    size="large"
+@@ -12 +12,0 @@
+-    <div class="dialog-scroll-body">
+@@ -96 +95,0 @@
+-    </div>
+@@ -469,8 +467,0 @@ export default {
+-::v-deep .el-dialog {
+-  margin-top: 6vh !important;
+-}
+-::v-deep .el-dialog__body {
+-  max-height: 60vh;
+-  overflow-y: auto;
+-  @include scrollbar-style;
+-}
+@@ -477,0 +469,4 @@ export default {
++  ::v-deep .el-dialog__body {
++    padding: 24px 40px;
++  }
++
+@@ -481,0 +477 @@ export default {
++    margin-bottom: 4px;
+@@ -514 +510 @@ export default {
+-    margin-bottom: 16px;
++    margin-bottom: 18px;
+@@ -524 +520 @@ export default {
+-    height: 32px;
++    height: 38px;
+@@ -527 +523,4 @@ export default {
+-    margin-bottom: 10px;
++    margin-bottom: 14px;
++  }
++  ::v-deep .el-form-item__label {
++    line-height: 38px;
 diff --git a/main/manager-web/src/components/ParamDialog.vue b/main/manager-web/src/components/ParamDialog.vue
-index 0f6de8d..03571aa 100644
+index 0f6de8d..bd5ef77 100644
 --- a/main/manager-web/src/components/ParamDialog.vue
 +++ b/main/manager-web/src/components/ParamDialog.vue
 @@ -5 +5 @@
 -    width="600px"
 +    width="720px"
+@@ -9,0 +10,2 @@
++    :confirmText="$t('button.ok')"
++    :cancelText="$t('button.cancel')"
+@@ -149,0 +152 @@ export default {
++      this.$emit('update:visible', false);
+@@ -186,18 +188,0 @@ export default {
+-<style>
+-.custom-param-dialog {
+-  border-radius: 16px !important;
+-  overflow: hidden;
+-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+-  border: none !important;
+-
+-  .el-dialog__header {
+-    display: none;
+-  }
+-
+-  .el-dialog__body {
+-    padding: 0 !important;
+-    border-radius: 16px;
+-  }
+-}
+-</style>
+-
+@@ -208 +193 @@ export default {
+-      margin-bottom: 20px;
++      margin-bottom: 28px;
+@@ -212 +197 @@ export default {
+-        padding-right: 12px;
++        padding-right: 14px;
+@@ -214 +199 @@ export default {
+-        font-size: 14px;
++        font-size: 15px;
+@@ -215,0 +201 @@ export default {
++        line-height: 44px;
+@@ -224 +210 @@ export default {
+-        height: 42px;
++        height: 44px;
+@@ -251 +237 @@ export default {
+-        height: 42px;
++        height: 44px;
+@@ -275 +261 @@ export default {
+-        padding: 12px 14px;
++        padding: 10px 14px;
+@@ -294,4 +279,0 @@ export default {
+-
+-    .remark-item :deep(.el-form-item__label) {
+-      margin-top: -4px;
+-    }
 diff --git a/main/manager-web/src/components/ProviderDialog.vue b/main/manager-web/src/components/ProviderDialog.vue
-index 713aefd..1e88bff 100644
+index 713aefd..5cb03db 100644
 --- a/main/manager-web/src/components/ProviderDialog.vue
 +++ b/main/manager-web/src/components/ProviderDialog.vue
-@@ -5 +5 @@
+@@ -5 +5,2 @@
 -    width="57%"
-+    width="960px" size="large"
++    width="960px"
++    size="large"
+@@ -310,0 +312,5 @@ export default {
++
++          // 兜底：父组件若未在回调内清 saving，3 秒后强制释放加载状态
++          setTimeout(() => {
++            this.saving = false;
++          }, 3000);
+diff --git a/main/manager-web/src/components/TtsAdvancedSettings.vue b/main/manager-web/src/components/TtsAdvancedSettings.vue
+index 676303c..597ab7c 100644
+--- a/main/manager-web/src/components/TtsAdvancedSettings.vue
++++ b/main/manager-web/src/components/TtsAdvancedSettings.vue
+@@ -77,0 +78,2 @@
++          filterable
++          collapse-tags
 diff --git a/main/manager-web/src/components/TtsModel.vue b/main/manager-web/src/components/TtsModel.vue
 index 6a33f28..73cd6e4 100644
 --- a/main/manager-web/src/components/TtsModel.vue
@@ -168,38 +920,309 @@ index 6a33f28..73cd6e4 100644
 -  <CustomDialog :visible.sync="localVisible" :title="$t('modelConfig.voiceManagement')" width="90%"
 +  <CustomDialog :visible.sync="localVisible" :title="$t('modelConfig.voiceManagement')" width="80%" size="large"
 diff --git a/main/manager-web/src/components/VoiceCloneDialog.vue b/main/manager-web/src/components/VoiceCloneDialog.vue
-index 6af1226..449e41c 100644
+index 6af1226..66c5aa8 100644
 --- a/main/manager-web/src/components/VoiceCloneDialog.vue
 +++ b/main/manager-web/src/components/VoiceCloneDialog.vue
-@@ -5 +5 @@
+@@ -5 +5,2 @@
 -        width="900px"
-+        width="960px" size="large"
++        width="960px"
++        size="large"
+diff --git a/main/manager-web/src/components/VoicePrintDialog.vue b/main/manager-web/src/components/VoicePrintDialog.vue
+index 1bd985f..5d4fd0a 100644
+--- a/main/manager-web/src/components/VoicePrintDialog.vue
++++ b/main/manager-web/src/components/VoicePrintDialog.vue
+@@ -12 +12 @@
+-        <el-select v-model="form.audioId" :placeholder="$t('voicePrintDialog.selectVoiceMessage')" class="custom-select">
++        <el-select v-model="form.audioId" :placeholder="$t('voicePrintDialog.selectVoiceMessage')" class="custom-select" filterable>
+diff --git a/main/manager-web/src/i18n/de.js b/main/manager-web/src/i18n/de.js
+index 135db01..40cebbe 100644
+--- a/main/manager-web/src/i18n/de.js
++++ b/main/manager-web/src/i18n/de.js
+@@ -480,2 +480,2 @@ export default {
+-  'device.verificationCode': 'Bestätigungscode:',
+-  'device.verificationCodePlaceholder': 'Bitte den 6-stelligen Bestätigungscode eingeben, der vom Gerät gesendet wird..',
++  'device.verificationCode': 'Bestätigungscode',
++  'device.verificationCodePlaceholder': 'Bitte den 6-stelligen Bestätigungscode eingeben, der vom Gerät gesendet wird…',
+@@ -823 +823 @@ export default {
+-  'addAgentDialog.placeholder': 'Bitte Agent-Namen eingeben..',
++  'addAgentDialog.placeholder': 'Bitte Agent-Namen eingeben…',
+diff --git a/main/manager-web/src/i18n/en.js b/main/manager-web/src/i18n/en.js
+index 9edc830..97a875c 100644
+--- a/main/manager-web/src/i18n/en.js
++++ b/main/manager-web/src/i18n/en.js
+@@ -480,2 +480,2 @@ export default {
+-  'device.verificationCode': 'Verification Code:',
+-  'device.verificationCodePlaceholder': 'Please enter the 6-digit verification code broadcasted by the device..',
++  'device.verificationCode': 'Verification Code',
++  'device.verificationCodePlaceholder': 'Please enter the 6-digit verification code broadcasted by the device…',
+@@ -823 +823 @@ export default {
+-  'addAgentDialog.placeholder': 'Please enter agent name..',
++  'addAgentDialog.placeholder': 'Please enter agent name…',
+diff --git a/main/manager-web/src/i18n/pt_BR.js b/main/manager-web/src/i18n/pt_BR.js
+index 46ad92c..0a8215d 100644
+--- a/main/manager-web/src/i18n/pt_BR.js
++++ b/main/manager-web/src/i18n/pt_BR.js
+@@ -480,2 +480,2 @@ export default {
+-  'device.verificationCode': 'Código de Verificação:',
+-  'device.verificationCodePlaceholder': 'Por favor, insira o código de verificação de 6 dígitos transmitido pelo dispositivo..',
++  'device.verificationCode': 'Código de Verificação',
++  'device.verificationCodePlaceholder': 'Por favor, insira o código de verificação de 6 dígitos transmitido pelo dispositivo…',
+@@ -823 +823 @@ export default {
+-  'addAgentDialog.placeholder': 'Por favor, insira o nome do agente..',
++  'addAgentDialog.placeholder': 'Por favor, insira o nome do agente…',
+diff --git a/main/manager-web/src/i18n/vi.js b/main/manager-web/src/i18n/vi.js
+index d2a56ba..bf2ca43 100644
+--- a/main/manager-web/src/i18n/vi.js
++++ b/main/manager-web/src/i18n/vi.js
+@@ -480,2 +480,2 @@ export default {
+-  'device.verificationCode': 'Mã xác minh:',
+-  'device.verificationCodePlaceholder': 'Vui lòng nhập mã xác minh 6 chữ số được phát từ thiết bị..',
++  'device.verificationCode': 'Mã xác minh',
++  'device.verificationCodePlaceholder': 'Vui lòng nhập mã xác minh 6 chữ số được phát từ thiết bị…',
+@@ -823 +823 @@ export default {
+-  'addAgentDialog.placeholder': 'Vui lòng nhập tên tác nhân..',
++  'addAgentDialog.placeholder': 'Vui lòng nhập tên tác nhân…',
+diff --git a/main/manager-web/src/i18n/zh_CN.js b/main/manager-web/src/i18n/zh_CN.js
+index eeff869..02e71f0 100644
+--- a/main/manager-web/src/i18n/zh_CN.js
++++ b/main/manager-web/src/i18n/zh_CN.js
+@@ -480,2 +480,2 @@ export default {
+-  'device.verificationCode': '验证码：',
+-  'device.verificationCodePlaceholder': '请输入设备播报的6位数验证码..',
++  'device.verificationCode': '验证码',
++  'device.verificationCodePlaceholder': '请输入设备播报的6位数验证码…',
+@@ -823 +823 @@ export default {
+-  'addAgentDialog.placeholder': '请输入智能体名称..',
++  'addAgentDialog.placeholder': '请输入智能体名称…',
+diff --git a/main/manager-web/src/i18n/zh_TW.js b/main/manager-web/src/i18n/zh_TW.js
+index e84ef23..ae50a82 100644
+--- a/main/manager-web/src/i18n/zh_TW.js
++++ b/main/manager-web/src/i18n/zh_TW.js
+@@ -480,2 +480,2 @@ export default {
+-  'device.verificationCode': '驗證碼：',
+-  'device.verificationCodePlaceholder': '請輸入設備播報的6位數驗證碼..',
++  'device.verificationCode': '驗證碼',
++  'device.verificationCodePlaceholder': '請輸入設備播報的6位數驗證碼…',
+@@ -823 +823 @@ export default {
+-  'addAgentDialog.placeholder': '請輸入智能體名稱..',
++  'addAgentDialog.placeholder': '請輸入智能體名稱…',
+diff --git a/main/manager-web/src/router/index.js b/main/manager-web/src/router/index.js
+index bb45b91..a47f1b4 100644
+--- a/main/manager-web/src/router/index.js
++++ b/main/manager-web/src/router/index.js
+@@ -84,4 +83,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '参数管理'
+@@ -95,4 +90,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '知识库管理'
+@@ -106,4 +97,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '服务端管理'
+@@ -117,4 +104,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: 'OTA管理'
+@@ -128,4 +111,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '音色资源开通'
+@@ -139,4 +118,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '音色克隆管理'
+@@ -181,4 +156,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '功能配置'
+@@ -193,4 +164,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '替换词管理'
+@@ -205,4 +172,0 @@ const routes = [
+-    },
+-    meta: {
+-      requiresAuth: true,
+-      title: '通讯录管理'
+@@ -231,2 +195,2 @@ VueRouter.prototype.push = function push(location) {
+-// 需要登录才能访问的路由
+-const protectedRoutes = ['home', 'RoleConfig', 'DeviceManagement', 'UserManagement', 'ModelConfig', 'KnowledgeBaseManagement', 'KnowledgeFileUpload', 'AddressBookManagement']
++// 匿名可访问的路由白名单
++const anonRouteNames = new Set(['login', 'Register', 'RetrievePassword', 'welcome'])
+@@ -236,9 +200,6 @@ router.beforeEach((to, from, next) => {
+-  // 检查是否是需要保护的路由
+-  if (protectedRoutes.includes(to.name)) {
+-    // 从localStorage获取token
+-    const token = localStorage.getItem('token')
+-    if (!token) {
+-      // 未登录，跳转到登录页
+-      next({ name: 'login', query: { redirect: to.fullPath } })
+-      return
+-    }
++  const token = localStorage.getItem('token');
++  const isAnonRoute = anonRouteNames.has(to.name);
++
++  if (isAnonRoute && token) {
++    next({ name: 'home', replace: true })
++    return
+@@ -245,0 +207,9 @@ router.beforeEach((to, from, next) => {
++
++  if (!isAnonRoute && !token) {
++    next({
++      name: 'login',
++      replace: true
++    })
++    return
++  }
++
 diff --git a/main/manager-web/src/styles/global.scss b/main/manager-web/src/styles/global.scss
-index 6d1411d..338f4de 100644
+index 6d1411d..f166f61 100644
 --- a/main/manager-web/src/styles/global.scss
 +++ b/main/manager-web/src/styles/global.scss
-@@ -46 +46,5 @@ select:-webkit-autofill:focus {
--}
-\ No newline at end of file
+@@ -45,0 +46,27 @@ select:-webkit-autofill:focus {
 +}
-+:root { --dialog-table-max: 1280px; }
-+.v-modal { background: rgba(15, 23, 42, .55) !important; backdrop-filter: blur(2px); }
-+.el-dialog__wrapper.custom-dialog { display: flex; align-items: center; justify-content: center; overflow: auto; }
-+.el-dialog__wrapper.delete-agent-dialog { display: flex; align-items: center; justify-content: center; overflow: auto; }
++
++// 大弹框宽度档位（表格档使用）
++:root {
++  --dialog-table-max: 1280px;
++}
++
++/* 全局弹框遮罩 */
++.v-modal {
++  background: rgba(15, 23, 42, 0.55) !important;
++  backdrop-filter: blur(2px);
++}
++
++/* 全局弹框 wrapper 居中 */
++.el-dialog__wrapper.custom-dialog {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  overflow: auto;
++}
++
++/* 首页删除智能体确认弹框 wrapper 居中（非 CustomDialog，需单独命中） */
++.el-dialog__wrapper.delete-agent-dialog {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  overflow: auto;
 diff --git a/main/manager-web/src/views/AgentTemplateManagement.vue b/main/manager-web/src/views/AgentTemplateManagement.vue
-index 2dc1142..54f0383 100644
+index 2dc1142..6894e73 100644
 --- a/main/manager-web/src/views/AgentTemplateManagement.vue
 +++ b/main/manager-web/src/views/AgentTemplateManagement.vue
-@@ -77 +77 @@
+@@ -77 +77,2 @@
 -      :width="'1200px'"
-+      width="1080px" size="large"
++      :width="'1080px'"
++      size="large"
+@@ -95 +96 @@
+-            :rows="16"
++            :autosize="{ minRows: 16 }"
 diff --git a/main/manager-web/src/views/KnowledgeBaseManagement.vue b/main/manager-web/src/views/KnowledgeBaseManagement.vue
-index 8f601b9..cb162e3 100644
+index 8f601b9..defd400 100644
 --- a/main/manager-web/src/views/KnowledgeBaseManagement.vue
 +++ b/main/manager-web/src/views/KnowledgeBaseManagement.vue
-@@ -116 +116 @@
--      width="1200px"
-+      width="1200px" size="large"
-@@ -192 +192 @@
+@@ -116,0 +117 @@
++      size="large"
+@@ -192 +193,2 @@
 -      width="900px"
-+      width="1200px" size="large"
++      width="1200px"
++      size="large"
+@@ -199 +201 @@
+-        <el-form :model="retrievalTestForm" label-width="100px">
++        <el-form :model="retrievalTestForm" label-width="100px" @submit.native.prevent>
+@@ -1016,0 +1019,2 @@ export default {
++  display: flex;
++  flex-direction: column;
+@@ -1020 +1024 @@ export default {
+-  max-height: 60vh;
++  flex: 1;
+@@ -1084,0 +1089 @@ export default {
++  flex: 1;
+@@ -1173,0 +1179,11 @@ export default {
++  display: flex;
++  flex-direction: column;
++  height: 100%;
++
++  .retrieval-test-result {
++    flex: 1;
++    display: flex;
++    flex-direction: column;
++    min-height: 0;
++  }
++
+@@ -1175 +1191,2 @@ export default {
+-    max-height: 400px;
++    flex: 1;
++    min-height: 0;
+diff --git a/main/manager-web/src/views/OtaManagement.vue b/main/manager-web/src/views/OtaManagement.vue
+index 512d6f9..f20f430 100644
+--- a/main/manager-web/src/views/OtaManagement.vue
++++ b/main/manager-web/src/views/OtaManagement.vue
+@@ -71 +71 @@
+-        <firmware-dialog :title="dialogTitle" :visible.sync="dialogVisible" :form="firmwareForm"
++        <firmware-dialog ref="firmwareDialog" :title="dialogTitle" :visible.sync="dialogVisible" :form="firmwareForm"
+@@ -212,0 +213 @@ export default {
++                    this.$refs.firmwareDialog?.resetSaving();
+@@ -229,0 +231 @@ export default {
++                    this.$refs.firmwareDialog?.resetSaving();
+diff --git a/main/manager-web/src/views/ProviderManagement.vue b/main/manager-web/src/views/ProviderManagement.vue
+index 5156c7e..266a900 100644
+--- a/main/manager-web/src/views/ProviderManagement.vue
++++ b/main/manager-web/src/views/ProviderManagement.vue
+@@ -258 +257,0 @@ export default {
+-      this.loading = true;
+@@ -266,0 +266,6 @@ export default {
++            this.dialogVisible = false;
++          } else {
++            this.$message.error({
++              message: data.msg || this.$t('common.updateFailure'),
++              showClose: true
++            });
+@@ -267,0 +273 @@ export default {
++          done && done();
+@@ -277,0 +284,6 @@ export default {
++            this.dialogVisible = false;
++          } else {
++            this.$message.error({
++              message: data.msg || this.$t('common.addFailure'),
++              showClose: true
++            });
+@@ -278,0 +291 @@ export default {
++          done && done();
+@@ -281,3 +293,0 @@ export default {
+-      this.loading = false;
+-      this.dialogVisible = false;
+-      done && done();
+diff --git a/main/manager-web/src/views/login.vue b/main/manager-web/src/views/login.vue
+index 29fc1d0..9e61ea9 100644
+--- a/main/manager-web/src/views/login.vue
++++ b/main/manager-web/src/views/login.vue
+@@ -77 +77 @@
+-                  <el-select v-model="form.areaCode" style="width: 220px; margin-right: 10px">
++                  <el-select v-model="form.areaCode" style="width: 220px; margin-right: 10px" filterable>
+diff --git a/main/manager-web/src/views/register.vue b/main/manager-web/src/views/register.vue
+index f159096..1a5ad03 100644
+--- a/main/manager-web/src/views/register.vue
++++ b/main/manager-web/src/views/register.vue
+@@ -37 +37 @@
+-                    <el-select v-model="form.areaCode" style="width: 220px; margin-right: 10px;">
++                    <el-select v-model="form.areaCode" style="width: 220px; margin-right: 10px;" filterable>
+diff --git a/main/manager-web/src/views/retrievePassword.vue b/main/manager-web/src/views/retrievePassword.vue
+index 074c672..5b0aae6 100644
+--- a/main/manager-web/src/views/retrievePassword.vue
++++ b/main/manager-web/src/views/retrievePassword.vue
+@@ -30 +30 @@
+-                  <el-select v-model="form.areaCode" style="width: 220px; margin-right: 10px;">
++                  <el-select v-model="form.areaCode" style="width: 220px; margin-right: 10px;" filterable>

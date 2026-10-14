@@ -2,8 +2,8 @@
 
 本目录是现有管理后台的源码补丁和验证工具，不是第二套后台。
 
-现网编译产物包含上游以外的桌面弹窗定制。`production-dialogs.patch` 从运行产物核对并恢复其尺寸、small/large接口及全屏样式；`responsive.patch` 在这个基线上扩展三端布局。发布前必须核对桌面基线的编译模块、依赖关系和CSS规则，不能直接以未定制上游原版替换生产。目标源码为
-`xiaozhi-esp32-server` v0.9.7 / `87c6df77b0220ddbd8fc804f984f83f69f3225e5`，沿用 Vue 2、Element UI、Vue CLI，API、路由、认证、数据库不变。
+现网编译产物包含 v0.9.7 后的桌面弹窗调整。`production-dialogs.patch` 合入已核对的官方主分支前端修复并恢复现网全屏样式；`responsive.patch` 在这个基线上扩展三端布局。发布前必须核对桌面基线的编译模块、依赖关系和CSS规则，不能直接以未定制上游原版替换生产。目标源码为
+`xiaozhi-esp32-server` v0.9.7 / `87c6df77b0220ddbd8fc804f984f83f69f3225e5`，沿用 Vue 2、Element UI、Vue CLI，API 路径、认证机制和数据库不变；登录路由合入官方守卫修复。官方对照详见 [差异清单](../upstream_fixes/README.md)。
 
 ## 构建与源码
 

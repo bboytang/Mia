@@ -1,0 +1,26 @@
+{
+  "base": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "official": "27399a2fb64b5910196f438a256ce0a9f868481f",
+  "files": {
+    "main/xiaozhi-server/config/manage_api_client.py": {
+      "before": "12eeafc615da8cff063d4af907d57fa025a491ef706ca77de8a7e95e062f4150",
+      "after": "cf34e8769ad1c891f2fda01eeb41a5f572547a00ebe4d8aec82c6e8ab289fa88"
+    },
+    "main/xiaozhi-server/core/handle/receiveAudioHandle.py": {
+      "before": "4493dfd77c1bfa7be1a79bb293dbdbf8cad64a6eb2bc53efca3e30efefcb47f1",
+      "after": "2cf58dc7e96f7ccf673053fd9ebee7302bce62641794c22146cfaae8e82f0949"
+    },
+    "main/xiaozhi-server/core/providers/asr/utils.py": {
+      "before": "80f480dba7021664b4500601843ba4dd620ba3fc2fd03bfb7c102e21353593b9",
+      "after": "73bb25fb9ba22eeb13d9a908f8faf072649e3d048d5b029ff77d8d7cba2a86b6"
+    },
+    "main/xiaozhi-server/core/providers/tts/base.py": {
+      "before": "8c9c6d9da3774d2f78d05e5d0e7c5081d750752466f36a593733911430bac00f",
+      "after": "af2006bb76e0bb66a24ae764ac33eb106035d0ea55d239a48caa149750a6f96f"
+    },
+    "main/xiaozhi-server/core/providers/tts/edge.py": {
+      "before": "1b1f46e58a5363d104a363ad1fcf7d3fccc999910e208537c6bafb14664a0281",
+      "after": "c7e030d1b9bc960c662a4e5382d6f8aed71040e97dfd9bbe9b47d6d15deaa5be"
+    }
+  }
+}

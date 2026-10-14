@@ -7,6 +7,8 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import shutil
+import tempfile
 
 
 def main():
@@ -26,8 +28,16 @@ def main():
             raise SystemExit(f'Upstream file differs; review custom changes first: {relative}')
     desktop_patch = str(bundle / 'production-dialogs.patch')
     patch = str(bundle / 'responsive.patch')
-    subprocess.run(['git', 'apply', '--unidiff-zero', '--check', desktop_patch], cwd=root, check=True)
-    subprocess.run(['git', 'apply', '--unidiff-zero', '--check', patch], cwd=root, check=True)
+    with tempfile.TemporaryDirectory(prefix='mia-admin-check-') as scratch:
+        for relative in manifest['files']:
+            source = root / relative
+            if source.is_file():
+                target = Path(scratch) / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
+        for candidate in (desktop_patch, patch):
+            subprocess.run(['git', 'apply', '--unidiff-zero', '--check', candidate], cwd=scratch, check=True)
+            subprocess.run(['git', 'apply', '--unidiff-zero', candidate], cwd=scratch, check=True)
     if args.apply:
         subprocess.run(['git', 'apply', '--unidiff-zero', desktop_patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', '--check', patch], cwd=root, check=True)

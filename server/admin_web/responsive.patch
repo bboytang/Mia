@@ -174,19 +174,19 @@ index ed7d2fd..1f7bac1 100644
 +.mac-address-wrapper:hover .mac-address-mask,
 +.mac-address-wrapper.is-revealed .mac-address-mask {
 diff --git a/main/manager-web/src/components/ProviderDialog.vue b/main/manager-web/src/components/ProviderDialog.vue
-index 1e88bff..9a02e6c 100644
+index 5cb03db..60d3946 100644
 --- a/main/manager-web/src/components/ProviderDialog.vue
 +++ b/main/manager-web/src/components/ProviderDialog.vue
-@@ -60 +60 @@
+@@ -61 +61 @@
 -            <el-table-column :label="$t('providerDialog.fieldKey')">
 +            <el-table-column :label="$t('providerDialog.fieldKey')" :min-width="$responsive.compact ? 140 : undefined">
-@@ -70 +70 @@
+@@ -71 +71 @@
 -            <el-table-column :label="$t('providerDialog.fieldLabel')">
 +            <el-table-column :label="$t('providerDialog.fieldLabel')" :min-width="$responsive.compact ? 140 : undefined">
-@@ -80 +80 @@
+@@ -81 +81 @@
 -            <el-table-column :label="$t('providerDialog.fieldType')">
 +            <el-table-column :label="$t('providerDialog.fieldType')" :min-width="$responsive.compact ? 140 : undefined">
-@@ -96 +96 @@
+@@ -97 +97 @@
 -            <el-table-column :label="$t('providerDialog.defaultValue')">
 +            <el-table-column :label="$t('providerDialog.defaultValue')" :min-width="$responsive.compact ? 140 : undefined">
 diff --git a/main/manager-web/src/components/TtsModel.vue b/main/manager-web/src/components/TtsModel.vue
@@ -215,37 +215,37 @@ index 73cd6e4..1bd2481 100644
 -          <el-table-column v-if="showReferenceColumns" :label="$t('ttsModel.referenceText')" align="center">
 +          <el-table-column v-if="showReferenceColumns" :label="$t('ttsModel.referenceText')" align="center" :min-width="$responsive.compact ? 140 : undefined">
 diff --git a/main/manager-web/src/i18n/de.js b/main/manager-web/src/i18n/de.js
-index 135db01..deebb23 100644
+index 40cebbe..824188c 100644
 --- a/main/manager-web/src/i18n/de.js
 +++ b/main/manager-web/src/i18n/de.js
 @@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Navigationsmenü', closeNavigation: 'Navigationsmenü schließen', selectRecord: 'Eintrag auswählen' },
 diff --git a/main/manager-web/src/i18n/en.js b/main/manager-web/src/i18n/en.js
-index 9edc830..59f92eb 100644
+index 97a875c..b1207a6 100644
 --- a/main/manager-web/src/i18n/en.js
 +++ b/main/manager-web/src/i18n/en.js
 @@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Navigation menu', closeNavigation: 'Close navigation menu', selectRecord: 'Select record' },
 diff --git a/main/manager-web/src/i18n/pt_BR.js b/main/manager-web/src/i18n/pt_BR.js
-index 46ad92c..03bfde0 100644
+index 0a8215d..3e9a812 100644
 --- a/main/manager-web/src/i18n/pt_BR.js
 +++ b/main/manager-web/src/i18n/pt_BR.js
 @@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Menu de navegação', closeNavigation: 'Fechar menu de navegação', selectRecord: 'Selecionar registro' },
 diff --git a/main/manager-web/src/i18n/vi.js b/main/manager-web/src/i18n/vi.js
-index d2a56ba..f6835f1 100644
+index bf2ca43..1c7107d 100644
 --- a/main/manager-web/src/i18n/vi.js
 +++ b/main/manager-web/src/i18n/vi.js
 @@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Menu điều hướng', closeNavigation: 'Đóng menu điều hướng', selectRecord: 'Chọn bản ghi' },
 diff --git a/main/manager-web/src/i18n/zh_CN.js b/main/manager-web/src/i18n/zh_CN.js
-index eeff869..2f9c88a 100644
+index 02e71f0..78f27c5 100644
 --- a/main/manager-web/src/i18n/zh_CN.js
 +++ b/main/manager-web/src/i18n/zh_CN.js
 @@ -1,0 +2 @@ export default {
 +  responsive: { navigation: '导航菜单', closeNavigation: '关闭导航菜单', selectRecord: '选择此记录' },
 diff --git a/main/manager-web/src/i18n/zh_TW.js b/main/manager-web/src/i18n/zh_TW.js
-index e84ef23..0ec6f61 100644
+index ae50a82..6d790e4 100644
 --- a/main/manager-web/src/i18n/zh_TW.js
 +++ b/main/manager-web/src/i18n/zh_TW.js
 @@ -1,0 +2 @@ export default {
@@ -261,10 +261,10 @@ index 395272a..ea27074 100644
 +installResponsive(Vue);
 diff --git a/main/manager-web/src/styles/responsive.scss b/main/manager-web/src/styles/responsive.scss
 new file mode 100644
-index 0000000..16dfcfe
+index 0000000..c821f46
 --- /dev/null
 +++ b/main/manager-web/src/styles/responsive.scss
-@@ -0,0 +1,350 @@
+@@ -0,0 +1,360 @@
 +// One layout system layered over the existing desktop design. Page-level selectors
 +// deliberately outrank scoped desktop styles without hiding horizontal overflow.
 +:root {
@@ -352,6 +352,8 @@ index 0000000..16dfcfe
 +    .device-item-title, .device-name, .info-value, .server-value { white-space: normal; overflow-wrap: anywhere; }
 +    .server-list, .server-list-card, .feature-groups-container, .params-body, .doc-section { height: auto; overflow: visible; }
 +    .server-card, .server-info { min-width: 0; }
++    .form-column, .model-select-wrapper, .model-item { min-width: 0; }
++    .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 +    .full-height-form, .full-height-form .el-form-item, .nickname-item, .description-item { height: auto !important; }
 +    .full-height-form .el-textarea__inner { height: auto !important; min-height: 160px; }
 +    .params-table .cell { white-space: normal; overflow-wrap: anywhere; }
@@ -427,6 +429,14 @@ index 0000000..16dfcfe
 +    .device-header, .device-stats, .section-header { flex-wrap: wrap; gap: 12px; }
 +    .device-header { align-items: flex-start; }
 +    .stat-item { min-width: 0; }
++  }
++}
++
++@media (max-width: 900px) {
++  #app .page-role-config {
++    .form-grid { grid-template-columns: minmax(0, 1fr); }
++    .model-row { flex-direction: column; gap: 8px; }
++    .model-row .language-select-item { flex: 1; max-width: 100%; }
 +  }
 +}
 +
@@ -656,7 +666,7 @@ index 5b33dfb..afc9167 100644
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-address-book-management">
 diff --git a/main/manager-web/src/views/AgentTemplateManagement.vue b/main/manager-web/src/views/AgentTemplateManagement.vue
-index 54f0383..6b9ea28 100644
+index 6894e73..17b1698 100644
 --- a/main/manager-web/src/views/AgentTemplateManagement.vue
 +++ b/main/manager-web/src/views/AgentTemplateManagement.vue
 @@ -2 +2 @@
@@ -684,7 +694,7 @@ index 9e67f51..3af070d 100644
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-feature-management">
 diff --git a/main/manager-web/src/views/KnowledgeBaseManagement.vue b/main/manager-web/src/views/KnowledgeBaseManagement.vue
-index cb162e3..ef3045e 100644
+index defd400..f78613b 100644
 --- a/main/manager-web/src/views/KnowledgeBaseManagement.vue
 +++ b/main/manager-web/src/views/KnowledgeBaseManagement.vue
 @@ -2 +2 @@
@@ -715,7 +725,7 @@ index 024bb4a..40e2b08 100644
 -              >
 +               :min-width="$responsive.compact ? 140 : undefined">
 diff --git a/main/manager-web/src/views/OtaManagement.vue b/main/manager-web/src/views/OtaManagement.vue
-index 512d6f9..ce1cb53 100644
+index f20f430..450b3b0 100644
 --- a/main/manager-web/src/views/OtaManagement.vue
 +++ b/main/manager-web/src/views/OtaManagement.vue
 @@ -2 +2 @@
@@ -729,7 +739,7 @@ index 36312c4..5648fe6 100644
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-params-management">
 diff --git a/main/manager-web/src/views/ProviderManagement.vue b/main/manager-web/src/views/ProviderManagement.vue
-index 5156c7e..9f32f74 100644
+index 266a900..6d71519 100644
 --- a/main/manager-web/src/views/ProviderManagement.vue
 +++ b/main/manager-web/src/views/ProviderManagement.vue
 @@ -2 +2 @@
@@ -795,21 +805,21 @@ index a560ae0..1295325 100644
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-home">
 diff --git a/main/manager-web/src/views/login.vue b/main/manager-web/src/views/login.vue
-index 29fc1d0..b3955c6 100644
+index 9e61ea9..a537d42 100644
 --- a/main/manager-web/src/views/login.vue
 +++ b/main/manager-web/src/views/login.vue
 @@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-login">
 diff --git a/main/manager-web/src/views/register.vue b/main/manager-web/src/views/register.vue
-index f159096..b8dbd57 100644
+index 1a5ad03..17f88c4 100644
 --- a/main/manager-web/src/views/register.vue
 +++ b/main/manager-web/src/views/register.vue
 @@ -2 +2 @@
 -  <div class="welcome" @keyup.enter="register">
 +  <div class="welcome responsive-page page-register" @keyup.enter="register">
 diff --git a/main/manager-web/src/views/retrievePassword.vue b/main/manager-web/src/views/retrievePassword.vue
-index 074c672..1ca06dd 100644
+index 5b0aae6..eff69d5 100644
 --- a/main/manager-web/src/views/retrievePassword.vue
 +++ b/main/manager-web/src/views/retrievePassword.vue
 @@ -2 +2 @@
