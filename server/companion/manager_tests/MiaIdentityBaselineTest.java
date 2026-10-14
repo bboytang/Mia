@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.crypto.Mac;
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import xiaozhi.common.redis.RedisKeys;
 import xiaozhi.common.redis.RedisUtils;
 import xiaozhi.modules.security.service.SysUserTokenService;
-import xiaozhi.modules.sys.redis.SysParamsRedis;
+import xiaozhi.modules.sys.service.SysParamsService;
 
 /** Reproduces known unsafe baseline behavior on disposable CI data, NOT security acceptance. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -43,7 +44,7 @@ class MiaIdentityBaselineTest {
     @Autowired private TestRestTemplate http;
     @Autowired private JdbcTemplate db;
     @Autowired private RedisUtils redis;
-    @Autowired private SysParamsRedis params;
+    @Autowired private SysParamsService params;
     @Autowired private SysUserTokenService tokens;
     @Autowired private ObjectMapper mapper;
 
@@ -78,10 +79,10 @@ class MiaIdentityBaselineTest {
         byte[] secret = new byte[32];
         new SecureRandom().nextBytes(secret);
         String secretText = Base64.getEncoder().encodeToString(secret);
-        params.set("server.secret", secretText);
-        params.set("server.auth.enabled", "true");
-        params.set("server.websocket", "ws://127.0.0.1:1/xiaozhi/v1/");
-        params.set("server.mqtt_gateway", "null");
+        params.updateValueByCode("server.secret", secretText);
+        params.updateValueByCode("server.auth.enabled", "true");
+        params.updateValueByCode("server.websocket", "ws://127.0.0.1:1/xiaozhi/v1/");
+        params.updateValueByCode("server.mqtt_gateway", "null");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Device-Id", DEVICE_B);
@@ -118,7 +119,7 @@ class MiaIdentityBaselineTest {
         String code = "864201";
         redis.set(RedisKeys.getOtaActivationCode(code), device, 300);
         redis.set(RedisKeys.getOtaDeviceActivationInfo(device.replace(':', '_')),
-                Map.of("mac_address", device, "activation_code", code, "board", "MIA_CI", "app_version", "CI"), 300);
+                new HashMap<>(Map.of("mac_address", device, "activation_code", code, "board", "MIA_CI", "app_version", "CI")), 300);
         String token = tokens.createToken(USER_A).getData().getToken();
         assertEquals(0, post("/device/bind/" + AGENT_B + "/" + code, Map.of(), token).path("code").asInt());
         assertEquals(USER_A, db.queryForObject("SELECT user_id FROM ai_device WHERE id=?", Long.class, device));

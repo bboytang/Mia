@@ -10,6 +10,8 @@ v3 [38592420655](https://github.com/bboytang/Mia/actions/runs/38592420655) 四�
 
 v4 不改变检索逻辑或质量门槛，新增独立 J／K 合成语料（仍为 20 记忆／112 查询，同 v3 划分），验证关闭 ONNX 内存 arena／pattern／预打包的资源影响；参考原始向量继续检查。INT8 改逐通道及 reduce-range：这是针对大精度损失的通用候选修正，依据 [ONNX Runtime 官方量化说明](https://onnxruntime.ai/docs/performance/model-optimizations/quantization.html) 的 U8S8 饱和与逐通道指引，是否解决须实测。预打包配置依据 [固定 ORT 1.23.2 源码](https://github.com/microsoft/onnxruntime/blob/v1.23.2/include/onnxruntime/core/session/onnxruntime_session_options_config_keys.h)。报告补 CPU 指令集／型号，不能假定 runner 与服务器指令集相同。
 
+v4 [38593905607](https://github.com/bboytang/Mia/actions/runs/38593905607) 四候选仍不合格，见 [v4 报告](embedding-results-v4.json)。base INT8 正向／Top1 1.0、无关空召回 0.9375、参考最低余弦 0.93648；量化大幅改善但仍低于 0.95。base FP32 RSS 564.22 MiB 且空召回 0.875。small 两变体正向／Top1 0.95833、空召回 0.875；INT8 参考最低 0.99411。没有选型，后续应解决校准选择稳定性／推理加载及实际查询内存，不能靠继续增大容易样本或改旧失败得出通过。
+
 ## 候选及官方依据
 
 - BAAI/bge-small-zh-v1.5，revision `7999e1d3359715c523056ef9478215996d62a620`，512 维。

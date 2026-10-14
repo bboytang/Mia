@@ -121,6 +121,13 @@
 - `d8690e3aee1a34b953020d8cc194693f03fdd646` 身份基线 run [38593101882](https://github.com/bboytang/Mia/actions/runs/38593101882)：复现 4 用例 error，原因是缺既有 dev profile 导致 Spring datasource driver 不可确定；未到行为断言，未证实运行缺口。四类对照通过；完整上游回归仍为同一既有失败。
 - 新增测试明确使用 dev 与隔离 context-path，等待 GitHub 复核。没有扩展生产改动，交接同步下一步。
 
+## 2026-10-14：P06 v4 仍不合格，两个身份缺口运行证实
+
+- v4 [38593905607](https://github.com/bboytang/Mia/actions/runs/38593905607) 实验成功但四候选 eligible=false，保存 `embedding-results-v4.json`。量化精度改善仍有不合格，正向最高 1.0，所有候选有无关误召回；base FP32 仍超 RSS。后续解决校准稳定性和实际加载／检索内存，不降低门槛、不改写旧结果。
+- 身份 [38593905608](https://github.com/bboytang/Mia/actions/runs/38593905608)：4 复现中2通过（手工添加指向 B Agent、越权解绑影响 B 通讯录），两项 fixture 设置失败已定位：不可变 Map 缺 Redis type id、OTA 参考密钥只改缓存。改与既有代码一致的数据类型及官方参数更新路径；等待 GitHub 复核。
+- 四个关键类对照通过，完整回归仍唯一既有脱敏测试失败；没有生产整改、部署或模型私钥迁移。
+- 交接同步当前真实状态；下一步先核实修正后的身份复现，再继续 P06 通用算法／资源诊断和独立验收。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。
