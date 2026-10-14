@@ -38,6 +38,17 @@ public class MiaDeviceAuthorizationController {
         return new Result<Map<String, Object>>().ok(value);
     }
 
+    private long version(Map<String, Object> body, String key) {
+        Object value = body.get(key);
+        String text = value == null ? "" : value.toString();
+        if (!text.matches("[0-9]{1,19}")) throw new RenException(ErrorCode.NO_PERMISSION);
+        try {
+            return Long.parseLong(text);
+        } catch (NumberFormatException invalid) {
+            throw new RenException(ErrorCode.NO_PERMISSION);
+        }
+    }
+
     @PostMapping("/device/mia-auth/code")
     @RequiresPermissions("sys:role:normal")
     public Result<Map<String, Object>> code(@RequestBody Map<String, Object> body, HttpServletRequest request) {
@@ -71,5 +82,12 @@ public class MiaDeviceAuthorizationController {
     public Result<Map<String, Object>> verify(@RequestBody Map<String, Object> body) {
         return result(grants.verify(field(body, "device_id", 32), field(body, "client_id", 128),
                 field(body, "private_credential", 64)));
+    }
+
+    @PostMapping("/config/mia-auth/check-scope")
+    public Result<Map<String, Object>> checkScope(@RequestBody Map<String, Object> body) {
+        return result(grants.checkScope(field(body, "device_id", 32), field(body, "client_id", 128),
+                field(body, "owner", 256), version(body, "operator_id"),
+                version(body, "binding_version"), version(body, "credential_version")));
     }
 }

@@ -232,6 +232,32 @@ class MiaPrivateAuthorizationTest {
     }
 
     @Test
+    void trustedSnapshotCheckRequiresServerSecretAndRejectsOwnerVersionAndRevocation() throws Exception {
+        JsonNode original = grant();
+        JsonNode scope = original.path("scope");
+        Map<String, Object> snapshot = new java.util.HashMap<>(Map.of("device_id", DEVICE_B, "client_id", CLIENT,
+                "owner", scope.path("owner").asText(), "operator_id", scope.path("operator_id").asLong(),
+                "binding_version", scope.path("binding_version").asLong(),
+                "credential_version", scope.path("credential_version").asLong()));
+        String server = params.getValue("server.secret", false);
+        assertNotEquals(0, post("/config/mia-auth/check-scope", snapshot, userToken(USER_B)).path("code").asInt());
+        assertEquals(0, post("/config/mia-auth/check-scope", snapshot, server).path("code").asInt());
+        snapshot.put("owner", "user:" + USER_A + ":agent:" + AGENT_B);
+        assertNotEquals(0, post("/config/mia-auth/check-scope", snapshot, server).path("code").asInt());
+        snapshot.put("owner", scope.path("owner").asText());
+        snapshot.put("credential_version", scope.path("credential_version").asLong() + 1);
+        assertNotEquals(0, post("/config/mia-auth/check-scope", snapshot, server).path("code").asInt());
+        snapshot.put("credential_version", scope.path("credential_version").asLong());
+        snapshot.put("binding_version", 0.5);
+        assertNotEquals(0, post("/config/mia-auth/check-scope", snapshot, server).path("code").asInt());
+        snapshot.put("binding_version", scope.path("binding_version").asLong());
+        assertEquals(0, post("/device/mia-auth/revoke", Map.of("device_id", DEVICE_B), userToken(USER_B)).path("code").asInt());
+        assertNotEquals(0, post("/config/mia-auth/check-scope", snapshot, server).path("code").asInt());
+        assertEquals(USER_B, grant().path("scope").path("user_id").asLong());
+        assertNotEquals(0, post("/config/mia-auth/check-scope", snapshot, server).path("code").asInt());
+    }
+
+    @Test
     void forwardedHeaderCannotBypassBoundedExchangeRateLimit() throws Exception {
         long second = Instant.now().getEpochSecond() % 60;
         if (second > 55) Thread.sleep((60 - second) * 1000 + 100);

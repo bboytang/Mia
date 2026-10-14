@@ -14,4 +14,4 @@
 
 这个probe验证真实连接与响应，不是Mia生产Provider集成、RAG、信息不足回答或八项能力验收。后续实际功能必须经真实manager身份、实际提取及向量、Mia单回复链、跨会话／重启和授权时间观察运行。不得用此短请求替代完整行为。
 
-当前：入口刚编写，GitHub语法检查尚未执行；三个测试Secret尚未核实配置、probe未执行。配置内容仅通过GitHub安全界面填写，换Codex账号使用repository权限取得可运行入口，不复制秘密。
+当前：代码 `1ba397c9866fb0134b4d82366b566e897ce0dd86` 的 [38621146139](https://github.com/bboytang/Mia/actions/runs/38621146139) 语法检查成功，live job 按 push 条件跳过；没有发出模型请求。最近 repository Secret 名称核查为0，仍待配置三个测试Secret。配置内容仅通过GitHub安全界面填写，换Codex账号使用repository权限取得可运行入口，不复制秘密。

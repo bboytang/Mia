@@ -192,13 +192,17 @@ public class MiaDeviceAuthorizationService {
         return result;
     }
 
-    private boolean valid(Map<String, Object> grant, Binding current, String clientId, String credential) {
+    private boolean active(Map<String, Object> grant, Binding current, String clientId) {
         Object revoked = grant == null ? null : grant.get("revoked");
         boolean isRevoked = revoked == null || Boolean.TRUE.equals(revoked)
                 || (revoked instanceof Number && ((Number) revoked).intValue() != 0);
         return sameBinding(grant, current) && currentAuthority(current) && !isRevoked
                 && Objects.equals(grant.get("client_id"), clientId)
-                && future(grant.get("credential_expires_at")) && matches(grant.get("credential_hash"), credential);
+                && future(grant.get("credential_expires_at")) && grant.get("credential_hash") instanceof String;
+    }
+
+    private boolean valid(Map<String, Object> grant, Binding current, String clientId, String credential) {
+        return active(grant, current, clientId) && matches(grant.get("credential_hash"), credential);
     }
 
     @Transactional(readOnly = true)
@@ -206,6 +210,18 @@ public class MiaDeviceAuthorizationService {
         Binding current = binding(deviceId, false);
         Map<String, Object> grant = row(deviceId, false);
         return valid(grant, current, clientId, credential) ? scope(grant) : null;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> checkScope(String deviceId, String clientId, String expectedOwner,
+                                          long operatorId, long bindingVersion, long credentialVersion) {
+        Binding current = binding(deviceId, false);
+        Map<String, Object> grant = row(deviceId, false);
+        if (!active(grant, current, clientId) || number(grant, "operator_id") != operatorId
+                || number(grant, "binding_version") != bindingVersion
+                || number(grant, "credential_version") != credentialVersion) return null;
+        Map<String, Object> actual = scope(grant);
+        return expectedOwner.equals(actual.get("owner")) ? actual : null;
     }
 
     @Transactional(rollbackFor = Exception.class)

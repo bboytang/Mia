@@ -21,9 +21,9 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P08 完整必要凭据链**，P07 剩余真实 Provider 等入口并行推进。P05 [开发契约](verification/mia-persona-memory/contracts.md)已明确，用户已选智控台一次性授权码；公网可信 IP 或域名证书均可，实际 TLS 部署尚未执行。
+当前步骤：**P09 可信 Scope 贯通**，P08 的客户端／入口与 P07 剩余真实 Provider 条件继续推进。用户已确认旧设备缺私有授权时提示“请用智控台授权码完成授权”，保留 ID／绑定，暂不加载个性化语音配置，授权后恢复；不增加公共语音回退。私有 Agent 配置及纠错词也必须验证私有凭据。[开发契约](verification/mia-persona-memory/contracts.md)已同步；实际 TLS 部署尚未执行。
 
-下一步：P08 [manager授权链](verification/mia-persona-memory/private-authorization.md)14个真实用例及构建已通过，贯通P09语音／工具／后台Scope并实施App凭据迁移及最小管理入口。完整回归保留唯一既有失败。P06 [固定规格](verification/mia-persona-memory/embedding-selection.json)直接复现。[专用真实Provider入口](verification/mia-persona-memory/live-provider.md)已编写，GitHub语法检查及Secret配置待核实、真实调用未执行。恢复时先查询在途Actions，避免重复运行。
+下一步：已有 [manager授权链](verification/mia-persona-memory/private-authorization.md)14个真实用例及构建通过。增加仅 server-secret 可访问的 check-scope，重核持久任务可信快照，拒绝撤销／版本／owner 变化；新增第15个用例尚待 GitHub 实跑。随后贯通语音／工具／后台Scope及私有配置门禁、App凭据迁移／最小管理入口。完整回归保留唯一既有失败。P06 [固定规格](verification/mia-persona-memory/embedding-selection.json)直接复现。[专用真实Provider入口](verification/mia-persona-memory/live-provider.md)语法检查已通过，真实调用未执行，测试Secret尚缺。恢复时先查询在途Actions，避免重复运行。
 
 ## 步骤状态
 
@@ -38,7 +38,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P06 | 完成：初选 | [固定规格](verification/mia-persona-memory/embedding-selection.json)，U8U8 base 达初选门槛；生产集成和行为未验收 |
 | P07 | 进行中 | 身份基线部分完成：编译／四类对照及4真实旧缺口复现通过；完整回归149/150，1既有失败；Provider等入口未完成 |
 | P08 | 进行中 | manager授权链14真实用例／构建通过；App、最小管理入口和实际TLS未完成，完整运行链未验收 |
-| P09—P10 | 未开始 | 可信 Scope、绑定／撤销贯通与记忆 schema 未实施 |
+| P09 | 进行中 | manager check-scope 及第15个真实用例待CI；语音私有配置／持续权限检查尚未贯通 |
+| P10 | 未开始 | 记忆 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
