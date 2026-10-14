@@ -26,6 +26,7 @@ python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
 - `HeaderBar.vue`：复用原导航项及权限判断，紧凑屏幕折叠菜单。
 - `CustomTable.vue`、`CustomPagination.vue`：手机卡片复用字段插槽、操作与选择；分页按钮调整。
 - `DeviceItem.vue`：触控操作和完整提示词查看。
+- `MacAddressMask.vue`：保持默认遮罩，触屏点击可展开或收起MAC地址。
 - `ProviderDialog.vue`、`TtsModel.vue`、`ModelConfig.vue`：宽表格列最小宽度与触屏详情。
 - 全部带路由的页面：限定响应式样式作用域；知识库文档子页面通过父页面继承规则。
 - 六种现有语言字典：导航、关闭与记录选择文案。

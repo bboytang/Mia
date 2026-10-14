@@ -25,9 +25,9 @@ def main():
         elif not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise SystemExit(f'Upstream file differs; review custom changes first: {relative}')
     patch = str(bundle / 'responsive.patch')
-    subprocess.run(['git', 'apply', '--check', patch], cwd=root, check=True)
+    subprocess.run(['git', 'apply', '--unidiff-zero', '--check', patch], cwd=root, check=True)
     if args.apply:
-        subprocess.run(['git', 'apply', patch], cwd=root, check=True)
+        subprocess.run(['git', 'apply', '--unidiff-zero', patch], cwd=root, check=True)
         print(f'Applied responsive source changes for upstream {manifest["commit"]}')
     else:
         print(f'All source checks passed for upstream {manifest["commit"]}; no files changed')

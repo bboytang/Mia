@@ -2,72 +2,40 @@ diff --git a/main/manager-web/public/index.html b/main/manager-web/public/index.
 index 3cd3bb7..43c1357 100644
 --- a/main/manager-web/public/index.html
 +++ b/main/manager-web/public/index.html
-@@ -4,7 +4,7 @@
- <head>
-   <meta charset="utf-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+@@ -7 +7 @@
 -  <meta name="viewport" content="width=device-width,initial-scale=1.0">
 +  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-   <meta name="description" content="<%= process.env.VUE_APP_DESCRIPTION %>">
-   <meta name="keywords" content="<%= process.env.VUE_APP_KEYWORDS %>">
-   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
 diff --git a/main/manager-web/src/App.vue b/main/manager-web/src/App.vue
 index f101e15..aecbadd 100644
 --- a/main/manager-web/src/App.vue
 +++ b/main/manager-web/src/App.vue
-@@ -65,12 +65,6 @@ export default {
-     this.$store.commit('setPubConfig', JSON.parse(localStorage.getItem('pubConfig') || '{}'));
-   },
-   mounted() {
+@@ -68,6 +67,0 @@ export default {
 -    // 检测是否为移动设备且VUE_APP_H5_URL不为空，如果两个条件都满足则跳转到H5页面
 -    if (this.isMobileDevice() && process.env.VUE_APP_H5_URL) {
 -      window.location.href = process.env.VUE_APP_H5_URL;
 -      return;
 -    }
 -    
-     // 只有在启用CDN时才添加相关事件和功能
-     if (this.isCDNEnabled) {
-       // 添加全局快捷键Alt+C用于显示缓存查看器
-@@ -112,11 +106,6 @@ export default {
-         this.showCacheViewer = true;
-       }
-     },
+@@ -115,5 +108,0 @@ export default {
 -    isMobileDevice() {
 -      // 检测是否为移动设备的函数
 -      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 -    },
 -    
-     async checkServiceWorkerStatus() {
-       // 检查Service Worker是否已注册
-       if ('serviceWorker' in navigator) {
 diff --git a/main/manager-web/src/components/CustomPagination.vue b/main/manager-web/src/components/CustomPagination.vue
 index 013839a..9b52c9e 100644
 --- a/main/manager-web/src/components/CustomPagination.vue
 +++ b/main/manager-web/src/components/CustomPagination.vue
-@@ -5,6 +5,7 @@
-       :page-size="pageSize"
-       :page-sizes="pageSizeOptions"
-       :total="total"
+@@ -7,0 +8 @@
 +      :pager-count="$responsive.mobile ? 5 : 7"
-       layout="sizes, prev, pager, next, total"
-       background
-       @size-change="handleSizeChange"
 diff --git a/main/manager-web/src/components/CustomTable.vue b/main/manager-web/src/components/CustomTable.vue
 index c3bfcd2..596ea4f 100644
 --- a/main/manager-web/src/components/CustomTable.vue
 +++ b/main/manager-web/src/components/CustomTable.vue
-@@ -1,6 +1,6 @@
- <template>
-   <div class="custom-table-wrapper">
+@@ -3 +3 @@
 -    <div class="table-container" :style="{ height: tableContainerHeight }">
 +    <div v-if="!$responsive.mobile" class="table-container" :style="{ height: tableContainerHeight }">
-       <el-table
-         ref="tableRef"
-         :data="data"
-@@ -78,6 +78,32 @@
-       </el-table>
-     </div>
- 
+@@ -80,0 +81,26 @@
 +    <div v-else class="mobile-records" v-loading="loading" :element-loading-text="loadingText">
 +      <div v-if="!data.length" class="mobile-records-empty">{{ $t('el.table.emptyText') }}</div>
 +      <article v-for="(row, index) in data" :key="row.id || row.deviceId || index" class="mobile-record"
@@ -94,18 +62,17 @@ index c3bfcd2..596ea4f 100644
 +      </article>
 +    </div>
 +
-     <!-- 分页 -->
-     <div class="table-footer">
-       <slot name="footer-btns"></slot>
 diff --git a/main/manager-web/src/components/DeviceItem.vue b/main/manager-web/src/components/DeviceItem.vue
-index 6985e1f..3b95b0b 100644
+index 6985e1f..3abfdb5 100644
 --- a/main/manager-web/src/components/DeviceItem.vue
 +++ b/main/manager-web/src/components/DeviceItem.vue
-@@ -9,7 +9,13 @@
-       <div>
-         <img src="@/assets/home/delete.png" alt="" style="width: 18px;height: 18px;margin-right: 10px;"
-           @click.stop="handleDelete" />
+@@ -10,3 +10,10 @@
+-        <img src="@/assets/home/delete.png" alt="" style="width: 18px;height: 18px;margin-right: 10px;"
+-          @click.stop="handleDelete" />
 -        <el-tooltip class="item" effect="light" :content="device.systemPrompt" placement="top"
++        <button type="button" class="device-delete-button" :aria-label="$t('common.delete')" @click.stop="handleDelete">
++          <img src="@/assets/home/delete.png" alt="" style="width: 18px;height: 18px;" />
++        </button>
 +        <el-popover v-if="$responsive.compact" placement="bottom" trigger="click">
 +          <pre class="device-prompt-detail">{{ device.systemPrompt }}</pre>
 +          <button slot="reference" type="button" class="device-info-button" :aria-label="$t('home.configureRole')">
@@ -113,49 +80,34 @@ index 6985e1f..3b95b0b 100644
 +          </button>
 +        </el-popover>
 +        <el-tooltip v-else class="item" effect="light" :content="device.systemPrompt" placement="top"
-           popper-class="device-item-tooltip"> 
-           <img src="@/assets/home/info.png" alt="" style="width: 18px;height: 18px;" />
-         </el-tooltip>
-@@ -21,23 +27,23 @@
-     <div class="device-name">
-       {{ $t('home.voiceModel') }}：{{ device.ttsModelName }} ({{ device.ttsVoiceName }})
-     </div>
+@@ -24,2 +31,2 @@
 -    <div style="display: flex;gap: 10px;align-items: center;">
 -      <div class="settings-btn" @click="handleConfigure">
 +    <div class="device-actions" style="display: flex;gap: 10px;align-items: center;">
 +      <button type="button" class="settings-btn" @click="handleConfigure">
-         {{ $t('home.configureRole') }}
+@@ -27,2 +34,2 @@
 -      </div>
 -      <div v-if="featureStatus.voiceprintRecognition" class="settings-btn" @click="handleVoicePrint">
 +      </button>
 +      <button type="button" v-if="featureStatus.voiceprintRecognition" class="settings-btn" @click="handleVoicePrint">
-         {{ $t('home.voiceprintRecognition') }}
+@@ -30,2 +37,2 @@
 -      </div>
 -      <div class="settings-btn" @click="handleDeviceManage">
 +      </button>
 +      <button type="button" class="settings-btn" @click="handleDeviceManage">
-         {{ $t('home.deviceManagement') }}({{ device.deviceCount }})
+@@ -33,2 +40,2 @@
 -      </div>
 -      <div :class="['settings-btn', { 'disabled-btn': device.memModelId === 'Memory_nomem' }]"
 +      </button>
 +      <button type="button" :class="['settings-btn', { 'disabled-btn': device.memModelId === 'Memory_nomem' }]"
-         @click="handleChatHistory">
-         <el-tooltip effect="light" v-if="device.memModelId === 'Memory_nomem'" :content="$t('home.enableMemory')" placement="top">
-           <span>{{ $t('home.chatHistory') }}</span>
-         </el-tooltip>
-         <span v-else>{{ $t('home.chatHistory') }}</span>
+@@ -40 +47 @@
 -      </div>
 +      </button>
-     </div>
-     <div class="version-info">
-       <div>{{ $t('home.lastConversation') }}：{{ formattedLastConnectedTime }}</div>
 diff --git a/main/manager-web/src/components/HeaderBar.vue b/main/manager-web/src/components/HeaderBar.vue
 index 9c2569d..f6dc2f8 100644
 --- a/main/manager-web/src/components/HeaderBar.vue
 +++ b/main/manager-web/src/components/HeaderBar.vue
-@@ -1,20 +1,28 @@
- <template>
-   <el-header class="header">
+@@ -3 +3,8 @@
 -    <div class="header-container">
 +    <div class="header-container" @keydown.esc="closeNavigation">
 +      <button v-if="$responsive.compact" ref="menuToggle" type="button" class="navigation-toggle"
@@ -165,287 +117,153 @@ index 9c2569d..f6dc2f8 100644
 +      </button>
 +      <button v-if="$responsive.compact && navigationOpen" type="button" class="navigation-backdrop"
 +        :aria-label="$t('responsive.closeNavigation')" @click="closeNavigation"></button>
-       <!-- 左侧元素 -->
+@@ -5 +12 @@
 -      <div class="header-left" @click="handleRouter('home')">
 +      <div class="header-left" role="button" tabindex="0" @keydown.enter="handleRouter('home')" @keydown.space.prevent="handleRouter('home')" @click="handleRouter('home')">
-         <img loading="lazy" alt="" src="@/assets/xiaozhi-logo.png" class="logo-img" />
-         <img loading="lazy" alt="" :src="xiaozhiAiIcon" class="brand-img" />
-       </div>
- 
-       <!-- 中间导航菜单 -->
+@@ -11 +18,2 @@
 -      <div class="header-center">
 +      <nav id="management-navigation" class="header-center"
 +        v-show="!$responsive.compact || navigationOpen" :aria-label="$t('responsive.navigation')">
-         <div class="equipment-management" :class="{
-           'active-tab':
-             $route.path === '/home' ||
-             $route.path === '/role-config' ||
-             $route.path === '/device-management',
+@@ -17 +25 @@
 -        }" @click="handleRouter('home')">
 +        }" role="button" tabindex="0" @keydown.enter="handleRouter('home')" @keydown.space.prevent="handleRouter('home')" @click="handleRouter('home')">
-           <img loading="lazy" alt="" src="@/assets/header/robot.png" :style="{
-             filter:
-               $route.path === '/home' ||
-@@ -28,7 +36,7 @@
-         <!-- 普通用户显示音色克隆 -->
-         <div v-if="!userInfo.superAdmin && featureStatus.voiceClone" class="equipment-management"
-           :class="{ 'active-tab': $route.path === '/voice-clone-management' }"
+@@ -31 +39 @@
 -          @click="handleRouter('voiceCloneManagement')">
 +          role="button" tabindex="0" @keydown.enter="handleRouter('voiceCloneManagement')" @keydown.space.prevent="handleRouter('voiceCloneManagement')" @click="handleRouter('voiceCloneManagement')">
-           <img loading="lazy" alt="" src="@/assets/header/voice.png" :style="{
-             filter:
-               $route.path === '/voice-clone-management'
-@@ -67,7 +75,7 @@
-         </el-dropdown>
- 
-         <div v-if="userInfo.superAdmin" class="equipment-management"
+@@ -70 +78 @@
 -          :class="{ 'active-tab': $route.path === '/model-config' }" @click="handleRouter('modelConfig')">
 +          :class="{ 'active-tab': $route.path === '/model-config' }" role="button" tabindex="0" @keydown.enter="handleRouter('modelConfig')" @keydown.space.prevent="handleRouter('modelConfig')" @click="handleRouter('modelConfig')">
-           <img loading="lazy" alt="" src="@/assets/header/model_config.png" :style="{
-             filter:
-               $route.path === '/model-config' ? 'brightness(0) invert(1)' : 'None',
-@@ -76,7 +84,7 @@
-         </div>
-         <div v-if="featureStatus.knowledgeBase" class="equipment-management"
-           :class="{ 'active-tab': $route.path === '/knowledge-base-management' || $route.path === '/knowledge-file-upload' }"
+@@ -79 +87 @@
 -          @click="handleRouter('knowledgeBaseManagement')">
 +          role="button" tabindex="0" @keydown.enter="handleRouter('knowledgeBaseManagement')" @keydown.space.prevent="handleRouter('knowledgeBaseManagement')" @click="handleRouter('knowledgeBaseManagement')">
-           <img loading="lazy" alt="" src="@/assets/header/knowledge_base.png" :style="{
-             filter:
-               $route.path === '/knowledge-base-management' || $route.path === '/knowledge-file-upload' ? 'brightness(0) invert(1)' : 'None',
-@@ -85,7 +93,7 @@
-         </div>
-         <div v-if="featureStatus.addressBook" class="equipment-management"
-           :class="{ 'active-tab': $route.path === '/address-book-management' }"
+@@ -88 +96 @@
 -          @click="handleRouter('addressBookManagement')">
 +          role="button" tabindex="0" @keydown.enter="handleRouter('addressBookManagement')" @keydown.space.prevent="handleRouter('addressBookManagement')" @click="handleRouter('addressBookManagement')">
-           <img loading="lazy" alt="" src="@/assets/header/address_book.png" :style="{
-             filter:
-               $route.path === '/address-book-management' ? 'brightness(0) invert(1)' : 'None',
-@@ -152,7 +160,7 @@
-             </el-dropdown-item>
-           </el-dropdown-menu>
-         </el-dropdown>
+@@ -155 +163 @@
 -      </div>
 +      </nav>
- 
-       <!-- 右侧元素 -->
-       <div class="header-right">
-@@ -191,6 +199,7 @@ export default {
-   data() {
-     return {
-       search: "",
+@@ -193,0 +202 @@ export default {
 +      navigationOpen: false,
-       isChangePasswordDialogVisible: false, // 控制修改密码弹窗的显示
-       paramDropdownVisible: false,
-       voiceCloneDropdownVisible: false,
-@@ -320,12 +329,21 @@ export default {
-       ];
-     },
-   },
+@@ -322,0 +332,4 @@ export default {
 +  watch: {
 +    '$route.fullPath'() { this.navigationOpen = false; },
 +    '$responsive.compact'() { this.navigationOpen = false; },
 +  },
-   async mounted() {
-     // 等待featureManager初始化完成后再加载功能状态
-     await this.loadFeatureStatus();
-   },
-   methods: {
+@@ -327,0 +341,4 @@ export default {
 +    closeNavigation() {
 +      this.navigationOpen = false;
 +      this.$nextTick(() => this.$refs.menuToggle && this.$refs.menuToggle.focus());
 +    },
-     handleRouter(type) {
+@@ -328,0 +346 @@ export default {
 +      this.navigationOpen = false;
-       this.$router.push(this.routerPaths[type]);
-     },
-     // 加载功能状态
+diff --git a/main/manager-web/src/components/MacAddressMask.vue b/main/manager-web/src/components/MacAddressMask.vue
+index ed7d2fd..1f7bac1 100644
+--- a/main/manager-web/src/components/MacAddressMask.vue
++++ b/main/manager-web/src/components/MacAddressMask.vue
+@@ -2 +2,4 @@
+-  <span v-if="isValid" class="mac-address-wrapper">{{ prefix }}<span class="mac-address-mask">{{ middle }}</span>{{ suffix }}</span>
++  <span v-if="isValid" class="mac-address-wrapper" :class="{ 'is-revealed': revealed }"
++    :role="$responsive.compact ? 'button' : undefined" :tabindex="$responsive.compact ? 0 : undefined"
++    :aria-pressed="$responsive.compact ? String(revealed) : undefined"
++    @click="revealed = !revealed" @keydown.enter="revealed = !revealed" @keydown.space.prevent="revealed = !revealed">{{ prefix }}<span class="mac-address-mask">{{ middle }}</span>{{ suffix }}</span>
+@@ -13,0 +17 @@ export default {
++  data() { return { revealed: false }; },
+@@ -35 +39,2 @@ export default {
+-.mac-address-wrapper:hover .mac-address-mask {
++.mac-address-wrapper:hover .mac-address-mask,
++.mac-address-wrapper.is-revealed .mac-address-mask {
 diff --git a/main/manager-web/src/components/ProviderDialog.vue b/main/manager-web/src/components/ProviderDialog.vue
 index 713aefd..ef2d3a9 100644
 --- a/main/manager-web/src/components/ProviderDialog.vue
 +++ b/main/manager-web/src/components/ProviderDialog.vue
-@@ -57,7 +57,7 @@
-                 <el-checkbox v-model="scope.row.selected" @change="handleFieldSelectChange"></el-checkbox>
-               </template>
-             </el-table-column>
+@@ -60 +60 @@
 -            <el-table-column :label="$t('providerDialog.fieldKey')">
 +            <el-table-column :label="$t('providerDialog.fieldKey')" :min-width="$responsive.compact ? 140 : undefined">
-               <template slot-scope="scope">
-                 <template v-if="scope.row.editing">
-                   <el-input v-model="scope.row.key" :placeholder="$t('providerDialog.fieldKey')"></el-input>
-@@ -67,7 +67,7 @@
-                 </template>
-               </template>
-             </el-table-column>
+@@ -70 +70 @@
 -            <el-table-column :label="$t('providerDialog.fieldLabel')">
 +            <el-table-column :label="$t('providerDialog.fieldLabel')" :min-width="$responsive.compact ? 140 : undefined">
-               <template slot-scope="scope">
-                 <template v-if="scope.row.editing">
-                   <el-input v-model="scope.row.label" :placeholder="$t('providerDialog.fieldLabel')"></el-input>
-@@ -77,7 +77,7 @@
-                 </template>
-               </template>
-             </el-table-column>
+@@ -80 +80 @@
 -            <el-table-column :label="$t('providerDialog.fieldType')">
 +            <el-table-column :label="$t('providerDialog.fieldType')" :min-width="$responsive.compact ? 140 : undefined">
-               <template slot-scope="scope">
-                 <template v-if="scope.row.editing">
-                   <el-select v-model="scope.row.type" :placeholder="$t('providerDialog.type')">
-@@ -93,7 +93,7 @@
-                 </template>
-               </template>
-             </el-table-column>
+@@ -96 +96 @@
 -            <el-table-column :label="$t('providerDialog.defaultValue')">
 +            <el-table-column :label="$t('providerDialog.defaultValue')" :min-width="$responsive.compact ? 140 : undefined">
-               <template slot-scope="scope">
-                 <template v-if="scope.row.editing">
-                   <el-input v-model="scope.row.default" :placeholder="$t('providerDialog.inputDefaultValue')"></el-input>
 diff --git a/main/manager-web/src/components/TtsModel.vue b/main/manager-web/src/components/TtsModel.vue
 index 6a33f28..770243f 100644
 --- a/main/manager-web/src/components/TtsModel.vue
 +++ b/main/manager-web/src/components/TtsModel.vue
-@@ -12,25 +12,25 @@
-               <el-checkbox v-model="scope.row.selected"></el-checkbox>
-             </template>
-           </el-table-column>
+@@ -15 +15 @@
 -          <el-table-column :label="$t('ttsModel.voiceCode')" align="center">
 +          <el-table-column :label="$t('ttsModel.voiceCode')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <el-input v-if="scope.row.editing" v-model="scope.row.voiceCode"></el-input>
-               <span v-else>{{ scope.row.voiceCode }}</span>
-             </template>
-           </el-table-column>
+@@ -21 +21 @@
 -          <el-table-column :label="$t('ttsModel.voiceName')" align="center">
 +          <el-table-column :label="$t('ttsModel.voiceName')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <el-input v-if="scope.row.editing" v-model="scope.row.voiceName"></el-input>
-               <span v-else>{{ scope.row.voiceName }}</span>
-             </template>
-           </el-table-column>
+@@ -27 +27 @@
 -          <el-table-column :label="$t('ttsModel.languageType')" align="center">
 +          <el-table-column :label="$t('ttsModel.languageType')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <el-input v-if="scope.row.editing" v-model="scope.row.languageType"></el-input>
-               <span v-else>{{ scope.row.languageType }}</span>
-             </template>
-           </el-table-column>
+@@ -33 +33 @@
 -          <el-table-column v-if="!showReferenceColumns" :label="$t('ttsModel.preview')" align="center" class-name="audio-column">
 +          <el-table-column v-if="!showReferenceColumns" :label="$t('ttsModel.preview')" align="center" class-name="audio-column" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <div class="custom-audio-container">
-                 <el-input v-if="scope.row.editing" v-model="scope.row.voiceDemo" :placeholder="$t('ttsModel.enterMp3Url')"
-@@ -40,20 +40,20 @@
-               </div>
-             </template>
-           </el-table-column>
+@@ -43 +43 @@
 -          <el-table-column v-if="!showReferenceColumns" :label="$t('ttsModel.remark')" align="center">
 +          <el-table-column v-if="!showReferenceColumns" :label="$t('ttsModel.remark')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <el-input v-if="scope.row.editing" type="textarea" :rows="1" autosize v-model="scope.row.remark"
-                   :placeholder="$t('ttsModel.enterRemark')" class="remark-input"></el-input>
-               <span v-else>{{ scope.row.remark }}</span>
-             </template>
-           </el-table-column>
+@@ -50 +50 @@
 -          <el-table-column v-if="showReferenceColumns" :label="$t('ttsModel.referenceAudioPath')" align="center">
 +          <el-table-column v-if="showReferenceColumns" :label="$t('ttsModel.referenceAudioPath')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <el-input v-if="scope.row.editing" v-model="scope.row.referenceAudio" :placeholder="$t('ttsModel.enterReferenceAudio')"></el-input>
-               <span v-else>{{ scope.row.referenceAudio }}</span>
-             </template>
-           </el-table-column>
+@@ -56 +56 @@
 -          <el-table-column v-if="showReferenceColumns" :label="$t('ttsModel.referenceText')" align="center">
 +          <el-table-column v-if="showReferenceColumns" :label="$t('ttsModel.referenceText')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-             <template slot-scope="scope">
-               <el-input v-if="scope.row.editing" v-model="scope.row.referenceText" :placeholder="$t('ttsModel.enterReferenceText')"></el-input>
-               <span v-else>{{ scope.row.referenceText }}</span>
 diff --git a/main/manager-web/src/i18n/de.js b/main/manager-web/src/i18n/de.js
 index 135db01..deebb23 100644
 --- a/main/manager-web/src/i18n/de.js
 +++ b/main/manager-web/src/i18n/de.js
-@@ -1,4 +1,5 @@
- export default {
+@@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Navigationsmenü', closeNavigation: 'Navigationsmenü schließen', selectRecord: 'Eintrag auswählen' },
-   // Login page related prompt text
-   'login.requiredUsername': 'Benutzername darf nicht leer sein',
-   'login.requiredPassword': 'Passwort darf nicht leer sein',
 diff --git a/main/manager-web/src/i18n/en.js b/main/manager-web/src/i18n/en.js
 index 9edc830..59f92eb 100644
 --- a/main/manager-web/src/i18n/en.js
 +++ b/main/manager-web/src/i18n/en.js
-@@ -1,4 +1,5 @@
- export default {
+@@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Navigation menu', closeNavigation: 'Close navigation menu', selectRecord: 'Select record' },
-   // Login page related prompt text
-   'login.requiredUsername': 'Username cannot be empty',
-   'login.requiredPassword': 'Password cannot be empty',
 diff --git a/main/manager-web/src/i18n/pt_BR.js b/main/manager-web/src/i18n/pt_BR.js
 index 46ad92c..03bfde0 100644
 --- a/main/manager-web/src/i18n/pt_BR.js
 +++ b/main/manager-web/src/i18n/pt_BR.js
-@@ -1,4 +1,5 @@
- export default {
+@@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Menu de navegação', closeNavigation: 'Fechar menu de navegação', selectRecord: 'Selecionar registro' },
-   // Texto da página de login
-   'login.requiredUsername': 'O nome de usuário não pode estar vazio',
-   'login.requiredPassword': 'A senha não pode estar vazia',
 diff --git a/main/manager-web/src/i18n/vi.js b/main/manager-web/src/i18n/vi.js
 index d2a56ba..f6835f1 100644
 --- a/main/manager-web/src/i18n/vi.js
 +++ b/main/manager-web/src/i18n/vi.js
-@@ -1,4 +1,5 @@
- export default {
+@@ -1,0 +2 @@ export default {
 +  responsive: { navigation: 'Menu điều hướng', closeNavigation: 'Đóng menu điều hướng', selectRecord: 'Chọn bản ghi' },
-   // Login page related prompt text
-   'login.requiredUsername': 'Tên đăng nhập không được để trống',
-   'login.requiredPassword': 'Mật khẩu không được để trống',
 diff --git a/main/manager-web/src/i18n/zh_CN.js b/main/manager-web/src/i18n/zh_CN.js
 index eeff869..2f9c88a 100644
 --- a/main/manager-web/src/i18n/zh_CN.js
 +++ b/main/manager-web/src/i18n/zh_CN.js
-@@ -1,4 +1,5 @@
- export default {
+@@ -1,0 +2 @@ export default {
 +  responsive: { navigation: '导航菜单', closeNavigation: '关闭导航菜单', selectRecord: '选择此记录' },
-   // 登录页面相关提示文本
-   'login.requiredUsername': '用户名不能为空',
-   'login.requiredPassword': '密码不能为空',
 diff --git a/main/manager-web/src/i18n/zh_TW.js b/main/manager-web/src/i18n/zh_TW.js
 index e84ef23..0ec6f61 100644
 --- a/main/manager-web/src/i18n/zh_TW.js
 +++ b/main/manager-web/src/i18n/zh_TW.js
-@@ -1,4 +1,5 @@
- export default {
+@@ -1,0 +2 @@ export default {
 +  responsive: { navigation: '導覽選單', closeNavigation: '關閉導覽選單', selectRecord: '選擇此記錄' },
-   // 登錄頁面相關提示文本
-   'login.requiredUsername': '用戶名不能為空',
-   'login.requiredPassword': '密碼不能為空',
 diff --git a/main/manager-web/src/main.js b/main/manager-web/src/main.js
 index 395272a..ea27074 100644
 --- a/main/manager-web/src/main.js
 +++ b/main/manager-web/src/main.js
-@@ -8,6 +8,8 @@ import store from './store';
- import i18n from './i18n';
- import locale from 'element-ui/lib/locale'
- import './styles/global.scss';
+@@ -10,0 +11,2 @@ import './styles/global.scss';
 +import './styles/responsive.scss';
 +import { installResponsive } from './utils/responsive';
- import { register as registerServiceWorker } from './registerServiceWorker';
- import featureManager from './utils/featureManager';
- 
-@@ -15,6 +17,7 @@ import featureManager from './utils/featureManager';
- Vue.prototype.$eventBus = new Vue();
- 
- Vue.use(ElementUI);
+@@ -17,0 +20 @@ Vue.use(ElementUI);
 +installResponsive(Vue);
- locale.i18n((key, value) => i18n.t(key, value))
- 
- Vue.config.productionTip = false
 diff --git a/main/manager-web/src/styles/responsive.scss b/main/manager-web/src/styles/responsive.scss
 new file mode 100644
-index 0000000..97e6b60
+index 0000000..33f54e3
 --- /dev/null
 +++ b/main/manager-web/src/styles/responsive.scss
-@@ -0,0 +1,264 @@
+@@ -0,0 +1,308 @@
 +// One layout system layered over the existing desktop design. Page-level selectors
 +// deliberately outrank scoped desktop styles without hiding horizontal overflow.
 +:root {
@@ -710,6 +528,50 @@ index 0000000..97e6b60
 +
 +.device-prompt-detail { max-height: calc(var(--visible-height) - 120px); overflow-y: auto; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
 +.device-info-button { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 0; padding: 0; vertical-align: middle; }
++
++.device-delete-button { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin-right: 10px; border: 0; background: transparent; padding: 0; cursor: pointer; }
++@media (max-width: 600px), (pointer: coarse) {
++  .device-delete-button { width: 44px; height: 44px; margin-right: 0; }
++  .device-item > div:first-child > div { display: flex; flex-shrink: 0; }
++  .alias-view .el-icon-edit, .stat-edit-icon, .permission-edit-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
++}
++
++@media (max-width: 1180px) {
++  #app .responsive-page {
++    .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++    .form-column { min-width: 0; }
++    .template-item { height: auto; min-height: 44px; line-height: 1.5; padding: 10px 12px; white-space: normal; overflow-wrap: anywhere; max-width: 100%; box-sizing: border-box; }
++    .context-provider-item .el-form-item__content > div { flex-wrap: wrap; gap: 8px; }
++    .device-stats, .device-mac, .device-name-text, .permission-name { overflow-wrap: anywhere; }
++    .device-info, .permission-content, .device-content, .info-left { min-width: 0; }
++  }
++}
++@media (max-width: 600px) { #app .responsive-page .form-grid { grid-template-columns: 1fr; } }
++
++// Appended overlays have no page ID. These selectors also outrank lazily loaded
++// scoped component rules, so a dialog opened after routing uses the same layout.
++@media (max-width: 1180px) {
++  body .el-dialog__wrapper .el-dialog .el-dialog__body { height: auto; overflow: auto; }
++  body .el-drawer__wrapper .el-drawer .el-drawer__body {
++    overflow-y: auto;
++    .function-manager { grid-template-columns: 1fr 1fr; height: auto; }
++    .params-column { grid-column: 1 / -1; min-width: 0; }
++    .drawer-footer { position: static; width: auto; box-sizing: border-box; }
++  }
++}
++@media (max-width: 600px) {
++  body .el-dialog__wrapper .el-dialog .el-dialog__body {
++    .form-row, .input-row, .header-row, .field-config-header { flex-direction: column; align-items: stretch; }
++    .chat-container { flex-direction: column; }
++    .session-list { width: auto; max-height: 160px; box-sizing: border-box; }
++  }
++  body .el-drawer__wrapper .el-drawer .el-drawer__body {
++    .function-manager { grid-template-columns: 1fr; }
++    .params-column { grid-column: auto; }
++  }
++}
++
++@media (max-width: 1180px) { .mac-address-wrapper { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; } }
 diff --git a/main/manager-web/src/utils/responsive.js b/main/manager-web/src/utils/responsive.js
 new file mode 100644
 index 0000000..462429b
@@ -747,291 +609,173 @@ diff --git a/main/manager-web/src/views/AddressBookManagement.vue b/main/manager
 index 5b33dfb..afc9167 100644
 --- a/main/manager-web/src/views/AddressBookManagement.vue
 +++ b/main/manager-web/src/views/AddressBookManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-address-book-management">
-     <HeaderBar />
- 
-     <div class="page-content">
 diff --git a/main/manager-web/src/views/AgentTemplateManagement.vue b/main/manager-web/src/views/AgentTemplateManagement.vue
 index 2dc1142..f0da314 100644
 --- a/main/manager-web/src/views/AgentTemplateManagement.vue
 +++ b/main/manager-web/src/views/AgentTemplateManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-agent-template-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/DeviceManagement.vue b/main/manager-web/src/views/DeviceManagement.vue
 index a4709ee..d5d5211 100644
 --- a/main/manager-web/src/views/DeviceManagement.vue
 +++ b/main/manager-web/src/views/DeviceManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-device-management">
-     <HeaderBar />
- 
-     <div class="main-wrapper">
 diff --git a/main/manager-web/src/views/DictManagement.vue b/main/manager-web/src/views/DictManagement.vue
 index fcd2b66..07e59e2 100644
 --- a/main/manager-web/src/views/DictManagement.vue
 +++ b/main/manager-web/src/views/DictManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-dict-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <el-card class="main-card" shadow="never">
 diff --git a/main/manager-web/src/views/FeatureManagement.vue b/main/manager-web/src/views/FeatureManagement.vue
 index 9e67f51..3af070d 100644
 --- a/main/manager-web/src/views/FeatureManagement.vue
 +++ b/main/manager-web/src/views/FeatureManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-feature-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/KnowledgeBaseManagement.vue b/main/manager-web/src/views/KnowledgeBaseManagement.vue
 index 8f601b9..b7cb663 100644
 --- a/main/manager-web/src/views/KnowledgeBaseManagement.vue
 +++ b/main/manager-web/src/views/KnowledgeBaseManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-knowledge-base-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/ModelConfig.vue b/main/manager-web/src/views/ModelConfig.vue
 index 024bb4a..40e2b08 100644
 --- a/main/manager-web/src/views/ModelConfig.vue
 +++ b/main/manager-web/src/views/ModelConfig.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-model-config">
-     <HeaderBar />
- 
-     <div class="operation-bar">
-@@ -84,18 +84,18 @@
-                 :label="$t('modelConfig.modelId')"
-                 prop="id"
-                 align="center"
+@@ -87 +87 @@
 -              ></el-table-column>
 +               :min-width="$responsive.compact ? 140 : undefined"></el-table-column>
-               <el-table-column
-                 :label="$t('modelConfig.modelName')"
-                 prop="modelName"
-                 align="center"
+@@ -92,2 +92,2 @@
 -              ></el-table-column>
 -              <el-table-column :label="$t('modelConfig.provider')" align="center">
 +               :min-width="$responsive.compact ? 140 : undefined"></el-table-column>
 +              <el-table-column :label="$t('modelConfig.provider')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-                 <template slot-scope="scope">
-                   {{ scope.row.configJson.type || $t("modelConfig.unknown") }}
-                 </template>
-               </el-table-column>
+@@ -98 +98 @@
 -              <el-table-column :label="$t('modelConfig.isEnabled')" align="center">
 +              <el-table-column :label="$t('modelConfig.isEnabled')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-                 <template slot-scope="scope">
-                   <el-tooltip
-                     v-if="scope.row.isDefault === 1 && scope.row.isEnabled === 1"
-@@ -124,7 +124,7 @@
-                   />
-                 </template>
-               </el-table-column>
+@@ -127 +127 @@
 -              <el-table-column :label="$t('modelConfig.isDefault')" align="center">
 +              <el-table-column :label="$t('modelConfig.isDefault')" align="center" :min-width="$responsive.compact ? 140 : undefined">
-                 <template slot-scope="scope">
-                   <el-switch
-                     v-model="scope.row.isDefault"
-@@ -140,7 +140,7 @@
-                 v-if="activeTab === 'tts'"
-                 :label="$t('modelConfig.voiceManagement')"
-                 align="center"
+@@ -143 +143 @@
 -              >
 +               :min-width="$responsive.compact ? 140 : undefined">
-                 <template slot-scope="scope">
-                   <el-button
-                     type="text"
 diff --git a/main/manager-web/src/views/OtaManagement.vue b/main/manager-web/src/views/OtaManagement.vue
 index 512d6f9..ce1cb53 100644
 --- a/main/manager-web/src/views/OtaManagement.vue
 +++ b/main/manager-web/src/views/OtaManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -    <div class="welcome">
 +    <div class="welcome responsive-page page-ota-management">
-         <HeaderBar />
-         <div class="main-wrapper">
-             <div class="content-panel">
 diff --git a/main/manager-web/src/views/ParamsManagement.vue b/main/manager-web/src/views/ParamsManagement.vue
 index 36312c4..5648fe6 100644
 --- a/main/manager-web/src/views/ParamsManagement.vue
 +++ b/main/manager-web/src/views/ParamsManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-params-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/ProviderManagement.vue b/main/manager-web/src/views/ProviderManagement.vue
 index 5156c7e..9f32f74 100644
 --- a/main/manager-web/src/views/ProviderManagement.vue
 +++ b/main/manager-web/src/views/ProviderManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-provider-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
-@@ -49,7 +49,7 @@
-                 </el-tag>
-               </template>
-               <template slot="fields" slot-scope="scope">
+@@ -52 +52 @@
 -                <el-popover placement="top-start" width="400" trigger="hover">
 +                <el-popover placement="top-start" width="400" :trigger="$responsive.compact ? 'click' : 'hover'">
-                   <div v-for="field in scope.row.fields" :key="field.key" class="field-item">
-                     <span class="field-label">{{ field.label }}:</span>
-                     <span class="field-type">{{ field.type }}</span>
 diff --git a/main/manager-web/src/views/ReplacementWordManagement.vue b/main/manager-web/src/views/ReplacementWordManagement.vue
 index 09ec01a..b7c4de8 100644
 --- a/main/manager-web/src/views/ReplacementWordManagement.vue
 +++ b/main/manager-web/src/views/ReplacementWordManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-replacement-word-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/ServerSideManager.vue b/main/manager-web/src/views/ServerSideManager.vue
 index 5e750be..02ffbe0 100644
 --- a/main/manager-web/src/views/ServerSideManager.vue
 +++ b/main/manager-web/src/views/ServerSideManager.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-server-side-manager">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/TemplateQuickConfig.vue b/main/manager-web/src/views/TemplateQuickConfig.vue
 index 14932d3..4c418a8 100644
 --- a/main/manager-web/src/views/TemplateQuickConfig.vue
 +++ b/main/manager-web/src/views/TemplateQuickConfig.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-template-quick-config">
-     <HeaderBar />
- 
-     <div class="operation-bar">
 diff --git a/main/manager-web/src/views/UserManagement.vue b/main/manager-web/src/views/UserManagement.vue
 index 1b8ba5a..982beb5 100644
 --- a/main/manager-web/src/views/UserManagement.vue
 +++ b/main/manager-web/src/views/UserManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-user-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/VoiceCloneManagement.vue b/main/manager-web/src/views/VoiceCloneManagement.vue
 index d06bcee..4fa6676 100644
 --- a/main/manager-web/src/views/VoiceCloneManagement.vue
 +++ b/main/manager-web/src/views/VoiceCloneManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-voice-clone-management">
-     <HeaderBar />
-     <div class="main-wrapper">
-       <div class="content-panel">
 diff --git a/main/manager-web/src/views/VoicePrint.vue b/main/manager-web/src/views/VoicePrint.vue
 index e52f88f..eeb7cda 100644
 --- a/main/manager-web/src/views/VoicePrint.vue
 +++ b/main/manager-web/src/views/VoicePrint.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -    <div class="welcome">
 +    <div class="welcome responsive-page page-voice-print">
-         <HeaderBar />
-         <div class="main-wrapper">
-             <div class="content-panel">
 diff --git a/main/manager-web/src/views/VoiceResourceManagement.vue b/main/manager-web/src/views/VoiceResourceManagement.vue
 index 21bdc8e..4d03a10 100644
 --- a/main/manager-web/src/views/VoiceResourceManagement.vue
 +++ b/main/manager-web/src/views/VoiceResourceManagement.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -    <div class="welcome">
 +    <div class="welcome responsive-page page-voice-resource-management">
-         <HeaderBar />
-         <div class="main-wrapper">
-             <div class="content-panel">
 diff --git a/main/manager-web/src/views/home.vue b/main/manager-web/src/views/home.vue
 index a560ae0..1295325 100644
 --- a/main/manager-web/src/views/home.vue
 +++ b/main/manager-web/src/views/home.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-home">
-     <!-- 公共头部 -->
-     <HeaderBar :devices="devices" />
-     <el-main style="padding: 20px;display: flex;flex-direction: column;">
 diff --git a/main/manager-web/src/views/login.vue b/main/manager-web/src/views/login.vue
 index 29fc1d0..b3955c6 100644
 --- a/main/manager-web/src/views/login.vue
 +++ b/main/manager-web/src/views/login.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-login">
-     <el-container style="height: 100%">
-       <el-header>
-         <div style="
 diff --git a/main/manager-web/src/views/register.vue b/main/manager-web/src/views/register.vue
 index f159096..b8dbd57 100644
 --- a/main/manager-web/src/views/register.vue
 +++ b/main/manager-web/src/views/register.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome" @keyup.enter="register">
 +  <div class="welcome responsive-page page-register" @keyup.enter="register">
-     <el-container style="height: 100%;">
-       <!-- 保持相同的头部 -->
-       <el-header>
 diff --git a/main/manager-web/src/views/retrievePassword.vue b/main/manager-web/src/views/retrievePassword.vue
 index 074c672..1ca06dd 100644
 --- a/main/manager-web/src/views/retrievePassword.vue
 +++ b/main/manager-web/src/views/retrievePassword.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome" @keyup.enter="retrievePassword">
 +  <div class="welcome responsive-page page-retrieve-password" @keyup.enter="retrievePassword">
-     <el-container style="height: 100%;">
-       <!-- 保持相同的头部 -->
-       <el-header>
 diff --git a/main/manager-web/src/views/roleConfig.vue b/main/manager-web/src/views/roleConfig.vue
 index 09e2208..8e250a6 100644
 --- a/main/manager-web/src/views/roleConfig.vue
 +++ b/main/manager-web/src/views/roleConfig.vue
-@@ -1,5 +1,5 @@
- <template>
+@@ -2 +2 @@
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-role-config">
-     <HeaderBar />
- 
-     <div class="operation-bar">

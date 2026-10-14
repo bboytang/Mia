@@ -6,7 +6,7 @@ export default defineConfig({
   expect: { timeout: 8000 },
   workers: 3,
   reporter: [['list'], ['html', { open: 'never' }], ['json', { outputFile: 'results.json' }]],
-  use: { baseURL: 'http://127.0.0.1:4173', serviceWorkers: 'block', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
+  use: { actionTimeout: 10000, baseURL: 'http://127.0.0.1:4173', serviceWorkers: 'block', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   webServer: {
     command: 'python3 -m http.server 4173 --bind 127.0.0.1 --directory "$MIA_ADMIN_DIST"',
     port: 4173,

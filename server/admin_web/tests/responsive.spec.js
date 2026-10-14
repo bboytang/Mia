@@ -8,13 +8,13 @@ const routes = [
   '/params-management', '/knowledge-base-management', '/server-side-management',
   '/ota-management', '/voice-resource-management', '/voice-clone-management',
   '/dict-management', '/provider-management', '/agent-template-management',
-  '/template-quick-config?agentId=test-agent', '/feature-management',
+  '/template-quick-config?templateId=test-template', '/feature-management',
   '/replacement-word-management', '/address-book-management',
 ];
 
 async function assertFits(page, label) {
   const metrics = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
-  expect(metrics.scroll, label).toBeLessThanOrEqual(metrics.width + 1);
+  expect.soft(metrics.scroll, label).toBeLessThanOrEqual(metrics.width + 1);
 }
 
 for (const width of [360, 390, 430, 768, 1024, 1440]) {
@@ -22,11 +22,12 @@ for (const width of [360, 390, 430, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await mockBackend(page);
     const errors = [];
-    page.on('pageerror', error => errors.push(error.message));
+    page.on('pageerror', error => errors.push(page.url() + ': ' + error.message));
     for (const route of routes) {
       await test.step(route, async () => {
         await page.goto('/#' + route);
-        await expect(page.locator('.responsive-page')).toBeVisible();
+        const name = route.split('?')[0].slice(1).replace('server-side-management', 'server-side-manager');
+        await expect(page.locator('.page-' + name)).toBeVisible();
         await page.waitForTimeout(300);
         await assertFits(page, route);
         if (route === '/home' || route.startsWith('/device-management') || route === '/params-management') {
@@ -106,4 +107,54 @@ test('mobile prompt details are touch accessible without losing long content', a
   await page.locator('.device-info-button').first().click();
   await expect(page.locator('.device-prompt-detail:visible')).toHaveText(longText);
   await assertFits(page, 'prompt details');
+});
+
+for (const width of [390, 768]) {
+  test(`all management add dialogs close at ${width}px without writing data`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await mockBackend(page);
+    const writes = [];
+    page.on('request', request => { if (['POST','PUT','DELETE'].includes(request.method())) writes.push(request.url()); });
+    for (const route of ['/params-management','/ota-management','/provider-management','/voice-resource-management','/replacement-word-management','/agent-template-management','/voice-print?agentId=test-agent']) {
+      await page.goto('/#' + route);
+      const add = page.locator('.ctrl_btn button:has(.el-icon-plus)').first();
+      await expect(add).toBeVisible();
+      await add.click();
+      const dialog = page.locator('.el-dialog:visible');
+      await expect(dialog).toBeVisible();
+      await assertFits(page, route + ' dialog');
+      await dialog.locator('.el-dialog__headerbtn').click();
+      await expect(dialog).toHaveCount(0);
+    }
+    expect(writes).toEqual([]);
+  });
+}
+
+test('role configuration drawers, context settings and history remain reachable on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await mockBackend(page);
+  await page.goto('/#/role-config?agentId=test-agent');
+  await page.getByRole('button', { name: '编辑源', exact: true }).click();
+  let dialog = page.locator('.el-dialog:visible');
+  await expect(dialog).toBeVisible();
+  await assertFits(page, 'context providers');
+  await dialog.locator('.el-dialog__headerbtn').click();
+  await page.getByRole('button', { name: '编辑功能', exact: true }).click();
+  const drawer = page.locator('.el-drawer:visible');
+  await expect(drawer).toBeVisible();
+  await assertFits(page, 'functions drawer');
+  await drawer.locator('.custom-close-btn').click();
+  await expect(drawer).toHaveCount(0);
+  await page.locator('.history-btn').click();
+  dialog = page.locator('.el-dialog:visible');
+  await expect(dialog).toBeVisible();
+  await assertFits(page, 'snapshot history');
+  await dialog.locator('.el-dialog__headerbtn').click();
+  await page.goto('/#/home');
+  await page.getByRole('button', { name: '聊天记录', exact: true }).first().click();
+  dialog = page.locator('.el-dialog:visible');
+  await expect(dialog).toBeVisible();
+  await assertFits(page, 'chat history');
+  await dialog.locator('.el-dialog__headerbtn').click();
+  await expect(dialog).toHaveCount(0);
 });
