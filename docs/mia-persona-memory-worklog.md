@@ -107,6 +107,13 @@
 - 改 CI 显式 `-DskipTests=false -DfailIfNoTests=true`，使用 runner 临时 MySQL 8.4／Redis 8。仅测试用密码，库为空后由固定上游迁移；不接生产、不改生产凭据或运行状态。结果待核实，P07 完整身份链与 Provider 仍未完成。
 - 已同步交接；下一步推送并读取真实 v3 和 Java 复核结果，不运行本地／生产软件测试。
 
+## 2026-10-14：P07 真测试结果与身份复现入口
+
+- `a7028e9ec05f34a13487db4876af59b4d60f7810`，Java run [38592420502](https://github.com/bboytang/Mia/actions/runs/38592420502)：150 项真实执行、149 通过、1 既有失败、0 跳过／error。唯一失败为脱敏测试末四字符断言，与本次身份链范围无关；不修改或隐藏，详见 `manager-ci.md`。
+- 同提交服务端 [38592420408](https://github.com/bboytang/Mia/actions/runs/38592420408) success；v3 embedding [38592420655](https://github.com/bboytang/Mia/actions/runs/38592420655) 仍在途，未读取结果、不作选型。
+- 编写真实 HTTP／Shiro／MySQL／Redis 合成身份复现入口，覆盖匿名签发、外人 Agent 的手工添加／激活、越权解绑通讯录影响。仅验证既有不安全行为；复现成功不等于安全通过。未运行、P08 未开始。
+- CI 完整回归的失败继续可见；身份复现和类字节检查在该既有失败之后独立运行。无生产改动，已同步交接。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

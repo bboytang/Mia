@@ -19,6 +19,10 @@ jobs:
   baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      SPRING_DATASOURCE_DRUID_PASSWORD: mia-ci-only
+      SPRING_DATASOURCE_DRUID_URL: jdbc:mysql://127.0.0.1:3306/xiaozhi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
     services:
       mysql:
         image: mysql:8.4
@@ -54,6 +58,7 @@ jobs:
           cache: maven
           cache-dependency-path: upstream/main/manager-api/pom.xml
       - name: Reconstruct existing Mia manager patch on pinned source
+        id: prepare
         run: |
           mkdir -p "$RUNNER_TEMP/mia-manager-results"
           python -m server.companion.install_xiaozhi upstream --check > "$RUNNER_TEMP/mia-manager-results/current-companion.patch"
@@ -62,12 +67,15 @@ jobs:
           mvn --version
       - name: Compile and run existing real Java regressions
         working-directory: upstream/main/manager-api
-        env:
-          SPRING_DATASOURCE_DRUID_PASSWORD: mia-ci-only
-          SPRING_DATASOURCE_DRUID_URL: jdbc:mysql://127.0.0.1:3306/xiaozhi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
-          SPRING_DATA_REDIS_HOST: 127.0.0.1
         run: mvn --batch-mode -DskipTests=false -DfailIfNoTests=true package
+      - name: Reproduce unsafe baseline with real HTTP, Shiro, MySQL and Redis
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          cp server/companion/manager_tests/MiaIdentityBaselineTest.java upstream/main/manager-api/src/test/java/xiaozhi/modules/device/
+          cd upstream/main/manager-api
+          mvn --batch-mode -DskipTests=false -DfailIfNoTests=true -Dtest=MiaIdentityBaselineTest test
       - name: Verify exact deployed class baseline
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
         run: |
           python scripts/ci/verify_mia_manager_baseline.py \
             --classes upstream/main/manager-api/target/classes \

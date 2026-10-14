@@ -16,14 +16,14 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 - 任务分支：`feature/mia-persona-memory-v1.2`，从已核实远程一致的 `feature/admin-responsive`／`a30a5081bfa3c08e7387b9f5d9be77bd957e8175` 创建。原分支保留。
 - V1.1 历史基线：Mia `31aeb6fe60a3ed81fb935b16a844c7a447b7f1df`、路遥 `e23c3aa25d6451e3f35e71609864bb3a54ad49a0`、小智 v0.9.7。
 - 四份文档首份保存提交 `d74b89acc0973502234724fba0e681b112985eeb` 已推送到任务分支，从独立目录检出相同 SHA 并逐文件比对一致。后续进度随任务提交保存。
-- P03 的 D01 及实际上游／运行补丁已冻结，见[基线证据](verification/mia-persona-memory/baseline.md)。P07 首轮 Java 编译及四类字节对照通过；上游默认跳过测试，不能算 Java 测试通过，显式启用并使用隔离 MySQL／Redis 重新验证。
+- P03 的 D01 及实际上游／运行补丁已冻结，见[基线证据](verification/mia-persona-memory/baseline.md)。P07 首轮 Java 编译及四类字节对照通过；复核实际执行 150 测试，149 通过、1 既有脱敏测试失败，详见 [Java CI](verification/mia-persona-memory/manager-ci.md)。不能称完整测试通过。
 - 仓库文档是完整任务入口，后续无需读取原对话。旧 `/tmp` 审计源码不是必须传递的材料，可以从固定来源重建。
 
 ## 下一步
 
 当前步骤：**P06 embedding 比较**。P05 [开发契约](verification/mia-persona-memory/contracts.md)已明确，用户已选智控台一次性授权码；公网可信 IP 或域名证书均可，实际 TLS 部署尚未执行。
 
-下一步：P06 v2 四候选仍未合格，见 [v2 实测](verification/mia-persona-memory/embedding-results-v2.json)。用独立 v3 复核参考 dropout 修正和校准置信度探索；用户已允许相关召回但必须明确所问属性未知，见[验收 v1.1](verification/mia-persona-memory/acceptance.md)。与此同时复核 P07 显式执行的 Java 测试与构建。恢复时先查询最新 Actions，再决定是否重跑。
+下一步：P06 v3 实验 [38592420655](https://github.com/bboytang/Mia/actions/runs/38592420655) 在途，先读取结果。用户已允许相关召回但必须明确所问属性未知，见[验收 v1.1](verification/mia-persona-memory/acceptance.md)。P07 新增合成身份真实复现待执行；保留 150 项上游回归中已确认的既有失败。恢复时先查询最新 Actions，再决定是否重跑。
 
 ## 步骤状态
 
@@ -36,7 +36,7 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 | P04 | 完成 | [验收 v1.1](verification/mia-persona-memory/acceptance.md)：数值不变，按用户确认区分无关与相关不可回答 |
 | P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
 | P06 | 进行中 | v1／v2 四候选均未合格；独立 v3 参考修正及置信度探索待验证 |
-| P07 | 进行中 | 首轮编译／四类字节对照通过，但测试默认被跳过；显式开启复核，真实身份链及 Provider 入口未完成 |
+| P07 | 进行中 | 编译／四类字节对照通过；真测试 149/150，1 既有失败；合成身份真实复现待执行，Provider 入口未完成 |
 | P08—P10 | 未开始 | 身份链、Scope 与 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
