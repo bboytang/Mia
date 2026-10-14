@@ -16,6 +16,20 @@ from config.manage_api_client import ManageApiClient
 from server.companion.authorization import (PrivateAuthorization, PrivateAuthorizationRequired,
     load_private_config, allow_generation, allow_output, execute_tool)
 
+trace = []
+
+
+class TracedAuthorization(PrivateAuthorization):
+    async def _request(self, endpoint, body):
+        entry = {'endpoint': endpoint}
+        trace.append(entry)
+        result = await super()._request(endpoint, body)
+        entry['result_type'] = type(result).__name__
+        if endpoint == '/config/mia-auth/verify' and isinstance(result, dict):
+            entry['field_types'] = {key: type(value).__name__ for key, value in result.items()}
+            entry['binding_version'] = result.get('binding_version')
+        return result
+
 
 async def rejects(operation):
     try:
@@ -29,7 +43,7 @@ async def main():
     config = {'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
                              'secret': os.environ['MIA_SCOPE_SERVER_SECRET']}, 'selected_module': {}}
     ManageApiClient(config)
-    auth = PrivateAuthorization(config)
+    auth = TracedAuthorization(config)
     device, client, credential = (os.environ[name] for name in (
         'MIA_SCOPE_DEVICE', 'MIA_SCOPE_CLIENT', 'MIA_SCOPE_CREDENTIAL'))
     scope, private = await auth.private_config(device, client, credential, {})
@@ -82,7 +96,7 @@ async def main():
 try:
     asyncio.run(main())
 except Exception as error:
-    print(json.dumps({'manager_python_scope_pass': False, 'error_class': type(error).__name__}))
+    print(json.dumps({'manager_python_scope_pass': False, 'error_class': type(error).__name__, 'request_trace': trace}))
     sys.exit(1)
 finally:
     ManageApiClient.safe_close()

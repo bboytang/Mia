@@ -6,6 +6,40 @@ enum MiaTokenStore {
     private static let account = "access-token"
     private static let sessionAccount = "account-session"
     private static let signedOutKey = "mia.accountSignedOut"
+    private static var privateGrantQuery: [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: service,
+         kSecAttrAccount as String: "private-device-grant"]
+    }
+
+    static func readPrivateGrant() -> MiaPrivateDeviceGrant? {
+        var query = privateGrantQuery
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var result: CFTypeRef?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let data = result as? Data else { return nil }
+        return try? JSONDecoder().decode(MiaPrivateDeviceGrant.self, from: data)
+    }
+
+    static func savePrivateGrant(_ grant: MiaPrivateDeviceGrant) throws {
+        let attributes: [String: Any] = [
+            kSecValueData as String: try JSONEncoder().encode(grant),
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        ]
+        var status = SecItemUpdate(privateGrantQuery as CFDictionary, attributes as CFDictionary)
+        if status == errSecItemNotFound {
+            status = SecItemAdd(privateGrantQuery.merging(attributes) { _, value in value } as CFDictionary, nil)
+        }
+        guard status == errSecSuccess else { throw NSError(domain: NSOSStatusErrorDomain, code: Int(status)) }
+    }
+
+    static func clearPrivateGrant() throws {
+        let status = SecItemDelete(privateGrantQuery as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw NSError(domain: NSOSStatusErrorDomain, code: Int(status))
+        }
+    }
 
     static func read() -> String? {
         let query: [String: Any] = [

@@ -210,6 +210,13 @@
 - 核对实际迁移与签发源码：保留的旧设备授权行 `binding_version` 初始为0，而Python错误要求所有ID／版本都大于0。修正仅允许绑定版本非负；用户／操作者／已签发凭据版本仍必须正整数，float／bool／负数继续拒绝。可信来源与当前manager复核保持，不更改既有绑定版本或降低权限要求。
 - 补充旧绑定版本0兼容机制负例，准备新的精确提交GitHub实跑。App提示 `b3a677bcddcf0beadd674ebc25b326147ff8022f` 的 iOS [38625280022](https://github.com/bboytang/Mia/actions/runs/38625280022) 在途；交接同步，无本地测试／部署。
 
+## 2026-10-14：P08 App私有凭据与Scope继续定位
+
+- 增加最小设置授权码兑换与移除本机凭据；沿原OTA根派生HTTPS签发／续期，同host WSS及精确地址／设备／client绑定，保留原语音Authorization格式。Keychain单独条目、授权码不持久化，默认拒绝明文与重定向；剩余有效期不足1天时私有轮换，过期重新授权。地址变更后过时结果不写入。
+- 新增iOS请求／Scope字段／期限／跨入口负例及实际Simulator Keychain生命周期检查，待本提交GitHub全构建和回归；实际HTTPS/WSS／manager兑换、iPhone和智控台code按钮未验。详见 `ios-private-authorization.md`。
+- `7f1834b36f605913fc194f503f6fd0b4de589a26`／[38625458527](https://github.com/bboytang/Mia/actions/runs/38625458527)：Java→Python实际集成仍失败，167全量仍为165通过／2失败。绑定初始版本0确须兼容，但不能据此声称已解决全部集成问题；新增只留endpoint／返回类型／字段类型的脱敏诊断，继续查因。
+- 同SHA服务 [38625458539](https://github.com/bboytang/Mia/actions/runs/38625458539)成功；iOS授权提示 [38625280022](https://github.com/bboytang/Mia/actions/runs/38625280022)仍在途，先核实。已审核必要补丁，未本地测试／部署或读取生产秘密，交接同步。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

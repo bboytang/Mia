@@ -134,6 +134,9 @@ private struct MiaSettingsView: View {
     @AppStorage("mia.xiaozhi.websocketURL") private var serverURL = MiaXiaozhiClient.defaultWebSocket
     @AppStorage("mia.xiaozhi.otaURL") private var otaURL = MiaXiaozhiClient.defaultOTA
     @State private var discoveryError: String?
+    @State private var authorizationCode = ""
+    @State private var authorizationStatus: String?
+    @State private var authorizing = false
 
     var body: some View {
         NavigationStack {
@@ -173,6 +176,39 @@ private struct MiaSettingsView: View {
                     }
                     .disabled(xiaozhi.checking)
                     if let discoveryError { Text(discoveryError).font(.footnote) }
+                }
+                Section("私有授权") {
+                    Text("在智控台为上述已绑定设备生成一次性授权码，完成后恢复个性化语音。")
+                        .font(.footnote)
+                    SecureField("智控台授权码", text: $authorizationCode)
+                        .textInputAutocapitalization(.never).autocorrectionDisabled()
+                        .accessibilityIdentifier("mia-private-authorization-code")
+                    Button("完成私有授权") {
+                        controller.stop()
+                        authorizing = true
+                        authorizationStatus = nil
+                        let selectedOTA = otaURL, selectedVoice = serverURL, code = authorizationCode
+                        Task {
+                            defer { authorizing = false; authorizationCode = "" }
+                            do {
+                                let grant = try await MiaPrivateAuthorizationClient.exchange(ota: selectedOTA,
+                                    websocket: selectedVoice, identity: xiaozhi.identity, code: code)
+                                guard selectedOTA == otaURL, selectedVoice == serverURL else { throw CancellationError() }
+                                try MiaTokenStore.savePrivateGrant(grant)
+                                authorizationStatus = "授权已保存，回首页即可恢复个性化语音。"
+                                session.errorMessage = nil
+                            } catch is CancellationError { authorizationStatus = "地址已改变，请重新授权。" }
+                            catch { authorizationStatus = error.localizedDescription }
+                        }
+                    }
+                    .disabled(authorizing || authorizationCode.isEmpty)
+                    Button("移除本机私有凭据") {
+                        controller.stop()
+                        do { try MiaTokenStore.clearPrivateGrant(); authorizationStatus = "本机凭据已移除。服务器授权可在智控台撤销。" }
+                        catch { authorizationStatus = error.localizedDescription }
+                    }
+                    .disabled(authorizing)
+                    if let authorizationStatus { Text(authorizationStatus).font(.footnote) }
                 }
                 Section("Mia") {
                     NavigationLink("个性化皮肤") { MiaSkinView() }

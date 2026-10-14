@@ -78,7 +78,8 @@ final class MiaXiaozhiClient: ObservableObject {
               let host = url.host, !host.isEmpty, url.user == nil, url.password == nil,
               url.fragment == nil,
               !(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? [])
-                .contains(where: { ["authorization", "token", "device-id", "client-id"].contains($0.name.lowercased()) }) else {
+                .contains(where: { ["authorization", "token", "device-id", "client-id", "mia-private-credential",
+                                    "private_credential", "authorization_code"].contains($0.name.lowercased()) }) else {
             throw MiaConnectionError.invalidEndpoint
         }
         return url
@@ -165,9 +166,20 @@ final class MiaXiaozhiClient: ObservableObject {
                 status = "等待在智控台绑定智能体"
                 throw MiaXiaozhiError.activationRequired
             }
+            var privateGrant = MiaTokenStore.readPrivateGrant()
+            if privateGrant?.matches(ota: ota, websocket: websocket, identity: identity) != true {
+                privateGrant = nil
+            }
+            if let grant = privateGrant, grant.expiresAt.timeIntervalSinceNow < 86_400 {
+                let renewed = try await MiaPrivateAuthorizationClient.exchange(ota: ota, websocket: websocket,
+                                                                               identity: identity, grant: grant)
+                guard generation == current else { throw CancellationError() }
+                try MiaTokenStore.savePrivateGrant(renewed)
+                privateGrant = renewed
+            }
             status = "设备配置已就绪"
             return try MiaWebSocketConfiguration(endpoint: config.endpoint, clientID: identity.clientID,
-                                                  token: config.token, deviceID: identity.deviceID)
+                                                  token: config.token, deviceID: identity.deviceID, privateGrant: privateGrant)
         } catch {
             if generation == current, activationCode == nil {
                 status = "OTA 发现失败，请检查地址和网络"

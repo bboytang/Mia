@@ -27,7 +27,8 @@ enum MiaConnectionError: LocalizedError {
 struct MiaWebSocketConfiguration {
     let request: URLRequest
 
-    init(endpoint: String, clientID: UUID, token: String?, deviceID: String? = nil) throws {
+    init(endpoint: String, clientID: UUID, token: String?, deviceID: String? = nil,
+         privateGrant: MiaPrivateDeviceGrant? = nil) throws {
         let url = try MiaXiaozhiClient.validatedURL(endpoint, schemes: ["ws", "wss"])
         let device = deviceID ?? MiaXiaozhiIdentity.deviceID(for: clientID)
         guard MiaXiaozhiIdentity.validDeviceID(device) else { throw MiaXiaozhiError.invalidIdentity }
@@ -40,6 +41,10 @@ struct MiaWebSocketConfiguration {
         request.setValue("1", forHTTPHeaderField: "Protocol-Version")
         request.setValue(device, forHTTPHeaderField: "Device-Id")
         request.setValue(identity, forHTTPHeaderField: "Client-Id")
+        if let privateGrant {
+            request.setValue(try privateGrant.header(for: url, device: device, client: clientID),
+                             forHTTPHeaderField: "Mia-Private-Credential")
+        }
         if let token, !token.isEmpty {
             let authorization = token.contains(" ") ? token : "Bearer " + token
             request.setValue(authorization, forHTTPHeaderField: "Authorization")
