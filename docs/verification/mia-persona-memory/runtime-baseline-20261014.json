@@ -1,0 +1,69 @@
+{
+  "python": "3.10.22",
+  "workdir": "/opt/xiaozhi-esp32-server",
+  "files": {
+    "app.py": "65c37299c510128006b658de6858492a4c8df044b26ed6a83bc3eba1b9d1a77b",
+    "core/connection.py": "493a3f445b723600155b8525d22e7e24f943e12e653ed8160a8b0da7a48b5137",
+    "core/auth.py": "27b0af12c591c97a532ccf95ee7c28c088482ea942faf749ef8c6670ac651e90",
+    "core/utils/dialogue.py": "0ae7837a4a6a7080b7ca8bea89d1c5f11ee7ac41ab4e68fc356821b30607efb2",
+    "core/handle/sendAudioHandle.py": "9b8093eb0e554081a60c4cd0cd3feff4c8d68781ffd1aa161d2ebd58b520c7b2",
+    "config/manage_api_client.py": "cf34e8769ad1c891f2fda01eeb41a5f572547a00ebe4d8aec82c6e8ab289fa88",
+    "core/handle/receiveAudioHandle.py": "2cf58dc7e96f7ccf673053fd9ebee7302bce62641794c22146cfaae8e82f0949",
+    "core/providers/asr/utils.py": "73bb25fb9ba22eeb13d9a908f8faf072649e3d048d5b029ff77d8d7cba2a86b6",
+    "core/providers/tts/base.py": "af2006bb76e0bb66a24ae764ac33eb106035d0ea55d239a48caa149750a6f96f",
+    "core/providers/tts/edge.py": "c7e030d1b9bc960c662a4e5382d6f8aed71040e97dfd9bbe9b47d6d15deaa5be",
+    "mia_companion/__init__.py": "f0537e0c74a0cdf0e6bfa97a11cdc1a8c75b436e62480bc77b72b6258eeba1d5",
+    "mia_companion/memory.py": "e7b24984ad682f767d76498b9b249e6dac5362ffad8ac453c793d2c6fde47ef5",
+    "mia_companion/xiaozhi_adapter.py": "67c404c5fb78e876f227a2f15d0f374adb7104cd2639fb7b7ac40e082e200a3d",
+    "plugins_func/functions/play_music.py": "6fe21451135ceb3cad6131a99e60a9cb1eee042bab4b3006cab954ee62b4ead5",
+    "requirements.txt": "f4b578fff7eab97e7fe0e31a986e56e5e71c549418b338ae3c71a744f15bb93b"
+  },
+  "packages": {
+    "websockets": "14.2",
+    "httpx": "0.28.1",
+    "aiohttp": "3.13.2",
+    "numpy": "1.26.4",
+    "torch": "2.2.2",
+    "sentence-transformers": null,
+    "onnxruntime": "1.23.2",
+    "chromadb": null,
+    "openai": "2.8.1"
+  },
+  "memory_schema": {
+    "owners": [
+      "owner",
+      "revision",
+      "paused",
+      "version"
+    ],
+    "memories": [
+      "id",
+      "owner",
+      "category",
+      "content",
+      "confirmed",
+      "created_at",
+      "updated_at"
+    ],
+    "sources": [
+      "memory_id",
+      "session_id",
+      "fingerprint",
+      "excerpt",
+      "created_at"
+    ],
+    "traits": [
+      "owner",
+      "name",
+      "description",
+      "evidence_ids",
+      "updated_at"
+    ],
+    "checkpoints": [
+      "owner",
+      "checkpoint_id",
+      "created_at"
+    ]
+  },
+  "memory_database_exists": true
+}

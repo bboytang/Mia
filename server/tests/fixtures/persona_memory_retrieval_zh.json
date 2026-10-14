@@ -1,0 +1,1037 @@
+{
+  "version": "1",
+  "purpose": "Synthetic, non-production Chinese retrieval benchmark. Facts are explicitly supplied by the test user; never seed production.",
+  "reference_scope": "A/travel/mia",
+  "memories": [
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-lactose",
+      "scope": "A/travel/mia",
+      "content": "我有乳糖不耐受，早餐会避开牛奶，燕麦奶可以。",
+      "entity": "早餐饮品",
+      "keywords": [
+        "乳糖不耐受",
+        "牛奶",
+        "燕麦奶"
+      ],
+      "triggers": [
+        "早餐",
+        "饮品",
+        "咖啡"
+      ],
+      "weight": 3
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-food",
+      "scope": "A/travel/mia",
+      "content": "我吃不了辣，点菜希望是清淡口味。",
+      "entity": "饮食口味",
+      "keywords": [
+        "不吃辣",
+        "清淡"
+      ],
+      "triggers": [
+        "点菜",
+        "餐厅",
+        "晚饭"
+      ],
+      "weight": 2
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-transit",
+      "scope": "A/travel/mia",
+      "content": "我坐长途汽车容易晕车，出差优先选高铁。",
+      "entity": "出差交通",
+      "keywords": [
+        "晕车",
+        "高铁",
+        "出差"
+      ],
+      "triggers": [
+        "出差",
+        "交通",
+        "行程"
+      ],
+      "weight": 4
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-hotel",
+      "scope": "A/travel/mia",
+      "content": "出差住酒店时，我希望从酒店到工作地点步行不超过十分钟。",
+      "entity": "住宿距离",
+      "keywords": [
+        "酒店",
+        "步行十分钟",
+        "工作地点"
+      ],
+      "triggers": [
+        "出差",
+        "住处",
+        "住宿"
+      ],
+      "weight": 2
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-project",
+      "scope": "A/travel/mia",
+      "content": "我在准备独立摄影展，目标是先完成十二张城市夜景作品。",
+      "entity": "摄影展",
+      "keywords": [
+        "摄影展",
+        "十二张",
+        "城市夜景"
+      ],
+      "triggers": [
+        "创作",
+        "目标",
+        "作品"
+      ],
+      "weight": 6
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-plant",
+      "scope": "A/travel/mia",
+      "content": "我阳台的薄荷叫小绿，周末会检查土壤干湿后再浇水。",
+      "entity": "小绿",
+      "keywords": [
+        "薄荷",
+        "周末",
+        "土壤"
+      ],
+      "triggers": [
+        "阳台",
+        "植物",
+        "浇水"
+      ],
+      "weight": 2
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-friend",
+      "scope": "A/travel/mia",
+      "content": "我的朋友林遥正在准备建筑师考试，我们约定周日一起复习。",
+      "entity": "林遥",
+      "keywords": [
+        "朋友",
+        "建筑师考试",
+        "周日复习"
+      ],
+      "triggers": [
+        "朋友",
+        "考试",
+        "周日"
+      ],
+      "weight": 5
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-work",
+      "scope": "A/travel/mia",
+      "content": "我工作日晚上九点后不讨论工作，希望那段时间留给休息。",
+      "entity": "休息边界",
+      "keywords": [
+        "九点后",
+        "不讨论工作",
+        "休息"
+      ],
+      "triggers": [
+        "加班",
+        "晚上",
+        "工作"
+      ],
+      "weight": 4
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-feedback",
+      "scope": "A/travel/mia",
+      "content": "给我提建议时先说明结论，再讲依据，不用委婉绕圈。",
+      "entity": "反馈方式",
+      "keywords": [
+        "结论",
+        "依据",
+        "直接"
+      ],
+      "triggers": [
+        "建议",
+        "反馈",
+        "解释"
+      ],
+      "weight": 2
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-gift",
+      "scope": "A/travel/mia",
+      "content": "我送给妹妹一套水彩颜料，她正在学画植物。",
+      "entity": "妹妹的礼物",
+      "keywords": [
+        "妹妹",
+        "水彩颜料",
+        "植物"
+      ],
+      "triggers": [
+        "礼物",
+        "家人",
+        "绘画"
+      ],
+      "weight": 6
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-rain",
+      "scope": "A/travel/mia",
+      "content": "上次露营赶上大雨，我们用防水袋保护了摄影器材。",
+      "entity": "雨中露营",
+      "keywords": [
+        "露营",
+        "大雨",
+        "防水袋",
+        "摄影器材"
+      ],
+      "triggers": [
+        "露营",
+        "雨天",
+        "装备"
+      ],
+      "weight": 7
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-high-emotion",
+      "scope": "A/travel/mia",
+      "content": "我的旧陶瓷杯摔碎了，那是毕业时老师送给我的，想到这件事很难过。",
+      "entity": "毕业陶瓷杯",
+      "keywords": [
+        "陶瓷杯",
+        "毕业",
+        "老师"
+      ],
+      "triggers": [
+        "毕业",
+        "陶瓷杯"
+      ],
+      "weight": 10
+    },
+    {
+      "state": "superseded",
+      "source": "synthetic-test-user-statement",
+      "id": "a-old-city",
+      "scope": "A/travel/mia",
+      "content": "我目前住在南京。",
+      "entity": "居住城市",
+      "keywords": [
+        "南京"
+      ],
+      "triggers": [
+        "住址",
+        "城市"
+      ],
+      "weight": 2
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-city",
+      "scope": "A/travel/mia",
+      "content": "我已经从南京搬到苏州了，目前住在苏州。",
+      "entity": "居住城市",
+      "keywords": [
+        "苏州",
+        "搬家"
+      ],
+      "triggers": [
+        "住址",
+        "城市"
+      ],
+      "weight": 2
+    },
+    {
+      "state": "deleted",
+      "source": "synthetic-test-user-statement",
+      "id": "a-deleted",
+      "scope": "A/travel/mia",
+      "content": "我曾把旅行纪念品放在书房第二层抽屉。",
+      "entity": "纪念品位置",
+      "keywords": [
+        "书房",
+        "抽屉"
+      ],
+      "triggers": [
+        "纪念品"
+      ],
+      "weight": 4
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-other-agent",
+      "scope": "A/work/mia",
+      "content": "我在这个工作角色中希望所有答复都使用英文。",
+      "entity": "工作角色语言",
+      "keywords": [
+        "英文",
+        "工作"
+      ],
+      "triggers": [
+        "语言"
+      ],
+      "weight": 3
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "a-other-persona",
+      "scope": "A/travel/tutor",
+      "content": "在导师角色中，我每周练习两次古典吉他。",
+      "entity": "导师练习",
+      "keywords": [
+        "古典吉他",
+        "每周两次"
+      ],
+      "triggers": [
+        "练习"
+      ],
+      "weight": 3
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "b-lactose",
+      "scope": "B/travel/mia",
+      "content": "我每天早餐喝全脂牛奶，没有乳糖不耐受。",
+      "entity": "早餐饮品",
+      "keywords": [
+        "全脂牛奶"
+      ],
+      "triggers": [
+        "早餐"
+      ],
+      "weight": 3
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "b-food",
+      "scope": "B/travel/mia",
+      "content": "我最喜欢重辣火锅，清淡菜不是我的首选。",
+      "entity": "饮食口味",
+      "keywords": [
+        "重辣",
+        "火锅"
+      ],
+      "triggers": [
+        "餐厅"
+      ],
+      "weight": 4
+    },
+    {
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "id": "b-city",
+      "scope": "B/travel/mia",
+      "content": "我现在住在成都。",
+      "entity": "居住城市",
+      "keywords": [
+        "成都"
+      ],
+      "triggers": [
+        "城市"
+      ],
+      "weight": 3
+    }
+  ],
+  "queries": [
+    {
+      "id": "q-01",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "给早餐挑饮料的时候要避开什么？",
+      "expected": [
+        "a-lactose"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-02",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "如果我要一杯拿铁，哪种奶更合适？",
+      "expected": [
+        "a-lactose"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-03",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "推荐今晚的饭菜时，我的口味有什么限制？",
+      "expected": [
+        "a-food"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-04",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "去外地工作的交通该优先考虑哪一种？",
+      "expected": [
+        "a-transit"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-05",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "给我安排出差住宿时要注意位置吗？",
+      "expected": [
+        "a-hotel"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-06",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我最近的创作计划要准备多少幅作品？",
+      "expected": [
+        "a-project"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-07",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "阳台那盆香草叫什么名字？",
+      "expected": [
+        "a-plant"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-08",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "星期天和朋友碰面是为了做什么？",
+      "expected": [
+        "a-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-09",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "晚间几点之后不该再聊职场任务？",
+      "expected": [
+        "a-work"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-10",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "给我反馈的时候，应该怎么组织说话顺序？",
+      "expected": [
+        "a-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-11",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "妹妹收到的绘画材料是什么？",
+      "expected": [
+        "a-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-12",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "下雨去野外过夜，需要保护我的什么装备？",
+      "expected": [
+        "a-rain"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-13",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "那件让我伤心的毕业赠品是谁给的？",
+      "expected": [
+        "a-high-emotion"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-14",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我搬家之后现在哪座城市？",
+      "expected": [
+        "a-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-15",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "周末给小绿补水之前先做什么？",
+      "expected": [
+        "a-plant"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-16",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "准备和林遥学习时，是哪门职业考试？",
+      "expected": [
+        "a-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-17",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我不想绕弯，建议先讲哪一部分？",
+      "expected": [
+        "a-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-18",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "出门拍照遇上降雨，上次用什么装相机？",
+      "expected": [
+        "a-rain"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-19",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "帮我制定出差安排，需要顾及交通和住宿哪些偏好？",
+      "expected": [
+        "a-transit",
+        "a-hotel"
+      ],
+      "type": "association"
+    },
+    {
+      "id": "q-20",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "那十二幅作品主要拍什么场景？",
+      "expected": [
+        "a-project"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-21",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "早餐用普通奶可能会让我不舒服，替代选择是什么？",
+      "expected": [
+        "a-lactose"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-22",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我喜欢的晚餐风味是不是越刺激越好？",
+      "expected": [
+        "a-food"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-23",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "九点以后我更希望做什么？",
+      "expected": [
+        "a-work"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-24",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "给家人挑的礼物和哪种绘画爱好有关？",
+      "expected": [
+        "a-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "n-01",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我办理护照的号码是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-02",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我第一次养的宠物是哪一年出生？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-03",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我的银行卡密码是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-04",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我小时候小学班主任叫什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-05",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我最喜欢哪颗太阳系行星？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-06",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我的鞋码是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-07",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我昨天的航班编号是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-08",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我最常用哪个编程语言？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-09",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我和你约好的婚礼是哪天？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-10",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我的汽车车牌号码是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-11",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "导师角色里我每周练几次吉他？",
+      "expected": [],
+      "type": "scope-negative"
+    },
+    {
+      "id": "n-12",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "工作角色中我要求你说什么语言？",
+      "expected": [],
+      "type": "scope-negative"
+    },
+    {
+      "id": "q-25",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "不喝动物奶的早餐方案，应该怎么替换？",
+      "expected": [
+        "a-lactose"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-26",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "外卖菜单里哪类口味需要排除？",
+      "expected": [
+        "a-food"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-27",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "规划远程通勤时为什么不要选大巴？",
+      "expected": [
+        "a-transit"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-28",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我住的旅馆和办公地点之间最好走多久？",
+      "expected": [
+        "a-hotel"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-29",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "夜里城市的照片是为了哪个创作目标？",
+      "expected": [
+        "a-project"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-30",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "家里种的那株薄荷该什么时候检查？",
+      "expected": [
+        "a-plant"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-31",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "林遥希望考取哪种职业资格？",
+      "expected": [
+        "a-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-32",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "今晚很晚了，适不适合找我处理工作？",
+      "expected": [
+        "a-work"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-33",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我希望别人给意见是直说还是绕圈？",
+      "expected": [
+        "a-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-34",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我给妹妹买的是油画材料还是水彩材料？",
+      "expected": [
+        "a-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-35",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "上回野外过夜天气变坏时用了什么防雨？",
+      "expected": [
+        "a-rain"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-36",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "毕业时留下的那个杯子后来怎么了？",
+      "expected": [
+        "a-high-emotion"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-37",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "现在给我寄东西城市应填哪里？",
+      "expected": [
+        "a-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-38",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "有一盆叫小绿的植物，它是哪种香草？",
+      "expected": [
+        "a-plant"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-39",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我在周日有什么共同学习的安排？",
+      "expected": [
+        "a-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-40",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "解释一个方案时，我最先想听什么？",
+      "expected": [
+        "a-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-41",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "如果要订出差用的车票，哪类出行更适合我？",
+      "expected": [
+        "a-transit"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-42",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "出差选择酒店之前需要考虑哪些步行距离要求？",
+      "expected": [
+        "a-hotel"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-43",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我打算为城市夜景系列凑多少张图？",
+      "expected": [
+        "a-project"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-44",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "周末我通常怎样照顾阳台上的薄荷？",
+      "expected": [
+        "a-plant"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-45",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我对晚上工作讨论设了什么时间边界？",
+      "expected": [
+        "a-work"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-46",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "老师给的东西破了为什么让我难过？",
+      "expected": [
+        "a-high-emotion"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "q-47",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "去外地工作我容易在路上不舒服，住处又想离办公室近，如何安排？",
+      "expected": [
+        "a-transit",
+        "a-hotel"
+      ],
+      "type": "association"
+    },
+    {
+      "id": "q-48",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我早餐能喝燕麦奶吗，为什么？",
+      "expected": [
+        "a-lactose"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "n-13",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我最喜欢哪部科幻电影？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-14",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我身高多少厘米？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-15",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我的生日是几月几号？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-16",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我常用的手机型号是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-17",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我的健身教练叫什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-18",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我最喜欢哪支足球队？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-19",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我猫咪的名字叫什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-20",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我买的保险是哪家公司？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-21",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我穿的衣服是什么品牌？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-22",
+      "split": "calibration",
+      "scope": "A/travel/mia",
+      "query": "我每月房租是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-23",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我游泳比赛的最好成绩是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "n-24",
+      "split": "holdout",
+      "scope": "A/travel/mia",
+      "query": "我去过的最北城市是哪座？",
+      "expected": [],
+      "type": "irrelevant"
+    }
+  ]
+}
