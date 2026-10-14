@@ -81,20 +81,23 @@ def signals(query, item, cosine):
             item['weight'] / 10.0]
 
 
-def rank(case, threshold, floor, disabled=None):
+def rank(case, threshold, floor, gap_floor=None, disabled=None):
     weights = [0.58, 0.28, 0.08, 0.06]
     rows = []
     for item in case['candidates']:
         score = sum(w * s for i, (w, s) in enumerate(zip(weights, item['signals'])) if i != disabled)
-        if score >= threshold and item['original_cosine'] >= floor:
+        distinct = (gap_floor is not None and item['original_cosine'] >= 0.25
+                    and item['original_margin'] >= gap_floor)
+        if score >= threshold and (item['original_cosine'] >= floor or distinct):
             rows.append((score, item['id']))
     return [item[1] for item in sorted(rows, reverse=True)[:4]]
 
 
-def metrics(cases, threshold, floor):
+def metrics(cases, threshold, floor, gap_floor=None):
     positives = [c for c in cases if c['expected']]
-    negatives = [c for c in cases if not c['expected']]
-    predictions = {c['id']: rank(c, threshold, floor) for c in cases}
+    negatives = [c for c in cases if not c['expected'] and c.get('type') != 'related_unanswerable']
+    related = [c for c in cases if c.get('type') == 'related_unanswerable']
+    predictions = {c['id']: rank(c, threshold, floor, gap_floor) for c in cases}
     return {
         'positive_count': len(positives), 'negative_count': len(negatives),
         'complete_recall_at_4': sum(set(c['expected']) <= set(predictions[c['id']])
@@ -102,6 +105,11 @@ def metrics(cases, threshold, floor):
         'top1': sum(bool(predictions[c['id']]) and predictions[c['id']][0] in c['expected']
                     for c in positives) / max(1, len(positives)),
         'empty_recall': sum(not predictions[c['id']] for c in negatives) / max(1, len(negatives)),
+        'related_unanswerable_count': len(related),
+        'related_unanswerable_with_recall': sum(bool(predictions[c['id']]) for c in related),
+        'related_unanswerable_expected_fact_recalled': sum(
+            bool(set(predictions[c['id']]) & set(c['allowed_related'])) for c in related),
+        'answer_abstention': 'not_executed_requires_real_chat_provider',
     }
 
 
@@ -132,7 +140,7 @@ def main():
     assert len({q['id'] for q in queries}) == len(queries)
     for query in queries:
         assert query['split'] in {'calibration', 'holdout'}
-        for key in query['expected']:
+        for key in [*query['expected'], *query.get('allowed_related', [])]:
             assert ids[key]['scope'] == query['scope'] and ids[key]['state'] == 'active'
     started = time.perf_counter()
     embedder = Embedder(args.model_dir, args.variant)
@@ -167,29 +175,36 @@ def main():
             names, matrix = load_vectors(connection, query['scope'], embedder.metadata['dimension'])
             plain = matrix @ original_vector
             cosine = matrix @ vector
+            top_original = np.sort(plain)[-2:]
             selected = sorted(set(np.argsort(cosine)[::-1][:12]) | set(np.argsort(plain)[::-1][:12]))
             candidates = [{'id': names[i], 'original_cosine': float(plain[i]),
+                           'original_margin': float(plain[i] - (top_original[-2] if plain[i] == top_original[-1]
+                                                               and len(top_original) > 1 else top_original[-1])),
                            'signals': signals(query['query'], ids[names[i]], max(cosine[i], plain[i]))}
                           for i in selected]
             latency.append((time.perf_counter() - start) * 1000)
         cases.append({**query, 'expansion': terms, 'candidates': candidates})
     calibration = [c for c in cases if c['split'] == 'calibration']
     holdout = [c for c in cases if c['split'] == 'holdout']
-    best = None
+    best_key, best_choices = None, []
     for threshold in np.arange(0.15, 0.91, 0.01):
         for floor in np.arange(0.30, 0.86, 0.025):
-            measured = metrics(calibration, float(threshold), float(floor))
-            key = (min(measured['complete_recall_at_4'], measured['empty_recall']),
-                   measured['complete_recall_at_4'] + measured['empty_recall'], measured['top1'], threshold, floor)
-            if best is None or key > best[0]:
-                best = (key, float(threshold), float(floor), measured)
-    _, threshold, floor, calibration_metrics = best
-    measured = metrics(holdout, threshold, floor)
+            for gap_floor in [None, 0.05, 0.10, 0.15, 0.20]:
+                measured = metrics(calibration, float(threshold), float(floor), gap_floor)
+                key = (min(measured['complete_recall_at_4'], measured['empty_recall']),
+                       measured['complete_recall_at_4'] + measured['empty_recall'], measured['top1'])
+                choice = (float(threshold), float(floor), gap_floor, measured)
+                if best_key is None or key > best_key:
+                    best_key, best_choices = key, [choice]
+                elif key == best_key:
+                    best_choices.append(choice)
+    threshold, floor, gap_floor, calibration_metrics = best_choices[len(best_choices) // 2]
+    measured = metrics(holdout, threshold, floor, gap_floor)
     for case in cases:
-        case['retrieved'] = rank(case, threshold, floor)
+        case['retrieved'] = rank(case, threshold, floor, gap_floor)
         assert all(ids[key]['scope'] == case['scope'] and ids[key]['state'] == 'active'
                    for key in case['retrieved'])
-    ablation = {name: sum(rank(c, threshold, floor, i) != c['retrieved'] for c in holdout)
+    ablation = {name: sum(rank(c, threshold, floor, gap_floor, i) != c['retrieved'] for c in holdout)
                 for i, name in enumerate(['semantic', 'lexical', 'association', 'emotion'])}
     stress = {}
     mandatory_rss_mib = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
@@ -227,7 +242,8 @@ def main():
               'peak_rss_mib': rss_mib, 'mandatory_peak_rss_mib': mandatory_rss_mib,
               'reference_cosine_min': min(fidelity), 'reference_cosine_all': fidelity,
               'query_pipeline': timings(latency), 'sqlite_stress': stress,
-              'threshold': threshold, 'semantic_floor': floor, 'calibration': calibration_metrics,
+              'threshold': threshold, 'semantic_floor': floor, 'distinct_margin_floor': gap_floor,
+              'calibration': calibration_metrics,
               'holdout': measured, 'pure_vector_positive_recall_at_4': sum(no_expansion_hits) / len(no_expansion_hits),
               'ablation_changed_holdout_predictions': ablation, 'cases': cases,
               'scope_or_lifecycle_violations': 0,

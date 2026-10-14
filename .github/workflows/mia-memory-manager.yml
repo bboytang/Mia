@@ -19,6 +19,24 @@ jobs:
   baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: mia-ci-only
+          MYSQL_DATABASE: xiaozhi_esp32_server
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pmia-ci-only"
+          --health-interval=10s --health-timeout=5s --health-retries=12
+      redis:
+        image: redis:8
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s --health-timeout=3s --health-retries=12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -44,7 +62,11 @@ jobs:
           mvn --version
       - name: Compile and run existing real Java regressions
         working-directory: upstream/main/manager-api
-        run: mvn --batch-mode test package
+        env:
+          SPRING_DATASOURCE_DRUID_PASSWORD: mia-ci-only
+          SPRING_DATASOURCE_DRUID_URL: jdbc:mysql://127.0.0.1:3306/xiaozhi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
+          SPRING_DATA_REDIS_HOST: 127.0.0.1
+        run: mvn --batch-mode -DskipTests=false -DfailIfNoTests=true package
       - name: Verify exact deployed class baseline
         run: |
           python scripts/ci/verify_mia_manager_baseline.py \

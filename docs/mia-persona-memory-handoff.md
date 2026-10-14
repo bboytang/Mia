@@ -16,14 +16,14 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 - 任务分支：`feature/mia-persona-memory-v1.2`，从已核实远程一致的 `feature/admin-responsive`／`a30a5081bfa3c08e7387b9f5d9be77bd957e8175` 创建。原分支保留。
 - V1.1 历史基线：Mia `31aeb6fe60a3ed81fb935b16a844c7a447b7f1df`、路遥 `e23c3aa25d6451e3f35e71609864bb3a54ad49a0`、小智 v0.9.7。
 - 四份文档首份保存提交 `d74b89acc0973502234724fba0e681b112985eeb` 已推送到任务分支，从独立目录检出相同 SHA 并逐文件比对一致。后续进度随任务提交保存。
-- P03 的 D01 及实际上游／运行补丁已冻结，见[基线证据](verification/mia-persona-memory/baseline.md)。Java 二进制校验值已记录，新 Java 集成构建对照属于 P07，尚未执行。
+- P03 的 D01 及实际上游／运行补丁已冻结，见[基线证据](verification/mia-persona-memory/baseline.md)。P07 首轮 Java 编译及四类字节对照通过；上游默认跳过测试，不能算 Java 测试通过，显式启用并使用隔离 MySQL／Redis 重新验证。
 - 仓库文档是完整任务入口，后续无需读取原对话。旧 `/tmp` 审计源码不是必须传递的材料，可以从固定来源重建。
 
 ## 下一步
 
 当前步骤：**P06 embedding 比较**。P05 [开发契约](verification/mia-persona-memory/contracts.md)已明确，用户已选智控台一次性授权码；公网可信 IP 或域名证书均可，实际 TLS 部署尚未执行。
 
-下一步：P06 v2 四候选仍未合格，见 [v2 实测](verification/mia-persona-memory/embedding-results-v2.json)。需要修正 PyTorch 参考 dropout 状态并复核；同主题缺属性的验收语义已询问用户。校准置信度探索尚未验证，不能作为生产算法。与此同时完成不依赖模型选择的 P07 Java 基线验证。
+下一步：P06 v2 四候选仍未合格，见 [v2 实测](verification/mia-persona-memory/embedding-results-v2.json)。用独立 v3 复核参考 dropout 修正和校准置信度探索；用户已允许相关召回但必须明确所问属性未知，见[验收 v1.1](verification/mia-persona-memory/acceptance.md)。与此同时复核 P07 显式执行的 Java 测试与构建。恢复时先查询最新 Actions，再决定是否重跑。
 
 ## 步骤状态
 
@@ -33,10 +33,10 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 | P01 | 完成 | d74b89a 已推送，独立 checkout 与四文件比对通过 |
 | P02 | 完成 | [环境与访问](verification/mia-persona-memory/environment.md)已核实；后续真实模型／真机缺项分别记录 |
 | P03 | 完成 | [固定基线](verification/mia-persona-memory/baseline.md)及运行文件／Java class 校验值已保存 |
-| P04 | 完成 | [验收 v1](verification/mia-persona-memory/acceptance.md)：样本、质量／资源／时间门槛已固定；不是测量结果 |
+| P04 | 完成 | [验收 v1.1](verification/mia-persona-memory/acceptance.md)：数值不变，按用户确认区分无关与相关不可回答 |
 | P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
-| P06 | 进行中 | v1／v2 四候选均未合格；参考 dropout 修正待复核，相关但不可回答的验收语义待用户答复 |
-| P07 | 进行中 | Java 基线构建／字节对照入口已编写；完整真实身份链及 Provider 入口尚未完成 |
+| P06 | 进行中 | v1／v2 四候选均未合格；独立 v3 参考修正及置信度探索待验证 |
+| P07 | 进行中 | 首轮编译／四类字节对照通过，但测试默认被跳过；显式开启复核，真实身份链及 Provider 入口未完成 |
 | P08—P10 | 未开始 | 身份链、Scope 与 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
@@ -61,7 +61,7 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 
 ## 待决与访问状态
 
-D01／D02／D05／D06／D07／D08／D10 契约已确定，用户已确认授权码和情绪保留。D09 数值保持冻结，相关性与答案可得性的一类样本语义待澄清。D03／D04 尚未选型；v1／v2 没有 eligible 候选。真实身份链安全及长期趋势行为仍未验收。
+D01／D02／D05／D06／D07／D08／D09／D10 契约已确定，用户已确认授权码、情绪保留及相关不可回答边界。D03／D04 尚未选型；v1／v2 没有 eligible 候选。真实身份链安全及长期趋势行为仍未验收。
 
 GitHub 读取／推送、Actions 和服务器严格主机校验下的只读 SSH 已验证；未改变任何凭据。仓库 Actions secrets 当前为空，不能推断组织或环境 secrets 的状态。真实聊天模型 job 的凭据来源和真机／签名仍未确认；不影响无密钥本地 embedding 候选在 GitHub 的实验。新环境须重新验证实际访问，不复制秘密进交接。
 

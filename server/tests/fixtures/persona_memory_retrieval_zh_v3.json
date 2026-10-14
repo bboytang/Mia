@@ -1,0 +1,1465 @@
+{
+  "version": "3",
+  "purpose": "New synthetic corpus and holdout, frozen before corrected-reference inference. User approved related recall with explicit insufficient-information replies; genuinely irrelevant queries still require empty recall. No production seeding.",
+  "reference_scope": "F/daily/mia",
+  "memories": [
+    {
+      "id": "f-diet",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "早餐禁忌",
+      "content": "我对荞麦过敏，早餐不能吃荞麦面；小米粥可以吃。",
+      "keywords": [
+        "荞麦",
+        "过敏",
+        "小米粥"
+      ],
+      "triggers": [
+        "早餐",
+        "饮食",
+        "吃面"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "f-sleep",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "晚间习惯",
+      "content": "我通常晚上十一点半准备睡觉，睡前不听新闻播报。",
+      "keywords": [
+        "十一点半",
+        "睡觉",
+        "新闻"
+      ],
+      "triggers": [
+        "睡前",
+        "晚间",
+        "新闻"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "f-commute",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "日常通勤",
+      "content": "上班我优先步行，来不及就打车，不选择共享单车。",
+      "keywords": [
+        "步行",
+        "打车",
+        "共享单车"
+      ],
+      "triggers": [
+        "上班",
+        "通勤",
+        "交通"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-rooms",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "房间要求",
+      "content": "住酒店时我希望有大书桌，也不接受没有窗户的房间。",
+      "keywords": [
+        "大书桌",
+        "窗户",
+        "酒店"
+      ],
+      "triggers": [
+        "酒店",
+        "住宿",
+        "房间"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-reading",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "阅读目标",
+      "content": "我每周读一篇自然科学长文，读完会写三句话笔记。",
+      "keywords": [
+        "自然科学",
+        "每周一篇",
+        "三句话笔记"
+      ],
+      "triggers": [
+        "阅读",
+        "读文章",
+        "笔记"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-tea",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "饮茶习惯",
+      "content": "我常喝桂花茶，晚上七点以后不喝浓茶。",
+      "keywords": [
+        "桂花茶",
+        "七点后",
+        "浓茶"
+      ],
+      "triggers": [
+        "喝茶",
+        "饮品",
+        "晚上"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "f-friend",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "夏言复习",
+      "content": "朋友夏言在准备会计资格考试，我们约定周四一起复习。",
+      "keywords": [
+        "夏言",
+        "会计资格",
+        "周四"
+      ],
+      "triggers": [
+        "夏言",
+        "复习",
+        "周四"
+      ],
+      "weight": 5
+    },
+    {
+      "id": "f-focus",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "集中工作",
+      "content": "我下午两点到四点专注写代码，非紧急消息等四点以后处理。",
+      "keywords": [
+        "两点到四点",
+        "代码",
+        "非紧急消息"
+      ],
+      "triggers": [
+        "专注",
+        "消息",
+        "编程"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-feedback",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "建议方式",
+      "content": "给我意见时先指出最大的风险，再提供改进建议，不用长篇安慰。",
+      "keywords": [
+        "最大风险",
+        "改进建议",
+        "不长篇安慰"
+      ],
+      "triggers": [
+        "意见",
+        "建议",
+        "风险"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-gift",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "哥哥礼物",
+      "content": "我送哥哥一个无线路由器，帮助改善他书房的网络覆盖。",
+      "keywords": [
+        "哥哥",
+        "无线路由器",
+        "书房网络"
+      ],
+      "triggers": [
+        "哥哥",
+        "礼物",
+        "网络"
+      ],
+      "weight": 6
+    },
+    {
+      "id": "f-outdoor",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "骑行补给",
+      "content": "上次骑行忘带水壶，途中很不方便；以后出发前检查饮水。",
+      "keywords": [
+        "骑行",
+        "水壶",
+        "饮水"
+      ],
+      "triggers": [
+        "骑行",
+        "出发",
+        "装备"
+      ],
+      "weight": 7
+    },
+    {
+      "id": "f-city",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "现居城市",
+      "content": "我从大连搬到沈阳，目前居住在沈阳。",
+      "keywords": [
+        "沈阳",
+        "大连",
+        "搬家"
+      ],
+      "triggers": [
+        "居住",
+        "城市",
+        "住址"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-loss",
+      "scope": "F/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "丢失的耳机",
+      "content": "我丢了爷爷送的耳机，想起这件事很伤心。",
+      "keywords": [
+        "爷爷",
+        "耳机"
+      ],
+      "triggers": [
+        "爷爷",
+        "耳机"
+      ],
+      "weight": 10
+    },
+    {
+      "id": "f-city-old",
+      "scope": "F/daily/mia",
+      "state": "superseded",
+      "source": "synthetic-test-user-statement",
+      "entity": "现居城市",
+      "content": "我目前住在大连。",
+      "keywords": [
+        "大连"
+      ],
+      "triggers": [
+        "城市"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-deleted",
+      "scope": "F/daily/mia",
+      "state": "deleted",
+      "source": "synthetic-test-user-statement",
+      "entity": "钥匙位置",
+      "content": "我的备用钥匙放在红色抽屉里。",
+      "keywords": [
+        "钥匙",
+        "抽屉"
+      ],
+      "triggers": [
+        "钥匙"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-other-agent",
+      "scope": "F/study/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "学习角色称呼",
+      "content": "在学习角色里请叫我小松。",
+      "keywords": [
+        "小松"
+      ],
+      "triggers": [
+        "称呼"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "f-other-persona",
+      "scope": "F/daily/tutor",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "导师乐器",
+      "content": "在导师角色里我每晚练十五分钟长笛。",
+      "keywords": [
+        "长笛",
+        "十五分钟"
+      ],
+      "triggers": [
+        "练习"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "g-diet",
+      "scope": "G/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "早餐习惯",
+      "content": "我每天早餐吃荞麦面，没有食物过敏。",
+      "keywords": [
+        "荞麦面"
+      ],
+      "triggers": [
+        "早餐"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "g-city",
+      "scope": "G/daily/mia",
+      "state": "active",
+      "source": "synthetic-test-user-statement",
+      "entity": "现居城市",
+      "content": "我现在住在广州。",
+      "keywords": [
+        "广州"
+      ],
+      "triggers": [
+        "城市"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "f-pending",
+      "scope": "F/daily/mia",
+      "state": "pending",
+      "source": "synthetic-test-user-statement",
+      "entity": "婚姻情况",
+      "content": "我在准备婚礼。",
+      "keywords": [
+        "婚礼"
+      ],
+      "triggers": [
+        "结婚"
+      ],
+      "weight": 4
+    }
+  ],
+  "queries": [
+    {
+      "id": "v3-q-1",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "安排早饭时有什么要避开的？",
+      "expected": [
+        "f-diet"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-2",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我对哪种谷物过敏？",
+      "expected": [
+        "f-diet"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-3",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我早餐能吃荞麦面吗？",
+      "expected": [
+        "f-diet"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-4",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "想换一种粥，什么食物对我可行？",
+      "expected": [
+        "f-diet"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-5",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "给我挑早餐面食应该注意什么？",
+      "expected": [
+        "f-diet"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-6",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我可以选择小米熬的粥吗？",
+      "expected": [
+        "f-diet"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-7",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "临睡前我会避免哪种声音内容？",
+      "expected": [
+        "f-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-8",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我一般几点准备睡觉？",
+      "expected": [
+        "f-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-9",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "晚上二十三点三十分我打算做什么？",
+      "expected": [
+        "f-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-10",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "安排晚间活动时要考虑我几点休息？",
+      "expected": [
+        "f-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-11",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我要入睡了，适合给我播新闻吗？",
+      "expected": [
+        "f-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-12",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我睡前对新闻播报有什么偏好？",
+      "expected": [
+        "f-sleep"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-13",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "早上赶时间去单位，我会怎么走？",
+      "expected": [
+        "f-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-14",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我上班优先选什么方式？",
+      "expected": [
+        "f-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-15",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的日常通勤通常如何安排？",
+      "expected": [
+        "f-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-16",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "工作日赶路是否适合让我骑共享单车？",
+      "expected": [
+        "f-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-17",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我想按平时习惯去上班，应先考虑什么？",
+      "expected": [
+        "f-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-18",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "步行时间不够，我倾向用哪种替代交通？",
+      "expected": [
+        "f-commute"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-19",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "帮我安排住处时要注意哪些条件？",
+      "expected": [
+        "f-rooms"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-20",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我住酒店需要怎样的桌子？",
+      "expected": [
+        "f-rooms"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-21",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "没有窗的旅馆房间适合我吗？",
+      "expected": [
+        "f-rooms"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-22",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "给我订房时需要满足哪两点？",
+      "expected": [
+        "f-rooms"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-23",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我在旅馆里想工作，房间要有哪件家具？",
+      "expected": [
+        "f-rooms"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-24",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "关于采光和书桌，我有什么住宿偏好？",
+      "expected": [
+        "f-rooms"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-25",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我保持阅读习惯时如何记录收获？",
+      "expected": [
+        "f-reading"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-26",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我每周读几篇什么类型的文章？",
+      "expected": [
+        "f-reading"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-27",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我读完长文通常做什么？",
+      "expected": [
+        "f-reading"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-28",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的文章阅读频率是什么？",
+      "expected": [
+        "f-reading"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-29",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "记阅读笔记时我通常写多长？",
+      "expected": [
+        "f-reading"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-30",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我每周想完成的科学阅读安排是什么？",
+      "expected": [
+        "f-reading"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-31",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "傍晚给我买饮品需要注意什么？",
+      "expected": [
+        "f-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-32",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我平时常喝什么茶？",
+      "expected": [
+        "f-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-33",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "十九点以后浓茶适合我吗？",
+      "expected": [
+        "f-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-34",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的茶饮习惯有哪些？",
+      "expected": [
+        "f-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-35",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "到了晚上该避开什么浓度的茶？",
+      "expected": [
+        "f-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-36",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我喜欢的常用花茶是哪一种？",
+      "expected": [
+        "f-tea"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-37",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "为了和朋友一起学习，该准备什么考试资料？",
+      "expected": [
+        "f-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-38",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我和夏言哪天复习？",
+      "expected": [
+        "f-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-39",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "星期四的共同学习安排是什么？",
+      "expected": [
+        "f-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-40",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "朋友最近在准备哪项职业考试？",
+      "expected": [
+        "f-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-41",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我约好和谁复习会计知识？",
+      "expected": [
+        "f-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-42",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "给夏言安排复习材料，需要考虑哪个考试？",
+      "expected": [
+        "f-friend"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-43",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "不紧急的消息什么时候联系我更合适？",
+      "expected": [
+        "f-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-44",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我下午几点到几点写代码？",
+      "expected": [
+        "f-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-45",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "十四到十六点我主要在做什么？",
+      "expected": [
+        "f-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-46",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我为编程预留的专注时间是多久？",
+      "expected": [
+        "f-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-47",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "下午两点能找我聊非紧急事情吗？",
+      "expected": [
+        "f-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-48",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的集中工作时间与消息处理怎样分配？",
+      "expected": [
+        "f-focus"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-49",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "一起评估方案时，我希望按什么顺序说？",
+      "expected": [
+        "f-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-50",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "给我提意见先讲哪一点？",
+      "expected": [
+        "f-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-51",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我喜欢建议之前先听什么？",
+      "expected": [
+        "f-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-52",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的反馈偏好是多安慰还是直接指出风险？",
+      "expected": [
+        "f-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-53",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "说完风险之后我希望听什么？",
+      "expected": [
+        "f-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-54",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我希望你怎么组织改进意见？",
+      "expected": [
+        "f-feedback"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-55",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "为家人改善上网情况，我买了什么？",
+      "expected": [
+        "f-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-56",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我送哥哥的礼物是什么？",
+      "expected": [
+        "f-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-57",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "那台送出去的路由器主要解决什么问题？",
+      "expected": [
+        "f-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-58",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "哥哥书房的信号问题与哪件礼物有关？",
+      "expected": [
+        "f-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-59",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我帮哥哥改善了哪里的网络？",
+      "expected": [
+        "f-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-60",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "为什么我选路由器作为礼物？",
+      "expected": [
+        "f-gift"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-61",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "准备户外活动时有哪项补给教训？",
+      "expected": [
+        "f-outdoor"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-62",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我上次骑行忘了带什么？",
+      "expected": [
+        "f-outdoor"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-63",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "下次骑车出发前要提醒我检查什么？",
+      "expected": [
+        "f-outdoor"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-64",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我为什么现在会特别注意水壶？",
+      "expected": [
+        "f-outdoor"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-65",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "骑行路上的不便来自哪件遗漏物品？",
+      "expected": [
+        "f-outdoor"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-66",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我要骑车出门，饮水方面有什么要记得的？",
+      "expected": [
+        "f-outdoor"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-67",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "现在给我寄东西，地址的城市该写什么？",
+      "expected": [
+        "f-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-68",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我目前住在哪里？",
+      "expected": [
+        "f-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-69",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我离开大连之后住在哪座城市？",
+      "expected": [
+        "f-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-70",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "搬家后现在居住地是哪儿？",
+      "expected": [
+        "f-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-71",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我现在的收件城市是什么？",
+      "expected": [
+        "f-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-q-72",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我从哪座城市搬到了哪里？",
+      "expected": [
+        "f-city"
+      ],
+      "type": "semantic"
+    },
+    {
+      "id": "v3-n-1",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我的电脑序列号是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-2",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我第一部手机是什么型号？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-3",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我最喜欢哪支足球队？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-4",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我的保险合同编号是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-5",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我小学的班级是几班？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-6",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我驾照的发证日期是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-7",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我的邮政编码是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-8",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我买的汽车是什么型号？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-9",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我最喜欢哪颗行星？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-10",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我上次飞机的座位号是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-11",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的身份证号码是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-12",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的银行卡密码是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-13",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我用的邮箱地址是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-14",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我小学班主任的名字是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-15",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的保险是哪家公司的？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-16",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我最喜欢的电子游戏叫什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-17",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的宠物生日是哪天？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-18",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我在小学得到过哪些奖？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-19",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的车牌号码是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-20",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的护照什么时候到期？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-21",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的家庭电话是多少？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-22",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我今天航班的起飞时间是什么？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-23",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的备用钥匙放在哪？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-n-24",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的婚礼日期定在什么时候？",
+      "expected": [],
+      "type": "irrelevant"
+    },
+    {
+      "id": "v3-r-1",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我出生在哪个城市？",
+      "expected": [],
+      "allowed_related": [
+        "f-city"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-2",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我读大学时住哪里？",
+      "expected": [],
+      "allowed_related": [
+        "f-city"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-3",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "夏言今年多大？",
+      "expected": [],
+      "allowed_related": [
+        "f-friend"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-4",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "哥哥的生日是什么时候？",
+      "expected": [],
+      "allowed_related": [
+        "f-gift"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-5",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "爷爷送的耳机是什么品牌？",
+      "expected": [],
+      "allowed_related": [
+        "f-loss"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-6",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我用的笔记本电脑是什么型号？",
+      "expected": [],
+      "allowed_related": [
+        "f-focus"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-7",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我最喜欢哪种咖啡？",
+      "expected": [],
+      "allowed_related": [
+        "f-tea"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-8",
+      "split": "calibration",
+      "scope": "F/daily/mia",
+      "query": "我具体有哪些自然科学作者偏好？",
+      "expected": [],
+      "allowed_related": [
+        "f-reading"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-9",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的出生地和现在住处是不是同一个地方？",
+      "expected": [],
+      "allowed_related": [
+        "f-city"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-10",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我读高中时住在哪个城市？",
+      "expected": [],
+      "allowed_related": [
+        "f-city"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-11",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我的朋友夏言哪一年出生？",
+      "expected": [],
+      "allowed_related": [
+        "f-friend"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-12",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "哥哥具体是几月几号出生？",
+      "expected": [],
+      "allowed_related": [
+        "f-gift"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-13",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "那副丢失的耳机准确型号是什么？",
+      "expected": [],
+      "allowed_related": [
+        "f-loss"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-14",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我平时用什么品牌的电脑写代码？",
+      "expected": [],
+      "allowed_related": [
+        "f-focus"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-15",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我最常选哪种咖啡豆？",
+      "expected": [],
+      "allowed_related": [
+        "f-tea"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    },
+    {
+      "id": "v3-r-16",
+      "split": "holdout",
+      "scope": "F/daily/mia",
+      "query": "我最喜欢哪位自然科学作者？",
+      "expected": [],
+      "allowed_related": [
+        "f-reading"
+      ],
+      "type": "related_unanswerable",
+      "response_expectation": "Explicitly state the requested attribute is unknown; never infer it from related facts."
+    }
+  ]
+}

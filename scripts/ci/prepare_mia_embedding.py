@@ -39,7 +39,7 @@ def main():
     names = ['input_ids', 'attention_mask', 'token_type_ids']
     path = args.output / 'model.onnx'
     with torch.no_grad():
-        torch.onnx.export(LastHiddenState(model), tuple(sample[n] for n in names),
+        torch.onnx.export(LastHiddenState(model).eval(), tuple(sample[n] for n in names),
                           str(path), input_names=names, output_names=['hidden_state'],
                           dynamic_axes={n: {0: 'batch', 1: 'sequence'} for n in names + ['hidden_state']},
                           opset_version=17, do_constant_folding=True, dynamo=False)
@@ -51,6 +51,7 @@ def main():
                 'dimension': model.config.hidden_size, 'max_tokens': 512,
                 'query_prefix': '为这个句子生成表示以用于检索相关文章：',
                 'pooling': 'CLS', 'normalized': True, 'models': {}, 'reference_vectors': []}
+    model.eval()
     for text in ['测试文字', '雨后的树林很安静。', '出行之前要检查天气。', '喝热水还是冷水？']:
         for query in [False, True]:
             encoded = tokenizer((metadata['query_prefix'] if query else '') + text,
