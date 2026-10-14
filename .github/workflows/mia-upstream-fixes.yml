@@ -45,6 +45,8 @@ jobs:
         env:
           RUN_LIVE_API_TESTS: '0'
         run: |
+          mkdir -p data
+          printf '{}\n' > data/.config.yaml
           python -B tests/test_manage_api_client_lifecycle.py -v
           python -m pytest tests/core/providers/asr/test_lang_tag_filter.py tests/core/providers/tts/test_quote_safe_segment.py -q
           python -m compileall -q config/manage_api_client.py core/handle/receiveAudioHandle.py core/providers/asr/utils.py core/providers/tts/base.py core/providers/tts/edge.py
