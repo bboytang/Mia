@@ -91,6 +91,31 @@ test('mobile card selection, editing, cancel and desktop rotation keep existing 
   await assertFits(page, 'rotation');
 });
 
+test('mobile pagination reaches arbitrary pages and keeps page-size selection', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await mockBackend(page);
+  const requests = [];
+  await page.route('**/xiaozhi/models/provider?**', async route => {
+    requests.push(new URL(route.request().url()).searchParams);
+    await route.fulfill({ contentType: 'application/json', body: JSON.stringify({ code: 0, data: { list: [], total: 1234 } }) });
+  });
+  await page.goto('/#/provider-management');
+  const pagination = page.locator('.pagination-wrapper');
+  await expect(pagination.locator('.el-pagination__total')).toContainText('1234');
+  await assertFits(page, 'large page count');
+  await pagination.locator('.btn-next').click();
+  await expect.poll(() => requests.at(-1)?.get('page')).toBe('2');
+  const jump = pagination.locator('.el-pagination__jump input');
+  await jump.fill('88');
+  await jump.press('Enter');
+  await expect.poll(() => requests.at(-1)?.get('page')).toBe('88');
+  await pagination.locator('.el-select').click();
+  await page.locator('.el-select-dropdown:visible').getByText('50条/页', { exact: true }).click();
+  await expect.poll(() => requests.at(-1)?.get('limit')).toBe('50');
+  expect(requests.at(-1).get('page')).toBe('1');
+  await assertFits(page, 'page-size selection');
+});
+
 test('parameter edit survives constrained keyboard height; cancel makes no API write', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await mockBackend(page);

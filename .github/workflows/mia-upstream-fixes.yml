@@ -31,6 +31,7 @@ jobs:
           python server/upstream_fixes/apply.py baseline
           python server/upstream_fixes/apply.py baseline --apply
           cp -a official/main/xiaozhi-server/tests baseline/main/xiaozhi-server/
+          MIA_AUDIO_SOURCE="$GITHUB_WORKSPACE/baseline/main/xiaozhi-server/core/handle/receiveAudioHandle.py" python server/upstream_fixes/test_receive_audio.py -v
       - name: Install official runtime and test dependencies
         working-directory: baseline/main/xiaozhi-server
         run: |

@@ -12,7 +12,7 @@
 | HTTP 客户端 | 现网文件 SHA256 与 v0.9.7 一致，缺少请求级客户端关闭、重试复用和 shutdown 中断修复。 |
 | FunASR / SenseVoice | 现网与 v0.9.7 一致，缺少 content 正文提取和中日文字间空格处理。 |
 | TTS | 现网与 v0.9.7 一致，缺少引号内分句保护及 Edge TTS 新服务地址修复。 |
-| requirements.txt | 现网文件 SHA256 已与本次官方提交一致，不重复改依赖。文件相同不代表所有运行包版本相同，发布前仍需核对相关已安装包。 |
+| requirements.txt | 现网文件 SHA256 已与本次官方提交一致，不重复改依赖。已只读核实运行包 `httpx 0.28.1` 与 `edge-tts 7.2.8`，与官方补丁依赖一致；其他包仍不能仅凭清单认定安装一致。 |
 | Mia 定制 | 记忆、情绪、主人认证、音乐精确匹配均保留，不覆盖 connection.py、sendAudioHandle.py、dialogue.py、Java ConfigServiceImpl 或插件。 |
 | CI / 基础镜像 | 官方 Dependabot、PyPI metadata 回退及基础镜像依赖调整属于构建维护，不作为缺失业务功能移植到现网。 |
 
@@ -25,7 +25,7 @@ python3 server/upstream_fixes/apply.py /path/to/source --apply
 ```
 
 默认只检查。已有定制或已安装修复时拒绝覆盖；不重启服务、不访问数据库。
-GitHub Actions 使用官方生命周期、ASR 和 TTS 回归用例，禁止真实 API 调用；Edge TTS 仅检查模块加载及地址，不声称验证微软线上发声。
+GitHub Actions 使用官方生命周期、ASR 和 TTS 回归用例，以及 FunASR 正文进入意图/STT/聊天、声纹首次称呼不变的回归用例，禁止真实 API 调用；Edge TTS 仅检查模块加载及地址，不声称验证微软线上发声。
 
 部署需以发布前现网语音镜像为基础，只覆盖验证产物中的五个文件，保留环境、挂载与其他源码。先记录原镜像 ID、文件校验和及当前三份 Compose；核对 `httpx` 和 `edge_tts` 版本；隔离验证后再切换语音镜像。重建语音容器会中断当前设备连接，应在设备空闲时发布。回滚恢复本次原镜像及 Compose，不回滚数据库，不删除记忆。当前尚未部署这些补丁，仍需实际设备验证 ASR、TTS、打断和重连。
 
