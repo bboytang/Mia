@@ -1,6 +1,7 @@
 {
   "commit": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
   "files": {
+    "main/manager-web/src/apis/httpRequest.js": "07d282551a6bd087001fecd5c219ff47dfc2994bcf665ba38122810a2b91d807",
     "main/manager-web/public/index.html": "fb75080f8b36e74a0ca7b36f8af732f4d0a6f8ff1f4cf3c5f320a9fd0b6ca2a7",
     "main/manager-web/src/App.vue": "1a09157d6d044eb82ec629e2d32f3fbca333857511ff0d0a720a73e9f9f50166",
     "main/manager-web/src/apis/module/device.js": "e219870ba7941b5205d07e10a41a916ffc7829d68a7a8a26e7807343a452abb4",

@@ -224,6 +224,13 @@
 - 初次私有核验与配置读取整体3秒、身份等待4秒，避免新增多次RPC使原1秒路由丢失hello；失败仍提示授权且不加载私有配置，不放宽TLS／权限。新增软件负例待新提交GitHub验证。
 - App `b3a677b...` 的 [38625280022](https://github.com/bboytang/Mia/actions/runs/38625280022) 已完成Simulator构建／全部测试，device构建在途；e2a0460的 [38626262073](https://github.com/bboytang/Mia/actions/runs/38626262073) Simulator构建通过、测试在途。完整成功尚待复核，不宣称真机或真实TLS通过。交接已同步，无部署。
 
+## 2026-10-14：P09真实集成通过与P08智控台最小入口
+
+- `0589665b51482f1422ebd172be360c490e07be65`／[38626866860](https://github.com/bboytang/Mia/actions/runs/38626866860)：实际manager→Python Scope集成和17身份用例通过、构建／类范围通过；167全量166通过／唯一既有脱敏失败，0error／skip。旧版0和Long字符串窄范围修正已真实验证，原失败记录保留。制品下载待归档。
+- 智控台设备操作只增加授权码／撤销按钮与短期弹窗，复用登录／请求；同源HTTPS限定，单次不重试，关闭／销毁／期限后清码，不改原ID／绑定，敏感请求错误不打印原始凭据对象。
+- 在完整preimage验证后叠加必要第三补丁，不改变成熟responsive方向。新增四浏览器的HTTP拒绝及合成HTTPS UI请求规则检查；当前待本提交GitHub全部前端回归／构建，合成HTTPSorigin不代替实际TLS验收。详见 `console-private-authorization.md`。
+- iOS完整测试／device构建仍在途：0589665的38626866880，e2a0460的38626262073；先查询精确run再报成功。无本地测试、生产变更或秘密读取。交接同步，P08／P09整体仍未完成。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

@@ -28,6 +28,7 @@ def main():
             raise SystemExit(f'Upstream file differs; review custom changes first: {relative}')
     desktop_patch = str(bundle / 'production-dialogs.patch')
     patch = str(bundle / 'responsive.patch')
+    private_patch = str(bundle / 'private-authorization.patch')
     with tempfile.TemporaryDirectory(prefix='mia-admin-check-') as scratch:
         for relative in manifest['files']:
             source = root / relative
@@ -35,13 +36,15 @@ def main():
                 target = Path(scratch) / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, target)
-        for candidate in (desktop_patch, patch):
+        for candidate in (desktop_patch, patch, private_patch):
             subprocess.run(['git', 'apply', '--unidiff-zero', '--check', candidate], cwd=scratch, check=True)
             subprocess.run(['git', 'apply', '--unidiff-zero', candidate], cwd=scratch, check=True)
     if args.apply:
         subprocess.run(['git', 'apply', '--unidiff-zero', desktop_patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', '--check', patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', patch], cwd=root, check=True)
+        subprocess.run(['git', 'apply', '--unidiff-zero', '--check', private_patch], cwd=root, check=True)
+        subprocess.run(['git', 'apply', '--unidiff-zero', private_patch], cwd=root, check=True)
         print(f'Applied responsive source changes for upstream {manifest["commit"]}')
     else:
         print(f'All source checks passed for upstream {manifest["commit"]}; no files changed')

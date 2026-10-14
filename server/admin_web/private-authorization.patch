@@ -1,0 +1,87 @@
+diff --git a/main/manager-web/src/apis/module/device.js b/main/manager-web/src/apis/module/device.js
+--- a/main/manager-web/src/apis/module/device.js
++++ b/main/manager-web/src/apis/module/device.js
+@@ -4,0 +5,12 @@
++    privateAuthorization(deviceId, action, callback) {
++        const url = new URL(`${getServiceUrl()}/device/mia-auth/${action}`, window.location.href);
++        if (window.location.protocol !== 'https:' || url.protocol !== 'https:' || url.origin !== window.location.origin
++            || !['code', 'revoke'].includes(action)) {
++            callback({ code: -1, msg: '请先通过 HTTPS 打开智控台，再办理私有授权。' });
++            return;
++        }
++        RequestService.sendRequest().sensitive().url(url.href).method('POST').data({ device_id: deviceId })
++            .success(res => callback(res.data))
++            .fail(() => callback({ code: -1, msg: '授权未完成，请检查当前设备权限。' }))
++            .networkFail(() => callback({ code: -1, msg: '授权请求未完成，请检查网络后手动重试。' })).send();
++    },
+diff --git a/main/manager-web/src/apis/httpRequest.js b/main/manager-web/src/apis/httpRequest.js
+--- a/main/manager-web/src/apis/httpRequest.js
++++ b/main/manager-web/src/apis/httpRequest.js
+@@ -21,0 +22,2 @@
++        _sensitive: false,
++        'sensitive'() { this._sensitive = true; return this },
+@@ -61 +63 @@
+-                console.log('catch', res)
++                console.log('catch', this._sensitive ? 'Private authorization request failed' : res)
+diff --git a/main/manager-web/src/views/DeviceManagement.vue b/main/manager-web/src/views/DeviceManagement.vue
+--- a/main/manager-web/src/views/DeviceManagement.vue
++++ b/main/manager-web/src/views/DeviceManagement.vue
+@@ -57,0 +58,2 @@
++                <el-button size="mini" type="text" @click="createPrivateCode(scope.row.device_id)">私有授权码</el-button>
++                <el-button size="mini" type="text" @click="revokePrivateGrant(scope.row.device_id)">撤销私有授权</el-button>
+@@ -86,0 +89,6 @@
++    <el-dialog title="Mia 私有授权码" :visible.sync="privateCodeVisible" width="min(90vw, 420px)" @closed="clearPrivateCode">
++      <p>设备：{{ privateCodeDevice }}</p>
++      <p>请在 Mia App 的设置／私有授权中输入此码。10 分钟内一次性使用，以服务器核验为准。</p>
++      <el-input :value="privateCode" readonly aria-label="一次性私有授权码" />
++      <span slot="footer"><el-button @click="privateCodeVisible = false">关闭</el-button></span>
++    </el-dialog>
+@@ -126,0 +135,5 @@
++      privateCodeVisible: false,
++      privateCode: '',
++      privateCodeDevice: '',
++      privateCodeTimer: null,
++      privateAuthorizationPending: false,
+@@ -186,0 +200 @@
++  beforeDestroy() { this.clearPrivateCode(); },
+@@ -187,0 +202,40 @@
++    clearPrivateCode() {
++      clearTimeout(this.privateCodeTimer);
++      this.privateCode = '';
++      this.privateCodeDevice = '';
++      this.privateCodeTimer = null;
++    },
++    createPrivateCode(deviceId) {
++      if (this.privateAuthorizationPending) return;
++      this.clearPrivateCode();
++      this.privateAuthorizationPending = true;
++      Api.device.privateAuthorization(deviceId, 'code', result => {
++        this.privateAuthorizationPending = false;
++        if (this._isDestroyed) return;
++        const data = result.data;
++        if (result.code !== 0 || !data || data.device_id !== deviceId
++            || !/^[A-Za-z0-9_-]{22}$/.test(data.authorization_code) || data.expires_in !== 600) {
++          this.$message.error(result.msg || '授权结果无效，请重新生成。');
++          return;
++        }
++        this.privateCodeDevice = deviceId;
++        this.privateCode = data.authorization_code;
++        this.privateCodeVisible = true;
++        this.privateCodeTimer = setTimeout(() => { this.privateCodeVisible = false; this.clearPrivateCode(); }, 600000);
++      });
++    },
++    revokePrivateGrant(deviceId) {
++      if (this.privateAuthorizationPending) return;
++      this.$confirm('撤销后该设备需要重新授权，原设备绑定保留。', '撤销私有授权', { type: 'warning' })
++        .then(() => {
++          this.privateAuthorizationPending = true;
++          Api.device.privateAuthorization(deviceId, 'revoke', result => {
++            this.privateAuthorizationPending = false;
++            if (this._isDestroyed) return;
++            this.privateCodeVisible = false;
++            this.clearPrivateCode();
++            if (result.code === 0) this.$message.success('私有授权已撤销，原设备绑定保留。');
++            else this.$message.error(result.msg || '撤销未完成，请检查当前设备权限。');
++          });
++        }).catch(() => {});
++    },
