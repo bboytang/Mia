@@ -231,6 +231,14 @@
 - 在完整preimage验证后叠加必要第三补丁，不改变成熟responsive方向。新增四浏览器的HTTP拒绝及合成HTTPS UI请求规则检查；当前待本提交GitHub全部前端回归／构建，合成HTTPSorigin不代替实际TLS验收。详见 `console-private-authorization.md`。
 - iOS完整测试／device构建仍在途：0589665的38626866880，e2a0460的38626262073；先查询精确run再报成功。无本地测试、生产变更或秘密读取。交接同步，P08／P09整体仍未完成。
 
+## 2026-10-14：P08／P09真实TLS补丁与阶段证据
+
+- 17身份用例／manager→Python实跑及JAR证据 `trusted-scope-results.json` 已保存，精确0589665／38626866860；完整167中166通过／1既有脱敏失败明确保留。没有把此结果当实际TLS或八项能力。
+- 新增原生WSS可选证书／密钥路径及固定上游第五文件preimage；只扩展现有server的SSL参数，证书错误／缺项拒绝启动，私有头不容明文回退。生产无配置更改。
+- 身份CI增加真实Spring HTTPS签发、带CA／地址验证的实际WSS与旧HMAC、缺私有grant拒绝和同连接撤销检查。runner生成临时测试CA／证书，仅在runner信任测试CA，私钥不上传。第18个身份用例待本提交实跑；不冒充真实ASR／LLM／TTS或iOS WSS验收。详见 `private-tls.md`。
+- 智控台 `e154ef6...` 的 [38627774166](https://github.com/bboytang/Mia/actions/runs/38627774166) 原单测／构建通过，8新增浏览器用例找不到授权按钮，既有浏览器回归通过；制品下载定位中，UI不标完工。
+- App `e2a0460...` 的 [38626262073](https://github.com/bboytang/Mia/actions/runs/38626262073) 整体success；0589665的38626866880 Simulator构建／全部测试通过，device阶段在途。实际CA／iPhone／模型权限仍未完成。交接同步，未本地自动测试／部署。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

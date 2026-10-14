@@ -5,13 +5,27 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import ipaddress
 import json
+import os
 import re
+import ssl
 from urllib.parse import urlsplit
 
 
 class PrivateAuthorizationRequired(Exception):
     def __init__(self):
         super().__init__("请用智控台授权码完成授权")
+
+
+def server_tls_context():
+    certificate = os.environ.get("MIA_TLS_CERT_FILE")
+    key = os.environ.get("MIA_TLS_KEY_FILE")
+    if not certificate and not key:
+        return None
+    if not certificate or not key:
+        raise ValueError("Both Mia TLS certificate and key paths are required")
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.load_cert_chain(certificate, key)
+    return context
 
 
 @dataclass(frozen=True)

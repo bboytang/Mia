@@ -3,6 +3,7 @@
 import asyncio
 import json
 import os
+import ssl
 from pathlib import Path
 import sys
 from types import SimpleNamespace
@@ -14,7 +15,7 @@ sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-se
 
 from config.manage_api_client import ManageApiClient
 from server.companion.authorization import (PrivateAuthorization, PrivateAuthorizationRequired,
-    load_private_config, allow_generation, allow_output, execute_tool)
+    load_private_config, allow_generation, allow_output, execute_tool, server_tls_context)
 
 trace = []
 
@@ -37,6 +38,57 @@ async def rejects(operation):
     except PrivateAuthorizationRequired:
         return
     raise AssertionError('Unauthorized operation was accepted')
+
+
+async def native_wss(config, device, client, credential):
+    from websockets.asyncio.client import connect
+    from websockets.asyncio.server import serve
+    from core.auth import AuthManager
+
+    transport_auth = AuthManager('synthetic-transport-only')
+    legacy = transport_auth.generate_token(client, device)
+    async def handler(socket):
+        headers = dict(socket.request.headers)
+        assert transport_auth.verify_token(headers.get('authorization', '')[7:],
+            headers.get('client-id'), headers.get('device-id'))
+        conn = SimpleNamespace(config=config, headers=headers, websocket=socket,
+            read_config_from_api=True, session_id='native-tls-ci', client_abort=False)
+        try:
+            private = await load_private_config(conn)
+            assert 'CI private prompt marker' in private['prompt']
+            assert 'mia-private-credential' not in conn.headers
+            await socket.send(json.dumps({'status': 'authorized'}))
+            async for _ in socket:
+                if await allow_output(conn):
+                    await socket.send(json.dumps({'status': 'allowed'}))
+        except PrivateAuthorizationRequired:
+            await socket.send(json.dumps({'type': 'mia_authorization', 'status': 'required'}))
+
+    async with serve(handler, '127.0.0.1', 0, ssl=server_tls_context()) as server:
+        url = 'wss://127.0.0.1:' + str(server.sockets[0].getsockname()[1])
+        verified = ssl.create_default_context(cafile=os.environ['MIA_SCOPE_CA'])
+        headers = {'Device-Id': device, 'Client-Id': client, 'Authorization': 'Bearer ' + legacy}
+        # Native TLS must verify a CA and address; no trust-all socket client.
+        try:
+            async with connect(url, ssl=ssl.create_default_context(), additional_headers=headers):
+                raise AssertionError('Untrusted certificate accepted')
+        except ssl.SSLCertVerificationError:
+            pass
+        async with connect(url, ssl=verified, additional_headers=headers) as socket:
+            assert json.loads(await socket.recv())['status'] == 'required'
+        headers['Mia-Private-Credential'] = credential
+        async with connect(url, ssl=verified, additional_headers=headers) as socket:
+            assert json.loads(await socket.recv())['status'] == 'authorized'
+            await socket.send('check')
+            assert json.loads(await socket.recv())['status'] == 'allowed'
+            async with httpx.AsyncClient(timeout=3, trust_env=False) as http:
+                response = await http.post(config['manager-api']['url'].rstrip('/') + '/device/mia-auth/revoke',
+                    json={'device_id': device}, headers={'Authorization': 'Bearer ' + os.environ['MIA_SCOPE_USER_TOKEN']})
+                assert response.json()['code'] == 0
+            await socket.send('check')
+            required = json.loads(await socket.recv())
+            assert required['type'] == 'mia_authorization' and required['status'] == 'required'
+    return True
 
 
 async def main():
@@ -77,6 +129,7 @@ async def main():
     assert await asyncio.to_thread(allow_generation, active)
     assert await allow_output(active)
     assert await execute_tool(active, {'name': 'synthetic_tool'}) == 'synthetic tool output'
+    tls_pass = await native_wss(config, device, client, credential) if os.environ.get('MIA_SCOPE_NATIVE_TLS') == 'true' else None
     # Actual manager revocation, using the existing authenticated console token.
     async with httpx.AsyncClient(timeout=3, trust_env=False) as http:
         response = await http.post(config['manager-api']['url'].rstrip('/') + '/device/mia-auth/revoke',
@@ -90,7 +143,8 @@ async def main():
     await rejects(execute_tool(active, {'name': 'synthetic_tool'}))
     assert active.client_abort and tool.calls == 1
     print(json.dumps({'manager_python_scope_pass': True, 'checks': 17,
-                      'real_model_acceptance': 'not_executed', 'actual_wss_acceptance': 'not_executed'}))
+                      'native_wss_scope_pass': tls_pass,
+                      'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 
 
 try:

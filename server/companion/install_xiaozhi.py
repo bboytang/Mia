@@ -15,6 +15,7 @@ EXPECTED = {
     PYTHON + "core/handle/sendAudioHandle.py": "9b9dba36e4f110017596f975503d893d1a134071bf953ce9021020b8d0436c6e",
     PYTHON + "core/utils/dialogue.py": "a4f7af45edd5f1e60a119eb698daba56047fb6c57dfe5c4bfcadbf28234a6602",
     JAVA: "9f6a782d2c25fc015d4ffc6a799085b0439884bdadc4d0a7f47eeebd9256aac1",
+    PYTHON + "core/websocket_server.py": "e46fc6a0d1b268953cd6fdcf9cb10aaf89b17f8612d611c33201a6303eb31505",
 }
 
 
@@ -113,7 +114,13 @@ def patch_manager(text):
                         '        result.put("mia_owner", "user:" + agent.getUserId() + ":agent:" + agent.getId());\n')
 
 
-PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager]))
+def patch_websocket(text):
+    text = replace_once(text, 'import websockets\n', 'import websockets\nfrom mia_companion import authorization as mia_auth\n')
+    return replace_once(text, '            ping_interval=None,\n',
+                        '            ping_interval=None,\n            ssl=mia_auth.server_tls_context(),\n')
+
+
+PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager, patch_websocket]))
 
 
 def build_changes(root):

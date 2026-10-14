@@ -71,6 +71,13 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
             await auth.execute_tool(conn, {"name": "private_tool"})
         conn.func_handler.handle_llm_function_call.assert_not_awaited()
 
+    def test_incomplete_tls_material_fails_startup_instead_of_downgrading(self):
+        with patch.dict("os.environ", {}, clear=True):
+            self.assertIsNone(auth.server_tls_context())
+        for material in [{"MIA_TLS_CERT_FILE": "/missing/cert"}, {"MIA_TLS_KEY_FILE": "/missing/key"}]:
+            with patch.dict("os.environ", material, clear=True), self.assertRaises(ValueError):
+                auth.server_tls_context()
+
 
 if __name__ == "__main__":
     unittest.main()
