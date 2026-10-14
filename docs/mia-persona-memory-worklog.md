@@ -280,6 +280,13 @@
 - 新增5项真实manager／MySQL／HTTP链测试，LLM仅合成桩，覆盖合法上报／标题、缺授权、foreign session、队列后改绑、模型期间撤销及摘要结果不覆盖两方。Python保留原上报正文／音频格式并补守卫测试。固定preimage与完整备份扩展到必要文件。
 - 当前新增代码待GitHub实跑，已检查diff并更新接续／private-chat-authorization.md；没有本地运行自动测试／构建，没有部署，P10 schema尚未编辑。
 
+## 2026-10-14：P09旧会话链通过，P10兼容迁移待验
+
+- 3cb7b3c92ff6ec42959148bb364b4ba467ab56cd／[38656359887](https://github.com/bboytang/Mia/actions/runs/38656359887)：5新增旧会话＋原18身份／实际TLS通过，类范围／JAR构建通过；完整173中172通过、唯一既有脱敏失败、0error／skip。private-chat-results.json含真实JAR SHA。服务38656359879success，模型仍合成桩、未部署。
+- P10新增扩展schema／SQL及独立原子迁移，保留原五表形状与真实数据含义；缺失来源字段NULL、确认来源legacy_unknown，memories.content仍唯一事实正文。独立版本账本校验SQL及实际扩展结构，不隐式提交。
+- 服务CI增加固定a30旧源独立checkout／SHA验证，6项实际SQLite升级、重复、旧代码回滚读写、进程硬退出恢复、未知schema及Scope关联约束测试待本提交实跑。安装器复制必要schema文件；不在本地测试，不迁移生产。
+- 仅schema与兼容基础，未宣称真向量／关联／持久Worker／事件／情绪已实现；完整派生生命周期按P12—P20及P24继续验收。已检查diff并同步交接／schema-migration.md。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

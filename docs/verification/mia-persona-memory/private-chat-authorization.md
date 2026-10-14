@@ -1,6 +1,6 @@
 # P09：旧聊天上报／标题／摘要的必要授权边界
 
-状态：已编写，待本提交 GitHub Actions 实跑；未部署。不属于完整 RAG、持久 MemoryWorker 或真实模型行为验收。
+状态：3cb7b3c92ff6ec42959148bb364b4ba467ab56cd／[38656359887](https://github.com/bboytang/Mia/actions/runs/38656359887) 的5项新增及原18项身份／TLS通过，JAR构建／类范围通过，全量173中172通过／1既有脱敏失败；[原始结果](private-chat-results.json)已归档。服务38656359879整体success。未部署。不属于完整 RAG、持久 MemoryWorker 或真实模型行为验收。
 
 ## 已核实的缺口
 

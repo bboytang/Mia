@@ -11,6 +11,8 @@ import time
 import unicodedata
 import uuid
 
+from .schema import migrate
+
 
 CATEGORIES = {"fact", "preference", "goal", "experience", "agreement"}
 SECRET = re.compile(
@@ -158,6 +160,11 @@ class MemoryStore:
             );
             CREATE VIRTUAL TABLE IF NOT EXISTS memory_search USING fts5(memory_id UNINDEXED,terms);
         """)
+        try:
+            migrate(self.db)
+        except BaseException:
+            self.db.close()
+            raise
 
     def _owner(self, owner):
         owner = _text(owner, 256, "authenticated owner")

@@ -183,7 +183,7 @@ def install(root, changes):
         shutil.copy2(root / relative, root / (relative + ".mia-original"))
     destination.mkdir(mode=0o700)
     try:
-        for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py"]:
+        for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")
