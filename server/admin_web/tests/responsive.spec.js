@@ -13,8 +13,15 @@ const routes = [
 ];
 
 async function assertFits(page, label) {
-  const metrics = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
-  expect.soft(metrics.scroll, label).toBeLessThanOrEqual(metrics.width + 1);
+  const metrics = await page.evaluate(() => {
+    const width = document.documentElement.clientWidth;
+    return { width, scroll: document.documentElement.scrollWidth,
+      overflow: [...document.querySelectorAll('body *')].filter(el => {
+        const rect = el.getBoundingClientRect();
+        return rect.width && (rect.right > width + 1 || rect.left < -1);
+      }).slice(0, 12).map(el => `${el.tagName}.${el.className}`) };
+  });
+  expect.soft(metrics.scroll, label + ' ' + metrics.overflow.join(', ')).toBeLessThanOrEqual(metrics.width + 1);
 }
 
 for (const width of [360, 390, 430, 768, 1024, 1440]) {
@@ -25,6 +32,9 @@ for (const width of [360, 390, 430, 768, 1024, 1440]) {
     page.on('pageerror', error => errors.push(page.url() + ': ' + error.message));
     for (const route of routes) {
       await test.step(route, async () => {
+        if (!['/login','/register','/retrieve-password'].includes(route)) {
+          await page.evaluate(() => localStorage.setItem('token', JSON.stringify({ token: 'synthetic-test-token' })));
+        }
         await page.goto('/#' + route);
         const name = route.split('?')[0].slice(1).replace('server-side-management', 'server-side-manager');
         await expect(page.locator('.page-' + name)).toBeVisible();

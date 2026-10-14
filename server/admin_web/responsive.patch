@@ -6,7 +6,7 @@ index 3cd3bb7..43c1357 100644
 -  <meta name="viewport" content="width=device-width,initial-scale=1.0">
 +  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 diff --git a/main/manager-web/src/App.vue b/main/manager-web/src/App.vue
-index f101e15..aecbadd 100644
+index 9f3d665..e2ab744 100644
 --- a/main/manager-web/src/App.vue
 +++ b/main/manager-web/src/App.vue
 @@ -68,6 +67,0 @@ export default {
@@ -23,11 +23,12 @@ index f101e15..aecbadd 100644
 -    },
 -    
 diff --git a/main/manager-web/src/components/CustomPagination.vue b/main/manager-web/src/components/CustomPagination.vue
-index 013839a..9b52c9e 100644
+index 013839a..18af647 100644
 --- a/main/manager-web/src/components/CustomPagination.vue
 +++ b/main/manager-web/src/components/CustomPagination.vue
-@@ -7,0 +8 @@
-+      :pager-count="$responsive.mobile ? 5 : 7"
+@@ -8 +8 @@
+-      layout="sizes, prev, pager, next, total"
++      :layout="$responsive.mobile ? 'sizes, prev, next, total, jumper' : 'sizes, prev, pager, next, total'"
 diff --git a/main/manager-web/src/components/CustomTable.vue b/main/manager-web/src/components/CustomTable.vue
 index c3bfcd2..596ea4f 100644
 --- a/main/manager-web/src/components/CustomTable.vue
@@ -173,7 +174,7 @@ index ed7d2fd..1f7bac1 100644
 +.mac-address-wrapper:hover .mac-address-mask,
 +.mac-address-wrapper.is-revealed .mac-address-mask {
 diff --git a/main/manager-web/src/components/ProviderDialog.vue b/main/manager-web/src/components/ProviderDialog.vue
-index 713aefd..ef2d3a9 100644
+index 1e88bff..9a02e6c 100644
 --- a/main/manager-web/src/components/ProviderDialog.vue
 +++ b/main/manager-web/src/components/ProviderDialog.vue
 @@ -60 +60 @@
@@ -189,7 +190,7 @@ index 713aefd..ef2d3a9 100644
 -            <el-table-column :label="$t('providerDialog.defaultValue')">
 +            <el-table-column :label="$t('providerDialog.defaultValue')" :min-width="$responsive.compact ? 140 : undefined">
 diff --git a/main/manager-web/src/components/TtsModel.vue b/main/manager-web/src/components/TtsModel.vue
-index 6a33f28..770243f 100644
+index 73cd6e4..1bd2481 100644
 --- a/main/manager-web/src/components/TtsModel.vue
 +++ b/main/manager-web/src/components/TtsModel.vue
 @@ -15 +15 @@
@@ -260,10 +261,10 @@ index 395272a..ea27074 100644
 +installResponsive(Vue);
 diff --git a/main/manager-web/src/styles/responsive.scss b/main/manager-web/src/styles/responsive.scss
 new file mode 100644
-index 0000000..a5a1e1f
+index 0000000..16dfcfe
 --- /dev/null
 +++ b/main/manager-web/src/styles/responsive.scss
-@@ -0,0 +1,314 @@
+@@ -0,0 +1,350 @@
 +// One layout system layered over the existing desktop design. Page-level selectors
 +// deliberately outrank scoped desktop styles without hiding horizontal overflow.
 +:root {
@@ -578,6 +579,42 @@ index 0000000..a5a1e1f
 +    .page-content, .left-panel, .right-panel { box-sizing: border-box; }
 +  }
 +}
++
++@media (max-width: 600px) {
++  body .el-pagination.is-background {
++    .btn-prev, .btn-next, .el-pager li { margin: 0 !important; min-width: 44px !important; height: 44px !important; line-height: 44px !important; }
++    .el-pagination__jump { margin-left: 0; }
++  }
++}
++@media (min-width: 1181px) and (max-width: 1440px) {
++  #app .header {
++    .header-center { gap: 8px; min-width: 0; }
++    .equipment-management { min-width: 0; padding: 8px 10px; font-size: 14px; flex-shrink: 1; }
++    .nav-text { overflow-wrap: anywhere; }
++  }
++}
++@media (max-width: 1180px) {
++  #app .header .el-user-dropdown { max-width: 100%; min-height: 44px; line-height: 44px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
++}
++
++// Configuration names can contain up to 64 characters at every viewport width.
++#app .responsive-page .config-header {
++  .header-left { min-width: 0; max-width: 100%; flex-shrink: 1; flex-wrap: wrap; }
++  .header-title { min-width: 0; max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
++}
++
++@media (max-width: 1180px) {
++  body .el-dialog__wrapper {
++    top: var(--visible-top); bottom: auto; height: var(--visible-height);
++    display: flex; align-items: center; justify-content: center;
++  }
++  body .el-dialog__wrapper .el-dialog { top: 0 !important; }
++  body .el-dialog__wrapper .el-dialog.custom-dialog,
++  body .el-dialog__wrapper .el-dialog.custom-dialog.custom-dialog--large {
++    margin: 0 auto !important;
++    max-height: calc(var(--visible-height) - 24px - env(safe-area-inset-bottom)) !important;
++  }
++}
 diff --git a/main/manager-web/src/utils/responsive.js b/main/manager-web/src/utils/responsive.js
 new file mode 100644
 index 0000000..462429b
@@ -619,7 +656,7 @@ index 5b33dfb..afc9167 100644
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-address-book-management">
 diff --git a/main/manager-web/src/views/AgentTemplateManagement.vue b/main/manager-web/src/views/AgentTemplateManagement.vue
-index 2dc1142..f0da314 100644
+index 54f0383..6b9ea28 100644
 --- a/main/manager-web/src/views/AgentTemplateManagement.vue
 +++ b/main/manager-web/src/views/AgentTemplateManagement.vue
 @@ -2 +2 @@
@@ -647,7 +684,7 @@ index 9e67f51..3af070d 100644
 -  <div class="welcome">
 +  <div class="welcome responsive-page page-feature-management">
 diff --git a/main/manager-web/src/views/KnowledgeBaseManagement.vue b/main/manager-web/src/views/KnowledgeBaseManagement.vue
-index 8f601b9..b7cb663 100644
+index cb162e3..ef3045e 100644
 --- a/main/manager-web/src/views/KnowledgeBaseManagement.vue
 +++ b/main/manager-web/src/views/KnowledgeBaseManagement.vue
 @@ -2 +2 @@

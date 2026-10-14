@@ -38,6 +38,7 @@ jobs:
           sudo mkdir -p /app
           sudo chown "$(id -u):$(id -g)" /app
           cp -a upstream/main/manager-web/. /app/
+          git -C /app apply --unidiff-zero -p3 "$GITHUB_WORKSPACE/server/admin_web/production-dialogs.patch"
       - name: Build original frontend for production comparison
         working-directory: /app
         env:
@@ -65,6 +66,10 @@ jobs:
           python3 server/admin_web/apply.py upstream --apply
           cp -a upstream/main/manager-web/src/. /app/src/
           cp upstream/main/manager-web/public/index.html /app/public/index.html
+      - name: Inspect reconstructed desktop build
+        run: |
+          npm ci --no-audit --no-fund --prefix server/admin_web/tests
+          MIA_ANALYSIS_PACKAGE="$GITHUB_WORKSPACE/server/admin_web/tests/package.json" node server/admin_web/compare_builds.cjs --compare server/admin_web/production-build.json admin-artifacts/baseline > admin-artifacts/baseline/semantic-comparison.json || true
       - name: Run existing frontend regressions
         working-directory: /app
         run: |

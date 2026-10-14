@@ -1,0 +1,205 @@
+diff --git a/main/manager-web/src/App.vue b/main/manager-web/src/App.vue
+index f101e15..9f3d665 100644
+--- a/main/manager-web/src/App.vue
++++ b/main/manager-web/src/App.vue
+@@ -179 +179,20 @@ export default {
+-</script>
+\ No newline at end of file
++</script>
++<style>
++.el-dialog {
++  margin: 10px auto !important;
++  height: calc(100vh - 20px);
++  max-height: calc(100vh - 20px);
++  border-radius: 10px;
++  display: flex;
++  flex-direction: column;
++  max-width: 1280px;
++}
++</style>
++<style scoped>
++::v-deep .el-dialog__wrapper { align-items: stretch; }
++::v-deep .el-dialog__body {
++  flex: 1;
++  max-height: calc(100vh - 20px - 130px);
++  overflow-y: auto;
++}
++</style>
+diff --git a/main/manager-web/src/components/AddModelDialog.vue b/main/manager-web/src/components/AddModelDialog.vue
+index b331480..6396b32 100644
+--- a/main/manager-web/src/components/AddModelDialog.vue
++++ b/main/manager-web/src/components/AddModelDialog.vue
+@@ -5 +5 @@
+-    width="57%"
++    width="960px" size="large"
+diff --git a/main/manager-web/src/components/ChatHistoryDialog.vue b/main/manager-web/src/components/ChatHistoryDialog.vue
+index 2846b97..9087cb4 100644
+--- a/main/manager-web/src/components/ChatHistoryDialog.vue
++++ b/main/manager-web/src/components/ChatHistoryDialog.vue
+@@ -5 +5 @@
+-        width="80%"
++        width="80%" size="large"
+diff --git a/main/manager-web/src/components/ContextProviderDialog.vue b/main/manager-web/src/components/ContextProviderDialog.vue
+index 84eae4a..97882a2 100644
+--- a/main/manager-web/src/components/ContextProviderDialog.vue
++++ b/main/manager-web/src/components/ContextProviderDialog.vue
+@@ -2,3 +2 @@
+-  <el-dialog
+-    :visible.sync="dialogVisible"
+-    width="900px"
++  <CustomDialog
+@@ -6,3 +4,7 @@
+-    :close-on-click-modal="false"
+-    custom-class="context-provider-dialog"
+-    append-to-body
++    :visible.sync="dialogVisible"
++    width="960px"
++    size="large"
++    :closeOnClickModal="false"
++    :confirmText="$t('contextProviderDialog.confirm')"
++    :cancelText="$t('contextProviderDialog.cancel')"
++    @confirm="handleConfirm"
+@@ -108,5 +110 @@
+-    <span slot="footer" class="dialog-footer">
+-      <el-button @click="dialogVisible = false">{{ $t('contextProviderDialog.cancel') }}</el-button>
+-      <el-button type="primary" @click="handleConfirm">{{ $t('contextProviderDialog.confirm') }}</el-button>
+-    </span>
+-  </el-dialog>
++  </CustomDialog>
+@@ -115,0 +114 @@
++import CustomDialog from './CustomDialog.vue';
+@@ -117,0 +117 @@ export default {
++  components: { CustomDialog },
+diff --git a/main/manager-web/src/components/CustomDialog.vue b/main/manager-web/src/components/CustomDialog.vue
+index 429b21a..e76fc5c 100644
+--- a/main/manager-web/src/components/CustomDialog.vue
++++ b/main/manager-web/src/components/CustomDialog.vue
+@@ -10 +10 @@
+-    :custom-class="customClass"
++    :custom-class="dialogCustomClass"
+@@ -57 +57 @@ export default {
+-      default: "600px"
++      default: "720px"
+@@ -82,0 +83,5 @@ export default {
++    size: {
++      type: String,
++      default: "small",
++      validator: value => ["small", "large"].includes(value)
++    },
+@@ -96,0 +102,9 @@ export default {
++  computed: {
++    dialogCustomClass() {
++      const classes = ["custom-dialog"];
++      if (this.customClass) classes.push(this.customClass);
++      if (this.size === "large") classes.push("custom-dialog--large");
++      if (String(this.width).includes("%")) classes.push("custom-dialog--fluid");
++      return classes.join(" ");
++    }
++  },
+@@ -127,2 +141,2 @@ export default {
+-.custom-dialog {
+-  ::v-deep .el-dialog {
++::v-deep {
++  .el-dialog.custom-dialog {
+@@ -131,0 +146,4 @@ export default {
++    margin: 5vh auto !important;
++    display: flex;
++    flex-direction: column;
++    max-height: 90vh;
+@@ -134 +152 @@ export default {
+-  ::v-deep .el-dialog__header {
++  .el-dialog__header {
+@@ -140 +158 @@ export default {
+-  ::v-deep .el-dialog__title {
++  .el-dialog__title {
+@@ -162 +180 @@ export default {
+-  ::v-deep .el-dialog__headerbtn {
++  .el-dialog__headerbtn {
+@@ -192 +210,3 @@ export default {
+-  ::v-deep .el-dialog__body {
++  .el-dialog__body {
++    max-height: calc(100vh - 220px);
++    overflow-y: auto;
+@@ -196 +216 @@ export default {
+-  ::v-deep .el-dialog__footer {
++  .el-dialog__footer {
+@@ -231,0 +252,15 @@ export default {
++  .el-dialog.custom-dialog.custom-dialog--large {
++    margin: 10px auto !important;
++    height: calc(100vh - 20px);
++    max-height: calc(100vh - 20px);
++    border-radius: 10px;
++  }
++  .el-dialog.custom-dialog.custom-dialog--large.custom-dialog--fluid {
++    max-width: var(--dialog-table-max);
++  }
++  .el-dialog.custom-dialog--large .el-dialog__body {
++    max-height: calc(100vh - 20px - 110px);
++    flex: 1;
++    min-height: 0;
++  }
++
+diff --git a/main/manager-web/src/components/ModelEditDialog.vue b/main/manager-web/src/components/ModelEditDialog.vue
+index ac6b18e..e8c0631 100644
+--- a/main/manager-web/src/components/ModelEditDialog.vue
++++ b/main/manager-web/src/components/ModelEditDialog.vue
+@@ -5 +5 @@
+-    width="57%"
++    width="960px" size="large"
+diff --git a/main/manager-web/src/components/ParamDialog.vue b/main/manager-web/src/components/ParamDialog.vue
+index 0f6de8d..03571aa 100644
+--- a/main/manager-web/src/components/ParamDialog.vue
++++ b/main/manager-web/src/components/ParamDialog.vue
+@@ -5 +5 @@
+-    width="600px"
++    width="720px"
+diff --git a/main/manager-web/src/components/ProviderDialog.vue b/main/manager-web/src/components/ProviderDialog.vue
+index 713aefd..1e88bff 100644
+--- a/main/manager-web/src/components/ProviderDialog.vue
++++ b/main/manager-web/src/components/ProviderDialog.vue
+@@ -5 +5 @@
+-    width="57%"
++    width="960px" size="large"
+diff --git a/main/manager-web/src/components/TtsModel.vue b/main/manager-web/src/components/TtsModel.vue
+index 6a33f28..73cd6e4 100644
+--- a/main/manager-web/src/components/TtsModel.vue
++++ b/main/manager-web/src/components/TtsModel.vue
+@@ -2 +2 @@
+-  <CustomDialog :visible.sync="localVisible" :title="$t('modelConfig.voiceManagement')" width="90%"
++  <CustomDialog :visible.sync="localVisible" :title="$t('modelConfig.voiceManagement')" width="80%" size="large"
+diff --git a/main/manager-web/src/components/VoiceCloneDialog.vue b/main/manager-web/src/components/VoiceCloneDialog.vue
+index 6af1226..449e41c 100644
+--- a/main/manager-web/src/components/VoiceCloneDialog.vue
++++ b/main/manager-web/src/components/VoiceCloneDialog.vue
+@@ -5 +5 @@
+-        width="900px"
++        width="960px" size="large"
+diff --git a/main/manager-web/src/styles/global.scss b/main/manager-web/src/styles/global.scss
+index 6d1411d..338f4de 100644
+--- a/main/manager-web/src/styles/global.scss
++++ b/main/manager-web/src/styles/global.scss
+@@ -46 +46,5 @@ select:-webkit-autofill:focus {
+-}
+\ No newline at end of file
++}
++:root { --dialog-table-max: 1280px; }
++.v-modal { background: rgba(15, 23, 42, .55) !important; backdrop-filter: blur(2px); }
++.el-dialog__wrapper.custom-dialog { display: flex; align-items: center; justify-content: center; overflow: auto; }
++.el-dialog__wrapper.delete-agent-dialog { display: flex; align-items: center; justify-content: center; overflow: auto; }
+diff --git a/main/manager-web/src/views/AgentTemplateManagement.vue b/main/manager-web/src/views/AgentTemplateManagement.vue
+index 2dc1142..54f0383 100644
+--- a/main/manager-web/src/views/AgentTemplateManagement.vue
++++ b/main/manager-web/src/views/AgentTemplateManagement.vue
+@@ -77 +77 @@
+-      :width="'1200px'"
++      width="1080px" size="large"
+diff --git a/main/manager-web/src/views/KnowledgeBaseManagement.vue b/main/manager-web/src/views/KnowledgeBaseManagement.vue
+index 8f601b9..cb162e3 100644
+--- a/main/manager-web/src/views/KnowledgeBaseManagement.vue
++++ b/main/manager-web/src/views/KnowledgeBaseManagement.vue
+@@ -116 +116 @@
+-      width="1200px"
++      width="1200px" size="large"
+@@ -192 +192 @@
+-      width="900px"
++      width="1200px" size="large"

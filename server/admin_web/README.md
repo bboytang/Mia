@@ -1,6 +1,8 @@
 # 小智管理后台统一响应式改造
 
-本目录是现有管理后台的源码补丁和验证工具，不是第二套后台。目标源码为
+本目录是现有管理后台的源码补丁和验证工具，不是第二套后台。
+
+现网编译产物包含上游以外的桌面弹窗定制。`production-dialogs.patch` 从运行产物核对并恢复其尺寸、small/large接口及全屏样式；`responsive.patch` 在这个基线上扩展三端布局。发布前必须核对桌面基线的编译模块、依赖关系和CSS规则，不能直接以未定制上游原版替换生产。目标源码为
 `xiaozhi-esp32-server` v0.9.7 / `87c6df77b0220ddbd8fc804f984f83f69f3225e5`，沿用 Vue 2、Element UI、Vue CLI，API、路由、认证、数据库不变。
 
 ## 构建与源码
@@ -25,6 +27,7 @@ python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
 - `src/main.js`、`src/utils/responsive.js`、`src/styles/responsive.scss`：统一宽度断点、视觉视口、页面布局、表单、弹窗、抽屉和触控规则。
 - `HeaderBar.vue`：复用原导航项及权限判断，紧凑屏幕折叠菜单。
 - `CustomTable.vue`、`CustomPagination.vue`：手机卡片复用字段插槽、操作与选择；分页按钮调整。
+- `CustomDialog.vue`及现有调用者、`App.vue`和`global.scss`：恢复已核对的现网桌面弹窗定制，保留原有size接口与尺寸。
 - `DeviceItem.vue`：触控操作和完整提示词查看。
 - `MacAddressMask.vue`：保持默认遮罩，触屏点击可展开或收起MAC地址。
 - `ProviderDialog.vue`、`TtsModel.vue`、`ModelConfig.vue`：宽表格列最小宽度与触屏详情。
@@ -37,7 +40,7 @@ python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
 
 当前生产Web镜像同时包含 Nginx 静态前端和 Java manager-api。前端发布必须保留运行镜像中的现有 JAR、启动脚本、Nginx API代理、Compose覆盖、端口、环境与数据卷；不要重新构建上游Java以覆盖Mia认证扩展。
 
-1. 核对CI对应提交全部通过，查看 `baseline/comparison.txt`。原版构建未全部匹配生产时，先核对构建依赖和实际定制，不直接替换现有前端。
+1. 核对CI对应提交全部通过，查看 `baseline/comparison.txt`。字节级不匹配时，必须查看 `baseline/semantic-comparison.json`：编译模块、依赖关系和CSS规则均需匹配；否则先完成实际定制核对，不直接替换现有前端。
 2. 再次记录运行Web镜像 ID、`/app/xiaozhi-esp32-api.jar` SHA256，以及生产静态文件清单；生产变化后重新核对。给当前镜像加唯一回滚标签，备份三份Compose和Nginx配置到非公开受保护目录。
 3. 从已验证的CI产物准备新版本。派生镜像以**当前生产Web镜像ID**为基础，只复制前端静态资源。保留旧的 `js/`、`css/`、`img/`、`fonts/` 带hash资源供已有桌面会话延迟加载；用新版 `index.html` 和 Service Worker 清单提供新入口。不要在发布时清空旧资源。
 4. 在隔离环境启动候选镜像，用合成数据检查路由、登录、功能与布局；校验新旧JAR一致、API路径与监听端口一致。不要让隔离测试进程连接生产数据库或使用生产密钥。

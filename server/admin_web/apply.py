@@ -24,9 +24,13 @@ def main():
                 raise SystemExit(f'Refusing to overwrite existing file: {relative}')
         elif not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise SystemExit(f'Upstream file differs; review custom changes first: {relative}')
+    desktop_patch = str(bundle / 'production-dialogs.patch')
     patch = str(bundle / 'responsive.patch')
+    subprocess.run(['git', 'apply', '--unidiff-zero', '--check', desktop_patch], cwd=root, check=True)
     subprocess.run(['git', 'apply', '--unidiff-zero', '--check', patch], cwd=root, check=True)
     if args.apply:
+        subprocess.run(['git', 'apply', '--unidiff-zero', desktop_patch], cwd=root, check=True)
+        subprocess.run(['git', 'apply', '--unidiff-zero', '--check', patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', patch], cwd=root, check=True)
         print(f'Applied responsive source changes for upstream {manifest["commit"]}')
     else:
