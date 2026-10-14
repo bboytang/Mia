@@ -1,0 +1,20 @@
+CREATE TABLE ai_mia_device_authorization (
+    device_id VARCHAR(32) NOT NULL PRIMARY KEY,
+    operator_id BIGINT NULL,
+    owner_id BIGINT NULL,
+    agent_id VARCHAR(32) NULL,
+    persona_id VARCHAR(32) NOT NULL DEFAULT 'mia',
+    client_id VARCHAR(128) NULL,
+    binding_version BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    credential_version BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    authorization_code_hash CHAR(64) NULL,
+    code_expires_at DATETIME(6) NULL,
+    wrong_attempts SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    credential_hash CHAR(64) NULL,
+    credential_expires_at DATETIME(6) NULL,
+    revoked BOOLEAN NOT NULL DEFAULT TRUE,
+    updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    KEY idx_mia_auth_operator (operator_id),
+    KEY idx_mia_auth_owner (owner_id),
+    KEY idx_mia_auth_agent (agent_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

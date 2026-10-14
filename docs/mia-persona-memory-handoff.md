@@ -23,7 +23,7 @@ P00—P06 已完成准备及模型初选：固定 BGE base 中文 U8U8 ONNX／76
 
 当前步骤：**P08 完整必要凭据链**，P07 剩余真实 Provider 等入口并行推进。P05 [开发契约](verification/mia-persona-memory/contracts.md)已明确，用户已选智控台一次性授权码；公网可信 IP 或域名证书均可，实际 TLS 部署尚未执行。
 
-下一步：沿 P05 智控台授权码契约实现签发／原子兑换／私有凭据／撤销和绑定生命周期，再贯通 P09 可信 Scope。P08 [绑定补丁](verification/mia-persona-memory/binding-authorization.md)四个真实用例及构建已通过；完整回归153/154且唯一既有失败。P06 [选择规格](verification/mia-persona-memory/embedding-selection.json)及模型／代码SHA可直接复现，不重复选型。恢复时先查询在途 Actions，再决定是否重跑。
+下一步：推送并验证 P08 [私有授权链](verification/mia-persona-memory/private-authorization.md)（代码已编写，9私有＋1默认传输及4绑定真实用例待CI），读取真实diff和精确提交结果后贯通 P09。原绑定部分已通过；完整回归保留唯一既有失败。P06 [选择规格](verification/mia-persona-memory/embedding-selection.json)及模型／代码SHA直接复现。用户选择专用GitHub测试Secret，入口待建立、凭据未配置。恢复时先查询在途Actions，避免重复运行。
 
 ## 步骤状态
 
@@ -37,7 +37,7 @@ P00—P06 已完成准备及模型初选：固定 BGE base 中文 U8U8 ONNX／76
 | P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
 | P06 | 完成：初选 | [固定规格](verification/mia-persona-memory/embedding-selection.json)，U8U8 base 达初选门槛；生产集成和行为未验收 |
 | P07 | 进行中 | 身份基线部分完成：编译／四类对照及4真实旧缺口复现通过；完整回归149/150，1既有失败；Provider等入口未完成 |
-| P08 | 进行中 | 绑定补丁4真实用例及构建通过；授权码／私有签发与撤销尚未实现 |
+| P08 | 进行中 | 绑定部分4真实用例通过；manager授权码／私有签发／撤销及10用例已编写待CI，完整链未验收 |
 | P09—P10 | 未开始 | 可信 Scope、绑定／撤销贯通与记忆 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
@@ -64,7 +64,9 @@ P00—P06 已完成准备及模型初选：固定 BGE base 中文 U8U8 ONNX／76
 
 D01—D10 已冻结开发契约及初选；D03／D04 见固定模型规格，用户已确认授权码、情绪保留及相关不可回答边界。生产完整RAG、私有安全链及长期趋势行为仍未验收，初选参数在最终独立用户语料验收不合格时需有新证据重评。
 
-GitHub 读取／推送、Actions 和服务器严格主机校验下的只读 SSH 已验证；未改变任何凭据。仓库 Actions secrets 当前为空，不能推断组织或环境 secrets 的状态。真实聊天模型 job 的凭据来源和真机／签名仍未确认；不影响无密钥本地 embedding 候选在 GitHub 的实验。新环境须重新验证实际访问，不复制秘密进交接。
+GitHub读取／推送、Actions和严格主机校验的只读SSH已验证；未改变凭据。仓库／Environment此前核实没有测试秘密配置，用户现已选择专用测试Secret，实际配置及真机／签名仍未具备或未确认。新环境重新验证实际访问，不复制秘密进交接。
+
+用户已确认真实聊天测试使用专用GitHub Actions Secret；尚未建立测试入口／配置凭据，不能假定已可调用。保留生产模型密钥原位置；任何新环境只核实秘密配置名和可用状态，不输出秘密。
 
 缺权限时：继续不依赖它的已授权工作；相应真实测试或远程动作记为未执行／阻塞。不得关闭认证、改用任意 owner、重新启用旧网关或输出密钥来绕过。
 

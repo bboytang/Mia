@@ -20,6 +20,7 @@
 - GitHub 仓库 `bboytang/Mia`：允许网络执行环境的 `git ls-remote` 和 repository API 成功，实际读取和推送权限存在；具体内容推送另受本次审批状态约束。
 - Actions：已列出并核实 `mia-server.yml`、`ios.yml`、`mia-upstream-fixes.yml` 等既有 active 工作流；基础运行环境分别为 Python 3.12、macOS 15、Python 3.10。
 - repository Actions secrets API：当前 `total_count=0`。这是仓库 secrets 结果，不代表 organization／environment secrets 或生产模型凭据不存在。真实 Provider 行为 job 的凭据来源仍需确定。
+- 2026-10-14 用户选择专用测试凭据配置到 GitHub Actions Secret；不复用／转移生产模型密钥。测试 Secret 名称及入口待建立，尚未配置或调用真实聊天 Provider；不能因来源方案确认就标凭据可用。
 - 服务器：原已配置 SSH 身份、BatchMode 和严格主机校验下 `root@43.143.230.174` 只读连接成功。未新增 key、未改 authorized_keys，未执行部署。
 - 真机及签名：尚未验证可用；用户设备上的具体操作仍需设备证据。
 

@@ -152,6 +152,14 @@
 - 绑定 [38613934248](https://github.com/bboytang/Mia/actions/runs/38613934248)：四个真实新行为、只改目标DeviceService类／另三类保持、JAR构建通过。完整154测试153通过、唯一既有脱敏失败，workflow仍failure；保存 `binding-authorization-results.json`、JAR SHA及已审核真实diff。
 - P08 仅绑定部分完成；授权码、私有签发／旧凭据区分及Scope／撤销等仍待实施，未部署。已同步交接，下一步完整必要凭据链。
 
+## 2026-10-14：P08 私有授权链代码准备与测试凭据决定
+
+- 用户选择专用测试凭据到GitHub Actions Secret；不要求聊天发送密钥，不读取／转移生产模型秘密。准备命名及测试入口，尚未配置／调用真实Provider，独立机制继续开发。
+- 编写私有授权表、服务与控制器：真实所有者／权限签发、128bit一次性码／10分钟、原子兑换、256bit散列凭据／30天、轮换／撤销、真实绑定及当前角色状态、管理员operator与owner区别、5次失败提交保留、20来源／120全局固定分钟限流。
+- 扩展固定源码补丁到必要Shiro精确路由、DeviceDao绑定锁、DeviceService生命周期、追加Liquibase变更；不重建账户、通信或事实库。授权码／私有凭据公网入口默认要求HTTPS，仅隔离测试显式HTTP；内部核验沿用server-secret。
+- 新增9个真实私有授权及1个默认传输用例，原4绑定与全部回归继续；代码未编译／运行。详见 `private-authorization.md`，P08整体及P09、App、实际TLS仍未完成，未部署。
+- 每个已有文件完整preimage校验及独立备份，payload拒绝覆盖。下一步GitHub运行、核实实际结果／diff；交接同步，不以编写完成冒充行为通过。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。
