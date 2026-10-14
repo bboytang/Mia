@@ -51,14 +51,14 @@ jobs:
           docker image inspect python:3.10-slim --format '{{json .RepoDigests}}' > "$RUNNER_TEMP/mia-embedding-results/base-image-digests.json"
       - name: Measure real vectors on 2 CPUs and 2 GiB (FP32 and INT8)
         run: |
-          for variant in model.onnx model-int8.onnx; do
+          for variant in model.ort model-int8.ort; do
             docker run --rm --cpus 2 --memory 2g --memory-swap 2g --network none \
               -e GITHUB_SHA="$GITHUB_SHA" \
               -v "$GITHUB_WORKSPACE:/experiment:ro" \
               -v "$RUNNER_TEMP/mia-embedding-model:/model:ro" \
               -v "$RUNNER_TEMP/mia-embedding-results:/results" \
               mia-embedding-experiment --model-dir /model --variant "$variant" \
-              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh_v4.json \
+              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh_v5.json \
               --output "/results/${variant}.json"
           done
       - uses: actions/upload-artifact@v4

@@ -23,7 +23,7 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 
 当前步骤：**P06 embedding 比较**。P05 [开发契约](verification/mia-persona-memory/contracts.md)已明确，用户已选智控台一次性授权码；公网可信 IP 或域名证书均可，实际 TLS 部署尚未执行。
 
-下一步：P06 v4 全部不合格，见 [v4 报告](verification/mia-persona-memory/embedding-results-v4.json)，继续校准稳定性和实际加载／查询内存诊断，门槛保持。P07 两个旧身份缺口已运行复现，另两个 fixture 已修正待复核；保留 150 项上游回归中已确认的既有失败。恢复时先查询最新 Actions，再决定是否重跑。
+下一步：P06 v5 准备校准间隔和 ORT BASIC 派生格式验证，旧 v1—v4 四候选全不合格。P07 身份基线部分已完成，四旧缺口真实复现证据见 [结果](verification/mia-persona-memory/manager-identity-baseline-results.json)，保留 150 项回归中唯一既有失败。按计划已记录的依赖细化，可独立推进 P08 必要身份整改。恢复时先查询最新 Actions，再决定是否重跑。
 
 ## 步骤状态
 
@@ -36,7 +36,7 @@ P00—P05 已完成：持久计划、环境、基线、工程指标与开发契�
 | P04 | 完成 | [验收 v1.1](verification/mia-persona-memory/acceptance.md)：数值不变，按用户确认区分无关与相关不可回答 |
 | P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
 | P06 | 进行中 | v1—v4 四候选均未合格；继续校准稳定性和实际加载／检索内存诊断 |
-| P07 | 进行中 | 编译／四类字节对照通过；真测试 149/150，1 既有失败；2 旧身份缺口运行证实，另2 fixture 修正待复核，Provider 入口未完成 |
+| P07 | 进行中 | 身份基线部分完成：编译／四类对照及4真实旧缺口复现通过；完整回归149/150，1既有失败；Provider等入口未完成 |
 | P08—P10 | 未开始 | 身份链、Scope 与 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |

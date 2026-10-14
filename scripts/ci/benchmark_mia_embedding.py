@@ -96,6 +96,26 @@ def rank(case, threshold, floor, gap_floor=None, disabled=None):
     return [item[1] for item in sorted(rows, reverse=True)[:4]]
 
 
+def calibration_margin(cases, threshold, floor, gap_floor):
+    distances = []
+    for case in cases:
+        if case.get('type') == 'related_unanswerable':
+            continue
+        margins = {}
+        for item in case['candidates']:
+            score = sum(w * s for w, s in zip([0.58, 0.28, 0.08, 0.06], item['signals']))
+            semantic = item['original_cosine'] - floor
+            if gap_floor is not None:
+                semantic = max(semantic, min(item['original_cosine'] - 0.25,
+                                             item['original_margin'] - gap_floor))
+            margins[item['id']] = min(score - threshold, semantic)
+        if case['expected']:
+            distances.append(min(margins.get(key, -1.0) for key in case['expected']))
+        else:
+            distances.append(-max(margins.values(), default=-1.0))
+    return min(distances)
+
+
 def metrics(cases, threshold, floor, gap_floor=None):
     positives = [c for c in cases if c['expected']]
     negatives = [c for c in cases if not c['expected'] and c.get('type') != 'related_unanswerable']
@@ -194,8 +214,9 @@ def main():
         for floor in np.arange(0.30, 0.86, 0.025):
             for gap_floor in [None, 0.05, 0.10, 0.15, 0.20]:
                 measured = metrics(calibration, float(threshold), float(floor), gap_floor)
+                stability = calibration_margin(calibration, float(threshold), float(floor), gap_floor)
                 key = (min(measured['complete_recall_at_4'], measured['empty_recall']),
-                       measured['complete_recall_at_4'] + measured['empty_recall'], measured['top1'])
+                       measured['complete_recall_at_4'] + measured['empty_recall'], measured['top1'], stability)
                 choice = (float(threshold), float(floor), gap_floor, measured)
                 if best_key is None or key > best_key:
                     best_key, best_choices = key, [choice]
@@ -249,6 +270,7 @@ def main():
               'reference_cosine_min': min(fidelity), 'reference_cosine_all': fidelity,
               'query_pipeline': timings(latency), 'sqlite_stress': stress,
               'threshold': threshold, 'semantic_floor': floor, 'distinct_margin_floor': gap_floor,
+              'calibration_min_signed_margin': calibration_margin(calibration, threshold, floor, gap_floor),
               'calibration': calibration_metrics,
               'holdout': measured, 'pure_vector_positive_recall_at_4': sum(no_expansion_hits) / len(no_expansion_hits),
               'ablation_changed_holdout_predictions': ablation, 'cases': cases,

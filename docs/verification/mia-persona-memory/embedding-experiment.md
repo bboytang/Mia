@@ -12,6 +12,10 @@ v4 不改变检索逻辑或质量门槛，新增独立 J／K 合成语料（仍�
 
 v4 [38593905607](https://github.com/bboytang/Mia/actions/runs/38593905607) 四候选仍不合格，见 [v4 报告](embedding-results-v4.json)。base INT8 正向／Top1 1.0、无关空召回 0.9375、参考最低余弦 0.93648；量化大幅改善但仍低于 0.95。base FP32 RSS 564.22 MiB 且空召回 0.875。small 两变体正向／Top1 0.95833、空召回 0.875；INT8 参考最低 0.99411。没有选型，后续应解决校准选择稳定性／推理加载及实际查询内存，不能靠继续增大容易样本或改旧失败得出通过。
 
+v5 保留 v4 事实及校准输入，新增独立 48 正向／16 无关／8 相关不可回答留出查询，不重用 v4 留出选参数。校准并列解增加最小有符号决策间隔：在同等质量下，选择离正负校准样本拒绝边界最远的解，代替任意中间网格点。只使用校准结果计算，留出不参与。
+
+在模型导出阶段使用固定 ORT 1.23.2 将 ONNX 保存为 ORT（仅 BASIC 图优化），比较模型载入内存；导出开销仍不计为推理结果。各源模型与派生模型有 SHA，真实原始向量一致性继续作为硬门槛。不以“格式更轻”声称内存已经合格，必须读取新的隔离报告。依据同版本 [保存格式配置](https://github.com/microsoft/onnxruntime/blob/v1.23.2/include/onnxruntime/core/session/onnxruntime_session_options_config_keys.h)。
+
 ## 候选及官方依据
 
 - BAAI/bge-small-zh-v1.5，revision `7999e1d3359715c523056ef9478215996d62a620`，512 维。

@@ -17,3 +17,5 @@
 首轮新增复现 `d8690e3aee1a34b953020d8cc194693f03fdd646`，[38593101882](https://github.com/bboytang/Mia/actions/runs/38593101882)：4 个复現用例在 Spring 启动阶段 error，没有执行到缺口断言。test resources 覆盖主 application，未激活 dev 导致未确定数据源 driver；改用既有 dev profile 并显式测试 context-path。四类对照仍通过，完整上游回归仍仅同一既有失败；修正后须复核，不能称身份运行复现已成功。
 
 `c7770a4106d9a5351e29fbc87ccc67e68f145df8`，[38593905608](https://github.com/bboytang/Mia/actions/runs/38593905608)：真实 HTTP／Shiro 已启动。A 向 B Agent 手动添加、A 解绑导致 B 通讯录删除两个旧缺口运行复现通过。激活 fixture 使用不可变 Map 触发现有 Redis serializer 缺 type id；OTA fixture 只写 Redis 而签名从 MySQL 读取，参考密钥不一致。两项为测试数据设置问题，改成与既有代码相同的 HashMap、官方参数更新服务同时写库和缓存；待复核。未因此修改生产 Redis 或账户／通信能力。
+
+`ac46615eaf3afc1dfa316b33180892395d3e6ce1`，[38594888061](https://github.com/bboytang/Mia/actions/runs/38594888061)：四个真实旧缺口复现全部通过，四类字节对照通过。完整回归仍为已记录的 149／150，总 workflow 为 failure；不抹去这个失败。脱敏持久证据见 [身份基线结果](manager-identity-baseline-results.json)。P07 身份基线部分完成，意味着 P08 可以针对已证实缺口实施；没有任何私有安全验收通过。真实 Provider 及其他后续入口仍待完成。

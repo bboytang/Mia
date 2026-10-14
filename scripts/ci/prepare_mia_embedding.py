@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import torch
+import onnxruntime as ort
 from onnxruntime.quantization import QuantType, quantize_dynamic
 from transformers import AutoModel, AutoTokenizer
 
@@ -63,7 +64,16 @@ def main():
                 vector = model(**encoded).last_hidden_state[0, 0]
                 vector = torch.nn.functional.normalize(vector, dim=0)
             metadata['reference_vectors'].append({'text': text, 'query': query, 'vector': vector.tolist()})
-    for item in [path, quantized]:
+    runtime_paths = []
+    for original in [path, quantized]:
+        runtime_path = original.with_suffix('.ort')
+        options = ort.SessionOptions()
+        options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
+        options.optimized_model_filepath = str(runtime_path)
+        options.add_session_config_entry('session.save_model_format', 'ORT')
+        ort.InferenceSession(str(original), options, providers=['CPUExecutionProvider'])
+        runtime_paths.append(runtime_path)
+    for item in [path, quantized, *runtime_paths]:
         metadata['models'][item.name] = {'sha256': hashlib.sha256(item.read_bytes()).hexdigest(),
                                         'bytes': item.stat().st_size}
     (args.output / 'metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
