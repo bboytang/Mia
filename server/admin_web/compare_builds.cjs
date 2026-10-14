@@ -121,15 +121,25 @@ if (mode === '--snapshot') {
 } else if (mode === '--compare') {
   const expected = JSON.parse(fs.readFileSync(input, 'utf8'));
   const actual = snapshot(output);
-  const actualHashes = new Map(Object.entries(actual.modules).map(([id, value]) => [value.hash, id]));
+  const actualHashes = new Map();
+  for (const [id, value] of Object.entries(actual.modules)) {
+    if (!actualHashes.has(value.hash)) actualHashes.set(value.hash, []);
+    actualHashes.get(value.hash).push(id);
+  }
   const missing = Object.entries(expected.modules).filter(([, value]) => !actualHashes.has(value.hash));
   const missingCss = expected.css.filter(value => !actual.css.includes(value));
   const extraCss = actual.css.filter(value => !expected.css.includes(value));
   // Once modules match, verify that each import points to the same module body.
   const brokenImports = Object.entries(expected.modules).filter(([, value]) => {
-    const target = actual.modules[actualHashes.get(value.hash)];
-    if (!target) return false;
-    return value.imports.some((id, index) => expected.modules[id]?.hash !== actual.modules[target.imports[index]]?.hash);
+    const candidates = actualHashes.get(value.hash);
+    if (!candidates) return false;
+    // Several generated require wrappers can share a body while importing
+    // different modules. Match the body together with its ordered imports.
+    return !candidates.some(candidate => {
+      const target = actual.modules[candidate];
+      return target.imports.length === value.imports.length && value.imports.every((id, index) =>
+        expected.modules[id]?.hash === actual.modules[target.imports[index]]?.hash);
+    });
   });
   const report = {
     expectedModules: Object.keys(expected.modules).length,
