@@ -314,6 +314,13 @@ async def handle_message(conn, message):
         if not provider:
             raise MemoryError("unavailable", "Persistent memory is not available on this server")
         await require_connection(conn, "memory:manage")
+        scope = conn._mia_scope
+        for field in ("owner", "agent_id", "persona_id", "device_id", "client_id"):
+            if field in request and request[field] != getattr(scope, field):
+                raise MemoryError("not_authorized", "Requested memory scope is not authorized")
+        if "user_id" in request and (type(request["user_id"]) not in {str, int}
+                                     or str(request["user_id"]) != str(scope.user_id)):
+            raise MemoryError("not_authorized", "Requested memory scope is not authorized")
         response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
         await require_connection(conn, "memory:manage")
         if request["action"] not in {"list", "personality"}:

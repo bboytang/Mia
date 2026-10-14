@@ -39,7 +39,8 @@ class MemoryStoreTests(unittest.TestCase):
         self.assertEqual(os.stat(self.path).st_mode & 0o777, 0o600)
         self.assertEqual([r["id"] for r in self.store.list_memories("alice")], [first])
         self.assertEqual(self.store.retrieve("bob", "蓝色")[0]["content"], "我喜欢红色")
-        self.store.delete_memory("bob", first)
+        with self.assertRaises(MemoryError):
+            self.store.delete_memory("bob", first)
         self.assertEqual(self.store.list_memories("alice")[0]["id"], first)
         with self.assertRaises(MemoryError):
             self.store.edit_memory("bob", first, "别人不能修改")
@@ -73,6 +74,8 @@ class MemoryStoreTests(unittest.TestCase):
 
     def test_credentials_never_enter_memories_sources_or_traits(self):
         for secret in ["我的密码是abc123", "验证码是123456", "api_key: example-value",
+                       "授权码是example", "私有凭据是example", "private_credential: example",
+                       "authorization_code: example", "Mia-Private-Credential: example",
                        "Bearer testing", "sk-proj-example", "PRIVATE secret is abc", "ＰＡＳＳＷＯＲＤ：123456"]:
             with self.subTest(secret=secret), self.assertRaises(MemoryError):
                 self.remember(secret)

@@ -144,6 +144,10 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         request = {"type": "mia_memory", "request_id": request_id, "action": "delete",
                    "id": memory_id, "owner": "user:2:agent:other"}
         self.assertTrue(await mia.handle_message(self.conn, json.dumps(request)))
+        self.assertEqual(self.conn.websocket.sent[-1]["error"]["code"], "not_authorized")
+        self.assertEqual(len(self.store.list_memories(self.provider.owner)), 1)
+        request["owner"] = self.scope.owner
+        self.assertTrue(await mia.handle_message(self.conn, json.dumps(request)))
         response = self.conn.websocket.sent[-1]
         self.assertEqual(response["request_id"], request_id)
         self.assertEqual(response["result"]["memories"], [])

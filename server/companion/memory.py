@@ -14,7 +14,8 @@ import uuid
 
 CATEGORIES = {"fact", "preference", "goal", "experience", "agreement"}
 SECRET = re.compile(
-    r"密码|口令|验证码|令牌|私钥|password|passphrase|secret|api[ _-]?key|"
+    r"密码|口令|验证码|授权码|私有凭据|令牌|私钥|password|passphrase|secret|api[ _-]?key|"
+    r"private[ _-]?credential|authorization[ _-]?code|mia-private-credential|"
     r"access[ _-]?token|bearer\s|\bsk-[A-Za-z0-9]|\bgh[pousr]_|\beyJ[A-Za-z0-9_-]{15}", re.I)
 SENSITIVE = re.compile(
     r"诊断|病历|疾病|癌症|肿瘤|糖尿病|艾滋|抑郁|焦虑症|怀孕|流产|药物|服药|医疗|性生活|性取向|"
@@ -359,6 +360,8 @@ class MemoryStore:
         with self.lock, self.db:
             self.db.execute("BEGIN IMMEDIATE")
             owner = self._owner(owner)
+            if self.db.execute("SELECT 1 FROM memories WHERE owner=? AND id=?", (owner, memory_id)).fetchone() is None:
+                raise MemoryError("not_found", "Memory does not exist")
             self._invalidate_traits(owner, memory_id)
             self.db.execute("DELETE FROM memory_search WHERE memory_id IN (SELECT id FROM memories WHERE owner=? AND id=?)", (owner, memory_id))
             self.db.execute("DELETE FROM memories WHERE owner=? AND id=?", (owner, memory_id))

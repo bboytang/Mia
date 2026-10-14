@@ -4,6 +4,8 @@ import asyncio
 import json
 import os
 import ssl
+import tempfile
+import uuid
 from pathlib import Path
 import sys
 from types import SimpleNamespace, ModuleType
@@ -116,8 +118,11 @@ async def main():
     assert 'mia-private-credential' not in conn.headers
     assert conn._mia_scope is None
     class Socket:
+        sent = []
         async def send(self, message):
-            assert json.loads(message)['type'] == 'mia_authorization'
+            parsed = json.loads(message)
+            assert parsed['type'] in {'mia_authorization', 'mia_memory'}
+            self.sent.append(parsed)
     class Tool:
         calls = 0
         async def handle_llm_function_call(self, conn, request):
@@ -152,6 +157,31 @@ async def main():
     executor = Executor()
     dispatcher.register_executor(ToolType.SERVER_PLUGIN, executor)
     assert (await dispatcher.execute_tool('synthetic_tool', {})).result == 'synthetic dispatch'
+    from mia_companion.memory import MemoryStore
+    from mia_companion import xiaozhi_adapter as adapter
+    with tempfile.TemporaryDirectory() as folder:
+        store = MemoryStore(Path(folder) / 'scope.sqlite3')
+        try:
+            peer = 'user:999999999:agent:other'
+            def fact(owner, content, marker):
+                return store.apply_extraction(owner, 'synthetic-session', store.snapshot(owner)['revision'], [content],
+                    {'memories': [{'category': 'fact', 'content': content, 'source_index': 0}]}, marker)['memories'][0]
+            own_id = fact(scope.owner, 'CI own memory', 'own')
+            other_id = fact(peer, 'CI other memory', 'other')
+            active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
+            active.dialogue = SimpleNamespace(dialogue=[])
+            for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
+                                  ({'action': 'delete', 'id': other_id}, 'not_found'),
+                                  ({'action': 'update', 'id': other_id, 'content': 'CI tampered'}, 'not_found')]:
+                await adapter.handle_message(active, json.dumps(dict(request, type='mia_memory', request_id=str(uuid.uuid4()))))
+                assert active.websocket.sent[-1]['error']['code'] == code
+                assert store.list_memories(scope.owner)[0]['id'] == own_id
+                assert store.list_memories(peer)[0]['id'] == other_id
+            await adapter.handle_message(active, json.dumps({'type': 'mia_memory', 'request_id': str(uuid.uuid4()),
+                'action': 'delete', 'id': own_id, 'owner': scope.owner}))
+            assert store.list_memories(scope.owner) == [] and store.list_memories(peer)[0]['id'] == other_id
+        finally:
+            store.close()
     tls_pass = await native_wss(config, device, client, credential) if os.environ.get('MIA_SCOPE_NATIVE_TLS') == 'true' else None
     # Actual manager revocation, using the existing authenticated console token.
     async with httpx.AsyncClient(timeout=3, trust_env=False) as http:
@@ -168,7 +198,7 @@ async def main():
     await rejects(dispatcher.execute_tool('synthetic_tool', {}))
     assert executor.calls == 1
     assert active.client_abort and tool.calls == 2
-    print(json.dumps({'manager_python_scope_pass': True, 'checks': 21,
+    print(json.dumps({'manager_python_scope_pass': True, 'checks': 25,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 
