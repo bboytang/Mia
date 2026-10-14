@@ -1,0 +1,18 @@
+{
+  "code_sha": "cde3395aa2529d02d769c00736ad197edff3f08c",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38629862200",
+  "workflow_conclusion": "success",
+  "build_pass": true,
+  "existing_unit_tests": 53,
+  "playwright": {
+    "startTime": "2026-10-14T20:13:17.432Z",
+    "duration": 221503.658,
+    "expected": 64,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "scope": "UI request policy and existing responsive regressions with synthetic backend",
+  "actual_manager_https_acceptance": "not_executed",
+  "deployment": "not_deployed"
+}

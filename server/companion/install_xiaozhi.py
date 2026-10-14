@@ -16,6 +16,8 @@ EXPECTED = {
     PYTHON + "core/utils/dialogue.py": "a4f7af45edd5f1e60a119eb698daba56047fb6c57dfe5c4bfcadbf28234a6602",
     JAVA: "9f6a782d2c25fc015d4ffc6a799085b0439884bdadc4d0a7f47eeebd9256aac1",
     PYTHON + "core/websocket_server.py": "e46fc6a0d1b268953cd6fdcf9cb10aaf89b17f8612d611c33201a6303eb31505",
+    PYTHON + "core/providers/tools/unified_tool_manager.py": "e6ce2d08b1d4932735170e6a6440506b2461311f9f2141cf65913447a57fc41b",
+    PYTHON + "core/handle/intentHandler.py": "eca53dfb2dd3cfa9b02190a9257b381246efd23bdbcca24933adbcbc9d78a7a4",
 }
 
 
@@ -66,6 +68,7 @@ def patch_connection(text):
     text = replace_once(text, "            self._init_prompt_enhancement()\n",
                         "            self._init_prompt_enhancement()\n            mia.apply_persona_prompt(self)\n")
     text = replace_once(text, "        if isinstance(message, str):\n            await handleTextMessage(self, message)\n",
+                        "        if not await mia_auth.allow_output(self):\n            return\n"
                         "        if isinstance(message, str):\n            if await mia.handle_message(self, message):\n                return\n            await handleTextMessage(self, message)\n")
     text = replace_once(text, '            self.dialogue.put(Message(role="user", content=query))\n',
                         '            mia.begin_turn(self, query)\n            self.dialogue.put(Message(role="user", content=query))\n')
@@ -120,7 +123,25 @@ def patch_websocket(text):
                         '            ping_interval=None,\n            ssl=mia_auth.server_tls_context(),\n')
 
 
-PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager, patch_websocket]))
+def patch_tools(text):
+    text = replace_once(text, 'from typing import Dict, List, Optional, Any\n',
+                        'from typing import Dict, List, Optional, Any\nfrom mia_companion import authorization as mia_auth\n')
+    return replace_once(text, '        """执行工具调用"""\n',
+                        '        """执行工具调用"""\n        await mia_auth.require_connection(self.conn)\n')
+
+
+def patch_intent(text):
+    text = replace_once(text, 'import asyncio\n', 'import asyncio\nfrom mia_companion import authorization as mia_auth\n')
+    text = replace_once(text, '    """使用LLM分析用户意图"""\n',
+                        '    """使用LLM分析用户意图"""\n    await mia_auth.require_connection(conn)\n')
+    text = replace_once(text, 'conn.intent.replyResult(context_prompt, original_text)',
+                        'mia_auth.intent_reply(conn, context_prompt, original_text)')
+    return replace_once(text, 'conn.intent.replyResult(text, original_text)',
+                        'mia_auth.intent_reply(conn, text, original_text)')
+
+
+PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager,
+                              patch_websocket, patch_tools, patch_intent]))
 
 
 def build_changes(root):

@@ -251,6 +251,14 @@
 - 原因是新增测试路径把runner.temp写在不支持runner context的job.env；核实GitHub官方context可用表，改为step.env并在runner中写GITHUB_ENV供后续测试使用，仅路径无密钥内容。明确记录本次配置错误，没有遮蔽原失败run。
 - 服务代码 b892e71／38629246595、cde3395／38629862712 已通过GitHub回归；App和前端仍先查询最新状态。交接同步，无本地自动测试／生产变更。
 
+## 2026-10-14：P08／P09隔离验收归档与剩余入口补齐
+
+- 576a651／[38630400678](https://github.com/bboytang/Mia/actions/runs/38630400678)：18身份／实际HTTPS/WSS通过、JAR构建／类范围通过，168全量167通过／1既有脱敏失败、0error／skip；`private-tls-results.json`含真实JAR SHA。TLS工作流定义失败历史未改写。
+- 0589665／[38626866880](https://github.com/bboytang/Mia/actions/runs/38626866880)：App100单测／5UI及Simulator／device构建整体success，IPA SHA与清单相符；`ios-private-results.json`。cde3395／[38629862200](https://github.com/bboytang/Mia/actions/runs/38629862200)：53前端单测／snapshot／构建及64四浏览器全部success、0skip／flaky；`console-private-results.json`。UI夹具失败历史保留，不把这些结果称真机或实际App TLS整链。
+- 沿现有输入、意图识别／意图回复、ToolManager每个派发加入持续Scope复查，覆盖多工具中途撤销，保持原调度。实际安装包驱动manager集成，并调用原ToolManager；仅日志和合成外部executor替代副作用。当前补齐待本提交GitHub实跑，不提前算通过。
+- 只读现网复核实际容器名为xiaozhi-esp32-server／-web，镜像标签仍为原基线；WebSocket源码SHA与固定preimage一致。此前简称查询不存在已明确，不擅推断生产变更。未读取秘密／用户事实或部署。
+- 最近专用Actions Secret名称仍0，真实Provider未调用；P07模型条件、P09实际App／全服务并发／性能、P10—P28继续按冻结计划，非TTL缓存绕过撤销。全部可迁移证据与交接同步。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

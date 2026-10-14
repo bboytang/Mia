@@ -13,3 +13,5 @@ App收到 `mia_authorization/required` 立即停止会话／音频，固定显�
 GitHub验证：协议／真实loopback WebSocket会话验证提示前不启动音频；请求与解析负例检查不安全入口、跨host／port／path／设备／client、过期及错误Persona；Simulator实际Keychain保存／读取／移除及续期body验证保留身份；现有完整UI／协议／音频回归继续。纯请求构造与fixture不证明已对实际manager通过HTTPS/WSS兑换、续期、重连及个性化恢复，实际证书／代理入口、iPhone和智控台code入口仍待贯通。
 
 当前代码待本提交GitHub构建／测试，无本地构建或生产部署。Scope实际Java→Python集成修正绑定版本0后仍失败，增加只记录endpoint／返回类型／字段类型的脱敏定位，不把机制测试或接口存在当整链完成。
+
+实跑完成：兼容manager Long后的 `0589665b51482f1422ebd172be360c490e07be65`／[38626866880](https://github.com/bboytang/Mia/actions/runs/38626866880) 整体成功，100单测／5 UI测试、Simulator与unsigned device构建通过，IPA校验与制品清单一致；见 `ios-private-results.json`。实际Keychain保存／读取／移除、请求构造、提示前不启音频均经模拟器测试；实际iPhone、App↔manager HTTPS／WSS及个性化语音整链仍未验收，不把构建当真机通过。

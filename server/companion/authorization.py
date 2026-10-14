@@ -230,3 +230,8 @@ def allow_generation(conn):
 async def execute_tool(conn, tool_call):
     await require_connection(conn)
     return await conn.func_handler.handle_llm_function_call(conn, tool_call)
+
+
+async def intent_reply(conn, context, query):
+    await require_connection(conn)
+    return await conn.intent.replyResult(context, query)

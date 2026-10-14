@@ -4,6 +4,8 @@
 
 ## 固定上游与运行组合
 
+P09只读补充复核：实际语音容器为 `xiaozhi-esp32-server`，管理为 `xiaozhi-esp32-server-web`，镜像标签仍与下列基线一致；一次简称 `xiaozhi-server` 查询未找到容器，不据此判断现网变更。运行 `core/websocket_server.py` SHA256为 `e46fc6a0d1b268953cd6fdcf9cb10aaf89b17f8612d611c33201a6303eb31505`，与新增必要原生TLS补丁preimage一致。只读取容器元数据与此源码哈希，未读秘密／用户事实或修改服务。
+
 - 上游基础：`xinnan-tech/xiaozhi-esp32-server`，`87c6df77b0220ddbd8fc804f984f83f69f3225e5`（v0.9.7）。
 - 已移植的官方修复来源：`27399a2fb64b5910196f438a256ce0a9f868481f`。五文件列表及前／后校验值由 `server/upstream_fixes/files.json` 管理。
 - 路遥仅为行为与缺陷参考：`insistgang/Luyao_AI_Project`，`e23c3aa25d6451e3f35e71609864bb3a54ad49a0`；不复制未获复用授权的业务代码或预置剧情。

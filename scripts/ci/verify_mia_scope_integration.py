@@ -6,7 +6,7 @@ import os
 import ssl
 from pathlib import Path
 import sys
-from types import SimpleNamespace
+from types import SimpleNamespace, ModuleType
 
 import httpx
 
@@ -14,8 +14,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
 
 from config.manage_api_client import ManageApiClient
-from server.companion.authorization import (PrivateAuthorization, PrivateAuthorizationRequired,
-    load_private_config, allow_generation, allow_output, execute_tool, server_tls_context)
+from mia_companion.authorization import (PrivateAuthorization, PrivateAuthorizationRequired,
+    load_private_config, allow_generation, allow_output, execute_tool, server_tls_context, intent_reply)
 
 trace = []
 
@@ -124,11 +124,34 @@ async def main():
             self.calls += 1
             return 'synthetic tool output'
     tool = Tool()
+    intent = SimpleNamespace(replyResult=tool.handle_llm_function_call)
     active = SimpleNamespace(_mia_scope=scope, _mia_authorization=auth, read_config_from_api=True,
-        session_id='scope-ci', client_abort=False, websocket=Socket(), loop=asyncio.get_running_loop(), func_handler=tool)
+        session_id='scope-ci', client_abort=False, websocket=Socket(), loop=asyncio.get_running_loop(), func_handler=tool,
+        intent=intent)
     assert await asyncio.to_thread(allow_generation, active)
     assert await allow_output(active)
     assert await execute_tool(active, {'name': 'synthetic_tool'}) == 'synthetic tool output'
+    assert await intent_reply(active, 'synthetic context', 'query') == 'synthetic tool output'
+    # Exercise the installed upstream dispatcher, with only logger/executor stubs.
+    # Authorization, manager HTTP/TLS, binding and grant state remain real.
+    logger_module = ModuleType('config.logger')
+    logger_module.setup_logging = lambda: SimpleNamespace(**{name: lambda *args, **kwargs: None
+        for name in ['debug', 'info', 'warning', 'error']})
+    sys.modules['config.logger'] = logger_module
+    from core.providers.tools.unified_tool_manager import ToolManager
+    from core.providers.tools.base import ToolType, ToolDefinition
+    from plugins_func.register import Action, ActionResponse
+    class Executor:
+        calls = 0
+        def get_tools(self):
+            return {'synthetic_tool': ToolDefinition('synthetic_tool', {}, ToolType.SERVER_PLUGIN)}
+        async def execute(self, conn, name, arguments):
+            self.calls += 1
+            return ActionResponse(Action.NONE, result='synthetic dispatch')
+    dispatcher = ToolManager(active)
+    executor = Executor()
+    dispatcher.register_executor(ToolType.SERVER_PLUGIN, executor)
+    assert (await dispatcher.execute_tool('synthetic_tool', {})).result == 'synthetic dispatch'
     tls_pass = await native_wss(config, device, client, credential) if os.environ.get('MIA_SCOPE_NATIVE_TLS') == 'true' else None
     # Actual manager revocation, using the existing authenticated console token.
     async with httpx.AsyncClient(timeout=3, trust_env=False) as http:
@@ -141,8 +164,11 @@ async def main():
     assert not await asyncio.to_thread(allow_generation, active)
     assert not await allow_output(active)
     await rejects(execute_tool(active, {'name': 'synthetic_tool'}))
-    assert active.client_abort and tool.calls == 1
-    print(json.dumps({'manager_python_scope_pass': True, 'checks': 17,
+    await rejects(intent_reply(active, 'synthetic context', 'query'))
+    await rejects(dispatcher.execute_tool('synthetic_tool', {}))
+    assert executor.calls == 1
+    assert active.client_abort and tool.calls == 2
+    print(json.dumps({'manager_python_scope_pass': True, 'checks': 21,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 

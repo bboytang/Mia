@@ -1,0 +1,16 @@
+{
+  "code_sha": "0589665b51482f1422ebd172be360c490e07be65",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38626866880",
+  "workflow_conclusion": "success",
+  "unit_tests": 100,
+  "ui_tests": 5,
+  "failures": 0,
+  "simulator_build_pass": true,
+  "unsigned_device_build_pass": true,
+  "ipa_sha256": "91aa0ee1658a42382f4e2dbc8234e35c5e3c2529edac2a95c8b48877924b7fa1",
+  "artifact_manifest_sha256": "91aa0ee1658a42382f4e2dbc8234e35c5e3c2529edac2a95c8b48877924b7fa1",
+  "artifact_integrity_match": true,
+  "actual_iphone_acceptance": "not_executed",
+  "actual_manager_https_exchange": "not_executed",
+  "deployment": "not_deployed"
+}

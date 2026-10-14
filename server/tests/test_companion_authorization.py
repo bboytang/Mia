@@ -70,6 +70,10 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(auth.PrivateAuthorizationRequired):
             await auth.execute_tool(conn, {"name": "private_tool"})
         conn.func_handler.handle_llm_function_call.assert_not_awaited()
+        conn.intent = SimpleNamespace(replyResult=AsyncMock())
+        with self.assertRaises(auth.PrivateAuthorizationRequired):
+            await auth.intent_reply(conn, "private context", "query")
+        conn.intent.replyResult.assert_not_awaited()
 
     def test_incomplete_tls_material_fails_startup_instead_of_downgrading(self):
         with patch.dict("os.environ", {}, clear=True):

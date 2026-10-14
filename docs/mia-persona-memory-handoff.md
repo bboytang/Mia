@@ -6,7 +6,7 @@
 
 当前用户要求：**“开始计划吧，每完成一步就写交接和进度”。** 已授权按 V1.2 和完整计划开始开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”的限制已由本次开始执行指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
-P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08 manager授权链14个真实用例及构建通过；语音／工具／后台Scope、App迁移／最小管理入口／实际TLS仍待完成。完整Java回归保留唯一既有失败；未部署，不以局部通过代替八项能力验收。
+P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。新增原意图／逐工具派发／输入边界守卫待本提交CI。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；未部署。
 
 四项不可削减要求：核心机制完整、真正向量＋关联＋四维 RAG、必要身份链整改而非系统重构、八项真实行为验收。保持单回复链、单事实库、可信 Scope、统一上下文和轻量持久任务；长期情绪默认关闭。
 
@@ -23,7 +23,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 当前步骤：**P09 可信 Scope 贯通**，P08 的客户端／入口与 P07 剩余真实 Provider 条件继续推进。用户已确认旧设备缺私有授权时提示“请用智控台授权码完成授权”，保留 ID／绑定，暂不加载个性化语音配置，授权后恢复；不增加公共语音回退。私有 Agent 配置及纠错词也必须验证私有凭据。[开发契约](verification/mia-persona-memory/contracts.md)已同步；实际 TLS 部署尚未执行。
 
-下一步：[manager授权链](verification/mia-persona-memory/private-authorization.md)现有16个真实用例及构建通过，唯一既有全量失败保持。语音／工具／输出／后台前置 [可信Scope补丁](verification/mia-persona-memory/trusted-scope.md)及实际manager→Python集成已编写，本提交GitHub待验；随后处理必要App迁移／事件／管理入口、实际WSS和并发／资源验收。TLS代理入口还需审核，未放宽安全校验。P06 [固定规格](verification/mia-persona-memory/embedding-selection.json)直接复现。[专用真实Provider入口](verification/mia-persona-memory/live-provider.md)语法通过，真实调用未执行，测试Secret尚缺。恢复时先查询在途Actions，避免重复运行。
+下一步：先核实本提交新增原意图／输入及每个ToolManager派发的身份CI，使用实际安装包，补全私有链入口审计。已通过的 [实际TLS](verification/mia-persona-memory/private-tls.md)、[App必要迁移](verification/mia-persona-memory/ios-private-authorization.md)、[智控台入口](verification/mia-persona-memory/console-private-authorization.md)证据可从仓库恢复，不依赖本机制品目录。随后P09剩余真实App整链／并发与P10 schema等按计划依赖推进，资源门槛不可省略。生产仍无公开TLS／证书配置变更，原生WSS支持已开发；代理方案若需要须独立审核。P06 [固定规格](verification/mia-persona-memory/embedding-selection.json)已冻结；[专用真实Provider入口](verification/mia-persona-memory/live-provider.md)语法通过、真实调用未执行，最新测试Secret名称仍为0。先查在途Actions，避免重复运行。
 
 ## 步骤状态
 
@@ -37,8 +37,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
 | P06 | 完成：初选 | [固定规格](verification/mia-persona-memory/embedding-selection.json)，U8U8 base 达初选门槛；生产集成和行为未验收 |
 | P07 | 进行中 | 身份基线部分完成：编译／四类对照及4真实旧缺口复现通过；完整回归149/150，1既有失败；Provider等入口未完成 |
-| P08 | 进行中 | manager授权链14真实用例／构建通过；App、最小管理入口和实际TLS未完成，完整运行链未验收 |
-| P09 | 进行中 | Scope17真实身份／构建通过；TLS第18用例首轮定义校验失败（job.env runner.temp），已移step.env待新CI，未执行TLS用例。App e2a0460 CI通过、0589665的38626866880最终上传在途；智控台夹具已修正并加强行加载，38629862200复验在途。App实际WSS／生产入口／并发／性能待验 |
+| P08 | 开发／隔离部分通过 | 18真实身份（含HTTPS/WSS）及构建、App100＋5和构建、智控台53＋64和构建通过；真实App↔manager与生产证书／入口／iPhone仍待验，整体未封板 |
+| P09 | 进行中 | Scope／撤销及隔离WSS守卫通过；新增原意图、输入与逐工具派发复核待本提交CI。持久任务贯通、实际App、全服务并发／性能尚未完成 |
 | P10 | 未开始 | 记忆 schema 未实施 |
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
