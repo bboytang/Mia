@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'server/companion/install_identity.py'
+      - 'server/companion/manager_chat_guards.py'
       - 'server/companion/manager_tests/MiaBindingAuthorizationTest.java'
       - 'server/companion/manager_identity/**'
       - 'server/companion/manager_tests/MiaPrivate*.java'
@@ -14,6 +15,7 @@ on:
   pull_request:
     paths:
       - 'server/companion/install_identity.py'
+      - 'server/companion/manager_chat_guards.py'
       - 'server/companion/manager_tests/MiaBindingAuthorizationTest.java'
       - 'server/companion/manager_identity/**'
       - 'server/companion/manager_tests/MiaPrivate*.java'

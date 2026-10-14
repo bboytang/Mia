@@ -18,6 +18,7 @@ EXPECTED = {
     PYTHON + "core/websocket_server.py": "e46fc6a0d1b268953cd6fdcf9cb10aaf89b17f8612d611c33201a6303eb31505",
     PYTHON + "core/providers/tools/unified_tool_manager.py": "e6ce2d08b1d4932735170e6a6440506b2461311f9f2141cf65913447a57fc41b",
     PYTHON + "core/handle/intentHandler.py": "eca53dfb2dd3cfa9b02190a9257b381246efd23bdbcca24933adbcbc9d78a7a4",
+    PYTHON + "core/handle/reportHandle.py": "d1598fba8b7d4e86ce6302e8f932d4a5e1c82cf7aadb177fab91f70dcb01cdf6",
 }
 
 
@@ -79,6 +80,10 @@ def patch_connection(text):
     text = replace_once(text, '    def chat(self, query, depth=0):\n',
                         '    def chat(self, query, depth=0):\n'
                         '        if not mia_auth.allow_generation(self):\n            return\n')
+    text = replace_once(text, 'from config.manage_api_client import DeviceNotFoundException, DeviceBindException, generate_and_save_chat_title',
+                        'from config.manage_api_client import DeviceNotFoundException, DeviceBindException')
+    text = replace_once(text, '                            generate_and_save_chat_title(self.session_id)',
+                        '                            mia_auth.save_chat_title(self)')
     text = replace_once(text, '                        self.func_handler.handle_llm_function_call(\n'
                         '                            self, tool_call_data\n                        ),',
                         '                        mia_auth.execute_tool(self, tool_call_data),')
@@ -130,6 +135,14 @@ def patch_tools(text):
                         '        """执行工具调用"""\n        await mia_auth.require_connection(self.conn)\n')
 
 
+def patch_report(text):
+    text = replace_once(text, 'from config.manage_api_client import report as manage_report',
+                        'from mia_companion import authorization as mia_auth')
+    text = replace_once(text, '        if audio_data:\n',
+                        '        await mia_auth.require_connection(conn, "memory:write")\n        if audio_data:\n')
+    return replace_once(text, '        await manage_report(\n', '        await mia_auth.report_chat(\n            conn,\n')
+
+
 def patch_intent(text):
     text = replace_once(text, 'import asyncio\n', 'import asyncio\nfrom mia_companion import authorization as mia_auth\n')
     text = replace_once(text, '    """使用LLM分析用户意图"""\n',
@@ -141,7 +154,7 @@ def patch_intent(text):
 
 
 PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager,
-                              patch_websocket, patch_tools, patch_intent]))
+                              patch_websocket, patch_tools, patch_intent, patch_report]))
 
 
 def build_changes(root):

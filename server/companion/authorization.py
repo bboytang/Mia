@@ -1,6 +1,7 @@
 """Private scopes come from manager verification, never from device JSON."""
 
 import asyncio
+import base64
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import ipaddress
@@ -85,7 +86,7 @@ class PrivateAuthorization:
     def __init__(self, config):
         self.config = config
 
-    async def _request(self, endpoint, body):
+    async def _request(self, endpoint, body, timeout=3):
         # Reuse the existing server-secret client, with one bounded attempt.
         # Public HTTP is never permitted. Loopback is for isolated CI only;
         # an internal production transport must be reviewed before adding it.
@@ -104,7 +105,7 @@ class PrivateAuthorization:
             client = ManageApiClient._get_instance()
             if client is None or client.config.get("url") != manager["url"]:
                 raise PrivateAuthorizationRequired()
-            return await asyncio.wait_for(client._async_request("POST", endpoint, json=body, timeout=3), timeout=3)
+            return await asyncio.wait_for(client._async_request("POST", endpoint, json=body, timeout=timeout), timeout=timeout)
         except Exception:
             # Never propagate HTTP request bodies, credentials or provider errors.
             raise PrivateAuthorizationRequired() from None
@@ -183,6 +184,30 @@ async def require_connection(conn, permission="memory:read"):
     if not authorization:
         raise PrivateAuthorizationRequired()
     await authorization.require(getattr(conn, "_mia_scope", None), permission)
+
+
+async def report_chat(conn, mac_address, session_id, chat_type, content, audio, report_time):
+    if not content:
+        return None
+    await require_connection(conn, "memory:write")
+    scope = getattr(conn, "_mia_scope", None)
+    if not isinstance(scope, AuthenticatedScope) or scope.device_id != mac_address or conn.session_id != session_id:
+        raise PrivateAuthorizationRequired()
+    return await conn._mia_authorization._request("/agent/chat-history/report", {
+        "macAddress": mac_address, "sessionId": session_id, "chatType": chat_type,
+        "content": content, "reportTime": report_time,
+        "audioBase64": base64.b64encode(audio).decode("utf-8") if audio else None,
+        "miaScope": scope.snapshot()})
+
+
+async def save_chat_title(conn):
+    await require_connection(conn)
+    scope = getattr(conn, "_mia_scope", None)
+    if not isinstance(scope, AuthenticatedScope) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", conn.session_id):
+        raise PrivateAuthorizationRequired()
+    # Existing title generation remains synchronous at manager; one attempt.
+    return await conn._mia_authorization._request(
+        f"/agent/chat-title/{conn.session_id}/generate", scope.snapshot(), timeout=30)
 
 
 async def prompt_authorization(conn):

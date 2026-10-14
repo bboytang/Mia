@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 
 from .install_xiaozhi import replace_once
+from . import manager_chat_guards
 
 
 TARGET = 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/DeviceServiceImpl.java'
@@ -29,7 +30,9 @@ PAYLOADS = {
     'MiaDeviceAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/MiaDeviceAuthorizationService.java',
     'MiaDeviceAuthorizationController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/MiaDeviceAuthorizationController.java',
     '202610141825.sql': 'main/manager-api/src/main/resources/db/changelog/202610141825.sql',
+    'MiaChatAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/MiaChatAuthorizationService.java',
 }
+PREIMAGES.update(manager_chat_guards.PREIMAGES)
 
 
 def binding_guards(original):
@@ -162,6 +165,7 @@ def build_changes(root):
                                '    @jakarta.validation.constraints.Size(max = 64)\n'
                                '    private String privateCredential;'),
     }
+    changed.update({name: patcher(originals[name]) for name, patcher in manager_chat_guards.PATCHERS.items()})
     return {name: (originals[name], content) for name, content in changed.items()}
 
 

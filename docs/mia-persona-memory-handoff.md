@@ -6,7 +6,7 @@
 
 当前用户要求：**“开始计划吧，每完成一步就写交接和进度”。** 已授权按 V1.2 和完整计划开始开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”的限制已由本次开始执行指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
-P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。新增原意图／逐工具派发／输入边界守卫待本提交CI。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；未部署。
+P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要必要链新增守卫待本提交CI。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；未部署。
 
 四项不可削减要求：核心机制完整、真正向量＋关联＋四维 RAG、必要身份链整改而非系统重构、八项真实行为验收。保持单回复链、单事实库、可信 Scope、统一上下文和轻量持久任务；长期情绪默认关闭。
 
@@ -23,7 +23,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 当前步骤：**P09 可信 Scope 贯通**，P08 的客户端／入口与 P07 剩余真实 Provider 条件继续推进。用户已确认旧设备缺私有授权时提示“请用智控台授权码完成授权”，保留 ID／绑定，暂不加载个性化语音配置，授权后恢复；不增加公共语音回退。私有 Agent 配置及纠错词也必须验证私有凭据。[开发契约](verification/mia-persona-memory/contracts.md)已同步；实际 TLS 部署尚未执行。
 
-下一步：先核实本提交新增原意图／输入及每个ToolManager派发的身份CI，使用实际安装包，补全私有链入口审计。已通过的 [实际TLS](verification/mia-persona-memory/private-tls.md)、[App必要迁移](verification/mia-persona-memory/ios-private-authorization.md)、[智控台入口](verification/mia-persona-memory/console-private-authorization.md)证据可从仓库恢复，不依赖本机制品目录。随后P09剩余真实App整链／并发与P10 schema等按计划依赖推进，资源门槛不可省略。生产仍无公开TLS／证书配置变更，原生WSS支持已开发；代理方案若需要须独立审核。P06 [固定规格](verification/mia-persona-memory/embedding-selection.json)已冻结；[专用真实Provider入口](verification/mia-persona-memory/live-provider.md)语法通过、真实调用未执行，最新测试Secret名称仍为0。先查在途Actions，避免重复运行。
+下一步：核实旧聊天report／标题／摘要Scope守卫的本提交CI，特别是模型期间撤销／改绑不落库；见[必要链证据](verification/mia-persona-memory/private-chat-authorization.md)。f4a7f4c／38637255419的18身份及管理隔离已通过，完整168中167通过／1既有失败，构建及类范围通过，已归档scope-management-results.json。已通过的 [实际TLS](verification/mia-persona-memory/private-tls.md)、[App必要迁移](verification/mia-persona-memory/ios-private-authorization.md)、[智控台入口](verification/mia-persona-memory/console-private-authorization.md)证据可从仓库恢复，不依赖本机制品目录。随后P09剩余真实App整链／并发与P10 schema等按计划依赖推进，资源门槛不可省略。生产仍无公开TLS／证书配置变更，原生WSS支持已开发；代理方案若需要须独立审核。P06 [固定规格](verification/mia-persona-memory/embedding-selection.json)已冻结；[专用真实Provider入口](verification/mia-persona-memory/live-provider.md)语法通过、真实调用未执行，最新测试Secret名称仍为0。先查在途Actions，避免重复运行。
 
 ## 步骤状态
 
@@ -41,7 +41,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P09 | 基础通过，整体进行中 | fc00fce的原意图／输入／实际安装ToolManager及18真实身份／TLS通过；新增索引／事件／趋势／持久任务逐模块补Scope证据，整体与真实App／资源待验 |
 | P10 | 开始 | 按依赖细化启动兼容schema，保留旧表形状／ID／owner／confirmed语义，后续用GitHub证明升级／中断／回滚写入 |
 
-当前补充：管理请求的Scope选择不匹配直接拒绝、跨范围ID删除不误报成功、新凭据名称秘密过滤与实际SQLite隔离检查已编写，待本提交CI。旧会话report／标题任务的当前绑定／撤销边界仍在核对；schema尚未编辑，不能据P09基础通过跳过新发现的必要链。
+当前补充：管理请求Scope不匹配拒绝、跨范围ID删除、凭据过滤与实际SQLite隔离已在f4a7f4c通过GitHub。旧会话report／标题／摘要的Scope快照、执行复查及短事务提交保护已编写，5项真实manager／隔离DB验证待本提交CI；模型仅合成桩。schema尚未编辑，先完成此必要链。
 | P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |

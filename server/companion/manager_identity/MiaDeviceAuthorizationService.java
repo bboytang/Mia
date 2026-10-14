@@ -242,6 +242,49 @@ public class MiaDeviceAuthorizationService {
         return valid(grant, current, clientId, credential) ? issue(deviceId, clientId) : null;
     }
 
+    // Server-owned queued work carries versions, never a reusable credential.
+    public Map<String, Object> requireSnapshot(Map<String, Object> snapshot, boolean lock) {
+        if (snapshot == null || !snapshot.keySet().equals(java.util.Set.of("owner", "operator_id",
+                "device_id", "client_id", "binding_version", "credential_version"))) {
+            throw new RenException(ErrorCode.NO_PERMISSION);
+        }
+        String device = snapshotText(snapshot, "device_id", 32);
+        String client = snapshotText(snapshot, "client_id", 128);
+        String owner = snapshotText(snapshot, "owner", 256);
+        Binding current = binding(device, lock);
+        Map<String, Object> grant = row(device, lock);
+        if (!active(grant, current, client)
+                || number(grant, "operator_id") != snapshotNumber(snapshot, "operator_id")
+                || number(grant, "binding_version") != snapshotNumber(snapshot, "binding_version")
+                || number(grant, "credential_version") != snapshotNumber(snapshot, "credential_version")) {
+            throw new RenException(ErrorCode.NO_PERMISSION);
+        }
+        Map<String, Object> actual = scope(grant);
+        if (!owner.equals(actual.get("owner"))) throw new RenException(ErrorCode.NO_PERMISSION);
+        return actual;
+    }
+
+    private String snapshotText(Map<String, Object> snapshot, String key, int maximum) {
+        Object value = snapshot.get(key);
+        if (!(value instanceof String text) || text.isBlank() || text.length() > maximum
+                || !text.matches("[A-Za-z0-9_:.\\-]+")) throw new RenException(ErrorCode.NO_PERMISSION);
+        return text;
+    }
+
+    private long snapshotNumber(Map<String, Object> snapshot, String key) {
+        Object value = snapshot.get(key);
+        if (!(value instanceof String || value instanceof Integer || value instanceof Long)) {
+            throw new RenException(ErrorCode.NO_PERMISSION);
+        }
+        String text = value.toString();
+        if (!text.matches("0|[1-9][0-9]{0,18}")) throw new RenException(ErrorCode.NO_PERMISSION);
+        try {
+            return Long.parseLong(text);
+        } catch (NumberFormatException invalid) {
+            throw new RenException(ErrorCode.NO_PERMISSION);
+        }
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void revoke(String deviceId) {
         requireOwner(deviceId);

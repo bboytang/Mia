@@ -75,6 +75,28 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
             await auth.intent_reply(conn, "private context", "query")
         conn.intent.replyResult.assert_not_awaited()
 
+    async def test_report_preserves_payload_and_only_sends_verified_snapshot(self):
+        scope = auth._manager_scope(scope_data())
+        authorization = SimpleNamespace(require=AsyncMock(return_value=scope), _request=AsyncMock(return_value=True))
+        conn = SimpleNamespace(read_config_from_api=True, _mia_scope=scope,
+                               _mia_authorization=authorization, session_id="session-one")
+        self.assertTrue(await auth.report_chat(conn, scope.device_id, conn.session_id, 1, "合成测试", b"audio", 123))
+        endpoint, body = authorization._request.call_args.args
+        self.assertEqual(endpoint, "/agent/chat-history/report")
+        self.assertEqual(body, {"macAddress": scope.device_id, "sessionId": "session-one", "chatType": 1,
+                               "content": "合成测试", "audioBase64": "YXVkaW8=", "reportTime": 123,
+                               "miaScope": scope.snapshot()})
+        authorization._request.reset_mock()
+        with self.assertRaises(auth.PrivateAuthorizationRequired):
+            await auth.report_chat(conn, "foreign-device", conn.session_id, 1, "test", None, 123)
+        authorization._request.assert_not_awaited()
+        authorization.require.side_effect = auth.PrivateAuthorizationRequired()
+        with self.assertRaises(auth.PrivateAuthorizationRequired):
+            await auth.report_chat(conn, scope.device_id, conn.session_id, 1, "test", None, 123)
+        with self.assertRaises(auth.PrivateAuthorizationRequired):
+            await auth.save_chat_title(conn)
+        authorization._request.assert_not_awaited()
+
     def test_incomplete_tls_material_fails_startup_instead_of_downgrading(self):
         with patch.dict("os.environ", {}, clear=True):
             self.assertIsNone(auth.server_tls_context())
