@@ -9,3 +9,5 @@
 GitHub继续全部原前端单测／snapshot、构建及四浏览器多尺寸回归；新增HTTP拒绝与合成HTTPS页面下生成／关闭／撤销检查，验证复用登录、仅正确设备body、没有解绑、无自动重试和码不持久化。HTTPS页面由浏览器route供应静态资源与mock API，是UI／请求规则测试；实际证书／代理／Java签发整链和真机另行验收，不能据此声称生产HTTPS已通过。
 
 当前：必要实现和浏览器用例待本提交GitHub验证，未部署。身份manager→Python代码 `0589665b51482f1422ebd172be360c490e07be65` 的 [38626866860](https://github.com/bboytang/Mia/actions/runs/38626866860) 17身份用例及构建通过；全量167中166通过／唯一既有脱敏失败，0error／skip，整体workflow保持failure。P09完整并发、App实际WSS、P16任务及八项行为仍未验收。
+
+首次UI run [38627774166](https://github.com/bboytang/Mia/actions/runs/38627774166) 单测／构建通过，8新增浏览器失败：原共享fixture把FIRMWARE_TYPE数组返回为分页对象，固定源码getFirmwareTypeName的find无法渲染真实设备行，旧尺寸测试未识别空加载状态。已核对请求trace、源制品与失败截图，仅修正fixture为实际数组，并在全部设备路线尺寸检查中要求行操作确实可见。没有改生产固件列表或账户实现；新增UI和更强原回归待修正提交GitHub复验。

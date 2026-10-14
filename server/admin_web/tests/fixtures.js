@@ -27,6 +27,7 @@ export async function mockBackend(page, superAdmin = true) {
     let data = { list: [], total: 0 };
     if (path.endsWith('/pub-config')) data = pubConfig;
     else if (path === '/user/info') data = { username: '响应式测试', superAdmin };
+    else if (path === '/admin/dict/data/type/FIRMWARE_TYPE') data = [];
     else if (path === '/agent/list' || path.includes('/agent/search')) data = [agent];
     else if (path === '/agent/template') data = [agent];
     else if (path === '/agent/template/page') data = { list: [agent], total: 1 };

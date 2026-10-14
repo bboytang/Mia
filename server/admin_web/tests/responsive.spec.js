@@ -38,6 +38,9 @@ for (const width of [360, 390, 430, 768, 1024, 1440]) {
         await page.goto('/#' + route);
         const name = route.split('?')[0].slice(1).replace('server-side-management', 'server-side-manager');
         await expect(page.locator('.page-' + name)).toBeVisible();
+        if (route.startsWith('/device-management')) {
+          await expect(page.getByRole('button', { name: '私有授权码', exact: true }).first()).toBeVisible();
+        }
         await page.waitForTimeout(300);
         await assertFits(page, route);
         if (route === '/home' || route.startsWith('/device-management') || route === '/params-management') {
