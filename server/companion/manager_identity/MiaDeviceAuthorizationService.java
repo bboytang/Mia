@@ -202,7 +202,8 @@ public class MiaDeviceAuthorizationService {
     }
 
     private boolean valid(Map<String, Object> grant, Binding current, String clientId, String credential) {
-        return active(grant, current, clientId) && matches(grant.get("credential_hash"), credential);
+        return credential != null && credential.matches("[A-Za-z0-9_-]{43}")
+                && active(grant, current, clientId) && matches(grant.get("credential_hash"), credential);
     }
 
     @Transactional(readOnly = true)
@@ -210,6 +211,15 @@ public class MiaDeviceAuthorizationService {
         Binding current = binding(deviceId, false);
         Map<String, Object> grant = row(deviceId, false);
         return valid(grant, current, clientId, credential) ? scope(grant) : null;
+    }
+
+    // ConfigController holds this transaction through the private config lookup.
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> requirePrivateConfiguration(String deviceId, String clientId, String credential) {
+        Binding current = binding(deviceId, true);
+        Map<String, Object> grant = row(deviceId, true);
+        if (!valid(grant, current, clientId, credential)) throw new RenException(ErrorCode.NO_PERMISSION);
+        return scope(grant);
     }
 
     @Transactional(readOnly = true)

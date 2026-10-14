@@ -258,6 +258,41 @@ class MiaPrivateAuthorizationTest {
     }
 
     @Test
+    void personalizedConfigAndCorrectWordsRequirePrivateGrantAndKeepOriginalBinding() throws Exception {
+        String server = params.getValue("server.secret", false);
+        db.update("UPDATE ai_agent SET system_prompt=?,summary_memory=? WHERE id=?",
+                "CI private prompt marker", "CI private summary marker", AGENT_B);
+        Map<String, Object> config = new java.util.HashMap<>(Map.of("macAddress", DEVICE_B,
+                "clientId", CLIENT, "selectedModule", Map.of()));
+        Map<String, Object> words = new java.util.HashMap<>(Map.of("macAddress", DEVICE_B, "clientId", CLIENT));
+        for (String invalid : new String[]{"", "legacy-signature.timestamp", "known-device-id-is-not-proof"}) {
+            config.put("privateCredential", invalid);
+            words.put("privateCredential", invalid);
+            for (JsonNode response : List.of(post("/config/agent-models", config, server),
+                    post("/config/correct-words", words, server))) {
+                assertNotEquals(0, response.path("code").asInt());
+                assertFalse(response.toString().contains("CI private"));
+            }
+        }
+        String credential = grant().path("private_credential").asText();
+        config.put("privateCredential", credential);
+        words.put("privateCredential", credential);
+        JsonNode authorized = post("/config/agent-models", config, server);
+        assertEquals(0, authorized.path("code").asInt());
+        assertTrue(authorized.toString().contains("CI private prompt marker"));
+        assertTrue(authorized.toString().contains("CI private summary marker"));
+        assertEquals("user:" + USER_B + ":agent:" + AGENT_B, authorized.path("data").path("mia_scope").path("owner").asText());
+        assertEquals(0, post("/config/correct-words", words, server).path("code").asInt());
+        assertNotEquals(0, post("/config/agent-models", config, userToken(USER_B)).path("code").asInt());
+        words.put("clientId", "other-client");
+        assertNotEquals(0, post("/config/correct-words", words, server).path("code").asInt());
+        assertEquals(0, post("/device/mia-auth/revoke", Map.of("device_id", DEVICE_B), userToken(USER_B)).path("code").asInt());
+        assertNotEquals(0, post("/config/agent-models", config, server).path("code").asInt());
+        assertEquals(USER_B, db.queryForObject("SELECT user_id FROM ai_device WHERE id=?", Long.class, DEVICE_B));
+        assertEquals(AGENT_B, db.queryForObject("SELECT agent_id FROM ai_device WHERE id=?", String.class, DEVICE_B));
+    }
+
+    @Test
     void forwardedHeaderCannotBypassBoundedExchangeRateLimit() throws Exception {
         long second = Instant.now().getEpochSecond() % 60;
         if (second > 55) Thread.sleep((60 - second) * 1000 + 100);

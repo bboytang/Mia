@@ -22,3 +22,5 @@ GitHub入口增加9个实际HTTP／Shiro／MySQL／Redis私有授权用例和1�
 尚待：P09语音／工具／后台任务的持续Scope检查、App Keychain迁移、智控台最小入口、实际TLS和完整跨用户行为。不能把本阶段manager接口当八项能力或完整运行安全已经通过。
 
 P09补充：新增内部 `/config/mia-auth/check-scope`，沿用 server-secret，按已验证快照中的设备／client／owner／operator／绑定版本／凭据版本重新检查当前账号、角色、绑定、撤销及期限。持久任务不保存明文私有凭据；客户端不能自行提交快照代替凭据。新增第10个私有授权用例覆盖错误调用者、owner／版本篡改、非整数版本、撤销和新授权不复活旧任务；尚待 GitHub 执行，原14个结果保持原提交事实。
+
+私有配置门禁：扩展固定源码补丁到 ConfigController 和两个请求DTO；server-base保持原实现。agent-models 与 correct-words 在原 server-secret 之外验证设备私有凭据和 client；配置读取事务保持设备及授权行锁，返回的 mia_owner 必须与已核验 Scope 一致，附带服务端 mia_scope。旧设备 ID／绑定不变，无凭据不加载个性化配置。新增第11个私有用例验证旧弱凭据拒绝、真实授权恢复 prompt／summary、服务端密钥边界、错误client、撤销及绑定不变；尚待本次提交GitHub实跑。

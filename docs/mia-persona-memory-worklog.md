@@ -182,6 +182,13 @@
 - Provider入口代码 `1ba397c...` 的 [38621146139](https://github.com/bboytang/Mia/actions/runs/38621146139) 语法检查成功、真实job跳过；未调用模型，最近Secret名称核查为0。配置条件继续由安全界面完成。
 - 已检查补丁范围及 diff；没有本地自动化测试、部署、生产凭据读取。下一步核实CI，再贯通私有配置／语音及持续Scope。契约与交接同步。
 
+## 2026-10-14：P09 私有 Agent 配置门禁开发
+
+- 源码补丁增加 ConfigController／AgentModelsDTO／CorrectWordsDTO 的精确 preimage 检查；只给两个现有私有配置接口增加必要凭据／client 校验。server-base、ConfigServiceImpl、OTA 和现有账户实现保持原逻辑。
+- 配置读取在同事务保持设备与授权行锁，与解绑／撤销串行；返回 owner 必须与已验证Scope一致，附加 mia_scope。缺凭据和旧OTA弱凭据均拒绝，保留设备ID／绑定，符合用户确认迁移行为。
+- 新增第11个私有真实HTTP用例，合计16个身份用例，待GitHub执行；未在本地测试或生产修改。语音端仍需接入此门禁和可信Scope；不称P09已完成。
+- 前一提交 `20b49dfe852470e838656d5e5ee3255dc559c4cf` 的 [38622999533](https://github.com/bboytang/Mia/actions/runs/38622999533) 已完成：身份专项核验及JAR构建成功，全量测试step失败；制品下载进行中，确切失败分类与计数待核查后入证据。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

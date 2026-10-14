@@ -13,11 +13,17 @@ TARGET = 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/Dev
 SHIRO = 'main/manager-api/src/main/java/xiaozhi/modules/security/config/ShiroConfig.java'
 DAO = 'main/manager-api/src/main/java/xiaozhi/modules/device/dao/DeviceDao.java'
 MASTER = 'main/manager-api/src/main/resources/db/changelog/db.changelog-master.yaml'
+CONFIG = 'main/manager-api/src/main/java/xiaozhi/modules/config/controller/ConfigController.java'
+AGENT_DTO = 'main/manager-api/src/main/java/xiaozhi/modules/config/dto/AgentModelsDTO.java'
+WORDS_DTO = 'main/manager-api/src/main/java/xiaozhi/modules/config/dto/CorrectWordsDTO.java'
 PREIMAGES = {
     TARGET: '26f5d6acbc8680232da1d8f2d8b5ad43eeaee04d4c35323f7c0f31505ce76743',
     SHIRO: '7ee4c8d5c1e53ededc107ddb92e4593aa61d88a398fc05fac5c4bf6b9809eae5',
     DAO: '0b348fdc6079c68119d547e8a95dc9f996d25a3490815888bfec2566bfcc9e1d',
     MASTER: 'b2c8039189f12b414811b85527e612ea970231799476ef8661f5dfd2c09005d0',
+    CONFIG: '7416fcd397c6d6da89193aeab2c58f1fd1113cc3909044d0888a94c2b07f4031',
+    AGENT_DTO: '058d6859941908dd7fb732d36e0f422720f0211718b64ac7c1def7af595de20f',
+    WORDS_DTO: '8e773a8f4e4d9b81177d888386f430ea65facc0777ba17d906f567d2ea8aaf2d',
 }
 PAYLOADS = {
     'MiaDeviceAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/MiaDeviceAuthorizationService.java',
@@ -93,6 +99,37 @@ def binding_guards(original):
                         '        // 批量删除这些设备相关的所有通讯录权限记录')
 
 
+def private_config_guards(original):
+    text = replace_once(original, 'import java.util.List;',
+                        'import java.util.List;\nimport java.util.Map;\n'
+                        'import org.springframework.transaction.annotation.Transactional;\n'
+                        'import xiaozhi.common.exception.ErrorCode;\n'
+                        'import xiaozhi.common.exception.RenException;\n'
+                        'import xiaozhi.modules.device.service.impl.MiaDeviceAuthorizationService;')
+    text = replace_once(text, '    private final ConfigService configService;',
+                        '    private final ConfigService configService;\n'
+                        '    private final MiaDeviceAuthorizationService miaPrivateGrants;')
+    text = replace_once(text, '    public Result<Object> getAgentModels(',
+                        '    @Transactional(rollbackFor = Exception.class)\n    public Result<Object> getAgentModels(')
+    text = replace_once(text, '        Object models = configService.getAgentModels(dto.getMacAddress(), dto.getSelectedModule());',
+                        '        Map<String, Object> scope = miaPrivateGrants.requirePrivateConfiguration(\n'
+                        '                dto.getMacAddress(), dto.getClientId(), dto.getPrivateCredential());\n'
+                        '        Object models = configService.getAgentModels(dto.getMacAddress(), dto.getSelectedModule());\n'
+                        '        if (!(models instanceof Map<?, ?> data) || !scope.get("owner").equals(data.get("mia_owner"))) {\n'
+                        '            throw new RenException(ErrorCode.NO_PERMISSION);\n'
+                        '        }\n'
+                        '        Map<String, Object> authorized = new java.util.HashMap<>();\n'
+                        '        data.forEach((key, value) -> authorized.put((String) key, value));\n'
+                        '        authorized.put("mia_scope", scope);\n'
+                        '        models = authorized;')
+    text = replace_once(text, '    public Result<Object> getCorrectWords(',
+                        '    @Transactional(rollbackFor = Exception.class)\n    public Result<Object> getCorrectWords(')
+    return replace_once(text, '        List<String> list = configService.getCorrectWords(dto.getMacAddress());',
+                        '        miaPrivateGrants.requirePrivateConfiguration(\n'
+                        '                dto.getMacAddress(), dto.getClientId(), dto.getPrivateCredential());\n'
+                        '        List<String> list = configService.getCorrectWords(dto.getMacAddress());')
+
+
 def build_changes(root):
     originals = {}
     for name, digest in PREIMAGES.items():
@@ -114,6 +151,16 @@ def build_changes(root):
                 '      id: 202610141825\n      author: Mia\n      changes:\n'
                 '        - sqlFile:\n            encoding: utf8\n'
                 '            path: classpath:db/changelog/202610141825.sql\n',
+        CONFIG: private_config_guards(originals[CONFIG]),
+        AGENT_DTO: replace_once(originals[AGENT_DTO], '    private String clientId;',
+                               '    private String clientId;\n\n'
+                               '    @jakarta.validation.constraints.Size(max = 64)\n'
+                               '    private String privateCredential;'),
+        WORDS_DTO: replace_once(originals[WORDS_DTO], '    private String macAddress;',
+                               '    private String macAddress;\n\n'
+                               '    @NotBlank\n    private String clientId;\n\n'
+                               '    @jakarta.validation.constraints.Size(max = 64)\n'
+                               '    private String privateCredential;'),
     }
     return {name: (originals[name], content) for name, content in changed.items()}
 
