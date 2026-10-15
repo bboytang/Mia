@@ -346,6 +346,7 @@ def begin_turn(conn, query):
         return
     command = query.strip().rstrip("。.!！ ")
     with provider.lock:
+        provider.force_checkpoint = False
         try:
             state = provider.store.snapshot(provider.owner)
         except sqlite3.Error:

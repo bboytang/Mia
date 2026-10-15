@@ -293,6 +293,26 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(self.store.list_memories(self.scope.owner), [])
             self.assertEqual(self.row(result)['source_payload'], '{}')
 
+    async def test_explicit_remember_priority_is_limited_to_its_own_completion(self):
+        from server.companion import xiaozhi_adapter as mia
+        provider = mia.MiaMemoryProvider(self.store, self.scope.owner, None, 'session', self.scope, self.policy)
+        conn = SimpleNamespace(_mia_memory=provider, _mia_scope=self.scope, _mia_authorization=self.policy,
+            read_config_from_api=True, session_id='session', loop=asyncio.get_running_loop(),
+            dialogue=SimpleNamespace(dialogue=[]), websocket=SimpleNamespace(send=AsyncMock()),
+            server=SimpleNamespace(_mia_worker=self.worker), client_abort=False)
+        @mia.completed_chat
+        def complete(conn, query, depth=0):
+            conn.sentence_id = uuid.uuid4().hex
+            mia.begin_turn(conn, query)
+        await asyncio.to_thread(complete, conn, '请记住我喜欢蓝色')
+        first = self.row(conn._mia_job_status)
+        await asyncio.to_thread(complete, conn, '今天聊点别的')
+        second = self.row(conn._mia_job_status)
+        self.assertTrue(json.loads(first['source_payload'])['priority'])
+        self.assertFalse(json.loads(second['source_payload'])['priority'])
+        self.assertEqual(self.worker.foreground, 0)
+        self.assertEqual(self.calls, [])
+
     async def test_wire_status_is_owner_scoped_and_does_not_return_source_or_clear_history(self):
         from server.companion import xiaozhi_adapter as mia
         own = await self.worker.submit(self.event())
