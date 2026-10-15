@@ -63,6 +63,8 @@ jobs:
           mkdir -p "$RUNNER_TEMP/mia-manager-results"
           python -m server.companion.install_xiaozhi upstream --check > "$RUNNER_TEMP/mia-manager-results/current-companion.patch"
           python -m server.companion.install_xiaozhi upstream --apply
+          git -C upstream apply --check "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
+          git -C upstream apply "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
           java -version
           mvn --version
       - name: Compile and run existing real Java regressions

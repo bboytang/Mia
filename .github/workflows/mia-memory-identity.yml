@@ -7,6 +7,7 @@ on:
       - 'server/companion/manager_tests/MiaBindingAuthorizationTest.java'
       - 'server/companion/manager_identity/**'
       - 'server/companion/manager_tests/MiaPrivate*.java'
+      - 'server/companion/manager_tests/sensitive-data-expectation.patch'
       - 'scripts/ci/verify_mia_binding_reports.py'
       - 'scripts/ci/verify_mia_scope_integration.py'
       - 'server/companion/authorization.py'
@@ -29,6 +30,7 @@ on:
       - 'server/companion/manager_tests/MiaBindingAuthorizationTest.java'
       - 'server/companion/manager_identity/**'
       - 'server/companion/manager_tests/MiaPrivate*.java'
+      - 'server/companion/manager_tests/sensitive-data-expectation.patch'
       - 'scripts/ci/verify_mia_binding_reports.py'
       - 'scripts/ci/verify_mia_scope_integration.py'
       - 'server/companion/authorization.py'
@@ -131,6 +133,8 @@ jobs:
           python -m server.companion.install_xiaozhi upstream --apply
           python -m server.companion.install_identity upstream --check > "$RUNNER_TEMP/mia-binding-results/binding.patch"
           python -m server.companion.install_identity upstream --apply
+          git -C upstream apply --check "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
+          git -C upstream apply "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
           cp server/companion/manager_tests/MiaBindingAuthorizationTest.java upstream/main/manager-api/src/test/java/xiaozhi/modules/device/
           cp server/companion/manager_tests/MiaPrivate*.java upstream/main/manager-api/src/test/java/xiaozhi/modules/device/
       - name: Run full Java suite including real binding acceptance
