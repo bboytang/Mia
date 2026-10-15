@@ -6,6 +6,7 @@ import os
 from queue import Queue
 import ssl
 import tempfile
+import traceback
 import uuid
 from pathlib import Path
 import sys
@@ -131,7 +132,7 @@ async def main():
             return 'synthetic tool output'
     tool = Tool()
     intent = SimpleNamespace(replyResult=tool.handle_llm_function_call)
-    active = SimpleNamespace(_mia_scope=scope, _mia_authorization=auth, read_config_from_api=True,
+    active = SimpleNamespace(config=config, _mia_scope=scope, _mia_authorization=auth, read_config_from_api=True,
         session_id='scope-ci', client_abort=False, websocket=Socket(), loop=asyncio.get_running_loop(), func_handler=tool,
         intent=intent)
     assert await asyncio.to_thread(allow_generation, active)
@@ -233,7 +234,10 @@ async def main():
 try:
     asyncio.run(main())
 except Exception as error:
-    print(json.dumps({'manager_python_scope_pass': False, 'error_class': type(error).__name__, 'request_trace': trace}))
+    frames = [{'file': Path(frame.filename).name, 'function': frame.name, 'line': frame.lineno}
+              for frame in traceback.extract_tb(error.__traceback__)]
+    print(json.dumps({'manager_python_scope_pass': False, 'error_class': type(error).__name__,
+                      'error_locations': frames, 'request_trace': trace}))
     sys.exit(1)
 finally:
     ManageApiClient.safe_close()
