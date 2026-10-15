@@ -38,3 +38,13 @@ P06独立完整中文留出集、关联与四信号作用、真实回答、实�
 服务[38664353550](https://github.com/bboytang/Mia/actions/runs/38664353550)121项通过；身份[38664353575](https://github.com/bboytang/Mia/actions/runs/38664353575)23专项、JAR及类范围通过，但完整173项仍有1项既有脱敏失败，workflow整体为failure；manager基线[38664353542](https://github.com/bboytang/Mia/actions/runs/38664353542)150项亦仅同一失败。不得写成全部CI绿色，未修改该无关失败。见[vectors-ci-results.json](vectors-ci-results.json)和[vectors-identity-results.json](vectors-identity-results.json)。
 
 用户要求先保存并交接，本段仅归档验证和文档，没有继续修改运行代码、重新触发测试、调用付费模型或部署。上述run均已完成。接续先核对任务分支与最新文档提交、阅读实际报告及P12／P13验收条件，再补P12剩余接口／生命周期审查，并实施P13关联扩展及四维评分。当前主回复链没有接入半成品检索，完整RAG与八项真实行为均未验收。
+
+## 2026-10-15接续：接口与生命周期复核
+
+用户要求先读取交接再继续。从远程一致的f2e78b7干净保存点复核P06规格、P10迁移、实际encoder／index／MemoryStore／SQL触发器及现有报告；本段未发现需要修改运行代码的问题，补齐原首轮未覆盖的生命周期验证。
+
+仅测试提交`d5edbd6a4b4b4bcef67a715ef97c4a42690fca64`的[服务CI 38665091584](https://github.com/bboytang/Mia/actions/runs/38665091584)整体success，125项全部通过。新增4个测试方法覆盖：两次真实阻塞线程触发3秒推理超时，槽位仍占用／第三次busy／释放后无迟到提交且重试成功；编码中及扫描后编辑、删除、清空、暂停的8组竞态；扫描后撤权、推理异常明确失败及恢复；关闭并重开SQLite后排除pending／superseded／invalidated，删派生向量后明确未就绪，重建后原事实逐字段不变。见[持久报告](vectors-lifecycle-results.json)。
+
+上述线程运行的是明确的合成单位向量编码器，只证明超时、授权和SQLite机制，不是新的BGE语义结果。暂停使在途快照失效，但不解释为清空或永久禁止读取既有事实。未改运行代码，未重复BGE／Java／Provider测试或调用模型；已有真实BGE及Java报告继续明确标原始SHA和范围。所有自动测试仅在GitHub，未部署或做真机测试。
+
+本段P12接口／生命周期复核通过，下一步P13。完整四维／关联、独立中文语料、真实manager＋BGE主链及八项行为仍待后续，P12整体联动未提前标完。

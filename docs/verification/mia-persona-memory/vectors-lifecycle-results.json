@@ -1,0 +1,37 @@
+{
+  "code_sha": "d5edbd6a4b4b4bcef67a715ef97c4a42690fca64",
+  "runtime_code_sha": "b8ebb4853107f160dd443eadbc99fccc8d8412b0",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38665091584",
+  "workflow": "Test Mia Protocol Server",
+  "status": "completed",
+  "conclusion": "success",
+  "service_tests": 125,
+  "new_test_methods": 4,
+  "vector_kind": "synthetic_unit_vectors_mechanisms_only",
+  "verified": [
+    "native_encode_timeout_retains_busy_slots_until_native_completion",
+    "timed_out_results_do_not_commit_late_and_subsequent_retry_succeeds",
+    "edit_delete_clear_pause_during_encoding_and_after_scan_reject_stale_query",
+    "revocation_after_scan_rejects_return",
+    "inference_failure_is_unavailable_not_successful_empty_and_retry_succeeds",
+    "sqlite_reopen_preserves_vectors_and_excludes_pending_superseded_invalidated",
+    "missing_index_is_unavailable_and_rebuild_preserves_original_facts"
+  ],
+  "reviewed_files": [
+    "server/companion/embedding.py",
+    "server/companion/semantic.py",
+    "server/companion/memory.py",
+    "server/companion/schema.sql"
+  ],
+  "runtime_changes": false,
+  "real_bge_rerun": false,
+  "java_identity_rerun": false,
+  "production_deployment": "not_performed",
+  "full_rag": "not_accepted",
+  "remaining": [
+    "P13_association_expansion_and_four_signal_scoring",
+    "full_independent_chinese_corpus_and_real_manager_BGE_integration",
+    "main_reply_context_tool_worker_integration_and_eight_behavior_acceptance",
+    "physical_iPhone_validation"
+  ]
+}
