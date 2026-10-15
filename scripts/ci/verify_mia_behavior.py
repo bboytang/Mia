@@ -199,7 +199,9 @@ async def serve():
     asyncio.get_running_loop().add_signal_handler(signal.SIGTERM, stop.set)
     try:
         async with wss(connection, '127.0.0.1', 0, ssl=tls) as server:
-            (ROOT / 'ready.json').write_text(json.dumps({'port': server.sockets[0].getsockname()[1], 'pid': os.getpid()}))
+            ready = ROOT / 'ready.tmp'
+            ready.write_text(json.dumps({'port': server.sockets[0].getsockname()[1], 'pid': os.getpid()}))
+            ready.replace(ROOT / 'ready.json')
             await stop.wait()
     finally:
         await adapter.stop_worker(runtime)
@@ -329,6 +331,14 @@ async def drive():
             await stop()
         except Exception as error:
             report.update(passed=False, shutdown_error_class=type(error).__name__)
+        decision_keys = {'passed', 'error_class', 'failed_phase', 'error_locations', 'server_pids', 'genuine_wss_restart',
+            'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
+            'raw_response_review', 'shutdown_error_class'}
+        decision = {key: report[key] for key in decision_keys if key in report}
+        # Shutdown may finish an in-flight real request. Keep its final output
+        # and count rather than overwriting it with a pre-shutdown snapshot.
+        report = json.loads(REPORT.read_text())
+        report.update(decision)
         save(report)
     print(json.dumps({'behavior_round': report['round'], 'passed': report['passed'], 'requests': report['requests']}))
     if not report['passed']:
