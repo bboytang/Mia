@@ -72,7 +72,7 @@ class MaintenanceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.store.db.execute('SELECT excerpt FROM sources WHERE memory_id=?', (target,)).fetchone()[0], '我喜欢蓝色')
         _, bundle = await self.bundle()
         self.assertNotIn('我喜欢蓝色', bundle.request_json)
-        self.assertIn('现在：我喜欢绿色', bundle.request_json)
+        self.assertIn('现在:我喜欢绿色', bundle.request_json)
 
     async def test_uncertain_conflict_preserves_both_for_confirmation_without_vectors(self):
         target = await self.seed()

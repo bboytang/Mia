@@ -31,7 +31,7 @@ from core.providers.llm.openai.openai import LLMProvider
 from mia_companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from mia_companion.context import ContextBuilder, ContextError, ContextLimits
 from mia_companion.embedding import SemanticEncoder
-from mia_companion.extraction import LLMMemoryExtractor
+from mia_companion.extraction import LLMMemoryExtractor, normalize
 from mia_companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from mia_companion.memory import MemoryError, MemoryStore
 from mia_companion.semantic import SemanticMemoryIndex
@@ -191,8 +191,8 @@ async def evaluate(args, report):
             fresh = await other_builder.build(scope, policy, 'after-' + mode, new, limits=limits)
             assert old not in fresh.request_json
             if mode != 'conflict':
-                assert new in fresh.request_json
-                target = store.db.execute('SELECT id FROM memories WHERE owner=? AND content=?', (scope.owner, new)).fetchone()[0]
+                assert normalize(new) in fresh.request_json
+                target = store.db.execute('SELECT id FROM memories WHERE owner=? AND content=?', (scope.owner, normalize(new))).fetchone()[0]
                 assert store.db.execute('SELECT COUNT(*) FROM mia_vectors WHERE memory_id=?', (target,)).fetchone()[0] == 1
             else:
                 assert new not in fresh.request_json

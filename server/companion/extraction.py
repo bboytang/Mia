@@ -110,7 +110,7 @@ def context_for(store, owner):
 def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive):
     proof = proposed.get('reconciliation')
     if proof is None:
-        if re.search(r'(?:更正|以前|不确定)：', normalize(source)):
+        if re.search(r'(?:更正|以前|不确定):', normalize(source)):
             raise MemoryError('invalid_input', 'Reconciliation instruction needs classification')
         return None
     if not isinstance(proof, dict):
@@ -124,10 +124,10 @@ def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive)
             or proof.get('old_quote') != target['content'] or quote == target['content']):
         raise MemoryError('invalid_input', 'Reconciliation lacks owned explicit evidence')
     evidence = proof.get('evidence')
-    expected = prefixes[mode] + target['content'] + '；' + quote
+    expected = normalize(prefixes[mode] + target['content'] + '；' + quote)
     if (not isinstance(evidence, str) or normalize(evidence) != expected
             or expected not in normalize(source) or not source_supported(source, quote)
-            or (mode == 'time_change' and not quote.startswith('现在：'))):
+            or (mode == 'time_change' and not quote.startswith('现在:'))):
         raise MemoryError('invalid_input', 'Reconciliation lacks an explicit user instruction')
     # Restrict the instruction itself, not merely its substring in quoted fiction.
     if (QUOTED.search(normalize(source)) or NONFACT.search(source)
