@@ -1,0 +1,68 @@
+name: Verify Mia actual semantic vectors
+on:
+  push:
+    paths:
+      - 'server/companion/embedding.py'
+      - 'server/companion/semantic.py'
+      - 'server/companion/requirements-vector.txt'
+      - 'scripts/ci/verify_mia_vectors.py'
+      - '.github/workflows/mia-memory-vectors.yml'
+  pull_request:
+    paths:
+      - 'server/companion/embedding.py'
+      - 'server/companion/semantic.py'
+      - 'server/companion/requirements-vector.txt'
+      - 'scripts/ci/verify_mia_vectors.py'
+      - '.github/workflows/mia-memory-vectors.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  vectors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Prepare fixed public BGE assets without private data
+        run: |
+          python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
+          python scripts/ci/prepare_mia_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$RUNNER_TEMP/mia-vector-model"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'mia-vector-model'
+          metadata = json.loads((root / 'metadata.json').read_text())
+          metadata['tokenizer_sha256'] = hashlib.sha256((root / 'tokenizer.json').read_bytes()).hexdigest()
+          (root / 'metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
+          PY
+      - name: Install actual companion and prepare isolated CPU runtime
+        run: |
+          python -m server.companion.install_xiaozhi upstream --apply
+          mkdir -p "$RUNNER_TEMP/mia-vector-results"
+          docker pull python:3.10-slim
+          mia_vector_base=$(docker image inspect python:3.10-slim --format '{{index .RepoDigests 0}}')
+          docker build --build-arg PYTHON_RUNTIME="$mia_vector_base" -f scripts/ci/mia-embedding-runtime.Dockerfile -t mia-vector-verification .
+      - name: Real encoder and actual SQLite retrieval without network or FTS
+        run: |
+          docker run --rm --cpus 2 --memory 2g --memory-swap 2g --network none --entrypoint python \
+            -e GITHUB_SHA="$GITHUB_SHA" -e PYTHONPATH=/installed \
+            -v "$GITHUB_WORKSPACE:/experiment:ro" \
+            -v "$GITHUB_WORKSPACE/upstream/main/xiaozhi-server:/installed:ro" \
+            -v "$RUNNER_TEMP/mia-vector-model:/model:ro" \
+            -v "$RUNNER_TEMP/mia-vector-results:/results" \
+            mia-vector-verification /experiment/scripts/ci/verify_mia_vectors.py --model-dir /model --output /results/vector-results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Mia-actual-vectors-${{ github.sha }}
+          path: ${{ runner.temp }}/mia-vector-results
+          if-no-files-found: warn

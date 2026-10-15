@@ -160,6 +160,8 @@ async def main():
     dispatcher.register_executor(ToolType.SERVER_PLUGIN, executor)
     assert (await dispatcher.execute_tool('synthetic_tool', {})).result == 'synthetic dispatch'
     from mia_companion.memory import MemoryStore
+    from mia_companion.semantic import SemanticMemoryIndex
+    from mia_companion.embedding import MODEL_KEY, REVISION, DIMENSION
     from mia_companion import xiaozhi_adapter as adapter
     # Actual installed DTO, Dialogue and guard; only the TTS consumer is a sink.
     from core.providers.tts.dto.dto import TTSMessageDTO, SentenceType, ContentType
@@ -196,6 +198,23 @@ async def main():
                     {'memories': [{'category': 'fact', 'content': content, 'source_index': 0}]}, marker)['memories'][0]
             own_id = fact(scope.owner, 'CI own memory', 'own')
             other_id = fact(peer, 'CI other memory', 'other')
+            class SyntheticVectorEncoder:
+                model_id, revision, dimension = MODEL_KEY, REVISION, DIMENSION
+                def encode(self, text, query=False):
+                    import numpy as np
+                    value = np.zeros(DIMENSION, dtype=np.float32)
+                    value[0] = 1
+                    return value
+            vector_index = SemanticMemoryIndex(store, SyntheticVectorEncoder())
+            await vector_index.index_memory(scope, auth, own_id)
+            try:
+                await vector_index.index_memory(scope, auth, other_id)
+            except adapter.MemoryError as error:
+                assert error.code == 'not_found'
+            else:
+                raise AssertionError('Cross-owner vector indexing was accepted')
+            found = await vector_index.candidates(scope, auth, 'CI synthetic vector')
+            assert [row['id'] for row in found['candidates']] == [own_id]
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
             for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
@@ -219,6 +238,10 @@ async def main():
     await rejects(auth.require(scope, 'memory:read'))
     await rejects(auth.restore(scope.snapshot()))
     await rejects(auth.private_config(device, client, credential, {}))
+    # The fixture DB is already closed: revocation must be rejected before any
+    # DB access, not converted to an empty vector result or an indexing retry.
+    await rejects(vector_index.candidates(scope, auth, 'CI revoked vector'))
+    await rejects(vector_index.index_memory(scope, auth, own_id))
     assert not await asyncio.to_thread(allow_generation, active)
     assert not await allow_output(active)
     await rejects(execute_tool(active, {'name': 'synthetic_tool'}))
@@ -226,7 +249,7 @@ async def main():
     await rejects(dispatcher.execute_tool('synthetic_tool', {}))
     assert executor.calls == 1
     assert active.client_abort and tool.calls == 2
-    print(json.dumps({'manager_python_scope_pass': True, 'checks': 30,
+    print(json.dumps({'manager_python_scope_pass': True, 'checks': 30, 'vector_scope_checks_pass': True,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 
