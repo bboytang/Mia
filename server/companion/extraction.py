@@ -18,6 +18,9 @@ Return JSON only: {"memories":[{"category":"fact|preference|goal|experience|agre
 "emotional_weight":null, "emotional_evidence":null, "relations":[]}], "trait":null}.
 At most 16 proposals, 512 characters each. Explicit content MUST equal source_quote;
 preserve the speaker and negation, never rewrite 'I' to refer to Mia or another person.
+category MUST be exactly one of: fact, preference, goal, experience, agreement.
+Use fact for lasting habits/routines, preference for tastes, goal for ongoing plans.
+Do not invent categories such as habit; these are invalid and will not be saved.
 Do not extract other people's quoted speech, fictional/hypothetical examples, jokes,
 questions, deletion commands, greetings or transient moods. Neutral but lasting habits,
 preferences and ongoing goals are valuable without any strong emotion. Never output secrets.

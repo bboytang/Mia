@@ -57,6 +57,8 @@ class ExtractionValidationTests(unittest.TestCase):
         self.assertEqual(result['memories'][0]['content'], source)
         self.assertIsNone(result['memories'][0]['emotional_weight'])
         self.assertFalse(result['memories'][0]['sensitive'])
+        with self.assertRaises(MemoryError):
+            self.validate(source, proposal(source, category='habit'))
 
     def test_quote_hypothesis_joke_report_question_and_deletion_are_not_facts(self):
         for source, quote in [
