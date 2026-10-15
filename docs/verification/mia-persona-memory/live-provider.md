@@ -10,6 +10,8 @@
 | `MIA_TEST_LLM_BASE_URL` | 现有Provider的HTTPS API根地址，即base_url，不是完整chat/completions地址 |
 | `MIA_TEST_LLM_MODEL` | 同Provider的测试模型名／endpoint ID，保留Mia既有Provider类型 |
 
+2026-10-15用户询问具体模型ID后，只读查询现网已配置Agent的LLM选择及对应模型的非敏感字段，当前唯一结果为 `ChatGLMLLM`／`glm-4-flash`，API根地址 `https://open.bigmodel.cn/api/paas/v4/`。因此本轮测试 `MIA_TEST_LLM_MODEL=glm-4-flash`、`MIA_TEST_LLM_BASE_URL=https://open.bigmodel.cn/api/paas/v4/`，API Key须在智谱另建专用测试密钥；此前火山方舟地址仅作示例，不能用于这组配置。未读取或复制现有API Key，未改现网配置，未调用模型。后续若用户改变模型选择，应重新核实此非敏感映射。
+
 `Verify Mia real chat provider` workflow只在手动dispatch执行真实请求；push／PR仅检查语法，不能记为真实模型通过。初始probe最多1次请求、128输出tokens、30秒、不重试，拒绝HTTP及重定向，不打印密钥、请求头、环境或错误响应body。只有配置齐全才发请求，缺配置明确记录未执行。制品记录代码SHA、配置散列、模型响应、usage与耗时。
 
 这个probe验证真实连接与响应，不是Mia生产Provider集成、RAG、信息不足回答或八项能力验收。后续实际功能必须经真实manager身份、实际提取及向量、Mia单回复链、跨会话／重启和授权时间观察运行。不得用此短请求替代完整行为。

@@ -75,6 +75,8 @@ GitHub读取／推送、Actions和严格主机校验的只读SSH已验证；未�
 
 用户已确认真实聊天测试使用专用GitHub Actions Secret；入口已编写，实际配置和调用仍未核实／执行。三个配置名见Provider入口文档，保留生产模型密钥原位置；新环境只核实秘密配置名和可用状态，不输出秘密。
 
+2026-10-15只读核实当前聊天模型为智谱 `glm-4-flash`（ChatGLMLLM），API根地址 `https://open.bigmodel.cn/api/paas/v4/`；具体测试Secret映射已补入[Provider入口](verification/mia-persona-memory/live-provider.md)。此前火山地址仅为示例。未读取或复用生产Key，用户仍需另建智谱测试Key，尚无真实模型请求。
+
 缺权限时：继续不依赖它的已授权工作；相应真实测试或远程动作记为未执行／阻塞。不得关闭认证、改用任意 owner、重新启用旧网关或输出密钥来绕过。
 
 ## 新会话可直接使用的接续说明
