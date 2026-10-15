@@ -4,6 +4,7 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -60,7 +61,7 @@ def provider(report, output=768):
     secret, base, model = (os.environ['MIA_TEST_LLM_' + key] for key in ('API_KEY', 'BASE_URL', 'MODEL'))
     url = urlsplit(base)
     assert secret and url.scheme == 'https' and url.hostname and not (url.username or url.password or url.query or url.fragment)
-    assert report['requests'] < 10
+    assert report['requests'] < (14 if os.environ.get('MIA_CONTINUITY_MODE') == 'daily' else 10)
     report['requests'] += 1
     result = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': output,
                           'temperature': 0.1, 'timeout': 30})
@@ -109,13 +110,16 @@ async def converse(store, policy, marker, query, report):
     try:
         chunks = await asyncio.to_thread(lambda: list(reply.response(conn, None, 0)))
         text = ''.join(chunks)
-        assert text.strip() and not PersonaGuardrail().inspect_output(text)[1]
         turn = conn._mia_context_turn
-        event_ids = await turn.builder.complete(turn.bundle, policy, text)
-        report['cases'].append({'phase': marker, 'source': query, 'model_output': text,
-            'events_before': turn.bundle.diagnostics()['events'], 'events_activated': event_ids,
+        case = {'phase': marker, 'source': query, 'model_output': text,
+            'events_before': turn.bundle.diagnostics()['events'], 'events_activated': [],
             'trend_status': turn.bundle.diagnostics()['trends'], 'selected_fact_ids': turn.bundle.diagnostics()['selected_fact_ids'],
-            'estimated_input': turn.bundle.diagnostics()['estimated_input']})
+            'estimated_input': turn.bundle.diagnostics()['estimated_input'],
+            'natural_style_pass': not bool(re.search(r'作为\s*(?:AI|人工智能)|我没有主观意识|观察数据不足|无法提供长期.{0,8}分析|您', text, re.I))}
+        report['cases'].append(case)
+        assert text.strip() and not PersonaGuardrail().inspect_output(text)[1]
+        assert case['natural_style_pass'], 'Unnatural unsolicited disclaimer or technical narration'
+        case['events_activated'] = await turn.builder.complete(turn.bundle, policy, text)
         return text, turn.bundle
     finally:
         llm.client.close()
@@ -166,6 +170,8 @@ async def stage(name, report):
             after = store.db.execute('SELECT COUNT(*) FROM mia_observations WHERE owner=?', (owner,)).fetchone()[0]
             assert after == before + int(name == 'enabled-mood' or name.startswith('daily-'))
             report['emotion_status'] = store.handle(owner, {'action': 'emotion_status'})
+            if name.startswith('daily-'):
+                await converse(store, policy, name + '-reply', '我今天很难过，你能结合长期记录看看我的心情趋势吗', report)
         else:
             raise ValueError('Unknown verification phase')
     finally:
@@ -190,7 +196,8 @@ def main():
             report.update(passed=False, error_class=type(error).__name__, failed_phase=name)
         finally:
             secret = os.environ['MIA_TEST_LLM_API_KEY']
-            target.write_text(json.dumps(report, ensure_ascii=False, indent=2).replace(secret, '[REDACTED]') + '\n')
+            encoded = json.dumps(report, ensure_ascii=False, indent=2)
+            target.write_text((encoded.replace(secret, '[REDACTED]') if secret else encoded) + '\n')
         if not report['passed']:
             raise SystemExit('Bounded continuity phase failed; inspect sanitized artifact')
         return

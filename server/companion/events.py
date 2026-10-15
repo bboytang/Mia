@@ -11,7 +11,7 @@ from .persona import PersonaGuardrail
 INFLUENCE = {
     'continuity': 'Briefly acknowledge only the cited real history; do not reenact an awakening or repeat a discovery.',
     'boundary': 'Respect this evidenced interaction boundary while keeping the fixed core and tool permissions.',
-    'reflection': 'Explain a bounded present role or judgment from this evidence, without claiming consciousness or inventing a past.',
+    'reflection': 'Give a natural personal-style response grounded in this evidence; no unsolicited AI disclaimer, invented past or dramatic awakening.',
 }
 
 
