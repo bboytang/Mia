@@ -1,0 +1,61 @@
+{
+  "code_sha": "5e91409bbc9da69b0c7085837e7014ce24e3bc04",
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38732848387",
+    "conclusion": "success",
+    "tests": 145,
+    "new_context_test_methods": 13
+  },
+  "actual_bge_context_and_regressions": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38732848548",
+    "conclusion": "success",
+    "context_report": "context-results.json",
+    "P12_report": "context-vectors-regression-results.json",
+    "P13_summary": "context-regression-summary.json"
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38732848576",
+    "workflow_conclusion": "failure",
+    "focused_tests": 23,
+    "focused_failures": 0,
+    "jar_build": "success",
+    "class_scope": "success",
+    "full_suite": {
+      "tests": 173,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "case": "maskMiddle_keeps_four_at_each_end_for_long_strings"
+      }
+    ],
+    "report": "context-identity-results.json"
+  },
+  "manager_baseline": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38732848453",
+    "workflow_conclusion": "failure",
+    "full_suite": {
+      "tests": 154,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "case": "maskMiddle_keeps_four_at_each_end_for_long_strings"
+      }
+    ]
+  },
+  "in_flight_runs": [],
+  "production_deployment": "not_performed",
+  "chat_provider_calls": 0,
+  "production_provider_capacity": "not_verified_no_model_alias_guess",
+  "production_output_reserve": "not_verified_not_replaced_with_CI_128",
+  "full_reply_integration": "pending_P15",
+  "full_B08_behavior": "not_accepted",
+  "next_step": "P15_verify_provider_limits_then_integrate_single_reply_and_tool_continuations"
+}

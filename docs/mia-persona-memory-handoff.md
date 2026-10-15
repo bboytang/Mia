@@ -4,7 +4,7 @@
 
 ## 当前范围与状态
 
-当前用户最新要求：**“继续下一步”。** P13检索模块及机制／中文质量／资源已通过，本段推进P14统一上下文与Token预算。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
+当前用户最新要求：**“继续下一步”。** 本段P14统一上下文／快照／预算模块验证通过，下一步P15核实Provider容量和输出并接唯一回复入口。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
 P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要新增5项及原18项在3cb7b3c通过，构建通过，P10兼容迁移6项与104服务测试在426d8c4通过，23身份／TLS及构建同提交通过；已归档。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；P11基础113服务、23身份及三个限定原Provider样本通过，完整人格仍待联动验收，未部署。
 
@@ -21,9 +21,13 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P14实现与验证进行中**，见[上下文说明](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明及三次结果](verification/mia-persona-memory/hybrid-retrieval.md)、[D04固定集成规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12／P13整体仍待主链及真实manager＋BGE＋Provider联动验收。P10兼容基础已完成，P09整体随新增消费者验收；P08实际App／入口及真机未封板，未部署。
+当前步骤：**P14模块验证通过，下一步P15**，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
-最新验证提交：`664237ff1b15837fc1b752bf869e02d6281669fa`，服务[38726443936](https://github.com/bboytang/Mia/actions/runs/38726443936)132项通过；真实BGE [38726443918](https://github.com/bboytang/Mia/actions/runs/38726443918)通过P12回归及P13四维／正负关联控制，独立P13-v1的32正向和16无关全正确，4相关不可回答均有允许事实但未测真实回答。1万短文本缺元数据容量混合p95 237.778ms，峰值RSS283.379MiB；不能外推长元数据或全服务并发。完整报告无损gzip、原文SHA256及摘要已入库，见[最终报告](verification/mia-persona-memory/hybrid-results-summary.json)。两次失败同样保留，不调参数或质量留出：首轮语料未体现排名变化；第二次目标0.341低于0.35底线被正确拒绝；最终明确海鲜正向目标从原Top12外进入第1，泛问仍被拒绝。
+最新验证提交：`5e91409bbc9da69b0c7085837e7014ce24e3bc04`，服务[38732848387](https://github.com/bboytang/Mia/actions/runs/38732848387)145项通过；实际BGE [38732848548](https://github.com/bboytang/Mia/actions/runs/38732848548)的P12／P13回归及P14安装包／原Dialogue／上下文10工具场景通过，50次build p95 34.959ms、峰值RSS283.887MiB。ContextBundle固定CORE与数据层分离、当前问题／完整工具优先、20轮及字节估算预算、权限及三项快照复查；历史／源字典不变、删除重建、无效特点不入、未知容量明确拒绝。报告见[context-results.json](verification/mia-persona-memory/context-results.json)。容量profile和工具结果为CI夹具，未调用聊天Provider，不是实际窗口、精确Token或完整B08证据。
+
+同提交身份[38732848576](https://github.com/bboytang/Mia/actions/runs/38732848576)23专项／实际TLS、ContextBuilder本人／外人隔离、删除和撤权、类范围及JAR通过；完整173中172通过／1既有脱敏失败，workflow整体failure。manager基线[38732848453](https://github.com/bboytang/Mia/actions/runs/38732848453)154中153通过、仅同一失败。见[本轮CI范围](verification/mia-persona-memory/context-ci-results.json)及[身份原报告](verification/mia-persona-memory/context-identity-results.json)。所有软件自动化仅GitHub，无本地测试或部署。
+
+P13验证提交`664237ff1b15837fc1b752bf869e02d6281669fa`服务132、真实BGE／四维正负控制通过，独立P13-v1的32正向及16无关全正确。1万短文本缺元数据容量p95 237.778ms、RSS283.379MiB，不能外推长元数据或并发；见[原结果](verification/mia-persona-memory/hybrid-results-summary.json)。两个失败原报告保留，未改参数或质量留出。P14同job继续回归通过，见[新回归摘要](verification/mia-persona-memory/context-regression-summary.json)。
 
 同提交身份[38727000802](https://github.com/bboytang/Mia/actions/runs/38727000802)专项／实际TLS、混合Scope、类范围和JAR通过；Java全量仍有既有脱敏失败，workflow整体failure，不能写全部CI通过。见[分项CI范围](verification/mia-persona-memory/hybrid-ci-results.json)和[身份报告](verification/mia-persona-memory/hybrid-identity-results.json)。运行包最初在5680f6f实现，此后只加验证和证据，包Git tree为2308843983e37bf1fc40acbb0e35172d0fa05243。
 
@@ -37,11 +41,11 @@ P12历史保存点`b8ebb4853107f160dd443eadbc99fccc8d8412b0`的服务121、真�
 
 P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／768维、资产与内容版本、Scope先行SQLite余弦候选、失效／取消机制。4个跨措辞Top1命中、无关空召回、无FTS仍召回及生命周期样本通过；1万容量扫描p95 102.125ms、编码＋查询119.573ms、峰值RSS284.098MiB。容量向量复制真实种子，仅测成本；不等于完整语义语料验收。没有修改主回复链接入半成品检索，没有新事实库、Provider或服务。
 
-恢复顺序：先核对当前分支／远程SHA／工作树，再读取D04集成规格、P13全部报告、contracts的D05与P14／P15计划。P12／P13模块检查已通过，无需重做已完成probe。下一步实现ContextBuilder统一快照和预算，保留核心／当前输入／完整工具结构，私有材料使用新retrieve结果及版本，不能直接把候选／扩展当系统指令；P15再接唯一文字／语音与工具续答。实际提取元数据、完整manager＋BGE＋Provider联动、独立真实用户语料及八项行为仍按后续阶段验收。不放宽原查询底线或借P13通过提前部署。
+恢复顺序：先核对分支／远程SHA／工作树，再读context.md、D05、P14原报告和P15计划。P12—P14模块及已完成probe无需重做。P15先核实当前Provider非敏感模型／容量／输出预留，再接唯一ConnectionHandler文字／语音及工具续答；ContextLimits必须来自审查过的服务端配置，不接受客户端字段。旧glm-4-flash别名容量和生产max_tokens本轮未核实，若None须维持限制，不用CI128替代或擅改费用配置。版本变化后须安全重建，不能盲目复用旧inputs_json或重复有副作用工具。完整真实manager＋BGE＋Provider、Token对照、实际提取、独立真实用户语料及八项行为继续后续验收，不因模块通过提前部署。
 
 P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源清派生线索；v1→v2失败回滚及真实a30旧代码读写已验。严格P10—P12旧迁移器不识别v2账本，P24完整回滚制品仍待做，不得删schema绕过。实际提取及来源校验在P17／P18接入，当前fixture写入不代表提取器完成。
 
-保存时本次38726443936／38726443918／38727000802及历史run均已completed，无在途开发／部署操作。GitHub读取／推送／Actions已实际核实，审批服务用量限制一度阻止第二轮报告下载，本次恢复正常审批后已完成，无绕过或凭据变更。生产SSH／iOS签名及模型Secrets未重新探测，不推定本环境已具备。报告／原文hash／无损gzip和复现workflow均在仓库，不依赖临时目录；专用Secrets留在GitHub，不复制到交接。
+保存时本次38732848387／38732848548／38732848576／38732848453及历史run均已completed，无在途开发／部署操作。GitHub读取／推送／Actions已核实，生产SSH／iOS签名及模型Secrets未重新探测，不推定本环境已具备。报告／原文hash／无损gzip和复现workflow均在仓库，不依赖临时目录；专用Secrets留在GitHub，不复制到交接。此前审批服务用量限制已恢复正常审批，无绕过或凭据变更。
 
 测试Secrets已配置且专用，连接与限定原Provider样本已通过，不复制密钥到新环境、不重复已完成probe。未实际App↔manager整链、生产TLS、iPhone、长期任务／情绪自然时间及全服务资源／八项行为；继续独立开发但这些条件不能被基础样本替代。先检查当前分支／SHA／工作树与在途run再接续。
 
@@ -63,7 +67,7 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P11 | 基础通过，整体进行中 | 232de0d的113服务／23身份、实际安装检查及原Provider三个语义样本通过；整体人格随统一上下文／工具／事件及正式评审验收 |
 | P12 | 基础及生命周期复核通过，整体待联动 | b8ebb48真实BGE及1千／1万资源通过；d5edbd6服务125通过，补超时／竞态／重开与重建；历史身份23专项／构建通过，完整Java保留1既有失败；完整语料／主链联动仍待后续 |
 | P13 | 完成：检索模块及受控验证 | 664237f服务132、实际BGE及正向找回／底线拒绝通过；身份专项／构建通过，Java保留既有失败；D04固定供P14集成，完整真实行为待P22 |
-| P14 | 进行中 | ContextBuilder／快照／预算和工具结构模块待GitHub验证；实际Provider容量未猜测，真实入口接线留P15 |
+| P14 | 完成：上下文模块及受控验证 | 5e91409服务145、实际BGE＋原Dialogue＋10工具场景、身份专项及构建通过；Java既有失败保留，真实Provider参数／接线及B08待P15／P22 |
 | P15 | 未开始 | 唯一回复入口和工具续答联动仍待实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
@@ -85,7 +89,7 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | B05 持续人格事件 | 未开始 | 未执行 | 未执行 | 未执行 |
 | B06 身份与记忆隔离 | 进行中：manager授权链 | 必要类范围／构建通过 | 23身份／实际TLS与Scope基础通过；完整未来消费者／实际App／八项行为未验收 | 未执行 |
 | B07 长期情绪趋势 | 未开始 | 未执行 | 未执行 | 未执行 |
-| B08 上下文管理 | 未开始 | 未执行 | 未执行 | 未执行 |
+| B08 上下文管理 | P14模块通过，真实入口未接 | 145服务、10组工具、真实BGE上下文及真实manager边界通过 | 实际Provider／Token对照／主回复链与多次真实工具行为待P15／P22 | 未执行 |
 
 ## 待决与访问状态
 
