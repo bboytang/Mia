@@ -1,0 +1,28 @@
+{
+  "code_sha": "dee34f5435bcfbe06b44be54b32c2b5321533319",
+  "source": "GitHub workflow test log",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38759159810",
+  "tests": 176,
+  "new_job_test_methods": [
+    "test_admission_is_durable_not_saved_and_duplicates_share_one_job",
+    "test_atomic_commit_rolls_back_facts_and_checkpoint_then_reuses_result",
+    "test_capacity_rejects_explicitly_and_duplicate_still_works_when_full",
+    "test_database_retry_uses_validated_result_without_second_model_call",
+    "test_delete_clear_pause_edit_and_reset_cancel_without_resurrection",
+    "test_explicit_remember_priority_is_limited_to_its_own_completion",
+    "test_hung_model_timeout_does_not_spawn_more_native_calls_or_block_shutdown",
+    "test_illegal_output_retries_twice_but_valid_empty_is_terminal",
+    "test_inflight_revocation_and_deletion_stop_late_result_before_commit",
+    "test_missing_source_index_is_invalid_not_empty_or_cross_source",
+    "test_restart_restores_extraction_and_keeps_attempt_count",
+    "test_revision_at_completion_and_foreign_scope_fail_before_model",
+    "test_scope_fairness_and_foreground_priority",
+    "test_secret_never_enters_jobs_and_status_is_not_a_fact_database",
+    "test_service_runtime_resolves_existing_model_and_owns_start_stop",
+    "test_shutdown_total_deadline_preserves_native_task_for_recovery",
+    "test_validated_restart_skips_model_and_commits_once",
+    "test_validation_persistence_failure_keeps_result_for_database_retry",
+    "test_wire_status_is_owner_scoped_and_does_not_return_source_or_clear_history"
+  ],
+  "conclusion": "success"
+}

@@ -1,6 +1,6 @@
 # P16：统一完成事件及持久任务
 
-状态：开发及首次GitHub验证准备，尚未通过，不部署。P17结构提取／来源增强与P18完整维护未完成；实际聊天Provider、真机及完整B03仍未验收。
+状态：dee34f5的机制及受控GitHub验证通过，不部署。P17结构提取／来源增强与P18完整维护未完成；实际聊天Provider、真机及完整B03仍未验收。
 
 ## 机制与边界
 
@@ -22,4 +22,16 @@
 - `scripts/ci/verify_mia_reply.py`：原安装Connection／Dialogue／SDK／BGE，六条完成路径各恰好一个持久任务；合成空提取明确pending→empty；P15限制／删除／撤权继续回归。合成响应／策略／提取，非聊天或声学验收。
 - `scripts/ci/verify_mia_scope_integration.py`：实际manager HTTPS／WSS，恢复当前LLM、服务token与普通用户token隔离、伪造Scope拒绝、恢复任务及删除／撤权取消。提取仍为fixture。
 
-自动化仅GitHub运行，精确提交、run与原报告待后续补录。不据实现存在标完成。
+自动化仅GitHub运行；精确提交与结果见下方，不以受控机制验证替代真实行为。
+
+## 最终验证与保存点
+
+被测提交`dee34f5435bcfbe06b44be54b32c2b5321533319`，四workflow均completed／success：
+
+- [服务38759159810](https://github.com/bboytang/Mia/actions/runs/38759159810)：176项全通过，其中19项P16方法，含SQLite重开／validated恢复、DB重试与原子回滚、默认128配置／缩小容量夹具满载、非法与空结果、Scope／前台公平、超时及总关闭、状态隔离、真实runtime start／resolve／stop和本轮优先级复位。[方法列表](jobs-service-results.json)。
+- [实际BGE38759159851](https://github.com/bboytang/Mia/actions/runs/38759159851)：P12—P14回归和P15／P16九个协议场景通过。普通文字、多步并行工具、direct_answer、ASR识别文本、RECORD及工具直接回复六条各恰好一个pending任务，经合成空提取到empty；合成SDK请求11次、工具派发7次，删除不重放、未知容量和撤权回归通过。见[原报告](jobs-reply-results.json)。P14回归50次build p95 36.341ms、峰值RSS283.676MiB，不是聊天TTFT或任务负载p95。
+- [身份38759159526](https://github.com/bboytang/Mia/actions/runs/38759159526)：全量173／173、23专项、实际HTTPS／WSS／Java→Python Worker模型恢复／普通用户token拒绝／伪造owner／删除与撤权、类范围及JAR通过。[身份原JSON](jobs-identity-results.json)保留。[manager38759159388](https://github.com/bboytang/Mia/actions/runs/38759159388)原150／150和独立基线4／4、字节对照通过。脱敏九项持续通过，未增加跳过项。
+
+[分项证据及原文hash](jobs-ci-results.json)附P12—P14原报告的无损gzip。首轮46e9a2d的RECORD夹具失败及[原报告](jobs-first-reply-failure.json)／[范围](jobs-first-ci-results.json)保持原样；a48201d修正该不成立的TTS预期后四workflow通过，后续复核发现旧checkpoint移除后显式记忆优先级需在每轮开始复位，以dee34f5及新增回归为最终保存点。没有改变运行工具语义来迎合夹具。
+
+没有真实聊天请求、本地自动测试／构建或部署；所有run结束，无在途操作。当前仍是P16机制与受控接线完成，非完整B03／八项行为验收。下一步P17：在同Worker上完善结构化提取、来源／价值／敏感状态及关联元数据校验与增量索引，验证数据库重试不重调模型。生产Provider容量／输出预留仍未解决，P18完整维护、P22真实模型／独立语料及P23全服务负载继续按计划。

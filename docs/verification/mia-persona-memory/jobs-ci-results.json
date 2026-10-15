@@ -1,0 +1,108 @@
+{
+  "code_sha": "dee34f5435bcfbe06b44be54b32c2b5321533319",
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38759159810",
+    "conclusion": "success",
+    "tests": 176,
+    "new_job_test_methods": 19,
+    "report": "jobs-service-results.json"
+  },
+  "actual_bge_completion_and_reply": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38759159851",
+    "conclusion": "success",
+    "protocol_cases": 9,
+    "durable_completion_cases": 6,
+    "synthetic_sdk_requests": 11,
+    "tool_dispatches": 7,
+    "reports": {
+      "jobs-reply-results.json": {
+        "source": "reply-results.json",
+        "source_sha256": "4c8c0fed4833a68b737723bf7a9448d8ce6388f4e39cb1becfce47298cfc804a",
+        "source_bytes": 20297
+      },
+      "jobs-context-results-regression.json.gz": {
+        "source": "context-results.json",
+        "source_sha256": "3ee54096c6df3b2ff0f8a9db204d7411316f068fb114425cd90b9fdc294d8c40",
+        "source_bytes": 18328
+      },
+      "jobs-vector-results-regression.json.gz": {
+        "source": "vector-results.json",
+        "source_sha256": "b442b109a8cd62b85a65ca9396b6e3c767957fe854876f2a23eb5d54a60aa85b",
+        "source_bytes": 2463
+      },
+      "jobs-retrieval-results-regression.json.gz": {
+        "source": "retrieval-results.json",
+        "source_sha256": "c9a7641eeca0f2244c33352d6545fdc1203723c502ad44481eba86a63617cebf",
+        "source_bytes": 1381292
+      },
+      "jobs-identity-results.json": {
+        "source": "Exact JSON payload from Verify binding behavior and narrow class scope workflow log",
+        "source_sha256": "8cdab00fde260eab5523b265e04f9f47b634f6ac4caeed4184641cc67db8cec2"
+      }
+    }
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38759159526",
+    "conclusion": "success",
+    "full_suite": {
+      "tests": 173,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "focused_tests": 23,
+    "jar_build": "success",
+    "class_scope": "success",
+    "worker_scope": "actual_manager_python_process_checks_current_model_restore_user_token_denial_forged_owner_delete_and_revocation"
+  },
+  "manager_baseline": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38759159388",
+    "conclusion": "success",
+    "full_suite": {
+      "tests": 150,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "separate_identity_baseline_tests": 4,
+    "class_scope": "success"
+  },
+  "previous_iterations": [
+    {
+      "code_sha": "46e9a2d171157c533b1042abdf55344ca37e800c",
+      "report": "jobs-first-ci-results.json",
+      "failure_retained": true
+    },
+    {
+      "code_sha": "a48201dcc0563fda78c3b10e17c1aa37756901da",
+      "service_run": "https://github.com/bboytang/Mia/actions/runs/38758683652",
+      "service_tests": 175,
+      "identity_run": "https://github.com/bboytang/Mia/actions/runs/38758709052",
+      "manager_run": "https://github.com/bboytang/Mia/actions/runs/38758710518",
+      "vectors_run": "https://github.com/bboytang/Mia/actions/runs/38758684102",
+      "all_four_conclusion": "success",
+      "followup_fix": "Reset per-turn force_checkpoint priority, with completion regression"
+    }
+  ],
+  "limits": {
+    "queue_capacity": 128,
+    "durable_pending_capacity": 128,
+    "background_concurrency": 1,
+    "model_attempts": 2,
+    "extraction_timeout_seconds": 30,
+    "job_lifetime_seconds": 120,
+    "database_retry_delay_seconds": 1,
+    "worker_close_total_wait_seconds": 20
+  },
+  "chat_provider_calls": 0,
+  "provider_and_tool_results": "synthetic_for_controlled_protocol",
+  "real_manager": "isolated_actual_HTTP_HTTPS_WSS_SQL_Redis",
+  "local_automated_tests": "not_executed",
+  "production_deployment": "not_performed",
+  "full_B03_and_real_extraction": "not_accepted_pending_P17_P22",
+  "full_B08": "not_accepted",
+  "load_and_physical_device": "not_executed",
+  "in_flight_runs": [],
+  "P16": "mechanisms_and_controlled_integration_verified",
+  "next_step": "P17_structured_extraction_source_validation_and_index_maintenance"
+}
