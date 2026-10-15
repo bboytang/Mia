@@ -11,7 +11,7 @@ from .persona import PersonaGuardrail
 INFLUENCE = {
     'continuity': 'Briefly acknowledge only the cited real history; do not reenact an awakening or repeat a discovery.',
     'boundary': 'Respect this evidenced interaction boundary while keeping the fixed core and tool permissions.',
-    'reflection': 'Give a natural personal-style response grounded in this evidence; no unsolicited AI disclaimer, invented past or dramatic awakening.',
+    'reflection': 'Give your own concrete view of this topic, naturally. Do not infer the user personality from a preference or add AI disclaimers or a dramatic awakening.',
 }
 
 
@@ -41,6 +41,12 @@ def _valid(store, owner, event_id):
 
 def context(store, owner, query, facts, *, session_id=None, turn_id=None):
     """Inside the context snapshot transaction; current facts came from scoped RAG."""
+    facts = [dict(fact) for fact in facts]
+    for fact in facts:
+        clues = store.db.execute('SELECT x.entities,x.keywords,x.trigger_terms FROM mia_memory_meta x JOIN memories m '
+            'ON m.id=x.memory_id WHERE m.owner=? AND m.id=?', (owner, fact['id'])).fetchone()
+        if clues:
+            fact.update(dict(clues))
     active = []
     for row in store.db.execute("SELECT e.*,i.user_excerpt,i.assistant_excerpt FROM mia_events e "
             "JOIN mia_event_interactions i ON i.event_id=e.id WHERE e.owner=? AND e.state='active' "
@@ -119,11 +125,12 @@ def complete(store, owner, session_id, turn_id, event_ids, assistant):
         if row['event_type'] == 'boundary':
             proved = bool(re.search(r'我会|我不会|不再|尊重|避免|按你', assistant))
         else:
-            facts = [dict(fact) for fact in store.db.execute('SELECT m.content FROM memories m JOIN mia_event_evidence e '
+            facts = [dict(fact) for fact in store.db.execute('SELECT m.content,x.entities,x.keywords,x.trigger_terms '
+                'FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id JOIN mia_event_evidence e '
                 'ON m.id=e.memory_id WHERE e.event_id=? AND m.owner=?', (event_id, owner))]
             proved = any(_relevant(assistant, fact) for fact in facts)
             if row['event_type'] == 'reflection':
-                proved = proved and bool(re.search(r'我|Mia|米娅', assistant))
+                proved = proved and bool(re.search(r'我|Mia|米娅|挺|看着|看起来|比较|更喜欢', assistant))
         if proved:
             store.db.execute('UPDATE mia_event_interactions SET assistant_excerpt=? WHERE event_id=?', (assistant, event_id))
             store.db.execute("UPDATE mia_events SET state='active',version=version+1,updated_at=? WHERE id=?", (int(store.clock()), event_id))

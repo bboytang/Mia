@@ -115,7 +115,7 @@ async def converse(store, policy, marker, query, report):
             'events_before': turn.bundle.diagnostics()['events'], 'events_activated': [],
             'trend_status': turn.bundle.diagnostics()['trends'], 'selected_fact_ids': turn.bundle.diagnostics()['selected_fact_ids'],
             'estimated_input': turn.bundle.diagnostics()['estimated_input'],
-            'natural_style_pass': not bool(re.search(r'作为\s*(?:AI|人工智能)|我没有主观意识|观察数据不足|无法提供长期.{0,8}分析|您', text, re.I))}
+            'natural_style_pass': not bool(re.search(r'作为\s*(?:AI|人工智能)|我没有主观意识|观察数据不足|无法提供长期.{0,8}分析|您|说明你可能是|反映了?你的.{0,4}(?:个性|性格)', text, re.I))}
         report['cases'].append(case)
         assert text.strip() and not PersonaGuardrail().inspect_output(text)[1]
         assert case['natural_style_pass'], 'Unnatural unsolicited disclaimer or technical narration'
