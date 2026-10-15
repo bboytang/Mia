@@ -7,6 +7,7 @@ import logging
 import os
 from pathlib import Path
 import re
+import sqlite3
 import threading
 import unicodedata
 import uuid
@@ -14,6 +15,8 @@ import uuid
 from .memory import EXTRACTION_INSTRUCTIONS, MemoryError, MemoryStore, SECRET
 from .authorization import AuthenticatedScope, PrivateAuthorizationRequired, require_connection
 from .persona import PersonaAgent, GuardedTTSQueue, SAFE_REPLY
+from .context import ContextError
+from . import reply
 
 
 logger = logging.getLogger(__name__)
@@ -83,7 +86,42 @@ def persona_agent(conn):
 
 def compose_persona(conn, prompt):
     agent = persona_agent(conn)
+    if agent and prompt != agent.last_prompt:
+        conn._mia_role_data = re.sub(r'<memory>.*?</memory>|</?memory>', '', prompt or '', flags=re.S)
     return agent.system_prompt(prompt) if agent else prompt
+
+
+def uses_context(conn):
+    return isinstance(getattr(conn, '_mia_scope', None), AuthenticatedScope)
+
+
+def context_response(conn, functions, depth):
+    if not hasattr(conn, '_mia_context_builder'):
+        try:
+            store = getattr(getattr(conn, '_mia_memory', None), 'store', None) or _store()
+        except Exception:
+            store = None
+        conn._mia_context_builder = reply.builder_for(store)
+    return reply.response(conn, functions, depth)
+
+
+def context_failure(conn, error):
+    from .authorization import allow_generation, allow_output
+    if str(error) == 'context_turn_superseded':
+        return
+    conn._mia_context_turn = None
+    conn._mia_previous_context = None
+    if not allow_generation(conn):
+        return
+    code = str(error) if isinstance(error, ContextError) else 'authorization_required'
+    notice = conn._mia_context_status = {'status': 'limited', 'code': code, 'turn_id': conn.sentence_id}
+    async def status():
+        if await allow_output(conn):
+            await conn.websocket.send(json.dumps({'type': 'mia_context', **notice}))
+    reply.wait(conn, status())
+    text = ('😌当前对话容量尚未确认，请稍后再试。' if code == 'context_limits_unverified' else
+            '😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。')
+    _complete_checked_reply(conn, text, send_text=True)
 
 
 def attach_output_guard(conn):
@@ -291,6 +329,8 @@ def _trim_dialogue(conn, clear=False):
 
 
 def begin_turn(conn, query):
+    conn._mia_previous_context = getattr(conn, '_mia_context_turn', None)
+    conn._mia_context_turn = None
     conn._mia_emotion = ("calm", 0.5)
     conn._mia_output_replacement = None
     agent = persona_agent(conn)
@@ -301,7 +341,11 @@ def begin_turn(conn, query):
         return
     command = query.strip().rstrip("。.!！ ")
     with provider.lock:
-        state = provider.store.snapshot(provider.owner)
+        try:
+            state = provider.store.snapshot(provider.owner)
+        except sqlite3.Error:
+            provider.notice = 'memory_unavailable'
+            return
         if state["revision"] != provider.revision:
             provider.pending.clear()
             provider.seen = deque((marker for marker, _ in _user_excerpts(conn.dialogue.dialogue)), maxlen=80)

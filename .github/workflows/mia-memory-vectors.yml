@@ -6,6 +6,9 @@ on:
       - 'server/companion/semantic.py'
       - 'server/companion/retrieval.py'
       - 'server/companion/context.py'
+      - 'server/companion/reply.py'
+      - 'server/companion/xiaozhi_adapter.py'
+      - 'server/companion/authorization.py'
       - 'server/companion/memory.py'
       - 'server/companion/schema*'
       - 'server/companion/install_xiaozhi.py'
@@ -16,6 +19,8 @@ on:
       - 'scripts/ci/verify_mia_vectors.py'
       - 'scripts/ci/verify_mia_retrieval.py'
       - 'scripts/ci/verify_mia_context.py'
+      - 'scripts/ci/verify_mia_reply.py'
+      - 'scripts/ci/mia-embedding-runtime.Dockerfile'
       - '.github/workflows/mia-memory-vectors.yml'
   pull_request:
     paths:
@@ -23,6 +28,9 @@ on:
       - 'server/companion/semantic.py'
       - 'server/companion/retrieval.py'
       - 'server/companion/context.py'
+      - 'server/companion/reply.py'
+      - 'server/companion/xiaozhi_adapter.py'
+      - 'server/companion/authorization.py'
       - 'server/companion/memory.py'
       - 'server/companion/schema*'
       - 'server/companion/install_xiaozhi.py'
@@ -33,6 +41,8 @@ on:
       - 'scripts/ci/verify_mia_vectors.py'
       - 'scripts/ci/verify_mia_retrieval.py'
       - 'scripts/ci/verify_mia_context.py'
+      - 'scripts/ci/verify_mia_reply.py'
+      - 'scripts/ci/mia-embedding-runtime.Dockerfile'
       - '.github/workflows/mia-memory-vectors.yml'
   workflow_dispatch:
 permissions:
@@ -98,6 +108,15 @@ jobs:
             -v "$RUNNER_TEMP/mia-vector-model:/model:ro" \
             -v "$RUNNER_TEMP/mia-vector-results:/results" \
             mia-vector-verification /experiment/scripts/ci/verify_mia_context.py --model-dir /model --output /results/context-results.json
+      - name: Installed connection text protocol and recursive tools through real SDK
+        run: |
+          docker run --rm --cpus 2 --memory 2g --memory-swap 2g --network none --entrypoint python \
+            -e GITHUB_SHA="$GITHUB_SHA" -e PYTHONPATH=/installed \
+            -v "$GITHUB_WORKSPACE:/experiment:ro" \
+            -v "$GITHUB_WORKSPACE/upstream/main/xiaozhi-server:/installed:ro" \
+            -v "$RUNNER_TEMP/mia-vector-model:/model:ro" \
+            -v "$RUNNER_TEMP/mia-vector-results:/results" \
+            mia-vector-verification /experiment/scripts/ci/verify_mia_reply.py --model-dir /model --output /results/reply-results.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

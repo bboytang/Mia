@@ -254,6 +254,13 @@ def allow_generation(conn):
 
 async def execute_tool(conn, tool_call):
     await require_connection(conn)
+    if hasattr(conn, '_mia_context_builder'):
+        from .reply import validate
+        from .context import ContextError
+        turn = await validate(conn)
+        allowed = {tool['function']['name'] for tool in turn.bundle.request().get('tools', [])}
+        if tool_call.get('name') not in allowed:
+            raise ContextError('context_tool_not_declared')
     return await conn.func_handler.handle_llm_function_call(conn, tool_call)
 
 

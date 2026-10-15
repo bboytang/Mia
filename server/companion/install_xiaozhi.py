@@ -104,6 +104,30 @@ def patch_connection(text):
     text = replace_once(text, '                        self.func_handler.handle_llm_function_call(\n'
                         '                            self, tool_call_data\n                        ),',
                         '                        mia_auth.execute_tool(self, tool_call_data),')
+    start = text.index('            # 使用带记忆的对话\n')
+    end = text.index('        except Exception as e:\n', start)
+    original = text[start:end]
+    text = replace_once(text, original,
+        '            if mia.uses_context(self):\n'
+        '                llm_responses = mia.context_response(self, functions, depth)\n'
+        '            else:\n' + ''.join('    ' + line if line.strip() else line for line in original.splitlines(True)))
+    for anchor in ('            self.logger.bind(tag=TAG).error(f"LLM 处理出错 {query}: {e}")\n',
+                   '            self.logger.bind(tag=TAG).error(f"LLM stream processing error: {e}")\n'):
+        text = replace_once(text, '        except Exception as e:\n' + anchor,
+            '        except (mia.ContextError, mia_auth.PrivateAuthorizationRequired) as e:\n'
+            '            mia.context_failure(self, e)\n            return\n'
+            '        except Exception as e:\n' + anchor)
+    forced = ('            self.dialogue.put(\n                Message(\n                    role="user",\n'
+              '                    content="[系统提示] 已达到最大工具调用次数限制，请你基于目前已经获取的所有信息，直接给出最终答案。不要再尝试调用任何工具。",\n'
+              '                )\n            )\n')
+    text = replace_once(text, forced, '            if not mia.uses_context(self):\n'
+        + ''.join('    ' + line for line in forced.splitlines(True)))
+    text = replace_once(text, '        # 如果使用 nointent，直接返回\n',
+        '        if mia.uses_context(self) and intent_type == "intent_llm":\n'
+        '            intent_type = self.intent_type = "function_call"\n\n'
+        '        # 如果使用 nointent，直接返回\n')
+    text = replace_once(text, '                if text is not None and len(text) > 0:\n',
+        '                if text is not None:\n')
     return text
 
 
@@ -166,6 +190,10 @@ def patch_intent(text):
     text = replace_once(text, 'import asyncio\n', 'import asyncio\nfrom mia_companion import authorization as mia_auth\n')
     text = replace_once(text, '    """使用LLM分析用户意图"""\n',
                         '    """使用LLM分析用户意图"""\n    await mia_auth.require_connection(conn)\n')
+    text = replace_once(text, '    if conn.intent_type == "function_call":\n',
+        '    if isinstance(getattr(conn, "_mia_scope", None), mia_auth.AuthenticatedScope):\n'
+        '        return False  # All personalized generation uses ConnectionHandler.chat.\n'
+        '    if conn.intent_type == "function_call":\n')
     text = replace_once(text, 'conn.intent.replyResult(context_prompt, original_text)',
                         'mia_auth.intent_reply(conn, context_prompt, original_text)')
     return replace_once(text, 'conn.intent.replyResult(text, original_text)',
@@ -203,7 +231,7 @@ def install(root, changes):
     destination.mkdir(mode=0o700)
     try:
         for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql", "schema-v2.sql", "persona.py",
-                     "embedding.py", "semantic.py", "retrieval.py", "context.py", "requirements-vector.txt"]:
+                     "embedding.py", "semantic.py", "retrieval.py", "context.py", "reply.py", "requirements-vector.txt"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")

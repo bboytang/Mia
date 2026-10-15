@@ -297,7 +297,7 @@ class ContextBuilder:
         await self.validate(bundle, authorization)
         return bundle
 
-    async def continue_turn(self, bundle, authorization, messages):
+    async def continue_turn(self, bundle, authorization, messages, *, tools=None):
         await self.validate(bundle, authorization)
         if bundle.snapshot is None:
             raise ContextError('context_snapshot_unavailable')
@@ -309,6 +309,8 @@ class ContextBuilder:
         if not isinstance(additions, list) or not additions:
             raise ContextError('invalid_context_messages')
         inputs['current'].extend(additions)
+        if tools is not None:
+            inputs['tools'] = self._prepare(inputs['query'], [], [], '', tools, None)['tools']
         turns(inputs['current'], current=True)
         turns([message for group in inputs['history'] for message in group] + inputs['current'])
         result = await asyncio.to_thread(self._assemble, bundle.scope, bundle.turn_id, bundle.limits, bundle.snapshot, inputs)

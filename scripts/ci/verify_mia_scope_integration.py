@@ -11,6 +11,7 @@ import uuid
 from pathlib import Path
 import sys
 from types import SimpleNamespace, ModuleType
+from unittest.mock import patch
 
 import httpx
 
@@ -162,6 +163,7 @@ async def main():
     from mia_companion.memory import MemoryStore
     from mia_companion.semantic import SemanticMemoryIndex
     from mia_companion.context import ContextBuilder, ContextLimits, ContextError
+    from mia_companion import reply
     from mia_companion.embedding import MODEL_KEY, REVISION, DIMENSION
     from mia_companion import xiaozhi_adapter as adapter
     # Actual installed DTO, Dialogue and guard; only the TTS consumer is a sink.
@@ -230,6 +232,19 @@ async def main():
             assert context_bundle.diagnostics()['selected_fact_ids'] == [own_id]
             assert 'CI other memory' not in context_bundle.request_json
             assert 'FOREIGN CLUE' not in context_bundle.request_json
+            profile = Path(folder) / 'context-profile.json'
+            active.llm = SimpleNamespace(model_name='scope-ci-fixture', max_tokens=128, base_url='https://ci.invalid')
+            profile.write_text(json.dumps({'provider_module': type(active.llm).__module__, 'model': active.llm.model_name,
+                'base_url': active.llm.base_url, 'context_window': 16384,
+                'capacity_source': 'Synthetic manager fixture; not production model evidence'}))
+            active._mia_context_builder = context_builder
+            active.dialogue = Dialogue()
+            active.dialogue.put(Message(role='user', content='CI synthetic context'))
+            with patch.dict(os.environ, {'MIA_CONTEXT_PROFILE_FILE': str(profile)}):
+                reply_turn = await reply.prepare(active, [{'type': 'function', 'function': {'name': 'synthetic_tool'}}], 0)
+                assert reply_turn.bundle.diagnostics()['selected_fact_ids'] == [own_id]
+                assert 'CI other memory' not in reply_turn.bundle.request_json
+                assert await execute_tool(active, {'name': 'synthetic_tool'}) == 'synthetic tool output'
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
             for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
@@ -248,6 +263,10 @@ async def main():
                 assert str(error) == 'context_changed'
             else:
                 raise AssertionError('Deleted context was reused')
+            with patch.dict(os.environ, {'MIA_CONTEXT_PROFILE_FILE': str(profile)}):
+                rebuilt = await reply.prepare(active, [], 1)
+                assert not rebuilt.bundle.diagnostics()['selected_fact_ids']
+                assert not rebuilt.bundle.request().get('tools')
         finally:
             store.close()
     tls_pass = await native_wss(config, device, client, credential) if os.environ.get('MIA_SCOPE_NATIVE_TLS') == 'true' else None
@@ -264,6 +283,7 @@ async def main():
     await rejects(vector_index.candidates(scope, auth, 'CI revoked vector'))
     await rejects(vector_index.retrieve(scope, auth, 'CI revoked hybrid'))
     await rejects(context_builder.validate(context_bundle, auth))
+    await rejects(reply.prepare(active, [], 1))
     await rejects(vector_index.index_memory(scope, auth, own_id))
     assert not await asyncio.to_thread(allow_generation, active)
     assert not await allow_output(active)
@@ -271,8 +291,9 @@ async def main():
     await rejects(intent_reply(active, 'synthetic context', 'query'))
     await rejects(dispatcher.execute_tool('synthetic_tool', {}))
     assert executor.calls == 1
-    assert active.client_abort and tool.calls == 2
-    print(json.dumps({'manager_python_scope_pass': True, 'checks': 30, 'vector_scope_checks_pass': True,
+    assert active.client_abort and tool.calls == 3
+    print(json.dumps({'manager_python_scope_pass': True, 'checks': 34, 'vector_scope_checks_pass': True,
+                      'reply_scope_checks_pass': True,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 
