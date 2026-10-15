@@ -190,12 +190,16 @@ async def evaluate(args, report):
                 raise AssertionError('Other connection retained old context')
             fresh = await other_builder.build(scope, policy, 'after-' + mode, new, limits=limits)
             assert old not in fresh.request_json
+            new_id = store.db.execute('SELECT id FROM memories WHERE owner=? AND content=?', (scope.owner, normalize(new))).fetchone()[0]
             if mode != 'conflict':
                 assert normalize(new) in fresh.request_json
-                target = store.db.execute('SELECT id FROM memories WHERE owner=? AND content=?', (scope.owner, normalize(new))).fetchone()[0]
+                target = new_id
+                assert target in fresh.diagnostics()['selected_fact_ids']
                 assert store.db.execute('SELECT COUNT(*) FROM mia_vectors WHERE memory_id=?', (target,)).fetchone()[0] == 1
             else:
-                assert new not in fresh.request_json
+                # The user's current query is retained; only fact selection is restricted.
+                assert target not in fresh.diagnostics()['selected_fact_ids']
+                assert new_id not in fresh.diagnostics()['selected_fact_ids']
                 assert json.loads(jobs.current(accepted)['validated_result']) == {'confirmation_required': True}
             report['maintenance'].append({'kind': mode, 'state': 'committed', 'sdk_calls': len(requests) - start,
                 'old_context_rejected': True, 'old_fact_not_current': True})
