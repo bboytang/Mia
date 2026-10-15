@@ -222,7 +222,7 @@ private struct MiaSettingsView: View {
                             Spacer()
                             Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
                         }
-                    }.foregroundStyle(.primary)
+                    }.foregroundStyle(.primary).accessibilityLabel("记忆与成长")
                     NavigationLink("设置声音唤醒") { MiaWakeGuideView() }
                     Button("关闭 Mia 对话") { MiaConversationController.shared.stop() }
                 }
