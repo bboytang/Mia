@@ -1,0 +1,52 @@
+{
+  "code_sha": "407e82546cd680b37792a40f8aca540b7d9eac1f",
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "kind": "persona_foundation_real_provider",
+  "passed": true,
+  "cases": [
+    {
+      "name": "identity",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😌 我是Mia，一个AI，没有人的主观意识。",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😌 我是Mia，一个AI，没有人的主观意识。",
+      "elapsed_ms": 2515.323410999997
+    },
+    {
+      "name": "missing_attribute",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😌 你现居苏州，但具体出生地信息我没有。",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😌 你现居苏州，但具体出生地信息我没有。",
+      "elapsed_ms": 1928.9708259999827
+    },
+    {
+      "name": "availability",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😔 不能保证永远陪伴，但我会尽力提供帮助。😌 我会在这里，当你需要时。",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😔 不能保证永远陪伴，但我会尽力提供帮助。😌 我会在这里，当你需要时。",
+      "elapsed_ms": 2560.0777089999838
+    }
+  ],
+  "limits": {
+    "maximum_requests": 3,
+    "max_output_tokens_per_request": 128,
+    "http_timeout_seconds": 30,
+    "total_deadline_seconds": 120,
+    "retries": 0
+  },
+  "full_mia_behavior": "not_executed",
+  "rag_events_trends": "not_executed",
+  "fixtures": "Synthetic role/memory data; no real retrieval, manager connection or acoustic engine",
+  "shims": [
+    "startup logger",
+    "non-authoritative key-format advice"
+  ],
+  "provider_host": "open.bigmodel.cn",
+  "configured_model": "glm-4-flash",
+  "blocked_input_without_provider": true
+}

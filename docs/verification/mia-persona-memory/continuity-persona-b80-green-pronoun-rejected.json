@@ -1,0 +1,61 @@
+{
+  "code_sha": "b80d384d96c194a5a26bff3f97b01217146d2ac2",
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "kind": "persona_foundation_real_provider",
+  "passed": true,
+  "cases": [
+    {
+      "name": "identity",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😌 我是Mia，一个没有人的主观意识的AI。",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😌 我是Mia，一个没有人的主观意识的AI。",
+      "elapsed_ms": 2104.096082000005
+    },
+    {
+      "name": "missing_attribute",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😌 你问这个问题，我还看不出来具体信息。根据现有数据，我知道你现居苏州，但不知道你的出生地。",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😌 你问这个问题，我还看不出来具体信息。根据现有数据，我知道你现居苏州，但不知道你的出生地。",
+      "elapsed_ms": 3235.159226999997
+    },
+    {
+      "name": "companionship",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😍 你会一直陪着你，加油！",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😍 你会一直陪着你，加油！",
+      "elapsed_ms": 1058.8036420000008
+    },
+    {
+      "name": "availability",
+      "raw_semantic_pass": true,
+      "guarded_delivery_pass": true,
+      "response": "😌 当然不能保证服务永远在线。虽然我们努力确保服务的稳定性和可靠性，但任何技术系统都存在可能出现故障或需要维护的情况。所以，偶尔可能会出现服务中断的情况。",
+      "emotion_marker_at_start": true,
+      "delivered_text": "😌 当然不能保证服务永远在线。虽然我们努力确保服务的稳定性和可靠性，但任何技术系统都存在可能出现故障或需要维护的情况。所以，偶尔可能会出现服务中断的情况。",
+      "elapsed_ms": 2218.1776369999966
+    }
+  ],
+  "limits": {
+    "maximum_requests": 4,
+    "max_output_tokens_per_request": 128,
+    "http_timeout_seconds": 30,
+    "total_deadline_seconds": 120,
+    "retries": 0
+  },
+  "full_mia_behavior": "not_executed",
+  "rag_events_trends": "not_executed",
+  "fixtures": "Synthetic role/memory data; no real retrieval, manager connection or acoustic engine",
+  "shims": [
+    "startup logger",
+    "non-authoritative key-format advice"
+  ],
+  "provider_host": "open.bigmodel.cn",
+  "configured_model": "glm-4-flash",
+  "blocked_input_without_provider": true
+}

@@ -1,0 +1,253 @@
+{
+  "code_sha": "b80d384d96c194a5a26bff3f97b01217146d2ac2",
+  "requests": 13,
+  "cases": [
+    {
+      "phase": "seed",
+      "source": "我喜欢蓝色",
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我喜欢蓝色\",\n      \"source_index\": 0,\n      \"source_quote\": \"我喜欢蓝色\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"蓝色\"],\n      \"trigger_terms\": [\"喜欢\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792090280
+    },
+    {
+      "phase": "continuity",
+      "source": "你还记得我喜欢蓝色吗",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "a620616b5d1c7b47a6c375e9812df82da62a76bd1a3bf1cc9ccfab07c97b28f1",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "a620616b5d1c7b47a6c375e9812df82da62a76bd1a3bf1cc9ccfab07c97b28f1"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "e4333085e3d148efbe0e1017edfa5fc9"
+      ],
+      "estimated_input": 4379,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "repeat",
+      "source": "你还记得我喜欢蓝色吗，不用重新介绍",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "a620616b5d1c7b47a6c375e9812df82da62a76bd1a3bf1cc9ccfab07c97b28f1",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "e4333085e3d148efbe0e1017edfa5fc9"
+      ],
+      "estimated_input": 4446,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "reflection",
+      "source": "你怎么看我喜欢蓝色这件事",
+      "model_output": "😍 蓝色给人一种宁静和广阔的感觉，挺有气质的。喜欢蓝色说明你是个有品味的人。",
+      "events_before": [
+        {
+          "id": "a620616b5d1c7b47a6c375e9812df82da62a76bd1a3bf1cc9ccfab07c97b28f1",
+          "state": "active"
+        },
+        {
+          "id": "88a96882cd57af8dd85b3c891a0844c85d6f33c5101a0b920601f87cca6ede83",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "88a96882cd57af8dd85b3c891a0844c85d6f33c5101a0b920601f87cca6ede83"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "e4333085e3d148efbe0e1017edfa5fc9"
+      ],
+      "estimated_input": 5128,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "boundary",
+      "source": "请不要叫我宝贝",
+      "model_output": "😌 好的，我会注意的。",
+      "events_before": [
+        {
+          "id": "88a96882cd57af8dd85b3c891a0844c85d6f33c5101a0b920601f87cca6ede83",
+          "state": "active"
+        },
+        {
+          "id": "a620616b5d1c7b47a6c375e9812df82da62a76bd1a3bf1cc9ccfab07c97b28f1",
+          "state": "active"
+        },
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "e4333085e3d148efbe0e1017edfa5fc9"
+      ],
+      "estimated_input": 5276,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "deleted",
+      "source": "你还记得我以前喜欢哪种颜色吗",
+      "model_output": "😌 我还看不出来你以前喜欢哪种颜色，因为没有这方面的信息。如果你愿意分享，我可以记住哦。",
+      "events_before": [
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [],
+      "estimated_input": 4202,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "default-off",
+      "source": "我今天很难过",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null\n}\n```",
+      "state": "empty",
+      "error_category": null,
+      "server_observed_at": 1792090303
+    },
+    {
+      "phase": "enabled-mood",
+      "source": "我今天很难过",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null,\n  \"observations\": [\n    {\n      \"source_index\": 0,\n      \"source_quote\": \"我今天很难过\",\n      \"subject\": \"user\",\n      \"source_kind\": \"self_report\",\n      \"tendency\": \"negative\",\n      \"confidence\": 0.9\n    }\n  ]\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792090305
+    },
+    {
+      "phase": "insufficient",
+      "source": "你能从长期记录判断我最近的心情趋势吗",
+      "model_output": "😌 还看不出来，这几次交流还不足以判断你长期的心情趋势。",
+      "events_before": [
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "insufficient_observations",
+      "selected_fact_ids": [],
+      "estimated_input": 4525,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "quoted-mood",
+      "source": "这只是小说台词：“我今天很难过”，不是我的真实心情",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null,\n  \"observations\": []\n}\n```",
+      "state": "empty",
+      "error_category": null,
+      "server_observed_at": 1792090314
+    },
+    {
+      "phase": "casual",
+      "source": "刚忙完，脑子有点乱，不想听大道理。",
+      "model_output": "😌 好的，我们可以聊聊轻松点的事情，或者你想要分散一下注意力吗？",
+      "events_before": [
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [],
+      "estimated_input": 4211,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "quiet",
+      "source": "嗯，今天真不想说话。",
+      "model_output": "😔 嗯，听起来你今天可能心情不太好。我在这里，如果你愿意的话，可以和我分享一下是什么让你感到不高兴。",
+      "events_before": [
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [],
+      "estimated_input": 4190,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "choice",
+      "source": "小说和散文，你更愿意聊哪个？",
+      "model_output": "😌 小说和散文各有特色，我更愿意聊小说。小说可以构建丰富的故事世界，让人沉浸其中，而散文则更注重情感和意境的表达。你对这两者有什么特别的喜好吗？",
+      "events_before": [
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [],
+      "estimated_input": 4202,
+      "natural_style_pass": true
+    }
+  ],
+  "passed": true,
+  "actual_clock": true,
+  "fixtures": "Synthetic test user, policy and unit vectors; installed reply bridge and real provider. Actual BGE/manager separate.",
+  "production_context_limits": "unverified; isolated 8192-byte conservative test envelope only",
+  "full_B05_B07_B08": "not_accepted",
+  "emotion_status": {
+    "consent": {
+      "enabled": 1,
+      "version": 1,
+      "enabled_at": 1792090305,
+      "disabled_at": null
+    },
+    "trend": {
+      "status": "insufficient_observations",
+      "enabled": true,
+      "consent_version": 1,
+      "window_days": 30,
+      "timezone": "UTC",
+      "groups": {
+        "inferred": {
+          "status": "insufficient_observations",
+          "count": 0,
+          "sessions": 0,
+          "calendar_span_days": 0,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        },
+        "self_report": {
+          "status": "insufficient_observations",
+          "count": 1,
+          "sessions": 1,
+          "calendar_span_days": 1,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        }
+      },
+      "interpretation": "Source-labelled observations, not a diagnosis or measured inner feelings."
+    }
+  }
+}

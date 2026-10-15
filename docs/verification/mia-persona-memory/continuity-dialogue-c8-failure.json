@@ -1,0 +1,81 @@
+{
+  "code_sha": "c8ffd341275e03751839edcdf433f3a20ca67ba2",
+  "requests": 4,
+  "cases": [
+    {
+      "phase": "seed",
+      "source": "我喜欢蓝色",
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我喜欢蓝色\",\n      \"source_index\": 0,\n      \"source_quote\": \"我喜欢蓝色\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"蓝色\"],\n      \"trigger_terms\": [\"喜欢\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792089189
+    },
+    {
+      "phase": "continuity",
+      "source": "你还记得我喜欢蓝色吗",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "ae7f3c79cd5b05990c1dba45d6fc135200c0b05bf38c50423e9282b4e9ba1875",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "ae7f3c79cd5b05990c1dba45d6fc135200c0b05bf38c50423e9282b4e9ba1875"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "ecaa8a4863654720b46758f58af044b2"
+      ],
+      "estimated_input": 4197,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "repeat",
+      "source": "你还记得我喜欢蓝色吗，不用重新介绍",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "ae7f3c79cd5b05990c1dba45d6fc135200c0b05bf38c50423e9282b4e9ba1875",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "ecaa8a4863654720b46758f58af044b2"
+      ],
+      "estimated_input": 4264,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "reflection",
+      "source": "你怎么看我喜欢蓝色这件事",
+      "model_output": "😌 蓝色通常给人一种宁静、稳重的感觉。喜欢蓝色可能意味着你寻求平静和深度，或者觉得蓝色与你的个性或兴趣相契合。每个人的喜好都是独特的，所以喜欢蓝色是个很个人化的选择。",
+      "events_before": [
+        {
+          "id": "ae7f3c79cd5b05990c1dba45d6fc135200c0b05bf38c50423e9282b4e9ba1875",
+          "state": "active"
+        },
+        {
+          "id": "1af71f68844e022f47bab52fb30cc781e8369e8cbf0f642352970110c43f5b3b",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "ecaa8a4863654720b46758f58af044b2"
+      ],
+      "estimated_input": 4701,
+      "natural_style_pass": true
+    }
+  ],
+  "passed": false,
+  "actual_clock": true,
+  "fixtures": "Synthetic test user, policy and unit vectors; installed reply bridge and real provider. Actual BGE/manager separate.",
+  "production_context_limits": "unverified; isolated 8192-byte conservative test envelope only",
+  "full_B05_B07_B08": "not_accepted",
+  "error_class": "AssertionError",
+  "failed_phase": "reflection"
+}

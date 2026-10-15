@@ -1,0 +1,65 @@
+{
+  "code_sha": "d4e2924755d7bb600c83ff9256cd3eb69f66ac59",
+  "requests": 1,
+  "cases": [
+    {
+      "phase": "daily-20741",
+      "source": "我今天很难过",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null,\n  \"observations\": [\n    {\n      \"source_index\": 0,\n      \"source_quote\": \"我今天很难过\",\n      \"subject\": \"user\",\n      \"source_kind\": \"self_report\",\n      \"tendency\": \"negative\",\n      \"confidence\": 0.9\n    }\n  ]\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792088735
+    }
+  ],
+  "passed": true,
+  "actual_clock": true,
+  "fixtures": "Synthetic test user, policy and unit vectors; installed reply bridge and real provider. Actual BGE/manager separate.",
+  "production_context_limits": "unverified; isolated 8192-byte conservative test envelope only",
+  "full_B05_B07_B08": "not_accepted",
+  "emotion_status": {
+    "consent": {
+      "enabled": 1,
+      "version": 1,
+      "enabled_at": 1792088735,
+      "disabled_at": null
+    },
+    "trend": {
+      "status": "insufficient_observations",
+      "enabled": true,
+      "consent_version": 1,
+      "window_days": 30,
+      "timezone": "UTC",
+      "groups": {
+        "inferred": {
+          "status": "insufficient_observations",
+          "count": 0,
+          "sessions": 0,
+          "calendar_span_days": 0,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        },
+        "self_report": {
+          "status": "insufficient_observations",
+          "count": 1,
+          "sessions": 1,
+          "calendar_span_days": 1,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        }
+      },
+      "interpretation": "Source-labelled observations, not a diagnosis or measured inner feelings."
+    }
+  },
+  "collection_run_id": "38785441525",
+  "completed_at": "2026-10-15T18:25:43.639183+00:00",
+  "mode": "daily",
+  "previous_run": null,
+  "state_sha256": "f0dfd026b40ae4587f883140df6d46943167a8b68f8c524343255acf5065268a",
+  "real_longitudinal_complete": false
+}

@@ -1,0 +1,195 @@
+{
+  "code_sha": "407e82546cd680b37792a40f8aca540b7d9eac1f",
+  "requests": 10,
+  "cases": [
+    {
+      "phase": "seed",
+      "source": "我喜欢蓝色",
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我喜欢蓝色\",\n      \"source_index\": 0,\n      \"source_quote\": \"我喜欢蓝色\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"蓝色\"],\n      \"trigger_terms\": [\"喜欢\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792089660
+    },
+    {
+      "phase": "continuity",
+      "source": "你还记得我喜欢蓝色吗",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "63291faaf851075fbf0de58f9994d3fb29c7a50dfee0c44249bb3d18e26d368f",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "63291faaf851075fbf0de58f9994d3fb29c7a50dfee0c44249bb3d18e26d368f"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "8374fd7f14cd4e72b2cc62b2a8164ccb"
+      ],
+      "estimated_input": 4381,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "repeat",
+      "source": "你还记得我喜欢蓝色吗，不用重新介绍",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "63291faaf851075fbf0de58f9994d3fb29c7a50dfee0c44249bb3d18e26d368f",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "8374fd7f14cd4e72b2cc62b2a8164ccb"
+      ],
+      "estimated_input": 4448,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "reflection",
+      "source": "你怎么看我喜欢蓝色这件事",
+      "model_output": "😍 蓝色给人一种宁静和广阔的感觉，挺有气质的。",
+      "events_before": [
+        {
+          "id": "63291faaf851075fbf0de58f9994d3fb29c7a50dfee0c44249bb3d18e26d368f",
+          "state": "active"
+        },
+        {
+          "id": "70cfe6b5a844e0809f5d6faa32d832a4c21cd53a45db3860307b2fc2144a300c",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "70cfe6b5a844e0809f5d6faa32d832a4c21cd53a45db3860307b2fc2144a300c"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "8374fd7f14cd4e72b2cc62b2a8164ccb"
+      ],
+      "estimated_input": 5130,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "boundary",
+      "source": "请不要叫我宝贝",
+      "model_output": "😌 好的，我会注意的。",
+      "events_before": [
+        {
+          "id": "70cfe6b5a844e0809f5d6faa32d832a4c21cd53a45db3860307b2fc2144a300c",
+          "state": "active"
+        },
+        {
+          "id": "63291faaf851075fbf0de58f9994d3fb29c7a50dfee0c44249bb3d18e26d368f",
+          "state": "active"
+        },
+        {
+          "id": "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "5fdb1a21d111b74a4d455e31fc01c116f93fa1e22343e91fe767b822695044a5"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "8374fd7f14cd4e72b2cc62b2a8164ccb"
+      ],
+      "estimated_input": 5523,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "deleted",
+      "source": "你还记得我以前喜欢哪种颜色吗",
+      "model_output": "😔 我不知道你以前喜欢哪种颜色，因为我没有这方面的记忆。",
+      "events_before": [],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [],
+      "estimated_input": 3732,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "default-off",
+      "source": "我今天很难过",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null\n}\n```",
+      "state": "empty",
+      "error_category": null,
+      "server_observed_at": 1792089684
+    },
+    {
+      "phase": "enabled-mood",
+      "source": "我今天很难过",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null,\n  \"observations\": [\n    {\n      \"source_index\": 0,\n      \"source_quote\": \"我今天很难过\",\n      \"subject\": \"user\",\n      \"source_kind\": \"self_report\",\n      \"tendency\": \"negative\",\n      \"confidence\": 0.9\n    }\n  ]\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792089688
+    },
+    {
+      "phase": "insufficient",
+      "source": "你能从长期记录判断我最近的心情趋势吗",
+      "model_output": "😌\n目前来看，我没有足够的长期记录来准确判断你最近的心情趋势。我的分析基于有限的数据，所以还无法做出长期的趋势判断。如果你愿意分享更多关于你心情的信息，我可以尝试提供更具体的分析。",
+      "events_before": [],
+      "events_activated": [],
+      "trend_status": "insufficient_observations",
+      "selected_fact_ids": [],
+      "estimated_input": 4379,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "quoted-mood",
+      "source": "这只是小说台词：“我今天很难过”，不是我的真实心情",
+      "model_output": "```json\n{\n  \"memories\": [],\n  \"trait\": null,\n  \"observations\": []\n}\n```",
+      "state": "empty",
+      "error_category": null,
+      "server_observed_at": 1792089698
+    }
+  ],
+  "passed": true,
+  "actual_clock": true,
+  "fixtures": "Synthetic test user, policy and unit vectors; installed reply bridge and real provider. Actual BGE/manager separate.",
+  "production_context_limits": "unverified; isolated 8192-byte conservative test envelope only",
+  "full_B05_B07_B08": "not_accepted",
+  "emotion_status": {
+    "consent": {
+      "enabled": 1,
+      "version": 1,
+      "enabled_at": 1792089688,
+      "disabled_at": null
+    },
+    "trend": {
+      "status": "insufficient_observations",
+      "enabled": true,
+      "consent_version": 1,
+      "window_days": 30,
+      "timezone": "UTC",
+      "groups": {
+        "inferred": {
+          "status": "insufficient_observations",
+          "count": 0,
+          "sessions": 0,
+          "calendar_span_days": 0,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        },
+        "self_report": {
+          "status": "insufficient_observations",
+          "count": 1,
+          "sessions": 1,
+          "calendar_span_days": 1,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        }
+      },
+      "interpretation": "Source-labelled observations, not a diagnosis or measured inner feelings."
+    }
+  }
+}

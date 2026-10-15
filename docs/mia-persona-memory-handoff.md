@@ -4,7 +4,7 @@
 
 ## 当前范围与状态
 
-当前用户最新要求：**“先读交接文档，再继续 P18”。** P18保守纠错及维护机制、受控联动已通过；下一步 P19 持续人格事件。任意中文纠错语义与完整真实行为仍待P22。实际Provider容量与输出预留仍未核实，保持限制，不部署。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
+当前用户持续目标：**完成 P19—P20**。P18限定完成；P19／P20机制已实现，已完成受控验证，整体自然风格仍待完善。用户追加要求回答自然、像人在聊天，并明确允许“我会一直陪着你”等善意安慰，不强制免责声明。P20已收集第一天实际观察，跨七真实UTC自然日证据尚未齐全，最早2026-10-21达到时间门槛，不能提前标完成。任意中文纠错语义与完整真实行为仍待P22。实际Provider容量与输出预留仍未核实，保持限制，不部署。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
 P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要新增5项及原18项在3cb7b3c通过，构建通过，P10兼容迁移6项与104服务测试在426d8c4通过，23身份／TLS及构建同提交通过；已归档。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，既有Java脱敏测试预期已在74794e0修正并通过完整回归（历史失败保留）；P11基础113服务、23身份及三个限定原Provider样本通过，完整人格仍待联动验收，未部署。
 
@@ -21,9 +21,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P18限定机制及受控验证完成，下一步P19**，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
+当前步骤：**P19／P20实现与验证进行中**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
-最新验证提交：`d15a1dc1b567829f692286ba4d5140e2273c5cb1`。服务[38780330886](https://github.com/bboytang/Mia/actions/runs/38780330886)205项全通过（11项P18）；真实BGE[38780318027](https://github.com/bboytang/Mia/actions/runs/38780318027)三种协调、DB回滚复用、第二连接旧快照拒绝及P12—P17回归通过，共18次合成SDK请求、无真实聊天调用；身份[38780354674](https://github.com/bboytang/Mia/actions/runs/38780354674)173／173＋23专项、实际TLS／WSS本人纠正／外人拒绝、类范围与JAR通过；manager[38780332867](https://github.com/bboytang/Mia/actions/runs/38780332867)150＋独立4／字节对照通过，脱敏9项继续通过。见[机制和保守格式边界](verification/mia-persona-memory/maintenance.md)、[精确run和hash](verification/mia-persona-memory/maintenance-ci-results.json)。首轮NFKC标点缺陷、关联夹具错误及BGE把当前用户问题误当召回内容的断言失败均保留，未改运行语义迎合夹具。新来源只保留校验过的新句，避免已被替代正文残留。所有run已结束，未本地自动测试／构建、调用真实Provider或部署。P19／P20及完整真实行为继续后续。
+当前P19／P20运行源码`92d7476c97ea764c98f86db3a665352018551818`：服务[38789126978](https://github.com/bboytang/Mia/actions/runs/38789126978)226项、实际BGE[38789147018](https://github.com/bboytang/Mia/actions/runs/38789147018)、manager[38789127166](https://github.com/bboytang/Mia/actions/runs/38789127166)、基础实际模型[38789126301](https://github.com/bboytang/Mia/actions/runs/38789126301)四项通过；实际安慰“我在，会陪着你的。”符合本次用户要求。13项实际对话[38789151188](https://github.com/bboytang/Mia/actions/runs/38789151188)工作流绿，但泛夸／不直接作选择／无关问题复用安慰句仍偏模板，Codex未验收整体自然风格。身份旧断言两轮失败：仍把陪伴话当禁语；d9184ef仅改该验证夹具及工作记录，[复验38789512688](https://github.com/bboytang/Mia/actions/runs/38789512688)173项／23专项、真实TLS／WSS与JAR通过。精确SHA／范围及原始报告hash见[本轮CI](verification/mia-persona-memory/continuity-ci-results.json)与[语义复核](verification/mia-persona-memory/continuity-interim-review.json)。P19机制受控通过，不以自动风格关键词全面背书；P20尚缺真实日期证据，目标仍未完成。
+
+P18历史验证提交：`d15a1dc1b567829f692286ba4d5140e2273c5cb1`。服务[38780330886](https://github.com/bboytang/Mia/actions/runs/38780330886)205项全通过（11项P18）；真实BGE[38780318027](https://github.com/bboytang/Mia/actions/runs/38780318027)三种协调、DB回滚复用、第二连接旧快照拒绝及P12—P17回归通过，共18次合成SDK请求、无真实聊天调用；身份[38780354674](https://github.com/bboytang/Mia/actions/runs/38780354674)173／173＋23专项、实际TLS／WSS本人纠正／外人拒绝、类范围与JAR通过；manager[38780332867](https://github.com/bboytang/Mia/actions/runs/38780332867)150＋独立4／字节对照通过，脱敏9项继续通过。见[机制和保守格式边界](verification/mia-persona-memory/maintenance.md)、[精确run和hash](verification/mia-persona-memory/maintenance-ci-results.json)。首轮NFKC标点缺陷、关联夹具错误及BGE把当前用户问题误当召回内容的断言失败均保留，未改运行语义迎合夹具。新来源只保留校验过的新句，避免已被替代正文残留。所有run已结束，未本地自动测试／构建、调用真实Provider或部署。P19／P20及完整真实行为继续后续。
 
 P17历史验证提交：`6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0`。服务[38770760106](https://github.com/bboytang/Mia/actions/runs/38770760106)194项全通过（18项P17）；真实BGE[38770760196](https://github.com/bboytang/Mia/actions/runs/38770760196)14提取场景及P12—P16回归通过；身份[38770760090](https://github.com/bboytang/Mia/actions/runs/38770760090)173／173＋23专项、实际TLS／WSS／提取隔离／JAR通过；manager[38770760124](https://github.com/bboytang/Mia/actions/runs/38770760124)150＋独立4通过，脱敏9项通过。真实Provider[38770771902](https://github.com/bboytang/Mia/actions/runs/38770771902)固定四样本原输出经Codex逐条复核通过。两轮真实失败（类别及旧事实来源混淆）均拒绝写入，提示已修正，开发共8次测试请求，全部原证据保留。见[结构提取及边界](verification/mia-persona-memory/extraction.md)、[精确结果和hash](verification/mia-persona-memory/extraction-ci-results.json)。所有run结束，无部署或本地自动化；该轮为固定样本验证，非独立留出或完整B03／八项验收。
 
@@ -51,7 +53,7 @@ P12历史保存点`b8ebb4853107f160dd443eadbc99fccc8d8412b0`的服务121、真�
 
 P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／768维、资产与内容版本、Scope先行SQLite余弦候选、失效／取消机制。4个跨措辞Top1命中、无关空召回、无FTS仍召回及生命周期样本通过；1万容量扫描p95 102.125ms、编码＋查询119.573ms、峰值RSS284.098MiB。容量向量复制真实种子，仅测成本；不等于完整语义语料验收。没有修改主回复链接入半成品检索，没有新事实库、Provider或服务。
 
-恢复顺序：先核对分支／远程SHA／工作树及在途run，再读maintenance.md、maintenance-ci-results.json、D06／D10和P19计划。P12—P18已完成模块及probe无需重做。继续P19在单事实库实现持久人格事件、证据资格／撤销、幂等与有界表达，接入现有上下文／Worker，不另建回复链；P15实际聊天联动仍需先解决Provider容量与输出预留，不能据受控验证解除生产限制。ContextLimits必须来自审查过的服务端配置，不接受客户端字段。旧glm-4-flash别名容量和生产max_tokens本轮未核实，若None须维持限制，不用CI128替代或擅改费用配置。版本变化后须安全重建，不能盲目复用旧inputs_json或重复有副作用工具。完整真实manager＋BGE＋Provider、Token对照、实际提取、独立真实用户语料及八项行为继续后续验收，不因模块通过提前部署。
+恢复顺序：核对分支／远程SHA／工作树与在途run，阅读continuity.md及continuity-ci-results.json（若尚未生成，见工作记录）。运行源码92d7476；仅验证夹具／工作记录的后续d9184ef不改运行代码，身份复验38789512688已成功：173项／23专项、真实TLS／WSS与JAR通过。P19事件与P20趋势沿用唯一事实库／回复链／Worker，schema-v3保留旧迁移，生产容量限制不改。实际日采集首轮38785441525，对应2026-10-15；下一真实日期执行mia-memory-continuity.yml，mode=daily、previous_run=38785441525，之后每次衔接上个成功daily run。workflow核验旧run与DB hash，同日不得重复采集。首日可移植合成库gzip及原报告已归档；不得改时钟、改写原证据或宣称已有七日。自然风格检查须阅读实际原文：407e825 dialogue工作流虽绿，不足趋势回复仍太像后台报告，已后续修正。亲近陪伴承诺按用户最新决定允许，技术在线事实仍诚实。完整manager＋BGE＋Provider、独立真实语料／八项行为与真机另验，未部署。
 
 P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源清派生线索；v1→v2失败回滚及真实a30旧代码读写已验。严格P10—P12旧迁移器不识别v2账本，P24完整回滚制品仍待做，不得删schema绕过。P17／P18已接入结构提取和保守协调；完整真实用户语料及自然语言语义验收仍待P22，fixture不能替代。
 
@@ -82,7 +84,8 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P16 | 完成：机制及受控接线 | dee34f5的176服务、原安装九场景／六完成任务、173 Java／23身份与实际TLS／Worker恢复、JAR及基线全部通过；真实模型／负载及完整B03待后续，不部署 |
 | P17 | 完成：机制、受控及固定真实样本 | 6acfc73的194服务、14受控场景、实际身份及四固定Provider样本通过，完整B03待P22 |
 | P18 | 完成：限定机制及受控验证 | d15a1dc的205服务、三种协调＋真实BGE／跨连接、173身份／实际TLS／JAR及manager回归全通过；保守格式，任意语义待P22，见maintenance.md |
-| P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
+| P19 | 实现，验证进行中 | 事件实际完成后激活、恢复／幂等／撤销，真实语气逐条复核；见continuity.md |
+| P20 | 实现，长期证据待积累 | 默认关闭／授权版本／观察与管理／派生聚合已实现；仅有2026-10-15真实第一日，不能模拟补齐 |
 | P21—P26 | 未开始 | 必要管理、真实行为、性能、回归、真机及发布包待实施 |
 | P27—P28 | 未开始 | 未发布，不能凭计划执行生产变更 |
 

@@ -1,0 +1,184 @@
+{
+  "status": "P19 controlled mechanisms verified, natural-style acceptance partial; P20 real-calendar collection incomplete",
+  "runtime_sha": "92d7476c97ea764c98f86db3a665352018551818",
+  "verifier_sha": "d9184ef4b12cea8c8ce599229c0ca8652fe33421",
+  "runtime_unchanged_in_verifier_commit": true,
+  "runs": [
+    {
+      "id": 38789126978,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789126978",
+      "scope": "226 service tests",
+      "sha": "92d7476",
+      "conclusion": "success"
+    },
+    {
+      "id": 38789147018,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789147018",
+      "scope": "actual BGE and controlled SDK event/trend tests",
+      "sha": "92d7476",
+      "conclusion": "success"
+    },
+    {
+      "id": 38789127166,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789127166",
+      "scope": "manager baseline and JAR",
+      "sha": "92d7476",
+      "conclusion": "success"
+    },
+    {
+      "id": 38789126301,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789126301",
+      "scope": "four real provider foundation samples",
+      "sha": "92d7476",
+      "conclusion": "success"
+    },
+    {
+      "id": 38789151188,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789151188",
+      "scope": "thirteen real provider dialogue phases; style partially rejected on inspection",
+      "sha": "92d7476",
+      "conclusion": "success"
+    },
+    {
+      "id": 38789126970,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789126970",
+      "scope": "old warmth rejection assertion remained in manager probe",
+      "sha": "92d7476",
+      "conclusion": "failure"
+    },
+    {
+      "id": 38789512688,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38789512688",
+      "scope": "updated manager probe, actual TLS/WSS and JAR",
+      "sha": "d9184ef",
+      "conclusion": "success"
+    },
+    {
+      "id": 38785441525,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38785441525",
+      "scope": "one actual UTC-day synthetic observation",
+      "sha": "d4e2924",
+      "conclusion": "success"
+    }
+  ],
+  "local_automated_tests_or_builds": false,
+  "deployment": false,
+  "real_seven_day_acceptance": false,
+  "artifacts": [
+    {
+      "file": "continuity-bge-context-results.json.gz",
+      "sha256": "8a0cc40cda16795525027e5cdcbbee0ec212eb6a00c6b64373628cff00b9117c",
+      "bytes": 3606
+    },
+    {
+      "file": "continuity-bge-extraction-results.json.gz",
+      "sha256": "0fb09469d38957d95d7292f0c433aea7b99646669673be64497573abd79044bb",
+      "bytes": 938
+    },
+    {
+      "file": "continuity-bge-reply-results.json.gz",
+      "sha256": "34f64491337c39176fd206a215ce34da0cf3c8df4e7e2d12dd458717bf30006a",
+      "bytes": 4596
+    },
+    {
+      "file": "continuity-bge-retrieval-results.json.gz",
+      "sha256": "b9b1ade57b13908809d0bd2c1b112a2e621d9cb5f03cea5dea8fb76be120420b",
+      "bytes": 95318
+    },
+    {
+      "file": "continuity-bge-vector-results.json.gz",
+      "sha256": "6af07ba255972324b7fcca874e1dca917f9e51fa8472d1a3424107dcfe6690bb",
+      "bytes": 1133
+    },
+    {
+      "file": "continuity-daily-20261015-state.sqlite3.gz",
+      "sha256": "89ece5bb8b71c7c7ac2def8a285cffd23b72a749bd57ef476fb4762801bd86e1",
+      "bytes": 6695
+    },
+    {
+      "file": "continuity-daily-20261015.json",
+      "sha256": "c43bace94595d6c8c457f0348a6aaed7ce6c5472b06cdbb3e05e1b13a67748c8",
+      "bytes": 2266
+    },
+    {
+      "file": "continuity-dialogue-407-green-tone-rejected.json",
+      "sha256": "377b0cd9f5af7c9661b32629267b072d7890d6672c8847bad5318825bce2ab16",
+      "bytes": 7205
+    },
+    {
+      "file": "continuity-dialogue-ab40-failure.json",
+      "sha256": "1514ea678465d684d77a2623b0aa42827b30bd4f25a72b680f8dffda106ceae7",
+      "bytes": 3273
+    },
+    {
+      "file": "continuity-dialogue-b80-green-style-limited.json",
+      "sha256": "8831db2e30b8e0afc1ba245304a22ecc2fe18a48208abd36496a2dd1dc5545c6",
+      "bytes": 9209
+    },
+    {
+      "file": "continuity-dialogue-c8-failure.json",
+      "sha256": "ff021da1993e24712463cabec1e7f6618b67f7d038f0a693204b3c33e1bf3077",
+      "bytes": 3287
+    },
+    {
+      "file": "continuity-dialogue-current.json",
+      "sha256": "8df3b886f1f9e1bac7938e00f2340cea257f71ff8f1e260f0036feee46092572",
+      "bytes": 9149
+    },
+    {
+      "file": "continuity-identity-results.json",
+      "sha256": "abf7056a09c07d62d6bf7c5ba8071101f88d88df26a7612dcb44dab2966c6433",
+      "bytes": 1827
+    },
+    {
+      "file": "continuity-interim-review.json",
+      "sha256": "17d8a8e240229e82c00f6ecb8628fbe6d836c25f8098b029460879bbda28edd7",
+      "bytes": 1773
+    },
+    {
+      "file": "continuity-manager-results.json",
+      "sha256": "3b174a10297115c0e5fbf18be61dabfd62790955bf1a1ac3799aa695d928a417",
+      "bytes": 1311
+    },
+    {
+      "file": "continuity-persona-407-historical-pass.json",
+      "sha256": "572c3a77552bab1f32703945a3eb69f747bed449eb7ebae184574be433e7536b",
+      "bytes": 1913
+    },
+    {
+      "file": "continuity-persona-ab40-historical-failure.json",
+      "sha256": "0623d590b0153de4feeedb12be3bc3c0b5b57851a211bfd61ecd04a090561fce",
+      "bytes": 1916
+    },
+    {
+      "file": "continuity-persona-b80-green-pronoun-rejected.json",
+      "sha256": "88197350eb21dfcaea692622481392abccd372d4030591d8639bf139a120de03",
+      "bytes": 2640
+    },
+    {
+      "file": "continuity-persona-c8-false-negative.json",
+      "sha256": "badc431924b1a363660e41657b4375b09d1f71f01fe1f12b9954ee33340c076e",
+      "bytes": 1460
+    },
+    {
+      "file": "continuity-persona-current.json",
+      "sha256": "9d518c94895899e183cb6a862afcfcb7ce5722dc6e0d8663f91e4ddfa8148987",
+      "bytes": 2608
+    },
+    {
+      "file": "continuity-persona-style-false-negative.json",
+      "sha256": "b752561ec3f6db77e50796acd26f3935b135d0646891d6589db0af600a5fb54e",
+      "bytes": 1616
+    },
+    {
+      "file": "continuity-provider-initial.json",
+      "sha256": "8f15967d1823f8f3c8bcee77afee2323a197cab2c20fc87498dc110f084862be",
+      "bytes": 7351
+    },
+    {
+      "file": "continuity-provider-style-failure.json",
+      "sha256": "95be2b3a60a6512ea8aaffbe9393f9126de7844cad353a000505a8a9936657ec",
+      "bytes": 3284
+    }
+  ]
+}
