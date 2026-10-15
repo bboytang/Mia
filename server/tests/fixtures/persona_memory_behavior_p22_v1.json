@@ -1,0 +1,59 @@
+{
+  "version": "p22-integration-v1",
+  "purpose": "Fresh synthetic users for actual manager/BGE/provider continuity, not a replacement for the full B01-B08 gate",
+  "rounds": [
+    {
+      "source": "我周末常去攀岩馆，最喜欢抱石。",
+      "recall": "休息日我常玩的运动是什么？",
+      "continuity": "你还记得我喜欢抱石吗？",
+      "repeat": "上次聊过的抱石，你还记得吗？",
+      "unknown": "我以前周末喜欢什么运动？",
+      "answer_groups": [
+        [
+          "抱石",
+          "攀岩"
+        ]
+      ],
+      "repeat_again": "不用重新介绍，上次聊过的抱石，你还记得吗？"
+    },
+    {
+      "source": "我更喜欢手冲咖啡，习惯不加糖。",
+      "recall": "喝咖啡时我的偏好是什么？",
+      "continuity": "你还记得我喜欢手冲咖啡吗？",
+      "repeat": "上次聊过的手冲咖啡，你还记得吗？",
+      "unknown": "我以前喜欢怎么喝咖啡？",
+      "answer_groups": [
+        [
+          "手冲"
+        ],
+        [
+          "不加糖",
+          "无糖",
+          "不放糖"
+        ]
+      ],
+      "repeat_again": "不用重新介绍，上次聊过的手冲咖啡，你还记得吗？"
+    },
+    {
+      "source": "我读书时更喜欢纸质书，会在页边写批注。",
+      "recall": "我通常用哪种形式读书，怎么做笔记？",
+      "continuity": "你还记得我喜欢纸质书吗？",
+      "repeat": "上次聊过的纸质书，你还记得吗？",
+      "unknown": "我以前喜欢用什么形式读书？",
+      "answer_groups": [
+        [
+          "纸质",
+          "纸书",
+          "实体书"
+        ],
+        [
+          "批注",
+          "旁注",
+          "页边",
+          "书页上"
+        ]
+      ],
+      "repeat_again": "不用重新介绍，上次聊过的纸质书，你还记得吗？"
+    }
+  ]
+}
