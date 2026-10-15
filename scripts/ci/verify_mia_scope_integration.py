@@ -225,7 +225,6 @@ async def main():
             assert jobs.current(accepted)['state'] == 'empty'
             await rejects(worker.submit(TurnCompleted(replace(scope, owner=peer),
                 'scope-ci', 'forged', 'forged', 'CI cross owner', 0)))
-            pending = await worker.submit(TurnCompleted(scope, 'scope-ci', 'worker-delete', 'worker-delete', 'CI user', 0))
             own_id = fact(scope.owner, 'CI own memory', 'own')
             other_id = fact(peer, 'CI other memory', 'other')
             with store.db:
@@ -254,16 +253,22 @@ async def main():
             assert extracted['owner'] == scope.owner
             assert store.db.execute('SELECT COUNT(*) FROM mia_vectors WHERE memory_id=?', (extracted['id'],)).fetchone()[0] == 1
             from mia_companion.extraction import validate_output, context_for
+            relation_source = '我使用CI文具'
+            relation_proposal = {'category': 'fact', 'content': relation_source, 'source_quote': relation_source,
+                'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable',
+                'relations': [{'target_id': own_id, 'relation': 'shared_term', 'anchor': 'CI', 'evidence': relation_source}]}
+            owned_context = context_for(store, scope.owner)
+            assert validate_output({'memories': [relation_proposal]}, [relation_source], owned_context)['memories']
+            relation_proposal['relations'][0]['target_id'] = other_id
             try:
-                validate_output({'memories': [{'category': 'fact', 'content': '我喜欢蓝色', 'source_quote': '我喜欢蓝色',
-                    'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable',
-                    'relations': [{'target_id': other_id, 'relation': 'shared_term', 'anchor': 'CI', 'evidence': '我喜欢蓝色'}]}]},
-                    ['我喜欢蓝色'], context_for(store, scope.owner))
+                validate_output({'memories': [relation_proposal]}, [relation_source], owned_context)
             except adapter.MemoryError:
                 pass
             else:
                 raise AssertionError('Foreign extraction relation was accepted')
             store.delete_memory(scope.owner, extracted['id'])
+            pending = await worker.submit(TurnCompleted(scope, 'scope-ci', 'worker-delete', 'worker-delete', 'CI user',
+                store.snapshot(scope.owner)['revision']))
             vector_index = SemanticMemoryIndex(store, SyntheticVectorEncoder())
             await vector_index.index_memory(scope, auth, own_id)
             try:
