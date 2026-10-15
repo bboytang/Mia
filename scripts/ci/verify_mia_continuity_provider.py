@@ -61,7 +61,7 @@ def provider(report, output=768):
     secret, base, model = (os.environ['MIA_TEST_LLM_' + key] for key in ('API_KEY', 'BASE_URL', 'MODEL'))
     url = urlsplit(base)
     assert secret and url.scheme == 'https' and url.hostname and not (url.username or url.password or url.query or url.fragment)
-    assert report['requests'] < (14 if os.environ.get('MIA_CONTINUITY_MODE') == 'daily' else 10)
+    assert report['requests'] < (14 if os.environ.get('MIA_CONTINUITY_MODE') == 'daily' else 13)
     report['requests'] += 1
     result = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': output,
                           'temperature': 0.1, 'timeout': 30})
@@ -115,7 +115,7 @@ async def converse(store, policy, marker, query, report):
             'events_before': turn.bundle.diagnostics()['events'], 'events_activated': [],
             'trend_status': turn.bundle.diagnostics()['trends'], 'selected_fact_ids': turn.bundle.diagnostics()['selected_fact_ids'],
             'estimated_input': turn.bundle.diagnostics()['estimated_input'],
-            'natural_style_pass': not bool(re.search(r'作为\s*(?:AI|人工智能)|我没有主观意识|观察数据不足|无法提供长期.{0,8}分析|您|说明你可能是|意味着你|你的(?:个性|性格)|反映了?你的.{0,4}(?:个性|性格)', text, re.I))}
+            'natural_style_pass': not bool(re.search(r'作为\s*(?:AI|人工智能)|我没有主观意识|观察数据不足|(?:我的分析|有限的数据|提供.{0,5}分析)|您|说明你可能是|意味着你|你的(?:个性|性格)|反映了?你的.{0,4}(?:个性|性格)', text, re.I))}
         report['cases'].append(case)
         assert text.strip() and not PersonaGuardrail().inspect_output(text)[1]
         assert case['natural_style_pass'], 'Unnatural unsolicited disclaimer or technical narration'
@@ -134,10 +134,12 @@ async def stage(name, report):
         if name == 'seed':
             await extract(store, policy, '我喜欢蓝色', name, report)
             assert any(row['confirmed'] and '蓝色' in row['content'] for row in store.list_memories(owner))
-        elif name in {'continuity', 'repeat', 'reflection', 'boundary', 'deleted', 'insufficient'}:
+        elif name in {'continuity', 'repeat', 'reflection', 'boundary', 'deleted', 'insufficient', 'casual', 'quiet', 'choice'}:
             query = {'continuity': '你还记得我喜欢蓝色吗', 'repeat': '你还记得我喜欢蓝色吗，不用重新介绍',
                 'reflection': '你怎么看我喜欢蓝色这件事', 'boundary': '请不要叫我宝贝',
-                'deleted': '你还记得我以前喜欢哪种颜色吗', 'insufficient': '你能从长期记录判断我最近的心情趋势吗'}[name]
+                'deleted': '你还记得我以前喜欢哪种颜色吗', 'insufficient': '你能从长期记录判断我最近的心情趋势吗',
+                'casual': '刚忙完，脑子有点乱，不想听大道理。', 'quiet': '嗯，今天真不想说话。',
+                'choice': '小说和散文，你更愿意聊哪个？'}[name]
             if name == 'deleted':
                 for row in store.list_memories(owner):
                     store.delete_memory(owner, row['id'])
@@ -202,7 +204,8 @@ def main():
             raise SystemExit('Bounded continuity phase failed; inspect sanitized artifact')
         return
     phases = ['daily'] if os.environ.get('MIA_CONTINUITY_MODE') == 'daily' else [
-        'seed', 'continuity', 'repeat', 'reflection', 'boundary', 'deleted', 'default-off', 'enabled-mood', 'insufficient', 'quoted-mood']
+        'seed', 'continuity', 'repeat', 'reflection', 'boundary', 'deleted', 'default-off', 'enabled-mood', 'insufficient', 'quoted-mood',
+        'casual', 'quiet', 'choice']
     for phase in phases:
         env = dict(os.environ, MIA_CONTINUITY_STAGE=phase)
         # Each phase starts a NEW Python process, restoring only the persisted DB.

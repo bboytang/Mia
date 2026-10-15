@@ -228,15 +228,20 @@ class ContextBuilder:
         omitted = {'role': False, 'fact_ids': [], 'traits': [], 'history_turns': inputs['older_turns_removed'], 'scene': False}
         def request():
             event_types = {item['type'] for item in data.get('events', [])}
+            pending_types = {item['type'] for item in data.get('events', []) if item['state'] == 'pending'}
             style = ''
-            if 'reflection' in event_types:
+            if 'reflection' in event_types and re.search(r'怎么看|怎么想|如何看待|立场', inputs['query']):
                 style = ('\n这轮在问你的看法，用一句口语直接说一个具体感受式看法，不分析对方。'
                     '表达示例（不是用户事实）：问“你觉得短篇怎么样”，可以答“短篇那股利落劲儿挺有意思，几页就能留下一个念头”。'
                     '不要把颜色等偏好解释成对方的性格、心理或情感需求，也不用解释AI身份。')
-            elif 'continuity' in event_types:
+            elif 'continuity' in event_types and re.search(r'记得|上次|之前', inputs['query']):
                 style = '\n自然接住这次追问，只说有依据的内容，不照抄上次回答，不再演初次发现或介绍身份。'
-            elif 'boundary' in event_types:
+            elif 'boundary' in pending_types:
                 style = '\n简短确认对方这次的具体边界，不加客服式的结束语。'
+            elif 'boundary' in event_types:
+                style = '\n遵守已经确认的互动边界，直接回应当前问题，不重新宣告或复述旧边界。'
+            if data.get('emotion_trend', {}).get('status') == 'insufficient_observations':
+                style += '\n这轮还看不出长期规律。用日常话直说还不了解这阵子的情况，可问一句近况；别用“数据、分析、样本不足”或邀请分享更多信息的客服套话。'
             messages = [{'role': 'system', 'content': CORE + POLICY + style},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             messages.extend(message for group in retained for message in group)
@@ -263,6 +268,9 @@ class ContextBuilder:
             if not fits():
                 data['events'].pop()
         data['emotion_trend'] = inputs.get('emotion_trend', {'status': 'unavailable'})
+        if data['emotion_trend']['status'] == 'insufficient_observations':
+            data['emotion_trend'] = {'status': 'insufficient_observations',
+                'meaning': '还不能从这几次交流判断长期规律，不把一次心情当成一直如此。'}
         if not fits():
             data['emotion_trend'] = {'status': 'omitted_for_budget'}
         # Keep a contiguous suffix of complete older user turns, never orphan a
