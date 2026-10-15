@@ -1,4 +1,4 @@
-"""Scope-first exact vectors in the existing fact DB; full hybrid RAG is P13."""
+"""Scope-first exact vectors and hybrid retrieval in the existing fact DB."""
 
 import asyncio
 import heapq
@@ -104,9 +104,12 @@ class SemanticMemoryIndex:
                 'model_id=? AND model_revision=? AND memory_id IN (SELECT id FROM memories WHERE owner=?)',
                 (memory_id, version, MODEL_KEY, REVISION, scope.owner))
 
-    def _scan(self, scope, expected, query, limit, minimum):
+    def _scan(self, scope, expected, query, limit, minimum, query_text=None, expanded=None):
         import numpy as np
+        from .retrieval import bigrams, signals
         query = self._vector(query)
+        expanded = query if expanded is None else self._vector(expanded)
+        query_terms = bigrams(query_text) if query_text is not None else None
         with self.store.lock, self.store.db:
             self.store.db.execute('BEGIN')
             self._check(scope, expected)
@@ -120,7 +123,7 @@ class SemanticMemoryIndex:
                 raise EmbeddingUnavailable('embedding_index_not_ready')
             cursor = self.store.db.execute('SELECT m.id,m.content,m.category,x.content_version,x.evidence_version,'
                 'x.entities,x.keywords,x.trigger_terms,x.emotional_weight,v.normalized_vector' + base, params)
-            heap = []
+            heaps = {name: [] for name in (('original',) if query_text is None else ('original', 'expanded', 'lexical', 'association'))}
             while True:
                 rows = cursor.fetchmany(256)
                 if not rows:
@@ -133,20 +136,82 @@ class SemanticMemoryIndex:
                     raise EmbeddingUnavailable('embedding_index_invalid')
                 # Avoid changing the voice process's global BLAS thread settings.
                 scores = np.clip(np.einsum('ij,j->i', matrix, query, optimize=False), -1, 1)
-                for row, score in zip(rows, scores):
+                expanded_scores = scores if expanded is query else np.clip(np.einsum('ij,j->i', matrix, expanded, optimize=False), -1, 1)
+                for row, score, expanded_score in zip(rows, scores, expanded_scores):
                     score = float(score)
                     if minimum is not None and score < minimum:
                         continue
-                    if len(heap) == limit and (score, row['id']) <= heap[0][:2]:
+                    if query_text is None and len(heaps['original']) == limit and (score, row['id']) <= heaps['original'][0][:2]:
                         continue
                     record = {key: row[key] for key in row.keys() if key != 'normalized_vector'}
                     record['cosine'] = score
-                    entry = (score, row['id'], record)
-                    if len(heap) < limit:
-                        heapq.heappush(heap, entry)
-                    elif entry[:2] > heap[0][:2]:
-                        heapq.heapreplace(heap, entry)
-            return [item[2] for item in sorted(heap, reverse=True)]
+                    values = {'original': score}
+                    if query_text is not None:
+                        record['original_cosine'], record['expanded_cosine'] = score, float(expanded_score)
+                        record['signals'], record['lexical_hits'], record['association_hits'] = signals(
+                            query_text, record, max(score, float(expanded_score)), query_terms)
+                        values.update(expanded=float(expanded_score), lexical=record['signals']['lexical'],
+                                      association=record['signals']['association'])
+                    for name, value in values.items():
+                        if name in ('lexical', 'association') and value <= 0:
+                            continue
+                        heap = heaps[name]
+                        entry = (value, row['id'], record)
+                        if len(heap) < limit:
+                            heapq.heappush(heap, entry)
+                        elif entry[:2] > heap[0][:2]:
+                            heapq.heapreplace(heap, entry)
+            if query_text is None:
+                return [item[2] for item in sorted(heaps['original'], reverse=True)]
+            selected = {}
+            for name, heap in heaps.items():
+                for _, memory_id, row in heap:
+                    if memory_id not in selected:
+                        selected[memory_id] = dict(row, candidate_sources=[])
+                    selected[memory_id]['candidate_sources'].append(name)
+            return sorted(selected.values(), key=lambda row: (row['original_cosine'], row['id']), reverse=True)
+
+    def _clues(self, scope, expected, query):
+        from .retrieval import terms
+        clues = {}
+        with self.store.lock:
+            self._check(scope, expected)
+            cursor = self.store.db.execute('SELECT m.id,x.content_version,x.evidence_version,x.entities,x.keywords,x.trigger_terms '
+                'FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
+                "WHERE m.owner=? AND x.persona_id=? AND m.confirmed=1 AND x.state='active' ORDER BY m.id",
+                (scope.owner, scope.persona_id))
+            for row in cursor:
+                hits = [term for term in terms(row['trigger_terms']) if len(term) >= 2 and term in query]
+                if not hits:
+                    continue
+                for term in terms(row['entities']) + terms(row['keywords']):
+                    if term not in clues and len(clues) < 8:
+                        clues[term] = {'term': term, 'memory_id': row['id'], 'content_version': row['content_version'],
+                                       'evidence_version': row['evidence_version'], 'trigger_hits': hits}
+        return list(clues.values())
+
+    async def retrieve(self, scope, authorization, query):
+        from .retrieval import CANDIDATES, WEIGHTS, THRESHOLD, SEMANTIC_FLOOR, rank
+        if not isinstance(query, str) or not query.strip() or len(query) > 4096:
+            raise ValueError('Invalid hybrid query')
+        await self._require(scope, authorization, 'memory:read')
+        state = await asyncio.to_thread(self._snapshot, scope)
+        available = await asyncio.to_thread(self._clues, scope, state, query)
+        clues, expanded_text = [], query
+        for clue in available:
+            candidate = expanded_text + ('、' if clues else '。关联线索：') + clue['term']
+            if len(candidate) <= 4096:
+                clues.append(clue)
+                expanded_text = candidate
+        original = await self._encode(query, query=True)
+        expanded = await self._encode(expanded_text, query=True) if clues else original
+        rows = await asyncio.to_thread(self._scan, scope, state, original, CANDIDATES, None, query, expanded)
+        results = rank(rows)
+        await self._require(scope, authorization, 'memory:read')
+        await asyncio.to_thread(self._snapshot_check, scope, state)
+        return {'snapshot': {'revision': state[0], 'content_epoch': state[1]}, 'query': query,
+                'expansion': clues, 'weights': dict(WEIGHTS), 'threshold': THRESHOLD, 'semantic_floor': SEMANTIC_FLOOR,
+                'candidates': rows, 'results': results}
 
     async def candidates(self, scope, authorization, query, limit=12, minimum=None):
         if type(limit) is not int or not 1 <= limit <= 24 or (minimum is not None and not -1 <= minimum <= 1):

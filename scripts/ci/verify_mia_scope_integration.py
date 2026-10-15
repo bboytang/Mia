@@ -198,6 +198,10 @@ async def main():
                     {'memories': [{'category': 'fact', 'content': content, 'source_index': 0}]}, marker)['memories'][0]
             own_id = fact(scope.owner, 'CI own memory', 'own')
             other_id = fact(peer, 'CI other memory', 'other')
+            with store.db:
+                for memory_id, keyword in ((own_id, 'own clue'), (other_id, 'FOREIGN CLUE')):
+                    store.db.execute('UPDATE mia_memory_meta SET keywords=?,trigger_terms=? WHERE memory_id=?',
+                        (json.dumps([keyword]), json.dumps(['CI']), memory_id))
             class SyntheticVectorEncoder:
                 model_id, revision, dimension = MODEL_KEY, REVISION, DIMENSION
                 def encode(self, text, query=False):
@@ -215,6 +219,10 @@ async def main():
                 raise AssertionError('Cross-owner vector indexing was accepted')
             found = await vector_index.candidates(scope, auth, 'CI synthetic vector')
             assert [row['id'] for row in found['candidates']] == [own_id]
+            hybrid = await vector_index.retrieve(scope, auth, 'CI synthetic vector')
+            assert [row['id'] for row in hybrid['candidates']] == [own_id]
+            assert [row['term'] for row in hybrid['expansion']] == ['own clue']
+            assert [row['id'] for row in hybrid['results']] == [own_id]
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
             for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
@@ -241,6 +249,7 @@ async def main():
     # The fixture DB is already closed: revocation must be rejected before any
     # DB access, not converted to an empty vector result or an indexing retry.
     await rejects(vector_index.candidates(scope, auth, 'CI revoked vector'))
+    await rejects(vector_index.retrieve(scope, auth, 'CI revoked hybrid'))
     await rejects(vector_index.index_memory(scope, auth, own_id))
     assert not await asyncio.to_thread(allow_generation, active)
     assert not await allow_output(active)

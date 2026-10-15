@@ -1,4 +1,4 @@
-"""One atomic additive migration; legacy fact tables and positional writes stay valid."""
+"""Atomic additive migrations; legacy fact tables and positional writes stay valid."""
 
 import hashlib
 import json
@@ -30,8 +30,9 @@ def _statements(source):
 def migrate(db):
     if db.in_transaction:
         raise ValueError('Mia schema migration requires its own transaction')
-    sql = Path(__file__).with_name('schema.sql').read_text(encoding='utf-8')
-    digest = hashlib.sha256(sql.encode()).hexdigest()
+    migrations = [Path(__file__).with_name(name).read_text(encoding='utf-8')
+                  for name in ('schema.sql', 'schema-v2.sql')]
+    digests = [hashlib.sha256(sql.encode()).hexdigest() for sql in migrations]
     db.execute('BEGIN IMMEDIATE')
     try:
         for table, expected in LEGACY_COLUMNS.items():
@@ -41,19 +42,22 @@ def migrate(db):
         exists = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='mia_schema_migrations'").fetchone()
         if exists:
             rows = db.execute('SELECT version,checksum,schema_checksum FROM mia_schema_migrations ORDER BY version').fetchall()
-            if (len(rows) != 1 or (rows[0][0], rows[0][1]) != (1, digest)
-                    or rows[0][2] != _schema_checksum(db)):
+            if (not 1 <= len(rows) <= len(migrations)
+                    or [(row[0], row[1]) for row in rows] != list(enumerate(digests[:len(rows)], 1))
+                    or rows[-1][2] != _schema_checksum(db)):
                 raise ValueError('Unreviewed Mia schema version or checksum')
-            db.commit()
-            return
-        if db.execute("SELECT 1 FROM sqlite_master WHERE name GLOB 'mia_*' LIMIT 1").fetchone():
-            raise ValueError('Unversioned Mia schema objects; refusing to overwrite')
-        db.execute('CREATE TABLE mia_schema_migrations(version INTEGER PRIMARY KEY,checksum TEXT NOT NULL,schema_checksum TEXT NOT NULL,applied_at INTEGER NOT NULL)')
+            applied = len(rows)
+        else:
+            if db.execute("SELECT 1 FROM sqlite_master WHERE name GLOB 'mia_*' LIMIT 1").fetchone():
+                raise ValueError('Unversioned Mia schema objects; refusing to overwrite')
+            db.execute('CREATE TABLE mia_schema_migrations(version INTEGER PRIMARY KEY,checksum TEXT NOT NULL,schema_checksum TEXT NOT NULL,applied_at INTEGER NOT NULL)')
+            applied = 0
         # executescript() implicitly commits; execute complete DDL statements instead.
-        for statement in _statements(sql):
-            db.execute(statement)
-        db.execute('INSERT INTO mia_schema_migrations(version,checksum,schema_checksum,applied_at) VALUES (1,?,?,?)',
-                   (digest, _schema_checksum(db), int(time.time())))
+        for version in range(applied + 1, len(migrations) + 1):
+            for statement in _statements(migrations[version - 1]):
+                db.execute(statement)
+            db.execute('INSERT INTO mia_schema_migrations(version,checksum,schema_checksum,applied_at) VALUES (?,?,?,?)',
+                       (version, digests[version - 1], _schema_checksum(db), int(time.time())))
         db.commit()
     except BaseException:
         db.rollback()

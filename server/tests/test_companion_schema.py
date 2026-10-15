@@ -2,6 +2,7 @@
 
 import hashlib
 import importlib.util
+import json
 import os
 from pathlib import Path
 import sqlite3
@@ -11,7 +12,7 @@ import tempfile
 import unittest
 
 from server.companion.memory import MemoryStore
-from server.companion.schema import LEGACY_COLUMNS, migrate
+from server.companion.schema import LEGACY_COLUMNS, _schema_checksum, _statements, migrate
 
 
 class SchemaCompatibilityTests(unittest.TestCase):
@@ -108,6 +109,41 @@ class SchemaCompatibilityTests(unittest.TestCase):
         self.assertEqual(tuple(new.db.execute('SELECT * FROM mia_schema_migrations').fetchone()), ledger)
         self.assertEqual([tuple(r) for r in new.db.execute('SELECT * FROM mia_memory_meta')], meta)
         new.close()
+
+    def test_p10_v1_upgrade_is_atomic_preserves_ledger_and_invalidates_scoring_snapshots(self):
+        # Build the exact immutable P10 SQL on the real old fact tables.
+        old = self.legacy(self.path)
+        memory_id = self.remember(old)
+        before = self.original_rows(old)
+        sql = Path('server/companion/schema.sql').read_text(encoding='utf-8')
+        with old.db:
+            old.db.execute('CREATE TABLE mia_schema_migrations(version INTEGER PRIMARY KEY,checksum TEXT NOT NULL,schema_checksum TEXT NOT NULL,applied_at INTEGER NOT NULL)')
+            for statement in _statements(sql):
+                old.db.execute(statement)
+            old.db.execute('INSERT INTO mia_schema_migrations VALUES (1,?,?,1)',
+                           (hashlib.sha256(sql.encode()).hexdigest(), _schema_checksum(old.db)))
+        ledger = tuple(old.db.execute('SELECT * FROM mia_schema_migrations').fetchone())
+        def reject_v2(action, name, *unused):
+            return sqlite3.SQLITE_DENY if action == sqlite3.SQLITE_CREATE_TRIGGER and name == 'mia_retrieval_source_delete' else sqlite3.SQLITE_OK
+        old.db.set_authorizer(reject_v2)
+        with self.assertRaises(sqlite3.DatabaseError):
+            migrate(old.db)
+        old.db.set_authorizer(None)
+        self.assertIsNone(old.db.execute("SELECT 1 FROM sqlite_master WHERE name='mia_retrieval_meta_update'").fetchone())
+        self.assertEqual([tuple(row) for row in old.db.execute('SELECT * FROM mia_schema_migrations')], [ledger])
+        migrate(old.db)
+        self.assertEqual(self.original_rows(old), before)
+        self.assertEqual(tuple(old.db.execute('SELECT * FROM mia_schema_migrations WHERE version=1').fetchone()), ledger)
+        epoch = old.db.execute('SELECT content_epoch FROM mia_scope_versions').fetchone()[0]
+        with old.db:
+            old.db.execute('UPDATE mia_memory_meta SET keywords=? WHERE memory_id=?', (json.dumps(['小说']), memory_id))
+        self.assertGreater(old.db.execute('SELECT content_epoch FROM mia_scope_versions').fetchone()[0], epoch)
+        # The actual pre-migration writer still edits and invalidates metadata.
+        old.edit_memory('user:1:agent:a', memory_id, '现在偏爱历史小说')
+        self.assertIsNone(old.db.execute('SELECT keywords FROM mia_memory_meta WHERE memory_id=?', (memory_id,)).fetchone()[0])
+        migrate(old.db)
+        self.assertEqual(old.db.execute('SELECT COUNT(*) FROM mia_schema_migrations').fetchone()[0], 2)
+        old.close()
 
     def test_process_exit_mid_ddl_rolls_back_without_partial_migration(self):
         old = self.legacy(self.path)
