@@ -17,6 +17,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 from types import ModuleType, SimpleNamespace
 import uuid
 
@@ -177,6 +178,8 @@ async def serve():
         except Exception as error:
             with LOCK:
                 report['service_error_class'] = type(error).__name__
+                report['service_error_locations'] = [{'file': Path(frame.filename).name, 'line': frame.lineno, 'function': frame.name}
+                    for frame in traceback.extract_tb(error.__traceback__)[-8:]]
                 save(report)
             await socket.send(json.dumps({'type': 'test_error', 'error_class': type(error).__name__}))
         finally:
@@ -218,6 +221,7 @@ async def drive():
     tls = ssl.create_default_context(cafile=os.environ['MIA_SCOPE_CA'])
     process = None
     endpoint = None
+    phase = 'service_start'
 
     async def start():
         nonlocal process, endpoint
@@ -272,25 +276,31 @@ async def drive():
 
     try:
         first_pid = await start()
+        phase = 'source_completion_and_extraction'
         _, saved = await ask(sample['source'])
         facts = [row for row in saved['memories'] if row['confirmed']]
         assert len(facts) == 1 and facts[0]['source'], 'Actual source was not saved with evidence'
+        phase = 'new_session_paraphrase_recall'
         answer, _ = await ask(sample['recall'])
         assert facts[0]['id'] in answer['diagnostics']['selected_fact_ids']
         assert all(any(word in answer['raw'] for word in group) for group in sample['answer_groups'])
+        phase = 'event_activation'
         continued, saved = await ask(sample['continuity'])
         assert facts[0]['id'] in continued['diagnostics']['selected_fact_ids']
         active = [event for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active']
         assert len(active) == 1
+        phase = 'actual_service_restart'
         await stop()
         second_pid = await start()
         assert first_pid != second_pid
+        phase = 'event_restoration_and_repeat'
         repeated, saved = await ask(sample['repeat'])
         assert repeated['session_id'] != continued['session_id']
         assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
         again, saved = await ask(sample['repeat_again'])
         assert again['session_id'] != repeated['session_id']
         assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
+        phase = 'source_deletion_and_unknown'
         await manage('delete', id=facts[0]['id'])
         unknown, saved = await ask(sample['unknown'])
         assert not unknown['diagnostics']['selected_fact_ids'] and not saved['memories']
@@ -302,7 +312,9 @@ async def drive():
             raw_response_review='required; automated gates alone do not establish full semantic acceptance')
     except Exception as error:
         report = json.loads(REPORT.read_text())
-        report.update(passed=False, error_class=type(error).__name__)
+        report.update(passed=False, error_class=type(error).__name__, failed_phase=phase,
+            error_locations=[{'file': Path(frame.filename).name, 'line': frame.lineno, 'function': frame.name}
+                for frame in traceback.extract_tb(error.__traceback__)[-8:]])
     finally:
         try:
             await stop()
