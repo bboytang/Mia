@@ -1,0 +1,204 @@
+{
+  "code_sha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+  "P17": "mechanisms_controlled_integration_and_four_fixed_real_provider_samples_verified",
+  "next_step": "P18_corrections_invalidation_deletion_and_cache_maintenance",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 38770771902,
+      "headSha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+      "name": "Verify Mia structured extraction provider",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38770771902"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38770760162,
+      "headSha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+      "name": "Verify Mia structured extraction provider",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38770760162"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38770760106,
+      "headSha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38770760106"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38770760090,
+      "headSha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38770760090"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38770760124,
+      "headSha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38770760124"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38770760196,
+      "headSha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38770760196"
+    }
+  ],
+  "service": {
+    "tests": 194,
+    "extraction_methods": 18
+  },
+  "actual_bge": {
+    "cases": 14,
+    "synthetic_sdk_calls": 15,
+    "confirmed_facts": 5,
+    "pending_facts": 2,
+    "db_retry_reused_validated_result": true,
+    "peak_rss_mib": 305.5078125,
+    "resource": "2 CPU / 2 GiB / network none"
+  },
+  "identity": {
+    "tests": 173,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "focused_tests": 23,
+    "redaction_tests": 9,
+    "tls_wss_scope_extraction_and_jar": "passed",
+    "vector_encoder": "synthetic_unit_fixture; true BGE separately"
+  },
+  "manager": {
+    "tests": 150,
+    "separate_baseline_tests": 4,
+    "failures": 0,
+    "class_byte_comparison": "passed"
+  },
+  "provider": {
+    "final_passed_samples": 4,
+    "final_requests": 4,
+    "total_development_requests": 8,
+    "attempt_requests": [
+      1,
+      3,
+      4
+    ],
+    "model": "glm-4-flash",
+    "independent_holdout": false,
+    "review": "Codex inspected all four raw outputs, not independent human signoff"
+  },
+  "previous_iterations": [
+    {
+      "sha": "38e4f65836ac2eb40f1249b40bc210f3e14bea61",
+      "service": 38769626602,
+      "identity": 38769626679,
+      "manager": 38769626480,
+      "vectors": 38769626479,
+      "failures": "SSE fixture mismatch and pending task ordering; original reports retained"
+    },
+    {
+      "sha": "a9ba4b96f6e0d05b57c3b1b74760d43712fb69e4",
+      "service": 38769942793,
+      "identity": 38769947937,
+      "manager": 38769977616,
+      "vectors": 38769928729,
+      "failures": "Identity pending task fixture ordering still failed; BGE passed"
+    },
+    {
+      "sha": "707fd8ec59342a64d5feb8e05dc839bde8d9e031",
+      "service": 38770140373,
+      "identity": 38770123647,
+      "manager": 38770147950,
+      "vectors": 38770143824,
+      "provider": 38770329661,
+      "failures": "Live provider invented habit category; strict rejection kept database empty"
+    },
+    {
+      "sha": "a0a2e313c389ccfafe3c14f770611cebeb211c36",
+      "service": 38770526809,
+      "identity": 38770526854,
+      "manager": 38770526964,
+      "vectors": 38770526807,
+      "provider": 38770540732,
+      "failures": "Live fictional quote case copied old fact; provenance guard rejected write"
+    }
+  ],
+  "artifacts": {
+    "extraction-controlled-results.json": {
+      "source": "extraction-results.json",
+      "source_sha256": "5c1e57e87f3c2fcdb201289e2eb1171832e9c68785d5cc581a492a37a0d69dd0",
+      "source_bytes": 2625
+    },
+    "extraction-reply-results-regression.json.gz": {
+      "source": "reply-results.json",
+      "source_sha256": "5adb8f90737c19f1b5e6d07e1c94d992f34e5f6b4e585a47071414d0c20fcdde",
+      "source_bytes": 20297
+    },
+    "extraction-context-results-regression.json.gz": {
+      "source": "context-results.json",
+      "source_sha256": "03066ba21a8b7fb3fdd714577b8d8cb375cffc6d2d0a6b75ac31234c3559b955",
+      "source_bytes": 18323
+    },
+    "extraction-retrieval-results-regression.json.gz": {
+      "source": "retrieval-results.json",
+      "source_sha256": "f8e898252858d90c576397bef4f75b27f69e935cedb091d020d8c5a1c5638492",
+      "source_bytes": 1381288
+    },
+    "extraction-vector-results-regression.json.gz": {
+      "source": "vector-results.json",
+      "source_sha256": "bdd60c17fdd42e606a61f1ee63508ff16a65c911a2cccba18d561c650a541279",
+      "source_bytes": 2469
+    },
+    "extraction-identity-results.json": {
+      "source": "JSON payload reconstructed from final GitHub step log; log prefixes and leading indentation removed",
+      "source_sha256": "1ac8c4d5b9fbbc575c6e11b9a0c5cfbc3cd81bce8d5d3540355129c4b9f6d6f4",
+      "source_bytes": 1655
+    },
+    "extraction-manager-results.json": {
+      "source": "JSON payload reconstructed from final GitHub step log; log prefixes and leading indentation removed",
+      "source_sha256": "b0c51323fd7624d20384a15533e657e19e2e7290c9d98b6d62892a8c86ce0a6b",
+      "source_bytes": 1195
+    },
+    "extraction-service-results.json": {
+      "sha256": "f3c6254ec1ccb049f76fbff295ec039627d40db45837c8b9e7c46d177f4b6a64",
+      "bytes": 1601
+    },
+    "extraction-provider-results.json": {
+      "sha256": "f3ad24c432e0e1dadce269c21c8acfbacce7bc0d1d38c1462c63cdf60180aa5b",
+      "bytes": 4197
+    },
+    "extraction-provider-review.json": {
+      "sha256": "61eda0287428f234f95e97e0d4e18e68ec9158caddb6274a149c4ed162e9cb62",
+      "bytes": 1008
+    },
+    "extraction-first-controlled-failure.json": {
+      "sha256": "79488a288f7b204a23d620f96e343e6e95f320162d5519a5402414147d9892e2",
+      "bytes": 1217
+    },
+    "extraction-first-identity-failure.json": {
+      "sha256": "067e732dac676e6c003ec7898f0133d710e4b46a239c302ce2050d6ce1cb2327",
+      "bytes": 4894
+    },
+    "extraction-first-provider-failure.json": {
+      "sha256": "7c6c494b148ccfb9e8eac8b213a54183c4e768f2d6271dd29f97f23278a23f90",
+      "bytes": 1704
+    },
+    "extraction-second-provider-failure.json": {
+      "sha256": "95ac6208bde03db7a7274d32008a24402314529547252ba9354d6b3c61e6f873",
+      "bytes": 3510
+    }
+  },
+  "local_automated_tests_builds": "not_performed",
+  "production_deployment": "not_performed",
+  "production_context_limits": "unverified_restriction_preserved",
+  "full_B03_B08_eight_behaviors": "not_accepted",
+  "physical_device": "not_tested",
+  "all_runs_completed": true
+}

@@ -1,0 +1,22 @@
+{
+  "code_sha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38770771902",
+  "reviewer": "Codex source/output semantic review; not independent human acceptance",
+  "cases": {
+    "neutral_durable": "Literal lasting routine retained without emotional threshold, category fact, confirmed true.",
+    "medical_confirmation": "Literal diagnosis marked sensitive; stored unconfirmed.",
+    "quoted_fiction": "Empty memories and null trait; no old fact copied or fictional experience stored.",
+    "ongoing_goal": "Literal six-month swimming plan retained as goal, confirmed true."
+  },
+  "parameters": "Unchanged across all attempts: glm-4-flash, temperature 0.1, max output 768, no transport/evaluation retries",
+  "total_real_requests_this_P17_development": 8,
+  "attempt_requests": [
+    1,
+    3,
+    4
+  ],
+  "failure_history_retained": true,
+  "independent_holdout": false,
+  "full_B03": "not_accepted",
+  "production_deployment": "not_performed"
+}

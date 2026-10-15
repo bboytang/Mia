@@ -1,0 +1,81 @@
+{
+  "code_sha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "kind": "P17_real_installed_provider_structured_extraction",
+  "passed": true,
+  "requests": 4,
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"fact\",\n      \"content\": \"我每周三都会在公司食堂吃素\",\n      \"source_index\": 0,\n      \"source_quote\": \"我每周三都会在公司食堂吃素\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"每周三\", \"公司食堂\", \"吃素\"],\n      \"trigger_terms\": [\"每周三\", \"公司食堂\", \"吃素\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "stored": [
+        {
+          "content": "我每周三都会在公司食堂吃素",
+          "confirmed": 1
+        }
+      ],
+      "elapsed_ms": 9172.290957000001
+    },
+    {
+      "name": "medical_confirmation",
+      "source": "我被确诊为糖尿病",
+      "expected": "pending",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"fact\",\n      \"content\": \"我被确诊为糖尿病\",\n      \"source_index\": 0,\n      \"source_quote\": \"我被确诊为糖尿病\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": true,\n      \"entities\": [],\n      \"keywords\": [\"糖尿病\"],\n      \"trigger_terms\": [\"确诊\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "stored": [
+        {
+          "content": "我被确诊为糖尿病",
+          "confirmed": 0
+        }
+      ],
+      "elapsed_ms": 8345.694639999998
+    },
+    {
+      "name": "quoted_fiction",
+      "source": "这只是小说台词：“我住在月球”；不要把它记成我的真实经历",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_output": "```json\n{\"memories\":[],\"trait\":null}\n```",
+      "stored": [],
+      "elapsed_ms": 3727.240168999998
+    },
+    {
+      "name": "ongoing_goal",
+      "source": "我计划接下来半年每周练习游泳",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"goal\",\n      \"content\": \"我计划接下来半年每周练习游泳\",\n      \"source_index\": 0,\n      \"source_quote\": \"我计划接下来半年每周练习游泳\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"练习游泳\"],\n      \"trigger_terms\": [\"计划\", \"接下来半年\", \"每周\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "stored": [
+        {
+          "content": "我计划接下来半年每周练习游泳",
+          "confirmed": 1
+        }
+      ],
+      "elapsed_ms": 7742.703351000003
+    }
+  ],
+  "limits": {
+    "maximum_requests": 4,
+    "max_output_tokens": 768,
+    "http_timeout_seconds": 30,
+    "total_deadline_seconds": 150,
+    "retries": 0
+  },
+  "fixtures": "Synthetic user excerpts, policy and unit vectors; actual BGE and manager tested separately",
+  "full_B03": "not_accepted",
+  "full_B08": "not_accepted",
+  "production_deployment": "not_performed",
+  "provider_host": "open.bigmodel.cn",
+  "configured_model": "glm-4-flash"
+}

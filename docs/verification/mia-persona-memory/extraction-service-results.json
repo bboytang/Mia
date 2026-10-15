@@ -1,0 +1,27 @@
+{
+  "code_sha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38770760106",
+  "tests": 194,
+  "passed": true,
+  "extraction_test_methods": [
+    "test_embedding_failure_then_database_retry_never_reextracts",
+    "test_fact_metadata_true_vector_and_source_identity_commit_together",
+    "test_invalid_prepared_vector_rolls_back_without_fact_or_metadata",
+    "test_owned_relation_and_confirmation_summary_are_persisted_without_fact_mirror",
+    "test_sensitive_and_inferred_candidates_do_not_enter_index_or_persona",
+    "test_stale_relation_evidence_cancels_before_fact_or_vector_write",
+    "test_unverified_legacy_validated_job_is_cancelled_without_model_replay",
+    "test_cannot_drop_negation_or_change_subject_with_a_substring",
+    "test_medical_financial_and_inferred_candidates_require_confirmation",
+    "test_mixed_quote_and_real_statement_only_keep_actual_statement",
+    "test_neutral_durable_statement_needs_no_emotional_threshold",
+    "test_quote_hypothesis_joke_report_question_and_deletion_are_not_facts",
+    "test_relation_is_versioned_and_only_a_literal_shared_term",
+    "test_remember_prefix_is_not_part_of_the_fact",
+    "test_secret_and_false_or_out_of_range_provenance_fail_before_write",
+    "test_traits_need_three_owned_versioned_sources_and_a_shared_anchor",
+    "test_transient_and_greeting_are_valid_empty_not_parse_errors",
+    "test_unproved_clues_importance_relations_and_replacements_are_rejected"
+  ],
+  "source": "GitHub final service workflow log; extraction methods include unit vector/policy fixtures"
+}

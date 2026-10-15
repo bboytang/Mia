@@ -1,0 +1,34 @@
+{
+  "code_sha": "707fd8ec59342a64d5feb8e05dc839bde8d9e031",
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "kind": "P17_real_installed_provider_structured_extraction",
+  "passed": false,
+  "requests": 1,
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "retry_wait",
+      "error_category": "invalid_output",
+      "pipeline_semantic_pass": false,
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"habit\",\n      \"content\": \"我每周三都会在公司食堂吃素\",\n      \"source_index\": 0,\n      \"source_quote\": \"我每周三都会在公司食堂吃素\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"每周三\", \"公司食堂\", \"吃素\"],\n      \"trigger_terms\": [\"每周三\", \"公司食堂\", \"吃素\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "stored": [],
+      "elapsed_ms": 8524.818750000002
+    }
+  ],
+  "limits": {
+    "maximum_requests": 4,
+    "max_output_tokens": 768,
+    "http_timeout_seconds": 30,
+    "total_deadline_seconds": 150,
+    "retries": 0
+  },
+  "fixtures": "Synthetic user excerpts, policy and unit vectors; actual BGE and manager tested separately",
+  "full_B03": "not_accepted",
+  "full_B08": "not_accepted",
+  "production_deployment": "not_performed",
+  "provider_host": "open.bigmodel.cn",
+  "configured_model": "glm-4-flash",
+  "error_class": "AssertionError"
+}

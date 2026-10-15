@@ -1,6 +1,6 @@
 # P17 结构化提取与原子索引
 
-当前：实现及验证入口已写入，GitHub 验证待执行；不标记完成。
+当前：P17 机制、受控联动及四个固定真实模型样本通过；完整 B03／八项行为仍待后续，下一步 P18。
 
 沿用 P16 的同一 Worker、选中模型与事实库。LLMMemoryExtractor 返回带实际来源引文、类别、价值、显性／推断、敏感状态与有据线索的结构；引文必须来自实际用户输入。显性正文保留完整句的主体与否定，仅可省略开头的记忆请求。引用、假设、玩笑、问题与短暂情绪作有效空结果；非法结构作 invalid_output。规则保守，不能据此宣称覆盖任意自然语言或独立真实用户语料。
 
@@ -11,3 +11,16 @@
 验证入口：服务测试含纯校验与 SQLite／Worker 竞态；原安装 SDK＋真实 BGE 的无网络控制语料；实际 manager 的身份及跨 owner 关联拒绝；独立手动 workflow 使用既有专用测试 Secrets，最多四次真实提取，每次输出 768、30 秒、无重试，总期限 150 秒。真实样本使用合成输入和策略／向量夹具，不能替代 manager＋BGE 联动、B03 或八项验收。
 
 生产容量未知限制保持，未部署。P18 完整纠错维护、P21 确认表达、P22 独立语料及 P23 全服务负载另行验证。所有自动化在 GitHub 执行。
+
+## 最终验证与保存点
+
+被测提交 `6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0`，所有相关 workflow 已结束且通过：
+
+- [服务 38770760106](https://github.com/bboytang/Mia/actions/runs/38770760106)：194 项全通过，含 18 项 P17 校验／事务方法；[方法证据](extraction-service-results.json)。
+- [真实 BGE 38770760196](https://github.com/bboytang/Mia/actions/runs/38770760196)：14 个提取场景、15 次合成 SDK 调用、5 项确认事实／2 项待确认、来源和关联、DB 重试不重提取通过；[原报告](extraction-controlled-results.json)。2 CPU／2 GiB／无网络，峰值 RSS 305.508 MiB，仅为该受控过程，非全服务负载指标。P12—P16 检索／上下文／回复回归也通过，原文无损 gzip 和 hash 见[本轮证据](extraction-ci-results.json)。
+- [身份 38770760090](https://github.com/bboytang/Mia/actions/runs/38770760090)：173／173、23 专项、实际 manager HTTPS／WSS、Worker 提取与同 owner 正向／跨 owner 拒绝对照、删除／撤权、类范围及 JAR 通过；向量在此为单位夹具，真实 BGE 单独验证。[manager 38770760124](https://github.com/bboytang/Mia/actions/runs/38770760124)：150／150＋独立基线 4／4、字节对照通过。脱敏 9 项继续通过，未跳过。
+- [真实 Provider 38770771902](https://github.com/bboytang/Mia/actions/runs/38770771902)：固定上游 SDK＋现有 glm-4-flash，四次请求，无重试，长期平淡习惯／医疗待确认／小说引用空结果／持续目标均通过。[原输出](extraction-provider-results.json)由 Codex 逐条复核，[复核范围](extraction-provider-review.json)明确不是独立人工签字或独立留出语料。真实样本使用策略与单位向量夹具，不是 manager＋BGE＋Provider 全链行为验收。
+
+两项初始夹具错误（SDK 实际 SSE 契约及旧待删除任务排在新任务前）修正在验证脚本，不改运行时公平性。两轮真实 Provider 失败分别为非法 habit 类别和把旧事实当作本轮来源，均被严格校验拒绝，未错误落库；提示先后补清类别映射及旧事实只读边界，未放宽校验、改变固定样本或采样参数。开发共 8 次真实请求（1＋3＋4），失败原输出及运行链接完整保留，不能把最终四次写成本轮全部调用。没有自动重试失败样本或调参刷成功。
+
+没有本地自动测试／构建或部署；生产容量与输出预留仍未核实，限制保持。下一步 P18 贯通明确纠正／时间变化／不确定冲突及跨连接失效、删除和缓存维护。P21 确认表达、P22 独立语料／真实行为、P23 全服务负载及真机均待后续。

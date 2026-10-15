@@ -1,0 +1,113 @@
+{
+  "code_sha": "6acfc73c69a9f4c5342783f5b580a53d6cf5b0e0",
+  "passed": true,
+  "kind": "P17_installed_SDK_real_BGE_extraction",
+  "chat_provider_calls": 0,
+  "model_outputs": "synthetic_controlled_fixture",
+  "manager": "policy_fixture_real_manager_separate",
+  "resource_limit": {
+    "cpu": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "full_B03": "not_accepted",
+  "dataset_sha256": "17ec242f91e6a0c4488fe98aa7e36a986a559da20b656cdea5abf7d144350e3b",
+  "cases": [
+    {
+      "id": "neutral",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "negation",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "mixed_quote",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "medical",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": false
+    },
+    {
+      "id": "inferred",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_inferred",
+      "confirmation_origin": "model_inferred_candidate",
+      "indexed": false
+    },
+    {
+      "id": "greeting",
+      "state": "empty",
+      "sdk_calls": 1
+    },
+    {
+      "id": "hypothesis",
+      "state": "empty",
+      "sdk_calls": 1
+    },
+    {
+      "id": "joke",
+      "state": "empty",
+      "sdk_calls": 1
+    },
+    {
+      "id": "quote",
+      "state": "empty",
+      "sdk_calls": 1
+    },
+    {
+      "id": "relation",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "ongoing_goal",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "unproved_clue",
+      "state": "failed",
+      "sdk_calls": 2
+    },
+    {
+      "id": "false_quote",
+      "state": "failed",
+      "sdk_calls": 2
+    },
+    {
+      "id": "credential",
+      "state": "credential_rejected",
+      "sdk_calls": 0
+    }
+  ],
+  "sdk_calls": 15,
+  "db_retry_did_not_repeat_model": true,
+  "confirmed_fact_count": 5,
+  "pending_fact_count": 2,
+  "peak_rss_mib": 305.5078125
+}

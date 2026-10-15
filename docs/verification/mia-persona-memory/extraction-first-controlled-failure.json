@@ -1,0 +1,19 @@
+{
+  "code_sha": "38e4f65836ac2eb40f1249b40bc210f3e14bea61",
+  "passed": false,
+  "kind": "P17_installed_SDK_real_BGE_extraction",
+  "chat_provider_calls": 0,
+  "model_outputs": "synthetic_controlled_fixture",
+  "manager": "policy_fixture_real_manager_separate",
+  "resource_limit": {
+    "cpu": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "full_B03": "not_accepted",
+  "dataset_sha256": "17ec242f91e6a0c4488fe98aa7e36a986a559da20b656cdea5abf7d144350e3b",
+  "cases": [],
+  "error_class": "AssertionError",
+  "failure": "('neutral', 'failed', 'invalid_output')",
+  "traceback": "Traceback (most recent call last):\n  File \"/experiment/scripts/ci/verify_mia_extraction.py\", line 168, in main\n    asyncio.run(evaluate(args, report))\n  File \"/usr/local/lib/python3.10/asyncio/runners.py\", line 44, in run\n    return loop.run_until_complete(main)\n  File \"/usr/local/lib/python3.10/asyncio/base_events.py\", line 649, in run_until_complete\n    return future.result()\n  File \"/experiment/scripts/ci/verify_mia_extraction.py\", line 122, in evaluate\n    assert task['state'] == expected, (row['id'], task['state'], task['error_category'])\nAssertionError: ('neutral', 'failed', 'invalid_output')\n"
+}
