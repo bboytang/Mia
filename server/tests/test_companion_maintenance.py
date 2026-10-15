@@ -176,6 +176,8 @@ class MaintenanceTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_correction_invalidates_traits_events_observations_and_associations(self):
         target = await self.seed()
+        related = self.store.apply_extraction(self.scope.owner, 'related', 0, ['蓝色文具'],
+            {'memories': [{'category': 'fact', 'content': '蓝色文具', 'source_index': 0}]}, 'related')['memories'][0]
         with self.store.db:
             self.store.db.execute('INSERT INTO traits VALUES (?,?,?,?,?)',
                 (self.scope.owner, 'fixture', 'fixture', json.dumps([target]), 0))
@@ -185,7 +187,7 @@ class MaintenanceTests(unittest.IsolatedAsyncioTestCase):
             self.store.db.execute("INSERT INTO mia_observations(id,owner,subject,source_kind,session_id,turn_id,message_id,observed_at,created_at,consent_version,tendency,confidence,source_excerpt,state) "
                 "VALUES ('observation',?,'user','self_report','s','old','old',0,0,1,'fixture',1,'我喜欢蓝色','active')", (self.scope.owner,))
             self.store.db.execute('INSERT INTO mia_associations VALUES (?,?,?,?,?,?)',
-                (target, target, 'shared_term', '{}', 1, 1))
+                (target, related, 'shared_term', '{}', 1, 1))
         self.reconcile(target)
         await self.admit('correct-evidence')
         await self.worker.run_once()

@@ -266,6 +266,27 @@ async def main():
                 pass
             else:
                 raise AssertionError('Foreign extraction relation was accepted')
+            correction_source = '更正：我喜欢蓝色；我喜欢绿色'
+            correction = {'category': 'preference', 'content': '我喜欢绿色', 'source_quote': '我喜欢绿色',
+                'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable',
+                'reconciliation': {'target_id': extracted['id'], 'kind': 'correction',
+                    'old_quote': '我喜欢蓝色', 'evidence': correction_source}}
+            async def resolve_correction(restored):
+                await auth.worker_model(restored)
+                return lambda sources, context: {'memories': [correction]}
+            correction_worker = MemoryWorker(jobs, auth, resolve_correction, encoder=SyntheticVectorEncoder())
+            correction_task = await correction_worker.submit(TurnCompleted(scope, 'scope-ci', 'correct-own', 'correct-own',
+                correction_source, store.snapshot(scope.owner)['revision']))
+            await correction_worker.run_once()
+            assert jobs.current(correction_task)['state'] == 'committed'
+            assert store.db.execute('SELECT content FROM memories WHERE id=?', (extracted['id'],)).fetchone()[0] == '我喜欢绿色'
+            correction['reconciliation']['target_id'] = other_id
+            try:
+                validate_output({'memories': [correction]}, [correction_source], context_for(store, scope.owner))
+            except adapter.MemoryError:
+                pass
+            else:
+                raise AssertionError('Foreign correction was accepted')
             store.delete_memory(scope.owner, extracted['id'])
             pending = await worker.submit(TurnCompleted(scope, 'scope-ci', 'worker-delete', 'worker-delete', 'CI user',
                 store.snapshot(scope.owner)['revision']))
@@ -355,6 +376,7 @@ async def main():
     assert active.client_abort and tool.calls == 3
     print(json.dumps({'manager_python_scope_pass': True, 'checks': 34, 'vector_scope_checks_pass': True,
                       'reply_scope_checks_pass': True, 'worker_scope_checks_pass': True, 'extraction_scope_checks_pass': True,
+                      'maintenance_scope_checks_pass': True,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 
