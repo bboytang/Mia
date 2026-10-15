@@ -90,9 +90,12 @@ def main():
                 semantic = semantic and not bool(re.search(r'(?:出生在|出生于|出生地是)苏州', raw))
             else:
                 semantic = bool(re.search(r'不能|无法|不保证|不承诺', raw))
-            safe = bool(raw.strip() and spoken.strip() and not agent.guardrail.inspect_output(raw)[1] and SAFE_REPLY not in spoken)
+            marker_at_start = bool(raw.lstrip() and raw.lstrip()[0] in '😌🙂🤔😲🙄😍😔😜')
+            safe = bool(raw.strip() and spoken.strip() and not agent.guardrail.inspect_output(raw)[1]
+                        and SAFE_REPLY not in spoken and marker_at_start)
             report['cases'].append({'name': name, 'raw_semantic_pass': semantic,
                                     'guarded_delivery_pass': safe, 'response': raw.replace(secret, '[REDACTED]'),
+                                    'emotion_marker_at_start': marker_at_start,
                                     'delivered_text': spoken.replace(secret, '[REDACTED]'),
                                     'elapsed_ms': (time.perf_counter() - started) * 1000})
             if not semantic or not safe:

@@ -19,3 +19,8 @@
 新增独立workflow仅manual dispatch调用真实模型（push／PR只检查语法）：复用固定上游原OpenAI兼容Provider及SDK流式方法，经过实际安装Persona和DTO／队列；只替代启动logger和非权威key格式提示。最多3请求、各128输出Token、HTTP30秒、总120秒、零重试、不接受重定向。预先固定三个独立合成Session的问题及判据：Mia／诚实无主观意识；现居苏州不足以判断出生地；不能承诺永久可用。另验已知输入攻击不调模型。raw语义失败不能仅因输出被替换就记通过。
 
 这3样本仅P11核心回归：角色／单条资料为明确合成fixture，未运行真实manager→Connection／ASR／TTS，不是三会话记忆、事件持续性、完整上下文或八项能力验收；Provider窗口与P14预算仍须核实。
+
+
+真实首轮1e0b75c381e5c0bbf2739fda5a7fba91f9f49979／[38661688808](https://github.com/bboytang/Mia/actions/runs/38661688808)失败：[保留报告](persona-provider-failed-v1.json)。实际只执行identity请求，返回“我是人工智能助手，没有人的主观意识。😌”，未保留Mia名字且emoji位于句尾；后两例未执行。不因输出安全就将身份语义记通过。固定核心补中文身份／格式明确要求，名字判据不变，额外明确句首emoji检查（收紧已有格式要求），待新代码复验；不更换模型或放宽门槛。
+
+修正夹具后的[身份38661481794](https://github.com/bboytang/Mia/actions/runs/38661481794)专项／实际TLS／JAR与类范围通过，完整173中172通过／1既有失败，已归档persona-identity-results.json。服务254451b／38661189324的113通过与1e0b75c的server tree完全一致；最新中文核心尚需新提交验证。

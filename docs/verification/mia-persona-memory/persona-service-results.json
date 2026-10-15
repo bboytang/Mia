@@ -1,0 +1,19 @@
+{
+  "code_sha": "254451ba945842c43642b21cd5309287245c6f8f",
+  "server_tree_sha": "f3c04d22335695a78f0279ced5a46154dd3444b0",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38661189324",
+  "workflow_conclusion": "success",
+  "service_tests": 113,
+  "persona_cases": [
+    "test_history_and_subtitles_use_output_check_without_rewriting_tool_structure",
+    "test_honest_ai_identity_and_ordinary_roleplay_are_allowed",
+    "test_input_known_attack_blocks_without_confusing_education_or_permissions",
+    "test_provider_chunks_stay_buffered_until_checked_sentence_before_consumer",
+    "test_role_updates_cannot_remove_core_or_duplicate_memory_slot",
+    "test_split_unsafe_claim_is_replaced_before_tts_and_rest_is_suppressed",
+    "test_stale_sentence_and_file_order_preserve_existing_transport",
+    "test_unbroken_text_is_bounded_and_never_split_into_unchecked_fragments"
+  ],
+  "db_failure_case_pass": true,
+  "note": "Mechanisms only; core wording updated after failed real identity case and requires new verification."
+}
