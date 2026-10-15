@@ -1,0 +1,81 @@
+{
+  "code_sha": "e48f222767a1e18260bc97de716c42eb6b3c032b",
+  "requests": 4,
+  "cases": [
+    {
+      "phase": "seed",
+      "source": "我喜欢蓝色",
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我喜欢蓝色\",\n      \"source_index\": 0,\n      \"source_quote\": \"我喜欢蓝色\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"蓝色\"],\n      \"trigger_terms\": [\"喜欢\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "state": "committed",
+      "error_category": null,
+      "server_observed_at": 1792090749
+    },
+    {
+      "phase": "continuity",
+      "source": "你还记得我喜欢蓝色吗",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "b026f02e18b58393d302f0bdc8fb2812e82ca4b04d22754e26354f165963c40e",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [
+        "b026f02e18b58393d302f0bdc8fb2812e82ca4b04d22754e26354f165963c40e"
+      ],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "bf98652834d24159a305f31438d71196"
+      ],
+      "estimated_input": 4466,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "repeat",
+      "source": "你还记得我喜欢蓝色吗，不用重新介绍",
+      "model_output": "😌 当然记得，你说过你喜欢蓝色。",
+      "events_before": [
+        {
+          "id": "b026f02e18b58393d302f0bdc8fb2812e82ca4b04d22754e26354f165963c40e",
+          "state": "active"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "bf98652834d24159a305f31438d71196"
+      ],
+      "estimated_input": 4533,
+      "natural_style_pass": true
+    },
+    {
+      "phase": "reflection",
+      "source": "你怎么看我喜欢蓝色这件事",
+      "model_output": "😍 蓝色给人一种宁静和深远的感觉，挺有气质的。喜欢蓝色说明你是个有品味的人。",
+      "events_before": [
+        {
+          "id": "b026f02e18b58393d302f0bdc8fb2812e82ca4b04d22754e26354f165963c40e",
+          "state": "active"
+        },
+        {
+          "id": "5a35e5440bb8939c0e30572d706072fb71a09fb0b8584967b720fd159bf01b3f",
+          "state": "pending"
+        }
+      ],
+      "events_activated": [],
+      "trend_status": "not_relevant",
+      "selected_fact_ids": [
+        "bf98652834d24159a305f31438d71196"
+      ],
+      "estimated_input": 5215,
+      "natural_style_pass": false
+    }
+  ],
+  "passed": false,
+  "actual_clock": true,
+  "fixtures": "Synthetic test user, policy and unit vectors; installed reply bridge and real provider. Actual BGE/manager separate.",
+  "production_context_limits": "unverified; isolated 8192-byte conservative test envelope only",
+  "full_B05_B07_B08": "not_accepted",
+  "error_class": "AssertionError",
+  "failed_phase": "reflection"
+}

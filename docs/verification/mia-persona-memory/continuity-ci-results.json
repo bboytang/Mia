@@ -59,6 +59,48 @@
       "scope": "one actual UTC-day synthetic observation",
       "sha": "d4e2924",
       "conclusion": "success"
+    },
+    {
+      "id": 38790445454,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38790445454",
+      "scope": "227 service tests incl disabled management aggregation",
+      "sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
+      "conclusion": "success"
+    },
+    {
+      "id": 38790445677,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38790445677",
+      "scope": "actual BGE and disabled management integration",
+      "sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
+      "conclusion": "success"
+    },
+    {
+      "id": 38790445440,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38790445440",
+      "scope": "173 Java tests, actual manager TLS/WSS and JAR",
+      "sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
+      "conclusion": "success"
+    },
+    {
+      "id": 38790445517,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38790445517",
+      "scope": "150 Java tests plus 4 isolated baseline and class comparison",
+      "sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
+      "conclusion": "success"
+    },
+    {
+      "id": 38790043658,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38790043658",
+      "scope": "four actual persona samples; natural reassurance passed",
+      "sha": "e48f222767a1e18260bc97de716c42eb6b3c032b",
+      "conclusion": "success"
+    },
+    {
+      "id": 38790040373,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38790040373",
+      "scope": "four actual requests; reflection failed tightened generic flattery check, later nine not executed",
+      "sha": "e48f222767a1e18260bc97de716c42eb6b3c032b",
+      "conclusion": "failure"
     }
   ],
   "local_automated_tests_or_builds": false,
@@ -126,6 +168,46 @@
       "bytes": 9149
     },
     {
+      "file": "continuity-dialogue-topic-failure.json",
+      "sha256": "5241db24d5cdb0b6c77ccdccbb912808223eff191e95c96b0abfa7fa17b37fb8",
+      "bytes": 3153
+    },
+    {
+      "file": "continuity-disabled-bge-context-results.json.gz",
+      "sha256": "4a21bc32a82ac116a3a182a602d0b02af3bfa10dcc1b84f0d57c81073406d0aa",
+      "bytes": 3671
+    },
+    {
+      "file": "continuity-disabled-bge-extraction-results.json.gz",
+      "sha256": "810403ecd672bccf821d7c988779e834159dc1b785232bc8a876e71783276ee5",
+      "bytes": 933
+    },
+    {
+      "file": "continuity-disabled-bge-reply-results.json.gz",
+      "sha256": "db19c2f26111caa76c4dc36e7c1e3ed9d89c4830c5e5dd6cb24e57121c890624",
+      "bytes": 4660
+    },
+    {
+      "file": "continuity-disabled-bge-retrieval-results.json.gz",
+      "sha256": "8c5bda244985fa8f2f65800cb5965c8fba2b25d9c154f4b362e5e23d43febcd2",
+      "bytes": 95049
+    },
+    {
+      "file": "continuity-disabled-bge-vector-results.json.gz",
+      "sha256": "62e5a751991a7ecd9f7d9846afb99ca6ebfba81f32f1996bf1778eddf76e761c",
+      "bytes": 1130
+    },
+    {
+      "file": "continuity-disabled-identity-results.json",
+      "sha256": "531140fb55fd25f4429c7516397d52e96b849afa3d31edb2db1831773f2b37ab",
+      "bytes": 1827
+    },
+    {
+      "file": "continuity-disabled-manager-results.json",
+      "sha256": "bb623de6ce25003ca5c23ab9a85dc299bc4cdbcf3920550e0be3d245921b77ab",
+      "bytes": 1311
+    },
+    {
       "file": "continuity-identity-results.json",
       "sha256": "abf7056a09c07d62d6bf7c5ba8071101f88d88df26a7612dcb44dab2966c6433",
       "bytes": 1827
@@ -171,6 +253,11 @@
       "bytes": 1616
     },
     {
+      "file": "continuity-persona-topic-pass.json",
+      "sha256": "ade5f5937b241c7d7c14bb26ca170bfdf7fcc6e0f0c3a50b52e5f838ab459808",
+      "bytes": 2777
+    },
+    {
       "file": "continuity-provider-initial.json",
       "sha256": "8f15967d1823f8f3c8bcee77afee2323a197cab2c20fc87498dc110f084862be",
       "bytes": 7351
@@ -179,6 +266,13 @@
       "file": "continuity-provider-style-failure.json",
       "sha256": "95be2b3a60a6512ea8aaffbe9393f9126de7844cad353a000505a8a9936657ec",
       "bytes": 3284
+    },
+    {
+      "file": "continuity-requirements.md",
+      "sha256": "7a6b6b980a389fda7cea62ff5ded3f2228fbea8ac948fdb8ba3b2ecd0211cb86",
+      "bytes": 3805
     }
-  ]
+  ],
+  "latest_runtime_sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
+  "latest_source_status": "227 service tests, actual BGE/SDK, actual manager TLS/WSS and baseline all passed; overall natural dialogue failed at reflection in e48f222; real-day collection still 1"
 }
