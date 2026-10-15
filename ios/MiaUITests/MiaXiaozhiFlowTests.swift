@@ -72,7 +72,18 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         }
         XCTAssertTrue(entry.waitForExistence(timeout: 5))
         entry.tap()
-        XCTAssertTrue(app.navigationBars["记忆与成长"].waitForExistence(timeout: 5))
+        guard app.navigationBars["记忆与成长"].waitForExistence(timeout: 5) else {
+            let hierarchy = XCTAttachment(string: app.debugDescription)
+            hierarchy.name = "P21 navigation failure hierarchy"
+            hierarchy.lifetime = .keepAlways
+            add(hierarchy)
+            let screenshot = XCTAttachment(screenshot: app.screenshot())
+            screenshot.name = "P21 navigation failure screenshot"
+            screenshot.lifetime = .keepAlways
+            add(screenshot)
+            XCTFail("Memory page did not remain open: " + app.debugDescription)
+            return
+        }
         let tracking = app.switches["记录我的长期心情"]
         for _ in 0..<6 {
             if tracking.isHittable { break }

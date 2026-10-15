@@ -10,6 +10,11 @@ on:
       - 'ios/**'
       - '.github/workflows/ios.yml'
   workflow_dispatch:
+    inputs:
+      memory_only:
+        description: Diagnose the memory management page only; full regression remains the default
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -65,6 +70,8 @@ jobs:
 
       - name: Run iOS unit and Xiaozhi UI tests
         working-directory: ios
+        env:
+          MIA_MEMORY_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.memory_only || false }}
         run: |
           simulator_id=$(xcrun simctl list devices available -j | python3 -c '
           import json, sys
@@ -72,11 +79,26 @@ jobs:
           print(next(device["udid"] for runtime in devices.values()
                      for device in runtime if "iPhone" in device["name"]))
           ')
+          mia_test_options=()
+          if [[ "$MIA_MEMORY_ONLY" == "true" ]]; then
+            mia_test_options=(-only-testing:MiaUITests/MiaXiaozhiFlowTests/testMemoryPageOffersExplicitOptInWithoutStartingConversation)
+          fi
           xcodebuild -project Mia.xcodeproj -scheme Mia -configuration Debug \
+            "${mia_test_options[@]}" \
             -destination "platform=iOS Simulator,id=$simulator_id" \
             -derivedDataPath "$RUNNER_TEMP/mia-tests" \
             -resultBundlePath "$RUNNER_TEMP/mia-account-tests.xcresult" \
             CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
+
+      - name: Preserve test results and loopback diagnostics, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mia-iOS-tests-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/mia-account-tests.xcresult
+            ${{ runner.temp }}/mia-fixture.log
+          if-no-files-found: warn
 
       - name: Build unsigned device app
         working-directory: ios
