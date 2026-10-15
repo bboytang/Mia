@@ -1,9 +1,10 @@
 {
-  "code_sha": "254451ba945842c43642b21cd5309287245c6f8f",
-  "server_tree_sha": "f3c04d22335695a78f0279ced5a46154dd3444b0",
-  "run_url": "https://github.com/bboytang/Mia/actions/runs/38661189324",
+  "code_sha": "232de0d2fc5250a42f9802a2bbd470e9866d5c18",
+  "server_tree_sha": "53f180c92f69ecb789aec4f724f0e73a660497bd",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38662376416",
   "workflow_conclusion": "success",
   "service_tests": 113,
+  "service_seconds": 23.43,
   "persona_cases": [
     "test_history_and_subtitles_use_output_check_without_rewriting_tool_structure",
     "test_honest_ai_identity_and_ordinary_roleplay_are_allowed",
@@ -15,5 +16,5 @@
     "test_unbroken_text_is_bounded_and_never_split_into_unchecked_fragments"
   ],
   "db_failure_case_pass": true,
-  "note": "Mechanisms only; core wording updated after failed real identity case and requires new verification."
+  "note": "Mechanisms only; real 3-case and individual semantic review are separately recorded, not full capability acceptance."
 }

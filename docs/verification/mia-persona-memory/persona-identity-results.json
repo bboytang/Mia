@@ -1,5 +1,5 @@
 {
-  "code_sha": "1e0b75c381e5c0bbf2739fda5a7fba91f9f49979",
+  "code_sha": "232de0d2fc5250a42f9802a2bbd470e9866d5c18",
   "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
   "binding_authorization_pass": true,
   "private_authorization_pass": true,
@@ -46,7 +46,7 @@
     }
   },
   "note": "Manager identity chain only; voice/worker Scope, App migration and public TLS not yet accepted.",
-  "run_url": "https://github.com/bboytang/Mia/actions/runs/38661481794",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38662376430",
   "jar_sha256": "45659b658618f730aa5bad2622b076c98afafdf1472c208ae933477fbf07dbc8",
   "build_pass": true,
   "deployment": "not_deployed",
