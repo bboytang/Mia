@@ -77,13 +77,14 @@ struct MiaEmotionTracking: Decodable {
     struct Observation: Decodable, Identifiable {
         let id: String
         let tendency: String
+        let state: String?
         let sourceKind: String
         let sourceExcerpt: String
         let confidence: Double
         let observedAt: Double
         let version: Int?
         enum CodingKeys: String, CodingKey {
-            case id, tendency, confidence, version
+            case id, tendency, state, confidence, version
             case sourceKind = "source_kind", sourceExcerpt = "source_excerpt", observedAt = "observed_at"
         }
     }

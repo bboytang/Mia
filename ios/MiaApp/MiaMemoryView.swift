@@ -181,12 +181,17 @@ struct MiaMemoryView: View {
                 }
                 ForEach(tracking.observations ?? []) { observation in
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(observation.sourceExcerpt)
+                        Text(observation.sourceExcerpt.isEmpty ? "原始依据已移除" : observation.sourceExcerpt)
+                        if observation.state != "active" {
+                            Text("依据失效或未核实，不用于趋势").font(.caption).foregroundStyle(.orange)
+                        }
                         Text("\(observation.sourceKind == "self_report" ? "明确自述" : "推测") · \(MiaEmotionTracking.tendencyLabel(observation.tendency)) · 置信度\(Int(observation.confidence * 100))%")
                             .font(.caption).foregroundStyle(.secondary)
                         Text(Date(timeIntervalSince1970: observation.observedAt).formatted(date: .abbreviated, time: .shortened))
                             .font(.caption).foregroundStyle(.secondary)
-                        Button("更正") { editingObservation = observation }.buttonStyle(.borderless)
+                        if observation.state == "active" {
+                            Button("更正") { editingObservation = observation }.buttonStyle(.borderless)
+                        }
                     }.swipeActions {
                         Button("删除", role: .destructive) { Task { await perform("observation_delete", fields: ["id": observation.id]) } }
                     }

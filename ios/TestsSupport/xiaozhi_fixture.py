@@ -105,7 +105,7 @@ async def websocket(ws):
     if extensions:
         memory["management"] = {"version": 1, "actions": extension_actions}
     tracking = {"consent": {"enabled": 0, "version": 0}, "trend": {"status": "disabled"},
-                "observations": [{"id": "fixture-observation", "source_kind": "self_report", "tendency": "negative",
+                "observations": [{"id": "fixture-observation", "state": "active", "source_kind": "self_report", "tendency": "negative",
                     "confidence": .9, "observed_at": 1800000000, "source_excerpt": "我今天很难过", "version": 1}]}
     events = {"events": [{"id": "fixture-event", "event_type": "boundary", "state": "active", "version": 1}]}
 
