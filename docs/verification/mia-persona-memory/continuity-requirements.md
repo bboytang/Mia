@@ -21,3 +21,5 @@
 所有自动化在GitHub执行。原报告、hash和不同提交的run见continuity-ci-results.json。无本地自动测试／构建或部署；没有用CI小预算替代生产Provider容量证据。不得在以上未完成项存在时结束“完成p19-p20”目标。
 
 本次契约审计修正：停用后原管理接口仍聚合，6b57337移除该例外。新服务用例覆盖足量后停用、原观察仍可看、无聚合、重启用可恢复；实际BGE同步补管理检查。此SHA四项workflow已全部成功，精确run见continuity-ci-results.json。
+
+2026-10-15新增50a8bac的audit入口：真实来源制品经GH来源／hash复核，只读备份后进行足量门槛检查。实际提前验收run38791285449按预期failure：audit_gate=insufficient_real_calendar_evidence、requests=0、原始state.sqlite3 hash保持与首日报告一致；不能将workflow失败改称完整验收成功。足量后四次回复／纠正／删除／停用的正向路径尚未执行，仍待真实七日。语法workflow38791286696成功。

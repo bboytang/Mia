@@ -37,3 +37,5 @@ daily模式每实际UTC日追加一条真实接收时间的合成测试自述，
 新增audit模式用于真实跨日足量后的变更验证：previous_run必须指向同工作流成功daily制品，沿用来源与DB hash检查；SQLite只读备份到audit.sqlite3，原state.sqlite3不迁移不修改，结束复核原hash。足量前在任何模型请求之前拒绝；足量后最多四次实际回复，依次为基线趋势、修正观察后的趋势、删至一条后的不足、停用后不使用；同时检查纠正使旧ContextBundle失效、停用后原观察仍可查看且不聚合。观察时间不修改，测试变更只在副本。集合最多14次采集请求＋独立audit最多4次，无重试；audit子进程150秒上限（四次各30秒），总workflow仍10分钟。daily的real_calendar_threshold_met只表示日期／数量门槛，real_longitudinal_complete固定false，不能只因门槛达到就称完整验收。audit原文仍须逐条复核，不能用绿色workflow自动宣布自然语义通过。
 
 本入口新增时只有2026-10-15首日：将用该真实制品验证提前audit被拒且模型请求为零；足量后的四回复路径仍待真实七日，不能据语法检查或提前拒绝冒称成功。
+
+50a8bac入口的实际提前拒绝已验证：[38791285449](https://github.com/bboytang/Mia/actions/runs/38791285449)workflow按预期failure，原因是首日仅1观察／1会话／1自然日；audit报告requests=0、original_collection_unchanged=true，原库hash与38785441525完全一致。语法38791286696成功。原始报告见continuity-audit-premature-rejection.json；没有把这种拒绝当作足量后的正向四回复验证。

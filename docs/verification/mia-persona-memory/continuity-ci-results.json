@@ -101,12 +101,32 @@
       "scope": "four actual requests; reflection failed tightened generic flattery check, later nine not executed",
       "sha": "e48f222767a1e18260bc97de716c42eb6b3c032b",
       "conclusion": "failure"
+    },
+    {
+      "id": 38791286696,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38791286696",
+      "scope": "new audit verifier syntax",
+      "sha": "50a8bac0302ff2b2ab19d481ebbec6cc0943b48e",
+      "conclusion": "success"
+    },
+    {
+      "id": 38791285449,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38791285449",
+      "scope": "premature audit refused using actual first-day artifact, zero provider requests, original DB hash unchanged; positive audit not executed",
+      "sha": "50a8bac0302ff2b2ab19d481ebbec6cc0943b48e",
+      "conclusion": "failure",
+      "expected_rejection": true
     }
   ],
   "local_automated_tests_or_builds": false,
   "deployment": false,
   "real_seven_day_acceptance": false,
   "artifacts": [
+    {
+      "file": "continuity-audit-premature-rejection.json",
+      "sha256": "62f8910bcc28a910048b5b5f00ea92a7d58bb1468240f3c71b20a80638b24c8a",
+      "bytes": 1546
+    },
     {
       "file": "continuity-bge-context-results.json.gz",
       "sha256": "8a0cc40cda16795525027e5cdcbbee0ec212eb6a00c6b64373628cff00b9117c",
@@ -269,10 +289,11 @@
     },
     {
       "file": "continuity-requirements.md",
-      "sha256": "7a6b6b980a389fda7cea62ff5ded3f2228fbea8ac948fdb8ba3b2ecd0211cb86",
-      "bytes": 3805
+      "sha256": "877f171a297c4113b2fa6266e67d7b4e7bec101f94216cc2f404c17e9db9572d",
+      "bytes": 4284
     }
   ],
   "latest_runtime_sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
-  "latest_source_status": "227 service tests, actual BGE/SDK, actual manager TLS/WSS and baseline all passed; overall natural dialogue failed at reflection in e48f222; real-day collection still 1"
+  "latest_source_status": "227 service tests, actual BGE/SDK, actual manager TLS/WSS and baseline all passed; overall natural dialogue failed at reflection in e48f222; real-day collection still 1",
+  "latest_audit_verifier_sha": "50a8bac0302ff2b2ab19d481ebbec6cc0943b48e"
 }

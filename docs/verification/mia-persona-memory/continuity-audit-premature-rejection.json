@@ -1,0 +1,55 @@
+{
+  "code_sha": "50a8bac0302ff2b2ab19d481ebbec6cc0943b48e",
+  "mode": "audit",
+  "requests": 0,
+  "cases": [],
+  "passed": false,
+  "source_collection_run": "38785441525",
+  "actual_clock": true,
+  "real_longitudinal_complete": false,
+  "raw_response_review": "required even if automated checks pass",
+  "audit_baseline": {
+    "consent": {
+      "enabled": 1,
+      "version": 1,
+      "enabled_at": 1792088735,
+      "disabled_at": null
+    },
+    "trend": {
+      "status": "insufficient_observations",
+      "enabled": true,
+      "consent_version": 1,
+      "window_days": 30,
+      "timezone": "UTC",
+      "groups": {
+        "inferred": {
+          "status": "insufficient_observations",
+          "count": 0,
+          "sessions": 0,
+          "calendar_span_days": 0,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        },
+        "self_report": {
+          "status": "insufficient_observations",
+          "count": 1,
+          "sessions": 1,
+          "calendar_span_days": 1,
+          "distribution": {},
+          "recent_7_days": {},
+          "previous_days": {},
+          "mean_confidence": null,
+          "evidence_ids": []
+        }
+      },
+      "interpretation": "Source-labelled observations, not a diagnosis or measured inner feelings."
+    }
+  },
+  "audit_gate": "insufficient_real_calendar_evidence",
+  "original_collection_unchanged": true,
+  "error_class": "AssertionError",
+  "failed_phase": "audit"
+}
