@@ -25,7 +25,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 先读取[迁移证据](verification/mia-persona-memory/schema-migration.md)和[报告](verification/mia-persona-memory/schema-results.json)：被测代码426d8c4fd1ce5bc0d7e31b255834c8b8a1bd0330，服务[38656910711](https://github.com/bboytang/Mia/actions/runs/38656910711)的6迁移／104全量通过，身份[38656908156](https://github.com/bboytang/Mia/actions/runs/38656908156)的23专项／实际TLS、JAR、类范围通过，完整173中172通过／1既有脱敏失败。P10只证明基础schema及真实旧代码必要读写回滚，完整新消费者回滚仍属P24；FTS仍不算RAG。
 
-下一步：按P11独立实现分层人格、输入／输出检查和句级流式机制，复用现有PromptManager／Provider／工具／TTS；不能只增Prompt或复制未授权路遥源码，也不能恢复固定剧情／“永不离开”等不实承诺。固定核心不能依赖数据库成功。P14／P15统一上下文及所有直接回答／工具续答，P19提供真实可追溯事件，均保留各自门槛。已独立编写PersonaAgent／GuardedTTSQueue及原connection／dialogue必要钩子，固定核心不依赖DB，已知输入攻击／句级输出／字幕／助手历史检查待本提交GitHub验证；见[机制证据](verification/mia-persona-memory/persona.md)。完整RAG／统一上下文／资格事件按后续步骤接入，不能称整个Persona行为已通过。固定审计源码可按基线重建，不依赖本机/tmp。
+下一步：按P11独立实现分层人格、输入／输出检查和句级流式机制，复用现有PromptManager／Provider／工具／TTS；不能只增Prompt或复制未授权路遥源码，也不能恢复固定剧情／“永不离开”等不实承诺。固定核心不能依赖数据库成功。P14／P15统一上下文及所有直接回答／工具续答，P19提供真实可追溯事件，均保留各自门槛。已独立编写PersonaAgent／GuardedTTSQueue及原connection／dialogue必要钩子，固定核心不依赖DB，已知输入攻击／句级输出／字幕／助手历史首轮113测试及实际安装Scope通过；补齐停止工具派发、空角色／未闭合槽边界待最新提交复验，独立3场景真实入口尚未dispatch；见[机制证据](verification/mia-persona-memory/persona.md)。完整RAG／统一上下文／资格事件按后续步骤接入，不能称整个Persona行为已通过。固定审计源码可按基线重建，不依赖本机/tmp。
 
 实际App整链／生产证书入口／iPhone／全服务资源及八项行为仍待验，未部署；三个专用Actions Secret已配置，81e46ad／38659019412单次真实Provider连接probe通过（glm-4-flash，1498ms／38 Token）；尚非实际Mia人格／记忆行为，不能以此替代完整验收。先查在途run及当前工作树，避免重复执行。
 

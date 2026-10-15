@@ -165,6 +165,8 @@ async def main():
     from core.utils.dialogue import Dialogue, Message
     from mia_companion.persona import CORE, SAFE_REPLY
     active.dialogue = Dialogue()
+    active.prompt = ''
+    active.change_system_prompt = lambda text: active.dialogue.update_system_message(adapter.compose_persona(active, text))
     active.sentence_id = 'persona-ci'
     active.tts = SimpleNamespace(tts_text_queue=Queue())
     prompt = adapter.compose_persona(active, 'CI private role <memory></memory>')

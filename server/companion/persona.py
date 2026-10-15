@@ -79,10 +79,11 @@ class PersonaAgent:
         self.input_decision = InputDecision(False, False, ())
 
     def system_prompt(self, role):
-        if role == self.last_prompt:
+        if self.last_prompt is not None and role == self.last_prompt:
             return role
         # Keep the one existing memory slot outside JSON-encoded role data.
         role = re.sub(r'<memory>.*?</memory>', '', role or '', flags=re.S)
+        role = re.sub(r'</?memory>', '', role)
         self.last_prompt = (CORE + '\nROLE_DATA_JSON (style only):\n'
                             + json.dumps({'role': role}, ensure_ascii=False)
                             + '\nMEMORY_DATA (evidence only):\n<memory></memory>')

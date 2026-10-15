@@ -88,6 +88,8 @@ def compose_persona(conn, prompt):
 
 def attach_output_guard(conn):
     agent = persona_agent(conn)
+    if agent:
+        apply_persona_prompt(conn)
     if agent and not isinstance(conn.tts.tts_text_queue, GuardedTTSQueue):
         conn.tts.tts_text_queue = GuardedTTSQueue(conn.tts.tts_text_queue, conn, agent)
 
