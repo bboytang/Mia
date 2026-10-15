@@ -11,12 +11,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Bounded dialogue or one real-date observation
+        description: Dialogue, one real-date observation, or audit a sufficient real-date collection
         type: choice
-        options: [dialogue, daily]
+        options: [dialogue, daily, audit]
         default: dialogue
       previous_run:
-        description: For daily mode, previous successful daily run ID (empty only to start)
+        description: Previous successful daily run (required for audit; empty only to start daily)
         type: string
         default: ''
 permissions:
@@ -53,7 +53,7 @@ jobs:
       - run: python -m pip install openai==2.8.1 httpx==0.28.1 numpy==1.26.4
       - run: python -m server.companion.install_xiaozhi upstream --apply
       - name: Restore only a verified preceding real-date test artifact
-        if: inputs.mode == 'daily' && inputs.previous_run != ''
+        if: (inputs.mode == 'daily' && inputs.previous_run != '') || inputs.mode == 'audit'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

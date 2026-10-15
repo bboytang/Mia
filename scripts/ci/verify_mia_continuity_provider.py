@@ -2,9 +2,11 @@
 
 import asyncio
 from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 import os
 import re
+import sqlite3
 from pathlib import Path
 import subprocess
 import sys
@@ -28,7 +30,7 @@ sys.modules['core.utils.util'] = util
 from core.providers.llm.openai.openai import LLMProvider
 from mia_companion import emotions, reply
 from mia_companion.authorization import AuthenticatedScope
-from mia_companion.context import ContextBuilder
+from mia_companion.context import ContextBuilder, ContextError
 from mia_companion.embedding import DIMENSION, MODEL_KEY, REVISION
 from mia_companion.extraction import LLMMemoryExtractor
 from mia_companion.jobs import JobStore, MemoryWorker, TurnCompleted
@@ -61,7 +63,8 @@ def provider(report, output=768):
     secret, base, model = (os.environ['MIA_TEST_LLM_' + key] for key in ('API_KEY', 'BASE_URL', 'MODEL'))
     url = urlsplit(base)
     assert secret and url.scheme == 'https' and url.hostname and not (url.username or url.password or url.query or url.fragment)
-    assert report['requests'] < (14 if os.environ.get('MIA_CONTINUITY_MODE') == 'daily' else 13)
+    mode = os.environ.get('MIA_CONTINUITY_MODE')
+    assert report['requests'] < {'daily': 14, 'audit': 4}.get(mode, 13)
     report['requests'] += 1
     result = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': output,
                           'temperature': 0.1, 'timeout': 30})
@@ -132,11 +135,63 @@ async def converse(store, policy, marker, query, report):
 
 async def stage(name, report):
     root = Path(os.environ['MIA_CONTINUITY_DIR'])
-    store = MemoryStore(root / 'state.sqlite3')
+    path = root / 'state.sqlite3'
+    source_hash = hashlib.sha256(path.read_bytes()).hexdigest() if name == 'audit' else None
+    if name == 'audit':
+        # Never migrate or mutate the original calendar collection.
+        audit_path = root / 'audit.sqlite3'
+        assert not audit_path.exists(), 'Audit must start from a fresh collection copy'
+        source = sqlite3.connect(path.as_uri() + '?mode=ro', uri=True)
+        destination = sqlite3.connect(audit_path)
+        try:
+            source.backup(destination)
+        finally:
+            destination.close()
+            source.close()
+        path = audit_path
+    store = MemoryStore(path)
     policy = Policy()
     owner = policy.scope.owner
     try:
-        if name == 'seed':
+        if name == 'audit':
+            baseline = store.handle(owner, {'action': 'emotion_status'})
+            report['audit_baseline'] = baseline
+            report['audit_gate'] = 'insufficient_real_calendar_evidence'
+            assert baseline['trend']['status'] == 'available', 'Real calendar collection is not sufficient yet'
+            report['audit_gate'] = 'ready'
+            _, original = await converse(store, policy, 'audit-baseline', '结合长期记录，最近我的心情有什么规律？', report)
+            assert original.diagnostics()['trends'] == 'available'
+            rows = store.handle(owner, {'action': 'observations'})['observations']
+            oldest = min(rows, key=lambda row: (row['observed_at'], row['id']))
+            corrected = 'neutral' if oldest['tendency'] != 'neutral' else 'positive'
+            changed = store.handle(owner, {'action': 'observation_update', 'id': oldest['id'], 'tendency': corrected})
+            assert changed['trend']['groups'] != baseline['trend']['groups']
+            checker = ContextBuilder(SemanticMemoryIndex(store, UnitEncoder()))
+            try:
+                await checker.validate(original, policy)
+            except ContextError:
+                report['old_context_rejected_after_correction'] = True
+            else:
+                raise AssertionError('Corrected observation left the old context valid')
+            report['corrected_trend'] = changed['trend']
+            _, updated = await converse(store, policy, 'audit-corrected', '我修正了一条心情观察。按修正后的记录，最近心情有什么规律？', report)
+            assert updated.diagnostics()['trends'] == 'available'
+            # Retain one observation so an old aggregate cannot conceal deletion.
+            for row in rows[1:]:
+                store.handle(owner, {'action': 'observation_delete', 'id': row['id']})
+            report['deleted_trend'] = store.handle(owner, {'action': 'emotion_status'})['trend']
+            assert report['deleted_trend']['status'] == 'insufficient_observations'
+            _, deleted = await converse(store, policy, 'audit-deleted', '删掉这些旧记录后，你还能判断我长期的心情趋势吗？', report)
+            assert deleted.diagnostics()['trends'] == 'insufficient_observations'
+            disabled = store.handle(owner, {'action': 'emotion_consent', 'enabled': False})
+            assert disabled['trend'] == {'status': 'disabled'}
+            retained = store.handle(owner, {'action': 'observations'})
+            assert len(retained['observations']) == 1 and retained['trend'] == {'status': 'disabled'}
+            _, stopped = await converse(store, policy, 'audit-disabled', '我已停用情绪记录，现在你会怎么看待我的心情？', report)
+            assert stopped.diagnostics()['trends'] == 'disabled'
+            report['disabled_retains_raw_only'] = True
+            report['longitudinal_change_checks_passed'] = True
+        elif name == 'seed':
             await extract(store, policy, '我喜欢蓝色', name, report)
             assert any(row['confirmed'] and '蓝色' in row['content'] for row in store.list_memories(owner))
         elif name in {'continuity', 'repeat', 'reflection', 'boundary', 'deleted', 'insufficient', 'casual', 'quiet', 'choice'}:
@@ -183,6 +238,9 @@ async def stage(name, report):
             raise ValueError('Unknown verification phase')
     finally:
         store.close()
+        if source_hash:
+            report['original_collection_unchanged'] = hashlib.sha256((root / 'state.sqlite3').read_bytes()).hexdigest() == source_hash
+            assert report['original_collection_unchanged'], 'Original calendar evidence changed'
 
 
 def main():
@@ -195,6 +253,14 @@ def main():
         'production_context_limits': 'unverified; isolated 8192-byte conservative test envelope only',
         'full_B05_B07_B08': 'not_accepted'}
     name = os.environ.get('MIA_CONTINUITY_STAGE')
+    mode = os.environ.get('MIA_CONTINUITY_MODE')
+    if not name and mode == 'audit':
+        assert report.get('mode') == 'daily' and report.get('passed'), 'Audit requires a verified daily artifact'
+        (root / 'daily-source-report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+        report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': 'audit', 'requests': 0, 'cases': [], 'passed': False,
+            'source_collection_run': report['collection_run_id'], 'actual_clock': True,
+            'real_longitudinal_complete': False, 'raw_response_review': 'required even if automated checks pass'}
+        target.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
     if name:
         try:
             asyncio.run(stage(name, report))
@@ -208,22 +274,22 @@ def main():
         if not report['passed']:
             raise SystemExit('Bounded continuity phase failed; inspect sanitized artifact')
         return
-    phases = ['daily'] if os.environ.get('MIA_CONTINUITY_MODE') == 'daily' else [
+    phases = [mode] if mode in {'daily', 'audit'} else [
         'seed', 'continuity', 'repeat', 'reflection', 'boundary', 'deleted', 'default-off', 'enabled-mood', 'insufficient', 'quoted-mood',
         'casual', 'quiet', 'choice']
     for phase in phases:
         env = dict(os.environ, MIA_CONTINUITY_STAGE=phase)
         # Each phase starts a NEW Python process, restoring only the persisted DB.
-        result = subprocess.run([sys.executable, __file__], env=env, timeout=45, capture_output=True)
+        result = subprocess.run([sys.executable, __file__], env=env, timeout=150 if phase == 'audit' else 45, capture_output=True)
         if result.returncode:
             raise SystemExit('Bounded continuity verification stopped; inspect sanitized artifact')
     if phases == ['daily']:
         report = json.loads(target.read_text())
-        import hashlib
         report.update(collection_run_id=os.environ['GITHUB_RUN_ID'], completed_at=datetime.now(timezone.utc).isoformat(),
             mode='daily', code_sha=os.environ['GITHUB_SHA'], previous_run=os.environ.get('MIA_CONTINUITY_PREVIOUS_RUN') or None,
             state_sha256=hashlib.sha256((root / 'state.sqlite3').read_bytes()).hexdigest(),
-            real_longitudinal_complete=report['emotion_status']['trend']['status'] == 'available')
+            real_calendar_threshold_met=report['emotion_status']['trend']['status'] == 'available',
+            real_longitudinal_complete=False)
         target.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
     print(json.dumps({'phases': len(phases), 'passed': True, 'clock': 'real', 'process_restart_between_phases': True}))
 
