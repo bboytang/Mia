@@ -1,0 +1,297 @@
+{
+  "code_sha": "d15a1dc1b567829f692286ba4d5140e2273c5cb1",
+  "P18": "bounded_reconciliation_and_maintenance_mechanisms_and_controlled_integration_verified",
+  "next_step": "P19_persistent_persona_events",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 38780354674,
+      "headSha": "d15a1dc1b567829f692286ba4d5140e2273c5cb1",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38780354674"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38780332867,
+      "headSha": "d15a1dc1b567829f692286ba4d5140e2273c5cb1",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38780332867"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38780330886,
+      "headSha": "d15a1dc1b567829f692286ba4d5140e2273c5cb1",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38780330886"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38780318027,
+      "headSha": "d15a1dc1b567829f692286ba4d5140e2273c5cb1",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38780318027"
+    }
+  ],
+  "previous_iterations": [
+    {
+      "conclusion": "success",
+      "databaseId": 38779798441,
+      "headSha": "ab921eea59114df6aaa27bf87fe82df58ccb96f1",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779798441"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779798449,
+      "headSha": "ab921eea59114df6aaa27bf87fe82df58ccb96f1",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779798449"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779798424,
+      "headSha": "ab921eea59114df6aaa27bf87fe82df58ccb96f1",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779798424"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 38779798451,
+      "headSha": "ab921eea59114df6aaa27bf87fe82df58ccb96f1",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779798451"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779607214,
+      "headSha": "0e70d3ce717e87edc4d4c0ec94274753026a00aa",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779607214"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 38779603238,
+      "headSha": "0e70d3ce717e87edc4d4c0ec94274753026a00aa",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779603238"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779583334,
+      "headSha": "0e70d3ce717e87edc4d4c0ec94274753026a00aa",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779583334"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779583544,
+      "headSha": "0e70d3ce717e87edc4d4c0ec94274753026a00aa",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779583544"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 38779483103,
+      "headSha": "3e05c639716c215a2d238cdcc5513c8c58e48c13",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779483103"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779482862,
+      "headSha": "3e05c639716c215a2d238cdcc5513c8c58e48c13",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779482862"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779482977,
+      "headSha": "3e05c639716c215a2d238cdcc5513c8c58e48c13",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779482977"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779483273,
+      "headSha": "3e05c639716c215a2d238cdcc5513c8c58e48c13",
+      "name": "Verify Mia structured extraction provider",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779483273"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 38779482901,
+      "headSha": "3e05c639716c215a2d238cdcc5513c8c58e48c13",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779482901"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779390820,
+      "headSha": "1cde8d7223914c5ec5c770342fa0483f279bbe24",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779390820"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779390965,
+      "headSha": "1cde8d7223914c5ec5c770342fa0483f279bbe24",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779390965"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 38779390804,
+      "headSha": "1cde8d7223914c5ec5c770342fa0483f279bbe24",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779390804"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 38779390976,
+      "headSha": "1cde8d7223914c5ec5c770342fa0483f279bbe24",
+      "name": "Verify Mia structured extraction provider",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779390976"
+    },
+    {
+      "conclusion": "failure",
+      "databaseId": 38779390830,
+      "headSha": "1cde8d7223914c5ec5c770342fa0483f279bbe24",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38779390830"
+    }
+  ],
+  "service": {
+    "tests": 205,
+    "maintenance_methods": 11
+  },
+  "actual_bge": {
+    "P17_regression_cases": 14,
+    "P18_modes": [
+      {
+        "kind": "correction",
+        "state": "committed",
+        "sdk_calls": 1,
+        "old_context_rejected": true,
+        "old_fact_not_current": true
+      },
+      {
+        "kind": "time_change",
+        "state": "committed",
+        "sdk_calls": 1,
+        "old_context_rejected": true,
+        "old_fact_not_current": true
+      },
+      {
+        "kind": "conflict",
+        "state": "committed",
+        "sdk_calls": 1,
+        "old_context_rejected": true,
+        "old_fact_not_current": true
+      }
+    ],
+    "synthetic_sdk_calls": 18,
+    "peak_rss_mib": 305.359375,
+    "resources": "2 CPU / 2 GiB / network none"
+  },
+  "identity": {
+    "tests": 173,
+    "focused_tests": 23,
+    "redaction_tests": 9,
+    "maintenance_scope": "own correction committed; foreign target rejected in actual TLS manager subprocess",
+    "vector_encoder": "synthetic_unit_fixture; true BGE separate",
+    "jar": "passed"
+  },
+  "manager": {
+    "tests": 150,
+    "separate_baseline_tests": 4,
+    "class_byte_comparison": "passed"
+  },
+  "artifacts": {
+    "maintenance-0e70d3c-bge-failure.json": {
+      "sha256": "2dad33b6ee72a6861378ba972a377eb1b48b95b503000ce3ccc4b6537679ccfc",
+      "bytes": 3549
+    },
+    "maintenance-3e05c63-bge-failure.json": {
+      "sha256": "88c6e1e5cdf43711c6f47c12c94bd9c4a24e45212f56da236e627a0f249ca11c",
+      "bytes": 3549
+    },
+    "maintenance-ab921ee-bge-failure.json": {
+      "sha256": "45966a9775a67230873e00684e1b42e35ed896f326fb54d7ce3669ee6ee98bbe",
+      "bytes": 3549
+    },
+    "maintenance-context-regression.json.gz": {
+      "sha256": "68b9c07c6f0042e5aea3f96137a5e8908d0d2c71118d80dff5771ebb77829619",
+      "bytes": 3227
+    },
+    "maintenance-controlled-results.json": {
+      "sha256": "66de2be0cf54a298892a04ad4eef6772871a88ecfdaf46913c58acf380729d20",
+      "bytes": 3132
+    },
+    "maintenance-first-bge-failure.json": {
+      "sha256": "aff5c6db5cb79489a08cdf8777aaafe3eb399699f7dbe438aabcb52f71c5559e",
+      "bytes": 4635
+    },
+    "maintenance-first-service-failure.json": {
+      "sha256": "f0bd105ac66c1e07978f0dbc7934a4c064970f9ade10f275c5047e2cb369fcea",
+      "bytes": 8684
+    },
+    "maintenance-identity-results.json": {
+      "sha256": "2fedd0df8baa5bc895b651f1d6c3345f1788e0a870b7f2c9882e242d6706b976",
+      "bytes": 1827
+    },
+    "maintenance-manager-results.json": {
+      "sha256": "83e274c08177de756ebda7805e7f2620b1e94bff49f5f91f4d7e7d1bd04c236f",
+      "bytes": 1311
+    },
+    "maintenance-reply-regression.json.gz": {
+      "sha256": "393c300a22ba8ddcd32499b8951203d8f4cc1a1f57b9ee3a2b1a63462e18ebc9",
+      "bytes": 4231
+    },
+    "maintenance-retrieval-regression.json.gz": {
+      "sha256": "d7b3f4d880b39b708fea69a867ce91075f264fce2dc4d5d9aef56798d308329c",
+      "bytes": 95045
+    },
+    "maintenance-second-service-failure.json": {
+      "sha256": "ba87f2a7bdae3668f58b6dab9413232d08671b83a432bc68c0458513e9f470f9",
+      "bytes": 1422
+    },
+    "maintenance-service-results.json": {
+      "sha256": "4ce915699151a1ffdbe69db93977311d3f76873a963d5de9f812f9697665cc5f",
+      "bytes": 1139
+    },
+    "maintenance-vector-regression.json.gz": {
+      "sha256": "5e4be3300733f5c2c8d768ee8b6be749e7e317b00b8c5775162fdb9e9984097f",
+      "bytes": 1133
+    }
+  },
+  "real_provider_calls": 0,
+  "local_automated_tests_builds": "not_performed",
+  "production_deployment": "not_performed",
+  "production_context_limits": "unverified_restriction_preserved",
+  "full_eight_behaviors": "not_accepted",
+  "physical_device": "not_tested",
+  "all_runs_completed": true,
+  "scope_limit": "Exact evidence with explicit conservative correction/time_change/conflict instructions; arbitrary natural-language semantic acceptance deferred to P22"
+}

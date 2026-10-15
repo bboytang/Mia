@@ -1,0 +1,23 @@
+{
+  "code_sha": "d15a1dc1b567829f692286ba4d5140e2273c5cb1",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38780330886",
+  "tests": 205,
+  "passed": true,
+  "maintenance_methods": [
+    "test_correction_invalidates_traits_events_observations_and_associations",
+    "test_correction_replaces_one_fact_and_invalidates_other_connection",
+    "test_database_retry_and_worker_restart_do_not_repeat_correction_model",
+    "test_delete_clear_pause_or_revoke_during_encoding_cannot_commit",
+    "test_forged_foreign_quoted_or_wrong_old_evidence_is_rejected",
+    "test_pause_retains_existing_data_clear_removes_event_and_observation_rows",
+    "test_same_batch_cannot_overwrite_twice_or_reuse_changed_evidence",
+    "test_similarity_and_missing_classification_cannot_replace",
+    "test_target_version_changed_after_validation_cancels_before_write",
+    "test_time_change_keeps_old_source_but_only_new_fact_is_current",
+    "test_uncertain_conflict_preserves_both_for_confirmation_without_vectors"
+  ],
+  "test_summary": [
+    "Ran 205 tests in 28.923s"
+  ],
+  "source": "GitHub final service log; synthetic unit vectors and policy"
+}
