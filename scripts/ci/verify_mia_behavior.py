@@ -4,6 +4,8 @@ Only synthetic CI users. The WSS harness drives the installed reply/completion
 bridge; it omits microphone/TTS consumers, not model or embedding responses.
 """
 
+import __future__
+import ast
 import asyncio
 import hashlib
 import json
@@ -40,11 +42,12 @@ from config.manage_api_client import ManageApiClient
 from core.auth import AuthManager
 from core.utils.dialogue import Dialogue, Message
 from core.utils.llm import create_instance
+from core.providers.tts.dto.dto import TTSMessageDTO, SentenceType, ContentType
 from mia_companion.authorization import PrivateAuthorizationRequired, load_private_config
 from mia_companion.context import ContextBuilder
 from mia_companion.persona import PersonaGuardrail
 from mia_companion.semantic import SemanticMemoryIndex
-from mia_companion import reply, xiaozhi_adapter as adapter
+from mia_companion import authorization, reply, xiaozhi_adapter as adapter
 
 
 ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVIOR_ROUND'])
@@ -81,6 +84,17 @@ def selected_provider(configuration, report, purpose):
         return create(*args, **kwargs)
 
     provider.client.chat.completions.create = counted
+    if purpose == 'reply':
+        response = provider.response
+        provider._mia_raw_chunks = []
+
+        def streamed(*args, **kwargs):
+            provider._mia_raw_chunks.clear()
+            for value in response(*args, **kwargs):
+                provider._mia_raw_chunks.append(value)
+                yield value
+
+        provider.response = streamed
     if purpose == 'extraction':
         response = provider.response_no_stream
 
@@ -95,9 +109,38 @@ def selected_provider(configuration, report, purpose):
     return provider
 
 
+def installed_connection(report):
+    # Same AST-loading approach as verify_mia_reply: preserve the installed
+    # ConnectionHandler bodies and decorators, omitting audio/plugin imports.
+    path = Path('core/connection.py')
+    source = path.read_text()
+    tree = ast.parse(source)
+    names = {'ConnectionHandler', 'DIRECT_ANSWER_TOOL'}
+    selected = [node for node in tree.body if getattr(node, 'name', None) in names
+        or isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id in names for target in node.targets)]
+    assert len(selected) == len(names)
+    namespace = dict(asyncio=asyncio, json=json, re=re, uuid=uuid, time=time, TAG='P22', mia=adapter, mia_auth=authorization,
+        Message=Message, Dialogue=Dialogue, TTSMessageDTO=TTSMessageDTO, SentenceType=SentenceType,
+        ContentType=ContentType, get_system_error_response=lambda config: 'UNEXPECTED_UPSTREAM_ERROR')
+    exec(compile(ast.Module(body=selected, type_ignores=[]), str(path), 'exec',
+        flags=__future__.annotations.compiler_flag), namespace)
+    report['installed_connection_sha256'] = hashlib.sha256(source.encode()).hexdigest()
+    report['connection_scope'] = 'Installed ConnectionHandler.chat bodies/decorators; constructed without audio initialization; not full WebSocketServer lifecycle'
+    save(report)
+    return namespace['ConnectionHandler']
+
+
 async def serve():
     from websockets.asyncio.server import serve as wss
     report = json.loads(REPORT.read_text())
+
+    def upstream_error(*args, **kwargs):
+        with LOCK:
+            report.setdefault('upstream_errors', []).append(str(args[0])[:1000] if args else 'error')
+            report['upstream_errors'] = report['upstream_errors'][-10:]
+            save(report)
+
+    logger.error = upstream_error
     configuration = {'read_config_from_api': True, 'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
                                    'secret': os.environ['MIA_SCOPE_SERVER_SECRET']}, 'selected_module': {}}
     ManageApiClient(configuration)
@@ -115,22 +158,23 @@ async def serve():
     store = worker.jobs.store
     index = SemanticMemoryIndex(store, reply._encoder)
     transport = AuthManager('synthetic-behavior-transport')
+    handler = installed_connection(report)
 
-    @adapter.completed_chat
-    def chat(conn, query, depth=0):
-        adapter.begin_turn(conn, query)
-        conn.dialogue.put(Message(role='user', content=query))
-        raw = ''.join(reply.response(conn, None, depth))
-        checked = conn._mia_persona.checked_text(raw)
-        conn.dialogue.put(Message(role='assistant', content=checked))
-        return raw, checked
+    class TextSink:
+        def __init__(self):
+            self.tts_text_queue = Queue()
+
+        def store_tts_text(self, sentence_id, text):
+            pass
 
     async def connection(socket):
         headers = dict(socket.request.headers)
         assert transport.verify_token(headers.get('authorization', '')[7:], headers.get('client-id'), headers.get('device-id'))
-        conn = SimpleNamespace(config=configuration, headers=headers, websocket=socket, read_config_from_api=True,
+        conn = object.__new__(handler)
+        conn.__dict__.update(config=configuration, headers=headers, websocket=socket, read_config_from_api=True,
             need_bind=False, dialogue=Dialogue(), session_id=str(uuid.uuid4()), sentence_id=None,
-            loop=asyncio.get_running_loop(), client_abort=False, tts=SimpleNamespace(tts_text_queue=Queue()))
+            loop=asyncio.get_running_loop(), client_abort=False, tts=TextSink(), logger=logger,
+            intent_type='nointent', current_speaker=None, system_introduced_speakers=set(), features={'emoji': False})
         llm = None
         try:
             private = await load_private_config(conn)
@@ -145,9 +189,7 @@ async def serve():
             os.environ['MIA_CONTEXT_PROFILE_FILE'] = str(profile)
             conn._mia_context_builder = ContextBuilder(index)
             conn._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, llm, conn.session_id, scope, auth)
-            conn.prompt = private['prompt']
-            conn.change_system_prompt = lambda text: conn.dialogue.update_system_message(adapter.compose_persona(conn, text))
-            adapter.compose_persona(conn, private['prompt'])
+            conn.change_system_prompt(private['prompt'])
             adapter.attach_output_guard(conn)
 
             jobs = worker.jobs
@@ -159,10 +201,19 @@ async def serve():
                 request = json.loads(message)
                 assert request['type'] == 'test_chat' and isinstance(request['query'], str)
                 conn.sentence_id = str(uuid.uuid4())
-                raw, checked = await asyncio.to_thread(chat, conn, request['query'])
+                assert await asyncio.to_thread(conn.chat, request['query']) is True, 'Installed chat did not complete'
+                raw = ''.join(llm._mia_raw_chunks)
+                assert conn.dialogue.dialogue[-1].role == 'assistant'
+                checked = conn.dialogue.dialogue[-1].content
+                spoken = []
+                while not conn.tts.tts_text_queue.empty():
+                    item = conn.tts.tts_text_queue.get_nowait()
+                    if item.content_type == ContentType.TEXT:
+                        spoken.append(item.content_detail)
+                assert spoken, 'Installed chat delivered no guarded TTS text'
                 turn = conn._mia_context_turn
                 diagnostics = turn.bundle.diagnostics()
-                case = {'query': request['query'], 'raw': raw, 'delivered': checked, 'diagnostics': diagnostics,
+                case = {'query': request['query'], 'raw': raw, 'delivered': checked, 'tts_text': ''.join(spoken), 'diagnostics': diagnostics,
                     'session_id': conn.session_id, 'pid': os.getpid(), 'input': turn.bundle.request()}
                 with LOCK:
                     report['cases'].append(case)
@@ -299,6 +350,7 @@ async def drive():
         actual_input = json.dumps(answer['input'], ensure_ascii=False)
         assert all(any(word in actual_input for word in group) for group in sample['answer_groups'])
         assert all(any(word in answer['raw'] for word in group) for group in sample['answer_groups'])
+        assert all(any(word in answer['tts_text'] for word in group) for group in sample['answer_groups'])
         phase = 'event_activation'
         continued, saved = await ask(sample['continuity'])
         assert fact_ids.intersection(continued['diagnostics']['selected_fact_ids'])
@@ -320,7 +372,7 @@ async def drive():
             await manage('delete', id=row['id'])
         unknown, saved = await ask(sample['unknown'])
         assert not unknown['diagnostics']['selected_fact_ids'] and not saved['memories']
-        assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['raw'])
+        assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['tts_text'])
         assert all(event['state'] != 'active' for event in saved['events'])
         report = json.loads(REPORT.read_text())
         report.update(passed=True, server_pids=[first_pid, second_pid], genuine_wss_restart=True,

@@ -11,3 +11,5 @@
 范围边界：WSS驱动原安装reply／completion桥，实际使用manager、Provider、BGE／SQLite；测试只省略麦克风／TTS消费者，不宣称声学或真机。第一项gate重点验证B02／B05的首次整合，不把其成功替代全套B01—B08：B01特点成长／注入、B03所有结束路径及持久故障、B04完整留出四维、B06完整隔离矩阵、B08十续答场景×三次仍须扩充。原ConnectionHandler整服务集成范围亦须核对，不将测试驱动连接视作完整服务验收。B07真实跨日用户自测。小请求测试包络不解除旧模型别名生产容量限制；官方GLM-4文档现以日期版型号描述，不能直接推定旧别名同容量（https://docs.bigmodel.cn/cn/guide/models/text/glm-4）。P23不得用此处无限制runner结果代替2核2GiB性能，P24仍须已安装补丁升级及旧版本读写回滚。
 
 准备入口最新源码806fdd9的[38821133535](https://github.com/bboytang/Mia/actions/runs/38821133535)仅Python／JSON语法成功；真实组合job在push上skipped。Java编译、实际模型／BGE／manager组合尚未执行，计数0，不将绿色workflow称真实验收。源码hash及缺项见[behavior-ci-results.json](behavior-ci-results.json)。
+
+准备入口进一步改用安装后的ConnectionHandler.chat完整方法与原装饰器，不自写chat替代。沿用verify_mia_reply已有AST加载方式，只省略音频／插件导入；构造时仍绕过音频初始化，不称完整WebSocketServer生命周期验收。通过原change_system_prompt、begin_turn／reply／checkpoint／completed_chat，记录安装文件hash、实际Provider原文、最终历史及GuardedTTSQueue中的待投递文字；召回和删除后未知同时检查实际TTS文字。真实组合尚未dispatch，具体来源／正向路径待GitHub验证，不以此代码调整直接标原服务整体验收。
