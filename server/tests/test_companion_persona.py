@@ -94,6 +94,9 @@ class PersonaMechanismTests(unittest.TestCase):
         refusal = '我不能保证我会永远陪着你。'
         self.assertEqual(self.agent.checked_text(refusal), refusal)
         self.assertEqual(self.agent.checked_text('我不能保证，但我会永远陪着你。'), SAFE_REPLY)
+        self.assertEqual(self.agent.checked_text('当然，我会一直在这里陪伴你。'), SAFE_REPLY)
+        bounded = '永远我没法保证，不过现在我在听。'
+        self.assertEqual(self.agent.checked_text(bounded), bounded)
 
     def test_unbroken_text_is_bounded_and_never_split_into_unchecked_fragments(self):
         self.queue.put(item('很' * 10000, Sentence.LAST))

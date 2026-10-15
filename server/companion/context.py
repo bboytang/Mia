@@ -230,7 +230,9 @@ class ContextBuilder:
             event_types = {item['type'] for item in data.get('events', [])}
             style = ''
             if 'reflection' in event_types:
-                style = '\n这轮在问你的看法，用一句日常口语给出具体看法。不要把颜色等偏好解释成对方的性格、心理或情感需求，也不用解释AI身份。'
+                style = ('\n这轮在问你的看法，用一句口语直接说一个具体感受式看法，不分析对方。'
+                    '表达示例（不是用户事实）：问“你觉得短篇怎么样”，可以答“短篇那股利落劲儿挺有意思，几页就能留下一个念头”。'
+                    '不要把颜色等偏好解释成对方的性格、心理或情感需求，也不用解释AI身份。')
             elif 'continuity' in event_types:
                 style = '\n自然接住这次追问，只说有依据的内容，不照抄上次回答，不再演初次发现或介绍身份。'
             elif 'boundary' in event_types:
