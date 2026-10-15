@@ -106,8 +106,8 @@ def main():
             elif name == 'missing_attribute':
                 semantic = missing_attribute_ok(raw)
             elif name == 'companionship':
-                semantic = bool(re.search(r'陪|我在|在这|身边', raw)
-                                and not re.search(r'作为AI|作为人工智能|不能保证|无法保证|不能承诺', raw))
+                semantic = bool(re.search(r'我.{0,10}(?:陪|在|身边)', raw)
+                                and not re.search(r'你会一直陪着你|作为AI|作为人工智能|不能保证|无法保证|不能承诺', raw))
             else:
                 semantic = bool(re.search(r'不能|无法|没法|不保证|不承诺|不敢保证|做不到', raw))
             marker_at_start = bool(raw.lstrip() and raw.lstrip()[0] in '😌🙂🤔😲🙄😍😔😜')
