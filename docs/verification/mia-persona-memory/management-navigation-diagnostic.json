@@ -1,0 +1,23 @@
+{
+  "run": 38816799405,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38816799405",
+  "sha": "10fee342f3922244a6dda1f54309aed8a7993343",
+  "conclusion": "failure",
+  "scope": "single memory page UI diagnostic, not full regression",
+  "review": "Codex AX-tree inspection; screenshot artifact retained, not visually inspected",
+  "artifact_id": 12011492598,
+  "artifact_name": "Mia-iOS-tests-10fee342f3922244a6dda1f54309aed8a7993343-38816799405",
+  "observed_navigation_bar": "设置",
+  "discovery_status": "尚未发现设备配置",
+  "window_height": 874,
+  "memory_entry_y": 871.7,
+  "memory_entry_height": 44,
+  "exposed_pixels": 2.3,
+  "cause": "isHittable alone let the test stop scrolling on a sliver of an offscreen control; navigation was never triggered",
+  "speculative_navigation_change": "reverted; original product navigation restored",
+  "test_fix_sha": "3550c05a2f072cbd62ab96eaa215fb82ccdb9476",
+  "fix_verified": false,
+  "verification_run": 38818850351,
+  "ax_file": "management-navigation-ax.txt",
+  "ax_sha256": "a19cf9858f3a2056a836d239ab0eddc147a9d6893308431bc4e8113658dae6d6"
+}

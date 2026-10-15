@@ -11,3 +11,5 @@ list／personality及旧事实操作的result继续保留memories／paused／per
 测试范围：Python实际MemoryStore及adapter；真实manager TLS／WSS的能力声明／双方片段／停用原观察及越权拒绝；Swift旧快照／任务状态与同连接扩展操作／取消／无录音；模拟器既有页面的明确授权UI。客户端loopback为显式合成协议夹具，manager整链另测，未冒称实际App→真实manager→BGE→Provider整链。软件检查仅GitHub；真机、声学、完整真实行为和资源分别留P22—P25，未部署。
 
 当前证据：[management-ci-results.json](management-ci-results.json)。后端22de963服务229、实际BGE／manager均通过，probe5dfa89a的实际身份38815615902通过。两轮probe错误（变量遮蔽／ID与admission字典比较）保留；运行权限未放宽。iOS当前4d4b5cc的38815987680待结果，P21不标完成；旧两个iOS run取消，旧22de963仍在途。当前客户端额外区分观察依据失效，不显示其更正入口。
+
+P21页面验证后续：22de963的38814955816为102单测通过、UI新增场景失败；4d4b5cc的38815987680同样未通过。定向38816799405保留AX和截图，AX证明设置页入口y=871.7、高44但窗口高874，只有2.3px露出，测试依据isHittable误停滚动，没有真正打开页面。已撤回未证实的产品导航变更，3550c05仅要求整行完整可见再点击／检查开关，实际App树与4d4b5cc相同。当前全量38818850351仍执行，不能记通过。见[原AX](management-navigation-ax.txt)、[诊断与制品](management-navigation-diagnostic.json)。

@@ -1,0 +1,49 @@
+{
+  "status": "preparation only; not P22 acceptance",
+  "code_sha": "26bc6ac77aac7d1a2e51acdfc633baeaadf4ee57",
+  "syntax_run": 38819496341,
+  "syntax_url": "https://github.com/bboytang/Mia/actions/runs/38819496341",
+  "syntax_conclusion": "success",
+  "executed_checks": [
+    "Python py_compile",
+    "frozen JSON parse"
+  ],
+  "composed_job": "skipped on push; manual dispatch not performed",
+  "java_compilation_verified": false,
+  "actual_provider_requests": 0,
+  "scope_prepared": "three isolated users, actual manager TLS, WSS service restart, existing reply/completion/worker, true BGE, selected Provider; first B02/B05 composed checks",
+  "remaining": [
+    "P21 current full UI verification",
+    "first actual composed run and raw response review",
+    "complete B01/B03/B04/B06/B08 matrices and original ConnectionHandler integration scope",
+    "P23 frozen constrained load/performance",
+    "P24 installed upgrade and actual rollback read/write"
+  ],
+  "user_delegated": "B07 real-calendar acceptance only",
+  "limits": {
+    "rounds": 3,
+    "maximum_requests_per_round": 18,
+    "total_request_cap": 54,
+    "output_tokens": 768,
+    "sdk_retries": 0,
+    "existing_worker_maximum_attempts": 2
+  },
+  "artifacts": [
+    {
+      "file": "scripts/ci/verify_mia_behavior.py",
+      "sha256": "d541e7caeb885bb7bc44c17caaa2c4db22ebaa081cc430e8f9e8bdf738270974"
+    },
+    {
+      "file": "server/companion/manager_tests/MiaBehaviorIntegrationTest.java",
+      "sha256": "e03e6996b5f57b38170908133f0381515a05471e30a5422b4cd59ada5909b0a3"
+    },
+    {
+      "file": "server/tests/fixtures/persona_memory_behavior_p22_v1.json",
+      "sha256": "0fb89049eab29f6440dd18734c6a6169d54fdaa0849c9924bf6d1015583db1c3"
+    },
+    {
+      "file": ".github/workflows/mia-memory-behavior.yml",
+      "sha256": "1b18ae6a3137bdd5b666bcb95f7b73fe45a9a09290bab00907eaa8fd86e238ec"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
-  "status": "P21 implementation and server controlled checks done; iOS checks still running; P22-P24 not completed",
+  "status": "P21 implementation and server checks complete; iOS UI test offscreen-hit defect diagnosed and corrected, full verification running; P22 preparation only, P23/P24 incomplete",
   "backend_sha": "22de9636a184096d391a811a938ac92dbd805d25",
   "client_sha": "4d4b5cc",
   "manager_probe_sha": "5dfa89a75e94b651ddf5b03de52f4e151cc040b9",
-  "server_tree_unchanged_after_backend_sha": true,
+  "server_tree_unchanged_after_backend_sha": false,
   "local_automated_tests_or_builds": false,
   "deployment": false,
   "runs": [
@@ -38,16 +38,16 @@
     {
       "id": 38814955816,
       "url": "https://github.com/bboytang/Mia/actions/runs/38814955816",
-      "scope": "iOS compile passed, tests running; superseded by client evidence-state clarification",
+      "scope": "102 unit tests passed; 6 UI cases, memory page failed at offscreen hit/navigation; no runtime navigation defect established",
       "sha": "22de963",
-      "status": "in_progress"
+      "status": "failure"
     },
     {
       "id": 38815987680,
       "url": "https://github.com/bboytang/Mia/actions/runs/38815987680",
-      "scope": "current iOS compile/unit/UI and unsigned build",
+      "scope": "same original memory-page navigation test defect; source state clarification compiled",
       "sha": "4d4b5cc",
-      "status": "in_progress"
+      "status": "failure"
     },
     {
       "id": 38814607661,
@@ -83,6 +83,41 @@
       "scope": "probe compared ID against entire admission dict",
       "sha": "13c8c15",
       "status": "failure"
+    },
+    {
+      "id": 38816799405,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38816799405",
+      "scope": "focused AX diagnosis of offscreen hit failure; one UI case",
+      "sha": "10fee342f3922244a6dda1f54309aed8a7993343",
+      "status": "failure"
+    },
+    {
+      "id": 38816800197,
+      "scope": "superseded duplicate full run while focused diagnosis was active",
+      "sha": "10fee34",
+      "status": "cancelled",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38816800197"
+    },
+    {
+      "id": 38818449543,
+      "scope": "reverted speculative navigation change; cancelled after AX evidence",
+      "sha": "06a038c",
+      "status": "cancelled",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38818449543"
+    },
+    {
+      "id": 38818656845,
+      "scope": "reverted navigation label change; cancelled after AX evidence",
+      "sha": "b413b83",
+      "status": "cancelled",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38818656845"
+    },
+    {
+      "id": 38818850351,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38818850351",
+      "scope": "current full unit/UI/build with entire-row visibility test fix and original product navigation",
+      "sha": "3550c05a2f072cbd62ab96eaa215fb82ccdb9476",
+      "status": "in_progress"
     }
   ],
   "client_fixture_scope": "Synthetic loopback protocol only; not actual app-to-manager-to-BGE-to-provider acceptance",
@@ -117,6 +152,14 @@
       "sha256": "92529a69bf61bfab5d88573534a2cd89d016e0a983890e3c087d30d4e95705b0"
     },
     {
+      "file": "management-navigation-ax.txt",
+      "sha256": "a19cf9858f3a2056a836d239ab0eddc147a9d6893308431bc4e8113658dae6d6"
+    },
+    {
+      "file": "management-navigation-diagnostic.json",
+      "sha256": "d45a8ee3dbf8baf77e7fe8be6674d4a1f7b01832a505e60d1e3b0bc0eb110abe"
+    },
+    {
       "file": "management-scope-shadow-failure.json",
       "sha256": "0b17e026379b9c82c377808d9fd3d6f5dba86eeeb7153bf4c620204d0cd5f40b"
     },
@@ -124,5 +167,10 @@
       "file": "management-scope-task-id-failure.json",
       "sha256": "ca417f4dbf21f48deec3afd780adb04195901a48acbd4ec2761d5b2aa64f5dec"
     }
-  ]
+  ],
+  "client_runtime_sha": "4d4b5cc60efd451b8f0a8b4853341e3e70f711a2",
+  "client_tests_sha": "3550c05a2f072cbd62ab96eaa215fb82ccdb9476",
+  "client_app_tree": "cbfe3d75fb543d116cf85a75fad48a7e748b36c7",
+  "backend_runtime_unchanged_after_backend_sha": true,
+  "server_tree_difference": "new isolated behavior Java test only; backend runtime modules unchanged"
 }
