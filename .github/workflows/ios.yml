@@ -90,6 +90,14 @@ jobs:
             -resultBundlePath "$RUNNER_TEMP/mia-account-tests.xcresult" \
             CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
 
+      - name: Export portable test attachments
+        if: always()
+        run: |
+          if [[ -d "$RUNNER_TEMP/mia-account-tests.xcresult" ]]; then
+            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/mia-account-tests.xcresult" \
+              --output-path "$RUNNER_TEMP/mia-test-attachments"
+          fi
+
       - name: Preserve test results and loopback diagnostics, including failures
         if: always()
         uses: actions/upload-artifact@v4
@@ -98,6 +106,7 @@ jobs:
           path: |
             ${{ runner.temp }}/mia-account-tests.xcresult
             ${{ runner.temp }}/mia-fixture.log
+            ${{ runner.temp }}/mia-test-attachments
           if-no-files-found: warn
 
       - name: Build unsigned device app

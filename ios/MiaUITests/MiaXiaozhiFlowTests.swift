@@ -8,6 +8,18 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         if permission.waitForExistence(timeout: 3) { permission.tap() }
     }
 
+    private func captureFailure(_ message: String, app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = "P21 failure hierarchy"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "P21 failure screenshot"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        XCTFail(message + ": " + app.debugDescription, file: file, line: line)
+    }
+
     private func launch(ota: String = "https://example.invalid/ota/",
                         websocket: String = "wss://example.invalid/xiaozhi/v1/") -> XCUIApplication {
         let app = XCUIApplication()
@@ -75,15 +87,7 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         XCTAssertLessThan(entry.frame.maxY, app.frame.maxY - 60)
         entry.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         guard app.navigationBars["记忆与成长"].waitForExistence(timeout: 5) else {
-            let hierarchy = XCTAttachment(string: app.debugDescription)
-            hierarchy.name = "P21 navigation failure hierarchy"
-            hierarchy.lifetime = .keepAlways
-            add(hierarchy)
-            let screenshot = XCTAttachment(screenshot: app.screenshot())
-            screenshot.name = "P21 navigation failure screenshot"
-            screenshot.lifetime = .keepAlways
-            add(screenshot)
-            XCTFail("Memory page did not remain open: " + app.debugDescription)
+            captureFailure("Memory page did not remain open", app: app)
             return
         }
         let tracking = app.switches["记录我的长期心情"]
@@ -95,7 +99,10 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         XCTAssertTrue(tracking.waitForExistence(timeout: 15))
         XCTAssertEqual(tracking.value as? String, "0")
         tracking.tap()
-        XCTAssertTrue(app.buttons["启用"].waitForExistence(timeout: 5))
+        guard app.buttons["启用"].waitForExistence(timeout: 5) else {
+            captureFailure("Emotion consent confirmation did not appear", app: app)
+            return
+        }
         app.buttons["启用"].tap()
         let enabled = NSPredicate(format: "value == %@", "1")
         expectation(for: enabled, evaluatedWith: tracking)
