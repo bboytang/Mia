@@ -9,7 +9,10 @@ import threading
 import sqlite3
 
 from .authorization import AuthenticatedScope, PrivateAuthorizationRequired
-from .memory import MemoryError, _safe_text, parse_extraction
+from .memory import MemoryError, _safe_text
+from .extraction import context_for, validate_output
+from .embedding import EmbeddingUnavailable
+from .semantic import SemanticMemoryIndex
 
 
 ACTIVE = ('pending', 'extracting', 'validated', 'retry_wait')
@@ -95,10 +98,10 @@ class JobStore:
             return (current['state'] in ACTIVE and current['deadline'] > self.store.clock()
                     and not state['paused'] and state['revision'] == job['memory_revision'])
 
-    def commit(self, job, result):
+    def commit(self, job, result, vectors=None):
         # Fact write and terminal job state share the fact store's transaction.
         return self.store.apply_extraction(job['owner'], job['session_id'], job['memory_revision'],
-            [json.loads(job['source_payload'])['text']], result, job['id'], job_id=job['id'])
+            [json.loads(job['source_payload'])['text']], result, job['id'], job_id=job['id'], prepared_vectors=vectors)
 
 
 class NativeLane:
@@ -135,9 +138,10 @@ class NativeLane:
 
 
 class MemoryWorker:
-    def __init__(self, jobs, authorization, resolve, *, extraction_timeout=30):
+    def __init__(self, jobs, authorization, resolve, *, extraction_timeout=30, encoder=None):
         self.jobs, self.authorization, self.resolve = jobs, authorization, resolve
         self.extraction_timeout = extraction_timeout
+        self.index = SemanticMemoryIndex(jobs.store, encoder) if encoder is not None else None
         self.lane = NativeLane()
         self.queue = deque(maxlen=jobs.capacity)
         self.served, self.tick = {}, 0
@@ -194,37 +198,52 @@ class MemoryWorker:
                 if job['attempts'] >= 2:
                     await asyncio.to_thread(self.jobs.update, job, 'failed', error='attempts_exhausted')
                     return True
+                context = await asyncio.to_thread(context_for, self.jobs.store, scope.owner)
                 extract = await self.resolve(scope)
                 # A newly active front-end gets priority before entering a native call.
                 if self.foreground:
                     return False
                 await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=True)
                 try:
-                    output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']]),
+                    output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']], context),
                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))
                 except asyncio.TimeoutError:
                     raise TimeoutError('extraction_timeout') from None
-                validated = parse_extraction(output)
-                if any(item['source_index'] != 0 for item in validated['memories']):
-                    raise MemoryError('invalid_input', 'Invalid source index')
+                validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
                 result = json.dumps(validated, ensure_ascii=False)
                 self.results[job['id']] = result
                 await self._scope(job)
+            if json.loads(result).get('_schema') != 1:
+                raise MemoryError('extractor_version_changed', 'Unverified legacy task result')
             if result is not None:
                 await asyncio.to_thread(self.jobs.update, job, 'validated', result=result)
                 self.results.pop(job['id'], None)
             await self._scope(job)
-            await asyncio.to_thread(self.jobs.commit, job, json.loads(result))
+            structured = json.loads(result)
+            vectors = {}
+            for i, record in enumerate(structured['memories']):
+                if not record['sensitive'] and record['kind'] == 'explicit':
+                    if self.index is None:
+                        raise EmbeddingUnavailable('embedding_assets_unconfigured')
+                    vector = await self.lane.call(lambda: self.index.encoder.encode(record['content']), 3)
+                    vectors[i] = self.index._vector(vector).tobytes()
+            await self._scope(job)
+            await asyncio.to_thread(self.jobs.commit, job, structured, vectors)
         except PrivateAuthorizationRequired:
             await asyncio.to_thread(self.jobs.update, job, 'cancelled', error='authorization_or_memory_changed')
             self.results.pop(job['id'], None)
-        except MemoryError:
+        except MemoryError as error:
+            if error.code in {'evidence_changed', 'extractor_version_changed'}:
+                await asyncio.to_thread(self.jobs.update, job, 'cancelled', error=error.code)
+                self.results.pop(job['id'], None)
+                return True
             current = await asyncio.to_thread(self.jobs.current, job)
             await asyncio.to_thread(self.jobs.update, job, 'failed' if current['attempts'] >= 2 else 'retry_wait',
                                     error='invalid_output')
         except Exception as error:
             current = await asyncio.to_thread(self.jobs.current, job)
             category = ('database' if isinstance(error, sqlite3.Error) else
+                        'embedding' if isinstance(error, EmbeddingUnavailable) else
                         'timeout' if isinstance(error, TimeoutError) else 'model')
             terminal = result is None and current['attempts'] >= 2
             await asyncio.to_thread(self.jobs.update, job, 'failed' if terminal else 'retry_wait',

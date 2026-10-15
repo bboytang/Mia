@@ -274,12 +274,13 @@ class MemoryStore:
         self.db.execute("UPDATE owners SET version=version+1 WHERE owner=?", (owner,))
         return True
 
-    def apply_extraction(self, owner, session_id, revision, sources, extraction, checkpoint_id, *, job_id=None):
+    def apply_extraction(self, owner, session_id, revision, sources, extraction, checkpoint_id, *, job_id=None, prepared_vectors=None):
         session_id = _text(session_id, 128, "session id")
         checkpoint_id = _text(checkpoint_id, 128, "checkpoint id")
         if type(revision) is not int or revision < 0 or not isinstance(sources, list) or not 1 <= len(sources) <= 20:
             raise MemoryError("invalid_input", "Invalid extraction snapshot")
         sources = [_text(source, 512, "source excerpt") for source in sources]
+        structured = extraction if job_id is not None else None
         extraction = parse_extraction(extraction)
         for item in extraction["memories"]:
             if item["source_index"] >= len(sources):
@@ -290,16 +291,32 @@ class MemoryStore:
             owner = self._owner(owner)
             state = self.db.execute("SELECT revision,paused FROM owners WHERE owner=?", (owner,)).fetchone()
             if job_id is not None:
-                job = self.db.execute('SELECT state,owner,memory_revision FROM mia_jobs WHERE id=?', (job_id,)).fetchone()
+                job = self.db.execute('SELECT * FROM mia_jobs WHERE id=?', (job_id,)).fetchone()
                 if (job is None or job['owner'] != owner or job['memory_revision'] != revision
                         or job['state'] not in {'validated', 'retry_wait'}):
                     return {"applied": False, "memories": [], "trait_updated": False}
+                if (not isinstance(structured, dict) or structured.get('_schema') != 1
+                        or structured != json.loads(job['validated_result'])
+                        or sources != [json.loads(job['source_payload'])['text']]
+                        or session_id != job['session_id'] or checkpoint_id != job_id):
+                    raise MemoryError('evidence_changed', 'Task evidence does not match')
+                evidence = [relation for record in structured['memories'] for relation in record['relations']]
+                evidence.extend((structured.get('trait') or {}).get('evidence_quotes', []))
+                for proof in evidence:
+                    target_id = proof.get('target_id', proof.get('id'))
+                    target = self.db.execute('SELECT x.content_version,x.evidence_version FROM memories m '
+                        "JOIN mia_memory_meta x ON x.memory_id=m.id WHERE m.owner=? AND m.id=? AND m.confirmed=1 AND x.state='active'",
+                        (owner, target_id)).fetchone()
+                    versions = (proof.get('target_version', proof.get('content_version')),
+                                proof.get('target_evidence_version', proof.get('evidence_version')))
+                    if target is None or tuple(target) != versions:
+                        raise MemoryError('evidence_changed', 'Referenced evidence has changed')
             if state["paused"] or state["revision"] != revision or self.db.execute(
                     "SELECT 1 FROM checkpoints WHERE owner=? AND checkpoint_id=?", (owner, checkpoint_id)).fetchone():
                 return {"applied": False, "memories": [], "trait_updated": False}
             changed = []
             corrected = False
-            for item in extraction["memories"]:
+            for item_index, item in enumerate(extraction["memories"]):
                 source = sources[item["source_index"]]
                 if SECRET.search(unicodedata.normalize("NFKC", source)):
                     continue
@@ -329,6 +346,42 @@ class MemoryStore:
                 self.db.execute("INSERT OR IGNORE INTO sources VALUES (?,?,?,?,?)",
                                 (memory_id, session_id, hashlib.sha256(source.encode()).hexdigest(), source, now))
                 self._index(memory_id, item["content"])
+                if job_id is not None:
+                    from .embedding import DIMENSION, MODEL_KEY, REVISION
+                    detail = structured['memories'][item_index]
+                    actual_confirmed = self.db.execute('SELECT confirmed FROM memories WHERE id=?', (memory_id,)).fetchone()[0]
+                    self.db.execute('UPDATE mia_memory_meta SET state=?,confirmation_origin=?,entities=?,keywords=?,'
+                        'trigger_terms=?,emotional_weight=? WHERE memory_id=?',
+                        ('active' if actual_confirmed else 'pending',
+                         'model_user_excerpt' if detail['kind'] == 'explicit' else 'model_inferred_candidate',
+                         json.dumps(detail['entities'], ensure_ascii=False), json.dumps(detail['keywords'], ensure_ascii=False),
+                         json.dumps(detail['trigger_terms'], ensure_ascii=False), detail['emotional_weight'], memory_id))
+                    fingerprint = hashlib.sha256(source.encode()).hexdigest()
+                    self.db.execute('UPDATE mia_source_meta SET turn_id=?,message_id=?,observed_at=?,source_type=? '
+                        'WHERE memory_id=? AND session_id=? AND fingerprint=? AND turn_id IS NULL',
+                        (job['turn_id'], json.loads(job['source_payload'])['message_id'], job['created_at'],
+                         'user_' + detail['kind'], memory_id, session_id, fingerprint))
+                    version = self.db.execute('SELECT content_version,evidence_version FROM mia_memory_meta WHERE memory_id=?',
+                                              (memory_id,)).fetchone()
+                    if actual_confirmed:
+                        vector = (prepared_vectors or {}).get(item_index)
+                        if vector is None:
+                            raise MemoryError('index_unavailable', 'Prepared vector is missing')
+                        self.db.execute('INSERT INTO mia_vectors(memory_id,model_id,model_revision,dimension,content_version,'
+                            'normalized_vector,indexed_at) VALUES (?,?,?,?,?,?,?) ON CONFLICT(memory_id) DO UPDATE SET '
+                            'model_id=excluded.model_id,model_revision=excluded.model_revision,dimension=excluded.dimension,'
+                            'content_version=excluded.content_version,normalized_vector=excluded.normalized_vector,indexed_at=excluded.indexed_at',
+                            (memory_id, MODEL_KEY, REVISION, DIMENSION, version['content_version'], vector, now))
+                        for relation in detail['relations']:
+                            if relation['target_id'] != memory_id:
+                                proof = json.dumps({'quote': relation['evidence'], 'anchor': relation['anchor'],
+                                    'message_id': json.loads(job['source_payload'])['message_id'],
+                                    'evidence_version': version['evidence_version']}, ensure_ascii=False)
+                                self.db.execute('INSERT INTO mia_associations(memory_id,related_id,relation,evidence,content_version,'
+                                    'related_version) VALUES (?,?,?,?,?,?) ON CONFLICT(memory_id,related_id,relation) DO UPDATE SET '
+                                    'evidence=excluded.evidence,content_version=excluded.content_version,related_version=excluded.related_version',
+                                    (memory_id, relation['target_id'], relation['relation'], proof,
+                                     version['content_version'], relation['target_version']))
                 changed.append(memory_id)
             trait_updated = self._trait(owner, extraction["trait"], now)
             if corrected:
@@ -337,8 +390,11 @@ class MemoryStore:
             self.db.execute("DELETE FROM checkpoints WHERE owner=? AND checkpoint_id NOT IN "
                             "(SELECT checkpoint_id FROM checkpoints WHERE owner=? ORDER BY rowid DESC LIMIT 100)", (owner, owner))
             if job_id is not None:
-                self.db.execute("UPDATE mia_jobs SET state=?,source_payload='{}',validated_result=NULL,updated_at=?,error_category=NULL WHERE id=?",
-                                ('committed' if changed or trait_updated else 'empty', now, job_id))
+                pending = any(not self.db.execute('SELECT confirmed FROM memories WHERE id=?', (memory_id,)).fetchone()[0]
+                              for memory_id in changed)
+                summary = json.dumps({'confirmation_required': True}) if pending else None
+                self.db.execute("UPDATE mia_jobs SET state=?,source_payload='{}',validated_result=?,updated_at=?,error_category=NULL WHERE id=?",
+                                ('committed' if changed or trait_updated else 'empty', summary, now, job_id))
             return {"applied": True, "memories": changed, "trait_updated": trait_updated}
 
     def personality(self, owner):

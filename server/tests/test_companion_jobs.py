@@ -1,6 +1,7 @@
 """Durability, bounded native work, fairness and lifecycle; no live model calls."""
 
 import asyncio
+import numpy as np
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 import json
@@ -18,6 +19,17 @@ from unittest.mock import AsyncMock, patch
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryStore, MemoryError
+from server.companion.extraction import validate_output
+from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION
+
+
+class UnitEncoder:
+    model_id, revision, dimension = MODEL_KEY, REVISION, DIMENSION
+
+    def encode(self, text, query=False):
+        result = np.zeros(DIMENSION, dtype=np.float32)
+        result[0] = 1
+        return result
 
 
 class Policy:
@@ -48,14 +60,16 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.policy = Policy([self.scope, self.peer])
         self.jobs = JobStore(self.store)
         self.calls = []
-        self.output = {'memories': [{'category': 'preference', 'content': '我喜欢蓝色', 'source_index': 0}]}
+        self.encoder = UnitEncoder()
+        self.output = {'memories': [{'category': 'preference', 'content': '我喜欢蓝色', 'source_index': 0,
+            'source_quote': '我喜欢蓝色', 'kind': 'explicit', 'subject': 'user', 'value': 'durable'}]}
         async def resolve(scope):
-            def extract(sources):
+            def extract(sources, context):
                 self.calls.append((scope.owner, sources))
                 return self.output
             return extract
         self.resolve = resolve
-        self.worker = MemoryWorker(self.jobs, self.policy, self.resolve)
+        self.worker = MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder)
 
     def tearDown(self):
         self.store.close()
@@ -103,19 +117,19 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.store = MemoryStore(self.path, clock=lambda: self.now[0])
         self.jobs = JobStore(self.store)
         self.jobs.recover()
-        worker = MemoryWorker(self.jobs, self.policy, self.resolve)
+        worker = MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder)
         await worker.run_once()
         self.assertEqual(self.row(result)['state'], 'committed')
         self.assertEqual(self.row(result)['attempts'], 2)
 
     async def test_validated_restart_skips_model_and_commits_once(self):
         result = await self.worker.submit(self.event())
-        self.jobs.update(self.row(result), 'validated', result=json.dumps(self.output))
+        self.jobs.update(self.row(result), 'validated', result=json.dumps(validate_output(self.output, ['我喜欢蓝色'], [])))
         self.store.close()
         self.store = MemoryStore(self.path, clock=lambda: self.now[0])
         self.jobs = JobStore(self.store)
         self.jobs.recover()
-        await MemoryWorker(self.jobs, self.policy, self.resolve).run_once()
+        await MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder).run_once()
         self.assertEqual(self.calls, [])
         self.assertEqual(self.row(result)['state'], 'committed')
 
@@ -207,13 +221,13 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_hung_model_timeout_does_not_spawn_more_native_calls_or_block_shutdown(self):
         started, release = threading.Event(), threading.Event()
-        def hung(sources):
+        def hung(sources, context):
             started.set()
             release.wait(3)
             return self.output
         async def resolve(scope):
             return hung
-        self.worker = MemoryWorker(self.jobs, self.policy, resolve, extraction_timeout=0.02)
+        self.worker = MemoryWorker(self.jobs, self.policy, resolve, extraction_timeout=0.02, encoder=self.encoder)
         first = await self.worker.submit(self.event())
         await self.worker.submit(self.event('two'))
         try:
@@ -237,12 +251,12 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
     async def test_shutdown_total_deadline_preserves_native_task_for_recovery(self):
         release, started = threading.Event(), threading.Event()
         async def resolve(scope):
-            def blocked(sources):
+            def blocked(sources, context):
                 started.set()
                 release.wait(3)
                 return self.output
             return blocked
-        self.worker = MemoryWorker(self.jobs, self.policy, resolve)
+        self.worker = MemoryWorker(self.jobs, self.policy, resolve, encoder=self.encoder)
         result = await self.worker.submit(self.event())
         await self.worker.start()
         try:
@@ -257,7 +271,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             release.set()
             await asyncio.sleep(0.03)
         self.jobs.recover()
-        await MemoryWorker(self.jobs, self.policy, self.resolve).run_once()
+        await MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder).run_once()
         self.assertEqual(self.row(result)['state'], 'committed')
 
     async def test_atomic_commit_rolls_back_facts_and_checkpoint_then_reuses_result(self):
@@ -281,14 +295,14 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             self.policy.active = True
             result = await self.worker.submit(self.event(operation))
             async def resolve(scope):
-                def extract(sources):
+                def extract(sources, context):
                     if operation == 'revoke':
                         self.policy.active = False
                     else:
                         self.store.clear(scope.owner)
                     return self.output
                 return extract
-            await MemoryWorker(self.jobs, self.policy, resolve).run_once()
+            await MemoryWorker(self.jobs, self.policy, resolve, encoder=self.encoder).run_once()
             self.assertEqual(self.row(result)['state'], 'cancelled')
             self.assertEqual(self.store.list_memories(self.scope.owner), [])
             self.assertEqual(self.row(result)['source_payload'], '{}')
@@ -327,7 +341,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
                 'action': 'job_status', 'id': job['id']}))
             return json.loads(conn.websocket.send.call_args.args[0])
         response = await query(own)
-        self.assertEqual(set(response['result']), {'id', 'state', 'attempts', 'error_category'})
+        self.assertEqual(set(response['result']), {'id', 'state', 'attempts', 'error_category', 'confirmation_required'})
         self.assertEqual(response['result']['state'], 'pending')
         self.assertEqual(len(history), 1)
         self.assertEqual((await query(peer))['error']['code'], 'not_found')
@@ -351,6 +365,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         factory.create_instance = create
         server = SimpleNamespace(config={'read_config_from_api': True})
         with patch('server.companion.xiaozhi_adapter._store', return_value=self.store), \
+                patch('server.companion.reply._encoder', self.encoder), \
                 patch('server.companion.authorization.PrivateAuthorization', return_value=self.policy), \
                 patch.dict(sys.modules, {'core': ModuleType('core'), 'core.utils': ModuleType('core.utils'),
                                         'core.utils.llm': factory}):

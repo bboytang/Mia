@@ -442,11 +442,15 @@ async def handle_message(conn, message):
         if request.get('action') == 'job_status':
             def status():
                 with provider.store.lock:
-                    row = provider.store.db.execute('SELECT id,state,attempts,error_category FROM mia_jobs WHERE owner=? AND id=?',
+                    row = provider.store.db.execute('SELECT id,state,attempts,error_category,validated_result FROM mia_jobs WHERE owner=? AND id=?',
                         (scope.owner, request.get('id'))).fetchone()
                     if row is None:
                         raise MemoryError('not_found', 'Task does not exist')
-                    return dict(row)
+                    result = dict(row)
+                    summary = result.pop('validated_result')
+                    result['confirmation_required'] = bool(result['state'] == 'committed' and summary
+                        and json.loads(summary).get('confirmation_required'))
+                    return result
             response['result'] = await asyncio.to_thread(status)
         else:
             response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
@@ -554,21 +558,12 @@ async def start_worker(server):
         models = await authorization.worker_model(scope)
         selected = models['selected_module']['LLM']
         config = models['LLM'][selected]
-        # Use the existing selected provider implementation; never a second reply path.
-        def extract(sources):
+        from .extraction import LLMMemoryExtractor
+        def factory():
             from core.utils.llm import create_instance
-            provider = create_instance(config.get('type', selected), config)
-            try:
-                context = {'user_excerpts': sources,
-                    'existing_memories': store.retrieve(scope.owner, ' '.join(sources)[:4096]),
-                    'personality': store.personality(scope.owner)}
-                return provider.response_no_stream(EXTRACTION_INSTRUCTIONS, json.dumps(context, ensure_ascii=False))
-            finally:
-                client = getattr(provider, 'client', None)
-                if client is not None and hasattr(client, 'close'):
-                    client.close()
-        return extract
-    worker = server._mia_worker = MemoryWorker(JobStore(store), authorization, resolve)
+            return create_instance(config.get('type', selected), config)
+        return LLMMemoryExtractor(factory)
+    worker = server._mia_worker = MemoryWorker(JobStore(store), authorization, resolve, encoder=reply._encoder)
     await worker.start()
 
 

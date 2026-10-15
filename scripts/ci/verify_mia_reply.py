@@ -126,7 +126,7 @@ async def evaluate(directory, output):
         policy.scope = scope
         async def resolve_memory(restored):
             assert restored == scope
-            return lambda sources: {'memories': [], 'trait': None}
+            return lambda sources, context: {'memories': [], 'trait': None}
         worker = MemoryWorker(JobStore(store), policy, resolve_memory)
         server_context = SimpleNamespace(_mia_worker=worker)
         completion_jobs = []

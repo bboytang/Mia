@@ -214,7 +214,7 @@ async def main():
                 assert restored == scope
                 async_models = await auth.worker_model(restored)
                 assert async_models['selected_module']['LLM'] == 'LLM_ChatGLMLLM'
-                return lambda sources: {'memories': [], 'trait': None}
+                return lambda sources, context: {'memories': [], 'trait': None}
             jobs = JobStore(store)
             worker = MemoryWorker(jobs, auth, resolve_worker)
             event = TurnCompleted(scope, 'scope-ci', 'worker-one', 'worker-one', 'CI user source only', 0)
@@ -239,6 +239,31 @@ async def main():
                     value = np.zeros(DIMENSION, dtype=np.float32)
                     value[0] = 1
                     return value
+            async def resolve_structured(restored):
+                assert restored == scope
+                return lambda sources, context: {'memories': [{'category': 'preference', 'content': sources[0],
+                    'source_quote': sources[0], 'source_index': 0, 'kind': 'explicit', 'subject': 'user',
+                    'value': 'durable', 'keywords': ['蓝色'], 'trigger_terms': ['喜欢']}]}
+            structured_worker = MemoryWorker(jobs, auth, resolve_structured, encoder=SyntheticVectorEncoder())
+            structured = await structured_worker.submit(TurnCompleted(scope, 'scope-ci', 'extract-own', 'extract-own',
+                '我喜欢蓝色', store.snapshot(scope.owner)['revision']))
+            await structured_worker.run_once()
+            assert jobs.current(structured)['state'] == 'committed'
+            extracted = store.db.execute("SELECT m.id,m.owner FROM memories m JOIN mia_source_meta s ON s.memory_id=m.id "
+                "WHERE s.message_id='extract-own'").fetchone()
+            assert extracted['owner'] == scope.owner
+            assert store.db.execute('SELECT COUNT(*) FROM mia_vectors WHERE memory_id=?', (extracted['id'],)).fetchone()[0] == 1
+            from mia_companion.extraction import validate_output, context_for
+            try:
+                validate_output({'memories': [{'category': 'fact', 'content': '我喜欢蓝色', 'source_quote': '我喜欢蓝色',
+                    'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable',
+                    'relations': [{'target_id': other_id, 'relation': 'shared_term', 'anchor': 'CI', 'evidence': '我喜欢蓝色'}]}]},
+                    ['我喜欢蓝色'], context_for(store, scope.owner))
+            except adapter.MemoryError:
+                pass
+            else:
+                raise AssertionError('Foreign extraction relation was accepted')
+            store.delete_memory(scope.owner, extracted['id'])
             vector_index = SemanticMemoryIndex(store, SyntheticVectorEncoder())
             await vector_index.index_memory(scope, auth, own_id)
             try:
@@ -324,7 +349,7 @@ async def main():
     assert executor.calls == 1
     assert active.client_abort and tool.calls == 3
     print(json.dumps({'manager_python_scope_pass': True, 'checks': 34, 'vector_scope_checks_pass': True,
-                      'reply_scope_checks_pass': True, 'worker_scope_checks_pass': True,
+                      'reply_scope_checks_pass': True, 'worker_scope_checks_pass': True, 'extraction_scope_checks_pass': True,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 

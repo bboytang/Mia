@@ -1,0 +1,308 @@
+{
+  "version": "P17-controlled-v1",
+  "kind": "mechanism_fixture_not_independent_real_user_holdout",
+  "cases": [
+    {
+      "id": "neutral",
+      "source": "我每周三都会在公司食堂吃素",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我每周三都会在公司食堂吃素",
+            "source_quote": "我每周三都会在公司食堂吃素",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false,
+            "keywords": [
+              "吃素"
+            ],
+            "trigger_terms": [
+              "周三"
+            ],
+            "entities": [
+              "公司食堂"
+            ]
+          }
+        ],
+        "trait": null
+      },
+      "expected": "active"
+    },
+    {
+      "id": "negation",
+      "source": "我不喜欢蓝色",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我不喜欢蓝色",
+            "source_quote": "我不喜欢蓝色",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "active"
+    },
+    {
+      "id": "mixed_quote",
+      "source": "“我喜欢蓝色”只是引用。我喜欢绿色。",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我喜欢绿色",
+            "source_quote": "我喜欢绿色",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "active"
+    },
+    {
+      "id": "medical",
+      "source": "我被确诊为糖尿病",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我被确诊为糖尿病",
+            "source_quote": "我被确诊为糖尿病",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "pending"
+    },
+    {
+      "id": "inferred",
+      "source": "我每次提交前都会检查测试结果",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "检查测试结果可能是我的习惯",
+            "source_quote": "我每次提交前都会检查测试结果",
+            "source_index": 0,
+            "kind": "inferred",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false,
+            "anchor": "检查测试结果"
+          }
+        ],
+        "trait": null
+      },
+      "expected": "pending"
+    },
+    {
+      "id": "greeting",
+      "source": "谢谢你",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "谢谢你",
+            "source_quote": "谢谢你",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "empty"
+    },
+    {
+      "id": "hypothesis",
+      "source": "假设我住在月球",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "假设我住在月球",
+            "source_quote": "假设我住在月球",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "empty"
+    },
+    {
+      "id": "joke",
+      "source": "我开玩笑说我住在月球",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我开玩笑说我住在月球",
+            "source_quote": "我开玩笑说我住在月球",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "empty"
+    },
+    {
+      "id": "quote",
+      "source": "“我住在月球”",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我住在月球",
+            "source_quote": "我住在月球",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "empty"
+    },
+    {
+      "id": "relation",
+      "source": "我吃素时会选择豆腐",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我吃素时会选择豆腐",
+            "source_quote": "我吃素时会选择豆腐",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false,
+            "keywords": [
+              "豆腐"
+            ],
+            "trigger_terms": [
+              "吃素"
+            ]
+          }
+        ],
+        "trait": null
+      },
+      "expected": "active"
+    },
+    {
+      "id": "ongoing_goal",
+      "source": "我打算接下来半年每周练习游泳",
+      "output": {
+        "memories": [
+          {
+            "category": "goal",
+            "content": "我打算接下来半年每周练习游泳",
+            "source_quote": "我打算接下来半年每周练习游泳",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false,
+            "keywords": [
+              "游泳"
+            ]
+          }
+        ],
+        "trait": null
+      },
+      "expected": "active"
+    },
+    {
+      "id": "unproved_clue",
+      "source": "我喜欢海边",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我喜欢海边",
+            "source_quote": "我喜欢海边",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false,
+            "keywords": [
+              "火星"
+            ]
+          }
+        ],
+        "trait": null
+      },
+      "expected": "invalid"
+    },
+    {
+      "id": "false_quote",
+      "source": "我喜欢海边",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我住在火星",
+            "source_quote": "我住在火星",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "invalid"
+    },
+    {
+      "id": "credential",
+      "source": "我的password是synthetic-only",
+      "output": {
+        "memories": [
+          {
+            "category": "preference",
+            "content": "我的password是synthetic-only",
+            "source_quote": "我的password是synthetic-only",
+            "source_index": 0,
+            "kind": "explicit",
+            "subject": "user",
+            "value": "durable",
+            "sensitive": false
+          }
+        ],
+        "trait": null
+      },
+      "expected": "credential_rejected"
+    }
+  ]
+}

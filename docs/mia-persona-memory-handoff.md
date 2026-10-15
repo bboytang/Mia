@@ -4,7 +4,7 @@
 
 ## 当前范围与状态
 
-当前用户最新要求：**“继续下一步”。** 本段P16统一完成事件与持久任务生命周期的机制及受控验证通过，下一步P17结构化提取与来源／元数据校验、增量索引。实际Provider容量与输出预留仍未核实，保持限制，不部署。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
+当前用户最新要求：**“继续下一步”。** P16机制及受控验证已通过；P17结构化提取、来源／元数据校验及增量索引已写入，正在进行 GitHub 验证，尚未标记完成。实际Provider容量与输出预留仍未核实，保持限制，不部署。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
 P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要新增5项及原18项在3cb7b3c通过，构建通过，P10兼容迁移6项与104服务测试在426d8c4通过，23身份／TLS及构建同提交通过；已归档。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，既有Java脱敏测试预期已在74794e0修正并通过完整回归（历史失败保留）；P11基础113服务、23身份及三个限定原Provider样本通过，完整人格仍待联动验收，未部署。
 
@@ -21,7 +21,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P16机制及受控验证通过，下一步P17**，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
+当前步骤：**P17验证进行中**，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
 最新验证提交：`dee34f5435bcfbe06b44be54b32c2b5321533319`，服务[38759159810](https://github.com/bboytang/Mia/actions/runs/38759159810)176项（19项新任务方法）、真实BGE[38759159851](https://github.com/bboytang/Mia/actions/runs/38759159851)的P12—P14回归及P15／P16九场景通过，六条完成路径各一个pending→empty任务；11次合成SDK请求、7次工具派发。身份[38759159526](https://github.com/bboytang/Mia/actions/runs/38759159526)173／173、23专项／实际TLS及Worker模型恢复／隔离、类范围和JAR通过；manager[38759159388](https://github.com/bboytang/Mia/actions/runs/38759159388)150／150＋独立4／4与字节对照通过，四workflow均success。原报告／hash／首轮RECORD夹具失败及中间通过保存点见[任务CI](verification/mia-persona-memory/jobs-ci-results.json)和[jobs.md](verification/mia-persona-memory/jobs.md)。所有run已结束，无在途操作；无本地自动测试／构建、真实聊天调用或部署，P17／P18及完整B03、全服务负载／真机仍待后续。
 
