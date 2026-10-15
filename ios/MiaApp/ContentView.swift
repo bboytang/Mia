@@ -137,7 +137,6 @@ private struct MiaSettingsView: View {
     @State private var authorizationCode = ""
     @State private var authorizationStatus: String?
     @State private var authorizing = false
-    @State private var showsMemory = false
 
     var body: some View {
         NavigationStack {
@@ -213,16 +212,7 @@ private struct MiaSettingsView: View {
                 }
                 Section("Mia") {
                     NavigationLink("个性化皮肤") { MiaSkinView() }
-                    Button {
-                        controller.stop()
-                        showsMemory = true
-                    } label: {
-                        HStack {
-                            Text("记忆与成长")
-                            Spacer()
-                            Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
-                        }
-                    }.foregroundStyle(.primary).accessibilityLabel("记忆与成长")
+                    NavigationLink("记忆与成长") { MiaMemoryView(session: session) }
                     NavigationLink("设置声音唤醒") { MiaWakeGuideView() }
                     Button("关闭 Mia 对话") { MiaConversationController.shared.stop() }
                 }
@@ -261,7 +251,6 @@ private struct MiaSettingsView: View {
             }
             .onAppear { controller.refreshAudioRoute() }
             .navigationTitle("设置")
-            .navigationDestination(isPresented: $showsMemory) { MiaMemoryView(session: session) }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) { Button("完成") { dismiss() } }
             }

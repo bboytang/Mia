@@ -67,11 +67,13 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         app.buttons["设置"].tap()
         let entry = app.buttons["记忆与成长"]
         for _ in 0..<5 {
-            if entry.isHittable { break }
+            if entry.isHittable && entry.frame.minY > app.navigationBars.firstMatch.frame.maxY + 8
+                && entry.frame.maxY < app.frame.maxY - 60 { break }
             app.swipeUp()
         }
         XCTAssertTrue(entry.waitForExistence(timeout: 5))
-        entry.tap()
+        XCTAssertLessThan(entry.frame.maxY, app.frame.maxY - 60)
+        entry.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         guard app.navigationBars["记忆与成长"].waitForExistence(timeout: 5) else {
             let hierarchy = XCTAttachment(string: app.debugDescription)
             hierarchy.name = "P21 navigation failure hierarchy"
@@ -86,7 +88,8 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         }
         let tracking = app.switches["记录我的长期心情"]
         for _ in 0..<6 {
-            if tracking.isHittable { break }
+            if tracking.isHittable && tracking.frame.minY > app.navigationBars.firstMatch.frame.maxY + 8
+                && tracking.frame.maxY < app.frame.maxY - 60 { break }
             app.swipeUp()
         }
         XCTAssertTrue(tracking.waitForExistence(timeout: 15))
