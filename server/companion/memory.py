@@ -551,7 +551,9 @@ class MemoryStore:
         elif action not in {"list", "personality"}:
             raise MemoryError("invalid_input", "Unknown memory action")
         state = self.snapshot(owner)
-        return {"memories": self.list_memories(owner), "paused": state["paused"], "personality": self.personality(owner)}
+        return {"memories": self.list_memories(owner), "paused": state["paused"], "personality": self.personality(owner),
+                "management": {"version": 1, "actions": ["events", "event_delete", "emotion_consent", "emotion_status",
+                    "observations", "observation_update", "observation_delete", "emotion_clear"]}}
 
     def close(self):
         with self.lock:

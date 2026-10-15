@@ -224,6 +224,48 @@ final class MiaCompanionSessionTests: XCTestCase {
         XCTAssertEqual(audio.starts, 0)
     }
 
+    @MainActor
+    func testExtendedManagementUsesExistingConnectionAndReportsAcceptedVersusSaved() async throws {
+        let audio = CompanionAudioStub()
+        let voice = session(audio: audio, query: "?memory=extensions", permission: { XCTFail("Management requested microphone"); return false })
+        defer { voice.disconnect() }
+        let snapshot = try await voice.manageMemory(action: "list")
+        XCTAssertTrue(snapshot.management?.supports("emotion_consent") == true)
+        try await waitUntil { voice.memoryTask?.id == "fixture-task" }
+        XCTAssertTrue(voice.memoryTask?.label.contains("尚未确认保存") == true)
+        try await voice.refreshMemoryTask()
+        XCTAssertEqual(voice.memoryTask?.label, "已整理，有内容等待你确认")
+        let original = try await voice.manageMemoryResult(action: "observations", as: MiaEmotionTracking.self)
+        XCTAssertEqual(original.consent.enabled, 0)
+        XCTAssertEqual(original.trend.status, "disabled")
+        XCTAssertEqual(original.observations?.count, 1)
+        let enabled = try await voice.manageMemoryResult(action: "emotion_consent", fields: ["enabled": true], as: MiaEmotionTracking.self)
+        XCTAssertEqual(enabled.consent.enabled, 1)
+        let corrected = try await voice.manageMemoryResult(action: "observation_update", fields: ["id": "fixture-observation", "tendency": "neutral"], as: MiaEmotionTracking.self)
+        XCTAssertEqual(corrected.observations?.first?.tendency, "neutral")
+        XCTAssertEqual(corrected.observations?.first?.version, 2)
+        let stopped = try await voice.manageMemoryResult(action: "emotion_consent", fields: ["enabled": false], as: MiaEmotionTracking.self)
+        XCTAssertEqual(stopped.trend.status, "disabled")
+        XCTAssertEqual(stopped.observations?.count, 1)
+        let deleted = try await voice.manageMemoryResult(action: "observation_delete", fields: ["id": "fixture-observation"], as: MiaEmotionTracking.self)
+        XCTAssertTrue(deleted.observations?.isEmpty == true)
+        let events = try await voice.manageMemoryResult(action: "events", as: MiaEventList.self)
+        XCTAssertEqual(events.events.first?.stateLabel, "已确认")
+        let removed = try await voice.manageMemoryResult(action: "event_delete", fields: ["id": "fixture-event"], as: MiaEventList.self)
+        XCTAssertTrue(removed.events.isEmpty)
+        XCTAssertEqual(audio.starts, 0)
+    }
+
+    func testLegacySnapshotAndTaskStatesDoNotClaimPrematureSaving() throws {
+        let legacy = try JSONDecoder().decode(MiaMemorySnapshot.self, from: Data(#"{"memories":[],"paused":false,"personality":{"version":0,"traits":[]}}"#.utf8))
+        XCTAssertNil(legacy.management)
+        for (state, label) in [("committed", "已保存"), ("failed", "本次整理失败，未确认保存"), ("empty", "本次没有需要保存的内容")] {
+            let task = try JSONDecoder().decode(MiaMemoryTask.self, from: Data("{\"state\":\"\(state)\"}".utf8))
+            XCTAssertEqual(task.label, label)
+        }
+        XCTAssertEqual(try MiaWireProtocol.parseServerEvent(Data(#"{"type":"mia_memory_job"}"#.utf8)), .other)
+    }
+
     func testExpressionProtocolAcceptsOptionalTagsAndBoundsIntensity() throws {
         let sentence = Data(#"{"type":"tts","state":"sentence_start","text":"很好","emotion":"happy","intensity":0.8}"#.utf8)
         XCTAssertEqual(try MiaWireProtocol.parseServerEvent(sentence), .expressiveSentence("很好", emotion: "happy", intensity: 0.8))

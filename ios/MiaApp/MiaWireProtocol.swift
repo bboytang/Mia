@@ -12,6 +12,7 @@ enum MiaServerEvent: Equatable {
     case assistantText(String)
     case expressiveText(String, emotion: String, intensity: Double)
     case memoryResponse(requestID: String, payload: Data)
+    case memoryTask(MiaMemoryTask)
     case privateAuthorizationRequired
     case serverError(String)
     case other
@@ -115,6 +116,10 @@ enum MiaWireProtocol {
                 return .emotion(emotion)
             }
             return .other
+        case "mia_memory_job":
+            guard let task = try? JSONDecoder().decode(MiaMemoryTask.self, from: data),
+                  task.status != nil else { return .other }
+            return .memoryTask(task)
         case "mia_memory":
             guard let requestID = object["request_id"] as? String,
                   UUID(uuidString: requestID) != nil else { return .other }

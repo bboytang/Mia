@@ -99,6 +99,16 @@ async def websocket(ws):
                            "created_at": 1800000000, "updated_at": 1800000000}],
               "paused": False, "personality": {"version": 0, "traits": []}}
 
+    extensions = params.get("memory") == ["extensions"]
+    extension_actions = ["events", "event_delete", "emotion_consent", "emotion_status", "observations",
+                         "observation_update", "observation_delete", "emotion_clear"]
+    if extensions:
+        memory["management"] = {"version": 1, "actions": extension_actions}
+    tracking = {"consent": {"enabled": 0, "version": 0}, "trend": {"status": "disabled"},
+                "observations": [{"id": "fixture-observation", "source_kind": "self_report", "tendency": "negative",
+                    "confidence": .9, "observed_at": 1800000000, "source_excerpt": "我今天很难过", "version": 1}]}
+    events = {"events": [{"id": "fixture-event", "event_type": "boundary", "state": "active", "version": 1}]}
+
     async def automatic_response(packet):
         await asyncio.sleep(.1)
         await ws.send(json.dumps({"type": "stt", "text": "用户识别文本"}))
@@ -134,6 +144,21 @@ async def websocket(ws):
             if params.get("memory") == ["delayed"]:
                 await asyncio.sleep(.5)
             action = event["action"]
+            if extensions and action in extension_actions + ["job_status"]:
+                if action == "event_delete":
+                    events["events"] = [item for item in events["events"] if item["id"] != event["id"]]
+                elif action == "emotion_consent":
+                    tracking["consent"] = {"enabled": int(event["enabled"]), "version": tracking["consent"]["version"] + 1}
+                    tracking["trend"] = {"status": "insufficient_observations" if event["enabled"] else "disabled"}
+                elif action == "observation_update":
+                    tracking["observations"][0].update(tendency=event["tendency"], version=2)
+                elif action in ["observation_delete", "emotion_clear"]:
+                    tracking["observations"] = []
+                result = events if action in ["events", "event_delete"] else tracking
+                if action == "job_status":
+                    result = {"id": event["id"], "state": "committed", "confirmation_required": True}
+                await ws.send(json.dumps({"type": "mia_memory", "request_id": request_id, "result": result}))
+                continue
             if action == "pause":
                 memory["paused"] = event["paused"]
             elif action == "update":
@@ -153,6 +178,9 @@ async def websocket(ws):
                                           "error": {"code": "invalid_input", "message": "Unknown action"}}))
                 continue
             await ws.send(json.dumps({"type": "mia_memory", "request_id": request_id, "result": memory}))
+            if extensions and action == "list":
+                await ws.send(json.dumps({"type": "mia_memory_job", "status": "accepted", "accepted": True,
+                                          "id": "fixture-task", "state": "pending", "turn_id": "fixture-turn"}))
         elif event["type"] == "listen" and event["state"] == "start":
             assert event["mode"] in ["manual", "auto"]
             mode = event["mode"]

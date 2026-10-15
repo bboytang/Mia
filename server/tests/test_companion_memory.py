@@ -19,6 +19,16 @@ class MemoryStoreTests(unittest.TestCase):
         self.store.close()
         self.temp.cleanup()
 
+    def test_management_capabilities_are_additive_to_legacy_snapshot(self):
+        result = self.store.handle('alice', {'action': 'list'})
+        self.assertEqual(result['memories'], [])
+        self.assertFalse(result['paused'])
+        self.assertEqual(result['personality']['traits'], [])
+        self.assertEqual(result['management']['version'], 1)
+        self.assertIn('emotion_consent', result['management']['actions'])
+        self.assertIn('event_delete', result['management']['actions'])
+        self.assertEqual(self.store.handle('alice', {'action': 'emotion_status'})['trend'], {'status': 'disabled'})
+
     def remember(self, content, owner="alice", session="one", source=None, sensitive=False, category="preference", **extra):
         self.counter += 1
         result = self.store.apply_extraction(owner, session, self.store.snapshot(owner)["revision"],

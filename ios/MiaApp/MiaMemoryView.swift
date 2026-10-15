@@ -9,13 +9,18 @@ struct MiaMemoryView: View {
     @State private var content = ""
     @State private var clearRequested = false
     @State private var resetRequested = false
+    @State private var events: [MiaEventList.Event] = []
+    @State private var tracking: MiaEmotionTracking?
+    @State private var enableTrackingRequested = false
+    @State private var clearTrackingRequested = false
+    @State private var editingObservation: MiaEmotionTracking.Observation?
 
     var body: some View {
         List {
             Section {
                 Text("Mia 会提炼重要内容，敏感记忆需你确认。使用云端模型时，相关记忆会随聊天请求发送给模型服务。")
                     .font(.footnote)
-                Text("普通聊天每十轮或结束后整理；可说「请记住我喜欢……」提前整理，随后刷新查看。只有实际保存的内容才能跨会话使用。")
+                Text("每次回复后会在后台整理；“已接收”不等于“已保存”。刷新可查看已保存或等待确认的内容。")
                     .font(.footnote).foregroundStyle(.secondary)
                 if let snapshot {
                     Toggle("自动记住重要内容", isOn: Binding(
@@ -23,6 +28,7 @@ struct MiaMemoryView: View {
                         set: { enabled in Task { await perform("pause", fields: ["paused": !enabled]) } }
                     ))
                 }
+                if let task = session.memoryTask { Text(task.label).font(.footnote) }
                 Button("刷新") { Task { await perform("list") } }
             }
             if let error { Section { Text(error).foregroundStyle(.orange) } }
@@ -72,6 +78,8 @@ struct MiaMemoryView: View {
                     }
                     Button("恢复基础性格", role: .destructive) { resetRequested = true }
                 }
+                if snapshot.management?.supports("events") == true { eventSection }
+                if snapshot.management?.supports("emotion_status") == true { trackingSection }
                 Section {
                     Button("清空全部记忆与成长", role: .destructive) { clearRequested = true }
                 }
@@ -106,6 +114,86 @@ struct MiaMemoryView: View {
         .confirmationDialog("恢复基础性格？", isPresented: $resetRequested, titleVisibility: .visible) {
             Button("恢复", role: .destructive) { Task { await perform("reset_personality") } }
         }
+        .confirmationDialog("启用长期情绪记录？", isPresented: $enableTrackingRequested, titleVisibility: .visible) {
+            Button("启用") { Task { await perform("emotion_consent", fields: ["enabled": true]) } }
+        } message: {
+            Text("默认关闭。启用后记录聊天中关于你心情的观察，分析最近30天，最多保留90天。相关观察可能随请求发送给云端模型；可随时停用、更正或删除。这不等于心理诊断。")
+        }
+        .confirmationDialog("删除全部心情观察？", isPresented: $clearTrackingRequested, titleVisibility: .visible) {
+            Button("删除观察", role: .destructive) { Task { await perform("emotion_clear") } }
+        } message: { Text("删除已有观察，不会关闭当前的记录授权。") }
+        .sheet(item: $editingObservation) { observation in
+            NavigationStack {
+                List {
+                    Text(observation.sourceExcerpt)
+                    ForEach(["positive", "negative", "neutral", "mixed"], id: \.self) { tendency in
+                        Button(MiaEmotionTracking.tendencyLabel(tendency)) {
+                            editingObservation = nil
+                            Task { await perform("observation_update", fields: ["id": observation.id, "tendency": tendency]) }
+                        }
+                    }
+                }.navigationTitle("更正当时的心情")
+                    .toolbar { Button("取消") { editingObservation = nil } }
+            }
+        }
+    }
+
+    private var eventSection: some View {
+        Section("互动记录（最新100条）") {
+            if events.isEmpty { Text("还没有已记录的互动") }
+            ForEach(events) { event in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(event.title)
+                    Text("\(event.stateLabel) · 第\(event.version)版").font(.caption).foregroundStyle(.secondary)
+                }.swipeActions {
+                    Button("删除", role: .destructive) { Task { await perform("event_delete", fields: ["id": event.id]) } }
+                }
+            }
+        }
+    }
+
+    private var trackingSection: some View {
+        Section("长期心情记录") {
+            if let tracking {
+                Toggle("记录我的长期心情", isOn: Binding(
+                    get: { tracking.consent.enabled == 1 },
+                    set: { enabled in
+                        if enabled { enableTrackingRequested = true }
+                        else { Task { await perform("emotion_consent", fields: ["enabled": false]) } }
+                    }
+                ))
+                Text("授权第\(tracking.consent.version)版。停用后停止采集和分析，已有观察仍可查看或删除。")
+                    .font(.footnote).foregroundStyle(.secondary)
+                if tracking.trend.status == "available" {
+                    ForEach(["self_report", "inferred"], id: \.self) { kind in
+                        if let group = tracking.trend.groups?[kind], !group.distribution.isEmpty {
+                            Text("\(kind == "self_report" ? "你明确说过的" : "从表达推测的")：\(group.count)条，\(group.sessions)次会话")
+                            Text(group.distribution.keys.sorted().map {
+                                "\(MiaEmotionTracking.tendencyLabel($0))\(group.distribution[$0] ?? 0)条"
+                            }.joined(separator: "、")).font(.caption)
+                        }
+                    }
+                } else if tracking.consent.enabled == 1 {
+                    Text("还不足以判断长期规律，需要至少5条观察、3次会话并跨7个自然日。")
+                        .font(.footnote)
+                }
+                ForEach(tracking.observations ?? []) { observation in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(observation.sourceExcerpt)
+                        Text("\(observation.sourceKind == "self_report" ? "明确自述" : "推测") · \(MiaEmotionTracking.tendencyLabel(observation.tendency)) · 置信度\(Int(observation.confidence * 100))%")
+                            .font(.caption).foregroundStyle(.secondary)
+                        Text(Date(timeIntervalSince1970: observation.observedAt).formatted(date: .abbreviated, time: .shortened))
+                            .font(.caption).foregroundStyle(.secondary)
+                        Button("更正") { editingObservation = observation }.buttonStyle(.borderless)
+                    }.swipeActions {
+                        Button("删除", role: .destructive) { Task { await perform("observation_delete", fields: ["id": observation.id]) } }
+                    }
+                }
+                Text("这里显示最新100条观察，不等于医学测量；Mia 的回复表情不作为你的心情记录。")
+                    .font(.footnote).foregroundStyle(.secondary)
+                Button("删除全部心情观察", role: .destructive) { clearTrackingRequested = true }
+            }
+        }
     }
 
     @MainActor
@@ -114,7 +202,22 @@ struct MiaMemoryView: View {
         working = true
         error = nil
         defer { working = false }
-        do { snapshot = try await session.manageMemory(action: action, fields: fields) }
+        do {
+            if action == "event_delete" {
+                events = try await session.manageMemoryResult(action: action, fields: fields, as: MiaEventList.self).events
+            } else if action.hasPrefix("emotion_") || action.hasPrefix("observation_") {
+                tracking = try await session.manageMemoryResult(action: action, fields: fields, as: MiaEmotionTracking.self)
+            } else {
+                snapshot = try await session.manageMemory(action: action, fields: fields)
+                try await session.refreshMemoryTask()
+            }
+            if snapshot?.management?.supports("events") == true {
+                events = try await session.manageMemoryResult(action: "events", as: MiaEventList.self).events
+            }
+            if snapshot?.management?.supports("observations") == true {
+                tracking = try await session.manageMemoryResult(action: "observations", as: MiaEmotionTracking.self)
+            }
+        }
         catch is CancellationError { }
         catch { self.error = error.localizedDescription }
     }

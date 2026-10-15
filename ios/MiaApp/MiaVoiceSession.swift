@@ -28,6 +28,7 @@ final class MiaVoiceSession: ObservableObject {
     @Published private(set) var microphonePeak: Float = 0
     @Published private(set) var lastUserTranscript = ""
     @Published private(set) var replyText = ""
+    @Published private(set) var memoryTask: MiaMemoryTask?
     private let logger = Logger(subsystem: "com.bboytang.mia", category: "Xiaozhi")
     private var reconnectTask: Task<Void, Never>?
     private var reconnectAttempts = 0
@@ -96,6 +97,7 @@ final class MiaVoiceSession: ObservableObject {
     }
 
     func disconnect() {
+        memoryTask = nil
         memoryTimeout?.cancel()
         memoryTimeout = nil
         let request = memoryRequest
@@ -267,6 +269,8 @@ final class MiaVoiceSession: ObservableObject {
         case .emotion(let emotion):
             guard conversationActive, acceptsReply else { return }
             pendingExpression = MiaReplyExpression(emotion: emotion)
+        case .memoryTask(let task):
+            memoryTask = task
         case .memoryResponse(let id, let payload):
             guard let request = memoryRequest, request.id == id else { return }
             memoryRequest = nil
@@ -447,7 +451,18 @@ final class MiaVoiceSession: ObservableObject {
         sentenceExpressions.removeAll()
     }
 
+    func refreshMemoryTask() async throws {
+        guard let id = memoryTask?.id else { return }
+        let updated = try await manageMemoryResult(action: "job_status", fields: ["id": id], as: MiaMemoryTask.self)
+        if memoryTask?.id == id { memoryTask = updated }
+    }
+
     func manageMemory(action: String, fields: [String: Any] = [:]) async throws -> MiaMemorySnapshot {
+        try await manageMemoryResult(action: action, fields: fields, as: MiaMemorySnapshot.self)
+    }
+
+    func manageMemoryResult<Result: Decodable>(action: String, fields: [String: Any] = [:],
+                                               as type: Result.Type) async throws -> Result {
         guard memoryRequest == nil else { throw MiaMemoryError.busy }
         if state == .disconnected { await connect() }
         for _ in 0..<220 {
@@ -496,7 +511,7 @@ final class MiaVoiceSession: ObservableObject {
               object["error"] == nil, let result = object["result"] as? [String: Any] else {
             throw MiaMemoryError.rejected
         }
-        return try JSONDecoder().decode(MiaMemorySnapshot.self,
+        return try JSONDecoder().decode(type,
                                         from: JSONSerialization.data(withJSONObject: result))
     }
 

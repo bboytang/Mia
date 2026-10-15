@@ -61,6 +61,37 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         XCTAssertTrue(app.buttons["开始说话"].exists)
     }
 
+    func testMemoryPageOffersExplicitOptInWithoutStartingConversation() {
+        let app = launch(ota: "http://127.0.0.1:8770/ota/",
+                         websocket: "ws://127.0.0.1:8769/xiaozhi/v1/?memory=extensions")
+        app.buttons["设置"].tap()
+        let entry = app.buttons["记忆与成长"]
+        for _ in 0..<5 {
+            if entry.isHittable { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.tap()
+        XCTAssertTrue(app.navigationBars["记忆与成长"].waitForExistence(timeout: 5))
+        let tracking = app.switches["记录我的长期心情"]
+        for _ in 0..<6 {
+            if tracking.isHittable { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(tracking.waitForExistence(timeout: 15))
+        XCTAssertEqual(tracking.value as? String, "0")
+        tracking.tap()
+        XCTAssertTrue(app.buttons["启用"].waitForExistence(timeout: 5))
+        app.buttons["启用"].tap()
+        let enabled = NSPredicate(format: "value == %@", "1")
+        expectation(for: enabled, evaluatedWith: tracking)
+        waitForExpectations(timeout: 10)
+        let image = XCTAttachment(screenshot: app.screenshot())
+        image.name = "P21 existing memory page with explicit emotion consent"
+        image.lifetime = .keepAlways
+        add(image)
+    }
+
     func testHomeWaitsForTapBeforeDeviceDiscoveryAndActivation() {
         let app = XCUIApplication()
         app.launchArguments = ["-mia.xiaozhi.otaURL", "http://127.0.0.1:8770/ota/?activation=1",
