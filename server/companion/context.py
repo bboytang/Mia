@@ -227,7 +227,15 @@ class ContextBuilder:
         retained = []
         omitted = {'role': False, 'fact_ids': [], 'traits': [], 'history_turns': inputs['older_turns_removed'], 'scene': False}
         def request():
-            messages = [{'role': 'system', 'content': CORE + POLICY},
+            event_types = {item['type'] for item in data.get('events', [])}
+            style = ''
+            if 'reflection' in event_types:
+                style = '\n这轮在问你的看法，用一句日常口语给出具体看法。不要把颜色等偏好解释成对方的性格、心理或情感需求，也不用解释AI身份。'
+            elif 'continuity' in event_types:
+                style = '\n自然接住这次追问，只说有依据的内容，不照抄上次回答，不再演初次发现或介绍身份。'
+            elif 'boundary' in event_types:
+                style = '\n简短确认对方这次的具体边界，不加客服式的结束语。'
+            messages = [{'role': 'system', 'content': CORE + POLICY + style},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             messages.extend(message for group in retained for message in group)
             messages.extend(inputs['current'])
