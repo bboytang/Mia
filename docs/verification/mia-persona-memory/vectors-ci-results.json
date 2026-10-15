@@ -1,0 +1,35 @@
+{
+  "code_sha": "b8ebb4853107f160dd443eadbc99fccc8d8412b0",
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38664353550",
+    "conclusion": "success",
+    "tests": 121
+  },
+  "vectors": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38664353600",
+    "conclusion": "success",
+    "report": "vectors-results.json"
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38664353575",
+    "workflow_conclusion": "failure",
+    "focused_tests": 23,
+    "focused_failures": 0,
+    "jar_build": "success",
+    "class_scope": "success",
+    "full_tests": 173,
+    "full_failures": 1,
+    "failed_case": "SensitiveDataUtilsTest.maskMiddle_keeps_four_at_each_end_for_long_strings",
+    "report": "vectors-identity-results.json"
+  },
+  "manager_baseline": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38664353542",
+    "workflow_conclusion": "failure",
+    "full_tests": 150,
+    "full_failures": 1,
+    "failed_case": "SensitiveDataUtilsTest.maskMiddle_keeps_four_at_each_end_for_long_strings"
+  },
+  "in_flight_runs": [],
+  "deployment": "not_performed",
+  "full_rag": "not_accepted"
+}

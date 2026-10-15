@@ -1,6 +1,6 @@
 # P12：真正向量编码与SQLite召回
 
-状态：首轮实现待GitHub验证；未部署，主回复链仍待P13完整混合检索后接入，不能称完整RAG通过。
+状态：b8ebb4853107f160dd443eadbc99fccc8d8412b0首轮GitHub机制及真实BGE验证通过；未部署，主回复链仍待P13完整混合检索后接入，不能称完整RAG通过。
 
 ## 固定编码器
 
@@ -27,4 +27,14 @@ P12仅语义候选，不冒充P13关联＋四维评分；P16／P23继续服务�
 3. `mia-memory-vectors.yml`仅构建已选base模型，复用原export脚本，写tokenizer manifest；实际安装companion后，在无网络、2CPU／2GiB、无Torch推理容器调用真正encoder和SQLite。校对8参考向量、4中文跨措辞Top1、无关空召回、FTS表临时不存在仍召回、真实编辑／删除失效。
 4. 1千／1万容量fixture复制一个**真实种子向量**，只证明实际数据库扫描成本，不声称1万事实都经真实编码或中文准确率。门槛维持SQLite1万p95≤150ms、编码＋查询p95≤400ms、峰值RSS≤512MiB；长输入另外诊断，不能伪称其单样本为p95。
 
-P06独立完整中文留出集、关联与四信号作用、真实回答、实际manager＋BGE＋主回复整链、TTFT／并发、缓存和全部八项能力仍须P13及后续验收。旧模型／数据集／权重门槛不因失败而修改。首轮未实跑前不标通过。
+P06独立完整中文留出集、关联与四信号作用、真实回答、实际manager＋BGE＋主回复整链、TTFT／并发、缓存和全部八项能力仍须P13及后续验收。旧模型／数据集／权重门槛不因失败而修改。本次首轮通过仅限上述范围，不标完整RAG通过。
+
+## 2026-10-15保存点：已取得的结果与恢复顺序
+
+被测代码 `b8ebb4853107f160dd443eadbc99fccc8d8412b0` 已推送。真实向量[38664353600](https://github.com/bboytang/Mia/actions/runs/38664353600)通过，原始报告持久保存于[vectors-results.json](vectors-results.json)：8参考向量最小cosine为0.9589616，4个中文跨措辞Top1全部命中，无关样本空召回，FTS缺表期间仍真实召回，编辑／删除失效及撤权拒绝通过。仅此小样本不能替代完整留出集。
+
+2CPU／2GiB离线容器，1千条SQLite扫描p95为10.715ms、编码＋查询p95为30.037ms；1万条分别102.125ms／119.573ms，峰值RSS284.098MiB。容量fixture复制真实种子向量，不是1万条中文语义准确率测试。1700字长输入截断至512 token，单次225.602ms，仅诊断。
+
+服务[38664353550](https://github.com/bboytang/Mia/actions/runs/38664353550)121项通过；身份[38664353575](https://github.com/bboytang/Mia/actions/runs/38664353575)23专项、JAR及类范围通过，但完整173项仍有1项既有脱敏失败，workflow整体为failure；manager基线[38664353542](https://github.com/bboytang/Mia/actions/runs/38664353542)150项亦仅同一失败。不得写成全部CI绿色，未修改该无关失败。见[vectors-ci-results.json](vectors-ci-results.json)和[vectors-identity-results.json](vectors-identity-results.json)。
+
+用户要求先保存并交接，本段仅归档验证和文档，没有继续修改运行代码、重新触发测试、调用付费模型或部署。上述run均已完成。接续先核对任务分支与最新文档提交、阅读实际报告及P12／P13验收条件，再补P12剩余接口／生命周期审查，并实施P13关联扩展及四维评分。当前主回复链没有接入半成品检索，完整RAG与八项真实行为均未验收。

@@ -4,7 +4,7 @@
 
 ## 当前范围与状态
 
-当前用户要求：**“开始计划吧，每完成一步就写交接和进度”。** 已授权按 V1.2 和完整计划开始开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”的限制已由本次开始执行指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
+当前用户最新要求：**“先保存进度，做好交接”。** 本次仅保存现有成果与验证，不推进下一开发步骤。此前要求为“开始计划吧，每完成一步就写交接和进度”。 已授权按 V1.2 和完整计划开始开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”的限制已由本次开始执行指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
 P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要新增5项及原18项在3cb7b3c通过，构建通过，P10兼容迁移6项与104服务测试在426d8c4通过，23身份／TLS及构建同提交通过；已归档。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；P11基础113服务、23身份及三个限定原Provider样本通过，完整人格仍待联动验收，未部署。
 
@@ -21,13 +21,19 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P11基础通过，完整Persona联动仍进行中；P12真向量实现待验**。P10兼容基础已完成，P09整体随新增消费者验收；P08实际App／入口及真机未封板，未部署。
+当前步骤：**P11基础通过，完整Persona联动仍进行中；P12真向量首轮验证通过，整体待联动验收**。P10兼容基础已完成，P09整体随新增消费者验收；P08实际App／入口及真机未封板，未部署。
 
-最近被测源码 `232de0d2fc5250a42f9802a2bbd470e9866d5c18`：服务[38662376416](https://github.com/bboytang/Mia/actions/runs/38662376416)全部113通过；身份[38662376430](https://github.com/bboytang/Mia/actions/runs/38662376430)的23专项／实际TLS、JAR／类范围通过，完整173中172通过／1既有脱敏失败。固定原Provider流式[38662470670](https://github.com/bboytang/Mia/actions/runs/38662470670)三个基础样本经本轮Codex逐条语义检查通过。见[Persona机制与全部边界](verification/mia-persona-memory/persona.md)、服务／身份／Provider JSON；失败和自动假阳性也保留，不能据绿色workflow或三样本标完整B01／八项完成。
+P11已验证源码 `232de0d2fc5250a42f9802a2bbd470e9866d5c18`：服务[38662376416](https://github.com/bboytang/Mia/actions/runs/38662376416)全部113通过；身份[38662376430](https://github.com/bboytang/Mia/actions/runs/38662376430)的23专项／实际TLS、JAR／类范围通过，完整173中172通过／1既有脱敏失败。固定原Provider流式[38662470670](https://github.com/bboytang/Mia/actions/runs/38662470670)三个基础样本经本轮Codex逐条语义检查通过。见[Persona机制与全部边界](verification/mia-persona-memory/persona.md)、服务／身份／Provider JSON；失败和自动假阳性也保留，不能据绿色workflow或三样本标完整B01／八项完成。
 
-本轮实装：固定核心与JSON角色数据、DB故障／空角色保留核心、输入已知攻击提前回应、共享TTS队列句级有界检查、字幕／助手历史检查、危险流停止及跳过后续工具。完整connection动态整链、统一上下文、证据特点／事件和表达一致性仍待P14／P15／P19／P21／P22。此前“人工复核”实际由Codex逐条阅读，无独立人工签字；正式评审保持待验。
+P11基础实装：固定核心与JSON角色数据、DB故障／空角色保留核心、输入已知攻击提前回应、共享TTS队列句级有界检查、字幕／助手历史检查、危险流停止及跳过后续工具。完整connection动态整链、统一上下文、证据特点／事件和表达一致性仍待P14／P15／P19／P21／P22。此前“人工复核”实际由Codex逐条阅读，无独立人工签字；正式评审保持待验。
 
-下一步：读取P06 [固定embedding规格](verification/mia-persona-memory/embedding-selection.json)、P10 [迁移证据](verification/mia-persona-memory/schema-migration.md)及prepare／benchmark脚本；实现BGE base中文U8U8 ONNX／768维的真实编码、模型／内容版本、SQLite真向量及Scope先行召回。FTS保留仅为旧兼容，不能冒充检索成功；完整关联／四维评分及生产接口联动在P13后验收。索引维护／编辑删除／撤销／重建／故障状态必须有证据，不新建事实库、Provider或服务。已实现SemanticEncoder／SemanticMemoryIndex、独立固定依赖、机制用例和2CPU／2GiB离线实际BGE job，**待本提交GitHub实跑**，见[vectors.md](verification/mia-persona-memory/vectors.md)。当前未改主回复链为半成品检索；完整P13后再联动。
+最新代码保存点：`b8ebb4853107f160dd443eadbc99fccc8d8412b0`，已推送到任务分支；本次交接提交仅文档与报告。该SHA服务[38664353550](https://github.com/bboytang/Mia/actions/runs/38664353550)121项通过；真实BGE[38664353600](https://github.com/bboytang/Mia/actions/runs/38664353600)通过。身份[38664353575](https://github.com/bboytang/Mia/actions/runs/38664353575)23专项、JAR／类范围通过，但完整173中172通过／1既有脱敏失败；manager基线38664353542亦仅同一失败，两个workflow整体failure，不能称全部CI通过。报告及性能详见[vectors.md](verification/mia-persona-memory/vectors.md)和[vectors-ci-results.json](verification/mia-persona-memory/vectors-ci-results.json)。
+
+P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／768维、资产与内容版本、Scope先行SQLite余弦候选、失效／取消机制。4个跨措辞Top1命中、无关空召回、无FTS仍召回及生命周期样本通过；1万容量扫描p95 102.125ms、编码＋查询119.573ms、峰值RSS284.098MiB。容量向量复制真实种子，仅测成本；不等于完整语义语料验收。没有修改主回复链接入半成品检索，没有新事实库、Provider或服务。
+
+恢复顺序：先核对当前分支／远程SHA／工作树，再读取P06固定规格、P10迁移和P12原始报告、相关源码及P12／P13计划验收条件；先确认P12剩余接口与生命周期审查，再做P13关联扩展＋四维评分及其证据。主回复链接入、完整真实manager＋BGE联动、独立完整语料及八项行为继续按后续阶段验收。不要重复probe或放宽阈值。用户本次仅要求保存，因此未开始P13。
+
+保存时上述四个run均已completed，无在途开发／部署操作。临时目录不是恢复依赖，报告已经入库；固定上游与模型来源、重建recipe均在仓库。新账号需自行取得仓库／Actions权限；专用Secrets留在GitHub，不复制到交接。
 
 测试Secrets已配置且专用，连接与限定原Provider样本已通过，不复制密钥到新环境、不重复已完成probe。未实际App↔manager整链、生产TLS、iPhone、长期任务／情绪自然时间及全服务资源／八项行为；继续独立开发但这些条件不能被基础样本替代。先检查当前分支／SHA／工作树与在途run再接续。
 
@@ -47,7 +53,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P09 | 基础通过，整体进行中 | 426d8c4的实际安装Scope／ToolManager／管理／旧会话及23身份／TLS通过；新增索引／事件／趋势／持久任务逐模块补Scope证据，整体与真实App／资源待验 |
 | P10 | 完成：兼容基础 | 426d8c4／38656910711的6项真实SQLite迁移及104服务测试通过；同提交23身份／TLS、构建及类范围通过，完整回归保留1既有失败 |
 | P11 | 基础通过，整体进行中 | 232de0d的113服务／23身份、实际安装检查及原Provider三个语义样本通过；整体人格随统一上下文／工具／事件及正式评审验收 |
-| P12 | 实现待验 | 真BGE编码／版本校验、Scope先行SQLite向量候选及失效／取消机制已编写，真实CPU资源／中文效果待GitHub |
+| P12 | 首轮基础验证通过，整体待联动 | b8ebb48服务121、真实BGE及1千／1万资源通过；身份23专项／构建通过，完整Java保留1既有失败；完整语料／主链联动仍待后续 |
 | P13—P15 | 未开始 | 完整关联／四维、统一上下文与唯一入口联动仍待实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
@@ -63,7 +69,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | 能力 | 代码 | 机制验证 | 真实行为 | 真机相关项 |
 | --- | --- | --- | --- | --- |
 | B01 人格对话引擎 | 进行中：P11基础通过 | 113服务及实际安装Scope通过 | 三个限定原Provider基础样本通过；完整多会话／事件／语义评审未验 | 未执行 |
-| B02 长期记忆 RAG | P12真向量进行中，完整RAG未完成 | 待GitHub真实向量与Scope检查 | 未执行完整RAG | 未执行 |
+| B02 长期记忆 RAG | P12真向量首轮通过，完整RAG未完成 | b8ebb48真实BGE／SQLite及23身份专项通过，完整Java有1既有失败 | 未执行完整RAG | 未执行 |
 | B03 异步记忆提取 | 未开始 | 未执行 | 未执行 | 未执行 |
 | B04 四维检索 | 未开始 | 未执行 | 未执行 | 未执行 |
 | B05 持续人格事件 | 未开始 | 未执行 | 未执行 | 未执行 |
