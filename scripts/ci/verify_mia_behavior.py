@@ -134,7 +134,7 @@ async def serve():
         llm = None
         try:
             private = await load_private_config(conn)
-            scope = conn._mia_scope
+            scope, auth = conn._mia_scope, conn._mia_authorization
             module = private['selected_module']['LLM']
             model = private['LLM'][module]
             llm = conn.llm = selected_provider(model, report, 'reply')

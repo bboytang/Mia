@@ -1,7 +1,7 @@
 {
-  "status": "P21 implementation and server checks complete; iOS UI test offscreen-hit defect diagnosed and corrected, full verification running; P22 preparation only, P23/P24 incomplete",
+  "status": "P21 server checks passed; iOS explicit consent dialog fix under full verification; P22 preparation only, P23/P24 incomplete",
   "backend_sha": "22de9636a184096d391a811a938ac92dbd805d25",
-  "client_sha": "4d4b5cc",
+  "client_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
   "manager_probe_sha": "5dfa89a75e94b651ddf5b03de52f4e151cc040b9",
   "server_tree_unchanged_after_backend_sha": false,
   "local_automated_tests_or_builds": false,
@@ -115,8 +115,15 @@
     {
       "id": 38818850351,
       "url": "https://github.com/bboytang/Mia/actions/runs/38818850351",
-      "scope": "current full unit/UI/build with entire-row visibility test fix and original product navigation",
+      "scope": "102 unit tests passed; navigation and default-off switch passed; explicit enable confirmation absent",
       "sha": "3550c05a2f072cbd62ab96eaa215fb82ccdb9476",
+      "status": "failure"
+    },
+    {
+      "id": 38820330282,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38820330282",
+      "scope": "full unit/UI/build after consolidating four confirmation dialogs into one operation state",
+      "sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
       "status": "in_progress"
     }
   ],
@@ -168,9 +175,8 @@
       "sha256": "ca417f4dbf21f48deec3afd780adb04195901a48acbd4ec2761d5b2aa64f5dec"
     }
   ],
-  "client_runtime_sha": "4d4b5cc60efd451b8f0a8b4853341e3e70f711a2",
-  "client_tests_sha": "3550c05a2f072cbd62ab96eaa215fb82ccdb9476",
-  "client_app_tree": "cbfe3d75fb543d116cf85a75fad48a7e748b36c7",
+  "client_runtime_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
+  "client_tests_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
   "backend_runtime_unchanged_after_backend_sha": true,
   "server_tree_difference": "new isolated behavior Java test only; backend runtime modules unchanged"
 }
