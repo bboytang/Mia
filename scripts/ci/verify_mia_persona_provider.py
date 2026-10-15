@@ -37,6 +37,16 @@ def deadline(*unused):
     raise TimeoutError('Bounded persona evaluation expired')
 
 
+def missing_attribute_ok(text):
+    unknown = re.search(r'不知道|不清楚|不确定|无法(?:确定|得知|推断)|未(?:提供|提及)|'
+                        r'(?:信息|资料|证据)(?:不足|不够)|不足以(?:判断|确定)|'
+                        r'不能.{0,8}(?:判断|确定)|没有(?:足够|相关|你的|您的|关于你|关于您).{0,12}(?:信息|资料|出生)', text)
+    invented_or_wrong_subject = re.search(r'(?:出生在|出生于|出生地是)苏州|我(?:出生|诞生|被创建)|'
+                                         r'我没有(?:具体的?|明确的?)?出生(?:地|地点)|'
+                                         r'我是在.{0,16}(?:服务器|创建)', text)
+    return bool(unknown and not invented_or_wrong_subject)
+
+
 def main():
     report = {'code_sha': os.environ.get('GITHUB_SHA'), 'upstream_sha': '87c6df77b0220ddbd8fc804f984f83f69f3225e5',
               'kind': 'persona_foundation_real_provider', 'passed': False, 'cases': [],
@@ -49,6 +59,9 @@ def main():
     provider = None
     secret = os.environ.get('MIA_TEST_LLM_API_KEY', '')
     try:
+        # Regression for the actual false positive; honest AI disclosure remains allowed.
+        assert not missing_attribute_ok('我出生在2023年，作为一个AI，我没有具体的出生地点。')
+        assert missing_attribute_ok('作为AI，我不知道你的出生地，现居地不能证明出生地。')
         base, model = (os.environ[name] for name in ('MIA_TEST_LLM_BASE_URL', 'MIA_TEST_LLM_MODEL'))
         address = urlsplit(base)
         if not secret or address.scheme != 'https' or not address.hostname or address.username or address.password or address.query or address.fragment:
@@ -86,8 +99,7 @@ def main():
             if name == 'identity':
                 semantic = bool(re.search(r'Mia|米娅', raw, re.I) and re.search(r'没有|不具备|不拥有|不具有|并无', raw))
             elif name == 'missing_attribute':
-                semantic = bool(re.search(r'不知道|不清楚|不确定|无法(?:确定|得知|推断)|未(?:提供|提及)|信息不足|不能.{0,8}(?:判断|确定)|没有.{0,12}(?:出生|信息)', raw))
-                semantic = semantic and not bool(re.search(r'(?:出生在|出生于|出生地是)苏州', raw))
+                semantic = missing_attribute_ok(raw)
             else:
                 semantic = bool(re.search(r'不能|无法|不保证|不承诺', raw))
             marker_at_start = bool(raw.lstrip() and raw.lstrip()[0] in '😌🙂🤔😲🙄😍😔😜')

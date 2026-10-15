@@ -24,3 +24,6 @@
 真实首轮1e0b75c381e5c0bbf2739fda5a7fba91f9f49979／[38661688808](https://github.com/bboytang/Mia/actions/runs/38661688808)失败：[保留报告](persona-provider-failed-v1.json)。实际只执行identity请求，返回“我是人工智能助手，没有人的主观意识。😌”，未保留Mia名字且emoji位于句尾；后两例未执行。不因输出安全就将身份语义记通过。固定核心补中文身份／格式明确要求，名字判据不变，额外明确句首emoji检查（收紧已有格式要求），待新代码复验；不更换模型或放宽门槛。
 
 修正夹具后的[身份38661481794](https://github.com/bboytang/Mia/actions/runs/38661481794)专项／实际TLS／JAR与类范围通过，完整173中172通过／1既有失败，已归档persona-identity-results.json。服务254451b／38661189324的113通过与1e0b75c的server tree完全一致；最新中文核心尚需新提交验证。
+
+
+66cf0e5／[38662021333](https://github.com/bboytang/Mia/actions/runs/38662021333)虽自动success，经原文复核**不予验收**：[保留自动结果与语义拒绝](persona-provider-rejected-v2.json)。出生地回答换成AI自身且编造2023年，自动regex误将“没有具体出生地点”判作未知用户信息。固定核心补主体／属性边界；规则排除该假阳性，下一轮仍逐条人工复核，不能只看workflow绿色。P11真实基础状态恢复进行中。
