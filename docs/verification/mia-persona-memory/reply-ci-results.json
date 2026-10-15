@@ -1,0 +1,97 @@
+{
+  "code_sha": "5c6e81438fc3bb1e91e0f008c2bfc7f3f5fd3788",
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38754547193",
+    "conclusion": "success",
+    "tests": 157,
+    "new_reply_test_methods": 12
+  },
+  "actual_bge_reply_and_regressions": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38754546905",
+    "conclusion": "success",
+    "reply_cases": 7,
+    "synthetic_provider_requests": 9,
+    "tool_dispatches": 5,
+    "reports": {
+      "reply-results.json": {
+        "source": "reply-results.json",
+        "source_sha256": "bd239dcedcb2287093c2289d252e1d28c0bfb300a9909fe39a6ba061feacf637",
+        "source_bytes": 14765
+      },
+      "reply-context-results-regression.json.gz": {
+        "source": "context-results.json",
+        "source_sha256": "fb1bacca207d09b73ee1877122d52f8f05aa5f3e0515e4eb7bc897a70df92b5a",
+        "source_bytes": 18326
+      },
+      "reply-vector-results-regression.json.gz": {
+        "source": "vector-results.json",
+        "source_sha256": "89d6a4463ede4adf0df989a5778f5d40d2e9ae8ca75a182db5b180ab54c2fb2e",
+        "source_bytes": 2452
+      },
+      "reply-retrieval-results-regression.json.gz": {
+        "source": "retrieval-results.json",
+        "source_sha256": "868e2849ff8a39ecac7050ef7a26e16d88aec3712a0ef78b36e1991e39e6dc71",
+        "source_bytes": 1381292
+      },
+      "reply-identity-results.json": {
+        "source_sha256": "ed96d4e1f1d72b6b60cc8f6196ca325b103a81fea211aefadc43236b9ccdd268"
+      }
+    }
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38754547230",
+    "workflow_conclusion": "failure",
+    "jar_build": "success",
+    "class_scope": "success",
+    "full_suite": {
+      "tests": 173,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "case": "maskMiddle_keeps_four_at_each_end_for_long_strings"
+      }
+    ],
+    "focused_tests": 23
+  },
+  "manager_baseline": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38754547323",
+    "workflow_conclusion": "failure",
+    "full_suite_log_before_separate_baseline": {
+      "tests": 150,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full_suite": {
+      "tests": 154,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "case": "maskMiddle_keeps_four_at_each_end_for_long_strings"
+      }
+    ],
+    "focused_tests": 4
+  },
+  "automatically_triggered_embedding_comparison": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38754546954",
+    "conclusion": "success",
+    "selection_changes": "none"
+  },
+  "in_flight_runs": [],
+  "production_deployment": "not_performed",
+  "chat_provider_calls": 0,
+  "production_provider_capacity": "unverified",
+  "production_output_reserve": "existing_empty_not_changed",
+  "token_calibration": "not_executed",
+  "full_B08_behavior": "not_accepted",
+  "P15": "single_reply_module_and_controlled_integration_verified",
+  "next_step": "P16_unified_completion_and_durable_tasks"
+}

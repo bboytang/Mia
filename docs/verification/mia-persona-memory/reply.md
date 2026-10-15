@@ -1,6 +1,6 @@
 # P15：唯一回复入口与工具续答
 
-状态：实现及CI入口已准备，待精确提交的GitHub结果。未部署；真实Provider、Token校准、声学／真机和完整B08仍未验收。
+状态：5c6e814的接线模块及受控GitHub验证通过，实际Provider联动仍待验。未部署；真实Provider、Token校准、声学／真机和完整B08仍未验收。
 
 ## 本轮只读配置核实
 
@@ -26,8 +26,19 @@
 - `scripts/ci/verify_mia_reply.py`：实际安装后的整段ConnectionHandler类、listen／文本processor／startToChat／intent／TTS序列化代码原样编译运行；仅省略无关启动导入与物理硬件初始化。实际Dialogue、BGE、SQLite、原Provider和OpenAI SDK，经本地WebSocket文字协议及合成SSE响应验证普通／多步并行工具／direct_answer／ASR识别文本／删除／缺配置／撤权。2CPU／2GiB、network-none，外部聊天请求0；策略与工具结果合成，不冒充真实manager／聊天／声学。
 - 实际manager HTTPS/WSS身份job补reply.prepare本人事实／外人隔离、删除后安全重建／禁止工具、撤权先于文件／DB与工具派发；此job向量／容量profile仍为fixture。
 
-上述自动测试及构建仅GitHub执行。本轮未执行本地软件测试。结果待run补录，不据实现存在标P15通过。P16完成事件／持久任务、P17提取索引维护、P19事件、P20趋势仍未实现；完整真实Provider语义、Token对照及B08随P22验收，不由受控接线替代。
+上述自动测试及构建仅GitHub执行。本轮未执行本地软件测试。结果见下方同提交原报告；仅接线模块及受控验证通过。P16完成事件／持久任务、P17提取索引维护、P19事件、P20趋势仍未实现；完整真实Provider语义、Token对照及B08随P22验收，不由受控接线替代。
 
-## 本地保存及推送阻塞
+## 历史本地保存及推送阻塞（本轮已解除）
 
 实现提交`940d8a8`已本地保存。推送至既有`bboytang/Mia`／`feature/mia-persona-memory-v1.2`被自动审批拒绝：审批只认可此前对`9117ac8`文档归档的授权，不认为其覆盖新增P15源码、测试与验证脚本。因此本轮尚未上传、未触发GitHub测试，不能引用前轮结果称本轮通过。没有绕行上传／dispatch；最后静态审阅修正CI单工具删除／撤权场景的夹具数量并随阻塞记录保存，仍待GitHub执行。需要用户明确授权本轮P15及验证所需修正推送到同一分支后继续；不涉及部署。
+
+## 2026-10-15：同提交GitHub受控验证通过
+
+用户要求“先读交接，继续下一步”后，正常权限审批允许将940d8a8及5c6e814推送到原功能分支；未绕行审批。被测SHA为`5c6e81438fc3bb1e91e0f008c2bfc7f3f5fd3788`，运行代码无需新增修正。
+
+- [服务38754547193](https://github.com/bboytang/Mia/actions/runs/38754547193)：157项通过，包含12项P15用例。
+- [实际BGE／安装包38754546905](https://github.com/bboytang/Mia/actions/runs/38754546905)：P12—P14回归及P15七场景通过，SDK合成请求9次、工具派发5次，无流式错误；普通文字、ASR识别文本、多步并行工具、direct_answer、删除后重新检索且无工具重放、缺容量明确限制、工具后撤权通过。原文见[reply-results.json](reply-results.json)。P14回归50次build p95 40.271ms、峰值RSS283.578MiB；不是真实聊天TTFT。
+- [身份38754547230](https://github.com/bboytang/Mia/actions/runs/38754547230)：23专项／实际TLS、reply本人／外人Scope、删除重建及撤权、类范围与JAR通过；全量173中172通过／1既有脱敏失败。原文见[reply-identity-results.json](reply-identity-results.json)。[manager38754547323](https://github.com/bboytang/Mia/actions/runs/38754547323)154中153通过，同一既有失败。两个workflow整体failure，不称全项目CI通过。
+- Dockerfile变更自动触发[嵌入比较38754546954](https://github.com/bboytang/Mia/actions/runs/38754546954)，两个候选job通过；未改模型选择或参数。
+
+[分项CI与原文校验值](reply-ci-results.json)记录精确SHA、结果及无损gzip回归原报告。P14原报告字段`full_reply_integration=pending_P15`是该独立回归脚本的固定范围标记；P15范围以单列接线报告为准，不修改原报告。所有run已completed；无本地自动测试／构建、真实聊天请求或生产部署。生产容量／输出仍未确认，不能用16384／1024夹具解除限制；实际manager＋BGE＋聊天Provider整链、精确Token、声学／真机、完整B08和事件／趋势仍待后续。下一步P16统一完成事件与持久任务生命周期。

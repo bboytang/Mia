@@ -4,7 +4,7 @@
 
 ## 当前范围与状态
 
-当前用户最新要求：**“继续下一步”。** 本段P14统一上下文／快照／预算模块验证通过，下一步P15核实Provider容量和输出并接唯一回复入口。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
+当前用户最新要求：**“继续下一步”。** 本段P15唯一回复入口及工具续答受控接线验证通过，下一步P16统一完成事件与持久任务生命周期。实际Provider容量与输出预留仍未核实，保持限制，不部署。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
 P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要新增5项及原18项在3cb7b3c通过，构建通过，P10兼容迁移6项与104服务测试在426d8c4通过，23身份／TLS及构建同提交通过；已归档。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；P11基础113服务、23身份及三个限定原Provider样本通过，完整人格仍待联动验收，未部署。
 
@@ -21,9 +21,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P15已本地实现，推送被自动审批阻止，GitHub尚未验证**，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
+当前步骤：**P15接线模块及受控验证通过，下一步P16**，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
-最新验证提交：`5e91409bbc9da69b0c7085837e7014ce24e3bc04`，服务[38732848387](https://github.com/bboytang/Mia/actions/runs/38732848387)145项通过；实际BGE [38732848548](https://github.com/bboytang/Mia/actions/runs/38732848548)的P12／P13回归及P14安装包／原Dialogue／上下文10工具场景通过，50次build p95 34.959ms、峰值RSS283.887MiB。ContextBundle固定CORE与数据层分离、当前问题／完整工具优先、20轮及字节估算预算、权限及三项快照复查；历史／源字典不变、删除重建、无效特点不入、未知容量明确拒绝。报告见[context-results.json](verification/mia-persona-memory/context-results.json)。容量profile和工具结果为CI夹具，未调用聊天Provider，不是实际窗口、精确Token或完整B08证据。
+本轮最新验证提交：`5c6e81438fc3bb1e91e0f008c2bfc7f3f5fd3788`，服务[38754547193](https://github.com/bboytang/Mia/actions/runs/38754547193)157项通过；真实BGE接线[38754546905](https://github.com/bboytang/Mia/actions/runs/38754546905)通过P12—P14回归及P15的7场景，合成SDK请求9次、工具派发5次，文字／ASR识别文本／多步并行工具／direct_answer／删除不重放／缺容量／撤权通过。实际manager身份[38754547230](https://github.com/bboytang/Mia/actions/runs/38754547230)23专项、实际TLS与reply Scope／删除／撤权、类范围及JAR通过；Java全量173中172通过，manager基线[38754547323](https://github.com/bboytang/Mia/actions/runs/38754547323)154中153通过，均仅既有脱敏失败，两个workflow整体failure。Dockerfile变更自动触发的嵌入比较[38754546954](https://github.com/bboytang/Mia/actions/runs/38754546954)通过，未改变模型选择。原报告／hash及分项范围见[本轮CI](verification/mia-persona-memory/reply-ci-results.json)、[接线原报告](verification/mia-persona-memory/reply-results.json)、[身份原报告](verification/mia-persona-memory/reply-identity-results.json)。所有run已完成，无在途操作。实际聊天请求0、无本地自动测试／构建、未部署；真实Provider容量／输出、Token、声学／真机及完整B08仍未验收。
+
+P14历史验证提交：`5e91409bbc9da69b0c7085837e7014ce24e3bc04`，服务[38732848387](https://github.com/bboytang/Mia/actions/runs/38732848387)145项通过；实际BGE [38732848548](https://github.com/bboytang/Mia/actions/runs/38732848548)的P12／P13回归及P14安装包／原Dialogue／上下文10工具场景通过，50次build p95 34.959ms、峰值RSS283.887MiB。ContextBundle固定CORE与数据层分离、当前问题／完整工具优先、20轮及字节估算预算、权限及三项快照复查；历史／源字典不变、删除重建、无效特点不入、未知容量明确拒绝。报告见[context-results.json](verification/mia-persona-memory/context-results.json)。容量profile和工具结果为CI夹具，未调用聊天Provider，不是实际窗口、精确Token或完整B08证据。
 
 同提交身份[38732848576](https://github.com/bboytang/Mia/actions/runs/38732848576)23专项／实际TLS、ContextBuilder本人／外人隔离、删除和撤权、类范围及JAR通过；完整173中172通过／1既有脱敏失败，workflow整体failure。manager基线[38732848453](https://github.com/bboytang/Mia/actions/runs/38732848453)154中153通过、仅同一失败。见[本轮CI范围](verification/mia-persona-memory/context-ci-results.json)及[身份原报告](verification/mia-persona-memory/context-identity-results.json)。所有软件自动化仅GitHub，无本地测试或部署。
 
@@ -41,7 +43,7 @@ P12历史保存点`b8ebb4853107f160dd443eadbc99fccc8d8412b0`的服务121、真�
 
 P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／768维、资产与内容版本、Scope先行SQLite余弦候选、失效／取消机制。4个跨措辞Top1命中、无关空召回、无FTS仍召回及生命周期样本通过；1万容量扫描p95 102.125ms、编码＋查询119.573ms、峰值RSS284.098MiB。容量向量复制真实种子，仅测成本；不等于完整语义语料验收。没有修改主回复链接入半成品检索，没有新事实库、Provider或服务。
 
-恢复顺序：先核对分支／远程SHA／工作树，再读context.md、D05、P14原报告和P15计划。P12—P14模块及已完成probe无需重做。P15先核实当前Provider非敏感模型／容量／输出预留，再接唯一ConnectionHandler文字／语音及工具续答；ContextLimits必须来自审查过的服务端配置，不接受客户端字段。旧glm-4-flash别名容量和生产max_tokens本轮未核实，若None须维持限制，不用CI128替代或擅改费用配置。版本变化后须安全重建，不能盲目复用旧inputs_json或重复有副作用工具。完整真实manager＋BGE＋Provider、Token对照、实际提取、独立真实用户语料及八项行为继续后续验收，不因模块通过提前部署。
+恢复顺序：先核对分支／远程SHA／工作树及在途run，再读reply.md、reply-ci-results.json、D05和P16计划。P12—P15模块及已完成probe无需重做。继续P16统一且不重复的完成事件、持久任务、服务级有界Worker及恢复／关闭；P15实际聊天联动仍需先解决Provider容量与输出预留，不能据受控验证解除生产限制。ContextLimits必须来自审查过的服务端配置，不接受客户端字段。旧glm-4-flash别名容量和生产max_tokens本轮未核实，若None须维持限制，不用CI128替代或擅改费用配置。版本变化后须安全重建，不能盲目复用旧inputs_json或重复有副作用工具。完整真实manager＋BGE＋Provider、Token对照、实际提取、独立真实用户语料及八项行为继续后续验收，不因模块通过提前部署。
 
 P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源清派生线索；v1→v2失败回滚及真实a30旧代码读写已验。严格P10—P12旧迁移器不识别v2账本，P24完整回滚制品仍待做，不得删schema绕过。实际提取及来源校验在P17／P18接入，当前fixture写入不代表提取器完成。
 
@@ -68,7 +70,7 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P12 | 基础及生命周期复核通过，整体待联动 | b8ebb48真实BGE及1千／1万资源通过；d5edbd6服务125通过，补超时／竞态／重开与重建；历史身份23专项／构建通过，完整Java保留1既有失败；完整语料／主链联动仍待后续 |
 | P13 | 完成：检索模块及受控验证 | 664237f服务132、实际BGE及正向找回／底线拒绝通过；身份专项／构建通过，Java保留既有失败；D04固定供P14集成，完整真实行为待P22 |
 | P14 | 完成：上下文模块及受控验证 | 5e91409服务145、实际BGE＋原Dialogue＋10工具场景、身份专项及构建通过；Java既有失败保留，真实Provider参数／接线及B08待P15／P22 |
-| P15 | 进行中：等待本轮推送授权 | 940d8a8及后续审阅记录仅本地；自动审批不认可9117ac8授权覆盖新代码，未运行GitHub。现网输出为空、容量未核实，未部署 |
+| P15 | 完成：接线模块及受控验证 | 5c6e814的157服务、真实BGE／原SDK合成SSE七场景、23身份专项／实际TLS、类范围及JAR通过；Java既有失败保留，实际Provider容量／输出及完整B08待验，未部署 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
 | P21—P26 | 未开始 | 必要管理、真实行为、性能、回归、真机及发布包待实施 |

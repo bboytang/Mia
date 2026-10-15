@@ -441,6 +441,16 @@
 - 实现保存为940d8a8。推送到同一bboytang/Mia功能分支被auto-review拒绝：此前授权只覆盖9117ac8文档提交，不覆盖当前新增P15源码、测试和CI脚本。未绕行上传或触发其他方式执行；本轮GitHub验证尚未运行，不借旧run背书。
 - 最后静态差异审阅修正native CI删除／撤权场景为单工具夹具；并行2＋1仍在专用多步场景验证。git diff --check通过；未本地执行自动测试／构建。交接及reply.md记录真实阻塞，下一步需本轮P15源码和验证修正的明确推送授权，再完成GitHub验证和结果归档。
 
+## 2026-10-15：恢复P15推送并完成受控GitHub验证
+
+- 用户要求“先读交接，继续下一步”。起始feature/mia-persona-memory-v1.2／5c6e81438fc3bb1e91e0f008c2bfc7f3f5fd3788，工作树干净，本地领先远程9117ac8两笔。读取交接、计划、近期记录、P14／P15说明及当前代码／差异；原run均已结束。使用cloud runtime技能，当前无environment_status工具和网络策略文件，不推定凭据就绪；沙箱网络受限后经正常权限审批读取GitHub。
+- 本轮正常推送审批通过，将既有940d8a8及5c6e814推至原功能分支，无绕行或凭据变更。无需修改运行代码；只完成本步缺失的GitHub验证及证据归档，没有跳过P15进入P16。
+- 精确SHA 5c6e814：服务38754547193完整157项通过（12项新P15）；真实BGE38754546905通过P12—P14回归及原安装Connection／Dialogue／Provider SDK合成SSE七场景，9次合成请求／5次工具派发；普通文字、ASR识别文本、2＋1多步并行工具、direct_answer、删除不重放、缺容量和撤权通过。P14回归50次build p95 40.271ms、RSS283.578MiB。不是实际聊天Provider／声学／真机或精确Token证据。
+- 身份38754547230的23专项／实际TLS／reply Scope、删除与撤权、类范围及JAR通过，完整173中172通过／1既有SensitiveDataUtilsTest.maskMiddle_keeps_four_at_each_end_for_long_strings失败；manager基线38754547323完整154中153通过，仅同一失败。两workflow整体failure保留，不改无关代码。Dockerfile变更自动触发嵌入比较38754546954两个候选job通过，不改变D04及模型选择。
+- 接线、身份原JSON和P12—P14回归原文gzip／hash／分项CI保存为reply-results.json、reply-identity-results.json、reply-*-regression.json.gz及reply-ci-results.json；原报告不改写。未将临时JAR／完整日志（可能含运行环境）加入仓库。P14独立报告的pending_P15固定范围标记保留，P15由单列接线报告证明。
+- P15接线模块及受控验证通过；现网glm-4-flash容量未核实／max_tokens空，继续context_limits_unverified，未改配置或调用真实聊天。完整Provider语义、Token、八项能力、真机及正式评审仍未验收。所有run已completed，无在途操作，无本地自动测试／构建或部署。
+- 本次变更仅文档及证据，交接同步最新SHA、审批解除、精确结果与边界；下一步P16统一完成事件、幂等持久任务、有界Worker、重启恢复及整体关闭期限，完成后继续更新进度。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。
