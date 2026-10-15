@@ -144,6 +144,8 @@ struct MiaMemoryView: View {
             ForEach(events) { event in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(event.title)
+                    if let source = event.userExcerpt, !source.isEmpty { Text("你说：" + source).font(.footnote) }
+                    if let reply = event.assistantExcerpt, !reply.isEmpty { Text("Mia：" + reply).font(.footnote) }
                     Text("\(event.stateLabel) · 第\(event.version)版").font(.caption).foregroundStyle(.secondary)
                 }.swipeActions {
                     Button("删除", role: .destructive) { Task { await perform("event_delete", fields: ["id": event.id]) } }

@@ -148,5 +148,6 @@ def manage(store, owner, request):
             store.db.execute('DELETE FROM mia_events WHERE owner=? AND id=?', (owner, event_id))
             store.db.execute('UPDATE owners SET revision=revision+1 WHERE owner=?', (owner,))
             store._cancel_jobs(owner)
-        return {'events': [dict(row) for row in store.db.execute('SELECT id,event_type,state,version,created_at,updated_at '
-            'FROM mia_events WHERE owner=? ORDER BY updated_at DESC,id LIMIT 100', (owner,))]}
+        return {'events': [dict(row) for row in store.db.execute('SELECT e.id,e.event_type,e.state,e.version,e.created_at,e.updated_at,'
+            'i.user_excerpt,i.assistant_excerpt FROM mia_events e LEFT JOIN mia_event_interactions i ON i.event_id=e.id '
+            'WHERE e.owner=? ORDER BY e.updated_at DESC,e.id LIMIT 100', (owner,))]}

@@ -39,6 +39,9 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.store.db.execute('SELECT state FROM mia_events').fetchone()[0], 'pending')
         ids = await self.builder.complete(bundle, self.policy, '😌记得，你喜欢蓝色。')
         self.assertEqual(ids, [bundle.diagnostics()['events'][0]['id']])
+        listed = self.store.handle(self.scope.owner, {'action': 'events'})['events'][0]
+        self.assertEqual(listed['user_excerpt'], '你还记得我喜欢蓝色吗')
+        self.assertEqual(listed['assistant_excerpt'], '😌记得，你喜欢蓝色。')
         self.assertEqual(self.store.db.execute('SELECT state FROM mia_events').fetchone()[0], 'active')
 
     async def test_keyword_without_support_has_no_event_and_unknown_reply_cannot_activate(self):

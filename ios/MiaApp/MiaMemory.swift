@@ -43,9 +43,12 @@ struct MiaEventList: Decodable {
         let eventType: String
         let state: String
         let version: Int
+        let userExcerpt: String?
+        let assistantExcerpt: String?
         enum CodingKeys: String, CodingKey {
             case id, state, version
             case eventType = "event_type"
+            case userExcerpt = "user_excerpt", assistantExcerpt = "assistant_excerpt"
         }
         var title: String {
             switch eventType {
