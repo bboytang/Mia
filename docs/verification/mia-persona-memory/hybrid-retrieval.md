@@ -28,3 +28,13 @@
 - 真实manager脚本调用实际安装的混合检索，验证仅本人线索／候选和撤权先于DB访问；该处向量明确合成。完整真实manager＋BGE＋Provider＋主回复链在后续联动，当前结果不得替代。
 
 本步不调用聊天Provider、不修改生产配置／密钥、不启用情绪追踪、不改App／语音／板级代码。
+
+## 首次真实验证：保留失败，不据质量通过标完
+
+`5680f6f3d3510bef8c706837bd746ead1cd43cde`服务[38666684684](https://github.com/bboytang/Mia/actions/runs/38666684684)132项通过，含新增6项四维机制及1项v1→v2原子兼容迁移。身份[38666684650](https://github.com/bboytang/Mia/actions/runs/38666684650)23专项／实际TLS／安装包混合Scope、类范围与JAR构建通过，完整173中172通过／1既有脱敏失败，workflow为failure；同提交manager基线38666684694亦仅此既有失败。身份原报告见[hybrid-identity-results.json](hybrid-identity-results.json)。
+
+真实BGE [38666684695](https://github.com/bboytang/Mia/actions/runs/38666684695)的P12回归通过；P13实际查询质量和资源通过，但关联作用门槛失败，workflow为failure。P06 v5正向48条Recall@4／Top1均97.9167%、16无关全空，相关不可回答6／8召回允许事实，未测实际回答。新P13-v1的32正向Recall@4／Top1和16无关空召回全部100%，4相关不可回答均有允许事实。820次查询p95 81.755ms、1万短文本无元数据容量p95 249.146ms、峰值RSS283.293MiB。S／L／A／E都有非零真实贡献；去掉单分项后排名变化为110／1／0／1例。
+
+失败原因：首轮语料中扩展前后的Top4变化为0、结果仅靠补充候选进入为0，不能证明实际关联用途。完整原始报告压缩保存在[hybrid-first-failure-results.json.gz](hybrid-first-failure-results.json.gz)，原文SHA256和摘要见[hybrid-first-failure-summary.json](hybrid-first-failure-summary.json)；gzip仅为无损保存，解压可读取所有候选／分项／版本。未改变运行代码、初选参数或P13-v1留出。
+
+补充一个明确标记的真实BGE控制场景：一条扇贝过敏事实对照16条真实编码的点菜流程干扰事实，检查目标不在原语义前12、扩展提高语义分且使目标真正进入Top4。此场景是候选遗漏机制实验，不追加到独立质量留出分母、不据其结果调阈值；关联作用门槛维持，并增加该遗漏场景必须通过。后续结果另记，首次失败不改写。

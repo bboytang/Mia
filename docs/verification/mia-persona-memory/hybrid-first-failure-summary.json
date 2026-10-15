@@ -1,0 +1,89 @@
+{
+  "code_sha": "5680f6f3d3510bef8c706837bd746ead1cd43cde",
+  "kind": "P13_real_BGE_installed_SQLite_hybrid",
+  "passed": false,
+  "weights": {
+    "semantic": 0.58,
+    "lexical": 0.28,
+    "association": 0.08,
+    "emotion": 0.06
+  },
+  "threshold": 0.2,
+  "semantic_floor": 0.35,
+  "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+  "model_revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+  "resource_limit": {
+    "cpu": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "manager": "fixture_only_actual_manager_separate",
+  "full_behavior": "not_accepted",
+  "datasets": {
+    "persona_memory_retrieval_zh_v5.json": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+    "persona_memory_retrieval_p13_holdout.json": "4d77bffb20cfc89a3d6c8099f9ffc234973d5a5b138771d0ffef00ffa0c35061"
+  },
+  "unsupported_persona_fixture_ids": [
+    "j-other-persona"
+  ],
+  "legacy_fts_absent": true,
+  "unsupported_persona_rejected": true,
+  "quality": {
+    "P06_v5_regression": {
+      "positive_count": 48,
+      "negative_count": 16,
+      "complete_recall_at_4": 0.9791666666666666,
+      "top1": 0.9791666666666666,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 8,
+      "related_expected_fact_recalled": 6,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    },
+    "P13_independent_v1": {
+      "positive_count": 32,
+      "negative_count": 16,
+      "complete_recall_at_4": 1.0,
+      "top1": 1.0,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 4,
+      "related_expected_fact_recalled": 4,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    }
+  },
+  "signal_max_weighted_contributions": {
+    "semantic": 0.45548648953437804,
+    "lexical": 0.2341405405405406,
+    "association": 0.055999999999999994,
+    "emotion": 0.06
+  },
+  "expansion_changes_vs_original_top12": 0,
+  "results_only_from_bounded_supplement": 0,
+  "ablation_ranking_changes": {
+    "semantic": 110,
+    "lexical": 1,
+    "association": 0,
+    "emotion": 1
+  },
+  "query_pipeline_ms": {
+    "count": 820,
+    "p50": 34.98909350001611,
+    "p95": 81.75485430001856
+  },
+  "capacity": {
+    "1000": {
+      "count": 10,
+      "pipeline_p95_ms": 53.44827635000797,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    },
+    "10000": {
+      "count": 10,
+      "pipeline_p95_ms": 249.14550714998427,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    }
+  },
+  "peak_rss_mib": 283.29296875,
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38666684695",
+  "failure_reason": "No observed change in Top4 from expansion on the first corpus; mandatory effect gate not met",
+  "original_report_sha256": "b18a22b7eee7c8c67c382f834c2a1f4098a553d12283968fd6c714c935e69d5d",
+  "original_report_gzip": "hybrid-first-failure-results.json.gz"
+}

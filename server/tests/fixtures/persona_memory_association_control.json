@@ -1,0 +1,31 @@
+{
+  "version": "P13-association-control-v1",
+  "purpose": "Controlled real-BGE candidate omission experiment; synthetic user facts, not independent quality holdout or threshold tuning",
+  "query": "帮我点菜，有什么需要注意？",
+  "target": {
+    "id": "association-target",
+    "content": "我吃扇贝会过敏，但龙虾可以正常吃。",
+    "entity": "扇贝",
+    "keywords": ["过敏", "龙虾"],
+    "triggers": ["点菜"],
+    "weight": 4
+  },
+  "distractors": [
+    "我点菜时习惯先翻看菜单上的招牌菜。",
+    "我点菜之前会先问服务员哪些菜还供应。",
+    "我点菜时喜欢先确定主食，再决定配菜。",
+    "我点菜时会先统计一起吃饭的人数。",
+    "我点菜之前通常会看看菜单上的图片。",
+    "我点菜时一般希望菜品分批端上桌。",
+    "我点菜时喜欢先给同桌的人传一遍菜单。",
+    "我点菜时会先询问每道菜的份量。",
+    "我点菜时会提前问清楚大概需要等多久。",
+    "我点菜时会先确认有没有套餐可以选择。",
+    "我点菜时喜欢先问清楚当日推荐。",
+    "我点菜时会注意菜品数量不要超过人数太多。",
+    "我点菜之前通常会先看看菜单上的价格。",
+    "我点菜时会请服务员复述一遍已选菜品。",
+    "我点菜时喜欢先商量大家各自选几道菜。",
+    "我点菜时一般希望服务员等大家选好再下单。"
+  ]
+}
