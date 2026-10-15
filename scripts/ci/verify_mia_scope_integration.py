@@ -1,6 +1,7 @@
 """Called inside real manager tests; synthetic credentials only, never print them."""
 
 import asyncio
+from dataclasses import replace
 import json
 import os
 from queue import Queue
@@ -111,8 +112,17 @@ async def main():
     await auth.require(scope, 'memory:manage')
     restored = await auth.restore(scope.snapshot())
     assert restored == scope
+    worker_models = await auth.worker_model(scope)
+    assert set(worker_models) == {'mia_scope', 'selected_module', 'LLM'}
+    assert worker_models['selected_module'] == {'LLM': 'LLM_ChatGLMLLM'}
+    assert set(worker_models['LLM']) == {'LLM_ChatGLMLLM'}
+    async with httpx.AsyncClient(timeout=3, trust_env=False) as http:
+        response = await http.post(config['manager-api']['url'].rstrip('/') + '/config/mia-auth/worker-model',
+            json=scope.snapshot(), headers={'Authorization': 'Bearer ' + os.environ['MIA_SCOPE_USER_TOKEN']})
+        assert response.json()['code'] != 0
     forged = dict(scope.snapshot(), owner='user:999999999:agent:other')
     await rejects(auth.restore(forged))
+    await rejects(auth._request('/config/mia-auth/worker-model', forged))
     await rejects(auth.private_config(device, client, 'legacy-signature.timestamp', {}))
     await rejects(auth.private_config(device, 'other-client', credential, {}))
     conn = SimpleNamespace(config=config, headers={'device-id': device, 'client-id': client,
@@ -199,6 +209,23 @@ async def main():
             def fact(owner, content, marker):
                 return store.apply_extraction(owner, 'synthetic-session', store.snapshot(owner)['revision'], [content],
                     {'memories': [{'category': 'fact', 'content': content, 'source_index': 0}]}, marker)['memories'][0]
+            from mia_companion.jobs import JobStore, MemoryWorker, TurnCompleted
+            async def resolve_worker(restored):
+                assert restored == scope
+                async_models = await auth.worker_model(restored)
+                assert async_models['selected_module']['LLM'] == 'LLM_ChatGLMLLM'
+                return lambda sources: {'memories': [], 'trait': None}
+            jobs = JobStore(store)
+            worker = MemoryWorker(jobs, auth, resolve_worker)
+            event = TurnCompleted(scope, 'scope-ci', 'worker-one', 'worker-one', 'CI user source only', 0)
+            accepted = await worker.submit(event)
+            assert accepted['status'] == 'accepted'
+            jobs.recover()
+            await worker.run_once()
+            assert jobs.current(accepted)['state'] == 'empty'
+            await rejects(worker.submit(TurnCompleted(replace(scope, owner=peer),
+                'scope-ci', 'forged', 'forged', 'CI cross owner', 0)))
+            pending = await worker.submit(TurnCompleted(scope, 'scope-ci', 'worker-delete', 'worker-delete', 'CI user', 0))
             own_id = fact(scope.owner, 'CI own memory', 'own')
             other_id = fact(peer, 'CI other memory', 'other')
             with store.db:
@@ -257,6 +284,8 @@ async def main():
             await adapter.handle_message(active, json.dumps({'type': 'mia_memory', 'request_id': str(uuid.uuid4()),
                 'action': 'delete', 'id': own_id, 'owner': scope.owner}))
             assert store.list_memories(scope.owner) == [] and store.list_memories(peer)[0]['id'] == other_id
+            assert jobs.current(pending)['state'] == 'cancelled'
+            assert jobs.current(pending)['source_payload'] == '{}'
             try:
                 await context_builder.validate(context_bundle, auth)
             except ContextError as error:
@@ -277,6 +306,8 @@ async def main():
         assert response.json()['code'] == 0
     await rejects(auth.require(scope, 'memory:read'))
     await rejects(auth.restore(scope.snapshot()))
+    await rejects(auth.worker_model(scope))
+    await rejects(worker.submit(event))
     await rejects(auth.private_config(device, client, credential, {}))
     # The fixture DB is already closed: revocation must be rejected before any
     # DB access, not converted to an empty vector result or an indexing retry.
@@ -293,7 +324,7 @@ async def main():
     assert executor.calls == 1
     assert active.client_abort and tool.calls == 3
     print(json.dumps({'manager_python_scope_pass': True, 'checks': 34, 'vector_scope_checks_pass': True,
-                      'reply_scope_checks_pass': True,
+                      'reply_scope_checks_pass': True, 'worker_scope_checks_pass': True,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 

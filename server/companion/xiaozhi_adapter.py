@@ -11,6 +11,7 @@ import sqlite3
 import threading
 import unicodedata
 import uuid
+from types import SimpleNamespace
 
 from .memory import EXTRACTION_INSTRUCTIONS, MemoryError, MemoryStore, SECRET
 from .authorization import AuthenticatedScope, PrivateAuthorizationRequired, require_connection
@@ -106,6 +107,7 @@ def context_response(conn, functions, depth):
 
 
 def context_failure(conn, error):
+    incomplete_turn()
     from .authorization import allow_generation, allow_output
     if str(error) == 'context_turn_superseded':
         return
@@ -147,6 +149,7 @@ def blocked_input_reply(conn, depth):
     agent = persona_agent(conn)
     if depth != 0 or not agent or not agent.input_decision.blocked:
         return False
+    incomplete_turn()
     _complete_checked_reply(conn, SAFE_REPLY, send_text=True)
     return True
 
@@ -159,6 +162,7 @@ def finish_blocked_output(conn):
     replacement = getattr(conn, '_mia_output_replacement', None)
     if not replacement:
         return False
+    incomplete_turn()
     _complete_checked_reply(conn, replacement, send_text=False)
     return True
 
@@ -331,6 +335,7 @@ def _trim_dialogue(conn, clear=False):
 def begin_turn(conn, query):
     conn._mia_previous_context = getattr(conn, '_mia_context_turn', None)
     conn._mia_context_turn = None
+    conn._mia_job_status = None
     conn._mia_emotion = ("calm", 0.5)
     conn._mia_output_replacement = None
     agent = persona_agent(conn)
@@ -375,8 +380,21 @@ def begin_turn(conn, query):
                 else:
                     provider.notice = "无法唯一确定待删除记忆；请在记忆设置选择，尚未删除。"
 
+    frame = getattr(_completion, 'frame', None)
+    if frame is not None and provider and not provider.suppressed and isinstance(query, str):
+        from .jobs import TurnCompleted
+        sources = _user_excerpts([SimpleNamespace(role='user', content=query, uniq_id=conn.sentence_id)])
+        if sources:
+            frame['event'] = TurnCompleted(provider.scope, conn.session_id, conn.sentence_id,
+                conn.sentence_id, sources[0][1], provider.revision, provider.force_checkpoint)
+
 
 def checkpoint(conn):
+    if uses_context(conn):
+        # The outer TurnCompleted hook is the sole admission path, including
+        # direct answers. Disconnect never resubmits a mutable display history.
+        _trim_dialogue(conn)
+        return
     provider = getattr(conn, "_mia_memory", None)
     if not provider:
         return
@@ -420,9 +438,19 @@ async def handle_message(conn, message):
         if "user_id" in request and (type(request["user_id"]) not in {str, int}
                                      or str(request["user_id"]) != str(scope.user_id)):
             raise MemoryError("not_authorized", "Requested memory scope is not authorized")
-        response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
+        if request.get('action') == 'job_status':
+            def status():
+                with provider.store.lock:
+                    row = provider.store.db.execute('SELECT id,state,attempts,error_category FROM mia_jobs WHERE owner=? AND id=?',
+                        (scope.owner, request.get('id'))).fetchone()
+                    if row is None:
+                        raise MemoryError('not_found', 'Task does not exist')
+                    return dict(row)
+            response['result'] = await asyncio.to_thread(status)
+        else:
+            response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
         await require_connection(conn, "memory:manage")
-        if request["action"] not in {"list", "personality"}:
+        if request["action"] not in {"list", "personality", "job_status"}:
             _trim_dialogue(conn, clear=True)
     except PrivateAuthorizationRequired:
         response.pop("result", None)
@@ -462,3 +490,88 @@ def tts_emotion(conn, text):
         return {}
     expression = _emotion(text) or getattr(conn, "_mia_emotion", ("calm", 0.5))
     return {"emotion": expression[0], "intensity": expression[1]}
+
+
+_completion = threading.local()
+
+
+def incomplete_turn():
+    frame = getattr(_completion, 'frame', None)
+    if frame is not None:
+        frame['limited'] = True
+
+
+def completed_chat(function):
+    """One outer completion covers recursion, direct_answer and terminal tools."""
+    def chat(conn, query, depth=0):
+        if depth:
+            return function(conn, query, depth)
+        worker = getattr(getattr(conn, 'server', None), '_mia_worker', None)
+        frame = {'event': None, 'limited': False}
+        previous = getattr(_completion, 'frame', None)
+        _completion.frame = frame
+        if worker:
+            worker.foreground += 1
+        try:
+            return function(conn, query, depth)
+        except Exception:
+            frame['limited'] = True
+            raise
+        finally:
+            _completion.frame = previous
+            if worker:
+                worker.foreground -= 1
+            event = frame['event']
+            if event and not frame['limited'] and not getattr(conn, 'client_abort', False):
+                async def accept():
+                    from .authorization import allow_output
+                    try:
+                        result = await worker.submit(event) if worker else {'status': 'unavailable', 'accepted': False}
+                    except PrivateAuthorizationRequired:
+                        result = {'status': 'cancelled', 'accepted': False}
+                    except Exception:
+                        result = {'status': 'unavailable', 'accepted': False}
+                    conn._mia_job_status = result
+                    if await allow_output(conn):
+                        await conn.websocket.send(json.dumps({'type': 'mia_memory_job', 'turn_id': event.turn_id, **result}))
+                try:
+                    reply.wait(conn, accept())
+                except Exception as error:
+                    logger.warning('Mia completion admission unavailable (%s)', type(error).__name__)
+    return chat
+
+
+async def start_worker(server):
+    from .authorization import PrivateAuthorization
+    from .jobs import JobStore, MemoryWorker
+    server._mia_worker = None
+    if not server.config.get('read_config_from_api', False):
+        return
+    authorization = PrivateAuthorization(server.config)
+    store = await asyncio.to_thread(_store)
+    async def resolve(scope):
+        models = await authorization.worker_model(scope)
+        selected = models['selected_module']['LLM']
+        config = models['LLM'][selected]
+        # Use the existing selected provider implementation; never a second reply path.
+        def extract(sources):
+            from core.utils.llm import create_instance
+            provider = create_instance(config.get('type', selected), config)
+            try:
+                context = {'user_excerpts': sources,
+                    'existing_memories': store.retrieve(scope.owner, ' '.join(sources)[:4096]),
+                    'personality': store.personality(scope.owner)}
+                return provider.response_no_stream(EXTRACTION_INSTRUCTIONS, json.dumps(context, ensure_ascii=False))
+            finally:
+                client = getattr(provider, 'client', None)
+                if client is not None and hasattr(client, 'close'):
+                    client.close()
+        return extract
+    worker = server._mia_worker = MemoryWorker(JobStore(store), authorization, resolve)
+    await worker.start()
+
+
+async def stop_worker(server):
+    worker = getattr(server, '_mia_worker', None)
+    if worker:
+        await worker.close(timeout=20)

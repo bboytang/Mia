@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +14,14 @@ import lombok.RequiredArgsConstructor;
 import xiaozhi.common.exception.ErrorCode;
 import xiaozhi.common.exception.RenException;
 import xiaozhi.common.utils.Result;
+import xiaozhi.modules.config.service.ConfigService;
 import xiaozhi.modules.device.service.impl.MiaDeviceAuthorizationService;
 
 @RestController
 @RequiredArgsConstructor
 public class MiaDeviceAuthorizationController {
     private final MiaDeviceAuthorizationService grants;
+    private final ConfigService configService;
     @Value("${mia.private-auth.allow-insecure-test-http:false}")
     private boolean allowInsecureTestHttp;
 
@@ -89,5 +92,21 @@ public class MiaDeviceAuthorizationController {
         return result(grants.checkScope(field(body, "device_id", 32), field(body, "client_id", 128),
                 field(body, "owner", 256), version(body, "operator_id"),
                 version(body, "binding_version"), version(body, "credential_version")));
+    }
+
+    @PostMapping("/config/mia-auth/worker-model")
+    @Transactional(rollbackFor = Exception.class)
+    public Result<Map<String, Object>> workerModel(@RequestBody Map<String, Object> snapshot) {
+        Map<String, Object> scope = grants.requireSnapshot(snapshot, true);
+        Map<String, Object> models = configService.getAgentModels((String) scope.get("device_id"), Map.of());
+        if (!scope.get("owner").equals(models.get("mia_owner"))) throw new RenException(ErrorCode.NO_PERMISSION);
+        if (!(models.get("selected_module") instanceof Map<?, ?> selected)
+                || !(selected.get("LLM") instanceof String module)
+                || !(models.get("LLM") instanceof Map<?, ?> llms) || llms.get(module) == null) {
+            throw new RenException(ErrorCode.NO_PERMISSION);
+        }
+        // Only the currently authorized agent's existing LLM, never a client-selected model.
+        return result(Map.of("mia_scope", scope, "selected_module", Map.of("LLM", module),
+                "LLM", Map.of(module, llms.get(module))));
     }
 }

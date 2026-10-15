@@ -52,6 +52,7 @@ from mia_companion import xiaozhi_adapter as mia, authorization as mia_auth, rep
 from mia_companion.context import ContextBuilder, turns
 from mia_companion.embedding import SemanticEncoder
 from mia_companion.memory import MemoryStore
+from mia_companion.jobs import JobStore, MemoryWorker
 from mia_companion.semantic import SemanticMemoryIndex
 
 
@@ -73,6 +74,11 @@ class Policy:
     async def require(self, scope, permission):
         if not self.active or permission not in scope.permissions:
             raise mia_auth.PrivateAuthorizationRequired()
+
+    async def restore(self, snapshot):
+        if not self.active or snapshot != self.scope.snapshot():
+            raise mia_auth.PrivateAuthorizationRequired()
+        return self.scope
 
 
 class TrackingExecutor:
@@ -117,6 +123,13 @@ async def evaluate(directory, output):
         datetime.now(timezone.utc) + timedelta(days=1), frozenset({'memory:read', 'memory:write', 'memory:manage'}))
     with tempfile.TemporaryDirectory() as folder:
         store = MemoryStore(Path(folder) / 'reply.sqlite3')
+        policy.scope = scope
+        async def resolve_memory(restored):
+            assert restored == scope
+            return lambda sources: {'memories': [], 'trait': None}
+        worker = MemoryWorker(JobStore(store), policy, resolve_memory)
+        server_context = SimpleNamespace(_mia_worker=worker)
+        completion_jobs = []
         requests, tool_calls, emitted = [], [], []
         mode, step, mutate = 'plain', 0, None
         tools = [{'type': 'function', 'function': {'name': 'weather', 'parameters': {'type': 'object', 'properties': {}}}}]
@@ -126,7 +139,7 @@ async def evaluate(directory, output):
             if mutate:
                 mutate()
                 mutate = None
-            return ActionResponse(Action.REQLLM, result='CI_TOOL_RESULT')
+            return ActionResponse(Action.RECORD if mode == 'record' else Action.RESPONSE if mode == 'tool_response' else Action.REQLLM, result='CI_TOOL_RESULT')
         def transport(request):
             nonlocal step
             body = json.loads(request.content)
@@ -136,9 +149,9 @@ async def evaluate(directory, output):
             assert body['max_tokens'] == 1024
             assert 'FOREIGN_PRIVATE' not in request.content.decode()
             data = json.loads(body['messages'][1]['content'])['mia_context']
-            if mode in {'tools', 'delete', 'revoke'} and step <= (2 if mode == 'tools' else 1):
+            if mode in {'tools', 'delete', 'revoke', 'record', 'tool_response'} and step <= (2 if mode == 'tools' else 1):
                 count = 2 if mode == 'tools' and step == 1 else 1
-                delta = {'tool_calls': [{'index': i, 'id': f'call-{step}-{i}', 'type': 'function',
+                delta = {'tool_calls': [{'index': i, 'id': f'{mode}-call-{step}-{i}', 'type': 'function',
                     'function': {'name': 'weather', 'arguments': '{}'}} for i in range(count)]}
             elif mode == 'direct':
                 delta = {'tool_calls': [{'index': 0, 'id': 'direct', 'type': 'function',
@@ -184,7 +197,8 @@ async def evaluate(directory, output):
             conn.__dict__.update(_mia_scope=scope, _mia_authorization=policy, read_config_from_api=True,
                 _mia_context_builder=ContextBuilder(index), llm=provider, session_id='reply-ci', logger=logger,
                 dialogue=Dialogue(), loop=asyncio.get_running_loop(), executor=executor, websocket=socket,
-                memory=None, _mia_memory=None, intent_type='function_call', need_bind=False, client_abort=False,
+                memory=None, _mia_memory=mia.MiaMemoryProvider(store, scope.owner, provider, 'reply-ci', scope, policy),
+                server=server_context, intent_type='function_call', need_bind=False, client_abort=False,
                 bind_completed_event=asyncio.Event(), max_output_size=0, client_is_speaking=False,
                 client_listen_mode='manual', introduced_speakers=set(), system_introduced_speakers=set(),
                 current_speaker=None, cmd_exit=[], features={'emoji': False},
@@ -234,6 +248,16 @@ async def evaluate(directory, output):
                     assert any(m['type'] == 'stt' for m in messages)
                     if name != 'revoke':
                         assert any(m['type'] == 'tts' and m.get('text') for m in messages)
+                    job_status = getattr(current, '_mia_job_status', None)
+                    if name in {'plain', 'tools', 'direct', 'voice', 'record', 'tool_response'}:
+                        assert job_status['status'] == 'accepted', (name, job_status)
+                        job = worker.jobs.current(job_status)
+                        assert job['state'] == 'pending' and worker.foreground == 0
+                        assert not job['validated_result']
+                        assert len([m for m in messages if m['type'] == 'mia_memory_job']) == 1
+                        await worker.run_once()
+                        assert worker.jobs.current(job_status)['state'] == 'empty'
+                        completion_jobs.append({'case': name, 'id': job_status['id'], 'state': 'empty'})
                     cases.append({'name': name, 'provider_requests': len(requests) - start,
                         'protocol': messages, 'diagnostics': getattr(current, '_mia_context_status', None)})
                     return cases[-1]
@@ -242,6 +266,8 @@ async def evaluate(directory, output):
                 assert len(tool_calls) == 3 and len(set(tool_calls)) == 3
                 assert (await text_case('direct'))['provider_requests'] == 1
                 assert (await text_case('voice'))['provider_requests'] == 1
+                assert (await text_case('record'))['provider_requests'] == 1
+                assert (await text_case('tool_response'))['provider_requests'] == 1
                 mutate = lambda: store.delete_memory(scope.owner, fact)
                 count = len(tool_calls)
                 assert (await text_case('delete'))['provider_requests'] == 2
@@ -258,6 +284,8 @@ async def evaluate(directory, output):
                 assert (await text_case('revoke'))['provider_requests'] == 1
                 assert current._mia_authorization_required
                 output['cases'] = cases
+        output['completion_jobs'] = completion_jobs
+        assert len(completion_jobs) == 6
         output['provider_requests'] = len(requests)
         output['tool_dispatches'] = len(tool_calls)
         output['sample_provider_request'] = requests[1]
@@ -274,7 +302,7 @@ def main():
     parser.add_argument('--model-dir', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    report = {'code_sha': os.environ['GITHUB_SHA'], 'passed': False, 'kind': 'P15_installed_connection_BGE_SDK_protocol',
+    report = {'code_sha': os.environ['GITHUB_SHA'], 'passed': False, 'kind': 'P16_installed_completion_jobs_plus_P15_BGE_SDK_protocol',
         'provider': 'actual_installed_OpenAI_compatible_provider_with_synthetic_HTTP_SSE',
         'manager': 'policy_fixture_actual_manager_separate', 'tool_results': 'synthetic',
         'provider_capacity': 'synthetic_not_production', 'chat_provider_calls': 0,

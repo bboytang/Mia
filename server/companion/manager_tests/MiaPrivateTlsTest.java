@@ -59,6 +59,7 @@ class MiaPrivateTlsTest {
                 agent, user, "CI only", "CI private prompt marker");
         db.update("INSERT INTO ai_device(id,mac_address,user_id,agent_id,board,auto_update) VALUES (?,?,?,?,?,0)",
                 device, device, user, agent, "MIA_CI");
+        db.update("UPDATE ai_agent SET llm_model_id=? WHERE id=?", "LLM_ChatGLMLLM", agent);
         String token = tokens.createToken(user).getData().getToken();
         JsonNode code = post("/device/mia-auth/code", Map.of("device_id", device), token);
         assertEquals(0, code.path("code").asInt());

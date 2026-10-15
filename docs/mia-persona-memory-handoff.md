@@ -21,7 +21,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P15接线模块及受控验证通过，下一步P16**，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
+当前步骤：**P16开发及首次GitHub验证准备**，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
 当前Java补充验证：用户追问脱敏失败原因和修复后，`74794e02c786f6f01389bdbc3d96b30911af4c5c`仅修正固定上游测试后缀预期`3123`→`e123`及两CI补丁接入，不改运行代码。新[身份38755588258](https://github.com/bboytang/Mia/actions/runs/38755588258)173／173、脱敏9／9、23专项／TLS、类范围和JAR通过；[manager38755588374](https://github.com/bboytang/Mia/actions/runs/38755588374)150／150＋独立4／4与字节对照通过；[服务38755588299](https://github.com/bboytang/Mia/actions/runs/38755588299)157／157通过，三workflow均success。见[原因及修复](verification/mia-persona-memory/manager-ci.md)、[精确结果](verification/mia-persona-memory/redaction-ci-results.json)。历史失败原报告不改；此前“唯一既有失败”对旧run仍成立，对当前修正后的Java回归已解除。无本地自动测试／构建、部署或在途run，下一步仍P16。
 
@@ -73,7 +73,8 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P13 | 完成：检索模块及受控验证 | 664237f服务132、实际BGE及正向找回／底线拒绝通过；身份专项／构建通过，Java保留既有失败；D04固定供P14集成，完整真实行为待P22 |
 | P14 | 完成：上下文模块及受控验证 | 5e91409服务145、实际BGE＋原Dialogue＋10工具场景、身份专项及构建通过；Java既有失败保留，真实Provider参数／接线及B08待P15／P22 |
 | P15 | 完成：接线模块及受控验证 | 5c6e814的157服务、真实BGE／原SDK合成SSE七场景、23身份专项／实际TLS、类范围及JAR通过；Java既有失败保留，实际Provider容量／输出及完整B08待验，未部署 |
-| P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
+| P16 | 进行中 | 统一完成事件、复用mia_jobs的持久Worker与必要模型恢复接口已开发，待GitHub验证，不部署 |
+| P17—P18 | 未开始 | 完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
 | P21—P26 | 未开始 | 必要管理、真实行为、性能、回归、真机及发布包待实施 |
 | P27—P28 | 未开始 | 未发布，不能凭计划执行生产变更 |

@@ -135,6 +135,13 @@ class PrivateAuthorization:
             raise PrivateAuthorizationRequired()
         return actual
 
+    async def worker_model(self, scope):
+        await self.require(scope, 'memory:write')
+        models = await self._request('/config/mia-auth/worker-model', scope.snapshot())
+        if not isinstance(models, dict) or _manager_scope(models.get('mia_scope')) != scope:
+            raise PrivateAuthorizationRequired()
+        return models
+
     async def private_config(self, device_id, client_id, credential, selected_module):
         scope = await self.verify(device_id, client_id, credential)
         models = await self._request("/config/agent-models", {

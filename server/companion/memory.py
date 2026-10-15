@@ -274,7 +274,7 @@ class MemoryStore:
         self.db.execute("UPDATE owners SET version=version+1 WHERE owner=?", (owner,))
         return True
 
-    def apply_extraction(self, owner, session_id, revision, sources, extraction, checkpoint_id):
+    def apply_extraction(self, owner, session_id, revision, sources, extraction, checkpoint_id, *, job_id=None):
         session_id = _text(session_id, 128, "session id")
         checkpoint_id = _text(checkpoint_id, 128, "checkpoint id")
         if type(revision) is not int or revision < 0 or not isinstance(sources, list) or not 1 <= len(sources) <= 20:
@@ -289,6 +289,11 @@ class MemoryStore:
             self.db.execute("BEGIN IMMEDIATE")
             owner = self._owner(owner)
             state = self.db.execute("SELECT revision,paused FROM owners WHERE owner=?", (owner,)).fetchone()
+            if job_id is not None:
+                job = self.db.execute('SELECT state,owner,memory_revision FROM mia_jobs WHERE id=?', (job_id,)).fetchone()
+                if (job is None or job['owner'] != owner or job['memory_revision'] != revision
+                        or job['state'] not in {'validated', 'retry_wait'}):
+                    return {"applied": False, "memories": [], "trait_updated": False}
             if state["paused"] or state["revision"] != revision or self.db.execute(
                     "SELECT 1 FROM checkpoints WHERE owner=? AND checkpoint_id=?", (owner, checkpoint_id)).fetchone():
                 return {"applied": False, "memories": [], "trait_updated": False}
@@ -331,6 +336,9 @@ class MemoryStore:
             self.db.execute("INSERT INTO checkpoints VALUES (?,?,?)", (owner, checkpoint_id, now))
             self.db.execute("DELETE FROM checkpoints WHERE owner=? AND checkpoint_id NOT IN "
                             "(SELECT checkpoint_id FROM checkpoints WHERE owner=? ORDER BY rowid DESC LIMIT 100)", (owner, owner))
+            if job_id is not None:
+                self.db.execute("UPDATE mia_jobs SET state=?,source_payload='{}',validated_result=NULL,updated_at=?,error_category=NULL WHERE id=?",
+                                ('committed' if changed or trait_updated else 'empty', now, job_id))
             return {"applied": True, "memories": changed, "trait_updated": trait_updated}
 
     def personality(self, owner):
@@ -345,6 +353,11 @@ class MemoryStore:
         self.db.execute("INSERT INTO memory_search(memory_search) VALUES ('optimize')")
         self.db.commit()
         self.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+
+    def _cancel_jobs(self, owner):
+        self.db.execute("UPDATE mia_jobs SET state='cancelled',source_payload='{}',validated_result=NULL,"
+                        "error_category='memory_changed',updated_at=? WHERE owner=? "
+                        "AND state IN ('pending','extracting','validated','retry_wait')", (int(self.clock()), owner))
 
     def edit_memory(self, owner, memory_id, content, confirmed=None):
         content = _safe_text(content, 512, "content")
@@ -364,6 +377,7 @@ class MemoryStore:
                 self.db.execute("DELETE FROM sources WHERE memory_id=?", (memory_id,))
             self._index(memory_id, content)
             self.db.execute("UPDATE owners SET revision=revision+1 WHERE owner=?", (owner,))
+            self._cancel_jobs(owner)
         with self.lock:
             self._purge()
 
@@ -378,6 +392,7 @@ class MemoryStore:
             self.db.execute("DELETE FROM memory_search WHERE memory_id IN (SELECT id FROM memories WHERE owner=? AND id=?)", (owner, memory_id))
             self.db.execute("DELETE FROM memories WHERE owner=? AND id=?", (owner, memory_id))
             self.db.execute("UPDATE owners SET revision=revision+1 WHERE owner=?", (owner,))
+            self._cancel_jobs(owner)
         with self.lock:
             self._purge()
 
@@ -387,6 +402,7 @@ class MemoryStore:
         with self.lock, self.db:
             owner = self._owner(owner)
             self.db.execute("UPDATE owners SET paused=?,revision=revision+1 WHERE owner=?", (paused, owner))
+            self._cancel_jobs(owner)
 
     def clear(self, owner):
         with self.lock, self.db:
@@ -397,6 +413,7 @@ class MemoryStore:
             self.db.execute("DELETE FROM traits WHERE owner=?", (owner,))
             self.db.execute("DELETE FROM checkpoints WHERE owner=?", (owner,))
             self.db.execute("UPDATE owners SET revision=revision+1,version=version+1 WHERE owner=?", (owner,))
+            self._cancel_jobs(owner)
         with self.lock:
             self._purge()
 
@@ -405,6 +422,7 @@ class MemoryStore:
             owner = self._owner(owner)
             self.db.execute("DELETE FROM traits WHERE owner=?", (owner,))
             self.db.execute("UPDATE owners SET revision=revision+1,version=version+1 WHERE owner=?", (owner,))
+            self._cancel_jobs(owner)
         with self.lock:
             self._purge()
 

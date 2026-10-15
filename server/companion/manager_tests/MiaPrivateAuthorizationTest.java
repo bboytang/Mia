@@ -294,7 +294,7 @@ class MiaPrivateAuthorizationTest {
 
     @Test
     void pythonScopeUsesActualManagerProofAndRejectsRevokedSnapshots() throws Exception {
-        db.update("UPDATE ai_agent SET system_prompt=? WHERE id=?", "CI private prompt marker", AGENT_B);
+        db.update("UPDATE ai_agent SET system_prompt=?,llm_model_id=? WHERE id=?", "CI private prompt marker", "LLM_ChatGLMLLM", AGENT_B);
         JsonNode value = grant();
         String script = System.getenv("MIA_SCOPE_INTEGRATION_SCRIPT");
         assertNotNull(script, "The identity workflow must provide the actual Python integration entry");

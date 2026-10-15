@@ -128,6 +128,13 @@ def patch_connection(text):
         '        # 如果使用 nointent，直接返回\n')
     text = replace_once(text, '                if text is not None and len(text) > 0:\n',
         '                if text is not None:\n')
+    text = replace_once(text, '    def chat(self, query, depth=0):\n',
+                        '    @mia.completed_chat\n    def chat(self, query, depth=0):\n')
+    text = replace_once(text, '            if self.memory:\n',
+                        '            if self.memory and not isinstance(self.memory, mia.MiaMemoryProvider):\n')
+    for anchor in ('            self.logger.bind(tag=TAG).error(f"LLM 处理出错 {query}: {e}")\n',
+                   '            self.logger.bind(tag=TAG).error(f"LLM stream processing error: {e}")\n'):
+        text = replace_once(text, anchor, '            mia.incomplete_turn()\n' + anchor)
     return text
 
 
@@ -200,8 +207,19 @@ def patch_intent(text):
                         'mia_auth.intent_reply(conn, text, original_text)')
 
 
+def patch_app(text):
+    text = replace_once(text, 'from core.websocket_server import WebSocketServer\n',
+                        'from core.websocket_server import WebSocketServer\nfrom mia_companion import xiaozhi_adapter as mia\n')
+    text = replace_once(text, '    ws_server = WebSocketServer(config)\n',
+                        '    ws_server = WebSocketServer(config)\n    await mia.start_worker(ws_server)\n')
+    return replace_once(text, '        # 停止全局GC管理器\n',
+                        '        await mia.stop_worker(ws_server)\n        # 停止全局GC管理器\n')
+
+
 PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager,
                               patch_websocket, patch_tools, patch_intent, patch_report]))
+EXPECTED[PYTHON + "app.py"] = "65c37299c510128006b658de6858492a4c8df044b26ed6a83bc3eba1b9d1a77b"
+PATCHERS[PYTHON + "app.py"] = patch_app
 
 
 def build_changes(root):
@@ -231,7 +249,7 @@ def install(root, changes):
     destination.mkdir(mode=0o700)
     try:
         for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql", "schema-v2.sql", "persona.py",
-                     "embedding.py", "semantic.py", "retrieval.py", "context.py", "reply.py", "requirements-vector.txt"]:
+                     "embedding.py", "semantic.py", "retrieval.py", "context.py", "reply.py", "jobs.py", "requirements-vector.txt"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")
