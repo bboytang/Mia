@@ -135,6 +135,12 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(mia.initialize_memory(self.conn))
         self.assertIsNone(self.conn.memory)
 
+    async def test_latest_job_status_without_id_is_owner_scoped_and_empty_is_not_saved(self):
+        request_id = str(uuid.uuid4())
+        await mia.handle_message(self.conn, json.dumps({'type': 'mia_memory', 'request_id': request_id, 'action': 'job_status'}))
+        self.assertEqual(self.conn.websocket.sent[-1]['request_id'], request_id)
+        self.assertEqual(self.conn.websocket.sent[-1]['result'], {'state': 'none', 'confirmation_required': False})
+
     async def test_management_uses_server_owner_and_clears_extractable_context(self):
         original = message("我喜欢蓝色")
         self.conn.dialogue.dialogue = [message("system", "system"), original]

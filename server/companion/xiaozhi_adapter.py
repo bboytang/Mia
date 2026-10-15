@@ -445,9 +445,14 @@ async def handle_message(conn, message):
         if request.get('action') == 'job_status':
             def status():
                 with provider.store.lock:
-                    row = provider.store.db.execute('SELECT id,state,attempts,error_category,validated_result FROM mia_jobs WHERE owner=? AND id=?',
-                        (scope.owner, request.get('id'))).fetchone()
+                    columns = 'SELECT id,state,attempts,error_category,validated_result FROM mia_jobs WHERE owner=?'
+                    if 'id' in request:
+                        row = provider.store.db.execute(columns + ' AND id=?', (scope.owner, request['id'])).fetchone()
+                    else:
+                        row = provider.store.db.execute(columns + ' ORDER BY created_at DESC,rowid DESC LIMIT 1', (scope.owner,)).fetchone()
                     if row is None:
+                        if 'id' not in request:
+                            return {'state': 'none', 'confirmation_required': False}
                         raise MemoryError('not_found', 'Task does not exist')
                     result = dict(row)
                     summary = result.pop('validated_result')

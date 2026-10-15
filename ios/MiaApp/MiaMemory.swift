@@ -119,6 +119,7 @@ struct MiaMemoryTask: Decodable, Equatable {
         case "committed": confirmationRequired == true ? "已整理，有内容等待你确认" : "已保存"
         case "accepted", "pending", "extracting", "validated", "running", "retry_wait": "已接收，正在整理，尚未确认保存"
         case "empty": "本次没有需要保存的内容"
+        case "none": "还没有整理任务"
         case "cancelled": "整理已取消，未保存本次内容"
         case "failed", "queue_full", "unavailable": "本次整理失败，未确认保存"
         default: "本次整理未完成，请稍后查看或重试"

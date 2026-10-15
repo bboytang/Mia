@@ -235,6 +235,8 @@ final class MiaCompanionSessionTests: XCTestCase {
         XCTAssertTrue(voice.memoryTask?.label.contains("尚未确认保存") == true)
         try await voice.refreshMemoryTask()
         XCTAssertEqual(voice.memoryTask?.label, "已整理，有内容等待你确认")
+        try await voice.refreshMemoryTask(latest: true)
+        XCTAssertEqual(voice.memoryTask?.id, "fixture-task")
         let original = try await voice.manageMemoryResult(action: "observations", as: MiaEmotionTracking.self)
         XCTAssertEqual(original.consent.enabled, 0)
         XCTAssertEqual(original.trend.status, "disabled")

@@ -552,7 +552,7 @@ class MemoryStore:
             raise MemoryError("invalid_input", "Unknown memory action")
         state = self.snapshot(owner)
         return {"memories": self.list_memories(owner), "paused": state["paused"], "personality": self.personality(owner),
-                "management": {"version": 1, "actions": ["events", "event_delete", "emotion_consent", "emotion_status",
+                "management": {"version": 1, "actions": ["job_status", "events", "event_delete", "emotion_consent", "emotion_status",
                     "observations", "observation_update", "observation_delete", "emotion_clear"]}}
 
     def close(self):

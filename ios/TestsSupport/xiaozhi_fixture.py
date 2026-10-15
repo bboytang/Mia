@@ -100,7 +100,7 @@ async def websocket(ws):
               "paused": False, "personality": {"version": 0, "traits": []}}
 
     extensions = params.get("memory") == ["extensions"]
-    extension_actions = ["events", "event_delete", "emotion_consent", "emotion_status", "observations",
+    extension_actions = ["job_status", "events", "event_delete", "emotion_consent", "emotion_status", "observations",
                          "observation_update", "observation_delete", "emotion_clear"]
     if extensions:
         memory["management"] = {"version": 1, "actions": extension_actions}
@@ -156,7 +156,7 @@ async def websocket(ws):
                     tracking["observations"] = []
                 result = events if action in ["events", "event_delete"] else tracking
                 if action == "job_status":
-                    result = {"id": event["id"], "state": "committed", "confirmation_required": True}
+                    result = {"id": event.get("id", "fixture-task"), "state": "committed", "confirmation_required": True}
                 await ws.send(json.dumps({"type": "mia_memory", "request_id": request_id, "result": result}))
                 continue
             if action == "pause":

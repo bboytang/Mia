@@ -451,10 +451,12 @@ final class MiaVoiceSession: ObservableObject {
         sentenceExpressions.removeAll()
     }
 
-    func refreshMemoryTask() async throws {
-        guard let id = memoryTask?.id else { return }
-        let updated = try await manageMemoryResult(action: "job_status", fields: ["id": id], as: MiaMemoryTask.self)
-        if memoryTask?.id == id { memoryTask = updated }
+    func refreshMemoryTask(latest: Bool = false) async throws {
+        let previousID = memoryTask?.id
+        guard latest || previousID != nil else { return }
+        let fields: [String: Any] = latest ? [:] : ["id": previousID!]
+        let updated = try await manageMemoryResult(action: "job_status", fields: fields, as: MiaMemoryTask.self)
+        if memoryTask?.id == previousID { memoryTask = updated }
     }
 
     func manageMemory(action: String, fields: [String: Any] = [:]) async throws -> MiaMemorySnapshot {

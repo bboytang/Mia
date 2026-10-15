@@ -211,7 +211,7 @@ struct MiaMemoryView: View {
                 tracking = try await session.manageMemoryResult(action: action, fields: fields, as: MiaEmotionTracking.self)
             } else {
                 snapshot = try await session.manageMemory(action: action, fields: fields)
-                try await session.refreshMemoryTask()
+                try await session.refreshMemoryTask(latest: snapshot?.management?.supports("job_status") == true)
             }
             if snapshot?.management?.supports("events") == true {
                 events = try await session.manageMemoryResult(action: "events", as: MiaEventList.self).events

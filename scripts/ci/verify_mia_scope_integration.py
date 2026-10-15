@@ -345,7 +345,7 @@ async def main():
                 assert await execute_tool(active, {'name': 'synthetic_tool'}) == 'synthetic tool output'
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
-            for action in ('list', 'events', 'observations'):
+            for action in ('list', 'events', 'observations', 'job_status'):
                 request_id = str(uuid.uuid4())
                 await adapter.handle_message(active, json.dumps({'type': 'mia_memory', 'request_id': request_id, 'action': action}))
                 response = active.websocket.sent[-1]
@@ -357,6 +357,8 @@ async def main():
                     event = next(item for item in response['result']['events'] if item['id'] == event_id)
                     assert event['user_excerpt'] == '你还记得CI own memory吗'
                     assert event['assistant_excerpt'] == '😌记得，CI own memory。'
+                elif action == 'job_status':
+                    assert response['result']['id'] == pending and response['result']['state'] == 'pending'
                 else:
                     assert response['result']['consent']['enabled'] == 0
                     assert response['result']['trend'] == {'status': 'disabled'}
