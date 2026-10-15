@@ -288,8 +288,6 @@ async def main():
             else:
                 raise AssertionError('Foreign correction was accepted')
             store.delete_memory(scope.owner, extracted['id'])
-            pending = await worker.submit(TurnCompleted(scope, 'scope-ci', 'worker-delete', 'worker-delete', 'CI user',
-                store.snapshot(scope.owner)['revision']))
             vector_index = SemanticMemoryIndex(store, SyntheticVectorEncoder())
             await vector_index.index_memory(scope, auth, own_id)
             try:
@@ -305,6 +303,28 @@ async def main():
             assert [row['term'] for row in hybrid['expansion']] == ['own clue']
             assert [row['id'] for row in hybrid['results']] == [own_id]
             context_builder = ContextBuilder(vector_index)
+            event_bundle = await context_builder.build(scope, auth, 'event-scope-ci', '你还记得CI own memory吗',
+                limits=ContextLimits('scope-ci-fixture', 16384, 128, 'CI capacity fixture; not production'), session_id='event-session')
+            assert await context_builder.complete(event_bundle, auth, '😌记得，CI own memory。')
+            event_id = event_bundle.diagnostics()['events'][0]['id']
+            assert store.db.execute('SELECT state FROM mia_events WHERE id=?', (event_id,)).fetchone()[0] == 'active'
+            await auth.require(scope, 'memory:manage')
+            store.handle(scope.owner, {'action': 'emotion_consent', 'enabled': True})
+            async def resolve_observation(restored):
+                await auth.worker_model(restored)
+                return lambda sources, context: {'memories': [], 'observations': [{'source_index': 0,
+                    'source_quote': sources[0], 'subject': 'user', 'source_kind': 'self_report',
+                    'tendency': 'negative', 'confidence': 0.9}]}
+            observation_worker = MemoryWorker(jobs, auth, resolve_observation, encoder=SyntheticVectorEncoder())
+            observation_task = await observation_worker.submit(TurnCompleted(scope, 'scope-ci', 'mood-own', 'mood-own',
+                '我今天很难过', store.snapshot(scope.owner)['revision']))
+            await observation_worker.run_once()
+            assert jobs.current(observation_task)['state'] == 'committed'
+            assert store.handle(scope.owner, {'action': 'emotion_status'})['trend']['status'] == 'insufficient_observations'
+            assert store.handle(peer, {'action': 'observations'})['observations'] == []
+            store.handle(scope.owner, {'action': 'emotion_consent', 'enabled': False})
+            pending = await worker.submit(TurnCompleted(scope, 'scope-ci', 'worker-delete', 'worker-delete', 'CI user',
+                store.snapshot(scope.owner)['revision']))
             context_bundle = await context_builder.build(scope, auth, 'context-scope-ci', 'CI synthetic context',
                 limits=ContextLimits('scope-ci-fixture', 16384, 128, 'CI capacity fixture; not production'))
             assert context_bundle.diagnostics()['selected_fact_ids'] == [own_id]
@@ -326,6 +346,8 @@ async def main():
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
             for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
+                                  ({'action': 'observations', 'owner': peer}, 'not_authorized'),
+                                  ({'action': 'event_delete', 'owner': peer, 'id': event_id}, 'not_authorized'),
                                   ({'action': 'delete', 'id': other_id}, 'not_found'),
                                   ({'action': 'update', 'id': other_id, 'content': 'CI tampered'}, 'not_found')]:
                 await adapter.handle_message(active, json.dumps(dict(request, type='mia_memory', request_id=str(uuid.uuid4()))))
@@ -377,6 +399,7 @@ async def main():
     print(json.dumps({'manager_python_scope_pass': True, 'checks': 34, 'vector_scope_checks_pass': True,
                       'reply_scope_checks_pass': True, 'worker_scope_checks_pass': True, 'extraction_scope_checks_pass': True,
                       'maintenance_scope_checks_pass': True,
+                      'events_scope_checks_pass': True, 'emotion_scope_checks_pass': True,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 

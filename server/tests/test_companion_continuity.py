@@ -1,15 +1,17 @@
 """P19/P20 lifecycle mechanisms. Clock/policy/vectors here are explicitly synthetic."""
 
 import json
+import asyncio
 from pathlib import Path
 import sqlite3
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
 from server.tests import test_companion_extraction as fixture
 from server.companion import emotions
+from server.companion import xiaozhi_adapter as mia
 from server.companion.context import ContextBuilder, ContextError, ContextLimits
-from server.companion.extraction import context_for, validate_output
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryError, MemoryStore
 from server.companion.semantic import SemanticMemoryIndex
@@ -98,6 +100,27 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         self.store.delete_memory(self.scope.owner, target)
         self.assertEqual(tuple(self.store.db.execute('SELECT user_excerpt,assistant_excerpt FROM mia_event_interactions').fetchone()), ('', None))
         self.assertEqual(self.store.db.execute('SELECT state FROM mia_events').fetchone()[0], 'invalidated')
+
+    async def test_actual_completed_chat_hook_promotes_only_its_checked_assistant_evidence(self):
+        await self.seed()
+        bundle = await self.bundle()
+        sent = []
+        async def send(message):
+            sent.append(json.loads(message))
+        conn = SimpleNamespace(loop=asyncio.get_running_loop(), session_id='new-session', sentence_id='event',
+            read_config_from_api=True, _mia_scope=self.scope, _mia_authorization=self.policy,
+            _mia_memory=mia.MiaMemoryProvider(self.store, self.scope.owner, None, 'new-session', self.scope, self.policy),
+            dialogue=SimpleNamespace(dialogue=[]), server=SimpleNamespace(_mia_worker=self.worker),
+            websocket=SimpleNamespace(send=send), client_abort=False)
+        @mia.completed_chat
+        def chat(conn, query, depth=0):
+            mia.begin_turn(conn, query)
+            conn._mia_context_turn = SimpleNamespace(builder=self.builder, bundle=bundle)
+            mia.guard_history(conn.dialogue, SimpleNamespace(role='assistant', content='😌你喜欢蓝色。'))
+        await asyncio.to_thread(chat, conn, '你还记得我喜欢蓝色吗')
+        self.assertTrue(conn._mia_event_status['activated'])
+        self.assertEqual(self.worker.foreground, 0)
+        self.assertTrue(sent[-1]['accepted'])
 
     def enable(self):
         return self.store.handle(self.scope.owner, {'action': 'emotion_consent', 'enabled': True})
@@ -214,7 +237,6 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_database_retry_does_not_repeat_model_or_duplicate_observation(self):
         self.enable()
-        original = self.jobs.commit
         with patch.object(self.jobs, 'commit', side_effect=sqlite3.OperationalError('fixture')):
             accepted = await self.observe('retry')
         self.assertEqual(self.jobs.current(accepted)['state'], 'retry_wait')
@@ -223,6 +245,21 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         await self.worker.run_once()
         self.assertEqual(self.calls, 1)
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0], 1)
+
+    async def test_disabling_during_native_extraction_blocks_late_observation_after_reenable(self):
+        self.enable()
+        original = self.worker.resolve
+        async def resolve(scope):
+            extract = await original(scope)
+            def changed(sources, context):
+                self.store.handle(self.scope.owner, {'action': 'emotion_consent', 'enabled': False})
+                self.enable()
+                return extract(sources, context)
+            return changed
+        self.worker.resolve = resolve
+        task = await self.observe('revoked-during-model')
+        self.assertEqual(self.jobs.current(task)['state'], 'cancelled')
+        self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0], 0)
 
 
 if __name__ == '__main__':

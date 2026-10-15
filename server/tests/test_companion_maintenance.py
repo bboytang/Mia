@@ -189,7 +189,8 @@ class MaintenanceTests(unittest.IsolatedAsyncioTestCase):
                 "VALUES ('event',?,'fixture','one','active','s','old',0,0)", (self.scope.owner,))
             self.store.db.execute('INSERT INTO mia_event_evidence VALUES (?,?,1,2)', ('event', target))
             self.store.db.execute("INSERT INTO mia_observations(id,owner,subject,source_kind,session_id,turn_id,message_id,observed_at,created_at,consent_version,tendency,confidence,source_excerpt,state) "
-                "VALUES ('observation',?,'user','self_report','s','old','old',0,0,1,'fixture',1,'我喜欢蓝色','active')", (self.scope.owner,))
+                "VALUES ('observation',?,'user','self_report','s','old','old',?,?,1,'fixture',1,'我喜欢蓝色','active')",
+                (self.scope.owner, int(self.store.clock()), int(self.store.clock())))
             self.store.db.execute('INSERT INTO mia_associations VALUES (?,?,?,?,?,?)',
                 (target, related, 'shared_term', '{}', 1, 1))
         self.reconcile(target)

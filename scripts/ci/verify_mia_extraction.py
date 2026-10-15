@@ -204,6 +204,55 @@ async def evaluate(args, report):
             report['maintenance'].append({'kind': mode, 'state': 'committed', 'sdk_calls': len(requests) - start,
                 'old_context_rejected': True, 'old_fact_not_current': True})
         second.close()
+        # P19/P20 installed mechanisms: real BGE, synthetic outputs and an EXPLICIT simulated clock.
+        from mia_companion import emotions
+        target = targets['relation']
+        old = store.db.execute('SELECT content FROM memories WHERE id=?', (target,)).fetchone()[0]
+        builder = ContextBuilder(index)
+        query = '你还记得' + old + '吗'
+        before = await builder.build(scope, policy, 'p19-first', query, limits=limits, session_id='p19-session')
+        assert before.diagnostics()['events'] and before.diagnostics()['events'][-1]['state'] == 'pending'
+        assert await builder.complete(before, policy, '😌记得，' + old + '。')
+        store.close()
+        store = MemoryStore(Path(folder) / 'facts.sqlite3')
+        index = SemanticMemoryIndex(store, encoder)
+        builder = ContextBuilder(index)
+        after = await builder.build(scope, policy, 'p19-restart', query, limits=limits, session_id='different-session')
+        assert after.diagnostics()['events'][0]['state'] == 'active'
+        assert store.db.execute('SELECT COUNT(*) FROM mia_events').fetchone()[0] == 1
+        store.delete_memory(scope.owner, target)
+        removed = await builder.build(scope, policy, 'p19-deleted', query, limits=limits, session_id='third-session')
+        assert removed.diagnostics()['events'] == []
+        report['persona_events'] = {'pending_then_completed': True, 'database_reopened': True,
+            'new_session_restored': True, 'repeated_query_one_event': True, 'deleted_evidence_not_used': True,
+            'assistant_output': 'synthetic_controlled_fixture'}
+        assert emotions.trend(store, scope.owner)['status'] == 'disabled'
+        store.handle(scope.owner, {'action': 'emotion_consent', 'enabled': True})
+        jobs = JobStore(store)
+        worker = MemoryWorker(jobs, policy, resolve, encoder=encoder)
+        epoch = int(store.clock()) // 86400 * 86400
+        for i, day in enumerate((0, 1, 2, 4, 6)):
+            store.clock = lambda day=day: epoch + day * 86400 + 3600
+            current = {'id': 'p20-' + str(i), 'source': '我今天很难过', 'output': {'memories': [], 'observations': [{
+                'source_index': 0, 'source_quote': '我今天很难过', 'subject': 'user', 'source_kind': 'self_report',
+                'tendency': 'negative', 'confidence': 0.9}]}}
+            admitted = await worker.submit(TurnCompleted(scope, 'mood-session-' + str(i % 3), current['id'], current['id'],
+                current['source'], store.snapshot(scope.owner)['revision']))
+            await worker.run_once()
+            assert jobs.current(admitted)['state'] == 'committed'
+        related = await builder.build(scope, policy, 'p20-related', '最近我的心情怎么样', limits=limits)
+        assert related.diagnostics()['trends'] == 'available'
+        store.handle(scope.owner, {'action': 'emotion_consent', 'enabled': False})
+        try:
+            await builder.validate(related, policy)
+        except ContextError:
+            pass
+        else:
+            raise AssertionError('Disabled trend snapshot remained usable')
+        assert emotions.trend(store, scope.owner)['status'] == 'disabled'
+        report['emotion_trend'] = {'clock': 'SIMULATED_UTC_not_real_seven_day_acceptance',
+            'observations': 5, 'sessions': 3, 'calendar_span_days': 7, 'related_context': True,
+            'disable_retains_five_but_blocks_usage': store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0] == 5}
         report['sdk_calls'] = len(requests)
         report['peak_rss_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
         report['passed'] = True

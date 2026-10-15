@@ -145,6 +145,35 @@ class SchemaCompatibilityTests(unittest.TestCase):
         self.assertEqual(old.db.execute('SELECT COUNT(*) FROM mia_schema_migrations').fetchone()[0], 3)
         old.close()
 
+    def test_p18_v2_to_v3_failure_rolls_back_then_reopens_without_fabricated_provenance(self):
+        old = self.legacy(self.path)
+        self.remember(old)
+        before = self.original_rows(old)
+        with old.db:
+            old.db.execute('CREATE TABLE mia_schema_migrations(version INTEGER PRIMARY KEY,checksum TEXT NOT NULL,schema_checksum TEXT NOT NULL,applied_at INTEGER NOT NULL)')
+            for version, name in enumerate(('schema.sql', 'schema-v2.sql'), 1):
+                sql = Path('server/companion', name).read_text()
+                for statement in _statements(sql):
+                    old.db.execute(statement)
+                old.db.execute('INSERT INTO mia_schema_migrations VALUES (?,?,?,1)',
+                    (version, hashlib.sha256(sql.encode()).hexdigest(), _schema_checksum(old.db)))
+        ledger = [tuple(row) for row in old.db.execute('SELECT * FROM mia_schema_migrations')]
+        old.db.set_authorizer(lambda action, name, *args: sqlite3.SQLITE_DENY
+            if action == sqlite3.SQLITE_CREATE_TABLE and name == 'mia_observation_meta' else sqlite3.SQLITE_OK)
+        with self.assertRaises(sqlite3.DatabaseError):
+            migrate(old.db)
+        old.db.set_authorizer(None)
+        self.assertEqual([tuple(row) for row in old.db.execute('SELECT * FROM mia_schema_migrations')], ledger)
+        self.assertIsNone(old.db.execute("SELECT 1 FROM sqlite_master WHERE name='mia_event_interactions'").fetchone())
+        migrate(old.db)
+        self.assertEqual(self.original_rows(old), before)
+        self.assertEqual(old.db.execute('SELECT COUNT(*) FROM mia_observation_meta').fetchone()[0], 0)
+        self.assertEqual(old.db.execute('SELECT COUNT(*) FROM mia_event_interactions').fetchone()[0], 0)
+        old.close()
+        reopened = MemoryStore(self.path)
+        self.assertEqual(self.original_rows(reopened), before)
+        reopened.close()
+
     def test_process_exit_mid_ddl_rolls_back_without_partial_migration(self):
         old = self.legacy(self.path)
         self.remember(old)
