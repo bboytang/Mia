@@ -1,0 +1,84 @@
+{
+  "code_sha": "664237ff1b15837fc1b752bf869e02d6281669fa",
+  "kind": "P12_real_semantic_vectors_not_full_RAG",
+  "passed": true,
+  "resource_limit": {
+    "cpus": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "manager_authorization": "fixture_only_actual_manager_test_separate",
+  "association_four_scores": "not_implemented_P13",
+  "full_behavior": "not_accepted",
+  "asset_sha256": "dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+  "tokenizer_sha256": "7dfbf1966ebf99d471c3796e9b457329d2b2182b817e144f1e904b957745c839",
+  "reference_cosine_min": 0.9589616060256958,
+  "real_chinese_cross_phrase": [
+    {
+      "query": "我喝哪类乳品容易闹肚子？",
+      "expected": "5f32fdf8222f4735b8733478fdc67e73",
+      "ids": [
+        "5f32fdf8222f4735b8733478fdc67e73"
+      ],
+      "cosines": [
+        0.5160889625549316
+      ]
+    },
+    {
+      "query": "休息日我一般去哪里散步？",
+      "expected": "0742206565e04679b9baf32a66d7430d",
+      "ids": [
+        "0742206565e04679b9baf32a66d7430d"
+      ],
+      "cosines": [
+        0.4435151219367981
+      ]
+    },
+    {
+      "query": "我现在在哪座城市生活？",
+      "expected": "d1e07854411b4f229d1c8e73555609c5",
+      "ids": [
+        "d1e07854411b4f229d1c8e73555609c5"
+      ],
+      "cosines": [
+        0.4440765976905823
+      ]
+    },
+    {
+      "query": "我通常哪天晚上练琴？",
+      "expected": "576c30caf9f047faa189147ad42f7a03",
+      "ids": [
+        "576c30caf9f047faa189147ad42f7a03"
+      ],
+      "cosines": [
+        0.5805942416191101
+      ]
+    }
+  ],
+  "unrelated_empty": true,
+  "legacy_fts_absent_during_recall": true,
+  "revoked_scope_rejected": true,
+  "sqlite_capacity": {
+    "1000": {
+      "sqlite_p95_ms": 13.8952762500125,
+      "encode_plus_query_p95_ms": 35.33213709999643,
+      "rss_peak_mib": 283.921875,
+      "database_bytes": 4608000,
+      "fixture": "Synthetic records, replicated real seed vector; capacity only, not accuracy"
+    },
+    "10000": {
+      "sqlite_p95_ms": 125.50450924998415,
+      "encode_plus_query_p95_ms": 146.97300990000173,
+      "rss_peak_mib": 283.921875,
+      "database_bytes": 44277760,
+      "fixture": "Synthetic records, replicated real seed vector; capacity only, not accuracy"
+    }
+  },
+  "long_input_diagnostic": {
+    "chars": 1700,
+    "model_max_tokens": 512,
+    "elapsed_ms": 273.9153389999842,
+    "normalized": true,
+    "rss_peak_mib": 283.921875
+  }
+}

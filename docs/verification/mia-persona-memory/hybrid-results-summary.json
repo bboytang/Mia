@@ -1,0 +1,250 @@
+{
+  "code_sha": "664237ff1b15837fc1b752bf869e02d6281669fa",
+  "kind": "P13_real_BGE_installed_SQLite_hybrid",
+  "passed": true,
+  "weights": {
+    "semantic": 0.58,
+    "lexical": 0.28,
+    "association": 0.08,
+    "emotion": 0.06
+  },
+  "threshold": 0.2,
+  "semantic_floor": 0.35,
+  "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+  "model_revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+  "resource_limit": {
+    "cpu": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "manager": "fixture_only_actual_manager_separate",
+  "full_behavior": "not_accepted",
+  "datasets": {
+    "persona_memory_retrieval_zh_v5.json": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+    "persona_memory_retrieval_p13_holdout.json": "4d77bffb20cfc89a3d6c8099f9ffc234973d5a5b138771d0ffef00ffa0c35061"
+  },
+  "unsupported_persona_fixture_ids": [
+    "j-other-persona"
+  ],
+  "legacy_fts_absent": true,
+  "unsupported_persona_rejected": true,
+  "quality": {
+    "P06_v5_regression": {
+      "positive_count": 48,
+      "negative_count": 16,
+      "complete_recall_at_4": 0.9791666666666666,
+      "top1": 0.9791666666666666,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 8,
+      "related_expected_fact_recalled": 7,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    },
+    "P13_independent_v1": {
+      "positive_count": 32,
+      "negative_count": 16,
+      "complete_recall_at_4": 1.0,
+      "top1": 1.0,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 4,
+      "related_expected_fact_recalled": 4,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    }
+  },
+  "signal_max_weighted_contributions": {
+    "semantic": 0.45548648953437804,
+    "lexical": 0.2341405405405406,
+    "association": 0.055999999999999994,
+    "emotion": 0.06
+  },
+  "expansion_changes_vs_original_top12": 0,
+  "results_only_from_bounded_supplement": 0,
+  "ablation_ranking_changes": {
+    "semantic": 111,
+    "lexical": 0,
+    "association": 0,
+    "emotion": 0
+  },
+  "query_pipeline_ms": {
+    "count": 820,
+    "p50": 23.3947790000002,
+    "p95": 50.74117484999476
+  },
+  "association_floor_control": {
+    "passed": false,
+    "kind": "controlled_real_BGE_not_independent_quality_holdout",
+    "floor_rejected": true,
+    "fixture_sha256": "99f9802f8569b80218f4daf9eae42a56c3f1eb167c21e9a6ab1e2c7984556903",
+    "original_top12": [
+      "distractor-11",
+      "distractor-07",
+      "distractor-15",
+      "distractor-05",
+      "distractor-01",
+      "distractor-13",
+      "distractor-04",
+      "distractor-10",
+      "distractor-08",
+      "distractor-06",
+      "distractor-02",
+      "distractor-00"
+    ],
+    "without_expansion": [
+      "distractor-11",
+      "distractor-08",
+      "distractor-07",
+      "distractor-05"
+    ],
+    "retrieved": [
+      "distractor-11",
+      "distractor-08",
+      "distractor-07",
+      "distractor-05"
+    ],
+    "target": {
+      "id": "association-target",
+      "original_cosine": 0.34117764234542847,
+      "expanded_cosine": 0.6261372566223145,
+      "signals": {
+        "semantic": 0.6261372566223145,
+        "lexical": 0.14,
+        "association": 0.35,
+        "emotion": 0.4
+      },
+      "score": 0.4543596088409424,
+      "accepted": false,
+      "candidate_sources": [
+        "expanded",
+        "association"
+      ],
+      "content_version": 1,
+      "evidence_version": 2
+    },
+    "expansion": [
+      {
+        "term": "扇贝",
+        "memory_id": "association-target",
+        "content_version": 1,
+        "evidence_version": 2,
+        "trigger_hits": [
+          "点菜"
+        ]
+      },
+      {
+        "term": "过敏",
+        "memory_id": "association-target",
+        "content_version": 1,
+        "evidence_version": 2,
+        "trigger_hits": [
+          "点菜"
+        ]
+      },
+      {
+        "term": "龙虾",
+        "memory_id": "association-target",
+        "content_version": 1,
+        "evidence_version": 2,
+        "trigger_hits": [
+          "点菜"
+        ]
+      }
+    ]
+  },
+  "association_control": {
+    "passed": true,
+    "kind": "controlled_real_BGE_not_independent_quality_holdout",
+    "floor_rejected": false,
+    "fixture_sha256": "c5046db81211356a1babf886956e0509b33d1a9162fc7a6abc4234dde0bf9f6c",
+    "original_top12": [
+      "distractor-11",
+      "distractor-05",
+      "distractor-01",
+      "distractor-07",
+      "distractor-15",
+      "distractor-00",
+      "distractor-13",
+      "distractor-08",
+      "distractor-09",
+      "distractor-10",
+      "distractor-04",
+      "distractor-06"
+    ],
+    "without_expansion": [
+      "distractor-11",
+      "distractor-08",
+      "distractor-05",
+      "distractor-07"
+    ],
+    "retrieved": [
+      "association-target",
+      "distractor-11",
+      "distractor-08",
+      "distractor-05"
+    ],
+    "target": {
+      "id": "association-target",
+      "original_cosine": 0.4416348338127136,
+      "expanded_cosine": 0.6604586839675903,
+      "signals": {
+        "semantic": 0.6604586839675903,
+        "lexical": 0.14,
+        "association": 0.35,
+        "emotion": 0.4
+      },
+      "score": 0.4742660367012024,
+      "accepted": true,
+      "candidate_sources": [
+        "expanded",
+        "lexical",
+        "association"
+      ],
+      "content_version": 1,
+      "evidence_version": 2
+    },
+    "expansion": [
+      {
+        "term": "扇贝",
+        "memory_id": "association-target",
+        "content_version": 1,
+        "evidence_version": 2,
+        "trigger_hits": [
+          "点菜"
+        ]
+      },
+      {
+        "term": "过敏",
+        "memory_id": "association-target",
+        "content_version": 1,
+        "evidence_version": 2,
+        "trigger_hits": [
+          "点菜"
+        ]
+      },
+      {
+        "term": "龙虾",
+        "memory_id": "association-target",
+        "content_version": 1,
+        "evidence_version": 2,
+        "trigger_hits": [
+          "点菜"
+        ]
+      }
+    ]
+  },
+  "capacity": {
+    "1000": {
+      "count": 10,
+      "pipeline_p95_ms": 42.70098775000122,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    },
+    "10000": {
+      "count": 10,
+      "pipeline_p95_ms": 237.77824584999792,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    }
+  },
+  "peak_rss_mib": 283.37890625,
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38726443918",
+  "original_report_sha256": "7e40d41865dbb139bc02a16347cb27f2a8ca729623f7edcb91150f1f631d6121",
+  "original_report_gzip": "hybrid-results.json.gz",
+  "note": "Positive v2 recovery and negative v1 floor rejection are separate controlled mechanisms, not additions to the independent quality denominator. Negative control passed:false retains its unmet recovery expectation; floor_rejected:true is the required guard result."
+}

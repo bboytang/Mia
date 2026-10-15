@@ -1,6 +1,6 @@
 # P13：关联扩展与四维检索
 
-状态：实现与首次验证准备，尚无本提交的通过结果。未部署，未接主回复链，完整RAG／八项行为仍待后续。当前进度以交接和后续追加结果为准。
+状态：P13检索模块的机制、独立中文质量／资源及正负关联控制通过；未部署，未接主回复链，完整RAG／八项行为仍待后续。固定集成参数见[D04规格](retrieval-selection.json)，历史失败保留如下。
 
 ## 固定算法与证据
 
@@ -31,7 +31,7 @@
 
 ## 首次真实验证：保留失败，不据质量通过标完
 
-`5680f6f3d3510bef8c706837bd746ead1cd43cde`服务[38666684684](https://github.com/bboytang/Mia/actions/runs/38666684684)132项通过，含新增6项四维机制及1项v1→v2原子兼容迁移。身份[38666684650](https://github.com/bboytang/Mia/actions/runs/38666684650)23专项／实际TLS／安装包混合Scope、类范围与JAR构建通过，完整173中172通过／1既有脱敏失败，workflow为failure；同提交manager基线38666684694亦仅此既有失败。身份原报告见[hybrid-identity-results.json](hybrid-identity-results.json)。
+`5680f6f3d3510bef8c706837bd746ead1cd43cde`服务[38666684684](https://github.com/bboytang/Mia/actions/runs/38666684684)132项通过，含新增6项四维机制及1项v1→v2原子兼容迁移。身份[38666684650](https://github.com/bboytang/Mia/actions/runs/38666684650)23专项／实际TLS／安装包混合Scope、类范围与JAR构建通过，完整173中172通过／1既有脱敏失败，workflow为failure；同提交manager基线38666684694亦仅此既有失败。身份原报告见[hybrid-identity-5680f6f-results.json](hybrid-identity-5680f6f-results.json)。
 
 真实BGE [38666684695](https://github.com/bboytang/Mia/actions/runs/38666684695)的P12回归通过；P13实际查询质量和资源通过，但关联作用门槛失败，workflow为failure。P06 v5正向48条Recall@4／Top1均97.9167%、16无关全空，相关不可回答6／8召回允许事实，未测实际回答。新P13-v1的32正向Recall@4／Top1和16无关空召回全部100%，4相关不可回答均有允许事实。820次查询p95 81.755ms、1万短文本无元数据容量p95 249.146ms、峰值RSS283.293MiB。S／L／A／E都有非零真实贡献；去掉单分项后排名变化为110／1／0／1例。
 
@@ -46,3 +46,19 @@
 原始结果无损保存在[第二次完整报告](hybrid-second-failure-results.json.gz)，原文hash、全部控制候选和摘要见[第二次摘要](hybrid-second-failure-summary.json)。不追溯改写此run为通过，不调低底线。v1泛问场景原文件保持不变，后续作为明确低于底线时扩展不得越权入选的负向机制对照，原`passed:false`找回判据仍原样报告。
 
 另加v2正向控制场景，明确问“海鲜有什么需要注意”，对应16条海鲜店点菜流程干扰记忆；该版本只检验语义底线之上的候选遗漏恢复，不并入任何独立留出分母。后续同时要求v2实际找回及v1底线拒绝；运行代码、所有参数及P13-v1独立质量样本保持不变。
+
+## 第三次真实验证：正向恢复与底线拒绝均通过
+
+`664237ff1b15837fc1b752bf869e02d6281669fa`服务[38726443936](https://github.com/bboytang/Mia/actions/runs/38726443936)132项通过；实际BGE [38726443918](https://github.com/bboytang/Mia/actions/runs/38726443918)整体success，含同提交P12回归和P13检索。完整逐候选原文见[hybrid-results.json.gz](hybrid-results.json.gz)，原文hash／控制样本／数值见[hybrid-results-summary.json](hybrid-results-summary.json)。仅无损压缩，解压即可按fixture ID读取全部分项和来源。
+
+v2明确海鲜问题：过敏目标不在原语义Top12，原cosine0.4416348338，扩展后0.6604586840，总分0.4742660367，来源expanded／lexical／association，实际Top4第1；无扩展仅原Top12排序没有目标。v1泛问：原0.3411776423，扩展0.6261372566，但仍拒绝入选，`floor_rejected:true`。该对象保留原找回判据`passed:false`，它不是本轮正向恢复场景；整体要求正向v2的passed及负向v1的floor_rejected同时为true，没有把旧失败追溯改成通过。
+
+固定P06 v5留出正向47／48、Top1 47／48、无关16／16空；新独立P13-v1正向32／32、Top1 32／32、无关16／16空，相关不可回答允许事实4／4，未验证真实回答。普通v5相关允许事实本轮7／8，前两轮6／8，原报告分别保留；不得据检索报告声称实际属性回答通过。
+
+820次混合查询p95 50.741ms；1千／1万短文本且缺评分元数据容量p95 42.701／237.778ms；峰值RSS283.379MiB。P12同job精确1万扫描p95 125.505ms、编码＋查询146.973ms，见[原回归报告](hybrid-vector-regression-results.json)。该P12脚本仍带早期过时的`association_four_scores:not_implemented_P13`标签；此脚本仅覆盖P12，不能将该标签当作当前实现状态，当前四维证据以同job的P13报告为准。
+
+四分项真实加权贡献均非零，受控四分项排名测试通过；本轮普通中文语料的消融排名变化为111／0／0／0，首轮110／1／0／1。这些差异原样保存，不声称每个因素在每个自然问题中都会改变Top4。关联扩展的实际排名作用由独立列明的真实BGE正向控制证明；受控实验不充当万人语料或真实Provider行为。
+
+P13模块门槛通过，D04沿用P06参数冻结供P14／P15集成，无留出调参；运行包自5680f6f至664237f的Git tree均为2308843983e37bf1fc40acbb0e35172d0fa05243，后续只增验证／证据。完整manager＋BGE＋Provider／主回复、提取器、长元数据／并发及真机仍待后续。
+
+为使最终验证对应同一提交，664237f另执行身份[38727000802](https://github.com/bboytang/Mia/actions/runs/38727000802)：23专项／实际HTTPS-WSS及混合Scope、类范围和JAR构建通过；完整173项172通过、1项既有`SensitiveDataUtilsTest.maskMiddle_keeps_four_at_each_end_for_long_strings`失败，0error／skip。workflow整体failure，不是全项目CI绿色。完整身份JSON见[hybrid-identity-results.json](hybrid-identity-results.json)，分项状态与精确SHA见[hybrid-ci-results.json](hybrid-ci-results.json)。所有run已完成，未部署；交接下一步为P14。

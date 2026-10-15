@@ -1,0 +1,62 @@
+{
+  "code_sha": "664237ff1b15837fc1b752bf869e02d6281669fa",
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38726443936",
+    "conclusion": "success",
+    "tests": 132
+  },
+  "vectors_and_hybrid": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38726443918",
+    "conclusion": "success",
+    "report": "hybrid-results-summary.json",
+    "raw_report_gzip": "hybrid-results.json.gz",
+    "P12_report": "hybrid-vector-regression-results.json"
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38727000802",
+    "workflow_conclusion": "failure",
+    "focused_tests": 23,
+    "focused_failures": 0,
+    "jar_build": "success",
+    "class_scope": "success",
+    "full_suite": {
+      "tests": 173,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "case": "maskMiddle_keeps_four_at_each_end_for_long_strings"
+      }
+    ],
+    "report": "hybrid-identity-results.json"
+  },
+  "manager_baseline": {
+    "code_sha": "5680f6f3d3510bef8c706837bd746ead1cd43cde",
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38666684694",
+    "workflow_conclusion": "failure",
+    "note": "Earlier same runtime tree; immutable Java baseline retains the same single pre-existing redaction failure",
+    "full_suite": {
+      "tests": 154,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "case": "maskMiddle_keeps_four_at_each_end_for_long_strings"
+      }
+    ]
+  },
+  "preserved_failed_runs": [
+    "https://github.com/bboytang/Mia/actions/runs/38666684695",
+    "https://github.com/bboytang/Mia/actions/runs/38667184462"
+  ],
+  "in_flight_runs": [],
+  "production_deployment": "not_performed",
+  "full_behavior": "not_accepted",
+  "next_step": "P14_ContextBuilder_and_token_budget"
+}

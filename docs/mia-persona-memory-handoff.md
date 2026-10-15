@@ -4,7 +4,7 @@
 
 ## 当前范围与状态
 
-当前用户最新要求：**“下一步”。** 从P12复核完成的2bbd660干净保存点推进P13关联扩展和四维评分。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
+当前用户最新要求：**“继续”。** 已完成P13检索模块及机制／中文质量／资源验证，下一步P14统一上下文与Token预算。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
 
 P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维＋SQLite真向量精确检索；P07身份基线部分完成。P08／P09必要授权、manager→Python及隔离实际HTTPS/WSS共18身份用例／构建通过；App100单测／5UI及构建、智控台53单测／64浏览器及构建通过，证据已保存。原意图／逐工具派发／输入及管理隔离已通过f4a7f4c的GitHub验证；旧report／标题／摘要新增5项及原18项在3cb7b3c通过，构建通过，P10兼容迁移6项与104服务测试在426d8c4通过，23身份／TLS及构建同提交通过；已归档。实际App↔manager HTTPS/WSS、iPhone、持久任务、全服务并发／资源及八项行为仍未验，完整Java回归保留唯一既有失败；P11基础113服务、23身份及三个限定原Provider样本通过，完整人格仍待联动验收，未部署。
 
@@ -21,21 +21,27 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P13实现与验证进行中**，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)。P11基础通过，完整Persona联动仍进行中；P12真向量首轮及接口／生命周期补充验证通过，整体仍待主链及真实manager＋BGE联动验收。P10兼容基础已完成，P09整体随新增消费者验收；P08实际App／入口及真机未封板，未部署。
+当前步骤：**P13模块与受控验证通过，下一步P14**，见[四维检索说明及三次结果](verification/mia-persona-memory/hybrid-retrieval.md)、[D04固定集成规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12／P13整体仍待主链及真实manager＋BGE＋Provider联动验收。P10兼容基础已完成，P09整体随新增消费者验收；P08实际App／入口及真机未封板，未部署。
 
-最新验证提交：`d5edbd6a4b4b4bcef67a715ef97c4a42690fca64`，仅增加4项生命周期测试，未改运行代码。服务[38665091584](https://github.com/bboytang/Mia/actions/runs/38665091584)全部125项通过，新增项涵盖原生推理超时／迟到提交、编码期间及扫描后的编辑／删除／清空／暂停竞态、扫描后撤权、推理失败，以及SQLite重开／索引重建／非active排除；报告见[vectors-lifecycle-results.json](verification/mia-persona-memory/vectors-lifecycle-results.json)。本段审查未发现需要修改运行代码的缺口；合成向量只作机制验证，不替代中文效果或完整RAG。
+最新验证提交：`664237ff1b15837fc1b752bf869e02d6281669fa`，服务[38726443936](https://github.com/bboytang/Mia/actions/runs/38726443936)132项通过；真实BGE [38726443918](https://github.com/bboytang/Mia/actions/runs/38726443918)通过P12回归及P13四维／正负关联控制，独立P13-v1的32正向和16无关全正确，4相关不可回答均有允许事实但未测真实回答。1万短文本缺元数据容量混合p95 237.778ms，峰值RSS283.379MiB；不能外推长元数据或全服务并发。完整报告无损gzip、原文SHA256及摘要已入库，见[最终报告](verification/mia-persona-memory/hybrid-results-summary.json)。两次失败同样保留，不调参数或质量留出：首轮语料未体现排名变化；第二次目标0.341低于0.35底线被正确拒绝；最终明确海鲜正向目标从原Top12外进入第1，泛问仍被拒绝。
+
+同提交身份[38727000802](https://github.com/bboytang/Mia/actions/runs/38727000802)专项／实际TLS、混合Scope、类范围和JAR通过；Java全量仍有既有脱敏失败，workflow整体failure，不能写全部CI通过。见[分项CI范围](verification/mia-persona-memory/hybrid-ci-results.json)和[身份报告](verification/mia-persona-memory/hybrid-identity-results.json)。运行包最初在5680f6f实现，此后只加验证和证据，包Git tree为2308843983e37bf1fc40acbb0e35172d0fa05243。
+
+P12补充生命周期提交`d5edbd6a4b4b4bcef67a715ef97c4a42690fca64`服务125项通过，覆盖超时／迟到提交、编辑／删除／清空／暂停竞态、扫描后撤权、推理故障及重开／重建；见[vectors-lifecycle-results.json](verification/mia-persona-memory/vectors-lifecycle-results.json)。不重复这些已通过检查。
 
 P11已验证源码 `232de0d2fc5250a42f9802a2bbd470e9866d5c18`：服务[38662376416](https://github.com/bboytang/Mia/actions/runs/38662376416)全部113通过；身份[38662376430](https://github.com/bboytang/Mia/actions/runs/38662376430)的23专项／实际TLS、JAR／类范围通过，完整173中172通过／1既有脱敏失败。固定原Provider流式[38662470670](https://github.com/bboytang/Mia/actions/runs/38662470670)三个基础样本经本轮Codex逐条语义检查通过。见[Persona机制与全部边界](verification/mia-persona-memory/persona.md)、服务／身份／Provider JSON；失败和自动假阳性也保留，不能据绿色workflow或三样本标完整B01／八项完成。
 
 P11基础实装：固定核心与JSON角色数据、DB故障／空角色保留核心、输入已知攻击提前回应、共享TTS队列句级有界检查、字幕／助手历史检查、危险流停止及跳过后续工具。完整connection动态整链、统一上下文、证据特点／事件和表达一致性仍待P14／P15／P19／P21／P22。此前“人工复核”实际由Codex逐条阅读，无独立人工签字；正式评审保持待验。
 
-运行代码保存点仍为`b8ebb4853107f160dd443eadbc99fccc8d8412b0`，后续d5edbd6仅补测试；二者均已推送到任务分支。b8ebb48服务[38664353550](https://github.com/bboytang/Mia/actions/runs/38664353550)121项通过；真实BGE[38664353600](https://github.com/bboytang/Mia/actions/runs/38664353600)通过。身份[38664353575](https://github.com/bboytang/Mia/actions/runs/38664353575)23专项、JAR／类范围通过，但完整173中172通过／1既有脱敏失败；manager基线38664353542亦仅同一失败，两个workflow整体failure，不能称全部CI通过。报告及性能详见[vectors.md](verification/mia-persona-memory/vectors.md)和[vectors-ci-results.json](verification/mia-persona-memory/vectors-ci-results.json)。本段未重跑未改变的BGE／Java验证，不以其旧SHA结果冒充本次新测试结果。
+P12历史保存点`b8ebb4853107f160dd443eadbc99fccc8d8412b0`的服务121、真实BGE／资源及身份23专项／JAR曾通过，Java全量保留唯一既有失败；报告及原SHA见[vectors.md](verification/mia-persona-memory/vectors.md)和[vectors-ci-results.json](verification/mia-persona-memory/vectors-ci-results.json)。当前实现和结果以以上P13新保存点为准，不能用旧SHA给新改动背书。
 
 P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／768维、资产与内容版本、Scope先行SQLite余弦候选、失效／取消机制。4个跨措辞Top1命中、无关空召回、无FTS仍召回及生命周期样本通过；1万容量扫描p95 102.125ms、编码＋查询119.573ms、峰值RSS284.098MiB。容量向量复制真实种子，仅测成本；不等于完整语义语料验收。没有修改主回复链接入半成品检索，没有新事实库、Provider或服务。
 
-恢复顺序：先核对当前分支／远程SHA／工作树，再读取P06固定规格、P10迁移和P12原始及生命周期报告、P13四维说明和本次run。P12接口／生命周期复核已通过，无需重复；P13新实现需完成GitHub机制、真实BGE及身份边界验证，失败结果保留并按实际原因修复，不能按独立留出结果调参。保留原查询语义底线、空召回、Scope先行及内容／证据版本；P06实验脚本不是生产四维实现。主回复链接入、完整真实manager＋BGE联动及八项行为继续按后续阶段验收。不要重复probe或放宽阈值。
+恢复顺序：先核对当前分支／远程SHA／工作树，再读取D04集成规格、P13全部报告、contracts的D05与P14／P15计划。P12／P13模块检查已通过，无需重做已完成probe。下一步实现ContextBuilder统一快照和预算，保留核心／当前输入／完整工具结构，私有材料使用新retrieve结果及版本，不能直接把候选／扩展当系统指令；P15再接唯一文字／语音与工具续答。实际提取元数据、完整manager＋BGE＋Provider联动、独立真实用户语料及八项行为仍按后续阶段验收。不放宽原查询底线或借P13通过提前部署。
 
-保存时上述历史run及本次38665091584均已completed，无在途开发／部署操作。本段远程分支与保存点f2e78b7一致、GitHub读取／推送／Actions已实际核实；生产SSH／iOS签名及测试模型Secrets未重新探测，不推定本环境已具备。临时目录不是恢复依赖，报告已经入库；固定上游与模型来源、重建recipe均在仓库。新账号需自行取得仓库／Actions权限；专用Secrets留在GitHub，不复制到交接。
+P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源清派生线索；v1→v2失败回滚及真实a30旧代码读写已验。严格P10—P12旧迁移器不识别v2账本，P24完整回滚制品仍待做，不得删schema绕过。实际提取及来源校验在P17／P18接入，当前fixture写入不代表提取器完成。
+
+保存时本次38726443936／38726443918／38727000802及历史run均已completed，无在途开发／部署操作。GitHub读取／推送／Actions已实际核实，审批服务用量限制一度阻止第二轮报告下载，本次恢复正常审批后已完成，无绕过或凭据变更。生产SSH／iOS签名及模型Secrets未重新探测，不推定本环境已具备。报告／原文hash／无损gzip和复现workflow均在仓库，不依赖临时目录；专用Secrets留在GitHub，不复制到交接。
 
 测试Secrets已配置且专用，连接与限定原Provider样本已通过，不复制密钥到新环境、不重复已完成probe。未实际App↔manager整链、生产TLS、iPhone、长期任务／情绪自然时间及全服务资源／八项行为；继续独立开发但这些条件不能被基础样本替代。先检查当前分支／SHA／工作树与在途run再接续。
 
@@ -56,14 +62,14 @@ P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／7
 | P10 | 完成：兼容基础 | 426d8c4／38656910711的6项真实SQLite迁移及104服务测试通过；同提交23身份／TLS、构建及类范围通过，完整回归保留1既有失败 |
 | P11 | 基础通过，整体进行中 | 232de0d的113服务／23身份、实际安装检查及原Provider三个语义样本通过；整体人格随统一上下文／工具／事件及正式评审验收 |
 | P12 | 基础及生命周期复核通过，整体待联动 | b8ebb48真实BGE及1千／1万资源通过；d5edbd6服务125通过，补超时／竞态／重开与重建；历史身份23专项／构建通过，完整Java保留1既有失败；完整语料／主链联动仍待后续 |
-| P13 | 进行中 | 关联扩展、S／L／A／E及有界候选补充实现待本提交GitHub验证；初选参数不变，独立P13-v1留出先冻结再测 |
+| P13 | 完成：检索模块及受控验证 | 664237f服务132、实际BGE及正向找回／底线拒绝通过；身份专项／构建通过，Java保留既有失败；D04固定供P14集成，完整真实行为待P22 |
 | P14—P15 | 未开始 | 统一上下文与唯一入口联动仍待实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
 | P21—P26 | 未开始 | 必要管理、真实行为、性能、回归、真机及发布包待实施 |
 | P27—P28 | 未开始 | 未发布，不能凭计划执行生产变更 |
 
-当前补充：P10扩展schema和旧代码基础兼容已验证并归档。新表存在不代表真向量／关联／Worker／事件／趋势完成，完整派生生命周期和实际行为按后续步骤验证。
+当前补充：P10扩展schema及P13二版迁移、旧事实代码基础兼容已验证并归档。真向量与关联／四维模块通过不代表主回复链、Worker、事件、趋势或完整生命周期完成，整体真实行为按后续步骤验证。
 
 ## 八项能力状态
 
@@ -72,9 +78,9 @@ P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／7
 | 能力 | 代码 | 机制验证 | 真实行为 | 真机相关项 |
 | --- | --- | --- | --- | --- |
 | B01 人格对话引擎 | 进行中：P11基础通过 | 113服务及实际安装Scope通过 | 三个限定原Provider基础样本通过；完整多会话／事件／语义评审未验 | 未执行 |
-| B02 长期记忆 RAG | P12真向量首轮通过，完整RAG未完成 | b8ebb48真实BGE／SQLite及23身份专项通过，完整Java有1既有失败 | 未执行完整RAG | 未执行 |
+| B02 长期记忆 RAG | P12真向量及P13混合模块通过，完整RAG未完成 | 664237f实际BGE／SQLite、132服务及身份专项通过，Java有1既有失败 | 未执行完整主链RAG | 未执行 |
 | B03 异步记忆提取 | 未开始 | 未执行 | 未执行 | 未执行 |
-| B04 四维检索 | 未开始 | 未执行 | 未执行 | 未执行 |
+| B04 四维检索 | P13模块通过 | S／L／A／E实际贡献、受控分项排名、真实BGE遗漏恢复和底线拒绝通过 | 独立合成中文留出通过；实际提取／Provider／真实用户语料待后续 | 未执行 |
 | B05 持续人格事件 | 未开始 | 未执行 | 未执行 | 未执行 |
 | B06 身份与记忆隔离 | 进行中：manager授权链 | 必要类范围／构建通过 | 23身份／实际TLS与Scope基础通过；完整未来消费者／实际App／八项行为未验收 | 未执行 |
 | B07 长期情绪趋势 | 未开始 | 未执行 | 未执行 | 未执行 |
@@ -82,7 +88,7 @@ P12已实现SemanticEncoder／SemanticMemoryIndex、固定BGE base中文U8U8／7
 
 ## 待决与访问状态
 
-D01—D10 已冻结开发契约及初选；D03／D04 见固定模型规格，用户已确认授权码、情绪保留及相关不可回答边界。生产完整RAG、私有安全链及长期趋势行为仍未验收，初选参数在最终独立用户语料验收不合格时需有新证据重评。
+D01—D10 已冻结开发契约及初选；D03见固定模型规格，D04经P13验证后按原参数冻结为[集成规格](verification/mia-persona-memory/retrieval-selection.json)，未按留出调参。用户已确认授权码、情绪保留及相关不可回答边界。生产完整RAG、私有安全链及长期趋势行为仍未验收，最终独立真实用户语料不合格时需保留新证据重评。
 
 GitHub读取／推送、Actions和严格主机校验的只读SSH已验证；未改变凭据。仓库此前未配置测试秘密；用户现已配置三个专用Repository Secret，单次真实连接已通过，真机／签名条件仍须分别核实。新环境重新验证实际访问，不复制秘密进交接。
 

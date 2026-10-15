@@ -1,0 +1,86 @@
+{
+  "status": "P13_module_verified_frozen_for_integration_not_production_acceptance",
+  "decision_id": "D04",
+  "runtime_code_sha": "5680f6f3d3510bef8c706837bd746ead1cd43cde",
+  "validation_code_sha": "664237ff1b15837fc1b752bf869e02d6281669fa",
+  "runtime_git_tree": "2308843983e37bf1fc40acbb0e35172d0fa05243",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38726443918",
+  "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+  "model_revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+  "dimension": 768,
+  "semantic_normalization": "clip(max(original_cosine,expanded_cosine),0,1)",
+  "weights": {
+    "semantic": 0.58,
+    "lexical": 0.28,
+    "association": 0.08,
+    "emotion": 0.06
+  },
+  "threshold": 0.2,
+  "original_semantic_floor": 0.35,
+  "candidate_pools": {
+    "original": 12,
+    "expanded": 12,
+    "lexical": 12,
+    "association": 12
+  },
+  "maximum_candidate_union": 48,
+  "maximum_expansion_terms": 8,
+  "top_k": 4,
+  "parameters_changed_after_P06": false,
+  "independent_holdout_used_for_tuning": false,
+  "datasets": {
+    "persona_memory_retrieval_zh_v5.json": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+    "persona_memory_retrieval_p13_holdout.json": "4d77bffb20cfc89a3d6c8099f9ffc234973d5a5b138771d0ffef00ffa0c35061"
+  },
+  "controlled_fixture_hashes": {
+    "association_control": "c5046db81211356a1babf886956e0509b33d1a9162fc7a6abc4234dde0bf9f6c",
+    "association_floor_control": "99f9802f8569b80218f4daf9eae42a56c3f1eb167c21e9a6ab1e2c7984556903"
+  },
+  "quality": {
+    "P06_v5_regression": {
+      "positive_count": 48,
+      "negative_count": 16,
+      "complete_recall_at_4": 0.9791666666666666,
+      "top1": 0.9791666666666666,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 8,
+      "related_expected_fact_recalled": 7,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    },
+    "P13_independent_v1": {
+      "positive_count": 32,
+      "negative_count": 16,
+      "complete_recall_at_4": 1.0,
+      "top1": 1.0,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 4,
+      "related_expected_fact_recalled": 4,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    }
+  },
+  "query_pipeline_ms": {
+    "count": 820,
+    "p50": 23.3947790000002,
+    "p95": 50.74117484999476
+  },
+  "capacity": {
+    "1000": {
+      "count": 10,
+      "pipeline_p95_ms": 42.70098775000122,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    },
+    "10000": {
+      "count": 10,
+      "pipeline_p95_ms": 237.77824584999792,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    }
+  },
+  "peak_rss_mib": 283.37890625,
+  "remaining": [
+    "P14_context_budget_and_P15_single_reply_integration",
+    "P17_actual_metadata_extraction_and_P18_lifecycle_integration",
+    "P22_full_provider_behavior_and_new_user_corpus",
+    "P23_dense_long_metadata_and_multi_service_resources",
+    "physical_iPhone_validation_and_release_gates"
+  ]
+}
