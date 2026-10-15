@@ -118,6 +118,27 @@ def parse_extraction(value):
     return result
 
 
+def trait_supported(evidence):
+    """Three distinct sessions must match three distinct source fingerprints."""
+    sessions = {}
+    for item in evidence:
+        sessions.setdefault(item["session_id"], set()).add(item["fingerprint"])
+    matched = {}
+
+    def match(session, seen):
+        for fingerprint in sessions[session] - seen:
+            seen.add(fingerprint)
+            if fingerprint not in matched or match(matched[fingerprint], seen):
+                matched[fingerprint] = session
+                return True
+        return False
+
+    for session in sessions:
+        if match(session, set()) and len(matched) >= 3:
+            return True
+    return False
+
+
 class MemoryStore:
     def __init__(self, path, clock=time.time):
         path = Path(path)
@@ -239,23 +260,7 @@ class MemoryStore:
         known = self.db.execute(f"SELECT count(*) FROM memories WHERE owner=? AND confirmed=1 AND id IN ({marks})", [owner, *ids]).fetchone()[0]
         if known != len(ids):
             return False
-        sessions = {}
-        for item in evidence:
-            sessions.setdefault(item["session_id"], set()).add(item["fingerprint"])
-        matched = {}
-
-        def match(session, seen):
-            for fingerprint in sessions[session] - seen:
-                seen.add(fingerprint)
-                if fingerprint not in matched or match(matched[fingerprint], seen):
-                    matched[fingerprint] = session
-                    return True
-            return False
-
-        for session in sessions:
-            if match(session, set()) and len(matched) >= 3:
-                break
-        if len(matched) < 3:
+        if not trait_supported(evidence):
             return False
         prior = self.db.execute("SELECT description,evidence_ids FROM traits WHERE owner=? AND name=?", (owner, trait["name"])).fetchone()
         encoded = json.dumps(ids, separators=(",", ":"))

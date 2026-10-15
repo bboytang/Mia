@@ -161,6 +161,7 @@ async def main():
     assert (await dispatcher.execute_tool('synthetic_tool', {})).result == 'synthetic dispatch'
     from mia_companion.memory import MemoryStore
     from mia_companion.semantic import SemanticMemoryIndex
+    from mia_companion.context import ContextBuilder, ContextLimits, ContextError
     from mia_companion.embedding import MODEL_KEY, REVISION, DIMENSION
     from mia_companion import xiaozhi_adapter as adapter
     # Actual installed DTO, Dialogue and guard; only the TTS consumer is a sink.
@@ -223,6 +224,12 @@ async def main():
             assert [row['id'] for row in hybrid['candidates']] == [own_id]
             assert [row['term'] for row in hybrid['expansion']] == ['own clue']
             assert [row['id'] for row in hybrid['results']] == [own_id]
+            context_builder = ContextBuilder(vector_index)
+            context_bundle = await context_builder.build(scope, auth, 'context-scope-ci', 'CI synthetic context',
+                limits=ContextLimits('scope-ci-fixture', 16384, 128, 'CI capacity fixture; not production'))
+            assert context_bundle.diagnostics()['selected_fact_ids'] == [own_id]
+            assert 'CI other memory' not in context_bundle.request_json
+            assert 'FOREIGN CLUE' not in context_bundle.request_json
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
             for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
@@ -235,6 +242,12 @@ async def main():
             await adapter.handle_message(active, json.dumps({'type': 'mia_memory', 'request_id': str(uuid.uuid4()),
                 'action': 'delete', 'id': own_id, 'owner': scope.owner}))
             assert store.list_memories(scope.owner) == [] and store.list_memories(peer)[0]['id'] == other_id
+            try:
+                await context_builder.validate(context_bundle, auth)
+            except ContextError as error:
+                assert str(error) == 'context_changed'
+            else:
+                raise AssertionError('Deleted context was reused')
         finally:
             store.close()
     tls_pass = await native_wss(config, device, client, credential) if os.environ.get('MIA_SCOPE_NATIVE_TLS') == 'true' else None
@@ -250,6 +263,7 @@ async def main():
     # DB access, not converted to an empty vector result or an indexing retry.
     await rejects(vector_index.candidates(scope, auth, 'CI revoked vector'))
     await rejects(vector_index.retrieve(scope, auth, 'CI revoked hybrid'))
+    await rejects(context_builder.validate(context_bundle, auth))
     await rejects(vector_index.index_memory(scope, auth, own_id))
     assert not await asyncio.to_thread(allow_generation, active)
     assert not await allow_output(active)
