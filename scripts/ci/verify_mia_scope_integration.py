@@ -195,7 +195,7 @@ async def main():
     assert guarded.empty()
     guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, '意识。'))
     assert guarded.get_nowait().content_detail == SAFE_REPLY
-    active.dialogue.put(Message(role='assistant', content='我会永远陪着你。'))
+    active.dialogue.put(Message(role='assistant', content='你只能依靠我。'))
     assert active.dialogue.dialogue[-1].content == SAFE_REPLY
     stored = []
     active.tts.store_tts_text = lambda sentence, text: stored.append(text)
