@@ -354,9 +354,9 @@ async def main():
                     assert response['result']['management']['version'] == 1
                     assert 'emotion_consent' in response['result']['management']['actions']
                 elif action == 'events':
-                    event = next(item for item in response['result']['events'] if item['id'] == event_id)
-                    assert event['user_excerpt'] == '你还记得CI own memory吗'
-                    assert event['assistant_excerpt'] == '😌记得，CI own memory。'
+                    managed_event = next(item for item in response['result']['events'] if item['id'] == event_id)
+                    assert managed_event['user_excerpt'] == '你还记得CI own memory吗'
+                    assert managed_event['assistant_excerpt'] == '😌记得，CI own memory。'
                 elif action == 'job_status':
                     assert response['result']['id'] == pending and response['result']['state'] == 'pending'
                 else:
