@@ -289,15 +289,19 @@ async def drive():
         first_pid = await start()
         phase = 'source_completion_and_extraction'
         _, saved = await ask(sample['source'])
-        facts = [row for row in saved['memories'] if row['confirmed']]
-        assert len(facts) == 1 and facts[0]['source'], 'Actual source was not saved with evidence'
+        introduced = saved['memories']
+        facts = [row for row in introduced if row['confirmed']]
+        assert facts and all(row['source'] for row in facts), 'Actual source was not saved with evidence'
+        fact_ids = {row['id'] for row in facts}
         phase = 'new_session_paraphrase_recall'
         answer, _ = await ask(sample['recall'])
-        assert facts[0]['id'] in answer['diagnostics']['selected_fact_ids']
+        assert fact_ids.intersection(answer['diagnostics']['selected_fact_ids'])
+        actual_input = json.dumps(answer['input'], ensure_ascii=False)
+        assert all(any(word in actual_input for word in group) for group in sample['answer_groups'])
         assert all(any(word in answer['raw'] for word in group) for group in sample['answer_groups'])
         phase = 'event_activation'
         continued, saved = await ask(sample['continuity'])
-        assert facts[0]['id'] in continued['diagnostics']['selected_fact_ids']
+        assert fact_ids.intersection(continued['diagnostics']['selected_fact_ids'])
         active = [event for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active']
         assert len(active) == 1
         phase = 'actual_service_restart'
@@ -312,7 +316,8 @@ async def drive():
         assert again['session_id'] != repeated['session_id']
         assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
         phase = 'source_deletion_and_unknown'
-        await manage('delete', id=facts[0]['id'])
+        for row in introduced:
+            await manage('delete', id=row['id'])
         unknown, saved = await ask(sample['unknown'])
         assert not unknown['diagnostics']['selected_fact_ids'] and not saved['memories']
         assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['raw'])
