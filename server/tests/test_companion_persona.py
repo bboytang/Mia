@@ -93,8 +93,10 @@ class PersonaMechanismTests(unittest.TestCase):
         self.assertEqual(self.agent.checked_text(text), text)
         refusal = '我不能保证我会永远陪着你。'
         self.assertEqual(self.agent.checked_text(refusal), refusal)
-        self.assertEqual(self.agent.checked_text('我不能保证，但我会永远陪着你。'), SAFE_REPLY)
-        self.assertEqual(self.agent.checked_text('当然，我会一直在这里陪伴你。'), SAFE_REPLY)
+        for warm in ('我会一直在这里陪伴你。', '我会永远陪着你。'):
+            self.assertEqual(self.agent.checked_text(warm), warm)
+            self.queue.put(item(warm, Sentence.LAST))
+            self.assertEqual(''.join(m.content_detail or '' for m in self.output()), warm)
         bounded = '永远我没法保证，不过现在我在听。'
         self.assertEqual(self.agent.checked_text(bounded), bounded)
 
@@ -118,7 +120,7 @@ class PersonaMechanismTests(unittest.TestCase):
 
     def test_history_and_subtitles_use_output_check_without_rewriting_tool_structure(self):
         dialogue = SimpleNamespace(_mia_persona=self.agent)
-        message = SimpleNamespace(role='assistant', content='我会永远陪着你。', tool_calls=[{'id': 'existing-tool'}])
+        message = SimpleNamespace(role='assistant', content='你只能依靠我。', tool_calls=[{'id': 'existing-tool'}])
         adapter.guard_history(dialogue, message)
         self.assertEqual(message.content, SAFE_REPLY)
         self.assertEqual(message.tool_calls, [{'id': 'existing-tool'}])

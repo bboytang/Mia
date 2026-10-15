@@ -40,7 +40,7 @@ jobs:
       - run: python -m pip install openai==2.8.1 httpx==0.28.1
       - name: Install preimage-checked companion on fixed upstream
         run: python -m server.companion.install_xiaozhi upstream --apply
-      - name: Three bounded real provider cases through installed persona output queue
+      - name: Four bounded real provider cases through installed persona output queue
         env:
           MIA_PERSONA_UPSTREAM: ${{ github.workspace }}/upstream
           MIA_PERSONA_REPORT: ${{ runner.temp }}/mia-persona-provider.json
