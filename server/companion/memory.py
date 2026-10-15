@@ -248,6 +248,15 @@ class MemoryStore:
                 self.db.execute("DELETE FROM traits WHERE owner=? AND name=?", (owner, trait["name"]))
                 self.db.execute("UPDATE owners SET version=version+1 WHERE owner=?", (owner,))
 
+    def _invalidate_observations(self, owner, memory_id):
+        # Observations have message identity, not a memory foreign key.
+        self.db.execute("UPDATE mia_observations SET state='invalidated',source_excerpt='' WHERE owner=? AND "
+            "(source_excerpt IN (SELECT excerpt FROM sources WHERE memory_id=?) OR EXISTS "
+            "(SELECT 1 FROM mia_source_meta s WHERE s.memory_id=? AND s.session_id=mia_observations.session_id "
+            "AND (s.message_id=mia_observations.message_id OR s.turn_id=mia_observations.turn_id)))",
+            (owner, memory_id, memory_id))
+        self.db.execute('UPDATE mia_scope_versions SET event_epoch=event_epoch+1,observation_epoch=observation_epoch+1 WHERE owner=?', (owner,))
+
     def _trait(self, owner, trait, now):
         if trait is None or not trait["evidence_ids"]:
             return False
@@ -301,6 +310,7 @@ class MemoryStore:
                         or session_id != job['session_id'] or checkpoint_id != job_id):
                     raise MemoryError('evidence_changed', 'Task evidence does not match')
                 evidence = [relation for record in structured['memories'] for relation in record['relations']]
+                evidence.extend(record['reconciliation'] for record in structured['memories'] if 'reconciliation' in record)
                 evidence.extend((structured.get('trait') or {}).get('evidence_quotes', []))
                 for proof in evidence:
                     target_id = proof.get('target_id', proof.get('id'))
@@ -322,11 +332,22 @@ class MemoryStore:
                     continue
                 confirmed = not (item["sensitive"] or SENSITIVE.search(item["content"]) or SENSITIVE.search(source))
                 replaced_id = item.get("replaces_id")
+                reconciliation = structured['memories'][item_index].get('reconciliation') if structured else None
+                if reconciliation and reconciliation['kind'] != 'correction':
+                    target_id = reconciliation['target_id']
+                    self._invalidate_traits(owner, target_id)
+                    self._invalidate_observations(owner, target_id)
+                    self.db.execute('UPDATE memories SET confirmed=0,updated_at=? WHERE id=?', (now, target_id))
+                    self.db.execute('UPDATE mia_memory_meta SET state=?,confirmation_origin=? WHERE memory_id=?',
+                        ('superseded' if reconciliation['kind'] == 'time_change' else 'pending',
+                         reconciliation['kind'], target_id))
+                    corrected = True
                 if replaced_id:
                     existing = self.db.execute("SELECT * FROM memories WHERE owner=? AND id=?", (owner, replaced_id)).fetchone()
                     if existing is None:
                         continue
                     self._invalidate_traits(owner, replaced_id)
+                    self._invalidate_observations(owner, replaced_id)
                     self.db.execute("DELETE FROM sources WHERE memory_id=?", (replaced_id,))
                     self.db.execute("UPDATE memories SET category=?,content=?,confirmed=?,updated_at=? WHERE id=?",
                                     (item["category"], item["content"], confirmed, now, replaced_id))
@@ -386,6 +407,7 @@ class MemoryStore:
             trait_updated = self._trait(owner, extraction["trait"], now)
             if corrected:
                 self.db.execute("UPDATE owners SET revision=revision+1 WHERE owner=?", (owner,))
+                self._cancel_jobs(owner, exclude=job_id)
             self.db.execute("INSERT INTO checkpoints VALUES (?,?,?)", (owner, checkpoint_id, now))
             self.db.execute("DELETE FROM checkpoints WHERE owner=? AND checkpoint_id NOT IN "
                             "(SELECT checkpoint_id FROM checkpoints WHERE owner=? ORDER BY rowid DESC LIMIT 100)", (owner, owner))
@@ -410,10 +432,11 @@ class MemoryStore:
         self.db.commit()
         self.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
 
-    def _cancel_jobs(self, owner):
+    def _cancel_jobs(self, owner, exclude=None):
         self.db.execute("UPDATE mia_jobs SET state='cancelled',source_payload='{}',validated_result=NULL,"
                         "error_category='memory_changed',updated_at=? WHERE owner=? "
-                        "AND state IN ('pending','extracting','validated','retry_wait')", (int(self.clock()), owner))
+                        "AND state IN ('pending','extracting','validated','retry_wait') AND id IS NOT ?",
+                        (int(self.clock()), owner, exclude))
 
     def edit_memory(self, owner, memory_id, content, confirmed=None):
         content = _safe_text(content, 512, "content")
@@ -427,6 +450,7 @@ class MemoryStore:
             if row is None:
                 raise MemoryError("not_found", "Memory does not exist")
             self._invalidate_traits(owner, memory_id)
+            self._invalidate_observations(owner, memory_id)
             status = confirmed if confirmed is not None else (bool(row["confirmed"]) and not SENSITIVE.search(content))
             self.db.execute("UPDATE memories SET content=?,confirmed=?,updated_at=? WHERE id=?", (content, status, int(self.clock()), memory_id))
             if content != row["content"]:
@@ -445,6 +469,7 @@ class MemoryStore:
             if self.db.execute("SELECT 1 FROM memories WHERE owner=? AND id=?", (owner, memory_id)).fetchone() is None:
                 raise MemoryError("not_found", "Memory does not exist")
             self._invalidate_traits(owner, memory_id)
+            self._invalidate_observations(owner, memory_id)
             self.db.execute("DELETE FROM memory_search WHERE memory_id IN (SELECT id FROM memories WHERE owner=? AND id=?)", (owner, memory_id))
             self.db.execute("DELETE FROM memories WHERE owner=? AND id=?", (owner, memory_id))
             self.db.execute("UPDATE owners SET revision=revision+1 WHERE owner=?", (owner,))
@@ -468,6 +493,9 @@ class MemoryStore:
             self.db.execute("DELETE FROM memories WHERE owner=?", (owner,))
             self.db.execute("DELETE FROM traits WHERE owner=?", (owner,))
             self.db.execute("DELETE FROM checkpoints WHERE owner=?", (owner,))
+            self.db.execute('DELETE FROM mia_observations WHERE owner=?', (owner,))
+            self.db.execute('DELETE FROM mia_events WHERE owner=?', (owner,))
+            self.db.execute('UPDATE mia_scope_versions SET observation_epoch=observation_epoch+1,event_epoch=event_epoch+1 WHERE owner=?', (owner,))
             self.db.execute("UPDATE owners SET revision=revision+1,version=version+1 WHERE owner=?", (owner,))
             self._cancel_jobs(owner)
         with self.lock:

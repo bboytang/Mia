@@ -29,7 +29,7 @@ sys.modules['core.utils.util'] = util
 
 from core.providers.llm.openai.openai import LLMProvider
 from mia_companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
-from mia_companion.context import ContextBuilder, ContextLimits
+from mia_companion.context import ContextBuilder, ContextError, ContextLimits
 from mia_companion.embedding import SemanticEncoder
 from mia_companion.extraction import LLMMemoryExtractor
 from mia_companion.jobs import JobStore, MemoryWorker, TurnCompleted
@@ -153,6 +153,54 @@ async def evaluate(args, report):
         report['db_retry_did_not_repeat_model'] = report['cases'][0]['sdk_calls'] == 1
         report['confirmed_fact_count'] = store.db.execute('SELECT COUNT(*) FROM memories WHERE owner=? AND confirmed=1', (scope.owner,)).fetchone()[0]
         report['pending_fact_count'] = store.db.execute('SELECT COUNT(*) FROM memories WHERE owner=? AND confirmed=0', (scope.owner,)).fetchone()[0]
+        # P18 uses the same installed SDK/Worker and actual BGE. Outputs remain fixtures.
+        report['maintenance'] = []
+        target = targets['neutral']
+        second = MemoryStore(Path(folder) / 'facts.sqlite3')
+        other_builder = ContextBuilder(SemanticMemoryIndex(second, encoder))
+        limits = ContextLimits('synthetic', 16384, 768, 'CI synthetic capacity; not production')
+        for mode, prefix, new in [('correction', '更正：', '我每周四都会在公司食堂吃素'),
+                ('time_change', '以前：', '现在：我每周五都会在公司食堂吃素'),
+                ('conflict', '不确定：', '我每周六都会在公司食堂吃素')]:
+            old = store.db.execute('SELECT content FROM memories WHERE id=?', (target,)).fetchone()[0]
+            cached = await other_builder.build(scope, policy, 'before-' + mode, old, limits=limits)
+            text = prefix + old + '；' + new
+            current = {'id': 'p18-' + mode, 'source': text, 'output': {'memories': [{
+                'category': 'fact', 'content': new, 'source_quote': new, 'source_index': 0,
+                'kind': 'explicit', 'subject': 'user', 'value': 'durable', 'sensitive': False,
+                'reconciliation': {'target_id': target, 'kind': mode, 'old_quote': old, 'evidence': text}}]}}
+            event = TurnCompleted(scope, 'p18-session', current['id'], current['id'], text, store.snapshot(scope.owner)['revision'])
+            accepted = await worker.submit(event)
+            start = len(requests)
+            if mode == 'correction':
+                with patch.object(store, '_index', side_effect=sqlite3.OperationalError('p18 rollback')):
+                    await worker.run_once()
+                assert jobs.current(accepted)['state'] == 'retry_wait'
+                assert store.db.execute('SELECT content FROM memories WHERE id=?', (target,)).fetchone()[0] == old
+                with store.db:
+                    store.db.execute('UPDATE mia_jobs SET next_attempt_at=0 WHERE id=?', (accepted['id'],))
+            await worker.run_once()
+            assert jobs.current(accepted)['state'] == 'committed', jobs.current(accepted)
+            assert len(requests) - start == 1, 'DB retry called the model again'
+            try:
+                await other_builder.validate(cached, policy)
+            except ContextError:
+                pass
+            else:
+                raise AssertionError('Other connection retained old context')
+            fresh = await other_builder.build(scope, policy, 'after-' + mode, new, limits=limits)
+            assert old not in fresh.request_json
+            if mode != 'conflict':
+                assert new in fresh.request_json
+                target = store.db.execute('SELECT id FROM memories WHERE owner=? AND content=?', (scope.owner, new)).fetchone()[0]
+                assert store.db.execute('SELECT COUNT(*) FROM mia_vectors WHERE memory_id=?', (target,)).fetchone()[0] == 1
+            else:
+                assert new not in fresh.request_json
+                assert json.loads(jobs.current(accepted)['validated_result']) == {'confirmation_required': True}
+            report['maintenance'].append({'kind': mode, 'state': 'committed', 'sdk_calls': len(requests) - start,
+                'old_context_rejected': True, 'old_fact_not_current': True})
+        second.close()
+        report['sdk_calls'] = len(requests)
         report['peak_rss_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
         report['passed'] = True
         store.close()

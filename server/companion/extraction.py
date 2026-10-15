@@ -38,6 +38,13 @@ it needs emotional_evidence quoted from source_quote with explicit importance.
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
 "relation":"shared_term", "anchor":"literal term shared with both source_quote and target content",
 "evidence":"same source_quote"}. Never invent target IDs or causal relationships.
+Optional reconciliation: {"target_id":"existing fact id", "kind":"correction|time_change|conflict",
+"old_quote":"complete existing fact content", "evidence":"complete user sentence containing old_quote and source_quote"}.
+For reconciliation, source_quote is the complete NEW factual clause after a semicolon.
+Use correction only for explicit '更正：old_quote；new fact', time_change only for
+'以前：old_quote；现在：new fact'. Preserve 现在： in the new clause.
+For uncertainty use conflict with '不确定：old_quote；new fact'; it requires confirmation.
+Never reconcile by similarity alone. Do not supply replaces_id; the server decides.
 Optional trait requires name, description, evidence_ids, anchor and evidence_quotes
 [{"id":"existing fact id","quote":"literal existing fact quotation"}]. Its anchor must
 occur in every quoted fact and description; at least three distinct sessions and sources
@@ -100,6 +107,36 @@ def context_for(store, owner):
         return result
 
 
+def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive):
+    proof = proposed.get('reconciliation')
+    if proof is None:
+        if re.search(r'(?:更正|以前|不确定)：', normalize(source)):
+            raise MemoryError('invalid_input', 'Reconciliation instruction needs classification')
+        return None
+    if not isinstance(proof, dict):
+        raise MemoryError('invalid_input', 'Invalid reconciliation')
+    target_id = proof.get('target_id')
+    target = known.get(target_id) if isinstance(target_id, str) else None
+    mode = proof.get('kind')
+    prefixes = {'correction': '更正：', 'time_change': '以前：', 'conflict': '不确定：'}
+    if (target is None or not isinstance(mode, str) or mode not in prefixes
+            or kind != 'explicit' or subject != 'user' or sensitive
+            or proof.get('old_quote') != target['content'] or quote == target['content']):
+        raise MemoryError('invalid_input', 'Reconciliation lacks owned explicit evidence')
+    evidence = proof.get('evidence')
+    expected = prefixes[mode] + target['content'] + '；' + quote
+    if (not isinstance(evidence, str) or normalize(evidence) != expected
+            or expected not in normalize(source) or not source_supported(source, quote)
+            or (mode == 'time_change' and not quote.startswith('现在：'))):
+        raise MemoryError('invalid_input', 'Reconciliation lacks an explicit user instruction')
+    # Restrict the instruction itself, not merely its substring in quoted fiction.
+    if (QUOTED.search(normalize(source)) or NONFACT.search(source)
+            or normalize(source).rstrip('。!！') != expected.rstrip('。!！')):
+        raise MemoryError('invalid_input', 'Reconciliation instruction is not factual')
+    return {'target_id': target_id, 'kind': mode, 'target_version': target['content_version'],
+            'target_evidence_version': target['evidence_version']}
+
+
 def validate_output(value, sources, context):
     raw = decode(value)
     basic = parse_extraction(raw)
@@ -131,10 +168,16 @@ def validate_output(value, sources, context):
         if PersonaGuardrail().inspect_input(content).blocked or PersonaGuardrail().inspect_output(content)[1]:
             continue
         if proposed.get('replaces_id') is not None:
-            # Automatic correction classification belongs to P18, never guess it.
             raise MemoryError('invalid_input', 'Unclassified replacement is not authorized')
         record = dict(clean, content=content, source_quote=quote, kind=kind, subject=subject, value=value,
                       sensitive=clean['sensitive'] or kind == 'inferred' or bool(SENSITIVE.search(quote + content) or EXTRA_SENSITIVE.search(quote + content)))
+        proof = reconciliation_for(proposed, sources[index], quote, known, kind, subject, record['sensitive'])
+        if proof is not None:
+            record['reconciliation'] = proof
+            if proof['kind'] == 'correction':
+                record['replaces_id'] = proof['target_id']
+            elif proof['kind'] == 'conflict':
+                record['sensitive'] = True  # Existing confirmation lifecycle, excluded from retrieval.
         for key in ('entities', 'keywords', 'trigger_terms'):
             terms = proposed.get(key, [])
             if not isinstance(terms, list) or len(terms) > 8:
@@ -193,6 +236,11 @@ def validate_output(value, sources, context):
         if not trait_supported([item for fact in context if fact['id'] in trait['evidence_ids'] for item in fact['evidence']]):
             raise MemoryError('invalid_input', 'Trait lacks three distinct sessions and sources')
         result['trait'] = dict(trait, anchor=anchor, evidence_quotes=grounded)
+    targets = [item['reconciliation']['target_id'] for item in result['memories'] if 'reconciliation' in item]
+    references = [proof['target_id'] for item in result['memories'] for proof in item['relations']]
+    references.extend((result.get('trait') or {}).get('evidence_ids', []))
+    if len(set(targets)) != len(targets) or set(targets).intersection(references):
+        raise MemoryError('invalid_input', 'Batch changes its own evidence')
     return result
 
 
