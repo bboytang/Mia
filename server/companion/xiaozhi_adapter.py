@@ -138,6 +138,9 @@ def guard_history(dialogue, message):
     agent = getattr(dialogue, "_mia_persona", None)
     if agent and message.role == "assistant" and isinstance(message.content, str):
         message.content = agent.checked_text(message.content)
+    frame = getattr(_completion, 'frame', None)
+    if frame is not None and message.role == 'assistant' and isinstance(message.content, str):
+        frame['assistant'] = (frame.get('assistant', '') + message.content)[-512:]
 
 
 def store_tts_text(conn, sentence_id, text):
@@ -318,7 +321,7 @@ class MiaMemoryProvider:
     def manage(self, request, messages):
         with self.lock:
             result = self.store.handle(self.owner, request)
-            if request["action"] not in {"list", "personality"}:
+            if request["action"] not in {"list", "personality", "events", "emotion_status", "observations"}:
                 self.pending.clear()
                 self.seen = deque((marker for marker, _ in _user_excerpts(messages)), maxlen=80)
                 self.revision = self.store.snapshot(self.owner)["revision"]
@@ -455,7 +458,7 @@ async def handle_message(conn, message):
         else:
             response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
         await require_connection(conn, "memory:manage")
-        if request["action"] not in {"list", "personality", "job_status"}:
+        if request["action"] not in {"list", "personality", "job_status", "events", "emotion_status", "observations"}:
             _trim_dialogue(conn, clear=True)
     except PrivateAuthorizationRequired:
         response.pop("result", None)
@@ -531,6 +534,10 @@ def completed_chat(function):
                 async def accept():
                     from .authorization import allow_output
                     try:
+                        turn = getattr(conn, '_mia_context_turn', None)
+                        if turn and any(item['state'] == 'pending' for item in turn.bundle.diagnostics()['events']):
+                            activated = await turn.builder.complete(turn.bundle, conn._mia_authorization, frame.get('assistant', ''))
+                            conn._mia_event_status = {'activated': activated}
                         result = await worker.submit(event) if worker else {'status': 'unavailable', 'accepted': False}
                     except PrivateAuthorizationRequired:
                         result = {'status': 'cancelled', 'accepted': False}

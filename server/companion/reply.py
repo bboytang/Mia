@@ -134,7 +134,7 @@ async def prepare(conn, functions, depth):
             except ContextError:
                 history = []
         bundle = await builder.build(conn._mia_scope, conn._mia_authorization, conn.sentence_id, query,
-            limits=limits, history=history, role=getattr(conn, '_mia_role_data', ''), tools=tools)
+            limits=limits, history=history, role=getattr(conn, '_mia_role_data', ''), tools=tools, session_id=conn.session_id)
         consumed = [current]
     else:
         if turn is None:
@@ -149,7 +149,7 @@ async def prepare(conn, functions, depth):
             # Already executed side effects are never replayed on a rebuild.
             bundle = await builder.build(conn._mia_scope, conn._mia_authorization, conn.sentence_id, query,
                 limits=limits, role=getattr(conn, '_mia_role_data', ''), tools=[],
-                scene='上下文已变化；旧工具结果已失效，本轮不再执行工具。需要新的工具操作时请用户重新发起。')
+                scene='上下文已变化；旧工具结果已失效，本轮不再执行工具。需要新的工具操作时请用户重新发起。', session_id=conn.session_id)
             consumed = []
             marker = None
         else:

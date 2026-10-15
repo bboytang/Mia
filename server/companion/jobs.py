@@ -56,11 +56,14 @@ class JobStore:
             if count >= self.capacity:
                 return {'status': 'queue_full', 'accepted': False}
             # Stable identifiers, one bounded real user excerpt, no credential or assistant text.
+            from .emotions import consent
+            tracking = consent(self.store, event.scope.owner)
             db.execute('INSERT INTO mia_jobs(id,owner,idempotency_key,scope_snapshot,memory_revision,session_id,turn_id,'
                 'source_payload,state,created_at,updated_at,deadline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
                 (key, event.scope.owner, key, json.dumps(event.scope.snapshot(), sort_keys=True), event.revision,
                  event.session_id, event.turn_id, json.dumps({'message_id': event.message_id, 'text': text,
-                 'priority': event.priority}, ensure_ascii=False), 'pending', now, now, now + self.lifetime))
+                 'priority': event.priority, 'emotion_consent_version': tracking['version'] if tracking['enabled'] else None},
+                 ensure_ascii=False), 'pending', now, now, now + self.lifetime))
             return {'status': 'accepted', 'accepted': True, 'id': key, 'state': 'pending'}
 
     def recover(self):
@@ -71,6 +74,8 @@ class JobStore:
     def ready(self):
         now = int(self.store.clock())
         with self.store.lock, self.store.db:
+            from .emotions import prune
+            prune(self.store)
             self.store.db.execute("UPDATE mia_jobs SET state='failed',error_category='deadline_exceeded',source_payload='{}',"
                 "validated_result=NULL,updated_at=? WHERE state IN ('pending','extracting','validated','retry_wait') AND deadline<=?", (now, now))
             return [dict(row) for row in self.store.db.execute(
@@ -198,7 +203,8 @@ class MemoryWorker:
                 if job['attempts'] >= 2:
                     await asyncio.to_thread(self.jobs.update, job, 'failed', error='attempts_exhausted')
                     return True
-                context = await asyncio.to_thread(context_for, self.jobs.store, scope.owner)
+                context = await asyncio.to_thread(context_for, self.jobs.store, scope.owner,
+                    json.loads(job['source_payload']).get('emotion_consent_version'))
                 extract = await self.resolve(scope)
                 # A newly active front-end gets priority before entering a native call.
                 if self.foreground:

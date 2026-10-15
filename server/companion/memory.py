@@ -386,6 +386,11 @@ class MemoryStore:
                     version = self.db.execute('SELECT content_version,evidence_version FROM mia_memory_meta WHERE memory_id=?',
                                               (memory_id,)).fetchone()
                     if actual_confirmed:
+                        self.db.execute('INSERT OR IGNORE INTO mia_event_evidence(event_id,memory_id,content_version,evidence_version) '
+                            "SELECT id,?,?,? FROM mia_events WHERE owner=? AND session_id=? AND turn_id=? AND state='active'",
+                            (memory_id, version['content_version'], version['evidence_version'], owner, session_id, job['turn_id']))
+                        self.db.execute('UPDATE mia_events SET version=version+1 WHERE owner=? AND session_id=? AND turn_id=?',
+                            (owner, session_id, job['turn_id']))
                         vector = (prepared_vectors or {}).get(item_index)
                         if vector is None:
                             raise MemoryError('index_unavailable', 'Prepared vector is missing')
@@ -413,11 +418,13 @@ class MemoryStore:
             self.db.execute("DELETE FROM checkpoints WHERE owner=? AND checkpoint_id NOT IN "
                             "(SELECT checkpoint_id FROM checkpoints WHERE owner=? ORDER BY rowid DESC LIMIT 100)", (owner, owner))
             if job_id is not None:
+                from .emotions import commit as commit_observations
+                observations = commit_observations(self, job, structured)
                 pending = any(not self.db.execute('SELECT confirmed FROM memories WHERE id=?', (memory_id,)).fetchone()[0]
                               for memory_id in changed)
                 summary = json.dumps({'confirmation_required': True}) if pending else None
                 self.db.execute("UPDATE mia_jobs SET state=?,source_payload='{}',validated_result=?,updated_at=?,error_category=NULL WHERE id=?",
-                                ('committed' if changed or trait_updated else 'empty', summary, now, job_id))
+                                ('committed' if changed or trait_updated or observations else 'empty', summary, now, job_id))
             return {"applied": True, "memories": changed, "trait_updated": trait_updated}
 
     def personality(self, owner):
@@ -517,6 +524,12 @@ class MemoryStore:
         action = request.get("action")
         if not isinstance(action, str):
             raise MemoryError("invalid_input", "Invalid memory action")
+        if action in {'emotion_consent', 'emotion_status', 'observations', 'observation_update', 'observation_delete', 'emotion_clear'}:
+            from .emotions import manage
+            return manage(self, owner, request)
+        if action in {'events', 'event_delete'}:
+            from .events import manage
+            return manage(self, owner, request)
         if action == "update":
             self.edit_memory(owner, request.get("id"), request.get("content"), request.get("confirmed"))
         elif action == "delete":

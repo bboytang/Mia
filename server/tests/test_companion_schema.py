@@ -142,7 +142,7 @@ class SchemaCompatibilityTests(unittest.TestCase):
         old.edit_memory('user:1:agent:a', memory_id, '现在偏爱历史小说')
         self.assertIsNone(old.db.execute('SELECT keywords FROM mia_memory_meta WHERE memory_id=?', (memory_id,)).fetchone()[0])
         migrate(old.db)
-        self.assertEqual(old.db.execute('SELECT COUNT(*) FROM mia_schema_migrations').fetchone()[0], 2)
+        self.assertEqual(old.db.execute('SELECT COUNT(*) FROM mia_schema_migrations').fetchone()[0], 3)
         old.close()
 
     def test_process_exit_mid_ddl_rolls_back_without_partial_migration(self):

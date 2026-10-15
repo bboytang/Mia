@@ -31,7 +31,7 @@ def migrate(db):
     if db.in_transaction:
         raise ValueError('Mia schema migration requires its own transaction')
     migrations = [Path(__file__).with_name(name).read_text(encoding='utf-8')
-                  for name in ('schema.sql', 'schema-v2.sql')]
+                  for name in ('schema.sql', 'schema-v2.sql', 'schema-v3.sql')]
     digests = [hashlib.sha256(sql.encode()).hexdigest() for sql in migrations]
     db.execute('BEGIN IMMEDIATE')
     try:

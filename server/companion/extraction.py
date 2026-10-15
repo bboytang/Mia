@@ -66,7 +66,7 @@ def normalize(value):
     return unicodedata.normalize('NFKC', value).strip()
 
 
-def source_supported(source, quote):
+def source_supported(source, quote, *, allow_transient=False):
     """Conservative provenance guard; semantic quality is separately evaluated."""
     masked = QUOTED.sub(lambda match: ' ' * len(match[0]), normalize(source))
     for clause in re.findall(r'[^。！？!?\n;；]+[。！？!?;；]?', masked):
@@ -75,7 +75,7 @@ def source_supported(source, quote):
         reported = re.search(r'^(?!我|请|米娅).{1,8}(?:说|表示|声称)', clause.strip())
         if (equivalent and not NONFACT.search(clause) and not reported
                 and not re.search(r'[?？]\s*$|吗\s*$', clause)):
-            return not LOW_VALUE.search(quote)
+            return allow_transient or not LOW_VALUE.search(quote)
     return False
 
 
@@ -88,18 +88,27 @@ def decode(value):
             value = json.loads(fenced[1] if fenced else value)
         except (ValueError, RecursionError):
             raise MemoryError('invalid_input', 'Invalid extraction JSON') from None
-    if not isinstance(value, dict) or set(value) - {'memories', 'trait'}:
+    if not isinstance(value, dict) or set(value) - {'memories', 'trait', 'observations'}:
         raise MemoryError('invalid_input', 'Invalid extraction object')
     return value
 
 
-def context_for(store, owner):
+class EvidenceContext(list):
+    """The existing bounded fact list plus a server-only consent snapshot."""
+    pass
+
+
+def context_for(store, owner, expected_consent=None):
     # A bounded reconciliation/evidence set, not an answer retrieval fallback.
     with store.lock:
         rows = store.db.execute('SELECT m.id,m.content,x.content_version,x.evidence_version FROM memories m '
             "JOIN mia_memory_meta x ON x.memory_id=m.id WHERE m.owner=? AND m.confirmed=1 AND x.state='active' "
             'ORDER BY m.updated_at DESC,m.rowid DESC LIMIT 8', (owner,)).fetchall()
-        result = []
+        from .emotions import consent
+        result = EvidenceContext()
+        result.tracking = consent(store, owner)
+        if result.tracking['version'] != expected_consent:
+            result.tracking = dict(result.tracking, enabled=0)
         for row in rows:
             evidence = [dict(item) for item in store.db.execute('SELECT session_id,fingerprint,excerpt FROM sources '
                 'WHERE memory_id=? ORDER BY created_at DESC,rowid DESC LIMIT 3', (row['id'],))]
@@ -241,6 +250,11 @@ def validate_output(value, sources, context):
     references.extend((result.get('trait') or {}).get('evidence_ids', []))
     if len(set(targets)) != len(targets) or set(targets).intersection(references):
         raise MemoryError('invalid_input', 'Batch changes its own evidence')
+    from .emotions import validate_observations
+    tracking = getattr(context, 'tracking', {'enabled': 0, 'version': 0})
+    observations = validate_observations(raw.get('observations', []), sources, tracking)
+    if tracking['enabled']:
+        result.update(observations=observations, emotion_consent_version=tracking['version'])
     return result
 
 
@@ -251,8 +265,18 @@ class LLMMemoryExtractor:
     def __call__(self, sources, context):
         provider = self.factory()
         try:
-            return provider.response_no_stream(INSTRUCTIONS,
-                json.dumps({'user_excerpts': sources, 'existing_memories': context}, ensure_ascii=False))
+            tracking = getattr(context, 'tracking', {'enabled': 0})
+            instruction = INSTRUCTIONS + ('\nEmotion tracking is explicitly enabled. Also return observations: at most one '
+                '{"source_index":0,"source_quote":"complete real first-person sentence","subject":"user",'
+                '"source_kind":"self_report|inferred","tendency":"positive|negative|neutral|mixed","confidence":0.9}. '
+                'Keep transient emotions OUT of memories. Only an actual first-person feeling is self_report; '
+                'inference is labelled inferred and confidence 0.5 to 0.6. No other people, quotations, fiction, '
+                'hypotheses or Mia emotions. Use observations:[] when none. Never supply a date or consent version. '
+                'Negation must be respected; do not label "not sad" as negative.' if tracking['enabled'] else
+                '\nEmotion tracking is disabled. Do not produce or persist observations.')
+            return provider.response_no_stream(instruction,
+                json.dumps({'user_excerpts': sources, 'existing_memories': context,
+                            'emotion_tracking_enabled': bool(tracking['enabled'])}, ensure_ascii=False))
         finally:
             client = getattr(provider, 'client', None)
             if client is not None and hasattr(client, 'close'):
