@@ -69,6 +69,20 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
             await self.builder.complete(first, self.policy, '😌你喜欢蓝色。')
         self.assertTrue(await self.builder.complete(second, self.policy, '😌你喜欢蓝色。'))
 
+    async def test_added_corroboration_preserves_event_identity_but_removed_evidence_invalidates(self):
+        target = await self.seed()
+        first = await self.bundle()
+        await self.builder.complete(first, self.policy, '😌你喜欢蓝色。')
+        self.store.apply_extraction(self.scope.owner, 'corroboration', 0, ['我喜欢蓝色'],
+            {'memories': [{'category': 'preference', 'content': '我喜欢蓝色', 'source_index': 0}]}, 'corroboration')
+        second = await self.bundle(turn='again', session='third')
+        self.assertEqual(second.diagnostics()['events'][0]['id'], first.diagnostics()['events'][0]['id'])
+        self.assertEqual(second.diagnostics()['events'][0]['state'], 'active')
+        self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_events').fetchone()[0], 1)
+        with self.store.db:
+            self.store.db.execute('DELETE FROM sources WHERE memory_id=? AND session_id=?', (target, 'corroboration'))
+        self.assertEqual(self.store.db.execute('SELECT state FROM mia_events').fetchone()[0], 'invalidated')
+
     async def test_edit_delete_and_revoke_prevent_completion_or_later_event_use(self):
         target = await self.seed()
         first = await self.bundle()
@@ -90,6 +104,9 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         types = {row[0] for row in self.store.db.execute("SELECT event_type FROM mia_events WHERE state='active'")}
         self.assertEqual(types, {'boundary', 'reflection'})
         self.assertIn('cannot be rewritten', reflection.request_json)
+        unrelated = await self.bundle('今天吃什么', turn='other-topic')
+        self.assertTrue(any(item['type'] == 'boundary' and item['state'] == 'active'
+            for item in json.loads(unrelated.inputs_json)['events']))
 
     async def test_deleting_evidence_erases_event_excerpts_and_foreign_management_is_denied(self):
         target = await self.seed()

@@ -48,15 +48,16 @@ def context(store, owner, query, facts, *, session_id=None, turn_id=None):
         if clues:
             fact.update(dict(clues))
     active = []
+    marks = ','.join('?' for _ in facts) or 'NULL'
     for row in store.db.execute("SELECT e.*,i.user_excerpt,i.assistant_excerpt FROM mia_events e "
             "JOIN mia_event_interactions i ON i.event_id=e.id WHERE e.owner=? AND e.state='active' "
-            'ORDER BY e.updated_at DESC,e.id LIMIT 100', (owner,)):
-        if not _valid(store, owner, row['id']):
+            f"AND (e.event_type='boundary' OR EXISTS (SELECT 1 FROM mia_event_evidence p WHERE p.event_id=e.id AND p.memory_id IN ({marks}))) "
+            "ORDER BY (e.event_type='boundary'),e.updated_at DESC,e.id LIMIT 8", (owner, *(fact['id'] for fact in facts))):
+        if row['event_type'] not in INFLUENCE or not _valid(store, owner, row['id']):
             continue
         ids = [item[0] for item in store.db.execute('SELECT memory_id FROM mia_event_evidence WHERE event_id=?', (row['id'],))]
         related = any(fact['id'] in ids for fact in facts)
-        boundary = row['event_type'] == 'boundary' and (re.search(r'边界|称呼|怎么叫|怎么称呼', query)
-            or any(term in query for term in re.findall(r'[\u4e00-\u9fff]{2,}', row['user_excerpt'])))
+        boundary = row['event_type'] == 'boundary'
         if (related or boundary) and len(active) < 4:
             active.append({'id': row['id'], 'type': row['event_type'], 'state': 'active', 'version': row['version'],
                 'evidence_ids': ids, 'user_evidence': row['user_excerpt'], 'assistant_evidence': row['assistant_excerpt'],
@@ -81,12 +82,10 @@ def context(store, owner, query, facts, *, session_id=None, turn_id=None):
         return active
     # Stable evidence identity, independent of the current turn and phrasing.
     evidence = sorted((fact['id'], fact['content_version'], fact['evidence_version']) for fact in supporting)
-    identity = [owner, 'mia', kind, evidence or query.strip().rstrip('。!！')]
+    identity = [owner, 'mia', kind, [(item[0], item[1]) for item in evidence] or query.strip().rstrip('。!！')]
     key = hashlib.sha256(json.dumps(identity, ensure_ascii=False).encode()).hexdigest()
     previous = store.db.execute('SELECT state FROM mia_events WHERE id=? AND owner=?', (key, owner)).fetchone()
     if previous and previous['state'] == 'active':
-        return active
-    if not previous and store.db.execute('SELECT COUNT(*) FROM mia_events WHERE owner=?', (owner,)).fetchone()[0] >= 100:
         return active
     now = int(store.clock())
     store.db.execute('INSERT INTO mia_events(id,owner,event_type,idempotency_key,state,session_id,turn_id,created_at,updated_at) '
@@ -102,6 +101,7 @@ def context(store, owner, query, facts, *, session_id=None, turn_id=None):
         store.db.execute('INSERT INTO mia_event_evidence(event_id,memory_id,content_version,evidence_version) VALUES (?,?,?,?)',
             (key, fact['id'], fact['content_version'], fact['evidence_version']))
     version = store.db.execute('SELECT version FROM mia_events WHERE id=?', (key,)).fetchone()[0]
+    active = active[:3]
     active.append({'id': key, 'type': kind, 'state': 'pending', 'version': version,
         'evidence_ids': [fact['id'] for fact in supporting], 'user_evidence': query,
         'assistant_evidence': None, 'influence': INFLUENCE[kind]})

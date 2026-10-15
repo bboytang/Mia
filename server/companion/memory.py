@@ -364,9 +364,17 @@ class MemoryStore:
                             self._invalidate_traits(owner, memory_id)
                         self.db.execute("UPDATE memories SET confirmed=?,updated_at=? WHERE id=?",
                                         (bool(existing["confirmed"]) and confirmed, now, memory_id))
-                self.db.execute("INSERT OR IGNORE INTO sources VALUES (?,?,?,?,?)",
+                source_added = self.db.execute("INSERT OR IGNORE INTO sources VALUES (?,?,?,?,?)",
                                 (memory_id, session_id, hashlib.sha256(source.encode()).hexdigest(),
-                                 structured['memories'][item_index]['source_quote'] if reconciliation else source, now))
+                                 structured['memories'][item_index]['source_quote'] if reconciliation else source, now)).rowcount
+                if source_added:
+                    # Adding corroboration does not retract an unchanged fact or repeat its event.
+                    self.db.execute('UPDATE mia_event_evidence SET evidence_version=(SELECT evidence_version FROM mia_memory_meta WHERE memory_id=?) '
+                        'WHERE memory_id=? AND content_version=(SELECT content_version FROM mia_memory_meta WHERE memory_id=?) '
+                        "AND event_id IN (SELECT id FROM mia_events WHERE owner=? AND state='active')",
+                        (memory_id, memory_id, memory_id, owner))
+                    self.db.execute("UPDATE mia_events SET version=version+1 WHERE owner=? AND state='active' "
+                        'AND id IN (SELECT event_id FROM mia_event_evidence WHERE memory_id=?)', (owner, memory_id))
                 self._index(memory_id, item["content"])
                 if job_id is not None:
                     from .embedding import DIMENSION, MODEL_KEY, REVISION
