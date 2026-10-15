@@ -1,7 +1,7 @@
 {
-  "status": "P21 server checks passed; iOS test now taps actual native switch; previous confirmation refactor reverted; full verification pending",
+  "status": "P21 server checks passed; original product dialogs restored, full iOS verification running with correct native switch target; P22 preparation only",
   "backend_sha": "22de9636a184096d391a811a938ac92dbd805d25",
-  "client_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
+  "client_sha": "87d242787d74283fee535e6345c8ecfa7e760d30",
   "manager_probe_sha": "5dfa89a75e94b651ddf5b03de52f4e151cc040b9",
   "server_tree_unchanged_after_backend_sha": false,
   "local_automated_tests_or_builds": false,
@@ -125,6 +125,13 @@
       "scope": "102 unit tests passed; native switch never hit: actual tap x201 vs native switch x313..364; dialog consolidation reverted",
       "sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
       "status": "failure"
+    },
+    {
+      "id": 38821633956,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38821633956",
+      "scope": "full iOS verification with native control center tap; product dialog refactor reverted",
+      "sha": "87d242787d74283fee535e6345c8ecfa7e760d30",
+      "status": "in_progress"
     }
   ],
   "client_fixture_scope": "Synthetic loopback protocol only; not actual app-to-manager-to-BGE-to-provider acceptance",
@@ -188,7 +195,7 @@
     }
   ],
   "client_runtime_sha": "4d4b5cc60efd451b8f0a8b4853341e3e70f711a2",
-  "client_tests_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
+  "client_tests_sha": "87d242787d74283fee535e6345c8ecfa7e760d30",
   "backend_runtime_unchanged_after_backend_sha": true,
   "server_tree_difference": "new isolated behavior Java test only; backend runtime modules unchanged"
 }
