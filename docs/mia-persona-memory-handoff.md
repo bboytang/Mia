@@ -27,7 +27,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 下一步：按P11独立实现分层人格、输入／输出检查和句级流式机制，复用现有PromptManager／Provider／工具／TTS；不能只增Prompt或复制未授权路遥源码，也不能恢复固定剧情／“永不离开”等不实承诺。固定核心不能依赖数据库成功。P14／P15统一上下文及所有直接回答／工具续答，P19提供真实可追溯事件，均保留各自门槛。已阅读固定路遥persona.py／guardrails.py及现有connection／adapter，尚未编写P11代码；固定审计源码可按基线重建，不依赖本机/tmp。
 
-实际App整链／生产证书入口／iPhone／全服务资源及八项行为仍待验，未部署；最新仅核对Actions Secret名称，仍为0，真实Provider未调用。缺凭据不阻止独立机制开发，但真实行为不能以合成桩替代。先查在途run及当前工作树，避免重复执行。
+实际App整链／生产证书入口／iPhone／全服务资源及八项行为仍待验，未部署；三个专用Actions Secret已配置，81e46ad／38659019412单次真实Provider连接probe通过（glm-4-flash，1498ms／38 Token）；尚非实际Mia人格／记忆行为，不能以此替代完整验收。先查在途run及当前工作树，避免重复执行。
 
 ## 步骤状态
 
@@ -40,7 +40,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P04 | 完成 | [验收 v1.1](verification/mia-persona-memory/acceptance.md)：数值不变，按用户确认区分无关与相关不可回答 |
 | P05 | 完成 | [契约 v1](verification/mia-persona-memory/contracts.md)；授权码路径确认，TLS 实际发布与真实身份验收尚未执行 |
 | P06 | 完成：初选 | [固定规格](verification/mia-persona-memory/embedding-selection.json)，U8U8 base 达初选门槛；生产集成和行为未验收 |
-| P07 | 进行中 | 身份基线部分完成：编译／四类对照及4真实旧缺口复现通过；完整回归149/150，1既有失败；Provider等入口未完成 |
+| P07 | 进行中 | 身份基线与真实Provider单次连接通过（81e46ad／38659019412）；完整回归保留1既有失败，实际Mia Provider集成／容量与行为入口随后续模块完善 |
 | P08 | 开发／隔离部分通过 | 18真实身份（含HTTPS/WSS）及构建、App100＋5和构建、智控台53＋64和构建通过；真实App↔manager与生产证书／入口／iPhone仍待验，整体未封板 |
 | P09 | 基础通过，整体进行中 | 426d8c4的实际安装Scope／ToolManager／管理／旧会话及23身份／TLS通过；新增索引／事件／趋势／持久任务逐模块补Scope证据，整体与真实App／资源待验 |
 | P10 | 完成：兼容基础 | 426d8c4／38656910711的6项真实SQLite迁移及104服务测试通过；同提交23身份／TLS、构建及类范围通过，完整回归保留1既有失败 |
@@ -71,11 +71,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 D01—D10 已冻结开发契约及初选；D03／D04 见固定模型规格，用户已确认授权码、情绪保留及相关不可回答边界。生产完整RAG、私有安全链及长期趋势行为仍未验收，初选参数在最终独立用户语料验收不合格时需有新证据重评。
 
-GitHub读取／推送、Actions和严格主机校验的只读SSH已验证；未改变凭据。仓库／Environment此前核实没有测试秘密配置，用户现已选择专用测试Secret，实际配置及真机／签名仍未具备或未确认。新环境重新验证实际访问，不复制秘密进交接。
+GitHub读取／推送、Actions和严格主机校验的只读SSH已验证；未改变凭据。仓库此前未配置测试秘密；用户现已配置三个专用Repository Secret，单次真实连接已通过，真机／签名条件仍须分别核实。新环境重新验证实际访问，不复制秘密进交接。
 
-用户已确认真实聊天测试使用专用GitHub Actions Secret；入口已编写，实际配置和调用仍未核实／执行。三个配置名见Provider入口文档，保留生产模型密钥原位置；新环境只核实秘密配置名和可用状态，不输出秘密。
+用户已配置真实聊天专用GitHub Actions Secret，三名称已核实，单次连接[38659019412](https://github.com/bboytang/Mia/actions/runs/38659019412)通过；[结果](verification/mia-persona-memory/live-provider-results.json)已保存，生产Key未读取／复用。新环境按仓库权限运行，不输出Secret值，不重复已完成probe。完整Mia Provider集成及容量／八项行为仍待后续验证。
 
-2026-10-15只读核实当前聊天模型为智谱 `glm-4-flash`（ChatGLMLLM），API根地址 `https://open.bigmodel.cn/api/paas/v4/`；具体测试Secret映射已补入[Provider入口](verification/mia-persona-memory/live-provider.md)。此前火山地址仅为示例。未读取或复用生产Key，用户仍需另建智谱测试Key，尚无真实模型请求。
+2026-10-15只读核实当前聊天模型为智谱 `glm-4-flash`（ChatGLMLLM），API根地址 `https://open.bigmodel.cn/api/paas/v4/`；具体测试Secret映射已补入[Provider入口](verification/mia-persona-memory/live-provider.md)。此前火山地址仅为示例。未读取或复用生产Key，用户随后已配置专用Key并通过上述单次真实请求，完整行为仍未验。
 
 缺权限时：继续不依赖它的已授权工作；相应真实测试或远程动作记为未执行／阻塞。不得关闭认证、改用任意 owner、重新启用旧网关或输出密钥来绕过。
 

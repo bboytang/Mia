@@ -300,6 +300,13 @@
 - 用户询问应填哪个模型ID。只读查询现网已配置Agent选用的LLM模型非敏感字段，唯一结果ChatGLMLLM／glm-4-flash，API根地址https://open.bigmodel.cn/api/paas/v4/。此前火山地址只是示例，不能作为当前实际配置。
 - 已将具体映射补入live-provider.md；测试Key仍须用户在智谱独立创建并通过GitHub Repository Secrets填写。未读取、复用或输出生产密钥，未修改服务器／调用模型，P11下一步和八项验收状态不变。
 
+## 2026-10-15：专用测试凭据与首次真实连接通过
+
+- 用户回复“已配置”，仅核对Repository Secret名称MIA_TEST_LLM_API_KEY／BASE_URL／MODEL齐全；没有读取或输出值，没有读取／复用生产模型密钥。先查历史run仅有push语法基线，无重复真实请求。
+- 手动dispatch固定任务分支81e46ad94addcf95aa69dd67f7212e9fab6b1185／[38659019412](https://github.com/bboytang/Mia/actions/runs/38659019412)，syntax及live整体success；仅1次HTTPS请求，128输出Token上限、30秒、0重试，符合已约定probe范围。
+- 实际open.bigmodel.cn／glm-4-flash，1498.23934ms，输入27／输出11／总38 Token。合成响应“请说明已知条件或建议补充信息。”live-provider-results.json保存精确SHA、参数、usage及脱敏结果；未变更生产。
+- P07测试连接条件已解除，尚非Mia生产Provider集成、真实信息不足剧本、RAG或八项能力验收，不把一句通用问答替代后续行为。交接／Provider入口同步；下一步仍为P11完整机制，不重复probe。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

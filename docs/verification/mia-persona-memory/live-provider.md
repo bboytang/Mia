@@ -16,4 +16,6 @@
 
 这个probe验证真实连接与响应，不是Mia生产Provider集成、RAG、信息不足回答或八项能力验收。后续实际功能必须经真实manager身份、实际提取及向量、Mia单回复链、跨会话／重启和授权时间观察运行。不得用此短请求替代完整行为。
 
-当前：代码 `1ba397c9866fb0134b4d82366b566e897ce0dd86` 的 [38621146139](https://github.com/bboytang/Mia/actions/runs/38621146139) 语法检查成功，live job 按 push 条件跳过；没有发出模型请求。最近 repository Secret 名称核查为0，仍待配置三个测试Secret。配置内容仅通过GitHub安全界面填写，换Codex账号使用repository权限取得可运行入口，不复制秘密。
+当前（2026-10-15）：用户确认已配置，已只核对三个Secret名称齐全；未读取其值。代码 `81e46ad94addcf95aa69dd67f7212e9fab6b1185` 的手动 [38659019412](https://github.com/bboytang/Mia/actions/runs/38659019412) 语法及live job整体success；仅发送约定的1次请求，实际host为open.bigmodel.cn、响应模型glm-4-flash、耗时1498.23934ms、输入27／输出11／合计38 Token。合成测试响应为“请说明已知条件或建议补充信息。”[脱敏结果](live-provider-results.json)已持久保存；不是实际记忆问答或八项能力验收。
+
+历史语法基线 `1ba397c9866fb0134b4d82366b566e897ce0dd86`／[38621146139](https://github.com/bboytang/Mia/actions/runs/38621146139) 的live job按push跳过，不能追溯改记为真实调用。测试配置现已就绪，换Codex账号需相应repository权限，不复制秘密。后续按P11等实现与验收，不重新运行同一连接probe，也不擅自读生产Key；完整Provider集成及容量／真实行为仍须分别验证。

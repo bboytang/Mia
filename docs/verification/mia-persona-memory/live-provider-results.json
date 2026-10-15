@@ -1,0 +1,32 @@
+{
+  "code_sha": "81e46ad94addcf95aa69dd67f7212e9fab6b1185",
+  "kind": "real_provider_connectivity_only",
+  "configured": {
+    "MIA_TEST_LLM_API_KEY": true,
+    "MIA_TEST_LLM_BASE_URL": true,
+    "MIA_TEST_LLM_MODEL": true
+  },
+  "passed": true,
+  "capability_acceptance": "not_executed",
+  "limits": {
+    "requests": 1,
+    "max_output_tokens": 128,
+    "timeout_seconds": 30,
+    "retries": 0
+  },
+  "provider_host": "open.bigmodel.cn",
+  "configuration_sha256": "e0079c1fd9a0823dc3be1f3b4a18a919f9a5568a73e86221e6b834e2c648782f",
+  "status": "executed",
+  "response_text": "请说明已知条件或建议补充信息。",
+  "response_model": "glm-4-flash",
+  "usage": {
+    "completion_tokens": 11,
+    "prompt_tokens": 27,
+    "total_tokens": 38
+  },
+  "elapsed_ms": 1498.2393400000014,
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38659019412",
+  "workflow_conclusion": "success",
+  "credentials": "Dedicated GitHub repository Secrets; values neither read nor copied",
+  "production_change": "none"
+}
