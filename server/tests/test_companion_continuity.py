@@ -209,6 +209,21 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         await self.observe('after', day=1)
         self.assertEqual(self.store.db.execute('SELECT consent_version FROM mia_observations WHERE message_id=\'after\'').fetchone()[0], 3)
 
+    async def test_disabled_management_preserves_raw_observations_without_aggregating(self):
+        self.enable()
+        for i, day in enumerate((0, 1, 2, 4, 6)):
+            await self.observe('retained-' + str(i), day=day)
+        owner = self.scope.owner
+        self.assertEqual(self.store.handle(owner, {'action': 'emotion_status'})['trend']['status'], 'available')
+        disabled = self.store.handle(owner, {'action': 'emotion_consent', 'enabled': False})
+        self.assertEqual(disabled['trend'], {'status': 'disabled'})
+        self.assertEqual(self.store.handle(owner, {'action': 'emotion_status'})['trend'], {'status': 'disabled'})
+        view = self.store.handle(owner, {'action': 'observations'})
+        self.assertEqual(len(view['observations']), 5)
+        self.assertEqual(view['trend'], {'status': 'disabled'})
+        self.enable()
+        self.assertEqual(self.store.handle(owner, {'action': 'emotion_status'})['trend']['status'], 'available')
+
     async def test_correction_delete_recompute_and_cross_owner_isolation(self):
         self.enable()
         for i, day in enumerate((0, 1, 2, 4, 6)):

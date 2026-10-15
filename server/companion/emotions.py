@@ -93,9 +93,9 @@ def prune(store):
     store.db.execute('DELETE FROM mia_observations WHERE observed_at<?', (start,))
 
 
-def trend(store, owner, *, for_reply=True):
+def trend(store, owner):
     setting = consent(store, owner)
-    if not setting['enabled'] and for_reply:
+    if not setting['enabled']:
         return {'status': 'disabled'}
     now = int(store.clock())
     start = (now // DAY - 29) * DAY
@@ -158,7 +158,7 @@ def manage(store, owner, request):
         if action not in {'emotion_status', 'observations'}:
             store.db.execute('UPDATE owners SET revision=revision+1 WHERE owner=?', (owner,))
             store._cancel_jobs(owner)
-        result = {'consent': consent(store, owner), 'trend': trend(store, owner, for_reply=False)}
+        result = {'consent': consent(store, owner), 'trend': trend(store, owner)}
         if action == 'observations':
             result['observations'] = [dict(row) for row in store.db.execute('SELECT o.*,x.version,x.correction_origin '
                 'FROM mia_observations o LEFT JOIN mia_observation_meta x ON x.observation_id=o.id '

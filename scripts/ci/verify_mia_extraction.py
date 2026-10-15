@@ -227,6 +227,7 @@ async def evaluate(args, report):
             'new_session_restored': True, 'repeated_query_one_event': True, 'deleted_evidence_not_used': True,
             'assistant_output': 'synthetic_controlled_fixture'}
         assert emotions.trend(store, scope.owner)['status'] == 'disabled'
+        assert store.handle(scope.owner, {'action': 'emotion_status'})['trend'] == {'status': 'disabled'}
         store.handle(scope.owner, {'action': 'emotion_consent', 'enabled': True})
         jobs = JobStore(store)
         worker = MemoryWorker(jobs, policy, resolve, encoder=encoder)
@@ -250,6 +251,7 @@ async def evaluate(args, report):
         else:
             raise AssertionError('Disabled trend snapshot remained usable')
         assert emotions.trend(store, scope.owner)['status'] == 'disabled'
+        assert store.handle(scope.owner, {'action': 'emotion_status'})['trend'] == {'status': 'disabled'}
         report['emotion_trend'] = {'clock': 'SIMULATED_UTC_not_real_seven_day_acceptance',
             'observations': 5, 'sessions': 3, 'calendar_span_days': 7, 'related_context': True,
             'disable_retains_five_but_blocks_usage': store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0] == 5}
