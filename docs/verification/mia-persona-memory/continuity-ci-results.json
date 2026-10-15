@@ -1,5 +1,5 @@
 {
-  "status": "P19 controlled mechanisms verified, natural-style acceptance partial; P20 real-calendar collection incomplete",
+  "status": "P19/P20 implementation and controlled verification complete; actual longitudinal acceptance delegated to user by explicit instruction, not passed",
   "runtime_sha": "92d7476c97ea764c98f86db3a665352018551818",
   "verifier_sha": "d9184ef4b12cea8c8ce599229c0ca8652fe33421",
   "runtime_unchanged_in_verifier_commit": true,
@@ -289,11 +289,21 @@
     },
     {
       "file": "continuity-requirements.md",
-      "sha256": "877f171a297c4113b2fa6266e67d7b4e7bec101f94216cc2f404c17e9db9572d",
-      "bytes": 4284
+      "sha256": "93d2af040a6c8f47d088064a9336a0f3b340ed930b81d9f5f80221ea4c89e0b4",
+      "bytes": 4883
     }
   ],
   "latest_runtime_sha": "6b57337147f4440488c6a37bda97c003a2cbca5e",
   "latest_source_status": "227 service tests, actual BGE/SDK, actual manager TLS/WSS and baseline all passed; overall natural dialogue failed at reflection in e48f222; real-day collection still 1",
-  "latest_audit_verifier_sha": "50a8bac0302ff2b2ab19d481ebbec6cc0943b48e"
+  "latest_audit_verifier_sha": "50a8bac0302ff2b2ab19d481ebbec6cc0943b48e",
+  "user_acceptance_decision": {
+    "date": "2026-10-15",
+    "instruction": "跳过这个验收门槛，后续由我自己测试",
+    "scope": "actual seven-calendar-day collection and subsequent longitudinal dialogue/change acceptance",
+    "owner": "user",
+    "automated_continuation_required": false,
+    "runtime_thresholds_changed": false,
+    "real_longitudinal_acceptance_passed": false,
+    "natural_style_limitations_retained": true
+  }
 }
