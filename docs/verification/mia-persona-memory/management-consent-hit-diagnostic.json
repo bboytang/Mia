@@ -1,0 +1,36 @@
+{
+  "run": 38820330282,
+  "sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
+  "conclusion": "failure",
+  "unit_tests_passed": 102,
+  "ui_cases": 6,
+  "ui_failed_cases": 1,
+  "review": "Original exported screenshot visually inspected; no consent dialog and native switch off. AX has whole-row outer switch and right-side native switch. Synthesized-event plist proves tap hit label region. Product dialog consolidation not established as necessary and reverted.",
+  "outer_switch": {
+    "x": 20,
+    "y": 455.3,
+    "width": 362,
+    "height": 44
+  },
+  "native_switch": {
+    "x": 313,
+    "y": 462,
+    "width": 51,
+    "height": 31
+  },
+  "actual_tap": {
+    "x": 201,
+    "y": 477.3333333333333
+  },
+  "fixture": "synthetic loopback only",
+  "files": [
+    {
+      "file": "management-consent-hit-failure.png",
+      "sha256": "2a3b8e5246f1efd7a37513baf54aa8dd572ccc8395b929ddbe858d575338b72f"
+    },
+    {
+      "file": "management-consent-hit-ax.txt",
+      "sha256": "c835af4cd9926a42287c3432056f26f927632a3e7117038dc3ce2910447051a7"
+    }
+  ]
+}

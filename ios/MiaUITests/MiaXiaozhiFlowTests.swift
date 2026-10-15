@@ -98,7 +98,12 @@ final class MiaXiaozhiFlowTests: XCTestCase {
         }
         XCTAssertTrue(tracking.waitForExistence(timeout: 15))
         XCTAssertEqual(tracking.value as? String, "0")
-        tracking.tap()
+        // SwiftUI exposes the whole labeled row as a switch as well as the
+        // native control. The row's center hits its label, not the control.
+        let control = tracking.switches.firstMatch
+        XCTAssertTrue(control.exists)
+        XCTAssertTrue(control.isHittable)
+        control.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         guard app.buttons["启用"].waitForExistence(timeout: 5) else {
             captureFailure("Emotion consent confirmation did not appear", app: app)
             return

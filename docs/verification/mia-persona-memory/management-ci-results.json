@@ -1,5 +1,5 @@
 {
-  "status": "P21 server checks passed; iOS explicit consent dialog fix under full verification; P22 preparation only, P23/P24 incomplete",
+  "status": "P21 server checks passed; iOS test now taps actual native switch; previous confirmation refactor reverted; full verification pending",
   "backend_sha": "22de9636a184096d391a811a938ac92dbd805d25",
   "client_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
   "manager_probe_sha": "5dfa89a75e94b651ddf5b03de52f4e151cc040b9",
@@ -122,9 +122,9 @@
     {
       "id": 38820330282,
       "url": "https://github.com/bboytang/Mia/actions/runs/38820330282",
-      "scope": "full unit/UI/build after consolidating four confirmation dialogs into one operation state",
+      "scope": "102 unit tests passed; native switch never hit: actual tap x201 vs native switch x313..364; dialog consolidation reverted",
       "sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
-      "status": "in_progress"
+      "status": "failure"
     }
   ],
   "client_fixture_scope": "Synthetic loopback protocol only; not actual app-to-manager-to-BGE-to-provider acceptance",
@@ -173,9 +173,21 @@
     {
       "file": "management-scope-task-id-failure.json",
       "sha256": "ca417f4dbf21f48deec3afd780adb04195901a48acbd4ec2761d5b2aa64f5dec"
+    },
+    {
+      "file": "management-consent-hit-failure.png",
+      "sha256": "2a3b8e5246f1efd7a37513baf54aa8dd572ccc8395b929ddbe858d575338b72f"
+    },
+    {
+      "file": "management-consent-hit-ax.txt",
+      "sha256": "c835af4cd9926a42287c3432056f26f927632a3e7117038dc3ce2910447051a7"
+    },
+    {
+      "file": "management-consent-hit-diagnostic.json",
+      "sha256": "a266829a3755f66fef543dfbb9dc8ad6a3c20cff39bc70c5cc629d87b0da4497"
     }
   ],
-  "client_runtime_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
+  "client_runtime_sha": "4d4b5cc60efd451b8f0a8b4853341e3e70f711a2",
   "client_tests_sha": "47bcdc3c1e24f3d52891f23320b4b8ca5abb7f6e",
   "backend_runtime_unchanged_after_backend_sha": true,
   "server_tree_difference": "new isolated behavior Java test only; backend runtime modules unchanged"

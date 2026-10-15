@@ -13,3 +13,5 @@ list／personality及旧事实操作的result继续保留memories／paused／per
 当前证据：[management-ci-results.json](management-ci-results.json)。后端22de963服务229、实际BGE／manager均通过，probe5dfa89a的实际身份38815615902通过。两轮probe错误（变量遮蔽／ID与admission字典比较）保留，运行权限未放宽。
 
 页面验证：22de963／4d4b5cc均102单测通过、新增UI失败。定向38816799405的AX证明入口只有2.3px露出，测试依据isHittable误停滚动；已撤回未证实的产品导航修改。3550c05的38818850351整行可见修正使导航及默认关闭通过，但点击开关未出现启用确认。47bcdc3把四个confirmationDialog统一为一个明确操作状态，保持授权说明与四项原操作，全量38820330282仍在途。原AX／截图制品保留，新workflow导出便携附件便于检查；未提前称修复或P21完成。见[原AX](management-navigation-ax.txt)、[诊断与制品](management-navigation-diagnostic.json)。
+
+最新38820330282终态失败但102单测通过。原截图已实际查看，AX和合成触摸plist证明点击x201落在文字，原生开关在x313..364，未真正切换。撤回未证实的四dialog冲突重构，运行源码恢复4d4b5cc；仅测试改点内层原生开关。新全量结果待CI，仍不标P21完成。便携附件导出实际通过；见management-consent-hit-diagnostic.json及原PNG／AX。

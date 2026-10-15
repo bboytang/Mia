@@ -7,30 +7,13 @@ struct MiaMemoryView: View {
     @State private var error: String?
     @State private var editing: MiaMemoryRecord?
     @State private var content = ""
-    @State private var confirmation: Confirmation?
+    @State private var clearRequested = false
+    @State private var resetRequested = false
     @State private var events: [MiaEventList.Event] = []
     @State private var tracking: MiaEmotionTracking?
+    @State private var enableTrackingRequested = false
+    @State private var clearTrackingRequested = false
     @State private var editingObservation: MiaEmotionTracking.Observation?
-
-    private enum Confirmation {
-        case clearMemories, resetPersonality, enableTracking, clearTracking
-        var title: String {
-            switch self {
-            case .clearMemories: "清空后无法撤销"
-            case .resetPersonality: "恢复基础性格？"
-            case .enableTracking: "启用长期情绪记录？"
-            case .clearTracking: "删除全部心情观察？"
-            }
-        }
-        var message: String {
-            switch self {
-            case .clearMemories: "服务器备份中的历史数据需由管理员另行处理。"
-            case .resetPersonality: "恢复基础性格，不删除已有记忆。"
-            case .enableTracking: "默认关闭。启用后记录聊天中关于你心情的观察，分析最近30天，最多保留90天。相关观察可能随请求发送给云端模型；可随时停用、更正或删除。这不等于心理诊断。"
-            case .clearTracking: "删除已有观察，不会关闭当前的记录授权。"
-            }
-        }
-    }
 
     var body: some View {
         List {
@@ -93,12 +76,12 @@ struct MiaMemoryView: View {
                             }
                         }
                     }
-                    Button("恢复基础性格", role: .destructive) { confirmation = .resetPersonality }
+                    Button("恢复基础性格", role: .destructive) { resetRequested = true }
                 }
                 if snapshot.management?.supports("events") == true { eventSection }
                 if snapshot.management?.supports("emotion_status") == true { trackingSection }
                 Section {
-                    Button("清空全部记忆与成长", role: .destructive) { confirmation = .clearMemories }
+                    Button("清空全部记忆与成长", role: .destructive) { clearRequested = true }
                 }
             }
         }
@@ -125,21 +108,20 @@ struct MiaMemoryView: View {
                     }
             }
         }
-        .confirmationDialog(confirmation?.title ?? "", isPresented: Binding(
-            get: { confirmation != nil },
-            set: { if !$0 { confirmation = nil } }
-        ), titleVisibility: .visible, presenting: confirmation) { choice in
-            switch choice {
-            case .clearMemories:
-                Button("清空全部记忆与成长", role: .destructive) { Task { await perform("clear") } }
-            case .resetPersonality:
-                Button("恢复", role: .destructive) { Task { await perform("reset_personality") } }
-            case .enableTracking:
-                Button("启用") { Task { await perform("emotion_consent", fields: ["enabled": true]) } }
-            case .clearTracking:
-                Button("删除观察", role: .destructive) { Task { await perform("emotion_clear") } }
-            }
-        } message: { choice in Text(choice.message) }
+        .confirmationDialog("清空后无法撤销", isPresented: $clearRequested, titleVisibility: .visible) {
+            Button("清空全部记忆与成长", role: .destructive) { Task { await perform("clear") } }
+        } message: { Text("服务器备份中的历史数据需由管理员另行处理。") }
+        .confirmationDialog("恢复基础性格？", isPresented: $resetRequested, titleVisibility: .visible) {
+            Button("恢复", role: .destructive) { Task { await perform("reset_personality") } }
+        }
+        .confirmationDialog("启用长期情绪记录？", isPresented: $enableTrackingRequested, titleVisibility: .visible) {
+            Button("启用") { Task { await perform("emotion_consent", fields: ["enabled": true]) } }
+        } message: {
+            Text("默认关闭。启用后记录聊天中关于你心情的观察，分析最近30天，最多保留90天。相关观察可能随请求发送给云端模型；可随时停用、更正或删除。这不等于心理诊断。")
+        }
+        .confirmationDialog("删除全部心情观察？", isPresented: $clearTrackingRequested, titleVisibility: .visible) {
+            Button("删除观察", role: .destructive) { Task { await perform("emotion_clear") } }
+        } message: { Text("删除已有观察，不会关闭当前的记录授权。") }
         .sheet(item: $editingObservation) { observation in
             NavigationStack {
                 List {
@@ -178,7 +160,7 @@ struct MiaMemoryView: View {
                 Toggle("记录我的长期心情", isOn: Binding(
                     get: { tracking.consent.enabled == 1 },
                     set: { enabled in
-                        if enabled { confirmation = .enableTracking }
+                        if enabled { enableTrackingRequested = true }
                         else { Task { await perform("emotion_consent", fields: ["enabled": false]) } }
                     }
                 ))
@@ -216,7 +198,7 @@ struct MiaMemoryView: View {
                 }
                 Text("这里显示最新100条观察，不等于医学测量；Mia 的回复表情不作为你的心情记录。")
                     .font(.footnote).foregroundStyle(.secondary)
-                Button("删除全部心情观察", role: .destructive) { confirmation = .clearTracking }
+                Button("删除全部心情观察", role: .destructive) { clearTrackingRequested = true }
             }
         }
     }
