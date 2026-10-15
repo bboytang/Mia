@@ -1,0 +1,128 @@
+{
+  "status": "P21 implementation and server controlled checks done; iOS checks still running; P22-P24 not completed",
+  "backend_sha": "22de9636a184096d391a811a938ac92dbd805d25",
+  "client_sha": "4d4b5cc",
+  "manager_probe_sha": "5dfa89a75e94b651ddf5b03de52f4e151cc040b9",
+  "server_tree_unchanged_after_backend_sha": true,
+  "local_automated_tests_or_builds": false,
+  "deployment": false,
+  "runs": [
+    {
+      "id": 38814955687,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814955687",
+      "scope": "229 service tests",
+      "sha": "22de963",
+      "status": "success"
+    },
+    {
+      "id": 38814955638,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814955638",
+      "scope": "actual BGE regressions",
+      "sha": "22de963",
+      "status": "success"
+    },
+    {
+      "id": 38814955677,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814955677",
+      "scope": "150 manager tests plus isolated 4 and class comparison",
+      "sha": "22de963",
+      "status": "success"
+    },
+    {
+      "id": 38815615902,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38815615902",
+      "scope": "173 Java tests, actual manager TLS/WSS management and JAR",
+      "sha": "5dfa89a",
+      "status": "success"
+    },
+    {
+      "id": 38814955816,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814955816",
+      "scope": "iOS compile passed, tests running; superseded by client evidence-state clarification",
+      "sha": "22de963",
+      "status": "in_progress"
+    },
+    {
+      "id": 38815987680,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38815987680",
+      "scope": "current iOS compile/unit/UI and unsigned build",
+      "sha": "4d4b5cc",
+      "status": "in_progress"
+    },
+    {
+      "id": 38814607661,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814607661",
+      "scope": "superseded iOS compile passed, testing cancelled",
+      "sha": "a6cf990",
+      "status": "cancelled"
+    },
+    {
+      "id": 38814700599,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814700599",
+      "scope": "superseded iOS compile passed, testing cancelled",
+      "sha": "98c6959",
+      "status": "cancelled"
+    },
+    {
+      "id": 38814832728,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814832728",
+      "scope": "probe local event variable shadowed TurnCompleted",
+      "sha": "99d96b7",
+      "status": "failure"
+    },
+    {
+      "id": 38814955675,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38814955675",
+      "scope": "same probe event variable failure",
+      "sha": "22de963",
+      "status": "failure"
+    },
+    {
+      "id": 38815159669,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38815159669",
+      "scope": "probe compared ID against entire admission dict",
+      "sha": "13c8c15",
+      "status": "failure"
+    }
+  ],
+  "client_fixture_scope": "Synthetic loopback protocol only; not actual app-to-manager-to-BGE-to-provider acceptance",
+  "deferred_by_user": "Actual seven-calendar-day longitudinal acceptance only",
+  "artifacts": [
+    {
+      "file": "management-bge-context-results.json.gz",
+      "sha256": "d21807179c824310f2c220a613fbf4f1d821be3dc30f714ed5ba272e5029f760"
+    },
+    {
+      "file": "management-bge-extraction-results.json.gz",
+      "sha256": "df6aea504e82ddcf9e9235504ba6f9fbc46da8f5ae2b212e8c56d680f851512c"
+    },
+    {
+      "file": "management-bge-reply-results.json.gz",
+      "sha256": "f3442f89d709e4608cf86c6ba828bc7e2671bce2747f76113f42cfd54c9e4224"
+    },
+    {
+      "file": "management-bge-retrieval-results.json.gz",
+      "sha256": "39b276233491012e50fad21af0f3e316da95417679311b2ee47ed9e98ffdf53b"
+    },
+    {
+      "file": "management-bge-vector-results.json.gz",
+      "sha256": "f19cc35cf5a57e7c832798a0964d2294c0e821f6bba257ce2490e952765c1e4d"
+    },
+    {
+      "file": "management-identity-results.json",
+      "sha256": "609426b9a2a6f0646b23cd9adc4f23e4d785d37a706008a698d3fd1fb3129fdd"
+    },
+    {
+      "file": "management-manager-results.json",
+      "sha256": "92529a69bf61bfab5d88573534a2cd89d016e0a983890e3c087d30d4e95705b0"
+    },
+    {
+      "file": "management-scope-shadow-failure.json",
+      "sha256": "0b17e026379b9c82c377808d9fd3d6f5dba86eeeb7153bf4c620204d0cd5f40b"
+    },
+    {
+      "file": "management-scope-task-id-failure.json",
+      "sha256": "ca417f4dbf21f48deec3afd780adb04195901a48acbd4ec2761d5b2aa64f5dec"
+    }
+  ]
+}

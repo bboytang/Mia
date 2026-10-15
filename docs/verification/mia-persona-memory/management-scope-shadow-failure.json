@@ -1,0 +1,501 @@
+{
+  "manager_python_scope_pass": false,
+  "error_class": "AttributeError",
+  "error_locations": [
+    {
+      "file": "verify_mia_scope_integration.py",
+      "function": "<module>",
+      "line": 424
+    },
+    {
+      "file": "runners.py",
+      "function": "run",
+      "line": 44
+    },
+    {
+      "file": "base_events.py",
+      "function": "run_until_complete",
+      "line": 649
+    },
+    {
+      "file": "verify_mia_scope_integration.py",
+      "function": "main",
+      "line": 399
+    },
+    {
+      "file": "verify_mia_scope_integration.py",
+      "function": "rejects",
+      "line": 43
+    },
+    {
+      "file": "jobs.py",
+      "function": "submit",
+      "line": 166
+    }
+  ],
+  "request_trace": [
+    {
+      "endpoint": "/config/mia-auth/verify",
+      "result_type": "dict",
+      "field_types": {
+        "owner": "str",
+        "credential_version": "str",
+        "expires_at": "str",
+        "device_id": "str",
+        "agent_id": "str",
+        "user_id": "str",
+        "operator_id": "str",
+        "permissions": "list",
+        "persona_id": "str",
+        "client_id": "str",
+        "binding_version": "str"
+      },
+      "binding_version": "0"
+    },
+    {
+      "endpoint": "/config/agent-models",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/correct-words",
+      "result_type": "list"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/worker-model",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope"
+    },
+    {
+      "endpoint": "/config/mia-auth/worker-model"
+    },
+    {
+      "endpoint": "/config/mia-auth/verify"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/worker-model",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/worker-model",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/worker-model",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope",
+      "result_type": "dict"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope"
+    },
+    {
+      "endpoint": "/config/mia-auth/check-scope"
+    }
+  ]
+}
