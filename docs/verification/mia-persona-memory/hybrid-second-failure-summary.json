@@ -1,0 +1,766 @@
+{
+  "code_sha": "6cc3fa2c5ee320b1e40448152b75cbec647e72c2",
+  "kind": "P13_real_BGE_installed_SQLite_hybrid",
+  "passed": false,
+  "weights": {
+    "semantic": 0.58,
+    "lexical": 0.28,
+    "association": 0.08,
+    "emotion": 0.06
+  },
+  "threshold": 0.2,
+  "semantic_floor": 0.35,
+  "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+  "model_revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+  "resource_limit": {
+    "cpu": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "manager": "fixture_only_actual_manager_separate",
+  "full_behavior": "not_accepted",
+  "datasets": {
+    "persona_memory_retrieval_zh_v5.json": "3b984d8e20008f7e9de675b7cc7758fcc1e0b2911bcb451056a59877c9ddabb8",
+    "persona_memory_retrieval_p13_holdout.json": "4d77bffb20cfc89a3d6c8099f9ffc234973d5a5b138771d0ffef00ffa0c35061"
+  },
+  "unsupported_persona_fixture_ids": [
+    "j-other-persona"
+  ],
+  "legacy_fts_absent": true,
+  "unsupported_persona_rejected": true,
+  "quality": {
+    "P06_v5_regression": {
+      "positive_count": 48,
+      "negative_count": 16,
+      "complete_recall_at_4": 0.9791666666666666,
+      "top1": 0.9791666666666666,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 8,
+      "related_expected_fact_recalled": 6,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    },
+    "P13_independent_v1": {
+      "positive_count": 32,
+      "negative_count": 16,
+      "complete_recall_at_4": 1.0,
+      "top1": 1.0,
+      "empty_recall": 1.0,
+      "related_unanswerable_count": 4,
+      "related_expected_fact_recalled": 4,
+      "provider_answer_abstention": "not_executed_P15_and_P22"
+    }
+  },
+  "signal_max_weighted_contributions": {
+    "semantic": 0.45548648953437804,
+    "lexical": 0.2341405405405406,
+    "association": 0.055999999999999994,
+    "emotion": 0.06
+  },
+  "expansion_changes_vs_original_top12": 0,
+  "results_only_from_bounded_supplement": 0,
+  "ablation_ranking_changes": {
+    "semantic": 110,
+    "lexical": 1,
+    "association": 0,
+    "emotion": 1
+  },
+  "query_pipeline_ms": {
+    "count": 820,
+    "p50": 37.835019499993905,
+    "p95": 89.9114640499647
+  },
+  "association_control": {
+    "passed": false,
+    "kind": "controlled_real_BGE_not_independent_quality_holdout",
+    "fixture_sha256": "99f9802f8569b80218f4daf9eae42a56c3f1eb167c21e9a6ab1e2c7984556903",
+    "original_top12": [
+      "distractor-11",
+      "distractor-07",
+      "distractor-15",
+      "distractor-05",
+      "distractor-01",
+      "distractor-13",
+      "distractor-04",
+      "distractor-10",
+      "distractor-08",
+      "distractor-06",
+      "distractor-02",
+      "distractor-00"
+    ],
+    "without_expansion": [
+      "distractor-11",
+      "distractor-08",
+      "distractor-07",
+      "distractor-05"
+    ],
+    "retrieved": [
+      "distractor-11",
+      "distractor-08",
+      "distractor-07",
+      "distractor-05"
+    ],
+    "diagnostics": {
+      "snapshot": {
+        "revision": 0,
+        "content_epoch": 35
+      },
+      "query": "帮我点菜，有什么需要注意？",
+      "expansion": [
+        {
+          "term": "扇贝",
+          "memory_id": "association-target",
+          "content_version": 1,
+          "evidence_version": 2,
+          "trigger_hits": [
+            "点菜"
+          ]
+        },
+        {
+          "term": "过敏",
+          "memory_id": "association-target",
+          "content_version": 1,
+          "evidence_version": 2,
+          "trigger_hits": [
+            "点菜"
+          ]
+        },
+        {
+          "term": "龙虾",
+          "memory_id": "association-target",
+          "content_version": 1,
+          "evidence_version": 2,
+          "trigger_hits": [
+            "点菜"
+          ]
+        }
+      ],
+      "weights": {
+        "semantic": 0.58,
+        "lexical": 0.28,
+        "association": 0.08,
+        "emotion": 0.06
+      },
+      "threshold": 0.2,
+      "semantic_floor": 0.35,
+      "candidates": [
+        {
+          "id": "distractor-11",
+          "content": "我点菜时会注意菜品数量不要超过人数太多。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.6170110702514648,
+          "original_cosine": 0.6170110702514648,
+          "expanded_cosine": 0.5257096290588379,
+          "signals": {
+            "semantic": 0.6170110702514648,
+            "lexical": 0.2357142857142857,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.42386642074584957,
+          "accepted": true
+        },
+        {
+          "id": "distractor-07",
+          "content": "我点菜时会先询问每道菜的份量。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5392378568649292,
+          "original_cosine": 0.5392378568649292,
+          "expanded_cosine": 0.43718236684799194,
+          "signals": {
+            "semantic": 0.5392378568649292,
+            "lexical": 0.18333333333333335,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.36409129031499227,
+          "accepted": true
+        },
+        {
+          "id": "distractor-15",
+          "content": "我点菜时一般希望服务员等大家选好再下单。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5366583466529846,
+          "original_cosine": 0.5366583466529846,
+          "expanded_cosine": 0.46005699038505554,
+          "signals": {
+            "semantic": 0.5366583466529846,
+            "lexical": 0.15172413793103448,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded"
+          ],
+          "score": 0.35374459967942073,
+          "accepted": true
+        },
+        {
+          "id": "distractor-05",
+          "content": "我点菜时一般希望菜品分批端上桌。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5347357988357544,
+          "original_cosine": 0.5347357988357544,
+          "expanded_cosine": 0.5040191411972046,
+          "signals": {
+            "semantic": 0.5347357988357544,
+            "lexical": 0.17600000000000002,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.3594267633247375,
+          "accepted": true
+        },
+        {
+          "id": "distractor-01",
+          "content": "我点菜之前会先问服务员哪些菜还供应。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5269864797592163,
+          "original_cosine": 0.5269864797592163,
+          "expanded_cosine": 0.4321392774581909,
+          "signals": {
+            "semantic": 0.5269864797592163,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded"
+          ],
+          "score": 0.35128178788997505,
+          "accepted": true
+        },
+        {
+          "id": "distractor-13",
+          "content": "我点菜时会请服务员复述一遍已选菜品。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5252766013145447,
+          "original_cosine": 0.5252766013145447,
+          "expanded_cosine": 0.4527793824672699,
+          "signals": {
+            "semantic": 0.5252766013145447,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.3502900583920655,
+          "accepted": true
+        },
+        {
+          "id": "distractor-04",
+          "content": "我点菜之前通常会看看菜单上的图片。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5189501643180847,
+          "original_cosine": 0.5189501643180847,
+          "expanded_cosine": 0.41364777088165283,
+          "signals": {
+            "semantic": 0.5189501643180847,
+            "lexical": 0.16923076923076924,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.34837571068910456,
+          "accepted": true
+        },
+        {
+          "id": "distractor-10",
+          "content": "我点菜时喜欢先问清楚当日推荐。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5159321427345276,
+          "original_cosine": 0.5159321427345276,
+          "expanded_cosine": 0.4457974433898926,
+          "signals": {
+            "semantic": 0.5159321427345276,
+            "lexical": 0.18333333333333335,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.3505739761193593,
+          "accepted": true
+        },
+        {
+          "id": "distractor-08",
+          "content": "我点菜时会提前问清楚大概需要等多久。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5100569128990173,
+          "original_cosine": 0.5100569128990173,
+          "expanded_cosine": 0.4001854658126831,
+          "signals": {
+            "semantic": 0.5100569128990173,
+            "lexical": 0.2538461538461539,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "lexical"
+          ],
+          "score": 0.36690993255835314,
+          "accepted": true
+        },
+        {
+          "id": "distractor-06",
+          "content": "我点菜时喜欢先给同桌的人传一遍菜单。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.49794602394104004,
+          "original_cosine": 0.49794602394104004,
+          "expanded_cosine": 0.4178372621536255,
+          "signals": {
+            "semantic": 0.49794602394104004,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded"
+          ],
+          "score": 0.33443832351543284,
+          "accepted": true
+        },
+        {
+          "id": "distractor-02",
+          "content": "我点菜时喜欢先确定主食，再决定配菜。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.4970027804374695,
+          "original_cosine": 0.4970027804374695,
+          "expanded_cosine": 0.42060941457748413,
+          "signals": {
+            "semantic": 0.4970027804374695,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded"
+          ],
+          "score": 0.3338912422833619,
+          "accepted": true
+        },
+        {
+          "id": "distractor-00",
+          "content": "我点菜时习惯先翻看菜单上的招牌菜。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.48522886633872986,
+          "original_cosine": 0.48522886633872986,
+          "expanded_cosine": 0.4045690894126892,
+          "signals": {
+            "semantic": 0.48522886633872986,
+            "lexical": 0.16923076923076924,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "lexical"
+          ],
+          "score": 0.3288173578610787,
+          "accepted": true
+        },
+        {
+          "id": "distractor-09",
+          "content": "我点菜时会先确认有没有套餐可以选择。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.4821978807449341,
+          "original_cosine": 0.4821978807449341,
+          "expanded_cosine": 0.38590216636657715,
+          "signals": {
+            "semantic": 0.4821978807449341,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "lexical"
+          ],
+          "score": 0.3253044004616914,
+          "accepted": true
+        },
+        {
+          "id": "distractor-14",
+          "content": "我点菜时喜欢先商量大家各自选几道菜。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.480697900056839,
+          "original_cosine": 0.480697900056839,
+          "expanded_cosine": 0.4152182936668396,
+          "signals": {
+            "semantic": 0.480697900056839,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.32443441166259623,
+          "accepted": true
+        },
+        {
+          "id": "distractor-03",
+          "content": "我点菜时会先统计一起吃饭的人数。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.46823155879974365,
+          "original_cosine": 0.46823155879974365,
+          "expanded_cosine": 0.37989717721939087,
+          "signals": {
+            "semantic": 0.46823155879974365,
+            "lexical": 0.17600000000000002,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "lexical"
+          ],
+          "score": 0.3208543041038513,
+          "accepted": true
+        },
+        {
+          "id": "distractor-12",
+          "content": "我点菜之前通常会先看看菜单上的价格。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.45413413643836975,
+          "original_cosine": 0.45413413643836975,
+          "expanded_cosine": 0.3515860140323639,
+          "signals": {
+            "semantic": 0.45413413643836975,
+            "lexical": 0.16296296296296298,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "lexical"
+          ],
+          "score": 0.30902742876388406,
+          "accepted": true
+        },
+        {
+          "id": "association-target",
+          "content": "我吃扇贝会过敏，但龙虾可以正常吃。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": "[\"扇贝\"]",
+          "keywords": "[\"过敏\", \"龙虾\"]",
+          "trigger_terms": "[\"点菜\"]",
+          "emotional_weight": 0.4,
+          "cosine": 0.34117764234542847,
+          "original_cosine": 0.34117764234542847,
+          "expanded_cosine": 0.6409081816673279,
+          "signals": {
+            "semantic": 0.6409081816673279,
+            "lexical": 0.14,
+            "association": 0.35,
+            "emotion": 0.4
+          },
+          "lexical_hits": [
+            "点菜"
+          ],
+          "association_hits": [
+            "点菜"
+          ],
+          "candidate_sources": [
+            "expanded",
+            "association"
+          ],
+          "score": 0.46292674536705014,
+          "accepted": false
+        }
+      ],
+      "results": [
+        {
+          "id": "distractor-11",
+          "content": "我点菜时会注意菜品数量不要超过人数太多。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.6170110702514648,
+          "original_cosine": 0.6170110702514648,
+          "expanded_cosine": 0.5257096290588379,
+          "signals": {
+            "semantic": 0.6170110702514648,
+            "lexical": 0.2357142857142857,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.42386642074584957,
+          "accepted": true
+        },
+        {
+          "id": "distractor-08",
+          "content": "我点菜时会提前问清楚大概需要等多久。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5100569128990173,
+          "original_cosine": 0.5100569128990173,
+          "expanded_cosine": 0.4001854658126831,
+          "signals": {
+            "semantic": 0.5100569128990173,
+            "lexical": 0.2538461538461539,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "lexical"
+          ],
+          "score": 0.36690993255835314,
+          "accepted": true
+        },
+        {
+          "id": "distractor-07",
+          "content": "我点菜时会先询问每道菜的份量。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5392378568649292,
+          "original_cosine": 0.5392378568649292,
+          "expanded_cosine": 0.43718236684799194,
+          "signals": {
+            "semantic": 0.5392378568649292,
+            "lexical": 0.18333333333333335,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.36409129031499227,
+          "accepted": true
+        },
+        {
+          "id": "distractor-05",
+          "content": "我点菜时一般希望菜品分批端上桌。",
+          "category": "fact",
+          "content_version": 1,
+          "evidence_version": 2,
+          "entities": null,
+          "keywords": null,
+          "trigger_terms": null,
+          "emotional_weight": null,
+          "cosine": 0.5347357988357544,
+          "original_cosine": 0.5347357988357544,
+          "expanded_cosine": 0.5040191411972046,
+          "signals": {
+            "semantic": 0.5347357988357544,
+            "lexical": 0.17600000000000002,
+            "association": 0.0,
+            "emotion": 0.0
+          },
+          "lexical_hits": [],
+          "association_hits": [],
+          "candidate_sources": [
+            "original",
+            "expanded",
+            "lexical"
+          ],
+          "score": 0.3594267633247375,
+          "accepted": true
+        }
+      ]
+    }
+  },
+  "capacity": {
+    "1000": {
+      "count": 10,
+      "pipeline_p95_ms": 55.83066349994397,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    },
+    "10000": {
+      "count": 10,
+      "pipeline_p95_ms": 258.63780970003063,
+      "fixture": "synthetic short records without metadata; repeated real seed vector; capacity only"
+    }
+  },
+  "peak_rss_mib": 283.53125,
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38667184462",
+  "failure_reason": "Controlled target original cosine 0.3411776423 is below fixed 0.35 floor; retrieval correctly rejects it despite expanded cosine 0.6409081817. Positive recovery expectation was not met.",
+  "original_report_sha256": "931de18ffbd5f92b0abd402dcabc8f80a06b56ac7d24470d8a27470fd1866bd5",
+  "original_report_gzip": "hybrid-second-failure-results.json.gz"
+}

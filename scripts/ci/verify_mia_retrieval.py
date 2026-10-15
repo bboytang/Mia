@@ -85,6 +85,7 @@ async def association_control(encoder, policy, path):
                 and target_row is not None and 'expanded' in target_row['candidate_sources']
                 and target_row['expanded_cosine'] > target_row['original_cosine'])
             return {'passed': passed, 'kind': 'controlled_real_BGE_not_independent_quality_holdout',
+                'floor_rejected': target_row is not None and target_row['original_cosine'] < SEMANTIC_FLOOR and target['id'] not in recovered,
                 'fixture_sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'original_top12': original_ids,
                 'without_expansion': without, 'retrieved': recovered, 'diagnostics': result}
         finally:
@@ -177,7 +178,8 @@ async def evaluate(directory, report):
             report['query_pipeline_ms'] = {'count': len(times), 'p50': float(np.percentile(times, 50)), 'p95': float(np.percentile(times, 95))}
         finally:
             store.close()
-    report['association_control'] = await association_control(encoder, policy, fixtures / 'persona_memory_association_control.json')
+    report['association_floor_control'] = await association_control(encoder, policy, fixtures / 'persona_memory_association_control.json')
+    report['association_control'] = await association_control(encoder, policy, fixtures / 'persona_memory_association_control_v2.json')
     report['capacity'] = {}
     current = scope('J/daily/mia')
     seed = encoder.encode('我在阳台种薄荷。').astype('<f4').tobytes()
@@ -206,6 +208,7 @@ async def evaluate(directory, report):
     report['passed'] = (all(meets_quality(q) for q in report['quality'].values()) and report['unsupported_persona_rejected']
         and all(value > 0 for value in maximum_contributions.values())
         and report['association_control']['passed']
+        and report['association_floor_control']['floor_rejected']
         and report['query_pipeline_ms']['p95'] <= 400 and report['capacity']['10000']['pipeline_p95_ms'] <= 400
         and report['peak_rss_mib'] <= 512)
 
