@@ -345,6 +345,22 @@ async def main():
                 assert await execute_tool(active, {'name': 'synthetic_tool'}) == 'synthetic tool output'
             active._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, None, 'scope-ci', scope, auth)
             active.dialogue = SimpleNamespace(dialogue=[])
+            for action in ('list', 'events', 'observations'):
+                request_id = str(uuid.uuid4())
+                await adapter.handle_message(active, json.dumps({'type': 'mia_memory', 'request_id': request_id, 'action': action}))
+                response = active.websocket.sent[-1]
+                assert response['request_id'] == request_id and 'error' not in response
+                if action == 'list':
+                    assert response['result']['management']['version'] == 1
+                    assert 'emotion_consent' in response['result']['management']['actions']
+                elif action == 'events':
+                    event = next(item for item in response['result']['events'] if item['id'] == event_id)
+                    assert event['user_excerpt'] == '你还记得CI own memory吗'
+                    assert event['assistant_excerpt'] == '😌记得，CI own memory。'
+                else:
+                    assert response['result']['consent']['enabled'] == 0
+                    assert response['result']['trend'] == {'status': 'disabled'}
+                    assert len(response['result']['observations']) == 1
             for request, code in [({'action': 'clear', 'owner': peer}, 'not_authorized'),
                                   ({'action': 'observations', 'owner': peer}, 'not_authorized'),
                                   ({'action': 'event_delete', 'owner': peer, 'id': event_id}, 'not_authorized'),
