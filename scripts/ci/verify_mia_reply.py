@@ -137,7 +137,7 @@ async def evaluate(directory, output):
             assert 'FOREIGN_PRIVATE' not in request.content.decode()
             data = json.loads(body['messages'][1]['content'])['mia_context']
             if mode in {'tools', 'delete', 'revoke'} and step <= (2 if mode == 'tools' else 1):
-                count = 2 if step == 1 else 1
+                count = 2 if mode == 'tools' and step == 1 else 1
                 delta = {'tool_calls': [{'index': i, 'id': f'call-{step}-{i}', 'type': 'function',
                     'function': {'name': 'weather', 'arguments': '{}'}} for i in range(count)]}
             elif mode == 'direct':

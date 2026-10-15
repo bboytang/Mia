@@ -21,7 +21,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P15实现与GitHub验证进行中**，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
+当前步骤：**P15已本地实现，推送被自动审批阻止，GitHub尚未验证**，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
 最新验证提交：`5e91409bbc9da69b0c7085837e7014ce24e3bc04`，服务[38732848387](https://github.com/bboytang/Mia/actions/runs/38732848387)145项通过；实际BGE [38732848548](https://github.com/bboytang/Mia/actions/runs/38732848548)的P12／P13回归及P14安装包／原Dialogue／上下文10工具场景通过，50次build p95 34.959ms、峰值RSS283.887MiB。ContextBundle固定CORE与数据层分离、当前问题／完整工具优先、20轮及字节估算预算、权限及三项快照复查；历史／源字典不变、删除重建、无效特点不入、未知容量明确拒绝。报告见[context-results.json](verification/mia-persona-memory/context-results.json)。容量profile和工具结果为CI夹具，未调用聊天Provider，不是实际窗口、精确Token或完整B08证据。
 
@@ -68,7 +68,7 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P12 | 基础及生命周期复核通过，整体待联动 | b8ebb48真实BGE及1千／1万资源通过；d5edbd6服务125通过，补超时／竞态／重开与重建；历史身份23专项／构建通过，完整Java保留1既有失败；完整语料／主链联动仍待后续 |
 | P13 | 完成：检索模块及受控验证 | 664237f服务132、实际BGE及正向找回／底线拒绝通过；身份专项／构建通过，Java保留既有失败；D04固定供P14集成，完整真实行为待P22 |
 | P14 | 完成：上下文模块及受控验证 | 5e91409服务145、实际BGE＋原Dialogue＋10工具场景、身份专项及构建通过；Java既有失败保留，真实Provider参数／接线及B08待P15／P22 |
-| P15 | 进行中 | 单回复及工具续答已实现待GitHub验证；真实Provider容量仍未核实，现网max_tokens为空，未改现网 |
+| P15 | 进行中：等待本轮推送授权 | 940d8a8及后续审阅记录仅本地；自动审批不认可9117ac8授权覆盖新代码，未运行GitHub。现网输出为空、容量未核实，未部署 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
 | P21—P26 | 未开始 | 必要管理、真实行为、性能、回归、真机及发布包待实施 |
