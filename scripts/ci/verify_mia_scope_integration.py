@@ -358,7 +358,7 @@ async def main():
                     assert managed_event['user_excerpt'] == '你还记得CI own memory吗'
                     assert managed_event['assistant_excerpt'] == '😌记得，CI own memory。'
                 elif action == 'job_status':
-                    assert response['result']['id'] == pending and response['result']['state'] == 'pending'
+                    assert response['result']['id'] == pending['id'] and response['result']['state'] == 'pending'
                 else:
                     assert response['result']['consent']['enabled'] == 0
                     assert response['result']['trend'] == {'status': 'disabled'}
