@@ -188,7 +188,9 @@ async def serve():
                 'capacity_source': 'Isolated short-request CI envelope; not verified production capacity'}))
             os.environ['MIA_CONTEXT_PROFILE_FILE'] = str(profile)
             conn._mia_context_builder = ContextBuilder(index)
-            conn._mia_memory = adapter.MiaMemoryProvider(store, scope.owner, llm, conn.session_id, scope, auth)
+            conn.memory = None
+            conn._initialize_memory()
+            assert conn._mia_memory.store is store and conn._mia_memory.authorization is auth
             conn.change_system_prompt(private['prompt'])
             adapter.attach_output_guard(conn)
 

@@ -644,3 +644,5 @@
 - 新UI验证源码87d2427已推送，唯一当前全量iOS run38821633956在执行，未提前记通过。工作树保存，P21—P24持续目标仍active。没有新增实际模型请求、部署、签名或本地自动化测试。
 
 - 等待87d2427全量iOS38821633956（已编译、单测／UI运行中）期间，P22驱动改用安装后ConnectionHandler.chat原方法及装饰器，移除自写chat。复用已有P15 AST加载方式，不改方法体；原change_system_prompt／回复／checkpoint／后台接收路径真实执行，仍明确未验完整WebSocketServer／音频初始化。原Provider回复用透明流观察器记录，最终历史及实际GuardedTTSQueue文字分别保存，召回／未知检查包括待投递文本。此准备变更尚无实际请求，下一GitHub语法／实际组合结果需分别记录。
+
+- 320d42a的GitHub语法38822131808成功，仅语法／JSON，真实组合job skipped。继续将驱动记忆初始化改为安装后原_initialize_memory()，验证与原Worker共用store及该连接真实授权对象，避免手工另造provider接线；需下一源码CI，尚未真实调用。
