@@ -365,7 +365,8 @@ class MemoryStore:
                         self.db.execute("UPDATE memories SET confirmed=?,updated_at=? WHERE id=?",
                                         (bool(existing["confirmed"]) and confirmed, now, memory_id))
                 self.db.execute("INSERT OR IGNORE INTO sources VALUES (?,?,?,?,?)",
-                                (memory_id, session_id, hashlib.sha256(source.encode()).hexdigest(), source, now))
+                                (memory_id, session_id, hashlib.sha256(source.encode()).hexdigest(),
+                                 structured['memories'][item_index]['source_quote'] if reconciliation else source, now))
                 self._index(memory_id, item["content"])
                 if job_id is not None:
                     from .embedding import DIMENSION, MODEL_KEY, REVISION
