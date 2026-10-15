@@ -282,7 +282,24 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         mia.begin_turn(self.conn, "下一轮")
         self.assertEqual(mia.tts_emotion(self.conn, "回答"), {"emotion": "calm", "intensity": 0.5})
         self.conn._mia_memory = None
+        self.assertEqual(mia.tts_emotion(self.conn, "🙂回答"), {"emotion": "happy", "intensity": 0.35})
+        self.conn._mia_scope = None
         self.assertEqual(mia.tts_emotion(self.conn, "🙂回答"), {})
+
+    def test_fixed_persona_loads_when_memory_database_initialization_fails(self):
+        from server.companion.persona import CORE
+        self.conn._mia_owner = self.scope.owner
+        self.conn.llm = self.model
+        self.conn.session_id = 'db-failure'
+        self.conn.prompt = '当前角色偏好简短回答'
+        self.conn.config = {}
+        self.conn.change_system_prompt = lambda prompt: setattr(self.conn, 'prompt', mia.compose_persona(self.conn, prompt))
+        with patch('server.companion.xiaozhi_adapter._store', side_effect=OSError('synthetic unavailable')):
+            self.assertTrue(mia.initialize_memory(self.conn))
+        self.assertIsNone(self.conn.memory)
+        mia.apply_persona_prompt(self.conn)
+        self.assertTrue(self.conn.prompt.startswith(CORE))
+        self.assertIn('当前角色偏好简短回答', self.conn.prompt)
 
     def test_short_history_keeps_whole_user_and_tool_rounds(self):
         history = []

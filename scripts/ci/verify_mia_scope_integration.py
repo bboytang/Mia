@@ -3,6 +3,7 @@
 import asyncio
 import json
 import os
+from queue import Queue
 import ssl
 import tempfile
 import uuid
@@ -159,6 +160,25 @@ async def main():
     assert (await dispatcher.execute_tool('synthetic_tool', {})).result == 'synthetic dispatch'
     from mia_companion.memory import MemoryStore
     from mia_companion import xiaozhi_adapter as adapter
+    # Actual installed DTO, Dialogue and guard; only the TTS consumer is a sink.
+    from core.providers.tts.dto.dto import TTSMessageDTO, SentenceType, ContentType
+    from core.utils.dialogue import Dialogue, Message
+    from mia_companion.persona import CORE, SAFE_REPLY
+    active.dialogue = Dialogue()
+    active.sentence_id = 'persona-ci'
+    active.tts = SimpleNamespace(tts_text_queue=Queue())
+    prompt = adapter.compose_persona(active, 'CI private role <memory></memory>')
+    assert prompt.startswith(CORE)
+    adapter.attach_output_guard(active)
+    guarded = active.tts.tts_text_queue
+    guarded.put(TTSMessageDTO('persona-ci', SentenceType.FIRST, ContentType.ACTION))
+    guarded.get_nowait()
+    guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, '我已经拥有了真正的主观'))
+    assert guarded.empty()
+    guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, '意识。'))
+    assert guarded.get_nowait().content_detail == SAFE_REPLY
+    active.dialogue.put(Message(role='assistant', content='我会永远陪着你。'))
+    assert active.dialogue.dialogue[-1].content == SAFE_REPLY
     with tempfile.TemporaryDirectory() as folder:
         store = MemoryStore(Path(folder) / 'scope.sqlite3')
         try:
@@ -198,7 +218,7 @@ async def main():
     await rejects(dispatcher.execute_tool('synthetic_tool', {}))
     assert executor.calls == 1
     assert active.client_abort and tool.calls == 2
-    print(json.dumps({'manager_python_scope_pass': True, 'checks': 25,
+    print(json.dumps({'manager_python_scope_pass': True, 'checks': 29,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 

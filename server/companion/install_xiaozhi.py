@@ -68,6 +68,16 @@ def patch_connection(text):
                         "    def _initialize_memory(self):\n        if mia.initialize_memory(self):\n            return\n        if self.memory is None:\n")
     text = replace_once(text, "            self._init_prompt_enhancement()\n",
                         "            self._init_prompt_enhancement()\n            mia.apply_persona_prompt(self)\n")
+    text = replace_once(text, '            # 打开语音合成通道\n',
+                        '            mia.attach_output_guard(self)\n            # 打开语音合成通道\n')
+    text = replace_once(text, '    def change_system_prompt(self, prompt):\n        self.prompt = prompt\n',
+                        '    def change_system_prompt(self, prompt):\n        self.prompt = mia.compose_persona(self, prompt)\n')
+    text = replace_once(text, '        # Define intent functions\n',
+                        '        if mia.blocked_input_reply(self, depth):\n            return\n\n'
+                        '        # Define intent functions\n')
+    for arguments in ('current_sentence_id, da_response', 'current_sentence_id, streamed_text',
+                      'current_sentence_id, text_buff', 'self.sentence_id, text'):
+        text = replace_once(text, f'self.tts.store_tts_text({arguments})', f'mia.store_tts_text(self, {arguments})')
     text = replace_once(text, "        if isinstance(message, str):\n            await handleTextMessage(self, message)\n",
                         "        if not await mia_auth.allow_output(self):\n            return\n"
                         "        if isinstance(message, str):\n            if await mia.handle_message(self, message):\n                return\n            await handleTextMessage(self, message)\n")
@@ -107,7 +117,9 @@ def patch_tts(text):
 
 def patch_dialogue(text):
     text = replace_once(text, "from datetime import datetime\n",
-                        "from datetime import datetime\nfrom mia_companion.xiaozhi_adapter import bounded_history\n")
+                        "from datetime import datetime\nfrom mia_companion.xiaozhi_adapter import bounded_history, guard_history\n")
+    text = replace_once(text, '    def put(self, message: Message):\n        self.dialogue.append(message)\n',
+                        '    def put(self, message: Message):\n        guard_history(self, message)\n        self.dialogue.append(message)\n')
     text = replace_once(text, '                    f"<memory>\\n{memory_str}\\n</memory>",\n',
                         '                    lambda _: f"<memory>\\n{memory_str}\\n</memory>",\n')
     return replace_once(text, "        actual_messages = [m for m in non_system_messages if not m.is_temporary]\n",
@@ -183,7 +195,7 @@ def install(root, changes):
         shutil.copy2(root / relative, root / (relative + ".mia-original"))
     destination.mkdir(mode=0o700)
     try:
-        for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql"]:
+        for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql", "persona.py"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")

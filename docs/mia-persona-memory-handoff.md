@@ -1,6 +1,6 @@
 # Mia 人格认知与长期记忆：接续入口
 
-更新：2026-10-14。方案：[V1.2](mia-persona-memory-v1.2.md)。完整步骤：[实施计划](mia-persona-memory-implementation.md)。事实记录：[工作记录](mia-persona-memory-worklog.md)。
+更新：2026-10-15。方案：[V1.2](mia-persona-memory-v1.2.md)。完整步骤：[实施计划](mia-persona-memory-implementation.md)。事实记录：[工作记录](mia-persona-memory-worklog.md)。
 
 ## 当前范围与状态
 
@@ -21,11 +21,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-当前步骤：**P10兼容存储基础完成，下一步P11完整Persona机制**。P09基础通过、整体随新增消费者联动验收；P07真实Provider与P08实际App／入口仍保留未验状态。用户确认的旧设备授权提示、无公共语音回退、保留ID／绑定等契约不变。
+当前步骤：**P11分层人格与输出前检查进行中**。P10兼容存储基础完成。P09基础通过、整体随新增消费者联动验收；P07真实Provider与P08实际App／入口仍保留未验状态。用户确认的旧设备授权提示、无公共语音回退、保留ID／绑定等契约不变。
 
 先读取[迁移证据](verification/mia-persona-memory/schema-migration.md)和[报告](verification/mia-persona-memory/schema-results.json)：被测代码426d8c4fd1ce5bc0d7e31b255834c8b8a1bd0330，服务[38656910711](https://github.com/bboytang/Mia/actions/runs/38656910711)的6迁移／104全量通过，身份[38656908156](https://github.com/bboytang/Mia/actions/runs/38656908156)的23专项／实际TLS、JAR、类范围通过，完整173中172通过／1既有脱敏失败。P10只证明基础schema及真实旧代码必要读写回滚，完整新消费者回滚仍属P24；FTS仍不算RAG。
 
-下一步：按P11独立实现分层人格、输入／输出检查和句级流式机制，复用现有PromptManager／Provider／工具／TTS；不能只增Prompt或复制未授权路遥源码，也不能恢复固定剧情／“永不离开”等不实承诺。固定核心不能依赖数据库成功。P14／P15统一上下文及所有直接回答／工具续答，P19提供真实可追溯事件，均保留各自门槛。已阅读固定路遥persona.py／guardrails.py及现有connection／adapter，尚未编写P11代码；固定审计源码可按基线重建，不依赖本机/tmp。
+下一步：按P11独立实现分层人格、输入／输出检查和句级流式机制，复用现有PromptManager／Provider／工具／TTS；不能只增Prompt或复制未授权路遥源码，也不能恢复固定剧情／“永不离开”等不实承诺。固定核心不能依赖数据库成功。P14／P15统一上下文及所有直接回答／工具续答，P19提供真实可追溯事件，均保留各自门槛。已独立编写PersonaAgent／GuardedTTSQueue及原connection／dialogue必要钩子，固定核心不依赖DB，已知输入攻击／句级输出／字幕／助手历史检查待本提交GitHub验证；见[机制证据](verification/mia-persona-memory/persona.md)。完整RAG／统一上下文／资格事件按后续步骤接入，不能称整个Persona行为已通过。固定审计源码可按基线重建，不依赖本机/tmp。
 
 实际App整链／生产证书入口／iPhone／全服务资源及八项行为仍待验，未部署；三个专用Actions Secret已配置，81e46ad／38659019412单次真实Provider连接probe通过（glm-4-flash，1498ms／38 Token）；尚非实际Mia人格／记忆行为，不能以此替代完整验收。先查在途run及当前工作树，避免重复执行。
 
@@ -44,7 +44,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 | P08 | 开发／隔离部分通过 | 18真实身份（含HTTPS/WSS）及构建、App100＋5和构建、智控台53＋64和构建通过；真实App↔manager与生产证书／入口／iPhone仍待验，整体未封板 |
 | P09 | 基础通过，整体进行中 | 426d8c4的实际安装Scope／ToolManager／管理／旧会话及23身份／TLS通过；新增索引／事件／趋势／持久任务逐模块补Scope证据，整体与真实App／资源待验 |
 | P10 | 完成：兼容基础 | 426d8c4／38656910711的6项真实SQLite迁移及104服务测试通过；同提交23身份／TLS、构建及类范围通过，完整回归保留1既有失败 |
-| P11—P15 | 未开始 | 人格、完整 RAG、上下文与唯一入口未实施 |
+| P11 | 实现待验 | 分层核心与句级检查、输入阻断／字幕／历史钩子已编写，服务与实际安装Scope机制待GitHub；真实人格行为未验 |
+| P12—P15 | 未开始 | 完整RAG、统一上下文与唯一入口联动仍待实施 |
 | P16—P18 | 未开始 | 持久任务、完整提取与维护未实施 |
 | P19—P20 | 未开始 | 持续人格事件与授权趋势未实施 |
 | P21—P26 | 未开始 | 必要管理、真实行为、性能、回归、真机及发布包待实施 |
@@ -58,7 +59,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 | 能力 | 代码 | 机制验证 | 真实行为 | 真机相关项 |
 | --- | --- | --- | --- | --- |
-| B01 人格对话引擎 | 未开始 | 未执行 | 未执行 | 未执行 |
+| B01 人格对话引擎 | 进行中：P11基础 | 待本提交GitHub | 未执行 | 未执行 |
 | B02 长期记忆 RAG | 未开始 | 未执行 | 未执行 | 未执行 |
 | B03 异步记忆提取 | 未开始 | 未执行 | 未执行 | 未执行 |
 | B04 四维检索 | 未开始 | 未执行 | 未执行 | 未执行 |
