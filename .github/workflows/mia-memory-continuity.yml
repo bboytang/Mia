@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      MIA_CONTINUITY_DIR: ${{ runner.temp }}/mia-continuity
+      MIA_CONTINUITY_DIR: /tmp/mia-continuity
       MIA_CONTINUITY_MODE: ${{ inputs.mode }}
       MIA_CONTINUITY_PREVIOUS_RUN: ${{ inputs.previous_run }}
     steps:
@@ -82,6 +82,6 @@ jobs:
         if: always()
         with:
           name: Mia-continuity-${{ github.sha }}-${{ github.run_id }}
-          path: ${{ runner.temp }}/mia-continuity
+          path: /tmp/mia-continuity
           if-no-files-found: warn
           retention-days: 90
