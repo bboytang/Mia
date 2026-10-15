@@ -66,9 +66,12 @@ async def evaluate(args, report):
             assert 'FOREIGN_PRIVATE' not in request.content.decode()
             assert context['user_excerpts'] == [current['source']]
             requests.append({'case': current['id'], 'model': body['model']})
-            return httpx.Response(200, json={'id': 'fixture', 'object': 'chat.completion', 'created': 0,
+            assert body['stream'] is True
+            chunk = {'id': 'fixture', 'object': 'chat.completion.chunk', 'created': 0,
                 'model': 'synthetic', 'choices': [{'index': 0, 'finish_reason': 'stop',
-                    'message': {'role': 'assistant', 'content': json.dumps(current['output'], ensure_ascii=False)}}]})
+                    'delta': {'content': json.dumps(current['output'], ensure_ascii=False)}}]}
+            return httpx.Response(200, headers={'content-type': 'text/event-stream'},
+                content=('data: ' + json.dumps(chunk, ensure_ascii=False) + '\n\ndata: [DONE]\n\n').encode())
         def factory():
             provider = LLMProvider({'api_key': 'synthetic-only', 'model_name': 'synthetic',
                 'base_url': 'https://ci.invalid/v4', 'max_tokens': 768, 'timeout': 5})
