@@ -1,0 +1,56 @@
+name: Verify Mia persona foundation
+on:
+  push:
+    paths:
+      - 'server/companion/persona.py'
+      - 'scripts/ci/verify_mia_persona_provider.py'
+      - '.github/workflows/mia-memory-persona.yml'
+  pull_request:
+    paths:
+      - 'server/companion/persona.py'
+      - 'scripts/ci/verify_mia_persona_provider.py'
+      - '.github/workflows/mia-memory-persona.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m py_compile scripts/ci/verify_mia_persona_provider.py
+  live:
+    if: github.event_name == 'workflow_dispatch'
+    needs: syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m pip install openai==2.8.1 httpx==0.28.1
+      - name: Install preimage-checked companion on fixed upstream
+        run: python -m server.companion.install_xiaozhi upstream --apply
+      - name: Three bounded real provider cases through installed persona output queue
+        env:
+          MIA_PERSONA_UPSTREAM: ${{ github.workspace }}/upstream
+          MIA_PERSONA_REPORT: ${{ runner.temp }}/mia-persona-provider.json
+          MIA_TEST_LLM_API_KEY: ${{ secrets.MIA_TEST_LLM_API_KEY }}
+          MIA_TEST_LLM_BASE_URL: ${{ secrets.MIA_TEST_LLM_BASE_URL }}
+          MIA_TEST_LLM_MODEL: ${{ secrets.MIA_TEST_LLM_MODEL }}
+        run: python scripts/ci/verify_mia_persona_provider.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Mia-persona-provider-${{ github.sha }}
+          path: ${{ runner.temp }}/mia-persona-provider.json
+          if-no-files-found: warn

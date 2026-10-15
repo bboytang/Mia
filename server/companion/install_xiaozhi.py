@@ -89,7 +89,14 @@ def patch_connection(text):
                         "        if depth == 0:\n            mia.checkpoint(self)\n            self.tts.tts_text_queue.put(\n")
     text = replace_once(text, '    def chat(self, query, depth=0):\n',
                         '    def chat(self, query, depth=0):\n'
+                        '        if depth > 0 and mia.output_was_blocked(self):\n            return\n'
                         '        if not mia_auth.allow_generation(self):\n            return\n')
+    text = replace_once(text, '                if self.client_abort:\n                    break\n',
+                        '                if self.client_abort or mia.output_was_blocked(self):\n                    break\n')
+    text = replace_once(text, '        # 处理function call\n',
+                        '        if mia.finish_blocked_output(self):\n'
+                        '            if hasattr(llm_responses, "close"):\n                llm_responses.close()\n'
+                        '            return\n\n        # 处理function call\n')
     text = replace_once(text, 'from config.manage_api_client import DeviceNotFoundException, DeviceBindException, generate_and_save_chat_title',
                         'from config.manage_api_client import DeviceNotFoundException, DeviceBindException')
     text = replace_once(text, '                            generate_and_save_chat_title(self.session_id)',

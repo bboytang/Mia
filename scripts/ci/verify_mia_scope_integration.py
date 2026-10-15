@@ -179,6 +179,11 @@ async def main():
     assert guarded.get_nowait().content_detail == SAFE_REPLY
     active.dialogue.put(Message(role='assistant', content='我会永远陪着你。'))
     assert active.dialogue.dialogue[-1].content == SAFE_REPLY
+    stored = []
+    active.tts.store_tts_text = lambda sentence, text: stored.append(text)
+    assert adapter.finish_blocked_output(active)
+    assert stored == [SAFE_REPLY]
+    assert guarded.get_nowait().sentence_type == SentenceType.LAST
     with tempfile.TemporaryDirectory() as folder:
         store = MemoryStore(Path(folder) / 'scope.sqlite3')
         try:
@@ -218,7 +223,7 @@ async def main():
     await rejects(dispatcher.execute_tool('synthetic_tool', {}))
     assert executor.calls == 1
     assert active.client_abort and tool.calls == 2
-    print(json.dumps({'manager_python_scope_pass': True, 'checks': 29,
+    print(json.dumps({'manager_python_scope_pass': True, 'checks': 30,
                       'native_wss_scope_pass': tls_pass,
                       'real_model_acceptance': 'not_executed', 'actual_ios_wss_acceptance': 'not_executed'}))
 

@@ -10,6 +10,10 @@ on:
       - 'scripts/ci/verify_mia_binding_reports.py'
       - 'scripts/ci/verify_mia_scope_integration.py'
       - 'server/companion/authorization.py'
+      - 'server/companion/persona.py'
+      - 'server/companion/xiaozhi_adapter.py'
+      - 'server/companion/memory.py'
+      - 'server/companion/schema.*'
       - 'server/companion/install_xiaozhi.py'
       - '.github/workflows/mia-memory-identity.yml'
   pull_request:
@@ -22,6 +26,10 @@ on:
       - 'scripts/ci/verify_mia_binding_reports.py'
       - 'scripts/ci/verify_mia_scope_integration.py'
       - 'server/companion/authorization.py'
+      - 'server/companion/persona.py'
+      - 'server/companion/xiaozhi_adapter.py'
+      - 'server/companion/memory.py'
+      - 'server/companion/schema.*'
       - 'server/companion/install_xiaozhi.py'
       - '.github/workflows/mia-memory-identity.yml'
   workflow_dispatch:

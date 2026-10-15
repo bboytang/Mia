@@ -107,14 +107,31 @@ def blocked_input_reply(conn, depth):
     agent = persona_agent(conn)
     if depth != 0 or not agent or not agent.input_decision.blocked:
         return False
+    _complete_checked_reply(conn, SAFE_REPLY, send_text=True)
+    return True
+
+
+def output_was_blocked(conn):
+    return bool(getattr(conn, '_mia_output_replacement', None))
+
+
+def finish_blocked_output(conn):
+    replacement = getattr(conn, '_mia_output_replacement', None)
+    if not replacement:
+        return False
+    _complete_checked_reply(conn, replacement, send_text=False)
+    return True
+
+
+def _complete_checked_reply(conn, text, send_text):
     from core.providers.tts.dto.dto import TTSMessageDTO, SentenceType, ContentType
     from core.utils.dialogue import Message
-    conn.tts.tts_text_queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.MIDDLE, ContentType.TEXT, SAFE_REPLY))
-    store_tts_text(conn, conn.sentence_id, SAFE_REPLY)
-    conn.dialogue.put(Message(role="assistant", content=SAFE_REPLY))
+    if send_text:
+        conn.tts.tts_text_queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.MIDDLE, ContentType.TEXT, text))
+    store_tts_text(conn, conn.sentence_id, text)
+    conn.dialogue.put(Message(role="assistant", content=text))
     checkpoint(conn)
     conn.tts.tts_text_queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.LAST, ContentType.ACTION))
-    return True
 
 
 def _user_excerpts(messages):
@@ -273,6 +290,7 @@ def _trim_dialogue(conn, clear=False):
 
 def begin_turn(conn, query):
     conn._mia_emotion = ("calm", 0.5)
+    conn._mia_output_replacement = None
     agent = persona_agent(conn)
     if agent:
         agent.begin_turn(query)

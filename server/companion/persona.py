@@ -61,8 +61,14 @@ class PersonaGuardrail:
 
     def inspect_output(self, text):
         value = unicodedata.normalize('NFKC', text or '')
-        if any(pattern.search(value) for pattern in self._forbidden):
-            return SAFE_REPLY, True
+        for index, pattern in enumerate(self._forbidden):
+            for match in pattern.finditer(value):
+                # A refusal may quote the very claim it rejects. A comma or
+                # sentence boundary resets that limited negation context.
+                prefix = re.split(r'[，,。！？!?\n]', value[:match.start()])[-1][-24:]
+                if index < 3 and re.search(r'不能(?:承诺|保证)|无法(?:承诺|保证)|不应声称|不能声称', prefix):
+                    continue
+                return SAFE_REPLY, True
         return text, False
 
 
@@ -117,8 +123,12 @@ class GuardedTTSQueue:
         item.content_detail = checked
         self._queue.put(item, block=block, timeout=timeout)
         if replaced:
-            self._stopped = True
-            self._pending = ''
+            self._stop(checked)
+
+    def _stop(self, replacement):
+        self._stopped = True
+        self._pending = ''
+        self._conn._mia_output_replacement = replacement
 
     def put(self, message, block=True, timeout=None):
         with self._lock:
@@ -129,6 +139,7 @@ class GuardedTTSQueue:
             text = message.content_type.name == 'TEXT'
             if first or message.sentence_id != self._sentence:
                 self._sentence, self._pending, self._stopped = message.sentence_id, '', False
+                self._conn._mia_output_replacement = None
             if text and not self._stopped:
                 incoming = message.content_detail or ''
                 # Process bounded slices so even a single huge provider delta
@@ -142,12 +153,12 @@ class GuardedTTSQueue:
                         phrase, self._pending = self._pending[:boundary.end()], self._pending[boundary.end():]
                         if len(phrase) > 1024:
                             self._text(message, LONG_REPLY, block, timeout)
-                            self._stopped = True
+                            self._stop(LONG_REPLY)
                         else:
                             self._text(message, phrase, block, timeout)
                     if len(self._pending) > 1024:
                         self._text(message, LONG_REPLY, block, timeout)
-                        self._stopped = True
+                        self._stop(LONG_REPLY)
                     if self._stopped:
                         self._pending = ''
                         break

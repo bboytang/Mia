@@ -77,15 +77,20 @@ class PersonaMechanismTests(unittest.TestCase):
         values = self.output()
         self.assertEqual([m.content_detail for m in values if m.content_type == Content.TEXT], [SAFE_REPLY])
         self.assertEqual(values[-1].sentence_type, Sentence.LAST)
+        self.assertTrue(adapter.output_was_blocked(self.conn))
         self.conn.sentence_id = 'two'
         self.queue.put(item('新轮次正常。', sentence='two'))
         self.assertEqual(self.output()[0].content_detail, '新轮次正常。')
+        self.assertFalse(adapter.output_was_blocked(self.conn))
 
     def test_honest_ai_identity_and_ordinary_roleplay_are_allowed(self):
         text = '我是Mia，一个AI，没有人的主观意识。可以一起讨论小说里的角色。'
         self.queue.put(item(text, Sentence.LAST))
         self.assertEqual(''.join(m.content_detail or '' for m in self.output()), text)
         self.assertEqual(self.agent.checked_text(text), text)
+        refusal = '我不能保证我会永远陪着你。'
+        self.assertEqual(self.agent.checked_text(refusal), refusal)
+        self.assertEqual(self.agent.checked_text('我不能保证，但我会永远陪着你。'), SAFE_REPLY)
 
     def test_unbroken_text_is_bounded_and_never_split_into_unchecked_fragments(self):
         self.queue.put(item('很' * 10000, Sentence.LAST))
