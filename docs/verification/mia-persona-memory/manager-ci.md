@@ -1,5 +1,15 @@
 # P07 Java 基线与隔离身份复现
 
+## 2026-10-15：既有脱敏测试预期已修正
+
+用户询问原因与修复后，复核固定上游源码确认：`verylongapikeyvalue123`末四字符为`e123`，测试误断言`3123`。运行实现使用`substring(length - 4)`符合本例保留首尾各四字符的约定。仅在两条Java CI应用[单行测试补丁](../../../server/companion/manager_tests/sensitive-data-expectation.patch)，保留测试方法和其他断言，不跳过或忽略失败，不改运行时脱敏规则。`git apply --check`确认补丁前像再应用，固定上游SHA不变。
+
+修正提交`74794e02c786f6f01389bdbc3d96b30911af4c5c`：[身份38755588258](https://github.com/bboytang/Mia/actions/runs/38755588258)全量173／173、脱敏9／9、身份专项23／23、类范围及JAR通过；[manager38755588374](https://github.com/bboytang/Mia/actions/runs/38755588374)原150／150及独立身份基线4／4、字节对照通过；[服务38755588299](https://github.com/bboytang/Mia/actions/runs/38755588299)157／157通过。三workflow均success，零跳过／失败／error。详见[本轮证据](redaction-ci-results.json)及[身份原报告](redaction-identity-results.json)。仅GitHub验证，未本地自动测试、改生产或部署；不代表全部脱敏边界或真机验收。
+
+以下为修正前历史记录，失败结论及原报告保持原样。
+
+## 历史基线与失败
+
 固定上游 `87c6df77b0220ddbd8fc804f984f83f69f3225e5`、Java 21、既有 Mia companion 补丁；不访问生产数据库、设备或用户。
 
 - `74d89641f9516f00e3e83520f3972599f837bd76`：[38590737953](https://github.com/bboytang/Mia/actions/runs/38590737953) 编译及四类字节对照通过，但上游默认跳过测试；不是 Java 测试通过。

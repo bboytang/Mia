@@ -451,6 +451,14 @@
 - P15接线模块及受控验证通过；现网glm-4-flash容量未核实／max_tokens空，继续context_limits_unverified，未改配置或调用真实聊天。完整Provider语义、Token、八项能力、真机及正式评审仍未验收。所有run已completed，无在途操作，无本地自动测试／构建或部署。
 - 本次变更仅文档及证据，交接同步最新SHA、审批解除、精确结果与边界；下一步P16统一完成事件、幂等持久任务、有界Worker、重启恢复及整体关闭期限，完成后继续更新进度。
 
+## 2026-10-15：修复既有脱敏测试的错误预期，完整Java回归通过
+
+- 用户问“脱敏失败是什么原因，怎么修复”。从19b5598／干净工作树开始，核对失败XML、manager-ci历史及固定上游87c6df7的SensitiveDataUtils／Test源码：输入verylongapikeyvalue123末四字符是e123，测试误写3123；实现substring(length - 4)在该例符合约定。
+- 最小修复为单行测试预期补丁，保存在server/companion/manager_tests/sensitive-data-expectation.patch；manager／identity workflow在固定源码安装后git apply --check再应用。身份workflow增加精确补丁路径触发；不修改运行时实现、其他断言或跳过／忽略失败参数。不扩展到其他未请求的脱敏逻辑。
+- 修复提交74794e02c786f6f01389bdbc3d96b30911af4c5c已推送同功能分支。GitHub身份38755588258全量173／173（脱敏9／9、身份专项23／23）、实际TLS与reply集成、类范围和JAR通过；manager38755588374原150／150及独立基线4／4、字节对照通过；服务38755588299完整157／157通过。三workflow整体success，零失败／error／skip。
+- redaction-ci-results.json记录精确SHA、原因、补丁hash、脱敏方法列表及分项范围，redaction-identity-results.json为workflow日志逐行提取的原JSON；manager-ci与交接补当前修复结果，历史失败与原报告不覆盖。未本地自动测试／构建、部署或调用真实模型；全部run completed，无在途操作。当前修正清除已知失败，不据此声称所有脱敏边界／八项行为或真机通过。
+- 最终差异仅测试补丁、两CI及对应交接／工作记录／证据；git diff --check通过。下一步仍P16完成事件及持久任务生命周期。
+
 ## 后续记录模板
 
 复制下列结构追加真实记录；不保留占位符冒充结果。

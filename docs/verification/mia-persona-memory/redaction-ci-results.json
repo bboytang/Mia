@@ -1,0 +1,67 @@
+{
+  "code_sha": "74794e02c786f6f01389bdbc3d96b30911af4c5c",
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "cause": "Test expected suffix 3123 for verylongapikeyvalue123, whose last four characters are e123.",
+  "fix": "Single test expectation changed from endsWith(\"3123\") to endsWith(\"e123\"); production implementation unchanged.",
+  "patch": "server/companion/manager_tests/sensitive-data-expectation.patch",
+  "patch_sha256": "b3979b6b6f10efd376c69aa9815ee655c2226a2a2de4aedf0a4cabe41bc74b94",
+  "redaction_suite": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "case_names": [
+      "maskMiddle_returns_input_unchanged_for_short_or_blank_values",
+      "isMaskedValue_detects_masked_values",
+      "maskSensitiveFields_returns_null_when_input_is_null",
+      "maskSensitiveFields_masks_known_sensitive_keys_only",
+      "maskMiddle_keeps_two_at_each_end_for_short_strings",
+      "isSensitiveField_recognizes_known_field_names",
+      "maskMiddle_keeps_four_at_each_end_for_long_strings",
+      "isSensitiveField_rejects_blank_and_unknown_field_names",
+      "isMaskedValue_rejects_blank_values"
+    ]
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38755588258",
+    "conclusion": "success",
+    "full_suite": {
+      "tests": 173,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "focused_tests": 23,
+    "jar_build": "success",
+    "class_scope": "success",
+    "report": "redaction-identity-results.json",
+    "report_source": "Exact JSON payload extracted from Verify binding behavior and narrow class scope workflow log"
+  },
+  "manager_baseline": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38755588374",
+    "conclusion": "success",
+    "full_suite": {
+      "tests": 150,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "separate_identity_baseline": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "class_scope": "success"
+  },
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38755588299",
+    "conclusion": "success",
+    "tests": 157
+  },
+  "production_code_changes": false,
+  "deployment": "not_performed",
+  "local_automated_tests": "not_performed",
+  "historical_failed_runs": "retained_unchanged",
+  "next_step": "P16_unified_completion_and_durable_tasks"
+}

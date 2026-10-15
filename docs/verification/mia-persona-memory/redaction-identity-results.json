@@ -1,0 +1,44 @@
+{
+  "code_sha": "74794e02c786f6f01389bdbc3d96b30911af4c5c",
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "binding_authorization_pass": true,
+  "private_authorization_pass": true,
+  "private_default_transport_pass": true,
+  "full_suite": {
+    "tests": 173,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "private_tls_transport_pass": true,
+  "private_chat_authorization_pass": true,
+  "full_suite_pass": true,
+  "failed_cases": [],
+  "classes": {
+    "xiaozhi/modules/security/config/ShiroConfig.class": {
+      "baseline": "e7b0288f61638de3d83ef5013da4fdbd65c2e0846196bfc58ff2b29b2ac4be78",
+      "actual": "b0b58ad884f4e48bf3b27c8a88d8553b9f926c3c3bf1cf1d0c74c944399d713a",
+      "intended_change": true,
+      "matches_change_scope": true
+    },
+    "xiaozhi/modules/device/controller/OTAController.class": {
+      "baseline": "94bf7c375619f3ab479c99ae2945a08c8e9bbc2511d17b72f5a43655c66ca3ec",
+      "actual": "94bf7c375619f3ab479c99ae2945a08c8e9bbc2511d17b72f5a43655c66ca3ec",
+      "intended_change": false,
+      "matches_change_scope": true
+    },
+    "xiaozhi/modules/device/service/impl/DeviceServiceImpl.class": {
+      "baseline": "eaf38b62a3ee554caa926308021a32dc92d2b666bb852fb63f056408116fe7b5",
+      "actual": "f6af60ceb99aed4c2bf64cddfd41048194655b8f3fef71422dd9546fd95c0518",
+      "intended_change": true,
+      "matches_change_scope": true
+    },
+    "xiaozhi/modules/config/service/impl/ConfigServiceImpl.class": {
+      "baseline": "df87f3f75af82dd54fa9f98584adc1db3639853a6bfa6f41f4046442d8cdf61c",
+      "actual": "df87f3f75af82dd54fa9f98584adc1db3639853a6bfa6f41f4046442d8cdf61c",
+      "intended_change": false,
+      "matches_change_scope": true
+    }
+  },
+  "note": "Manager identity chain only; voice/worker Scope, App migration and public TLS not yet accepted."
+}
