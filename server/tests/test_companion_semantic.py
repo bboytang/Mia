@@ -164,6 +164,111 @@ class SemanticIndexTests(unittest.IsolatedAsyncioTestCase):
             await asyncio.sleep(0.05)
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_vectors').fetchone()[0], 0)
 
+    async def test_timed_out_native_encodes_keep_slots_and_cannot_commit_late(self):
+        own = self.fact('喜欢蓝色')
+        release = threading.Event()
+        self.encoder.hook = lambda *args: release.wait(10)
+        tasks = [asyncio.create_task(self.index.index_memory(self.scope, self.auth, own)) for _ in range(2)]
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            self.assertEqual(len(self.encoder.calls), 2)
+            for error in results:
+                self.assertIsInstance(error, EmbeddingUnavailable)
+                self.assertEqual(str(error), 'embedding_timeout')
+            with self.assertRaisesRegex(EmbeddingUnavailable, 'embedding_busy'):
+                await self.index.index_memory(self.scope, self.auth, own)
+            self.assertEqual(len(self.encoder.calls), 2)
+        finally:
+            release.set()
+            await asyncio.gather(*tasks, return_exceptions=True)
+        self.encoder.hook = None
+        # Retry only after the native work has completed, without replacing the
+        # index/semaphore. Timed-out results must never appear in SQLite.
+        for _ in range(100):
+            if not self.index._slots.locked():
+                break
+            await asyncio.sleep(0.01)
+        self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_vectors').fetchone()[0], 0)
+        await self.index.index_memory(self.scope, self.auth, own)
+        self.assertEqual((await self.index.candidates(self.scope, self.auth, '蓝色'))['candidates'][0]['id'], own)
+
+    async def test_query_changes_during_encode_and_after_scan_do_not_return_stale_facts(self):
+        for phase in ('encode', 'after_scan'):
+            for action in ('edit', 'delete', 'clear', 'pause'):
+                with self.subTest(phase=phase, action=action):
+                    self.store.set_paused(self.scope.owner, False)
+                    own = self.fact('喜欢蓝色')
+                    await self.index.rebuild_batch(self.scope, self.auth)
+                    def change():
+                        if action == 'edit':
+                            self.store.edit_memory(self.scope.owner, own, '现在喜欢红色')
+                        elif action == 'delete':
+                            self.store.delete_memory(self.scope.owner, own)
+                        elif action == 'clear':
+                            self.store.clear(self.scope.owner)
+                        else:
+                            self.store.set_paused(self.scope.owner, True)
+                    scanned = threading.Event()
+                    original_scan = self.index._scan
+                    def scan(*args):
+                        result = original_scan(*args)
+                        scanned.set()
+                        return result
+                    if phase == 'encode':
+                        self.encoder.hook = lambda *args: change()
+                    else:
+                        self.index._scan = scan
+                        self.auth.hook = lambda: change() if scanned.is_set() else None
+                    try:
+                        with self.assertRaisesRegex(EmbeddingUnavailable, 'memory_changed'):
+                            await self.index.candidates(self.scope, self.auth, '蓝色')
+                    finally:
+                        self.encoder.hook = self.auth.hook = None
+                        self.index._scan = original_scan
+
+    async def test_query_revocation_after_scan_and_encoder_failure_are_not_empty_success(self):
+        own = self.fact('喜欢蓝色')
+        await self.index.index_memory(self.scope, self.auth, own)
+        scanned = threading.Event()
+        original_scan = self.index._scan
+        def scan(*args):
+            result = original_scan(*args)
+            scanned.set()
+            return result
+        self.index._scan = scan
+        self.auth.hook = lambda: setattr(self.auth, 'active', False) if scanned.is_set() else None
+        with self.assertRaises(PrivateAuthorizationRequired):
+            await self.index.candidates(self.scope, self.auth, '蓝色')
+        self.auth.hook = None
+        self.auth.active = True
+        def fail(*args):
+            raise EmbeddingUnavailable('embedding_inference_failed')
+        self.encoder.hook = fail
+        with self.assertRaisesRegex(EmbeddingUnavailable, 'embedding_inference_failed'):
+            await self.index.candidates(self.scope, self.auth, '蓝色')
+        self.encoder.hook = None
+        self.assertEqual((await self.index.candidates(self.scope, self.auth, '蓝色'))['candidates'][0]['id'], own)
+
+    async def test_reopen_and_rebuild_preserve_facts_and_exclude_nonactive_states(self):
+        own = self.fact('喜欢蓝色')
+        excluded = [self.fact('蓝色经历' + str(i)) for i in range(3)]
+        with self.store.db:
+            for memory_id, state in zip(excluded, ('pending', 'superseded', 'invalidated')):
+                self.store.db.execute('UPDATE mia_memory_meta SET state=? WHERE memory_id=?', (state, memory_id))
+        await self.index.rebuild_batch(self.scope, self.auth)
+        facts = [tuple(row) for row in self.store.db.execute('SELECT * FROM memories ORDER BY id')]
+        self.store.close()
+        self.store = MemoryStore(Path(self.temp.name) / 'memory.sqlite3')
+        self.index = SemanticMemoryIndex(self.store, self.encoder)
+        self.assertEqual([r['id'] for r in (await self.index.candidates(self.scope, self.auth, '蓝色'))['candidates']], [own])
+        with self.store.db:
+            self.store.db.execute('DELETE FROM mia_vectors')
+        with self.assertRaisesRegex(EmbeddingUnavailable, 'embedding_index_not_ready'):
+            await self.index.candidates(self.scope, self.auth, '蓝色')
+        self.assertEqual(await self.index.rebuild_batch(self.scope, self.auth), {'indexed': 1, 'has_more': False})
+        self.assertEqual([tuple(row) for row in self.store.db.execute('SELECT * FROM memories ORDER BY id')], facts)
+        self.assertEqual([r['id'] for r in (await self.index.candidates(self.scope, self.auth, '蓝色'))['candidates']], [own])
+
     def test_invalid_assets_fail_before_optional_native_runtime_import(self):
         with self.assertRaisesRegex(EmbeddingUnavailable, 'assets_invalid'):
             SemanticEncoder(Path(self.temp.name) / 'missing-assets')
