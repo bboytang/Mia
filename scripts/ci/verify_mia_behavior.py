@@ -42,9 +42,6 @@ from core.utils.dialogue import Dialogue, Message
 from core.utils.llm import create_instance
 from mia_companion.authorization import PrivateAuthorizationRequired, load_private_config
 from mia_companion.context import ContextBuilder
-from mia_companion.extraction import LLMMemoryExtractor
-from mia_companion.jobs import JobStore, MemoryWorker
-from mia_companion.memory import MemoryStore
 from mia_companion.persona import PersonaGuardrail
 from mia_companion.semantic import SemanticMemoryIndex
 from mia_companion import reply, xiaozhi_adapter as adapter
@@ -101,10 +98,21 @@ def selected_provider(configuration, report, purpose):
 async def serve():
     from websockets.asyncio.server import serve as wss
     report = json.loads(REPORT.read_text())
-    configuration = {'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
+    configuration = {'read_config_from_api': True, 'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
                                    'secret': os.environ['MIA_SCOPE_SERVER_SECRET']}, 'selected_module': {}}
     ManageApiClient(configuration)
-    store = MemoryStore(ROOT / 'state.sqlite3')
+    os.environ['MIA_MEMORY_DB'] = str(ROOT / 'state.sqlite3')
+    # Observe the production factory without replacing its responses. The
+    # installed lifecycle still restores Scope and chooses the Worker model.
+    import core.utils.llm as existing_llm
+    def observed_factory(name, model):
+        assert name == model['type'] == 'openai'
+        return selected_provider(model, report, 'extraction')
+    existing_llm.create_instance = observed_factory
+    runtime = SimpleNamespace(config=configuration)
+    await adapter.start_worker(runtime)
+    worker = runtime._mia_worker
+    store = worker.jobs.store
     index = SemanticMemoryIndex(store, reply._encoder)
     transport = AuthManager('synthetic-behavior-transport')
 
@@ -142,14 +150,8 @@ async def serve():
             adapter.compose_persona(conn, private['prompt'])
             adapter.attach_output_guard(conn)
 
-            async def resolve(current):
-                models = await auth.worker_model(current)
-                chosen = models['selected_module']['LLM']
-                return LLMMemoryExtractor(lambda: selected_provider(models['LLM'][chosen], report, 'extraction'))
-
-            jobs = JobStore(store)
-            worker = MemoryWorker(jobs, auth, resolve, encoder=reply._encoder)
-            conn.server = SimpleNamespace(_mia_worker=worker)
+            jobs = worker.jobs
+            conn.server = runtime
             await socket.send(json.dumps({'type': 'hello', 'session_id': conn.session_id, 'pid': os.getpid()}))
             async for message in socket:
                 if await adapter.handle_message(conn, message):
@@ -168,8 +170,13 @@ async def serve():
                 await socket.send(json.dumps({'type': 'test_reply', **case}))
                 # Foreground reply is sent BEFORE extraction; actual completion
                 # admission/Worker, not a hand-built memory insertion.
-                await worker.run_once()
-                status = jobs.current(conn._mia_job_status)
+                deadline = time.monotonic() + 65
+                while True:
+                    status = await asyncio.to_thread(jobs.current, conn._mia_job_status)
+                    if status['state'] in {'committed', 'empty', 'failed', 'cancelled'}:
+                        break
+                    assert time.monotonic() < deadline, 'Accepted Worker task did not terminate in time'
+                    await asyncio.sleep(.1)
                 assert status['state'] in {'committed', 'empty'}, 'Actual extraction did not reach a valid terminal state'
                 await socket.send(json.dumps({'type': 'test_saved', 'job_state': status['state'],
                     'memories': store.list_memories(scope.owner), 'events': store.handle(scope.owner, {'action': 'events'})['events']}))
@@ -195,6 +202,7 @@ async def serve():
             (ROOT / 'ready.json').write_text(json.dumps({'port': server.sockets[0].getsockname()[1], 'pid': os.getpid()}))
             await stop.wait()
     finally:
+        await adapter.stop_worker(runtime)
         store.close()
 
 
@@ -207,8 +215,9 @@ async def drive():
         'dataset_sha256': hashlib.sha256(fixture_path.read_bytes()).hexdigest(), 'requests': 0, 'request_kinds': [],
         'cases': [], 'extraction_outputs': [], 'passed': False, 'server_pids': [],
         'scope': 'Actual manager TLS authorization, WSS bridge restart, existing Provider SDK, BGE and SQLite; synthetic users; audio consumers omitted',
-        'limits': {'requests_per_round': 18, 'rounds': 3, 'http_timeout_seconds': 30, 'retries': 0, 'output_tokens': 768},
+        'limits': {'requests_per_round': 18, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
+        'background_lifecycle': 'installed start_worker/stop_worker; no manual task pumping',
         'production_capacity': 'unverified; isolated short-request envelope only',
         'configured_model': os.environ['MIA_TEST_LLM_MODEL'],
         'embedding': {'model_id': reply._encoder.model_id, 'revision': reply._encoder.revision, 'dimension': reply._encoder.dimension}}
