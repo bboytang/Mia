@@ -9,8 +9,11 @@ import sqlite3
 import tempfile
 import threading
 import time
+import sys
+import uuid
+from types import ModuleType, SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
@@ -289,6 +292,60 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(self.row(result)['state'], 'cancelled')
             self.assertEqual(self.store.list_memories(self.scope.owner), [])
             self.assertEqual(self.row(result)['source_payload'], '{}')
+
+    async def test_wire_status_is_owner_scoped_and_does_not_return_source_or_clear_history(self):
+        from server.companion import xiaozhi_adapter as mia
+        own = await self.worker.submit(self.event())
+        peer = await self.worker.submit(self.event('peer', self.peer))
+        history = [SimpleNamespace(role='user', content='keep display history')]
+        conn = SimpleNamespace(_mia_memory=mia.MiaMemoryProvider(self.store, self.scope.owner, None,
+            'session', self.scope, self.policy), read_config_from_api=True, _mia_scope=self.scope,
+            _mia_authorization=self.policy, dialogue=SimpleNamespace(dialogue=history),
+            websocket=SimpleNamespace(send=AsyncMock()))
+        async def query(job):
+            await mia.handle_message(conn, json.dumps({'type': 'mia_memory', 'request_id': str(uuid.uuid4()),
+                'action': 'job_status', 'id': job['id']}))
+            return json.loads(conn.websocket.send.call_args.args[0])
+        response = await query(own)
+        self.assertEqual(set(response['result']), {'id', 'state', 'attempts', 'error_category'})
+        self.assertEqual(response['result']['state'], 'pending')
+        self.assertEqual(len(history), 1)
+        self.assertEqual((await query(peer))['error']['code'], 'not_found')
+        self.policy.active = False
+        self.assertEqual((await query(own))['error']['code'], 'authorization_required')
+
+    async def test_service_runtime_resolves_existing_model_and_owns_start_stop(self):
+        from server.companion import xiaozhi_adapter as mia
+        selected = {'type': 'fixture', 'model_name': 'same-agent-model'}
+        self.policy.worker_model = AsyncMock(return_value={'selected_module': {'LLM': 'existing'},
+                                                          'LLM': {'existing': selected}})
+        client = SimpleNamespace(close=lambda: None)
+        calls = []
+        def create(module, config):
+            calls.append((module, config))
+            def respond(system, user):
+                self.assertEqual(json.loads(user)['user_excerpts'], ['我喜欢蓝色'])
+                return self.output
+            return SimpleNamespace(client=client, response_no_stream=respond)
+        factory = ModuleType('core.utils.llm')
+        factory.create_instance = create
+        server = SimpleNamespace(config={'read_config_from_api': True})
+        with patch('server.companion.xiaozhi_adapter._store', return_value=self.store), \
+                patch('server.companion.authorization.PrivateAuthorization', return_value=self.policy), \
+                patch.dict(sys.modules, {'core': ModuleType('core'), 'core.utils': ModuleType('core.utils'),
+                                        'core.utils.llm': factory}):
+            await mia.start_worker(server)
+            try:
+                result = await server._mia_worker.submit(self.event())
+                for _ in range(200):
+                    if self.row(result)['state'] == 'committed':
+                        break
+                    await asyncio.sleep(0.01)
+                self.assertEqual(self.row(result)['state'], 'committed')
+                self.assertEqual(calls, [('fixture', selected)])
+            finally:
+                await mia.stop_worker(server)
+            self.assertTrue(server._mia_worker.task.done())
 
     async def test_secret_never_enters_jobs_and_status_is_not_a_fact_database(self):
         with self.assertRaises(MemoryError):

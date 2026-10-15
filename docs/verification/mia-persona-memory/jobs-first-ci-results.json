@@ -1,0 +1,31 @@
+{
+  "code_sha": "46e9a2d171157c533b1042abdf55344ca37e800c",
+  "service": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38757924462",
+    "conclusion": "success",
+    "tests": 173,
+    "new_job_test_methods": 16
+  },
+  "identity": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38757924507",
+    "conclusion": "success",
+    "tests": 173,
+    "focused_tests": 23,
+    "jar_build": "success"
+  },
+  "manager_baseline": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38757924110",
+    "conclusion": "success"
+  },
+  "vectors": {
+    "run_url": "https://github.com/bboytang/Mia/actions/runs/38757924604",
+    "conclusion": "failure",
+    "P12_P13_P14_regressions": "passed",
+    "failed_step": "P16_installed_reply",
+    "cause": "Fixture incorrectly required TTS text for Action.RECORD; original terminal handler only records tool history.",
+    "failure_report": "jobs-first-reply-failure.json",
+    "failure_report_sha256": "6b53fb4f33928582ce31b56d854e0e1f84165aca2c65b2d0425e5e533f736ff9"
+  },
+  "production_code_fix": "none_for_this_fixture_failure",
+  "next_verification": "Correct RECORD expectation, retain exactly-one durable completion assertion; add wire status and service runtime ownership coverage."
+}

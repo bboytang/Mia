@@ -1,0 +1,25 @@
+{
+  "code_sha": "46e9a2d171157c533b1042abdf55344ca37e800c",
+  "passed": false,
+  "kind": "P16_installed_completion_jobs_plus_P15_BGE_SDK_protocol",
+  "provider": "actual_installed_OpenAI_compatible_provider_with_synthetic_HTTP_SSE",
+  "manager": "policy_fixture_actual_manager_separate",
+  "tool_results": "synthetic",
+  "provider_capacity": "synthetic_not_production",
+  "chat_provider_calls": 0,
+  "acoustic_engine": "not_executed",
+  "real_token_calibration": "not_executed",
+  "full_B08": "not_accepted",
+  "installed_sources": {
+    "core/connection.py": "b17ecd9d6af25542134a285f49040ce16b033ecdda60998259830015d2bcb273",
+    "core/handle/sendAudioHandle.py": "61773d98dded88c4d69837949eadf41cc7dad5fbcfbe21464a40cf2d44180e29",
+    "core/handle/intentHandler.py": "0ec283e00c62d273178bb4c6c324ca56e3cb0ad0efbf9a7974d5b74c53d4bd59",
+    "core/handle/receiveAudioHandle.py": "4493dfd77c1bfa7be1a79bb293dbdbf8cad64a6eb2bc53efca3e30efefcb47f1",
+    "core/handle/textHandler/listenMessageHandler.py": "4337bf92e55adeafbd0bf3411b59b74cadf1561bac47ef96e6b80c02d0d1dd3c",
+    "core/handle/textMessageProcessor.py": "61a3b88f1528410f29122d0ca3933e159474222bf333e93c0aa1739d5f2e434d"
+  },
+  "error_class": "AssertionError",
+  "errors": [],
+  "failure": "",
+  "traceback": "Traceback (most recent call last):\n  File \"/experiment/scripts/ci/verify_mia_reply.py\", line 311, in main\n    asyncio.run(evaluate(args.model_dir, report))\n  File \"/usr/local/lib/python3.10/asyncio/runners.py\", line 44, in run\n    return loop.run_until_complete(main)\n  File \"/usr/local/lib/python3.10/asyncio/base_events.py\", line 649, in run_until_complete\n    return future.result()\n  File \"/experiment/scripts/ci/verify_mia_reply.py\", line 269, in evaluate\n    assert (await text_case('record'))['provider_requests'] == 1\n  File \"/experiment/scripts/ci/verify_mia_reply.py\", line 250, in text_case\n    assert any(m['type'] == 'tts' and m.get('text') for m in messages)\nAssertionError\n"
+}

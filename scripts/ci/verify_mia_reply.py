@@ -246,7 +246,9 @@ async def evaluate(directory, output):
                             break
                         messages.append(message)
                     assert any(m['type'] == 'stt' for m in messages)
-                    if name != 'revoke':
+                    # RECORD tools may produce their own audio/file output; the
+                    # generic terminal handler only records history.
+                    if name not in {'revoke', 'record'}:
                         assert any(m['type'] == 'tts' and m.get('text') for m in messages)
                     job_status = getattr(current, '_mia_job_status', None)
                     if name in {'plain', 'tools', 'direct', 'voice', 'record', 'tool_response'}:
