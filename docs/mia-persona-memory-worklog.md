@@ -2,6 +2,7 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- 一般资格候选4b81c927cf506054b3660660fd8aa50f06cbc9aa已精确发布。基础回归均终态success：服务38980101498、manager38980101429、身份38980101441、真实向量38980101366、提取语法38980101524；语法不冒充真实提取。只各单次创建校准v1[38980235375](https://github.com/bboytang/Mia/actions/runs/38980235375)和成长[38980239326](https://github.com/bboytang/Mia/actions/runs/38980239326)，均FlashX隔离、实际headSha为4b81c927，已确认in_progress。接续只跟踪这两个句柄、读实际schema资格/原输出/SQL/回答；已消耗独立v2不重发，不能据基础回归或67本地项宣告修复有效/P22完成。关闭三组成功与独立失败均完整保留；P23/P24未完成。
 - 独立v2/1f5626dc/38977613787已failure，共32真实请求、17原回答已读。第0/1组第四源两attempt均实际finish_reason=length，空或截断原JSON，10检索问题未执行；第0组截断文本还包含单字trait anchor“我”，但实际任务首先是invalid_output，不能冒称单独trait校验结论。第2组首次空/length，第二次有效，5问题结构及S/L/A/E通过；重要性回答却无来源补出比较频率与摸土做法，语义不报通过。retrieval-holdout-v2-*原报告/SQL/结束metadata/哈希保存；v2已消耗，不能继续把它写未执行或重跑取绿，后续改候选须新独立版本。
 - 一般性资格修复候选依据既有validator的长度2—32共同字面锚点及三独立来源规则：growth_eligible只作必要条件判断，不产出锚点/特点/证据；只有可能存在三个所属事实共同连续字面片段且原trait_supported证据匹配成立，才向原模型展示成长字段。关系/特点schema同原validator要求minLength=2/maxLength=32，未声明trait须省略。原validator、模型/预算/两attempts/RAG权重和阈值不改，原结果不修补；没有引入留出答案或词表。使用不同于v2的既有观云/普通合成单测，正向成长保持，单会话/同指纹/仅单字共同内容被排除；67本地提取/提案/Worker项通过（11.287秒）。真实仅回归v1及成长，独立v2不再执行，P22/P23/P24未完成。
 - 独立检索v2已在观察前冻结：1f5626dcba268d94c834173b23b182a6ece66529的retrieval-holdout-freeze.md记录原0dfa6a0数据blob4a64401fc047d1ba2a35aaca15d24c8df3476b2e与12运行模块blob；相对v1实测61eaa416，server/companion只改Java测试fixture接纳关闭套件，运行Python未改。留出[38977613787](https://github.com/bboytang/Mia/actions/runs/38977613787)单次、实际headSha为1f5626dc、FlashX隔离比较，当前in_progress/真实manager三轮阶段。不得再用这份留出调参或同样重跑取绿；原回答质量局限仍保留，不预称P22通过。
