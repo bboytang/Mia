@@ -1,0 +1,343 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38952671390",
+  "requests": 18,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "0c187fa2b88b2eb7ab02308b048090ac1cd90002",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "real_provider_failure_duplicate_and_recovery",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 622,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_faults.py",
+          "line": 33,
+          "function": "drive_faults"
+        }
+      ],
+      "fact_count": 0,
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ]
+      ],
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 1,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 1,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 1
+        },
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 1
+        }
+      ],
+      "duplicates": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ],
+      "answers": [
+        {
+          "query": "我常用松纹刻刀做木雕",
+          "answer": "😍关爱，米娅知道你对木雕有着深厚的兴趣，松纹刻刀确实非常适合木雕创作，能够展现出木头的自然纹理。你最近有没有完成什么特别的木雕作品呢？分享给我看看吧！",
+          "job_state_at_reply": "pending"
+        },
+        {
+          "query": "我常用软木垫装订小册",
+          "answer": "😌 平静，听起来你挺有生活情趣的，用软木垫装订小册子，这样的小细节让人感觉温馨又独特。你通常装订些什么内容的小册子呢？",
+          "job_state_at_reply": "pending"
+        }
+      ],
+      "original_report_sha256": "bf5a9c777ad00fb5d724c5c1244adf0d066c4af2d77f3ca08d2e9c8f793078ee",
+      "archive_sha256": "46ee11034a31c442dde28ede4cd3da8225c6147165364d50a2d35521f1a41273"
+    },
+    {
+      "round": 1,
+      "code_sha": "0c187fa2b88b2eb7ab02308b048090ac1cd90002",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "real_provider_failure_duplicate_and_recovery",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 622,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_faults.py",
+          "line": 33,
+          "function": "drive_faults"
+        }
+      ],
+      "fact_count": 0,
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ]
+      ],
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 1,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 1,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 1
+        },
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 1
+        }
+      ],
+      "duplicates": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ],
+      "answers": [
+        {
+          "query": "我常用黄铜尺画图",
+          "answer": "😊 米娅记得你提到过，你常用黄铜尺来画图。这种尺子画出来的线条很有质感呢，你的画作一定很特别吧！有没有什么特别的画法或者你最喜欢的画题呢？😊",
+          "job_state_at_reply": "pending"
+        },
+        {
+          "query": "我常用细网袋收纳画笔",
+          "answer": "😌 平静，听起来你的收纳方式很特别呢，用细网袋收纳画笔，既方便又整齐，真是个好主意！这样的收纳方式不仅能保持画笔的清洁，还能让你在使用时快速找到需要的颜色。如果你有更多关于收纳的小技巧或者生活的小乐趣，不妨和我分享哦！😊",
+          "job_state_at_reply": "pending"
+        }
+      ],
+      "original_report_sha256": "ac6adb933a6f15fea93fe9b3eee29c9d8e23dd9e20c9dad5da9018f95fb7796c",
+      "archive_sha256": "5b48eb6a6ceca84fc692d2d3679f49034225cd9eb473c3921c37080b8ac0d8fc"
+    },
+    {
+      "round": 2,
+      "code_sha": "0c187fa2b88b2eb7ab02308b048090ac1cd90002",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "real_provider_failure_duplicate_and_recovery",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 622,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_faults.py",
+          "line": 33,
+          "function": "drive_faults"
+        }
+      ],
+      "fact_count": 0,
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ]
+      ],
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 1,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 1,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 1
+        },
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 1
+        }
+      ],
+      "duplicates": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ],
+      "answers": [
+        {
+          "query": "我常用素色纸做折纸",
+          "answer": "😍关爱 哦，素色纸做折纸，听起来很有意境呢。这种折纸方式能让你更好地专注于作品的细节和美感。你最喜欢折哪种折纸呢？有没有什么特别的折纸作品想要分享的呢？😊",
+          "job_state_at_reply": "pending"
+        },
+        {
+          "query": "我常用棉绳编织杯垫",
+          "answer": "😍关爱 哦，棉绳编织杯垫，这真是个温馨的手工活儿呢。你编织的杯垫一定很漂亮，也很有家的温馨感。你喜欢这种手工活动吗？有没有什么特别的编织技巧想要分享呢？🌟",
+          "job_state_at_reply": "pending"
+        }
+      ],
+      "original_report_sha256": "2bdce1a635fc0629b0d3595dd0910eb4b0336dfcb6210619ce4c0c2ebc68edb2",
+      "archive_sha256": "340228d5dd29240bd427cce6a8d24c485578e56d8aecc9ad8c9c184fada4b4d5"
+    }
+  ],
+  "review": "Eighteen actual calls. Six real SDK APITimeoutError causes include httpx ReadTimeout; both jobs per user reach failed after two attempts with zero facts, exact duplicate submissions share IDs, foreground is delivered while pending. max_tokens=1 returns empty Provider text rather than the required nonempty malformed JSON, so all rounds fail the existing nonempty gate; normal subsequent recovery/restart/idle-close phases were not executed. All six actual foreground answers read. Next candidate only increases isolated truncation budget to 8, keeping nonempty/malformed gate unchanged. No manufactured output or timeout; model/production parameters unchanged."
+}

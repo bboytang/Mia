@@ -333,6 +333,7 @@ class CompanionAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(source.read_text(), "changed\n")
         self.assertEqual(Path(str(source) + ".mia-original").read_text(), "original\n")
         self.assertTrue((root / "main/xiaozhi-server/mia_companion/memory.py").exists())
+        self.assertTrue((root / "main/xiaozhi-server/mia_companion/proposal.py").exists())
         with self.assertRaises(ValueError):
             install(root, changes)
 

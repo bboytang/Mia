@@ -258,8 +258,10 @@ def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive)
             raise MemoryError('invalid_input', 'Natural correction lacks literal values')
         old, new, anchor = [normalize(term.strip()) for term in values]
         if anchor not in actual or anchor not in target['content']:
-            raise MemoryError('invalid_input', 'Natural correction anchor must be one contiguous literal substring '
-                              'of BOTH the current user sentence and the old fact; do not join separated words')
+            error = MemoryError('invalid_input', 'Natural correction anchor must be one contiguous literal substring '
+                                'of BOTH the current user sentence and the old fact; do not join separated words')
+            error.rejected_clues = {'reconciliation.anchor': [_safe_text(anchor, 32, 'reconciliation anchor')]}
+            raise error
         matching = [fact for fact in known.values() if old in fact['content'] and anchor in fact['content']]
         denied = re.search(r'不是\s*' + re.escape(old), actual)
         uncertain = re.search(r'不确定|记不清|可能|也许|或许|大概|似乎|好像', actual)
@@ -459,7 +461,8 @@ class LLMMemoryExtractor:
             natural = len(sources) == 1 and natural_change_requested(sources[0], context)
             growth = (not natural and len(context) >= 3 and trait_supported(
                 [item for fact in context for item in fact.get('evidence', [])]))
-            significance = not natural and len(sources) == 1 and bool(IMPORTANCE.search(sources[0]))
+            has_importance = any(IMPORTANCE.search(source) for source in sources)
+            significance = not natural and len(sources) == 1 and has_importance
             base = (NATURAL_CHANGE_INSTRUCTIONS if natural else
                     FOCUSED_EXTRACTION_INSTRUCTIONS if growth or significance else INSTRUCTIONS)
             # A read-only projection excludes output-shaped serialized metadata.
@@ -495,6 +498,15 @@ class LLMMemoryExtractor:
                        'existing_memories': model_context, 'emotion_tracking_enabled': bool(tracking['enabled'])}
             if feedback:
                 payload['validation_feedback'] = feedback
+            if (natural or growth or significance) and callable(getattr(type(provider), 'response_with_functions', None)):
+                from .proposal import NAME, read_stream, tool_definition
+                tool = tool_definition(context, sources=payload['user_excerpts'], natural=natural, growth=growth,
+                    significance=bool(has_importance), tracking=bool(tracking['enabled']), feedback=feedback)
+                instruction += ('\nUse the ' + NAME + ' function to return this proposal. '
+                    'It only submits model-generated arguments for server validation; no action is executed and nothing is yet saved.')
+                return read_stream(provider.response_with_functions('',
+                    [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
+                    functions=[tool]))
             return provider.response_no_stream(instruction,
                 json.dumps(payload, ensure_ascii=False))
         finally:

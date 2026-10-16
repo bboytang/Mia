@@ -77,7 +77,7 @@ def selected_provider(configuration, report, purpose):
     assert configuration['model_name'] == os.environ['MIA_TEST_LLM_MODEL']
     assert configuration['base_url'] == os.environ['MIA_TEST_LLM_BASE_URL']
     fault_mode = report.get('fault_mode') if SUITE == 'faults' and purpose == 'extraction' else None
-    effective = dict(configuration, max_tokens=1) if fault_mode == 'truncated_json' else configuration
+    effective = dict(configuration, max_tokens=8) if fault_mode == 'truncated_json' else configuration
     provider = create_instance(effective['type'], effective)
     original = provider.client
     timeout = httpx.Timeout(connect=3, write=3, pool=3, read=.001) if fault_mode == 'read_timeout' else 30
@@ -105,7 +105,7 @@ def selected_provider(configuration, report, purpose):
                 report.setdefault('sdk_requests', []).append(request)
             else:
                 report.setdefault('extraction_sdk_requests', []).append(
-                    json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'max_tokens') if key in kwargs})))
+                    json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'tools', 'max_tokens') if key in kwargs})))
             save(report)
         return create(*args, **kwargs)
 
@@ -164,6 +164,31 @@ def selected_provider(configuration, report, purpose):
             return value
 
         provider.response_no_stream = captured
+        function_response = provider.response_with_functions
+
+        def captured_function(*args, **kwargs):
+            events, text, arguments = [], '', {}
+            complete = False
+            try:
+                for content, calls in function_response(*args, **kwargs):
+                    events.append({'content': content,
+                        'tool_calls': [call.model_dump(exclude_none=True) for call in calls or []]})
+                    text += content or ''
+                    for call in calls or []:
+                        if call.function:
+                            arguments[call.index] = arguments.get(call.index, '') + (call.function.arguments or '')
+                    yield content, calls
+                complete = True
+            finally:
+                with LOCK:
+                    report.setdefault('extraction_tool_outputs', []).append({'complete': complete, 'events': events})
+                    if len(arguments) == 1:
+                        report['extraction_outputs'].append(next(iter(arguments.values())))
+                    elif not arguments:
+                        report['extraction_outputs'].append(text)
+                    save(report)
+
+        provider.response_with_functions = captured_function
     return provider
 
 
