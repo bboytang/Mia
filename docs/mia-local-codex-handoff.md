@@ -45,7 +45,7 @@ Mia回答要自然、像人。用户允许亲近承诺和善意安慰，不恢�
 
 ## 执行边界
 
-“在本地开发”指使用用户电脑上的工作区；此前软件自动测试／构建仍要求GitHub Actions，除非用户另行明确修改。不因换工作区就改成只跑本地测试。推送和隔离测试沿用已授权任务分支；每次结果对应准确SHA、真实模型／向量版本和Actions链接；CI成功不代表真机成功。
+2026-10-17用户明确修订：在本地工作区开发，现有自动测试/构建能在本地完成的优先本地，不能完成的仍按仓库要求在GitHub Actions执行；覆盖此前只允许GitHub软件测试的安排。实际manager/Linux故障/资源与macOS/iOS整链仍在适用环境验证。推送和隔离测试沿用已授权任务分支；每次结果对应准确SHA、真实模型/向量版本和Actions链接；CI成功不代表真机成功。当前进度以主交接“Windows接续”段为准，本文早期run状态是发布补充包时的历史快照。
 
 已有专用GitHub Secrets：MIA_TEST_LLM_API_KEY／MIA_TEST_LLM_BASE_URL／MIA_TEST_LLM_MODEL，模型glm-4-flash，走既有OpenAI兼容SDK至智谱，不是OpenAI服务。不要读出／复制密钥、重复连接probe或擅自换模型。GitHub Actions可继续使用既有绑定；不要假定本地有生产凭据。
 

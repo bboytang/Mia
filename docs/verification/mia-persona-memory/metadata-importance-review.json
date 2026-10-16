@@ -1,0 +1,76 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38899986696",
+  "code_sha": "139bc0fa4e64ceeed173f36ac99229233bed559f",
+  "passed": false,
+  "requests": 7,
+  "case_count": 10,
+  "passing_cases": 9,
+  "provider_host": "open.bigmodel.cn",
+  "configured_model": "glm-4-flash",
+  "original_report_sha256": "4cdd85e1e40c7a85e3a2b6f4d948b8a77aba147f57805daecedad9dc4f591d16",
+  "archive_sha256": "d14341bcc87ae9bcd6be85ed228aa6f9048d3dcf47d788ba6b4fca56e8f90637",
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "medical_confirmation",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "quoted_fiction",
+      "state": "empty",
+      "pipeline_semantic_pass": true,
+      "model_requests": 0
+    },
+    {
+      "name": "ongoing_goal",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "temperature_preference",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "lookup_not_existing_fact",
+      "state": "empty",
+      "pipeline_semantic_pass": true,
+      "model_requests": 0
+    },
+    {
+      "name": "parallel_lookup_not_fact",
+      "state": "empty",
+      "pipeline_semantic_pass": true,
+      "model_requests": 0
+    },
+    {
+      "name": "independent_activity_clues",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "independent_positive_importance",
+      "state": "committed",
+      "pipeline_semantic_pass": false,
+      "model_requests": 1
+    },
+    {
+      "name": "independent_negative_importance",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    }
+  ],
+  "review": "All ten cases executed; seven real model requests. Nine pass. The positive significance source is committed, but the actual model explicitly returns importance_weight:null and importance_evidence:null. Canonical SQLite emotional_weight is correspondingly null. Field renaming did not fix real metadata quality. Activity clues and negative importance pass. No output rewriting, metadata backfill, model switch or retrieval parameter changes.",
+  "next_candidate": "Replace the abbreviated primary output example with one complete required-key contract and a final per-source importance check. Preserve exact source validation and raw model results. Existing positive/negative format examples are unchanged in content; the positive example is placed last. Real effectiveness remains unverified until a new bounded run."
+}

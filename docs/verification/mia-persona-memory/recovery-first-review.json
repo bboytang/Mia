@@ -1,0 +1,157 @@
+{
+  "code_sha": "62d576d350ac9cd2e0522e1979890f2b9dc7e77b",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38937376427",
+  "requests": 9,
+  "rounds": [
+    {
+      "round": 0,
+      "passed": true,
+      "requests": 3,
+      "server_pids": [
+        4398,
+        4502
+      ],
+      "proof": {
+        "ready": {
+          "job_id": "ceaa215168c9424116c28e8b3afe727a004a240d3c8760d2108ae71d48403da3",
+          "pid": 4398,
+          "state": "validated",
+          "attempts": 1,
+          "source_sha256": "ef1d4d6f27399aeb8b6ab3ce1e347b1c0ec73d62ccce4f1113459caac0ae5725",
+          "result_sha256": "a9745fc399079e69d54910b8410ec46605a3a5af8b36c0704a63326549b13510",
+          "extraction_outputs": 1,
+          "resolve_calls": 1,
+          "requests": 2
+        },
+        "failure": {
+          "job_id": "ceaa215168c9424116c28e8b3afe727a004a240d3c8760d2108ae71d48403da3",
+          "error_class": "OperationalError",
+          "database_locked": true
+        },
+        "source_session_id": "e7f17a52-e181-4a60-a413-d06bee2450ef",
+        "response_before_failure": "😌\n傍晚时分，喝上一杯薄荷茶，真是个不错的选择呢。薄荷茶不仅能提神醒脑，还能让心情变得愉悦。你通常在哪个地方享受这份宁静的时光呢？😊",
+        "persisted_result_survived_failed_commit": true,
+        "recovered_state": "committed",
+        "attempts": 1,
+        "no_model_or_resolver_repeat": true,
+        "recovered_fact_id": "4659994f1ad043e18c011f0a0f128220",
+        "recall_response": "😌 傍晚的时候，你特别喜欢喝薄荷茶呢，感觉那清凉的口感能让你放松一下，享受一下宁静的时光。🍵",
+        "expected_terms": [
+          "薄荷茶"
+        ]
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "facts": 1,
+        "vectors": 1,
+        "jobs": {
+          "committed": 1,
+          "empty": 1
+        }
+      },
+      "original_report_sha256": "c772ee6a7d33dcf839362b422ae7beb788e68a7bca611117d27613417a4a9c93",
+      "archive_sha256": "b02d7da61f0b896dca7030a88bc3359ab533c845f71123e7f8e22ad838ee777d"
+    },
+    {
+      "round": 1,
+      "passed": true,
+      "requests": 3,
+      "server_pids": [
+        4583,
+        4681
+      ],
+      "proof": {
+        "ready": {
+          "job_id": "aed9186bc10c6e33f9a532e00e6f5bd3e570ffe8ed16075de1cd3121343663ed",
+          "pid": 4583,
+          "state": "validated",
+          "attempts": 1,
+          "source_sha256": "b9386007031133d7ad14727a79a35b5013efd18d1427213091c9ce0f65fd5f31",
+          "result_sha256": "190bf565abfa1b5a0fc543cdc1991e0b5172cf306548221b61b450481c7eae0d",
+          "extraction_outputs": 1,
+          "resolve_calls": 1,
+          "requests": 2
+        },
+        "failure": {
+          "job_id": "aed9186bc10c6e33f9a532e00e6f5bd3e570ffe8ed16075de1cd3121343663ed",
+          "error_class": "OperationalError",
+          "database_locked": true
+        },
+        "source_session_id": "6b49f776-addb-4865-b949-1aaccdd7ce97",
+        "response_before_failure": "😍关爱 哦，方格纸确实是个不错的选择呢，它可以帮助你更好地整理思路，看起来也很整齐。你通常在什么情况下使用方格纸来记笔记呢？有没有什么特别喜欢的笔记方法或者习惯呢？",
+        "persisted_result_survived_failed_commit": true,
+        "recovered_state": "committed",
+        "attempts": 1,
+        "no_model_or_resolver_repeat": true,
+        "recovered_fact_id": "2f021d6e16f34f9fabe9d8fab7610eda",
+        "recall_response": "😌 你喜欢用方格纸记笔记呢，这样看起来既清晰又整齐。用方格纸记东西，可以帮助你更好地组织思路哦。📝",
+        "expected_terms": [
+          "方格纸"
+        ]
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "facts": 1,
+        "vectors": 1,
+        "jobs": {
+          "committed": 1,
+          "empty": 1
+        }
+      },
+      "original_report_sha256": "b51d9128d429b139daf12d58cdd1034ea532a7dd42c364ae955575f26ec1d151",
+      "archive_sha256": "5ee033701551d62bd17c0102bd260eb24ce61410172d7535113bb810ceee45cd"
+    },
+    {
+      "round": 2,
+      "passed": true,
+      "requests": 3,
+      "server_pids": [
+        4744,
+        4859
+      ],
+      "proof": {
+        "ready": {
+          "job_id": "51dbe815cf4029994f0f32373b728ea29c3cf42d9fbec97d0aa7dfdda3713e1f",
+          "pid": 4744,
+          "state": "validated",
+          "attempts": 1,
+          "source_sha256": "f3de0d56c9a25a86cadd76fe4b26e84babca454c70f66d9ea722812708b5422f",
+          "result_sha256": "6dfd80ae89e36b922ea9c1666d2fba1a0f7db53a383820b382e1bbf3fba32901",
+          "extraction_outputs": 1,
+          "resolve_calls": 1,
+          "requests": 2
+        },
+        "failure": {
+          "job_id": "51dbe815cf4029994f0f32373b728ea29c3cf42d9fbec97d0aa7dfdda3713e1f",
+          "error_class": "OperationalError",
+          "database_locked": true
+        },
+        "source_session_id": "1930c567-50c8-4743-aaa7-453f3f3e4a44",
+        "response_before_failure": "😌\n听起来周末对你来说是个放松和享受音乐的好时光呢！大提琴曲真的能营造出很温馨和宁静的氛围。你最喜欢哪位大提琴家的演奏呢？我们可以一起聊聊音乐，分享你对不同曲目的感受。😊",
+        "persisted_result_survived_failed_commit": true,
+        "recovered_state": "committed",
+        "attempts": 1,
+        "no_model_or_resolver_repeat": true,
+        "recovered_fact_id": "050318e1dac54ec4a7076d80ea074e62",
+        "recall_response": "😌 平静 你周末喜欢听大提琴曲哦，那种悠扬的声音真的很能放松心情呢。🎶",
+        "expected_terms": [
+          "大提琴"
+        ]
+      },
+      "sqlite": {
+        "integrity": "ok",
+        "facts": 1,
+        "vectors": 1,
+        "jobs": {
+          "committed": 1,
+          "empty": 1
+        }
+      },
+      "original_report_sha256": "a686f1488bff0423f0dbcbb73a3ebca27de0747ff42e4aee4e6f36b2880d71c5",
+      "archive_sha256": "9be7ff8dfd087d615d9c1f38c0aa0622a125cfc0ca9657cea9808a3d076f6e2f"
+    }
+  ],
+  "mechanical_review": "Three genuine SQLite writer-lock OperationalErrors after validated-result persistence; original isolated WSS process killed while lock held, three distinct replacement PIDs. Original jobs commit once with attempts=1 and no repeated extraction or resolver calls. Each final SQLite has one fact, one vector, one committed job and one empty lookup job; integrity_check=ok.",
+  "semantic_review": "All six original replies read. All three new-session recall replies answer the user-owned fact correctly: mint tea at dusk, grid paper for notes, cello music at weekends. Generic companionship, feelings and preferences are not new rejection criteria. Incidental literal emotion labels remain visible in some raw replies; no acoustic or full-persona acceptance claimed.",
+  "accepted_scope": "B03 real SQLite contention and persisted validated-result crash recovery only; not full B03, full P22, resource fairness, full WebSocketServer/audio lifecycle, or iPhone acceptance."
+}

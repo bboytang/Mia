@@ -20,14 +20,16 @@ source_index是user_excerpts的从0开始的下标，不能使用existing_memori
 逗号连接的同一句不要拆开；source_quote和content都逐字保留整句，否则不会保存。
 If user_excerpts contains only fiction/quoted speech, return {"memories":[],"trait":null}
 even when existing_memories contains useful facts. Do not re-emit those old facts.
-Return JSON only: {"memories":[{"category":"fact",
-"content":"exact source_quote for explicit facts", "source_index":0,
-"source_quote":"one complete factual sentence from that user excerpt (omit only a leading remember request)",
-"kind":"explicit", "subject":"user", "value":"durable",
-"sensitive":false}], "trait":null}.
-Each proposal also includes entities, keywords, trigger_terms (arrays of source phrases),
-importance_weight (number or null), importance_evidence (source phrase or null), and relations (array).
-These are fields to extract, not fixed empty defaults. Populate them from this source.
+Return JSON only with memories (an array) and trait (an object or null).
+Every memory includes category, content, source_index, source_quote, kind, subject,
+value, sensitive, entities, keywords, trigger_terms, importance_weight,
+importance_evidence and relations. Do not use a shortened memory schema.
+source_quote is one complete factual sentence from that user excerpt, omitting only
+a leading remember request. For an explicit fact, content equals source_quote,
+kind is explicit, subject is user and value is durable; sensitive is a boolean.
+entities, keywords, trigger_terms and relations are arrays. importance_weight is
+a number or null; importance_evidence is a literal source phrase or null.
+Evaluate these metadata fields for EACH source, not from another example's defaults.
 At most 16 proposals, 512 characters each. Explicit content MUST equal source_quote;
 preserve the speaker and negation, never rewrite 'I' to refer to Mia or another person.
 category MUST be exactly one of: fact, preference, goal, experience, agreement.
@@ -50,10 +52,10 @@ importance_weight表示用户对该事实明确表达的重视程度，不是当
 以下仅为格式示例，不是当前用户的事实，不得在输出中复用示例内容：
 示例原句：我每次写生都会带帆布画袋
 示例输出：{"memories":[{"category":"fact","content":"我每次写生都会带帆布画袋","source_index":0,"source_quote":"我每次写生都会带帆布画袋","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["帆布画袋"],"keywords":["写生","帆布画袋"],"trigger_terms":["写生"],"importance_weight":null,"importance_evidence":null,"relations":[]}],"trait":null}
-示例原句：整理好旧相册对我很有意义
-示例输出：{"memories":[{"category":"experience","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"importance_weight":0.8,"importance_evidence":"很有意义","relations":[]}],"trait":null}
 示例原句：我一直觉得收集瓶盖并不重要
 示例输出：{"memories":[{"category":"preference","content":"我一直觉得收集瓶盖并不重要","source_index":0,"source_quote":"我一直觉得收集瓶盖并不重要","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["瓶盖"],"keywords":["收集瓶盖"],"trigger_terms":["瓶盖"],"importance_weight":null,"importance_evidence":null,"relations":[]}],"trait":null}
+示例原句：整理好旧相册对我很有意义
+示例输出：{"memories":[{"category":"experience","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"importance_weight":0.8,"importance_evidence":"很有意义","relations":[]}],"trait":null}
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
 "relation":"shared_term", "anchor":"literal term shared with both source_quote and target content",
 "evidence":"same source_quote"}. Never invent target IDs or causal relationships.
@@ -69,6 +71,9 @@ Optional trait requires name, description, evidence_ids, anchor and evidence_quo
 occur in every quoted fact and description; at least three distinct sessions and sources
 are required. Otherwise return trait:null. Do not infer intimacy, dependence or consciousness.
 Use {"memories":[],"trait":null} for a valid empty result, not malformed JSON.
+最后逐条核对本次原句：明确肯定重视或意义时，importance_evidence摘录该肯定原文，
+importance_weight填写你依据原文评估的数值；否定或没有表达重视时，两者才为null。
+不要因为句子没有喜怒哀乐就把明确意义填成null，也不要把示例的数值或null当成通用默认值。
 '''
 
 REMEMBER_PREFIX = re.compile(r'^(?:(?:米娅|Mia)[,， ]*)?(?:你好[,， ]*)?(?:请|帮我)?记住[：:,， ]*', re.I)
