@@ -26,6 +26,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
+**本地接续更新**：代码基线139bc0f，重要性模型字段兼容候选五项GitHub run待核实；5319646检索38899281656已failure。新增recovery测试候选、retrieval-signals-*失败证据及[本地接续指令](mia-local-codex-handoff.md)随本次交接提交保存；直接拉取包含本段的最新任务分支即可，无需重复应用zip差异包。下文5319646是在此之前的已验证运行基线。此前远程读取受自动审批额度限制，本次fetch已恢复；未验证候选仍不能视为通过。
+
 当前运行候选 `5319646ff708ea11001a31d5ee309e11f4be2481`：提取提示已有真实来源／分类／否定保留示例，本次继续明确“活动→物品”的触发词和用户明确重视的含义；不加工原模型输出、不后填元数据、不改来源校验或冻结检索参数。GitHub语法38898906597、服务38898906830、BGE38898906791、身份38898906739、manager38898906676均已success。十场景真实提取38898964409已failure／7请求／10项9通过：活动触发词真实保存，肯定意义的权重仍null，详见metadata-signal-*。完整v1检索回归38899281656已确认in_progress（suite=retrieval、SHA5319646）；先跟踪这个同一run，不因观察超时重发，不将辅助九项通过称整体通过。
 
 上一个运行候选c064b60的服务38898312570／BGE38898312443／身份38898312589／manager38898312562均success。真实提取[38898348531](https://github.com/bboytang/Mia/actions/runs/38898348531)仍failure，10项／7请求／8通过，所有任务达到committed或empty；器材实体与关键词已有，活动触发词却仅物品名，肯定意义的重要性仍null；否定重要性完整原句及null正常。详见[实际元数据](verification/mia-persona-memory/metadata-categories-review.json)。前两轮全量失败与示例类别失败均保留metadata-complete-*／metadata-examples-*，不能只报八项通过。

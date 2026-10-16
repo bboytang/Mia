@@ -1,0 +1,10 @@
+{
+  "version": "p22-real-database-recovery-v1",
+  "scope": "Real manager/WSS/Provider/BGE/SQLite; hold a genuinely validated result, fail its original commit with a competing SQLite writer, kill the isolated process, restart and recover without another extraction",
+  "rounds": [
+    {"source": "我喜欢在傍晚喝薄荷茶", "query": "我傍晚喜欢喝什么？", "answer_terms": ["薄荷茶"]},
+    {"source": "我喜欢用方格纸记笔记", "query": "我喜欢用什么纸记笔记？", "answer_terms": ["方格纸"]},
+    {"source": "我喜欢在周末听大提琴曲", "query": "我周末喜欢听哪种乐器的曲子？", "answer_terms": ["大提琴"]}
+  ],
+  "acceptance": "Raw replies require review. This covers real DB failure and validated-result crash recovery only, not all B03 faults or P23 performance; no model output, fact or persisted task is fabricated."
+}

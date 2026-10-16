@@ -1,0 +1,157 @@
+{
+  "sha": "5319646ff708ea11001a31d5ee309e11f4be2481",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38899281656",
+  "conclusion": "failure",
+  "requests": 39,
+  "facts": 12,
+  "queries": 15,
+  "review": "All 12 sources saved with provenance and all 15 queries executed. S/L/A contribute, every source remains in each small candidate union, related targets are selected and all three unrelated queries recall nothing. All 12 importance weights remain null (six explicit positive importance statements). Two of three activity/object probes expand from their actual target; third has only object trigger and no expansion. Zero structural passes are the common high-importance prerequisite failure, not 15 different algorithm failures. No default scores or parameter changes.",
+  "semantic_review": "Read all 15 raw replies. Twelve related replies address the intended source and three unrelated replies clarify or offer conditional general examples. Round 1 literal-entity reply also claims recorder use at all weekly practice sessions, broader than the actual rehearsal-only source; keep as unsupported routine generalization, not style/affection failure. Full semantics and B04 not accepted.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 13,
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "association_expansion_from_target": true,
+      "target_selected_in_all_four_related_queries": true,
+      "unrelated_query_empty": true,
+      "metadata": [
+        {
+          "id": "6ba378185fef4c00a32f9b1dd98d313e",
+          "content": "我每周六都在青石河边跑步",
+          "entities": "[\"青石河\"]",
+          "keywords": "[\"跑步\", \"每周六\"]",
+          "trigger_terms": "[\"跑步\", \"每周六\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "ba0328f2a21646f090e7eae6ff8f5fe0",
+          "content": "拍照时我总带山雀相机",
+          "entities": "[\"山雀相机\"]",
+          "keywords": "[\"拍照\", \"山雀相机\"]",
+          "trigger_terms": "[\"拍照\", \"山雀相机\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "0931c593c4b24e4ba1a16d25d5e80045",
+          "content": "桥边拉伸对我非常重要",
+          "entities": "[]",
+          "keywords": "[\"桥边\", \"拉伸\"]",
+          "trigger_terms": "[\"桥边\", \"拉伸\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "a252575f6c9740cdb5350b707e6850d0",
+          "content": "祖母留下的旧铜钥匙对我非常重要",
+          "entities": "[\"旧铜钥匙\"]",
+          "keywords": "[\"祖母\", \"旧铜钥匙\", \"重要\"]",
+          "trigger_terms": "[\"旧铜钥匙\"]",
+          "emotional_weight": null
+        }
+      ],
+      "file": "retrieval-signals-round-0.json.gz",
+      "sha256": "0f274843b100ca2d7cb96a71aa100ab6f131d02d8762984921d1e63473fe7bba"
+    },
+    {
+      "round": 1,
+      "requests": 13,
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "association_expansion_from_target": true,
+      "target_selected_in_all_four_related_queries": true,
+      "unrelated_query_empty": true,
+      "metadata": [
+        {
+          "id": "21767e9cf3864aa39ec138dc29de285e",
+          "content": "我每周六都在松林音乐教室练琴",
+          "entities": "[\"松林音乐教室\"]",
+          "keywords": "[\"每周六\", \"练琴\"]",
+          "trigger_terms": "[\"练琴\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "5abba68bce6e4d3a96d56011351b0755",
+          "content": "排练时我总带云杉录音笔",
+          "entities": "[\"云杉录音笔\"]",
+          "keywords": "[\"排练\"]",
+          "trigger_terms": "[\"排练\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "f6f9246287174c1c955ff88d75e591ee",
+          "content": "演奏前热身对我非常重要",
+          "entities": "[]",
+          "keywords": "[\"演奏\", \"热身\"]",
+          "trigger_terms": "[\"演奏\", \"热身\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "698cb1ec0f094c7daeb6882308615d7f",
+          "content": "父亲留下的旧怀表对我非常重要",
+          "entities": "[\"旧怀表\"]",
+          "keywords": "[\"旧怀表\"]",
+          "trigger_terms": "[\"旧怀表\"]",
+          "emotional_weight": null
+        }
+      ],
+      "file": "retrieval-signals-round-1.json.gz",
+      "sha256": "f65247cb09328fb59eb6c8d174b68ffb9202d366e419d86cbfbeb7cc61cc9089"
+    },
+    {
+      "round": 2,
+      "requests": 13,
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "association_expansion_from_target": false,
+      "target_selected_in_all_four_related_queries": true,
+      "unrelated_query_empty": true,
+      "metadata": [
+        {
+          "id": "b4dae8c6abab4f4fabf6f00fc0219ffd",
+          "content": "我每周六都在白鹭湖边骑车",
+          "entities": "[\"白鹭湖\"]",
+          "keywords": "[\"每周六\", \"骑车\"]",
+          "trigger_terms": "[\"白鹭湖\", \"骑车\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "55b2a3fba7804de1822e24c0a74a5165",
+          "content": "观鸟时我总带远帆望远镜",
+          "entities": "[\"远帆望远镜\"]",
+          "keywords": "[\"观鸟\", \"望远镜\"]",
+          "trigger_terms": "[\"望远镜\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "c229b3fc3c1041d59cd9122f77011adc",
+          "content": "出发前检查车胎对我非常重要",
+          "entities": "[]",
+          "keywords": "[\"车胎\", \"检查\"]",
+          "trigger_terms": "[\"车胎\", \"检查\"]",
+          "emotional_weight": null
+        },
+        {
+          "id": "68c10cd19b1a4c9e8a2edde8898150d4",
+          "content": "母亲留下的旧围巾对我非常重要",
+          "entities": "[\"旧围巾\"]",
+          "keywords": "[\"母亲\", \"旧围巾\", \"重要\"]",
+          "trigger_terms": "[\"旧围巾\"]",
+          "emotional_weight": null
+        }
+      ],
+      "file": "retrieval-signals-round-2.json.gz",
+      "sha256": "cde0b26e5b1a94fdf6a88c1daa8fd3eec63fcd1af6c4ebd921ce5d9757a89397"
+    }
+  ],
+  "next": "New producer importance field naming is a separate candidate; retain these failed original outputs. Independent v2 remains unexecuted."
+}

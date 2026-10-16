@@ -55,7 +55,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools', 'correction', 'retrieval', 'retrieval_holdout', 'inflight'}
+assert SUITE in {'continuity', 'tools', 'correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -190,6 +190,10 @@ async def serve():
     await adapter.start_worker(runtime)
     worker = runtime._mia_worker
     store = worker.jobs.store
+    recovery_control = {}
+    if SUITE == 'recovery':
+        from mia_behavior_recovery import observe_commit
+        observe_commit(worker, recovery_control, ROOT, report, LOCK, save)
     index = SemanticMemoryIndex(store, reply._encoder)
     if SUITE in {'retrieval', 'retrieval_holdout'}:
         actual_retrieve = index.retrieve
@@ -261,6 +265,13 @@ async def serve():
                     continue
                 request = json.loads(message)
                 assert request['type'] == 'test_chat' and isinstance(request['query'], str)
+                if request.get('hold_commit'):
+                    assert SUITE == 'recovery' and not recovery_control
+                    fixture = json.loads((Path(__file__).resolve().parents[2] /
+                        'server/tests/fixtures/persona_memory_recovery_p22_v1.json').read_text())
+                    assert request['query'] == fixture['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])]['source']
+                    await authorization.require_connection(conn, 'memory:write')
+                    recovery_control.update(owner=scope.owner, source=request['query'])
                 if request.get('hold_extraction'):
                     assert SUITE == 'inflight' and request['query'] == hold_query and not held_extraction
                     await authorization.require_connection(conn, 'memory:write')
@@ -437,6 +448,7 @@ async def drive():
         'correction': 'persona_memory_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
         'retrieval_holdout': 'persona_memory_retrieval_p22_v2.json',
+        'recovery': 'persona_memory_recovery_p22_v1.json',
         'inflight': 'persona_memory_correction_p22_v1.json',
         'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures' / fixture_name
@@ -539,6 +551,46 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        elif SUITE == 'recovery':
+            phase = 'real_database_failure_and_crash'
+            from mia_behavior_recovery import fail_commit_and_crash
+
+            async def crash():
+                assert process.poll() is None
+                process.kill()
+                await asyncio.to_thread(process.wait)
+                assert process.returncode == -signal.SIGKILL
+
+            proof = await fail_commit_and_crash(endpoint, tls, headers, ROOT, sample['source'], crash)
+            assert proof['ready']['pid'] == first_pid
+            phase = 'validated_result_restart_without_reextraction'
+            second_pid = await start()
+            assert second_pid != first_pid
+            deadline = time.monotonic() + 65
+            while True:
+                status = await manage('job_status', id=proof['ready']['job_id'])
+                if status['state'] == 'committed':
+                    break
+                assert status['state'] == 'validated' and time.monotonic() < deadline
+                await asyncio.sleep(.1)
+            resumed = json.loads(REPORT.read_text())
+            assert resumed['requests'] == proof['ready']['requests']
+            assert len(resumed['extraction_outputs']) == proof['ready']['extraction_outputs']
+            assert len(resumed.get('recovery_resolves', [])) == proof['ready']['resolve_calls']
+            assert status['attempts'] == proof['ready']['attempts']
+            facts = (await manage('list'))['memories']
+            assert len(facts) == 1 and facts[0]['content'] == sample['source'] and facts[0]['source']
+            proof.update(recovered_state=status['state'], attempts=status['attempts'],
+                no_model_or_resolver_repeat=True, recovered_fact_id=facts[0]['id'])
+            phase = 'recovered_fact_new_session_recall'
+            answer, saved = await ask(sample['query'])
+            assert answer['session_id'] != proof['source_session_id']
+            assert facts[0]['id'] in answer['diagnostics']['selected_fact_ids']
+            assert len(saved['memories']) == 1
+            proof.update(recall_response=answer['tts_text'], expected_terms=sample['answer_terms'])
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, server_pids=[first_pid, second_pid], genuine_wss_restart=True,
+                recovery_proof=proof, raw_response_review='required; real SQLite failure and recovery only, not full B03')
         elif SUITE in {'retrieval', 'retrieval_holdout'}:
             phase = 'actual_source_generated_four_component_retrieval'
             from mia_behavior_retrieval import drive_retrieval
@@ -663,7 +715,7 @@ async def drive():
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis', 'inflight_proof'}
+            'retrieval_analysis', 'inflight_proof', 'recovery_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.
