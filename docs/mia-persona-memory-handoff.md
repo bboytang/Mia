@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+最新接续覆盖下方旧记录：faults38971357457已failure/27请求，非空坏JSON未证；独立正常恢复/换PID召回/空闲关闭实际完成，原完整证据在faults-independent-glm53-flashx-*。当前shutdown候选使用实际app.main/完整类导入/真实WS/HTTP/GC/同Worker/SIGTERM，三组受控真实已校验结果保持与跨PID恢复；32本地相关项及最后保持器2项复验通过，真实完整导入/Java/Linux待精确SHA CI。具体安装版本与边界见verification/mia-persona-memory/runtime-shutdown-contract.md；仅临时runner安装。本候选不改生产模型/Secrets/事实库/两attempts，音频消费者省略，P22/P23/P24未完成，v2未消耗。
+
 最新接续：aef41df9已发布，服务CI38971228481/行为语法38971228546 success。旧tools38970299198终态success/30场景66请求，实际原生并行三组观察到，全部场景与预热回答已复核，tools-glm53-flashx-*保留具体局限。新faults38971357457为改进控制流候选唯一真实整链句柄；保持8预算及所有原门槛，即使非空坏JSON未证也继续独立正常恢复/换PID检查，最终不得冒称通过。优先跟踪此句柄，继续全服务在途关闭真实验证；P22/P23/P24未完成。
 
 最近状态覆盖下方旧在途记录：scope38970303359已success/36请求，27原回答与只读三owner各1事实复核通过；faults38970307413已failure/18请求，实际截断返回空、非空坏JSON门槛未证，真实SDK超时/两次上限/重复幂等/零事实已观察，但后续恢复未执行。scope/faults-glm53-flashx-*原始证据已保存。tools38970299198仍在途。当前CI控制流候选保留所有门槛，只让独立正常恢复/换PID检查继续执行，最终仍失败直到全部实际满足；6本地项通过，待精确SHA发布与CI。勿重复原失败同代码或在途工具任务。

@@ -71,7 +71,7 @@ class MiaBehaviorIntegrationTest {
             model = comparisonModel;
         }
         String suite = System.getenv().getOrDefault("MIA_BEHAVIOR_SUITE", "continuity");
-        assertTrue(suite.equals("continuity") || suite.equals("growth") || suite.equals("scope") || suite.equals("faults") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("inflight") || suite.equals("recovery"));
+        assertTrue(suite.equals("continuity") || suite.equals("growth") || suite.equals("scope") || suite.equals("faults") || suite.equals("shutdown") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("inflight") || suite.equals("recovery"));
         assertNotNull(key, "Dedicated test provider not configured");
         assertNotNull(endpoint, "Dedicated test endpoint not configured");
         assertNotNull(model, "Dedicated test model not configured");

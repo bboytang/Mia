@@ -27,16 +27,21 @@ import httpx
 
 sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
 os.chdir(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server')
-logger = SimpleNamespace()
-logger.bind = lambda *args, **kwargs: logger
-for level in ('debug', 'info', 'warning', 'error'):
-    setattr(logger, level, lambda *args, **kwargs: None)
-logging = ModuleType('config.logger')
-logging.setup_logging = lambda: logger
-sys.modules['config.logger'] = logging
-util = ModuleType('core.utils.util')
-util.check_model_key = lambda *args, **kwargs: None
-sys.modules['core.utils.util'] = util
+FULL_APP = os.environ.get('MIA_BEHAVIOR_SUITE') == 'shutdown'
+if FULL_APP:
+    from mia_behavior_runtime import bootstrap
+    FULL_CONFIG, logger = bootstrap()
+else:
+    logger = SimpleNamespace()
+    logger.bind = lambda *args, **kwargs: logger
+    for level in ('debug', 'info', 'warning', 'error'):
+        setattr(logger, level, lambda *args, **kwargs: None)
+    logging = ModuleType('config.logger')
+    logging.setup_logging = lambda: logger
+    sys.modules['config.logger'] = logging
+    util = ModuleType('core.utils.util')
+    util.check_model_key = lambda *args, **kwargs: None
+    sys.modules['core.utils.util'] = util
 
 from config.manage_api_client import ManageApiClient
 from core.auth import AuthManager
@@ -56,7 +61,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'shutdown', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -244,6 +249,12 @@ def selected_provider(configuration, report, purpose):
 
 
 def installed_connection(report):
+    if FULL_APP:
+        from core.connection import ConnectionHandler
+        report['installed_connection_sha256'] = hashlib.sha256(Path('core/connection.py').read_bytes()).hexdigest()
+        report['connection_scope'] = 'Full installed ConnectionHandler import and original chat; synthetic text connection without audio initialization; actual app/services lifecycle'
+        save(report)
+        return ConnectionHandler
     # Same AST-loading approach as verify_mia_reply: preserve the installed
     # ConnectionHandler bodies and decorators, omitting audio/plugin imports.
     path = Path('core/connection.py')
@@ -280,8 +291,9 @@ async def serve():
             report['upstream_errors'] = report['upstream_errors'][-10:]
             save(report)
 
-    logger.error = upstream_error
-    configuration = {'read_config_from_api': True, 'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
+    if not FULL_APP:
+        logger.error = upstream_error
+    configuration = FULL_CONFIG if FULL_APP else {'read_config_from_api': True, 'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
                                    'secret': os.environ['MIA_SCOPE_SERVER_SECRET']}, 'selected_module': {}}
     ManageApiClient(configuration)
     os.environ['MIA_MEMORY_DB'] = str(ROOT / 'state.sqlite3')
@@ -292,8 +304,13 @@ async def serve():
         assert name == model['type'] == 'openai'
         return selected_provider(model, report, 'extraction')
     existing_llm.create_instance = observed_factory
-    runtime = SimpleNamespace(config=configuration)
-    await adapter.start_worker(runtime)
+    app_task = None
+    if FULL_APP:
+        from mia_behavior_runtime import launch
+        runtime, app_task = await launch(configuration, ROOT, report, LOCK, save)
+    else:
+        runtime = SimpleNamespace(config=configuration)
+        await adapter.start_worker(runtime)
     worker = runtime._mia_worker
     store = worker.jobs.store
     if SUITE == 'faults':
@@ -329,6 +346,11 @@ async def serve():
     tools_fixture = (json.loads((Path(__file__).resolve().parents[2] /
         'server/tests/fixtures/persona_memory_tools_p22_v1.json').read_text()) if SUITE == 'tools' else None)
     held_extraction = {}
+    shutdown_control = {}
+    connection_tasks = set()
+    if FULL_APP:
+        from mia_behavior_runtime import observe_hold
+        observe_hold(worker, shutdown_control, ROOT, report, LOCK, save)
     if SUITE == 'inflight':
         from mia_behavior_inflight import observe_worker
         correction_fixture = json.loads((Path(__file__).resolve().parents[2] /
@@ -347,6 +369,8 @@ async def serve():
             self.tts_text_queue.put(TTSMessageDTO(active.sentence_id, SentenceType.MIDDLE, content_type, content_detail))
 
     async def connection(socket):
+        if FULL_APP:
+            connection_tasks.add(asyncio.current_task())
         headers = dict(socket.request.headers)
         assert transport.verify_token(headers.get('authorization', '')[7:], headers.get('client-id'), headers.get('device-id'))
         conn = object.__new__(handler)
@@ -384,6 +408,14 @@ async def serve():
                     continue
                 request = json.loads(message)
                 assert request['type'] == 'test_chat' and isinstance(request['query'], str)
+                if request.get('shutdown_hold'):
+                    assert FULL_APP and 'source' not in shutdown_control
+                    fixture = json.loads((Path(__file__).resolve().parents[2] /
+                        'server/tests/fixtures/persona_memory_shutdown_p22_v1.json').read_text())
+                    sample = fixture['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])]
+                    assert request['query'] in {sample['drain_source'], sample['blocked_source']}
+                    await authorization.require_connection(conn, 'memory:write')
+                    shutdown_control['source'] = request['query']
                 if SUITE == 'faults':
                     fault = request.get('fault_kind')
                     assert fault in {None, 'truncated_json', 'read_timeout'}
@@ -558,28 +590,38 @@ async def serve():
                 save(report)
             await socket.send(json.dumps({'type': 'test_error', 'error_class': type(error).__name__}))
         finally:
+            connection_tasks.discard(asyncio.current_task())
             if llm:
                 llm.client.close()
 
     tls = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     tls.load_cert_chain(os.environ['MIA_TLS_CERT_FILE'], os.environ['MIA_TLS_KEY_FILE'])
     stop = asyncio.Event()
-    asyncio.get_running_loop().add_signal_handler(signal.SIGTERM, stop.set)
+    if not FULL_APP:
+        asyncio.get_running_loop().add_signal_handler(signal.SIGTERM, stop.set)
     try:
-        async with wss(connection, '127.0.0.1', 0, ssl=tls) as server:
+        async with wss(connection, '127.0.0.1', 0, ssl=tls, close_timeout=.1 if FULL_APP else 10) as server:
             ready = ROOT / 'ready.tmp'
             ready.write_text(json.dumps({'port': server.sockets[0].getsockname()[1], 'pid': os.getpid()}))
             ready.replace(ROOT / 'ready.json')
-            await stop.wait()
+            if FULL_APP:
+                await app_task  # Actual app wait_for_exit handles the real SIGTERM.
+                for task in list(connection_tasks):
+                    task.cancel()  # Ancillary text-driver polling must not add a second shutdown budget.
+                if connection_tasks:
+                    await asyncio.wait(connection_tasks, timeout=.2)
+            else:
+                await stop.wait()
     finally:
-        await adapter.stop_worker(runtime)
+        if not FULL_APP:
+            await adapter.stop_worker(runtime)
         store.close()
 
 
 async def drive():
     from mia_model_comparison import output_tokens
     from websockets.asyncio.client import connect
-    fixture_name = {'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
+    fixture_name = {'shutdown': 'persona_memory_shutdown_p22_v1.json', 'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
@@ -618,7 +660,8 @@ async def drive():
         ready = ROOT / 'ready.json'
         ready.unlink(missing_ok=True)
         with (ROOT / 'service.log').open('ab') as output:
-            process = subprocess.Popen([sys.executable, __file__, '--serve'], stdout=output, stderr=output)
+            process = subprocess.Popen([sys.executable, __file__, '--serve'], stdout=output, stderr=output,
+                                       stdin=subprocess.PIPE if FULL_APP else None)
         deadline = time.monotonic() + 45
         while not ready.exists():
             assert process.poll() is None and time.monotonic() < deadline, 'WSS service did not start'
@@ -638,6 +681,19 @@ async def drive():
                 await asyncio.to_thread(process.wait)
                 raise AssertionError('WSS service exceeded bounded shutdown')
             assert process.returncode == 0, 'WSS service did not shut down cleanly'
+            if FULL_APP:
+                process.stdin.close()
+                state = json.loads((ROOT / 'ready.json').read_text())
+                latest = json.loads(REPORT.read_text())['app_lifecycles'][-1]
+                assert latest['pid'] == state['pid']
+                for port in latest['ports']:
+                    try:
+                        reader, writer = await asyncio.wait_for(asyncio.open_connection('127.0.0.1', port), 1)
+                    except (OSError, asyncio.TimeoutError):
+                        continue
+                    writer.close()
+                    await writer.wait_closed()
+                    raise AssertionError('Actual service socket remains open after process exit')
 
     def peer_headers(peer):
         if peer is None:
@@ -687,7 +743,14 @@ async def drive():
 
     try:
         first_pid = await start()
-        if SUITE == 'tools':
+        if SUITE == 'shutdown':
+            phase = 'actual_app_inflight_shutdown_and_recovery'
+            from mia_behavior_runtime import drive_shutdown
+            proof = await drive_shutdown(sample, lambda: endpoint, tls, headers, ROOT, ask, start, stop, first_pid)
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, shutdown_proof=proof, server_pids=proof['server_pids'],
+                raw_response_review='required; actual app/service/process lifecycle, controlled native hold, audio consumers omitted; not P23 resources')
+        elif SUITE == 'tools':
             phase = 'ten_real_tool_and_context_scenarios'
             from mia_behavior_tools import drive_tools
             results = await drive_tools(dataset, sample, ask, manage)
@@ -885,7 +948,7 @@ async def drive():
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof', 'faults_proof'}
+            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof', 'faults_proof', 'shutdown_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

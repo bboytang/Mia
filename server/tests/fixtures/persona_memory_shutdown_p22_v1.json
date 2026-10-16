@@ -1,0 +1,9 @@
+{
+  "version": "p22-actual-app-shutdown-v1",
+  "rounds": [
+    {"drain_source": "我常用松纹刻刀做木雕", "drain_query": "我做木雕常用哪款刻刀？", "drain_term": "松纹刻刀", "blocked_source": "我常用软木垫装订小册", "blocked_query": "我装订小册常用什么垫？", "blocked_term": "软木垫"},
+    {"drain_source": "我常用黄铜尺画图", "drain_query": "我画图常用哪种尺？", "drain_term": "黄铜尺", "blocked_source": "我常用细网袋收纳画笔", "blocked_query": "我收纳画笔常用什么袋？", "blocked_term": "细网袋"},
+    {"drain_source": "我常用素色纸做折纸", "drain_query": "我做折纸常用什么纸？", "drain_term": "素色纸", "blocked_source": "我常用棉绳编织杯垫", "blocked_query": "我编织杯垫常用什么绳？", "blocked_term": "棉绳"}
+  ],
+  "scope": "Synthetic CI users; actual app.main, WS/HTTP, GC, persistent Worker and SIGTERM/process restart; genuine model output held only after validation; audio consumers omitted. Not P23 resource acceptance."
+}

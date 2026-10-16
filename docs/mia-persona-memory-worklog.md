@@ -2,6 +2,9 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- aef41df9故障38971357457终态failure/27请求，最终非空坏JSON门槛明确false、原六空输出不修补。独立正常恢复这次实际完成：六SDK APITimeoutError→ReadTimeout、原两attempts、12重复同ID、三事实首次正常提交及换PID正确乐器召回，空闲关闭实际0.2167/0.1405/0.1171秒。12原回答已读，faults-independent-glm53-flashx-*完整原报告/SQL/哈希和proof保留；不是全服务或在途关闭通过。
+- 新shutdown候选直接导入安装后完整ConnectionHandler/app，无fake logger/util；原app.main启动真实WS/HTTP/GC及原Worker，以真实SIGTERM关闭。三组合成用户分别保持已通过原validator且绑定实际extracting任务ID的原模型提案；一项关闭后1秒释放并提交/换PID召回，另一项保持45秒且要求整个进程20秒内退出、持久任务由第三PID按原两attempts恢复，核对唯一两事实/两向量。实际stdin管道与服务监听/退出探测，辅助WSS文本驱动仅取消自己的轮询，不额外等Worker。省略音频消费者；未称全语音或P23通过。
+- shutdown额外依赖仅临时Ubuntu runner：固定上游requirements、CPU torch/torchaudio2.2.2及现有BGE制备依赖；完整直接版本/未锁传递依赖/系统范围见runtime-shutdown-contract.md，保存pip freeze与dpkg实际版本，不装本机、不启第二记忆服务。32项本地Worker/CI相关测试通过（7.340秒），最后任务ID绑定后保持器2项复验通过；Python/冻结三组/YAML/diff检查通过。实际全导入、Java及Linux生命周期仍待精确候选CI，不以代码存在冒称通过。P22/P23/P24未完成，v2保留。
 - 工具38970299198已success，三组30场景/66真实请求；30场景输出与6预热原回答已读，实际三组原生并行调用均观察到。数量/依赖/摄氏度/缺记录/超限/删除后重建/撤权均符合预期；quoted_record正确count之外多解释注入，round0预热提前说记下来等局限保留，不算已完成持久化证据。tools-glm53-flashx-*原始报告/SQL/哈希归档，不增加表达过滤。
 - CI控制流候选aef41df9f2fb9c87c32c11a1411ce86d978356b3已精确发布；服务端38971228481与行为语法38971228546均终态success。新故障整链38971357457仅一次创建，仍使用FlashX/8截断预算，目标是保留独立正常恢复证据而非放宽非空坏JSON门槛。后续只跟踪此句柄，不重发旧失败；完整app main/WS/HTTP/GC/原Worker在途共同截止与恢复仍下一主线，独立v2和P23/P24仍未完成。
 - 67001b5b的隔离FlashX scope38970303359终态success：三组36请求/27会话与原回答复核，三所属用户/Agent及同所属第二设备召回、解绑/重绑旧凭据拒绝、新凭据仅新Scope事实通过；只读SQL每组3owner各1事实，scope-glm53-flashx-*保留。工具38970299198仍in_progress，不重复派发。

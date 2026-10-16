@@ -11,6 +11,8 @@ on:
       - 'scripts/ci/mia_behavior_growth.py'
       - 'scripts/ci/mia_behavior_scope.py'
       - 'scripts/ci/mia_behavior_faults.py'
+      - 'scripts/ci/mia_behavior_runtime.py'
+      - 'server/tests/fixtures/persona_memory_shutdown_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_faults_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_scope_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
@@ -34,6 +36,8 @@ on:
       - 'scripts/ci/mia_behavior_growth.py'
       - 'scripts/ci/mia_behavior_scope.py'
       - 'scripts/ci/mia_behavior_faults.py'
+      - 'scripts/ci/mia_behavior_runtime.py'
+      - 'server/tests/fixtures/persona_memory_shutdown_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_faults_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_scope_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
@@ -51,7 +55,7 @@ on:
       suite:
         description: Real continuity, correction, retrieval or tool/context scenarios with three isolated users
         type: choice
-        options: [continuity, growth, scope, faults, tools, correction, natural_correction, retrieval, retrieval_holdout, inflight, recovery]
+        options: [continuity, growth, scope, faults, shutdown, tools, correction, natural_correction, retrieval, retrieval_holdout, inflight, recovery]
         default: continuity
       test_model:
         description: Explicit isolated comparison only; configured preserves existing test model
@@ -77,6 +81,8 @@ jobs:
       - run: python -m py_compile scripts/ci/mia_behavior_growth.py
       - run: python -m py_compile scripts/ci/mia_behavior_scope.py
       - run: python -m py_compile scripts/ci/mia_behavior_faults.py
+      - run: python -m py_compile scripts/ci/mia_behavior_runtime.py
+      - run: python -m json.tool server/tests/fixtures/persona_memory_shutdown_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_faults_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_scope_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_growth_p22_v1.json > /dev/null
@@ -137,6 +143,15 @@ jobs:
           cache-dependency-path: upstream/main/manager-api/pom.xml
       - name: Install existing manager client dependency for real Python Scope integration
         run: python -m pip install httpx==0.28.1 websockets==14.2 numpy==1.26.4 openai==2.8.1 tokenizers==0.21.1 onnxruntime==1.23.2
+      - name: Install fixed upstream full-import dependencies only for actual app lifecycle
+        if: inputs.suite == 'shutdown'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libopus0 libsndfile1 ffmpeg
+          dpkg-query --show libopus0 libsndfile1 ffmpeg > /tmp/mia-runtime-system.txt
+          python -m pip install torch==2.2.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r upstream/main/xiaozhi-server/requirements.txt
+          python -m pip freeze > /tmp/mia-runtime-dependencies.txt
       - name: Prepare isolated TLS certificates and explicit test trust
         env:
           MIA_SCOPE_KEYSTORE: file:${{ runner.temp }}/mia-test-tls/server.p12
@@ -170,7 +185,9 @@ jobs:
             -file "$MIA_SCOPE_CA" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
       - name: Prepare fixed public BGE assets without private data
         run: |
-          python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          if [ "${{ inputs.suite }}" != shutdown ]; then
+            python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          fi
           python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
           python scripts/ci/prepare_mia_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$MIA_EMBEDDING_DIR"
           python - <<'PY'
@@ -181,6 +198,9 @@ jobs:
           metadata['tokenizer_sha256'] = hashlib.sha256((root / 'tokenizer.json').read_bytes()).hexdigest()
           (root / 'metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
           PY
+          if [ "${{ inputs.suite }}" = shutdown ]; then
+            python -m pip freeze > /tmp/mia-runtime-dependencies.txt
+          fi
       - name: Reconstruct existing Mia and necessary binding patch
         id: prepare
         run: |
@@ -205,5 +225,7 @@ jobs:
           name: Mia-composed-behavior-${{ github.sha }}-${{ github.run_id }}
           path: |
             /tmp/mia-behavior-ci
+            /tmp/mia-runtime-dependencies.txt
+            /tmp/mia-runtime-system.txt
             upstream/main/manager-api/target/surefire-reports
           if-no-files-found: warn
