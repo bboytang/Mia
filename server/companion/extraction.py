@@ -20,10 +20,10 @@ source_index是user_excerpts的从0开始的下标，不能使用existing_memori
 逗号连接的同一句不要拆开；source_quote和content都逐字保留整句，否则不会保存。
 If user_excerpts contains only fiction/quoted speech, return {"memories":[],"trait":null}
 even when existing_memories contains useful facts. Do not re-emit those old facts.
-Return JSON only: {"memories":[{"category":"fact|preference|goal|experience|agreement",
+Return JSON only: {"memories":[{"category":"fact",
 "content":"exact source_quote for explicit facts", "source_index":0,
 "source_quote":"one complete factual sentence from that user excerpt (omit only a leading remember request)",
-"kind":"explicit|inferred", "subject":"user|other", "value":"durable|transient",
+"kind":"explicit", "subject":"user", "value":"durable",
 "sensitive":false}], "trait":null}.
 Each proposal also includes entities, keywords, trigger_terms (arrays of source phrases),
 emotional_weight (number or null), emotional_evidence (source phrase or null), and relations (array).
@@ -33,6 +33,7 @@ preserve the speaker and negation, never rewrite 'I' to refer to Mia or another 
 category MUST be exactly one of: fact, preference, goal, experience, agreement.
 Use fact for lasting habits/routines, preference for tastes, goal for ongoing plans.
 Do not invent categories such as habit; these are invalid and will not be saved.
+日常习惯／规律的category填fact；喜好填preference，持续计划填goal，经历填experience，约定填agreement。habit不是合法分类。
 Do not extract other people's quoted speech, fictional/hypothetical examples, jokes,
 questions, deletion commands, greetings or transient moods. Neutral but lasting habits,
 preferences and ongoing goals are valuable without any strong emotion. Never output secrets.
@@ -45,6 +46,8 @@ All entities/keywords/trigger_terms must occur literally in source_quote, at mos
 emotional_weight表示用户对该事实明确表达的重视程度，不是当下心情。明确肯定重要、珍惜、在意或意义时给出大于0且不超过1的权重，并在emotional_evidence引用原文的肯定重视短语；否定或未表达重视时保持null，不推断重要性。
 低重要性不妨碍保存其他有用的长期事实；情绪观察仍须单独授权。
 以下仅为格式示例，不是当前用户的事实，不得在输出中复用示例内容：
+示例原句：我每周六去榆树公园散步
+示例输出：{"memories":[{"category":"fact","content":"我每周六去榆树公园散步","source_index":0,"source_quote":"我每周六去榆树公园散步","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["榆树公园"],"keywords":["每周六","散步"],"trigger_terms":["榆树公园","散步"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
 示例原句：我一直珍惜姐姐送的陶杯
 示例输出：{"memories":[{"category":"preference","content":"我一直珍惜姐姐送的陶杯","source_index":0,"source_quote":"我一直珍惜姐姐送的陶杯","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["姐姐","陶杯"],"keywords":["珍惜","陶杯"],"trigger_terms":["姐姐","陶杯"],"emotional_weight":0.8,"emotional_evidence":"珍惜","relations":[]}],"trait":null}
 示例原句：我一直觉得收集瓶盖并不重要

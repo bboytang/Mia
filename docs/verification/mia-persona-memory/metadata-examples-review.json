@@ -1,0 +1,21 @@
+{
+  "sha": "ca7960d10234f3b19622985ada2cb6820c4f549c",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38898081395",
+  "conclusion": "failure",
+  "requests": 1,
+  "executed_cases": 1,
+  "not_executed": [
+    "medical_confirmation",
+    "quoted_fiction",
+    "ongoing_goal",
+    "temperature_preference",
+    "lookup_not_existing_fact",
+    "parallel_lookup_not_fact",
+    "independent_activity_clues",
+    "independent_positive_importance",
+    "independent_negative_importance"
+  ],
+  "review": "First source now produces genuine populated metadata, but uses invalid category habit and is rejected into retry_wait. No importance controls executed; cannot infer those results. Existing strict category/source validator retained. Next prompt uses valid example JSON classification values rather than pipe alternatives, adds Chinese category mapping and a distinct ordinary habit example. No output normalization or fabricated metadata.",
+  "file": "metadata-examples-provider.json.gz",
+  "sha256": "1c23d1c75df7f497974f1af1ad7b0daebf2043e84c5ff48715661b9614415677"
+}
