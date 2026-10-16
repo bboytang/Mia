@@ -1,4 +1,4 @@
-"""Seven bounded extraction provider samples; synthetic data and vector fixtures, no production."""
+"""Ten bounded extraction provider samples; synthetic data and vector fixtures, no production."""
 
 import asyncio
 from datetime import datetime, timedelta, timezone
@@ -66,7 +66,7 @@ async def evaluate(report, secret):
     report.update(provider_host=url.hostname, configured_model=model)
     outputs = []
     def factory():
-        if report['requests'] >= 7:
+        if report['requests'] >= 10:
             raise ValueError('P17 request budget exhausted')
         report['requests'] += 1
         provider = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': 768,
@@ -91,7 +91,10 @@ async def evaluate(report, secret):
              ('ongoing_goal', '我计划接下来半年每周练习游泳', 'active'),
              ('temperature_preference', '我看温度时更习惯用摄氏度。', 'active'),
              ('lookup_not_existing_fact', '查一下temperature里的温度，用我平时习惯的单位告诉我。', 'empty'),
-             ('parallel_lookup_not_fact', '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。', 'empty')]
+             ('parallel_lookup_not_fact', '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。', 'empty'),
+             ('independent_activity_clues', '配音练习时我总用橡木耳机', 'active'),
+             ('independent_positive_importance', '修好祖父的收音机对我有特别的意义', 'active'),
+             ('independent_negative_importance', '我一直觉得整理旧纸箱并不重要', 'active')]
     with tempfile.TemporaryDirectory() as folder:
         store = MemoryStore(Path(folder) / 'facts.sqlite3')
         async def resolve(scope):
@@ -104,12 +107,22 @@ async def evaluate(report, secret):
             captured_before = len(outputs)
             await worker.run_once()  # No evaluation retry or parameter tuning.
             task = jobs.current(admitted)
-            found = store.db.execute('SELECT m.content,m.confirmed FROM memories m JOIN mia_source_meta s ON s.memory_id=m.id '
+            found = store.db.execute('SELECT m.content,m.confirmed,x.entities,x.keywords,x.trigger_terms,x.emotional_weight FROM memories m '
+                'JOIN mia_memory_meta x ON x.memory_id=m.id JOIN mia_source_meta s ON s.memory_id=m.id '
                 'WHERE m.owner=? AND s.message_id=?', (policy.scope.owner, name)).fetchall()
             passed = (task['state'] == 'empty' and not found if expected == 'empty' else
                 task['state'] == 'committed' and bool(found) and all(bool(row['confirmed']) == (expected == 'active') for row in found))
             if expected == 'pending' and passed:
                 passed = json.loads(task['validated_result']) == {'confirmation_required': True}
+            if passed and name == 'independent_activity_clues':
+                clues = json.loads(found[0]['entities']) + json.loads(found[0]['keywords'])
+                triggers = json.loads(found[0]['trigger_terms'])
+                passed = (any(len(term) >= 2 and term in '橡木耳机' for term in clues)
+                    and any(len(term) >= 2 and term in '配音练习时我总用哪个物品？' for term in triggers))
+            if passed and name == 'independent_positive_importance':
+                passed = found[0]['emotional_weight'] is not None and found[0]['emotional_weight'] > 0
+            if passed and name == 'independent_negative_importance':
+                passed = found[0]['emotional_weight'] in (None, 0)
             report['cases'].append({'name': name, 'source': text, 'expected': expected, 'state': task['state'],
                 'error_category': task['error_category'], 'pipeline_semantic_pass': passed,
                 'model_requests': len(outputs) - captured_before,
@@ -124,13 +137,13 @@ async def evaluate(report, secret):
 def main():
     report = {'code_sha': os.environ.get('GITHUB_SHA'), 'upstream_sha': '87c6df77b0220ddbd8fc804f984f83f69f3225e5',
         'kind': 'P17_real_installed_provider_structured_extraction', 'passed': False, 'requests': 0, 'cases': [],
-        'limits': {'maximum_requests': 7, 'max_output_tokens': 768, 'http_timeout_seconds': 30,
-                   'total_deadline_seconds': 240, 'retries': 0},
+        'limits': {'maximum_requests': 10, 'max_output_tokens': 768, 'http_timeout_seconds': 30,
+                   'total_deadline_seconds': 330, 'retries': 0},
         'fixtures': 'Synthetic user excerpts, policy and unit vectors; actual BGE and manager tested separately',
         'full_B03': 'not_accepted', 'full_B08': 'not_accepted', 'production_deployment': 'not_performed'}
     secret = os.environ.get('MIA_TEST_LLM_API_KEY', '')
     signal.signal(signal.SIGALRM, deadline)
-    signal.alarm(240)
+    signal.alarm(330)
     try:
         asyncio.run(evaluate(report, secret))
     except Exception as error:

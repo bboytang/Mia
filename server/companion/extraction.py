@@ -38,8 +38,10 @@ Health, finance and intimate details require confirmation: mark sensitive true.
 Inferred clues are NOT facts: kind=inferred requires an anchor literally in both its
 source_quote and proposed content; they remain unconfirmed and never alter Mia's traits.
 All entities/keywords/trigger_terms must occur literally in source_quote, at most 8 each,
-32 characters each. No invented synonyms. Emotional weight may be absent; if supplied,
-it needs emotional_evidence quoted from source_quote with explicit importance.
+32 characters each. No invented synonyms.
+从本次原句提取有字面出处的少量实体、关键词、活动或场景触发短语，分别填入entities、keywords、trigger_terms；没有才留空，不从旧记忆补词。
+emotional_weight表示用户对该事实明确表达的重视程度，不是当下心情。明确肯定重要、珍惜、在意或意义时给出大于0且不超过1的权重，并在emotional_evidence引用原文的肯定重视短语；否定或未表达重视时保持null，不推断重要性。
+低重要性不妨碍保存其他有用的长期事实；情绪观察仍须单独授权。
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
 "relation":"shared_term", "anchor":"literal term shared with both source_quote and target content",
 "evidence":"same source_quote"}. Never invent target IDs or causal relationships.
