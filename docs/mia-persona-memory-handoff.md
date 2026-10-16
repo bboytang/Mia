@@ -26,36 +26,19 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-最新实证：工具38897863755 success，69真实请求，30结构与30预期语义结果通过（含21普通回复＋9故障处理），见tools-d09-review.json；仅适用于d1ef337／运行模块b2d5a1c，原D09不要求同代多调用，native并行覆盖仍无。后续提取改动需要最终相关回归。c064b60提取38898348531已failure／10项7请求8通过，活动触发词与肯定重要性两项仍失败；其余终态及否定原句正常，见metadata-categories-*。新B04 v2独立语料已冻结并接入retrieval_holdout，尚未真实执行；不要把准备记通过。
+当前运行候选 `5319646ff708ea11001a31d5ee309e11f4be2481`：提取提示已有真实来源／分类／否定保留示例，本次继续明确“活动→物品”的触发词和用户明确重视的含义；不加工原模型输出、不后填元数据、不改来源校验或冻结检索参数。GitHub语法38898906597、服务38898906830、BGE38898906791、身份38898906739、manager38898906676均已success。十场景真实提取38898964409已failure／7请求／10项9通过：活动触发词真实保存，肯定意义的权重仍null，详见metadata-signal-*。完整v1检索回归38899281656已确认in_progress（suite=retrieval、SHA5319646）；先跟踪这个同一run，不因观察超时重发，不将辅助九项通过称整体通过。
 
-最新提取证据：38897706514已failure，10项全部执行／7请求，原七项通过，线索空与肯定重要性null仍存在，否定对照原句改写导致retry_wait；见metadata-complete-*。提示新候选去掉空元数据模板并演示来源内肯定／否定字段，待GitHub，不能手填元数据或报B04通过。工具矩阵38897863755为d1ef337单次执行，需跟踪当前handle；不要重发。
+上一个运行候选c064b60的服务38898312570／BGE38898312443／身份38898312589／manager38898312562均success。真实提取[38898348531](https://github.com/bboytang/Mia/actions/runs/38898348531)仍failure，10项／7请求／8通过，所有任务达到committed或empty；器材实体与关键词已有，活动触发词却仅物品名，肯定意义的重要性仍null；否定重要性完整原句及null正常。详见[实际元数据](verification/mia-persona-memory/metadata-categories-review.json)。前两轮全量失败与示例类别失败均保留metadata-complete-*／metadata-examples-*，不能只报八项通过。
 
-B08复核补记：模型必须同代多调用是此前harness额外条件，原D09未要求；现改为真实并行诊断，所有工具闭合／权限／预算／当前问题检查保留。旧自动结果不回写，相同输入为v1.2回归，尚未重新真实执行。十场景提取38897706514已启动并确认在途，跟踪同run，不重发。
+B08实际十场景矩阵在[38897863755](https://github.com/bboytang/Mia/actions/runs/38897863755)已success，d1ef337／运行模块b2d5a1c，三组各23共69真实请求。30结构及30预期语义结果通过，含21普通回复和9超限／删除／撤权处理；三库最终0事实、0事件，任务各1committed＋8empty。见[原文与人工复核](verification/mia-persona-memory/tools-d09-review.json)。原D09不要求模型同代必须多调用，此前agent额外断言已撤除，真实工具闭合／权限／当前问题／预算仍全检查；native并行实际覆盖仍无。旧21／30和24／30报告不改，相同输入是回归。后续提取提示更改仍须最终候选相关回归，不能据此报完整P22通过。
 
-2026-10-16接续补记：重新从GitHub核对路遥HEAD仍e23c3aa，九文件hash全部匹配，实际机制与Mia对照见[再次复核](verification/mia-persona-memory/luyao-reference-review.md)。未新增表达限制。前缀／明确不保存修正已提交推送为b2d5a1c，服务38896686846、BGE38896686873、身份38896686872、manager38896686853均success；提取推送检查38896686961仅为自动检查。十场景真实模型辅助尚未重验，不能视为元数据问题已解决。下文该候选“待推送／GitHub验证”的历史状态由此补记覆盖。
+B04首次真实检索38891089842的39请求／12事实／15查询已全部保存：S／L／A实际贡献、候选无遗漏、相关回答正确，但E全null和指定活动关联无扩展导致失败，原证据retrieval-first-*。v1现在只作回归。新的独立v2（新活动／物品／重要性表达／问法）已在0dfa6a0冻结，`suite=retrieval_holdout`接入同一真实manager／BGE／Worker及评分检查；语法38898831820成功，真实v2尚未执行。当前完整v1回归38899281656在途；先读它的真实提取／SQL／评分与原回答，再决定独立v2执行，不用预置线索或改阈值获得通过。
 
-P21完成必要实现与GitHub验证。最近已验证运行源码642cb28：来源预检、临时工具请求排除、伪boundary修复已实现；服务234／38855004290、BGE38855004266、身份／TLS／WSS／JAR38855004276、manager38855004281全部success。[来源预检真实报告](verification/mia-persona-memory/extraction-preflight-ci-results.json)38855031862七场景成功、五真实模型请求，两条纯查询实际0调用／null输出／empty；未把确定性空提取称模型输出。人设表达不因此新增限制。
+明确更正三协议在7ef9a46／38890796048已完成三组流程及有限语义复核，见correction-speaker-*；在途删除c625c55／38894890125的三个真实可写结果删除后被原Worker取消、重启无复活，25真实请求，见inflight-prefix-*。茶组最后仍答自身偏好，仅机械在途机制通过；任意自然纠错及完整语义不能据此记通过。来源预检和命令前缀相关失败／修复见extraction-preflight-*、inflight-first-*及metadata-interrupted-*。
 
-工具复验38854020949已failure，96实际请求、结构24／30、普通回答21／21语义正确；原文与SDK delta见tools-quality-*。三次删除安全重建均通过，无旧事实／工具数据／声明／重放、新任务cancelled，最终三库0事实且无伪boundary。三个parallel实际每代只返回一个调用，不是合并丢失，并行门槛未改。旧偏好重发导致的三Worker失败已经由642cb28来源预检在独立七场景修复；当前完整工具矩阵尚未按新源码复验，不能将24／30预测改成27／30或通过。摄氏正确答案附加条件式华氏换算不判错，首轮过严语义评分已修订，原自动结果和原文保留。
+用户指定路遥HEAD于2026-10-16重新核实仍e23c3aa，九文件hash全部匹配，见[逐项对照](verification/mia-persona-memory/luyao-reference-review.md)。不新增拟人／亲近表达门槛。最终上线模型与共同往事澄清均未收到回答，继续现有glm-4-flash，不更换模型或Secrets、不默认选项已答。真实跨七自然日由用户自测，不自动续采，不部署。
 
-首次真实correction38855205246为18请求failure，保留三个原事实，未到后续重启／删除，见correction-first-*。明确协议候选6be70f7服务38889180420、manager38889180348、身份38889180501成功；BGE38889180351仅旧断言要求1SDK而失败，b198aba修正为0SDK并禁止DB重试重新resolve、要求持久校验结果后38889729308通过，运行源码仍6be70f7，原失败未删。
-
-真实复验[38889408684](https://github.com/bboytang/Mia/actions/runs/38889408684)已success／18请求；三组同ID纠正、active旧事件失效、两次不同PID重启及第三问法／本人删除／0事实无事件复活的完整机械链通过。人工复核不报整体语义通过：0／1组正确用新事实，2组把用户问“我平常喝哪种茶”答成Mia的“我更喜欢普洱茶，你呢”，删除后也答自己的偏好，属于答错对象而非禁止拟人喜好。证据[明确协议复核](verification/mia-persona-memory/correction-quoted-review.json)及精确correction-ci-results.json。
-
-当前运行源码7ef9a46已通过服务38890285057、BGE38890285669、身份38890285029、manager38890285089。公共上下文澄清当前消息第一人称归用户，实际复验[38890796048](https://github.com/bboytang/Mia/actions/runs/38890796048)success／18请求，三组新事实均以正确用户主体回答、删除后无旧事实断言；全部15回答和三库／PID已读，明确协议流程＋本三组语义通过，见correction-speaker-*。4013ced只新增B04测试入口，服务38890982491／manager38890982374／语法38890982397全部success，运行模块仍7ef9a46。
-
-B04首轮[38891089842](https://github.com/bboytang/Mia/actions/runs/38891089842)已failure，39真实请求、12事实／15查询全部执行；S／L／A有真实贡献，候选小库无遗漏及无关空召回，但12条重要性元数据全null（含6条明确重要原句），三条活动器材记录线索为空，指定关联无扩展。结构0／15为同一前置E条件失败，不是十五种检索错误；相关12回答正确，另2澄清、1仅说稍等查记录。原提取／SQL／评分／消融／原文在retrieval-first-*，不手填字段、不改冻结权重，v1后续视作回归而非未看过的最终留出。
-
-在途删除首轮[38892883235](https://github.com/bboytang/Mia/actions/runs/38892883235)源码dca17b8已failure／24请求，见inflight-first-*。三组真实“请记住”提取把命令放入source_quote、正文却省掉，来源守卫丢候选；CI要求真实可写结果的前置不成立，所以没进ready，更未执行删除／释放／最终重启。不能称队列缺陷或在途拒绝通过。新候选复用原前缀模式，仅在模型user_excerpts去掉记忆命令，原任务／来源索引／最终原文校验不改；原模型输出不加工。新增否定偏好及原始来源不变的生产者回归。
-
-715edd4澄清来源线索及“用户明确重要性而非当前心情”的元数据语义，冻结检索参数不变，四回归服务38893584177／BGE38893584166／身份38893584008／manager38893584050成功。辅助[38893872558](https://github.com/bboytang/Mia/actions/runs/38893872558)failure／6请求／8场景，原7通过，新设备事实虽保存但线索仍空；正／负重要性后两项未执行，见metadata-first-*，不能推定它们的结果。辅助脚本新候选允许已终态的逻辑检查失败后继续独立场景，以取得未执行对照；总通过仍要求所有项目通过，未完成任务停止，不评估重试。
-
-命令前缀候选c625c55已通过服务38894665772／BGE38894665710／身份38894665859／manager38894666387。真实在途复验[38894890125](https://github.com/bboytang/Mia/actions/runs/38894890125)success／25请求（9／8／8）：三个真实可写提案先验证暂停，本人删除后原结果返回原Worker，三任务均cancelled(memory_changed)、native结束、最终三库0事实／0观察／失效事件，见inflight-prefix-*。三个held任务各1尝试；第0组初始habit类别错误由原Worker第2尝试恢复，不是重试workflow取绿。茶组最终仍答Mia自身偏好，因此仅在途机制三组通过，不宣称所有对话语义或完整P22通过。
-
-十场景辅助38894897225只执行3项／3请求便failure：小说模型改引号，来源校验拒绝、任务retry_wait，脚本正确停止未完成任务，未执行后续元数据对照。前缀输入处理还意外规范化了普通原文，现已改成仅去命令、普通标点原样；并排除明确不要把它记成／不要保存等操作句，纯小说＋不保存指令直接empty，不改造模型输出或放宽原文校验，见metadata-interrupted-*。新修正待推送／GitHub验证。
-
-当前第一项可执行工作：完成新候选四回归及实际十场景辅助，观察此前未执行的正／负重要性，仍保留全部失败及总通过门槛；不要按同源码重复取绿。目前无在途真实run。最终上线模型及共同往事澄清均未答，不换模型／Secrets、不追加表达拦截。后续仍需元数据／关联实际行为和新的独立留出、任意自然纠错、完整后台故障／身份矩阵、特点成长／趋势派生；P22尚未验收，P23／P24未完成。真实跨日用户自测，不自动日采，不部署。
-
+P22仍需元数据／关联整链与独立留出、任意自然纠错、后台故障及身份矩阵、特点成长／派生失效等；P23资源／延迟／公平性和P24定制补丁升级／回滚未完成。P21已完成必要实现与GitHub验证，真机仍另验。完整失败历史见工作记录和各原始报告。
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 

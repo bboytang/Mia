@@ -17,5 +17,17 @@
     "run": "https://github.com/bboytang/Mia/actions/runs/38853421693",
     "sha": "5498b28d9ffb633ebcfc73218c6f83eb63886a40",
     "conclusion": "success"
+  },
+  "latest_verified_matrix": {
+    "sha": "d1ef33756b1a6f54197f9b8ffced368d6bccdf8b",
+    "runtime_sha": "b2d5a1c40d3856f8c68e2d1c990d44e800936f2e",
+    "run": "https://github.com/bboytang/Mia/actions/runs/38897863755",
+    "conclusion": "success",
+    "requests": 69,
+    "structural_cases": "30/30",
+    "reviewed_expected_outcomes": "30/30",
+    "B08_matrix_accepted_for_this_candidate": true,
+    "evidence": "tools-d09-review.json",
+    "caveats": "Original D09 scope restored before run; actual native parallelism not observed; reused inputs are regression; later extraction prompt changes still require relevant final candidate validation; not full P22 acceptance."
   }
 }

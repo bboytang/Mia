@@ -1,0 +1,12 @@
+{
+  "sha": "5319646ff708ea11001a31d5ee309e11f4be2481",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38898964409",
+  "conclusion": "failure",
+  "executed_cases": 10,
+  "requests": 7,
+  "passed_cases": 9,
+  "review": "All source tasks reach committed/empty. Activity source now genuinely contains object entities/keywords and activity trigger 配音练习, so that control passes. Positive significance still has emotional_weight=null, despite a source-grounded significance keyword. Negative importance preserves complete source and null. Overall still fails; no manual backfill, weight tuning, model switch or evaluation retry.",
+  "file": "metadata-signal-provider.json.gz",
+  "sha256": "649f23b91e6a1bb6f34c4b1f229c69fba9dfae94e374f30a479fbcbab9b322c1",
+  "next": "One full v1 retrieval regression on this materially changed producer to observe actual four-component behavior across three contexts. Preserve independent frozen v2 until ready, rather than repeatedly tuning against it."
+}
