@@ -14,12 +14,12 @@ import sys
 import uuid
 from types import ModuleType, SimpleNamespace
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryStore, MemoryError
-from server.companion.extraction import validate_output
+from server.companion.extraction import LLMMemoryExtractor, validate_output
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION
 
 
@@ -178,6 +178,38 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         await self.worker.run_once()
         self.assertEqual(self.row(result)['error_category'], 'invalid_output')
         self.assertEqual(self.store.list_memories(self.scope.owner), [])
+
+    async def test_real_validation_feedback_is_task_local_and_keeps_two_attempt_limit(self):
+        bad = json.loads(json.dumps(self.output))
+        bad['memories'][0]['keywords'] = ['not in actual source']
+        original = json.dumps(bad)
+        provider = Mock()
+        provider.response_no_stream.side_effect = [bad, self.output, self.output]
+        async def resolve(scope):
+            return LLMMemoryExtractor(lambda: provider)
+        self.worker.resolve = resolve
+        own = await self.worker.submit(self.event('feedback'))
+        await self.worker.run_once()
+        self.assertEqual(self.row(own)['state'], 'retry_wait')
+        self.assertEqual(self.row(own)['attempts'], 1)
+        self.assertEqual(self.store.list_memories(self.scope.owner), [])
+        peer = await self.worker.submit(self.event('other-task', scope=self.peer))
+        self.now[0] += 2
+        await self.worker.run_once()
+        self.assertEqual(self.row(peer)['state'], 'committed')
+        await self.worker.run_once()
+        self.assertEqual(self.row(own)['state'], 'committed')
+        self.assertEqual(self.row(own)['attempts'], 2)
+        calls = provider.response_no_stream.call_args_list
+        self.assertEqual(len(calls), 3)
+        self.assertNotIn('previous attempt for THIS task failed', calls[0].args[0])
+        self.assertNotIn('previous attempt for THIS task failed', calls[1].args[0])
+        self.assertIn('keywords clue must occur as a contiguous literal substring', calls[2].args[0])
+        self.assertEqual(json.loads(calls[2].args[1])['user_excerpts'], ['我喜欢蓝色'])
+        self.assertEqual(json.dumps(bad), original)
+        self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
+        self.assertEqual(len(self.store.list_memories(self.peer.owner)), 1)
+        self.assertNotIn(own['id'], self.worker.validation_feedback)
 
     async def test_delete_clear_pause_edit_and_reset_cancel_without_resurrection(self):
         for action in ('delete', 'clear', 'pause', 'update', 'reset_personality'):

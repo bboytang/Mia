@@ -151,6 +151,7 @@ class MemoryWorker:
         self.queue = deque(maxlen=jobs.capacity)
         self.served, self.tick = {}, 0
         self.results = {}
+        self.validation_feedback = {}
         self.foreground = 0
         self.closing = False
         self.task = None
@@ -183,6 +184,7 @@ class MemoryWorker:
         rows = await asyncio.to_thread(self.jobs.ready)
         active = {row['id'] for row in rows}
         self.results = {key: value for key, value in self.results.items() if key in active}
+        self.validation_feedback = {key: value for key, value in self.validation_feedback.items() if key in active}
         if self.foreground or not self.lane.done.is_set():
             return False
         owners = {row['owner'] for row in rows}
@@ -205,6 +207,7 @@ class MemoryWorker:
                     return True
                 context = await asyncio.to_thread(context_for, self.jobs.store, scope.owner,
                     json.loads(job['source_payload']).get('emotion_consent_version'))
+                context.validation_feedback = self.validation_feedback.get(job['id'])
                 extract = await self.resolve(scope)
                 # A newly active front-end gets priority before entering a native call.
                 if self.foreground:
@@ -215,7 +218,15 @@ class MemoryWorker:
                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))
                 except asyncio.TimeoutError:
                     raise TimeoutError('extraction_timeout') from None
-                validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
+                try:
+                    validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
+                except MemoryError as error:
+                    if error.code == 'invalid_input' and job['attempts'] + 1 < 2:
+                        # Server validation messages only; never provider errors,
+                        # raw model text, extra sources or output repair.
+                        self.validation_feedback[job['id']] = str(error)[:512]
+                    raise
+                self.validation_feedback.pop(job['id'], None)
                 result = json.dumps(validated, ensure_ascii=False)
                 self.results[job['id']] = result
                 await self._scope(job)

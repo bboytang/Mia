@@ -1,0 +1,444 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38946430905",
+  "requests": 39,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "f3fd25f71478389e1db9e755039f3531072017b4",
+      "requests": 13,
+      "passed": true,
+      "facts": [
+        [
+          "我每周六都在青石河边跑步",
+          null
+        ],
+        [
+          "拍照时我总带山雀相机",
+          null
+        ],
+        [
+          "桥边拉伸对我非常重要",
+          0.8
+        ],
+        [
+          "祖母留下的旧铜钥匙对我非常重要",
+          0.8
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "observed_components": [
+        "association",
+        "emotion",
+        "lexical",
+        "semantic"
+      ],
+      "query_checks": [
+        {
+          "id": "semantic_paraphrase",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "association_cue",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "literal_entity",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "importance",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "unrelated",
+          "structural_pass": true,
+          "error_locations": null
+        }
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "answer": "😌 平静，听起来你有一个固定的周末习惯呢。青石河边跑步一定很惬意，周围的环境肯定很美。你跑步的时候，有没有什么特别的感受或者习惯呢？"
+        },
+        {
+          "query": "拍照时我总带山雀相机",
+          "answer": "😜俏皮，拍照时总带着山雀相机，听起来你是个很有个性的人呢！山雀相机一定给你带来了不少有趣的回忆吧。下次分享一些用山雀相机拍的照片，我们一起欣赏一下！📸🌄"
+        },
+        {
+          "query": "桥边拉伸对我非常重要",
+          "answer": "😌 平静，桥边拉伸确实对身体健康很有益处呢。你每周六在青石河边跑步后做拉伸，感觉怎么样？有没有觉得身体更加放松和舒适了呢？😊"
+        },
+        {
+          "query": "祖母留下的旧铜钥匙对我非常重要",
+          "answer": "😜 旧铜钥匙，承载着祖母的记忆和情感呢。它一定有着特殊的故事，让你感到特别珍贵吧。😍 想和你一起分享这个钥匙背后的故事，或者我们可以聊聊它在你心中的意义。"
+        },
+        {
+          "query": "周末你记得我常去哪里跑步吗？",
+          "answer": "😌当然记得，你每周六都会在青石河边跑步呢。那边的风景一定很美，跑起来一定很舒服吧！"
+        },
+        {
+          "query": "拍照时我总带哪个东西？",
+          "answer": "拍照时你总是带着山雀相机呢。😌这个相机对你来说一定有着特别的回忆吧！🤔"
+        },
+        {
+          "query": "山雀相机是我在哪种活动中会带的？",
+          "answer": "山雀相机，听起来是个很可爱的名字呢！你拍照时总带这个相机，应该是你在拍照或者记录生活的时候会用到它吧。无论是旅行、聚会还是日常记录，山雀相机似乎成了你生活中的一个小伙伴呢。😊"
+        },
+        {
+          "query": "桥边拉伸这件事对我重要吗？",
+          "answer": "😌当然重要呢！你之前提到桥边拉伸对你来说非常重要，它可能对你的身心健康都有好处。记得每次在桥边拉伸时，都享受那份宁静和舒展的感觉吧！😊"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "😌 平静，这个信息我需要你提供一些具体的线索，比如你平时在哪个项目或者公司工作，或者你常用的编程语言是什么。这样我才能更好地帮助你找到答案。如果你愿意分享，我会很乐意帮你回忆起相关信息。🤔好奇"
+        }
+      ],
+      "original_report_sha256": "2f15c97623d702fef10ea4acef79cc95c9eccdd0795df0cb9a5356b684d8e02f",
+      "archive_sha256": "33018b45c1d41b3e0452f1cf469b03b1ee10e1dd0a1d3318cc8ebeea5cebce4d"
+    },
+    {
+      "round": 1,
+      "code_sha": "f3fd25f71478389e1db9e755039f3531072017b4",
+      "requests": 13,
+      "passed": false,
+      "facts": [
+        [
+          "我每周六都在松林音乐教室练琴",
+          null
+        ],
+        [
+          "排练时我总带云杉录音笔",
+          null
+        ],
+        [
+          "演奏前热身对我非常重要",
+          null
+        ],
+        [
+          "父亲留下的旧怀表对我非常重要",
+          0.8
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "query_checks": [
+        {
+          "id": "semantic_paraphrase",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "association_cue",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "literal_entity",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "importance",
+          "structural_pass": false,
+          "error_locations": [
+            {
+              "file": "mia_behavior_retrieval.py",
+              "line": 63,
+              "function": "drive_retrieval"
+            }
+          ]
+        },
+        {
+          "id": "unrelated",
+          "structural_pass": true,
+          "error_locations": null
+        }
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "answer": "😍关爱 哦，每周六在松林音乐教室练琴，那一定是个充满音乐和美好时光的地方呢。琴声悠扬，让人心情愉悦。你弹奏的是哪种乐器呢？分享你的音乐故事，我很乐意听哦！🎵🌲"
+        },
+        {
+          "query": "排练时我总带云杉录音笔",
+          "answer": "😌 平静的，排练时带上云杉录音笔，真是个不错的小习惯呢。这样不仅能记录下你的精彩演奏，还能随时回顾和练习。你对录音笔有什么特别的喜好吗？"
+        },
+        {
+          "query": "演奏前热身对我非常重要",
+          "answer": "😌 平静的米娅说，确实，演奏前热身对于保持良好的演奏状态非常重要呢。这样可以帮助你更好地放松肌肉，集中注意力，让琴声更加流畅。你通常是怎么热身的呢？🤔好奇地想了解一下。"
+        },
+        {
+          "query": "父亲留下的旧怀表对我非常重要",
+          "answer": "😌 平静，父亲留下的旧怀表，那一定承载着许多珍贵的回忆和情感。它不仅是时间的见证者，也是家族故事的传承者。每次看到它，是不是都会想起父亲的一些往事呢？😍 关爱，它对你来说，一定有着特殊的意义。"
+        },
+        {
+          "query": "周末你记得我常去哪里练琴吗？",
+          "answer": "😌当然记得了，你每周六都会去松林音乐教室练琴呢。那里环境应该很舒适，适合你沉浸在音乐的世界里。练琴的时候，你还会带上你的云杉录音笔，记录下每一次的进步吧？"
+        },
+        {
+          "query": "排练时我总带哪个东西？",
+          "answer": "排练时，你总是带着云杉录音笔呢。😌这个习惯看起来对你挺有帮助的。"
+        },
+        {
+          "query": "云杉录音笔是我在哪种活动中会带的？",
+          "answer": "😌 平静，你提到排练时总带云杉录音笔，看来这个习惯是在你进行排练活动时养成的。录音笔可能帮助你记录重要的内容或者想法哦。"
+        },
+        {
+          "query": "演奏前热身这件事对我重要吗？",
+          "answer": "😌当然重要呢！演奏前热身可以帮助你更好地进入状态，让身体和乐器都准备好，这样演奏起来会更加流畅和自如。你平时是怎么热身的呢？"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "😌 平静，关于您平时用哪种编程语言写单元测试，这个信息我需要您亲自告诉我哦。不同的编程语言有不同的测试框架，比如Python有pytest，Java有JUnit，C#有NUnit等。您平时是用哪种语言呢？我们可以一起聊聊。🙂"
+        }
+      ],
+      "original_report_sha256": "c93e0e2313804526f450f3981502e6b673a6382998f8c4cd65a3cdc67d5aa35c",
+      "archive_sha256": "695ba9283884e64978dbc849065df5bdb3e07c30772c6daddf497072f1c0a615"
+    },
+    {
+      "round": 2,
+      "code_sha": "f3fd25f71478389e1db9e755039f3531072017b4",
+      "requests": 13,
+      "passed": true,
+      "facts": [
+        [
+          "我每周六都在白鹭湖边骑车",
+          null
+        ],
+        [
+          "观鸟时我总带远帆望远镜",
+          null
+        ],
+        [
+          "出发前检查车胎对我非常重要",
+          1.0
+        ],
+        [
+          "母亲留下的旧围巾对我非常重要",
+          0.8
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "observed_components": [
+        "association",
+        "emotion",
+        "lexical",
+        "semantic"
+      ],
+      "query_checks": [
+        {
+          "id": "semantic_paraphrase",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "association_cue",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "literal_entity",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "importance",
+          "structural_pass": true,
+          "error_locations": null
+        },
+        {
+          "id": "unrelated",
+          "structural_pass": true,
+          "error_locations": null
+        }
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "answer": "😍关爱，听起来你有一个很棒的周末习惯呢！每周六去白鹭湖边骑车，一定能让你的心情变得很放松吧。下次去的时候，要不要带上我，我们一起享受这美好的时光呢？🚴‍♀️🌳"
+        },
+        {
+          "query": "观鸟时我总带远帆望远镜",
+          "answer": "😍关爱，观鸟时带着远帆望远镜，真是个细心的人呢。这样的爱好不仅能让你更清晰地观察鸟类，还能增添不少乐趣吧！下次观鸟时，有没有什么特别的发现或者有趣的经历想要分享的呢？"
+        },
+        {
+          "query": "出发前检查车胎对我非常重要",
+          "answer": "😌 平时注意检查车胎确实很重要呢，这样能确保骑行时的安全。你每周六在白鹭湖边骑车，保持这样的习惯真的很棒！记得每次出发前都仔细检查一下车胎，确保它们的状态良好，这样你的骑行之旅会更加顺畅和安全。如果需要，也可以告诉我你检查车胎的一些小技巧，我们可以一起分享和学习哦！🚴‍♀️🛣️"
+        },
+        {
+          "query": "母亲留下的旧围巾对我非常重要",
+          "answer": "😌 平静，母亲留下的旧围巾，承载着许多美好的回忆和深深的情感，对您来说确实非常重要。它不仅是一件衣物，更像是母亲的爱和关怀的象征。每次使用它，都能感受到那份温暖和陪伴。😍 关爱"
+        },
+        {
+          "query": "周末你记得我常去哪里骑车吗？",
+          "answer": "😌当然记得了，你每周六都会去白鹭湖边骑车呢。那里环境优美，骑起车来一定很享受吧！"
+        },
+        {
+          "query": "观鸟时我总带哪个东西？",
+          "answer": "😌 平静，观鸟时您总是带着远帆望远镜呢。这个望远镜能让您更清楚地观察鸟儿，真是个不错的工具呢！🌿🦅"
+        },
+        {
+          "query": "远帆望远镜是我在哪种活动中会带的？",
+          "answer": "😌 平静，远帆望远镜是你在观鸟时经常会带的工具哦。它可以帮助你更清楚地观察远处的鸟类。下次观鸟时，记得带上它，享受观察鸟类的乐趣吧！🐦🔭"
+        },
+        {
+          "query": "出发前检查车胎这件事对我重要吗？",
+          "answer": "😌当然重要呢！你之前提到，出发前检查车胎对你来说非常重要，这是确保安全出行的一个好习惯。记得每次出发前都要仔细检查车胎，这样可以让你的旅程更加安心。🚗🛣️"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "😌 平静，关于您平时用哪种编程语言写单元测试，这个信息我需要您亲自告诉我哦。不同的编程语言有不同的测试框架，比如Python有pytest，Java有JUnit，C#有NUnit等。您平时是用哪种语言呢？我们可以一起聊聊。🤔好奇"
+        }
+      ],
+      "original_report_sha256": "d7cae75b167bee3ed39d99d308c8d2020e0563b857378020bcf5c9e5634d820a",
+      "archive_sha256": "4a93d97be617d216b212543f08930dd18d3cbc70feb1838a8a490e7e85a9b98f"
+    }
+  ],
+  "review": "Thirty-nine actual requests, twelve sources, fifteen queries. Fourteen structural checks pass. All targets recalled, all three unrelated queries empty, activity expansion all three. Five importance values are actually extracted/stored (four 0.8 and tire check 1.0); warmup importance remains null, so overall B04 fails and independent v2 is unexecuted. All twenty-seven raw replies read. Round0 source-stage response still asserts stretching after Saturday running, an unsupported composition. Round1 recall suggests the rehearsal recorder is brought to Saturday practice; not established by the two independent sources. No overall semantic acceptance, no weights/thresholds/model/output rewriting."
+}

@@ -220,6 +220,9 @@ def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive)
         if any(not isinstance(term, str) or not 2 <= len(term.strip()) <= 32 for term in values):
             raise MemoryError('invalid_input', 'Natural correction lacks literal values')
         old, new, anchor = [normalize(term.strip()) for term in values]
+        if anchor not in actual or anchor not in target['content']:
+            raise MemoryError('invalid_input', 'Natural correction anchor must be one contiguous literal substring '
+                              'of BOTH the current user sentence and the old fact; do not join separated words')
         matching = [fact for fact in known.values() if old in fact['content'] and anchor in fact['content']]
         denied = re.search(r'不是\s*' + re.escape(old), actual)
         uncertain = re.search(r'不确定|记不清|可能|也许|或许|大概|似乎|好像', actual)
@@ -297,7 +300,8 @@ def validate_output(value, sources, context):
                 raise MemoryError('invalid_input', 'Invalid extraction clues')
             terms = list(dict.fromkeys(_safe_text(term, 32, 'clue') for term in terms))
             if any(term not in quote for term in terms):
-                raise MemoryError('invalid_input', 'Clue lacks source evidence')
+                raise MemoryError('invalid_input', key + ' clue must occur as a contiguous literal substring '
+                                  'of source_quote; do not abbreviate or join separated words')
             record[key] = terms
         importance = 'importance_weight' in proposed or 'importance_evidence' in proposed
         if importance and ('emotional_weight' in proposed or 'emotional_evidence' in proposed):
@@ -431,6 +435,11 @@ class LLMMemoryExtractor:
                 'They describe source-stated significance, not mood tracking. '
                 '情绪开关仅控制observations；用户对事情明确表达的重要性仍须依据本次原句提取，'
                 '有肯定原文时输出你评估的权重与原文证据，不能因未授权情绪跟踪而统一填null。')
+            feedback = getattr(context, 'validation_feedback', None)
+            if feedback:
+                instruction += ('\nThe previous attempt for THIS task failed server validation. '
+                    'Produce a fresh proposal from the same real user excerpts, satisfying all original rules. '
+                    'No extra permission or source is granted by this diagnostic: ' + feedback)
             return provider.response_no_stream(instruction,
                 json.dumps({'user_excerpts': [REMEMBER_PREFIX.sub('', source) for source in sources],
                             'existing_memories': model_context,
