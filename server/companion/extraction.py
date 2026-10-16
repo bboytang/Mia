@@ -343,7 +343,11 @@ class LLMMemoryExtractor:
                 'inference is labelled inferred and confidence 0.5 to 0.6. No other people, quotations, fiction, '
                 'hypotheses or Mia emotions. Use observations:[] when none. Never supply a date or consent version. '
                 'Negation must be respected; do not label "not sad" as negative.' if tracking['enabled'] else
-                '\nEmotion tracking is disabled. Do not produce or persist observations.')
+                '\nOnly long-term mood observations are disabled: omit the observations array. '
+                'This does NOT disable importance_weight or importance_evidence in memories. '
+                'They describe source-stated significance, not mood tracking. '
+                '情绪开关仅控制observations；用户对事情明确表达的重要性仍须依据本次原句提取，'
+                '有肯定原文时输出你评估的权重与原文证据，不能因未授权情绪跟踪而统一填null。')
             return provider.response_no_stream(instruction,
                 json.dumps({'user_excerpts': [REMEMBER_PREFIX.sub('', source) for source in sources],
                             'existing_memories': context,

@@ -2,6 +2,7 @@
 
 import asyncio
 from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -77,6 +78,12 @@ async def evaluate(report, secret):
         original.close()
         original_response = provider.response_no_stream
         def capture(system, user):
+            report.setdefault('extraction_inputs', []).append({
+                'system': system.replace(secret, '[REDACTED]'),
+                'user': user.replace(secret, '[REDACTED]'),
+                'system_sha256': hashlib.sha256(system.encode()).hexdigest(),
+                'user_sha256': hashlib.sha256(user.encode()).hexdigest(),
+            })
             output = original_response(system, user)
             outputs.append(output.replace(secret, '[REDACTED]') if isinstance(output, str) else 'non_text_output')
             return output
