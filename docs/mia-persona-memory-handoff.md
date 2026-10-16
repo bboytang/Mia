@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+最新状态：e0ec157a/faults38974841980已success/27请求，实际glm-4-flash，六非空坏JSON/六真实SDK超时、原两attempts/重复幂等/后续正常提取/换PID召回通过；12原回答已读，faults-current-configured-*保存完整原证据。不能用它冒称FlashX坏JSON门槛通过。shutdown38974837753仍in_progress，已通过准备进入真实manager/BGE/Provider三轮；只跟踪该句柄，保存完整app/SIGTERM/退出/第三PID恢复实际证据。P22余项/独立v2及P23/P24仍未完成。
+
 当前第一项：跟踪精确e0ec157a的shutdown/FlashX38974837753及faults/configured38974841980（各一次、headSha已核对，创建时queued）；语法38974725259 success。配置模型故障回归与FlashX结果按型号分开，不能把组合历史证据称单型号全通过。旧bb230a00关闭任务已准备失败并归档，无模型/app结果。新候选只补导出venv的pip25.3/typing_extensions4.16.0；服务模型、torch2.2.2和原固定资产hash不改。之后继续实际app关闭/恢复与P22余项，满足后P23→P24；不重发这些在途任务。
 
 最新覆盖：bb230a00/shutdown38973884791已failure并归档shutdown-export-install-*，停在临时导出venv的typing_extensions元数据/CPU索引构建依赖错误；完整模型/app未执行。新候选只在该venv固定pip25.3和预装typing_extensions4.16.0，运行torch2.2.2/导出torch2.6.0/既有资产校验不改，待新精确提交单次CI。P22矩阵主表已按现有有限真实证据同步；全服务在途关闭、独立v2及最终组合仍待验证，P23/P24未完成。

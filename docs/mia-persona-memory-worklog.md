@@ -2,6 +2,8 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- e0ec157a/faults38974841980终态success/27真实请求，实际configured型号glm-4-flash。三组共六非空原始坏JSON与六SDK APITimeoutError→ReadTimeout、原两attempts、12重复同ID/失败无事实、正常首次提交和真正换PID正确乐器召回通过；空闲关闭0.1092/0.1440/0.1131秒。12原回答已读，一般器具描述保留其推测局限，不冒充产品事实；faults-current-configured-*原报告/SQL/哈希与proof保存。此为该型号当前候选故障链，不替代FlashX非空坏JSON或完整服务关闭。
+- 同SHA shutdown38974837753仍in_progress，已经通过完整依赖和独立BGE导出准备、进入真实manager/BGE/Provider三轮。继续原句柄，尚无实际关闭结论，P22/P23/P24未完成。
 - e0ec157a4c8eb3eb63737fbdb71ad46dec7dc459已精确发布，语法38974725259 success。各单次启动并核对精确headSha：shutdown/FlashX[38974837753](https://github.com/bboytang/Mia/actions/runs/38974837753)、faults/configured[38974841980](https://github.com/bboytang/Mia/actions/runs/38974841980)，当前queued。后者补当前候选在现有默认模型下的真实非空坏JSON、超时与正常恢复门槛，结果与FlashX分开，不将不同型号的通过合成单型号完整验收。接续只跟踪这两个句柄；完整生命周期与P22其余项尚待结果，P23/P24未完成。
 - bb230a00/shutdown38973884791已failure，仍是准备阶段：导出venv的默认pip拒绝CPU索引typing_extensions的元数据名称，尝试sdist后缺flit_core；未运行BGE导出/Java模型/app。shutdown-export-install-*原失败日志及初始实际依赖哈希保存。新候选仅导出venv从PyPI固定pip25.3、预装typing_extensions4.16.0后安装原CPU torch2.6.0；服务torch2.2.2及固定BGE资产不变，尚待验证。当前P22表格按最新有限证据更新，已完成的成长/自然纠错/工具/Scope不再误列为“正在验”，剩余原门槛不削减。
 - 工具链隔离候选bb230a004daab63a3a0a18b36072f04549b4d45d已精确发布，语法38973818397 success；新shutdown[38973884791](https://github.com/bboytang/Mia/actions/runs/38973884791)单次创建、精确headSha为bb230a00，已确认queued。接续只跟踪此句柄，不重发d106a686的准备失败；尚无实际app关闭结果。全服务→P22剩余门槛/独立v2→P23→P24顺序保持，不部署或改生产模型。

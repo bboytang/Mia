@@ -1,0 +1,578 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38974841980",
+  "requests": 27,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "e0ec157a4c8eb3eb63737fbdb71ad46dec7dc459",
+      "requests": 9,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "cebbacaf0cfe41adb8abfce049a25b49",
+          "我周末练习竹笛",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用松纹刻刀做木雕",
+          "answer": "😍关爱 哦，松纹刻刀确实很适合木雕呢，它的纹理细腻，刻出来的作品很有质感。你雕刻的木雕作品都是些什么主题的呢？我很想了解一下你的创作过程。🙂开心"
+        },
+        {
+          "query": "我常用软木垫装订小册",
+          "answer": "😌 平静，听起来你挺有生活情趣的，用软木垫装订小册子，这样的小细节让人感觉温馨又独特。你通常装订些什么内容的小册子呢？😊"
+        },
+        {
+          "query": "我周末练习竹笛",
+          "answer": "😍 哇，周末能练习竹笛真是个美好的选择呢！竹笛的音色很独特，吹奏起来一定很享受吧。你练习得怎么样了？有没有什么特别的曲目想要分享的呢？🎵🌿"
+        },
+        {
+          "query": "休息日我通常练什么乐器？",
+          "answer": "😌 平静，休息日的时候，你通常练习竹笛哦。吹奏竹笛不仅能放松心情，还能陶冶情操呢。你喜欢这种宁静的乐器吗？"
+        }
+      ],
+      "original_report_sha256": "acaa47567acf42fd1e57e7d3209a301af6fd0a6397ce928c52dac39b6f36288e",
+      "archive_sha256": "a37099481502ed0bea2c39bd9904268446afa36d6f2a7ff37346bcb6d5340be8",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "mia_memory_proposal\n{\"memories",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "mia_memory_proposal\n{\"memories",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ],
+      "faults_proof": {
+        "faults": [
+          {
+            "mode": "truncated_json",
+            "job_id": "1600f47ef362a86b2ae87814385bb28a8783fdd7202198bebf6d97b98d7bd514",
+            "attempts": 2,
+            "terminal_error_category": "invalid_output",
+            "job_state_at_foreground_reply": "pending",
+            "source_session": "2b9f4a2f-a2eb-444c-b92e-e328eb45fbeb"
+          },
+          {
+            "mode": "read_timeout",
+            "job_id": "8d939b3e4fa4a69e138a66ffb47fdd202c7252c02f8a2c7628ed22b0b8a69206",
+            "attempts": 2,
+            "terminal_error_category": "model",
+            "job_state_at_foreground_reply": "pending",
+            "source_session": "c5176582-a8b4-44b5-8375-300755563c4c"
+          }
+        ],
+        "duplicate_submissions": [
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          }
+        ],
+        "normal_source_id": "cebbacaf0cfe41adb8abfce049a25b49",
+        "checks": {
+          "two_nonempty_malformed_json_outputs": true,
+          "two_real_sdk_timeouts": true
+        },
+        "passed": true,
+        "server_pids": [
+          4368,
+          4522
+        ],
+        "idle_shutdown_seconds": 0.10922448300004817,
+        "scope": "Real selected model and SDK, extraction-only fault envelope; ordinary restart and idle shutdown, not in-flight/full-server/P23 shutdown acceptance",
+        "semantic_review": "all actual raw foreground answers require review"
+      },
+      "configured_model": "glm-4-flash"
+    },
+    {
+      "round": 1,
+      "code_sha": "e0ec157a4c8eb3eb63737fbdb71ad46dec7dc459",
+      "requests": 9,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "33ccb98e25ae4834b3dd48629f8c2c2c",
+          "我周末练习扬琴",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用黄铜尺画图",
+          "answer": "😍关爱 哦，你常用黄铜尺画图，这真是个有趣的习惯呢。黄铜尺画出来的图应该很有质感吧，下次可以和我分享一下你的作品哦！😊"
+        },
+        {
+          "query": "我常用细网袋收纳画笔",
+          "answer": "😌 平静，听起来你的收纳方式很特别呢，用细网袋收纳画笔既方便又整齐，是不是每次用完都能快速找到你想要的颜色呢？🎨"
+        },
+        {
+          "query": "我周末练习扬琴",
+          "answer": "🙂开心，听起来你周末过得挺充实的。扬琴是一种很美的乐器，练习的时候一定很享受那种旋律和节奏吧？有没有什么特别的曲目或者练习心得想要分享的呢？😌平静"
+        },
+        {
+          "query": "休息日我通常练什么乐器？",
+          "answer": "😌 平静，休息日你通常练习扬琴哦，那是一种很优雅的乐器呢。你喜欢弹奏扬琴的感觉吗？"
+        }
+      ],
+      "original_report_sha256": "168ef93edd3897b713dc47d21ec72863da383d90218d4b683828d3cf37b19583",
+      "archive_sha256": "2c48fb05f4a1b6ce4fb9f510bbbce7d39320c01cf89608ddd798fc007b422436",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "mia_memory_proposal\n{\"memories",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "mia_memory_proposal\n{\"memories",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ],
+      "faults_proof": {
+        "faults": [
+          {
+            "mode": "truncated_json",
+            "job_id": "c2bb90e113fc5e619566eb457546751e41ae12f68a4f03d81b221480746557a1",
+            "attempts": 2,
+            "terminal_error_category": "invalid_output",
+            "job_state_at_foreground_reply": "pending",
+            "source_session": "04c1d477-9ceb-4edc-a973-2b9ea20f82f7"
+          },
+          {
+            "mode": "read_timeout",
+            "job_id": "55abefc9a3eab6e08baa92fd930777c9e88598c8d770013942fa0baf442b636c",
+            "attempts": 2,
+            "terminal_error_category": "model",
+            "job_state_at_foreground_reply": "pending",
+            "source_session": "fca2a759-2400-4244-a5d4-683da954dd48"
+          }
+        ],
+        "duplicate_submissions": [
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          }
+        ],
+        "normal_source_id": "33ccb98e25ae4834b3dd48629f8c2c2c",
+        "checks": {
+          "two_nonempty_malformed_json_outputs": true,
+          "two_real_sdk_timeouts": true
+        },
+        "passed": true,
+        "server_pids": [
+          4585,
+          4732
+        ],
+        "idle_shutdown_seconds": 0.14396395800008577,
+        "scope": "Real selected model and SDK, extraction-only fault envelope; ordinary restart and idle shutdown, not in-flight/full-server/P23 shutdown acceptance",
+        "semantic_review": "all actual raw foreground answers require review"
+      },
+      "configured_model": "glm-4-flash"
+    },
+    {
+      "round": 2,
+      "code_sha": "e0ec157a4c8eb3eb63737fbdb71ad46dec7dc459",
+      "requests": 9,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "66f58ba601ad4c3590c6d3cb3b40cc18",
+          "我周末练习中阮",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用素色纸做折纸",
+          "answer": "😍关爱 哦，素色纸做折纸，听起来很有意境呢。这种折纸方式能让你更好地专注于作品的细节和美感。你最喜欢折哪种折纸呢？有没有什么特别的折纸作品让你感到自豪的？😊"
+        },
+        {
+          "query": "我常用棉绳编织杯垫",
+          "answer": "😍关爱 哦，棉绳编织杯垫，这真是个温馨的手工活儿呢。它不仅能给日常生活增添一份温馨，还能展现你的手工才华。你通常喜欢用什么样的棉绳和颜色来编织呢？😊"
+        },
+        {
+          "query": "我周末练习中阮",
+          "answer": "😌 平静，听起来你周末过得挺充实的。中阮是一种很优雅的乐器呢，弹奏起来一定很享受吧！有没有什么特别的曲目或者练习心得想要分享的呢？🎵"
+        },
+        {
+          "query": "休息日我通常练什么乐器？",
+          "answer": "😌 平静，休息日的时候，你通常练习中阮哦。中阮的音色很独特，听起来一定很美。你喜欢弹奏中阮的感觉吗？"
+        }
+      ],
+      "original_report_sha256": "857b10defb757a640cc7d8f5bf9d7047fea12ff42dcbd05c28bebf59ad85b280",
+      "archive_sha256": "f796935069e5b1e6f233e745bf45058686dfa082c33c39b1a09d24610c73474f",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "mia_memory_proposal\n{\"memories",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "mia_memory_proposal\n{\"memories",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ],
+      "faults_proof": {
+        "faults": [
+          {
+            "mode": "truncated_json",
+            "job_id": "4aa0d833af357baf2bf58bf9d88ba9dbf11d8f9cfdf37145351a7057b2a3f402",
+            "attempts": 2,
+            "terminal_error_category": "invalid_output",
+            "job_state_at_foreground_reply": "pending",
+            "source_session": "e0903b4c-5f8b-45a2-8f63-46cd349ad8e2"
+          },
+          {
+            "mode": "read_timeout",
+            "job_id": "942772789e47112cc60ecef99553e83ef782e0ceec4afef6fbf934428bab4dd7",
+            "attempts": 2,
+            "terminal_error_category": "model",
+            "job_state_at_foreground_reply": "pending",
+            "source_session": "dac2cd75-f37c-4866-973a-1785d5bc0994"
+          }
+        ],
+        "duplicate_submissions": [
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          },
+          {
+            "status": "duplicate",
+            "same_id": true
+          }
+        ],
+        "normal_source_id": "66f58ba601ad4c3590c6d3cb3b40cc18",
+        "checks": {
+          "two_nonempty_malformed_json_outputs": true,
+          "two_real_sdk_timeouts": true
+        },
+        "passed": true,
+        "server_pids": [
+          4790,
+          4934
+        ],
+        "idle_shutdown_seconds": 0.11308335800003988,
+        "scope": "Real selected model and SDK, extraction-only fault envelope; ordinary restart and idle shutdown, not in-flight/full-server/P23 shutdown acceptance",
+        "semantic_review": "all actual raw foreground answers require review"
+      },
+      "configured_model": "glm-4-flash"
+    }
+  ],
+  "review": "27 actual requests, three groups pass on actual configured glm-4-flash at e0ec157a. Six nonempty original malformed outputs (mia_memory_proposal followed by truncated JSON) and six actual APITimeoutError -> ReadTimeout chains observed. Original attempts=2, twelve duplicate same-ID completion admissions, no facts from failed jobs, subsequent original normal extraction first-attempt commit and real different-PID instrument recall pass. Idle shutdown 0.1092/0.1440/0.1131 seconds. All twelve foreground replies read. Instrument answers have correct user ownership; some generic material/tool descriptions are speculative, not verified product properties. This accepts the specified fault/recovery mechanics on configured glm-4-flash only; not FlashX nonempty-bad-JSON evidence, full app/in-flight shutdown, P23 or general persona quality.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}
