@@ -52,10 +52,16 @@
   "first_review": "behavior-first-review.json",
   "first_composed_run": 38822605022,
   "candidate_sha": "3529dcab17d43b0b6911cfbe3b944a2a4d185e07",
-  "current_composed_run": 38848989372,
-  "current_composed_url": "https://github.com/bboytang/Mia/actions/runs/38848989372",
+  "current_composed_run": 38850006204,
+  "current_composed_url": "https://github.com/bboytang/Mia/actions/runs/38850006204",
   "current_composed_status": "failure",
   "candidate_ci": "luyao-ci-results.json",
-  "current_composed_requests": 49,
-  "current_review": "behavior-luyao-review.json"
+  "current_composed_requests": 48,
+  "current_review": "behavior-evidence-review.json",
+  "prepared_candidate_limits": {
+    "requests_per_round": 20,
+    "rounds": 3,
+    "total_request_cap": 60,
+    "reason": "add true third post-activation session; normally18 requests, retain bounded extraction retry allowance"
+  }
 }

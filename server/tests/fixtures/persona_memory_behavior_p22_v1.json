@@ -1,5 +1,5 @@
 {
-  "version": "p22-integration-v1",
+  "version": "p22-integration-v1.1",
   "purpose": "Fresh synthetic users for actual manager/BGE/provider continuity, not a replacement for the full B01-B08 gate",
   "rounds": [
     {
@@ -14,7 +14,8 @@
           "攀岩"
         ]
       ],
-      "repeat_again": "不用重新介绍，上次聊过的抱石，你还记得吗？"
+      "repeat_again": "不用重新介绍，上次聊过的抱石，你还记得吗？",
+      "repeat_later": "我又来聊抱石了，你还记得这件事吗？"
     },
     {
       "source": "我更喜欢手冲咖啡，习惯不加糖。",
@@ -32,7 +33,8 @@
           "不放糖"
         ]
       ],
-      "repeat_again": "不用重新介绍，上次聊过的手冲咖啡，你还记得吗？"
+      "repeat_again": "不用重新介绍，上次聊过的手冲咖啡，你还记得吗？",
+      "repeat_later": "我又来聊手冲咖啡了，你还记得这件事吗？"
     },
     {
       "source": "我读书时更喜欢纸质书，会在页边写批注。",
@@ -53,7 +55,8 @@
           "书页上"
         ]
       ],
-      "repeat_again": "不用重新介绍，上次聊过的纸质书，你还记得吗？"
+      "repeat_again": "不用重新介绍，上次聊过的纸质书，你还记得吗？",
+      "repeat_later": "我又来聊纸质书了，你还记得这件事吗？"
     }
   ]
 }

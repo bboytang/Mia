@@ -1,5 +1,5 @@
 {
-  "status": "Luyao-aligned runtime checks passed; composed run failed on deleted-memory response; explicit no-match context fix pending",
+  "status": "Explicit no-match runtime checks passed; composed review found verifier synonym omission and missing third active followup; harness fixes pending",
   "reference_repository": "https://github.com/insistgang/Luyao_AI_Project",
   "reference_sha": "e23c3aa25d6451e3f35e71609864bb3a54ad49a0",
   "runtime_sha": "b6e8c25bc0ba725562d59af49a48002699cf69af",
@@ -97,32 +97,41 @@
       "url": "https://github.com/bboytang/Mia/actions/runs/38849860894",
       "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
       "scope": "230 service tests including real SQLite deletion/no-match distinction",
-      "status": "in_progress"
+      "status": "success"
     },
     {
       "id": 38849860744,
       "url": "https://github.com/bboytang/Mia/actions/runs/38849860744",
       "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
       "scope": "actual BGE and controlled integration regressions",
-      "status": "in_progress"
+      "status": "success"
     },
     {
       "id": 38849861009,
       "url": "https://github.com/bboytang/Mia/actions/runs/38849861009",
       "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
       "scope": "actual manager authorization/TLS/WSS and JAR",
-      "status": "in_progress"
+      "status": "success"
     },
     {
       "id": 38849860897,
       "url": "https://github.com/bboytang/Mia/actions/runs/38849860897",
       "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
       "scope": "manager baseline regression",
-      "status": "in_progress"
+      "status": "success"
+    },
+    {
+      "id": 38850006204,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38850006204",
+      "sha": "af216d5397b4e8b1b91267f733836a30f5abee4a",
+      "scope": "48 actual requests; explicit no-match evidence, two active followups; verifier missed 记忆",
+      "status": "failure"
     }
   ],
   "deployment": false,
   "local_automated_tests_or_builds": false,
   "composed_review": "behavior-luyao-review.json",
-  "candidate_scope": "Explicit memory_evidence state/description for matched, healthy no-match and unavailable; no new response-style gate"
+  "candidate_scope": "Explicit memory_evidence state/description for matched, healthy no-match and unavailable; no new response-style gate",
+  "latest_composed_review": "behavior-evidence-review.json",
+  "shared_history_policy": "User clarification pending; no added response gate"
 }

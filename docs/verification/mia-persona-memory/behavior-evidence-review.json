@@ -1,0 +1,61 @@
+{
+  "run": 38850006204,
+  "sha": "af216d5397b4e8b1b91267f733836a30f5abee4a",
+  "runtime_sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38850006204",
+  "conclusion": "failure",
+  "requests": 48,
+  "review": "Rounds0/2 explicitly report no matching memory; automated regex missed the Chinese synonym 记忆. Round1 asks user to clarify without a personal factual answer. All actual databases contain no memories at final inspection. Earlier three-followup report counted activation; only two active post-activation sessions were exercised. New v1.1 adds a genuine third post-activation session.",
+  "shared_history_policy": "Awaiting user clarification; no new runtime expression restriction added",
+  "full_P22_accepted": false,
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 16,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "last_reply": "😌 嗯，关于你以前周末喜欢什么运动，我这里没有找到相关的记忆。不过，你可以和我分享一下，你最喜欢的周末运动是什么呢？这样我也能更好地了解你的兴趣爱好。🤔",
+      "artifact_final_counts": {
+        "memories": 0,
+        "events_by_state": {
+          "invalidated": 1
+        }
+      },
+      "active_followup_sessions_after_activation": 2,
+      "file": "behavior-evidence-round-0.json.gz",
+      "sha256": "545755d5a6f50688cf6b59de75f8f5a394863925c753a67a523b691e20d713f7"
+    },
+    {
+      "round": 1,
+      "requests": 16,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "last_reply": "😌 嗯，关于喝咖啡的习惯，这得看你的个人喜好啦。有的人喜欢加糖，有的人喜欢加奶，还有的人喜欢纯黑咖啡。你呢，以前是喜欢哪种方式喝咖啡的呢？😊",
+      "artifact_final_counts": {
+        "memories": 0,
+        "events_by_state": {
+          "invalidated": 1
+        }
+      },
+      "active_followup_sessions_after_activation": 2,
+      "file": "behavior-evidence-round-1.json.gz",
+      "sha256": "60616b5de151525ddc0bcf79c2008188c6c17bb4c8e0b1368f90bfbd08e80556"
+    },
+    {
+      "round": 2,
+      "requests": 16,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "last_reply": "哦，这个话题很有趣呢！😌不过，关于你以前喜欢用什么形式读书，我这里没有找到相关的记忆。也许你可以和我分享一下，你以前是喜欢纸质书、电子书，还是其他方式呢？这样我就能更好地了解你了。🤔",
+      "artifact_final_counts": {
+        "memories": 0,
+        "events_by_state": {
+          "invalidated": 1
+        }
+      },
+      "active_followup_sessions_after_activation": 2,
+      "file": "behavior-evidence-round-2.json.gz",
+      "sha256": "f79e89a119875237dbf67c545f93de934b0c7a9a107913903454ad4a85bf7319"
+    }
+  ]
+}

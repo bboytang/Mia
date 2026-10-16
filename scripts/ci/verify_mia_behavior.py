@@ -77,7 +77,7 @@ def selected_provider(configuration, report, purpose):
 
     def counted(*args, **kwargs):
         with LOCK:
-            assert report['requests'] < 18, 'Per-round real request budget exhausted'
+            assert report['requests'] < 20, 'Per-round real request budget exhausted'
             report['requests'] += 1
             report['request_kinds'].append(purpose)
             save(report)
@@ -270,7 +270,7 @@ async def drive():
         'dataset_sha256': hashlib.sha256(fixture_path.read_bytes()).hexdigest(), 'requests': 0, 'request_kinds': [],
         'cases': [], 'extraction_outputs': [], 'passed': False, 'server_pids': [],
         'scope': 'Actual manager TLS authorization, WSS bridge restart, existing Provider SDK, BGE and SQLite; synthetic users; audio consumers omitted',
-        'limits': {'requests_per_round': 18, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
+        'limits': {'requests_per_round': 20, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
         'background_lifecycle': 'installed start_worker/stop_worker; no manual task pumping',
         'persona_reference': 'insistgang/Luyao_AI_Project@e23c3aa25d6451e3f35e71609864bb3a54ad49a0; user requested no additional expression gate',
@@ -377,12 +377,15 @@ async def drive():
         again, saved = await ask(sample['repeat_again'])
         assert again['session_id'] != repeated['session_id']
         assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
+        later, saved = await ask(sample['repeat_later'])
+        assert len({continued['session_id'], repeated['session_id'], again['session_id'], later['session_id']}) == 4
+        assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
         phase = 'source_deletion_and_unknown'
         for row in introduced:
             await manage('delete', id=row['id'])
         unknown, saved = await ask(sample['unknown'])
         assert not unknown['diagnostics']['selected_fact_ids'] and not saved['memories']
-        assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['tts_text'])
+        assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录|记忆)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['tts_text'])
         assert all(event['state'] != 'active' for event in saved['events'])
         report = json.loads(REPORT.read_text())
         report.update(passed=True, server_pids=[first_pid, second_pid], genuine_wss_restart=True,

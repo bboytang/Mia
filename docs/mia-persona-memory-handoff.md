@@ -156,3 +156,5 @@ docs/mia-persona-memory-worklog.md
 ```
 
 每次接续更新此文件的当前范围、基线、下一步和证据定位；历史事实只追加到工作记录，不让“当前下一步”长期保留过期信息。
+
+最新接续补充（优先于上文历史在途描述）：cb52464四回归均success；38850006204终态failure，48实际请求，原文与三库最终只读状态见behavior-evidence-review.json。正则漏“记忆”与active后续数误计已在当前测试修正，v1.1增加真正第三active后续，20／组三组60请求上限，尚未新执行。用户共同往事表达边界澄清待答，不能假定预选项已批准。继续独立B08工具驱动接线：已冻结十组留出，mia_behavior_tools.py辅助模块准备，需真实ToolManager／原chat／实际Provider三十场景执行，不算完成。没有新日采或部署。
