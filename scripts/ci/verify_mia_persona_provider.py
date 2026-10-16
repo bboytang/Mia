@@ -105,12 +105,8 @@ def main():
                 semantic = bool(re.search(r'Mia|米娅', raw, re.I))
             elif name == 'missing_attribute':
                 semantic = missing_attribute_ok(raw)
-            elif name == 'companionship':
-                semantic = bool(re.search(r'我.{0,10}(?:陪|在|身边)', raw)
-                                and not re.search(r'你会一直陪着你|作为AI|作为人工智能|不能保证|无法保证|不能承诺', raw))
             else:
                 semantic = bool(raw.strip())
-            marker_at_start = bool(raw.lstrip() and raw.lstrip()[0] in '😌🙂🤔😲🙄😍😔😜')
             safe = bool(raw.strip() and spoken.strip() and not agent.guardrail.inspect_output(raw)[1])
             report['cases'].append({'name': name, 'raw_semantic_pass': semantic,
                                     'guarded_delivery_pass': safe, 'response': raw.replace(secret, '[REDACTED]'),
