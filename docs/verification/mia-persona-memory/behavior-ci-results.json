@@ -49,5 +49,11 @@
   "composed_run": 38822605022,
   "composed_url": "https://github.com/bboytang/Mia/actions/runs/38822605022",
   "composed_conclusion": "failure",
-  "first_review": "behavior-first-review.json"
+  "first_review": "behavior-first-review.json",
+  "first_composed_run": 38822605022,
+  "candidate_sha": "3529dcab17d43b0b6911cfbe3b944a2a4d185e07",
+  "current_composed_run": 38848989372,
+  "current_composed_url": "https://github.com/bboytang/Mia/actions/runs/38848989372",
+  "current_composed_status": "in_progress",
+  "candidate_ci": "luyao-ci-results.json"
 }

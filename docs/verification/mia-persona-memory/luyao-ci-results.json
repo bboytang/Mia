@@ -1,0 +1,98 @@
+{
+  "status": "Luyao-aligned runtime checked; actual composed rerun in progress; full P22-P24 incomplete",
+  "reference_repository": "https://github.com/insistgang/Luyao_AI_Project",
+  "reference_sha": "e23c3aa25d6451e3f35e71609864bb3a54ad49a0",
+  "runtime_sha": "b6e8c25bc0ba725562d59af49a48002699cf69af",
+  "candidate_sha": "3529dcab17d43b0b6911cfbe3b944a2a4d185e07",
+  "runtime_tree_unchanged_since_runtime_sha": true,
+  "new_composed_run_actual_requests": "not known until terminal artifact; cap54",
+  "previous_composed_requests": 26,
+  "runs": [
+    {
+      "id": 38848538243,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848538243",
+      "sha": "2ce1379",
+      "scope": "229 service: 227 passed, two old literal assertions failed",
+      "status": "failure"
+    },
+    {
+      "id": 38848538212,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848538212",
+      "sha": "2ce1379",
+      "scope": "actual BGE and controlled reply/extraction/maintenance regressions",
+      "status": "success"
+    },
+    {
+      "id": 38848538222,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848538222",
+      "sha": "2ce1379",
+      "scope": "actual manager authorization/TLS/WSS and JAR",
+      "status": "success"
+    },
+    {
+      "id": 38848538227,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848538227",
+      "sha": "2ce1379",
+      "scope": "manager baseline regression",
+      "status": "success"
+    },
+    {
+      "id": 38848713475,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848713475",
+      "sha": "b6e8c25",
+      "scope": "229 service: 228 passed, one old literal assertion failed",
+      "status": "failure"
+    },
+    {
+      "id": 38848713459,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848713459",
+      "sha": "b6e8c25",
+      "scope": "actual BGE and controlled reply/extraction/maintenance regressions",
+      "status": "success"
+    },
+    {
+      "id": 38848713454,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848713454",
+      "sha": "b6e8c25",
+      "scope": "actual manager authorization/TLS/WSS and JAR",
+      "status": "success"
+    },
+    {
+      "id": 38848713461,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848713461",
+      "sha": "b6e8c25",
+      "scope": "manager baseline regression",
+      "status": "success"
+    },
+    {
+      "id": 38848873025,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848873025",
+      "sha": "3529dca",
+      "scope": "229 service tests; exact whole CORE prefix preserved",
+      "status": "success"
+    },
+    {
+      "id": 38848799068,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848799068",
+      "sha": "1c6a7bd",
+      "scope": "persona verifier syntax only; real provider job skipped",
+      "status": "success"
+    },
+    {
+      "id": 38848713500,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848713500",
+      "sha": "b6e8c25",
+      "scope": "composed verifier syntax/fixture only; real composed job skipped",
+      "status": "success"
+    },
+    {
+      "id": 38848989372,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38848989372",
+      "sha": "3529dca",
+      "scope": "manual actual manager/BGE/provider three-user composed rerun",
+      "status": "in_progress"
+    }
+  ],
+  "deployment": false,
+  "local_automated_tests_or_builds": false
+}

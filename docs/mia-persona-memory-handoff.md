@@ -26,7 +26,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-P21完成必要实现与GitHub验证：后端22de963服务229／BGE／manager，身份probe5dfa89a实际TLS／WSS通过；iOS87d2427的38821633956已success，102单测、6UI及模拟器／未签名设备构建通过，启用截图已实际查看。P22首轮c088bf2／38822605022为failure，实际26次Provider请求、真实manager／BGE／原ConnectionHandler.chat／Worker；两组机械路径通过，但召回答成第一人称，一组模型拆分原句被来源守卫正确拒绝，未保存。原文及复核见behavior-first-*，不冒称全套八项通过。当前改动按用户路遥方向调整核心／事件表达，取消额外风格门槛；事实增加subject=user、提取明确保留完整原句，等待新提交GitHub回归后再执行真实组合。P23／P24仍未完成；用户只接管跨真实自然日验收，不再自动采集。
+P21完成必要实现与GitHub验证：后端22de963服务229／BGE／manager、身份probe5dfa89a通过；iOS87d2427的38821633956为102单测、6UI、模拟器／未签名设备构建成功，启用原图已实际查看。P22首轮c088bf2／38822605022失败，26次实际请求；原报告behavior-first-*保存。现已按用户明确指定的路遥参考调整：运行源码b6e8c25，候选3529dca（只改后续测试／记录，server/companion树不变）。BGE38848713459、真实身份／TLS／WSS／JAR38848713454、manager38848713461与服务229项38848873025均success；旧提示词字面断言失败两轮保留，最终检查完整CORE前缀，未弱化。当前唯一真实组合复验38848989372正在执行，继续此handle、不重启；三用户各自身份／陪伴／源事实／不同措辞／跨PID重启／后续会话／删除，最多54实际请求。尚未读到终态原文，不报完整B01—B08通过。精确CI见luyao-ci-results.json，P23／P24仍待推进；真实跨日验收用户接管，不自动采集。
 
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
