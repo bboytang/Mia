@@ -1,0 +1,22 @@
+{
+  "runtime_extraction_sha": "a16a805ef73bf022e7400bc789415103295ecb0f",
+  "runtime_event_sha": "236f2c71b78a8d9a0b9ca314ce5a158fa311050a",
+  "provider_run": {
+    "id": 38853748642,
+    "url": "https://github.com/bboytang/Mia/actions/runs/38853748642",
+    "conclusion": "success",
+    "requests": 7
+  },
+  "artifact": "extraction-quality-provider.json.gz",
+  "sha256": "b98511f7bf3647c6e38269f858d8d1c5ffc409fbb0506c2c918e1d36340dcdea",
+  "review": "All seven raw responses and stored results reviewed. Durable diet/goal/Celsius saved; medical fact stays unconfirmed; quoted fiction and two tool queries write no facts. Model still proposed one lookup as a durable fact, but source validator discarded it. No claim of model-only semantic correctness.",
+  "full_B03_accepted": false,
+  "full_P22_accepted": false,
+  "remaining": [
+    "composed actual manager/BGE/tool verification for changed extractor and boundary event",
+    "actual parallel tool group evidence",
+    "full correction/fault/identity/retrieval matrices",
+    "P23 resource gate",
+    "P24 upgrade/rollback"
+  ]
+}

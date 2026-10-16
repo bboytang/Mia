@@ -113,6 +113,13 @@ def selected_provider(configuration, report, purpose):
             for content, calls in function_response(*args, **kwargs):
                 if content:
                     provider._mia_raw_chunks.append(content)
+                if calls:
+                    # Preserve the real SDK deltas before ConnectionHandler
+                    # merges them; do not infer parallel output from inputs.
+                    with LOCK:
+                        provider._mia_requests[-1].setdefault('tool_call_deltas', []).append(
+                            [call.model_dump(exclude_none=True) for call in calls])
+                        save(report)
                 yield content, calls
 
         provider.response_with_functions = function_streamed
