@@ -1,0 +1,185 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38959662648",
+  "code_sha": "b0aa35013f385a4a407237ca6157bf8bae774311",
+  "requests": 7,
+  "passing_cases": 8,
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"我每周三都会在公司食堂吃素\", \"source_index\": 0, \"source_quote\": \"我每周三都会在公司食堂吃素\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"entities\": [\"公司食堂\"], \"keywords\": [\"每周三\", \"吃素\"], \"trigger_terms\": [\"每周三\", \"吃素\"], \"importance_weight\": null, \"importance_evidence\": null, \"relations\": []}]}",
+      "stored": [
+        {
+          "content": "我每周三都会在公司食堂吃素",
+          "confirmed": 1,
+          "entities": "[\"公司食堂\"]",
+          "keywords": "[\"每周三\", \"吃素\"]",
+          "trigger_terms": "[\"每周三\", \"吃素\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 7262.559383999999
+    },
+    {
+      "name": "medical_confirmation",
+      "source": "我被确诊为糖尿病",
+      "expected": "pending",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"糖尿病\", \"category\": \"fact\", \"content\": \"我被确诊为糖尿病\", \"entities\": [\"糖尿病\"], \"keywords\": [\"确诊\"], \"kind\": \"explicit\", \"relations\": [], \"source_index\": 0, \"source_quote\": \"我被确诊为糖尿病\", \"subject\": \"user\", \"sensitive\": true, \"trigger_terms\": [], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我被确诊为糖尿病",
+          "confirmed": 0,
+          "entities": "[\"糖尿病\"]",
+          "keywords": "[\"确诊\"]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 5098.136443999998
+    },
+    {
+      "name": "quoted_fiction",
+      "source": "这只是小说台词：“我住在月球”；不要把它记成我的真实经历",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 2.6026589999972316
+    },
+    {
+      "name": "ongoing_goal",
+      "source": "我计划接下来半年每周练习游泳",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"半年\", \"category\": \"goal\", \"content\": \"我计划接下来半年每周练习游泳\", \"entities\": [\"游泳\"], \"keywords\": [\"计划\", \"练习\"], \"kind\": \"explicit\", \"relations\": [], \"source_index\": 0, \"source_quote\": \"我计划接下来半年每周练习游泳\", \"subject\": \"user\", \"sensitive\": false, \"trigger_terms\": [\"游泳\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我计划接下来半年每周练习游泳",
+          "confirmed": 1,
+          "entities": "[\"游泳\"]",
+          "keywords": "[\"计划\", \"练习\"]",
+          "trigger_terms": "[\"游泳\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 5298.560545999997
+    },
+    {
+      "name": "temperature_preference",
+      "source": "我看温度时更习惯用摄氏度。",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"我看温度时更习惯用摄氏度。\", \"source_index\": 0, \"source_quote\": \"我看温度时更习惯用摄氏度。\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"entities\": [\"摄氏度\"], \"keywords\": [\"温度\", \"摄氏度\"], \"trigger_terms\": [\"温度\"], \"importance_weight\": null, \"importance_evidence\": null, \"relations\": []}]}",
+      "stored": [
+        {
+          "content": "我看温度时更习惯用摄氏度。",
+          "confirmed": 1,
+          "entities": "[\"摄氏度\"]",
+          "keywords": "[\"温度\", \"摄氏度\"]",
+          "trigger_terms": "[\"温度\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 6834.382839999997
+    },
+    {
+      "name": "lookup_not_existing_fact",
+      "source": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 2.2040150000037784
+    },
+    {
+      "name": "parallel_lookup_not_fact",
+      "source": "请同时查红盒和蓝盒，分别告诉我各有几颗棋子。",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 2.0537679999961256
+    },
+    {
+      "name": "independent_activity_clues",
+      "source": "配音练习时我总用橡木耳机",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"配音练习时我总用橡木耳机\", \"source_index\": 0, \"source_quote\": \"配音练习时我总用橡木耳机\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"entities\": [\"橡木耳机\"], \"keywords\": [\"配音练习\", \"橡木耳机\"], \"trigger_terms\": [\"配音练习\"], \"importance_weight\": null, \"importance_evidence\": null, \"relations\": []}]}",
+      "stored": [
+        {
+          "content": "配音练习时我总用橡木耳机",
+          "confirmed": 1,
+          "entities": "[\"橡木耳机\"]",
+          "keywords": "[\"配音练习\", \"橡木耳机\"]",
+          "trigger_terms": "[\"配音练习\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 5838.323964999993
+    },
+    {
+      "name": "independent_positive_importance",
+      "source": "修好祖父的收音机对我有特别的意义",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": false,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"修好祖父的收音机对我有特别的意义\", \"category\": \"fact\", \"content\": \"修好祖父的收音机对我有特别的意义\", \"entities\": [\"修好祖父的收音机\"], \"keywords\": [\"修好\", \"祖父\", \"收音机\", \"特别\", \"意义\"], \"kind\": \"explicit\", \"subject\": \"user\", \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"修好祖父的收音机对我有特别的意义\", \"trigger_terms\": [\"修好\", \"祖父\", \"收音机\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "修好祖父的收音机对我有特别的意义",
+          "confirmed": 1,
+          "entities": "[\"修好祖父的收音机\"]",
+          "keywords": "[\"修好\", \"祖父\", \"收音机\", \"特别\", \"意义\"]",
+          "trigger_terms": "[\"修好\", \"祖父\", \"收音机\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 7556.775100999999
+    },
+    {
+      "name": "independent_negative_importance",
+      "source": "我一直觉得整理旧纸箱并不重要",
+      "expected": "active",
+      "state": "retry_wait",
+      "error_category": "invalid_output",
+      "pipeline_semantic_pass": false,
+      "model_requests": 1,
+      "model_output": "\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我一直觉得整理旧纸箱并不重要\",\n      \"source_index\": 0,\n      \"source_quote\": \"我一直觉得整理旧纸箱并不重要\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [\"整理旧纸箱\"],\n      \"keywords\": [\"觉得\", \"整理\", \"旧纸箱\", \"不重要\"],\n      \"trigger_terms\": [\"整理旧纸箱\"],\n      \"importance_weight\": 0.5,\n      \"importance_evidence\": \"我一直觉得\",\n      \"relations\": []\n    }\n  ]\n}\n```",
+      "stored": [],
+      "elapsed_ms": 6618.3175670000055
+    }
+  ],
+  "original_report_sha256": "24896cb8d5d7d3cb599932f1bcab8f795188c4736fd8f6388de2042703c57bce",
+  "archive_sha256": "95e352388bcd0e3aa617ece1f378584e96768ace1a58a43f30cc2032a65d8e90",
+  "review": "All ten cases executed, seven actual model requests, eight pass. Positive source: original model omits both significance fields despite schema requiring them, backend stores null. Negative source: original plain text contains invented .5 importance and unrelated evidence plus stray closing JSON fence, original validator rejects invalid output; do not attribute this rejection solely to the new negation guard. No backend fill, model switch, evaluation retry or v2 consumption. Auxiliary fixture uses unit vectors and policy, not full manager/BGE or B04."
+}

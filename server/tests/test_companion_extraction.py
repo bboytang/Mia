@@ -367,6 +367,17 @@ class ExtractionValidationTests(unittest.TestCase):
                         self.validate(source, raw)
                     self.assertEqual(json.dumps(raw), before)
 
+    def test_explicit_self_importance_cannot_silently_commit_without_model_score(self):
+        source = '修补旧地图对我有特别的意义'
+        for extra in ({}, {'importance_weight': None, 'importance_evidence': None},
+                      {'emotional_weight': None, 'emotional_evidence': None}):
+            with self.subTest(extra=extra):
+                raw = proposal(source, **extra)
+                before = json.dumps(raw)
+                with self.assertRaisesRegex(MemoryError, 'Missing source-stated importance'):
+                    self.validate(source, raw)
+                self.assertEqual(json.dumps(raw), before)
+
     def test_importance_negation_does_not_discard_other_actual_affirmative_evidence(self):
         for source, evidence in [('我不在意封皮颜色，但每天阅读对我很重要', '很重要'),
                                  ('我一直觉得这并不是不重要', '重要'),

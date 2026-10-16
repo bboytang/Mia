@@ -28,6 +28,12 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- b0aa3501五项均终态，不重发。基础服务38959575280/BGE38959575255/身份38959575350/manager38959575190及两语法全success。faults38959647587 success/27请求，函数路径原始坏JSON/真实超时/重复/正常恢复/实际PID召回通过，空闲关闭约0.13秒，十二回答已读；faults-optional-*保存。
+- v1检索38959633592 success/41请求，12真实事实和15结构检查全通过：S/L/A/E参与、肯定重要性实际入库、目标全召回、三无关空召回、三活动扩展。27原回答已读，仍把跑步与拉伸组合、声称记得拉伸后感受、从相机/录音笔习惯推重要性。retrieval-optional-*保留；硬门槛虚构来源仍未满足，不报完整B04语义或P22通过，不消耗独立v2。
+- 自然纠错38959608746 failure/21请求，第1/2组机械生命周期通过，第0组两次仍拼接非字面anchor。13回答已读，目击长笛练习及口误说成实际变化仍在，pending投影不能独自解决语义；natural-optional-*保存。成长38959619823 failure/27请求，三组第四源都输出无依据importance=1而拒绝，trait未产生；实际SDK finish_reason=tool_calls、用量远小于768，没有截断证据，12回答已读，growth-optional-*保存。
+- 辅助十项38959662648 failure/7请求/8通过：肯定意义原模型漏两字段，schema required没有被遵循，原后端仍提交null；否定句给无依据0.5及无关证据并带末尾孤立fence，invalid_output，不将拒绝归因于某个单独guard。metadata-optional-*完整保存，辅助unit向量/policy不替代整链。
+- 当前新候选修复明确本人肯定重要性却漏值仍提交的缺口：三种旧/新/缺失字段先复现失败，改为原校验错误，既有Worker同job第二尝试可收到实际诊断，不填分、不追加尝试。函数路径不再沿用要求JSON/null的文本模板，改为一份一致函数契约；原文本Provider路径保留。成长仍需实际三个独立来源及共同原文锚，模型决定提案，后端不造特点。96相关本地项最终通过（16.274秒），真实效果待下一SHA。P22/P23/P24未完成。
+
 - 最新已推送候选b0aa35013f385a4a407237ca6157bf8bae774311。五项各单次创建：自然纠错[38959608746](https://github.com/bboytang/Mia/actions/runs/38959608746)、成长[38959619823](https://github.com/bboytang/Mia/actions/runs/38959619823)、v1检索[38959633592](https://github.com/bboytang/Mia/actions/runs/38959633592)、faults[38959647587](https://github.com/bboytang/Mia/actions/runs/38959647587)、十项提取[38959662648](https://github.com/bboytang/Mia/actions/runs/38959662648)。基础服务38959575280/BGE38959575255/身份38959575350/manager38959575190最后在运行；两语法38959575258/38959575220已success。下一次只跟踪同handle，不重发。Git manager凭据助手HTTPS两次中断，改用已登录gh标准git-credential后正常推送，不读取/复制密钥或更改模型。
 
 - c993c2df四项已全部终态：自然纠错38954791650 success/21请求，三组同ID替换、换PID召回、删除重启无复活；faults38954807774 success/27请求，真实非空坏JSON、SDK超时、重复提交、两次失败、后续正常保存与重启召回通过。关闭只是空闲关闭，不是完整在途关闭。natural-function-*、faults-complete-*保存原文和SQL。

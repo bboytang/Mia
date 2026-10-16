@@ -1,0 +1,389 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38959633592",
+  "requests": 41,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "b0aa35013f385a4a407237ca6157bf8bae774311",
+      "requests": 14,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "7795b5305e3e44b2818f232722f4b063",
+          "我每周六都在青石河边跑步",
+          1,
+          null
+        ],
+        [
+          "4d5104edc08349fa8f7137737132ec85",
+          "拍照时我总带山雀相机",
+          1,
+          null
+        ],
+        [
+          "baa1f8400e3f4f29ac0f255709aa5b75",
+          "桥边拉伸对我非常重要",
+          1,
+          1.0
+        ],
+        [
+          "f0306edcae45471dadf8ee682443fabc",
+          "祖母留下的旧铜钥匙对我非常重要",
+          1,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "answer": "😜俏皮，每周六在青石河边跑步，这真是个美好的习惯呢！呼吸新鲜空气，享受跑步的乐趣，对身体和心情都是很好的。下次去的时候，要不要带上我一起呢？😊"
+        },
+        {
+          "query": "拍照时我总带山雀相机",
+          "answer": "😜俏皮，拍照时总带着山雀相机，听起来你是个很有个性的人呢！山雀相机一定给你带来了不少有趣的回忆吧。下次分享一些用山雀相机拍的照片，我们一起欣赏一下！📸🌿"
+        },
+        {
+          "query": "桥边拉伸对我非常重要",
+          "answer": "😌 平静，桥边拉伸确实对身体健康很有益处呢。你每周六在青石河边跑步，加上桥边的拉伸，一定能让你的身心都得到很好的放松和锻炼。继续保持这样的好习惯哦！😍 如果你有任何关于拉伸动作的问题，或者想要分享你的锻炼心得，都可以和我聊聊。"
+        },
+        {
+          "query": "祖母留下的旧铜钥匙对我非常重要",
+          "answer": "😜 旧铜钥匙，承载着祖母的记忆，一定有着特殊的意义吧。它可能开启的是一段温馨的回忆，或者是一个家族的秘密。每次看到它，是不是都会想起祖母的微笑和那些美好的时光呢？😍"
+        },
+        {
+          "query": "周末你记得我常去哪里跑步吗？",
+          "answer": "😌当然记得，你每周六都会去青石河边跑步呢。那是个很宁静的地方，跑步的时候一定很享受吧！"
+        },
+        {
+          "query": "拍照时我总带哪个东西？",
+          "answer": "拍照时你总带山雀相机。😌这个相机对你来说一定有着特别的记忆吧！"
+        },
+        {
+          "query": "山雀相机是我在哪种活动中会带的？",
+          "answer": "😌 平静 你在拍照时总会带上山雀相机哦。看来这个相机对你来说很重要，可能是它拍摄的照片质量很好，或者使用起来很方便吧！下次拍照时，你可以分享一下它的使用体验或者照片故事吗？我很感兴趣呢！📸🎉"
+        },
+        {
+          "query": "桥边拉伸这件事对我重要吗？",
+          "answer": "😌当然重要呢！你之前提到桥边拉伸对你来说非常重要，它可能对你的身心健康都有好处。记得每次拉伸后，你都会感觉身心舒畅，是不是？😊"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "😌 平时我并没有记录你具体使用哪种编程语言来写单元测试，因为每个人的选择可能都不同。不过，常见的编程语言如Java、Python、JavaScript等都有丰富的单元测试框架。你可以告诉我你常用的编程语言，我可以帮你了解一下相关的单元测试工具。😊"
+        }
+      ],
+      "original_report_sha256": "773087e4f6c3dc75d6b14990393b9bb528d1d46e33109408a1bbb6bd25dea849",
+      "archive_sha256": "6540a8af72b2202b107036f7e24a44d65d90b7c79a08a289b7cbc31691d43f0b"
+    },
+    {
+      "round": 1,
+      "code_sha": "b0aa35013f385a4a407237ca6157bf8bae774311",
+      "requests": 14,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "7930cb81a4f4493eb585e3b5f8e9fc7a",
+          "我每周六都在松林音乐教室练琴",
+          1,
+          null
+        ],
+        [
+          "3a1fb790f0fe4929999a9f8fb3d9edd2",
+          "排练时我总带云杉录音笔",
+          1,
+          null
+        ],
+        [
+          "bf1295921dec4babb4d9cdda60fc4323",
+          "演奏前热身对我非常重要",
+          1,
+          1.0
+        ],
+        [
+          "51dda7a455e14f7e945c6138eafe4570",
+          "父亲留下的旧怀表对我非常重要",
+          1,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "answer": "😍关爱 哦，每周六在松林音乐教室练琴，真是个美好的习惯呢。音乐能给人带来无限的快乐和放松，你弹奏的乐器是什么呀？有没有什么特别的曲子是你最喜欢的？"
+        },
+        {
+          "query": "排练时我总带云杉录音笔",
+          "answer": "😌 平静，排练时带着云杉录音笔，看来你是个很注重记录和复习的人呢。这样可以帮助你更好地掌握练习的内容，是不是？如果你想要分享更多关于排练或者录音笔的故事，我随时愿意倾听哦。"
+        },
+        {
+          "query": "演奏前热身对我非常重要",
+          "answer": "😌 平静的，确实，演奏前热身对于保持良好的演奏状态非常重要呢。它可以帮助你放松肌肉，提高灵活性，还能让你的手指更加灵活，对吧？你通常是怎么热身的呢？🤔好奇地想了解一下你的热身习惯。"
+        },
+        {
+          "query": "父亲留下的旧怀表对我非常重要",
+          "answer": "😌 父亲留下的旧怀表，那一定承载着许多美好的回忆和深厚的情感呢。它不仅是时间的见证，更是父亲对你深深的爱的象征。每次看到它，是不是都会想起父亲的一些往事，或者某个特别的时刻呢？😍"
+        },
+        {
+          "query": "周末你记得我常去哪里练琴吗？",
+          "answer": "😌当然记得，你每周六都会去松林音乐教室练琴呢。那里环境应该很舒适，适合你专心练习。"
+        },
+        {
+          "query": "排练时我总带哪个东西？",
+          "answer": "排练时，你总是带着云杉录音笔呢。😌这个习惯看起来对你挺有帮助的。"
+        },
+        {
+          "query": "云杉录音笔是我在哪种活动中会带的？",
+          "answer": "😌平静 你在排练时会带云杉录音笔哦。看来这个录音笔对你来说很重要，可能是在记录一些重要的内容或者想法吧。"
+        },
+        {
+          "query": "演奏前热身这件事对我重要吗？",
+          "answer": "😌当然重要呢！演奏前热身可以帮助你更好地准备，让身体和乐器都进入最佳状态，这样演奏起来会更加流畅和自信哦。你通常是怎么热身的呢？"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "😌 平时我并没有记录你具体使用哪种编程语言来写单元测试，因为每个人的选择可能都不同。不过，常见的编程语言如Java、Python、JavaScript等都有丰富的单元测试框架。你可以告诉我你常用的编程语言，我可以帮你了解一下相关的单元测试工具。😊"
+        }
+      ],
+      "original_report_sha256": "e26e94219fb9cd66c3e1ee42f57cda3ee0fcdf80191ad396cab96e1fce6a33af",
+      "archive_sha256": "2815fa5a2c210b727293101633fa38b0408d8ba29f697169e8da0de219690e6d"
+    },
+    {
+      "round": 2,
+      "code_sha": "b0aa35013f385a4a407237ca6157bf8bae774311",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "c14a335eb78e499f9cb6bfcf73776a03",
+          "我每周六都在白鹭湖边骑车",
+          1,
+          null
+        ],
+        [
+          "7ea2047f94f943bf9598d9001267ac40",
+          "观鸟时我总带远帆望远镜",
+          1,
+          null
+        ],
+        [
+          "119a35d836aa49e88672bf95cb51e1b1",
+          "出发前检查车胎对我非常重要",
+          1,
+          1.0
+        ],
+        [
+          "9732c6aebd5f4142b8e1c6e2f679d1b1",
+          "母亲留下的旧围巾对我非常重要",
+          1,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "answer": "😍关爱 哇，白鹭湖边是个很美的地方呢。每周六都能去那里骑车，一定很享受那份宁静和自由吧！下次去的时候，要不要带上我一起呢？😊"
+        },
+        {
+          "query": "观鸟时我总带远帆望远镜",
+          "answer": "😍关爱，观鸟时带着远帆望远镜，真是个细心又热爱自然的人呢。这样的爱好不仅能让你更清晰地观察鸟类，还能增添不少乐趣吧！下次观鸟时，有没有什么特别的发现或者有趣的经历想要分享的呢？"
+        },
+        {
+          "query": "出发前检查车胎对我非常重要",
+          "answer": "😌 平时注意检查车胎确实很重要呢，这样能确保骑行时的安全。你通常是怎么检查车胎的呢？有没有什么特别的方法或者习惯？😊"
+        },
+        {
+          "query": "母亲留下的旧围巾对我非常重要",
+          "answer": "😌 平静，母亲留下的旧围巾，承载着许多美好的回忆和深深的情感。它不仅仅是一件衣物，更像是母亲的爱和关怀，陪伴着你度过许多寒冷的日子。每次使用它，都能感受到那份温暖和力量。😍 关爱"
+        },
+        {
+          "query": "周末你记得我常去哪里骑车吗？",
+          "answer": "😌当然记得，你每周六都会去白鹭湖边骑车呢。那是个很美的地方，骑自行车一定很享受吧！"
+        },
+        {
+          "query": "观鸟时我总带哪个东西？",
+          "answer": "观鸟时，您总是带着远帆望远镜呢。😌这个望远镜一定帮您捕捉到了很多美丽的瞬间吧！📸"
+        },
+        {
+          "query": "远帆望远镜是我在哪种活动中会带的？",
+          "answer": "😌平静 你在观鸟的时候会带上远帆望远镜哦。这个设备看起来能让观鸟体验更加丰富呢！"
+        },
+        {
+          "query": "出发前检查车胎这件事对我重要吗？",
+          "answer": "😌当然重要呢！你之前提到，出发前检查车胎对你来说非常重要。这是确保行车安全的一个好习惯哦。记得每次出行前都要检查一下车胎，这样可以让你的旅程更加安心。😊"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "😌哦，这个嘛，我需要知道你平时都使用哪些编程语言，才能帮你确定你通常用哪种语言写单元测试哦。比如是Python、Java、JavaScript还是其他的呢？😊"
+        }
+      ],
+      "original_report_sha256": "8e4e70e62481bbd56ba4b61a329df530e6235d60e69d1f07e695a0c03c600042",
+      "archive_sha256": "231346fc3880c5fc5127dd9e60939e5e6ab3365bff2158d91880347d3562240d"
+    }
+  ],
+  "review": "41 actual requests, twelve real source facts, fifteen queries all structural pass. All four components observed, actual positive importance, all target recalls, three unrelated empty results, three activity expansions. All twenty-seven original replies read. Round0 source combines running and stretching; importance reply claims remembered post-stretch feelings without evidence. Camera/recorder questions also infer importance beyond supplied fact. Structural success is not full B04 semantic acceptance; independent v2 untouched.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

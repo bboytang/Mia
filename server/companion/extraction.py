@@ -190,6 +190,10 @@ def affirmative_importance_evidence(quote, evidence):
     return False
 
 
+def explicit_self_importance(quote):
+    return any(affirmative_importance_evidence(quote, match[0]) for match in SELF_IMPORTANCE.finditer(quote))
+
+
 def source_supported(source, quote, *, allow_transient=False):
     """Conservative provenance guard; quote=None checks for any eligible clause."""
     masked = QUOTED.sub(lambda match: ' ' * len(match[0]), normalize(source))
@@ -370,6 +374,8 @@ def validate_output(value, sources, context):
         prefix = 'importance' if importance else 'emotional'
         weight = proposed.get(prefix + '_weight')
         evidence = proposed.get(prefix + '_evidence')
+        if weight is None and kind == 'explicit' and explicit_self_importance(quote):
+            raise MemoryError('invalid_input', 'Missing source-stated importance: model must supply its score and affirmative literal evidence')
         if weight is not None:
             if (type(weight) not in (int, float) or not 0 <= weight <= 1 or not isinstance(evidence, str)
                     or not evidence or evidence not in quote or not affirmative_importance_evidence(quote, evidence)):
@@ -493,6 +499,10 @@ class LLMMemoryExtractor:
                 base += GROWTH_INSTRUCTIONS
             if significance:
                 base += IMPORTANCE_TASK_INSTRUCTIONS
+            function_capable = callable(getattr(type(provider), 'response_with_functions', None))
+            if function_capable:
+                from .proposal import instructions
+                base = instructions(natural=natural, growth=growth, significance=significance)
             instruction = base + ('\nEmotion tracking is explicitly enabled. Also return observations: at most one '
                 '{"source_index":0,"source_quote":"complete real first-person sentence","subject":"user",'
                 '"source_kind":"self_report|inferred","tendency":"positive|negative|neutral|mixed","confidence":0.9}. '
@@ -517,11 +527,10 @@ class LLMMemoryExtractor:
                        'existing_memories': model_context, 'emotion_tracking_enabled': bool(tracking['enabled'])}
             if feedback:
                 payload['validation_feedback'] = feedback
-            if callable(getattr(type(provider), 'response_with_functions', None)):
+            if function_capable:
                 from .proposal import NAME, read_stream, tool_definition
                 whole = len(sources) == 1 and source_supported(sources[0], payload['user_excerpts'][0])
-                required_importance = whole and any(affirmative_importance_evidence(payload['user_excerpts'][0], match[0])
-                    for match in SELF_IMPORTANCE.finditer(payload['user_excerpts'][0]))
+                required_importance = whole and explicit_self_importance(payload['user_excerpts'][0])
                 tool = tool_definition(context, sources=payload['user_excerpts'], natural=natural, growth=growth,
                     significance=bool(has_importance), tracking=bool(tracking['enabled']), feedback=feedback,
                     whole_source=whole, require_importance=bool(required_importance))
