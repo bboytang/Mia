@@ -539,8 +539,8 @@ class LLMMemoryExtractor:
                     'For this function schema, optional importance fields are supplied only for source-supported affirmative importance; '
                     'otherwise omit those fields rather than inventing a number. Supply the optional trait OBJECT only if actual prior '
                     'evidence supports it, otherwise omit it; do not invent empty traits. This optional-field form replaces null placeholders, '
-                    'not the original evidence or permission rules. Relations must be [] when the schema has maxItems:0; there is no possible '
-                    'literal shared anchor in the actual inputs then.')
+                    'not the original evidence or permission rules. Do not invent properties omitted from the schema; '
+                    'absent relations mean no proposed relationship, not permission to invent an ID.')
                 return read_stream(provider.response_with_functions('',
                     [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
                     functions=[tool]))

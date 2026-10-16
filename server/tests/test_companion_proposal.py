@@ -117,7 +117,8 @@ class ProposalTests(unittest.TestCase):
         self.assertEqual(props['relations']['items']['properties']['target_id']['enum'], ['shared'])
         no_match = tool_definition([context[1]], sources=['我经常做陶器'], natural=False, growth=False,
             significance=False, tracking=False)['function']['parameters']['properties']['memories']['items']['properties']
-        self.assertEqual(no_match['relations']['maxItems'], 0)
+        self.assertNotIn('relations', no_match)
+        self.assertNotIn('reconciliation', no_match)
         self.assertEqual(context[0]['content'], '我喜欢做陶器')
 
 

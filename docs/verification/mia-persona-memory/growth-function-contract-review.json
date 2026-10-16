@@ -1,0 +1,209 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38962044977",
+  "requests": 15,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "78b8965b522e4e41670c104fb7e00c935135c0c2",
+      "requests": 5,
+      "passed": false,
+      "failed_phase": "real_three_session_growth_and_invalidation",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 696,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_growth.py",
+          "line": 16,
+          "function": "drive_growth"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "8b4dc14ee0724ea483d77ad4d87bf543",
+          "我周末常做手工木作",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我周末常做手工木作",
+          "answer": "😍关爱 哇，周末做手工木作真是个不错的选择呢！不仅能锻炼动手能力，还能让你在创作中找到乐趣。你最喜欢做哪种木制品呢？分享给我听听吧！"
+        },
+        {
+          "query": "我喜欢研究手工木作的榫卯",
+          "answer": "😍关爱 哦，你对手工木作的榫卯这么感兴趣呢！榫卯结构真是中国传统木作工艺中的精华，既美观又实用。你通常喜欢研究哪些方面的榫卯呢？我们可以一起探讨哦！🌳🔨"
+        }
+      ],
+      "original_report_sha256": "b6661ec929ed5bdccf5ae2aa4df1dca89cd238d803414306d19585ab85a3bba9",
+      "archive_sha256": "f7353857353c1858a9f2d7ecf91c134e04dd06ea47705847d16fbeda6a4a086e"
+    },
+    {
+      "round": 1,
+      "code_sha": "78b8965b522e4e41670c104fb7e00c935135c0c2",
+      "requests": 5,
+      "passed": false,
+      "failed_phase": "real_three_session_growth_and_invalidation",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 696,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_growth.py",
+          "line": 16,
+          "function": "drive_growth"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "3da0581f718e47a38397676ce956f3ec",
+          "我休息时喜欢做植物拓印",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我休息时喜欢做植物拓印",
+          "answer": "😍关爱 哦，植物拓印真是个不错的选择呢！在休息的时候，通过拓印植物，不仅能放松心情，还能创作出美丽的作品。你通常喜欢用哪些植物来做拓印呢？有没有什么特别的拓印技巧想要分享的？"
+        },
+        {
+          "query": "我做植物拓印会仔细挑叶脉",
+          "answer": "😍关爱 哦，你做植物拓印时这么用心挑选叶脉，真是个细致的人呢。这样的作品一定很美，能分享给我看看吗？我很期待一睹为快哦！"
+        }
+      ],
+      "original_report_sha256": "72176edc002c5ced922f5fbb9af3ca1adedd8d2630e602f4eef8c3ea11a6ff76",
+      "archive_sha256": "97988c514fc2597fbaa283bf6f2438fd2033b4fd577d0c6cfd0ae437f1887b7e"
+    },
+    {
+      "round": 2,
+      "code_sha": "78b8965b522e4e41670c104fb7e00c935135c0c2",
+      "requests": 5,
+      "passed": false,
+      "failed_phase": "real_three_session_growth_and_invalidation",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 696,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_growth.py",
+          "line": 16,
+          "function": "drive_growth"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "fb5e1a9e6cd749cba6fb96a697aa83c4",
+          "我喜欢用手帐拼贴记录生活",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我喜欢用手帐拼贴记录生活",
+          "answer": "😍关爱 哇，手帐拼贴真是个很棒的方式记录生活呢！它不仅能让你把日常的点滴都保存下来，还能让你的生活变得更加丰富多彩。你通常会用哪些素材和图案来装饰你的手帐呢？😊"
+        },
+        {
+          "query": "我做手帐拼贴时习惯搭配相近色系",
+          "answer": "😍关爱 哦，这样搭配相近色系的风格真的很温馨呢！手帐拼贴不仅能记录生活，还能在色彩中找到属于自己的小确幸。你最喜欢的色系是什么呢？我们可以一起分享更多关于手帐的美好时光。🎨🌈"
+        }
+      ],
+      "original_report_sha256": "7869fe69a7b08066c0c7d50feaba3f8b5e71dba21bce5a4e5e010626984c2abb",
+      "archive_sha256": "e2094fdf3424c7d877c9c844cdcda5d170afa506b91edaa0364b7e3f689d4df2"
+    }
+  ],
+  "review": "15 actual requests, all groups fail second source extraction with invented reconciliation and unsupported relation. No fourth source or trait assertion reached. All six original foreground replies read; no growth acceptance. The optional reconciliation schema was advertised to ordinary tasks; remove that misleading option rather than strip model outputs.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

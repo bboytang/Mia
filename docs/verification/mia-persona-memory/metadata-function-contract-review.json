@@ -1,0 +1,45 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38962075573",
+  "code_sha": "78b8965b522e4e41670c104fb7e00c935135c0c2",
+  "requests": 2,
+  "executed_cases": 2,
+  "passing_cases": 1,
+  "original_report_sha256": "d104aaa9f8edc6d077234f2df02050599095dec5b7c7407086d93b42f6deab96",
+  "archive_sha256": "c54c59db37b5f28fd28bb414dc5222fd1e9f598af3e8f4bf25b4482c81fb6d36",
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"我每周三都会在公司食堂吃素\", \"category\": \"fact\", \"content\": \"我每周三都会在公司食堂吃素\", \"entities\": [\"公司食堂\"], \"keywords\": [\"每周三\", \"吃素\"], \"kind\": \"explicit\", \"reconciliation\": null, \"relations\": [], \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我每周三都会在公司食堂吃素\", \"subject\": \"user\", \"trigger_terms\": [\"每周三\", \"公司食堂\", \"吃素\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我每周三都会在公司食堂吃素",
+          "confirmed": 1,
+          "entities": "[\"公司食堂\"]",
+          "keywords": "[\"每周三\", \"吃素\"]",
+          "trigger_terms": "[\"每周三\", \"公司食堂\", \"吃素\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 6185.3800390000015
+    },
+    {
+      "name": "medical_confirmation",
+      "source": "我被确诊为糖尿病",
+      "expected": "pending",
+      "state": "retry_wait",
+      "error_category": "invalid_output",
+      "pipeline_semantic_pass": false,
+      "model_requests": 1,
+      "model_output": "",
+      "stored": [],
+      "elapsed_ms": 9739.960994000001
+    }
+  ],
+  "review": "Only two actual cases/requests executed. Neutral fact saved, medical case original function stream contains one empty content/no-tool event and ends complete; Worker is retry_wait/invalid_output after the one bounded auxiliary run_once, gate correctly fails unfinished and remaining eight cases unexecuted. Not a ten-case pass, not an SDK timeout claim, not full manager/BGE or native two-attempt recovery. No manufactured empty stream or evaluation rerun."
+}

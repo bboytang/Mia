@@ -28,6 +28,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 78b8965b四项已全终态failure，不重发：自然纠错38962029349/15请求，第一/三组更正输出inferred/旧内容/非共享anchor及关联，第二组首事实就造空目标更正；成长38962044977/15请求，三组第二事实均造更正/非法关系，未到第四源；检索38962060012/18请求，第一组第二源非法关联，第三组首源空目标更正，第二组第四源先真实0.9但非法关联、再漏重要性被新guard拒绝。20条实际前台原回答已读，长笛目击仍在；natural/growth/retrieval-function-contract-*完整原文/SDK/SQL/哈希保存，v2未消耗。
+- 辅助38962075573只有2请求/2实际样本，首样本保存，医疗样本实际函数流只含空content/无tool事件且complete=true，Worker在retry_wait/invalid_output，入口按原有unfinished门槛失败；余8项未执行。metadata-function-contract-*保留，不能报十项整体9/10或SDK超时。
+- 新候选依实际无目标更正输出，收窄提供给模型的schema：只有真实自然纠错任务声明reconciliation，且kind只允许explicit；旧完整分号协议仍先由原preflight处理。无可能字面共同锚或自然纠错任务不展示relations项目模板；字段缺省沿用原parser空关系，绝不删除/修补实际模型输出，若仍输出不支持字段原validator继续拒绝。原模型/Scope/事实库/Worker/两次上限不变。96本地相关项通过（18.868秒），真实待新SHA。
+- 关闭证据仍缺。只读固定上游app.py发现当前安装补丁先stop_worker(timeout20)、再GC.stop、再服务任务wait3，尚无共同总期限；这是源码风险，不是实测超时，不能以现有空闲约0.13秒称全服务在途≤20秒。后续需实际生命周期测试和必要修复，不提前把P23判通过。P22/P23/P24仍未完成。
+
 - 当前已发布HEAD：78b8965b522e4e41670c104fb7e00c935135c0c2，运行代码候选b84556a6bd17ebba5ed9db37c5edba52f085da49。Git HTTPS依然连接失败，但官方Git数据API正常；通过既有gh认证上传本地对象，两个提交的每个blob/tree/commit SHA均与本地严格一致后才force=false快进任务分支。未重建不同历史、未读出密钥。可复核远程Git commit API及分支引用。
 - 四项各单次创建并确认在途：自然纠错[38962029349](https://github.com/bboytang/Mia/actions/runs/38962029349)、成长[38962044977](https://github.com/bboytang/Mia/actions/runs/38962044977)、v1检索[38962060012](https://github.com/bboytang/Mia/actions/runs/38962060012)、辅助十项[38962075573](https://github.com/bboytang/Mia/actions/runs/38962075573)。自动基础服务38961981041/BGE38961980914/身份38961980955/manager38961980942在途，提取语法38961980936已success。后续跟踪同句柄，不重发、不把观察超时当终止。b0aa3501五项全部终态且完整归档，独立v2仍未执行。
 - P22仍缺成长/派生失效、自然纠错及回复来源语义、全服务在途关闭和最终回归；P23/P24未完成。本地96相关项已过只证明机制，不能提前称新模型效果通过。
