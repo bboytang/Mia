@@ -227,6 +227,13 @@ class ContextBuilder:
         retained = []
         omitted = {'role': False, 'fact_ids': [], 'traits': [], 'history_turns': inputs['older_turns_removed'], 'scene': False}
         def request():
+            if data['facts']:
+                evidence = {'status': 'matched', 'meaning': '以下是本轮召回的用户事实，保留了用户原话。'}
+            elif inputs['memory_status'] == 'unavailable':
+                evidence = {'status': 'unavailable', 'meaning': '本轮用户长期记忆查询不可用。'}
+            else:
+                evidence = {'status': 'no_match', 'meaning': '本轮没有与问题匹配的可靠用户长期记忆，用户的这段往事未知。'}
+            data['memory_evidence'] = evidence
             messages = [{'role': 'system', 'content': CORE + POLICY},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             messages.extend(message for group in retained for message in group)

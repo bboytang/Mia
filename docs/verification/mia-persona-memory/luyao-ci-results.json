@@ -1,11 +1,11 @@
 {
-  "status": "Luyao-aligned runtime checked; actual composed rerun in progress; full P22-P24 incomplete",
+  "status": "Luyao-aligned runtime checks passed; composed run failed on deleted-memory response; explicit no-match context fix pending",
   "reference_repository": "https://github.com/insistgang/Luyao_AI_Project",
   "reference_sha": "e23c3aa25d6451e3f35e71609864bb3a54ad49a0",
   "runtime_sha": "b6e8c25bc0ba725562d59af49a48002699cf69af",
   "candidate_sha": "3529dcab17d43b0b6911cfbe3b944a2a4d185e07",
   "runtime_tree_unchanged_since_runtime_sha": true,
-  "new_composed_run_actual_requests": "not known until terminal artifact; cap54",
+  "new_composed_run_actual_requests": 49,
   "previous_composed_requests": 26,
   "runs": [
     {
@@ -90,9 +90,10 @@
       "url": "https://github.com/bboytang/Mia/actions/runs/38848989372",
       "sha": "3529dca",
       "scope": "manual actual manager/BGE/provider three-user composed rerun",
-      "status": "in_progress"
+      "status": "failure"
     }
   ],
   "deployment": false,
-  "local_automated_tests_or_builds": false
+  "local_automated_tests_or_builds": false,
+  "composed_review": "behavior-luyao-review.json"
 }

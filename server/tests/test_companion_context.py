@@ -92,6 +92,7 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(request['messages'][-1], {'role': 'user', 'content': '我喜欢什么颜色？'})
         self.assertEqual([r['id'] for r in self.data(bundle)['facts']], [own])
         self.assertTrue(all(r['subject'] == 'user' for r in self.data(bundle)['facts']))
+        self.assertEqual(self.data(bundle)['memory_evidence']['status'], 'matched')
         self.assertEqual(self.data(bundle)['role_data'], role)
         self.assertNotIn('FOREIGN_PRIVATE', bundle.request_json)
         self.assertEqual(history, [{'role': 'user', 'content': '旧问题'}, {'role': 'assistant', 'content': '旧回答'}])
@@ -177,6 +178,18 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.assertLessEqual(estimate(bundle.request()), small.input_limit())
         self.assertTrue(own in bundle.diagnostics()['selected_fact_ids'] or own in bundle.diagnostics()['omitted']['fact_ids'])
 
+    async def test_deleted_fact_has_explicit_no_match_instead_of_unavailable_memory(self):
+        own = self.fact()
+        await self.index.rebuild_batch(self.scope, self.auth)
+        before = await self.build()
+        self.assertEqual(self.data(before)['memory_evidence']['status'], 'matched')
+        self.store.delete_memory(self.scope.owner, own)
+        after = await self.build()
+        self.assertEqual(self.data(after)['memory_status'], 'available')
+        self.assertEqual(self.data(after)['memory_evidence']['status'], 'no_match')
+        self.assertEqual(self.data(after)['facts'], [])
+        self.assertEqual(after.request()['messages'][-1], {'role': 'user', 'content': '我喜欢什么颜色？'})
+
     async def test_unknown_capacity_and_missing_output_reserve_do_not_guess_defaults(self):
         for limits in (None, ContextLimits('fixture', None, 128, 'source'), ContextLimits('fixture', 8192, None, 'source'),
                        ContextLimits('fixture', 8192, 128, ''), ContextLimits('fixture', True, 128, 'source')):
@@ -228,6 +241,7 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.fact()
         bundle = await self.build()  # Index intentionally missing.
         self.assertEqual(self.data(bundle)['memory_status'], 'unavailable')
+        self.assertEqual(self.data(bundle)['memory_evidence']['status'], 'unavailable')
         self.assertEqual(self.data(bundle)['facts'], [])
         self.assertTrue(bundle.request()['messages'][0]['content'].startswith(CORE))
         self.store.close()

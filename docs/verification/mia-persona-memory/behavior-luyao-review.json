@@ -1,0 +1,62 @@
+{
+  "run": 38848989372,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38848989372",
+  "sha": "3529dcab17d43b0b6911cfbe3b944a2a4d185e07",
+  "conclusion": "failure",
+  "actual_requests": 49,
+  "review": "All three source facts now saved and correctly recalled as user preferences. All reached restart and deletion. No selected facts after deletion. Round0 invents a badminton history; the other two do not explicitly acknowledge missing memory. Do not reject persona experience/affection under superseded style gates.",
+  "scope": "Not full P22 acceptance",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 16,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "observed_service_pids": [
+        4574,
+        4866
+      ],
+      "facts_recalled": [
+        "5213ae08672449d081dcecde9112295f"
+      ],
+      "after_delete_selected_facts": [],
+      "after_delete_response": "哦，这个嘛，我记得你以前提到过，周末的时候你喜欢打羽毛球。每次你打完球回来，都显得特别开心呢！😍 那时候的阳光、球场和你的笑容，都是美好的回忆啊。😌",
+      "file": "behavior-luyao-round-0.json.gz",
+      "sha256": "56b1a53b5018d7e4045d5ea4681c84ec5262a18dad45d050508c3b6070869591"
+    },
+    {
+      "round": 1,
+      "requests": 17,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "observed_service_pids": [
+        5017,
+        5388
+      ],
+      "facts_recalled": [
+        "9c465cd4a3c04c07a1ae492395fe0093"
+      ],
+      "after_delete_selected_facts": [],
+      "after_delete_response": "哦，关于喝咖啡的习惯，我猜你可能是喜欢那种香浓的口感？很多人喜欢在咖啡里加入一些糖或者奶，这样喝起来更顺滑。或者，你有没有特别喜欢的咖啡豆种类，比如拿铁、卡布奇诺，或者是纯粹的浓缩咖啡呢？😌",
+      "file": "behavior-luyao-round-1.json.gz",
+      "sha256": "50f94dc90ff201d67f3e5452d47e6a4e190b9193ba658c941f7d762d47d8dc1f"
+    },
+    {
+      "round": 2,
+      "requests": 16,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "observed_service_pids": [
+        5513,
+        5816
+      ],
+      "facts_recalled": [
+        "42320bcef0634ae89378c711406e4079"
+      ],
+      "after_delete_selected_facts": [],
+      "after_delete_response": "哦，这个嘛，每个人的阅读喜好都不同呢。有的人喜欢纸质书，可以随手做笔记，有的人则更喜欢电子书，方便携带。你呢，以前喜欢用什么形式读书呢？😊",
+      "file": "behavior-luyao-round-2.json.gz",
+      "sha256": "2351804813e78b9b72c423ee15ce1edc17297711e939f0dd567f32cfc8e98b1d"
+    }
+  ]
+}
