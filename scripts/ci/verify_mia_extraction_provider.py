@@ -128,9 +128,9 @@ async def evaluate(report, secret):
                 'model_requests': len(outputs) - captured_before,
                 'model_output': outputs[-1] if len(outputs) > captured_before else None,
                 'stored': [dict(row) for row in found], 'elapsed_ms': (time.perf_counter() - started) * 1000})
-            if not passed:
-                raise AssertionError('P17 provider sample did not pass; no retry performed')
-        report['passed'] = True
+            if not passed and task['state'] not in {'committed', 'empty', 'failed', 'cancelled'}:
+                raise AssertionError('Actual task remains unfinished; do not rerun it as a new case')
+        report['passed'] = all(row['pipeline_semantic_pass'] for row in report['cases'])
         store.close()
 
 

@@ -59,6 +59,7 @@ are required. Otherwise return trait:null. Do not infer intimacy, dependence or 
 Use {"memories":[],"trait":null} for a valid empty result, not malformed JSON.
 '''
 
+REMEMBER_PREFIX = re.compile(r'^(?:(?:米娅|Mia)[,， ]*)?(?:你好[,， ]*)?(?:请|帮我)?记住[：:,， ]*', re.I)
 QUOTED = re.compile(r'“[^”]*”|「[^」]*」|『[^』]*』|‘[^’]*’|"[^"\n]*"|\'[^\'\n]*\'')
 NONFACT = re.compile(r'假设|假如|如果|比如|例如|举例|小说|虚构|扮演|开玩笑|玩笑|段子|引用|'
     r'他说|她说|你说|你刚才说|模型说|助手说|是否|是不是|难道|忘掉|忘记|不要记|别记|'
@@ -79,7 +80,7 @@ def source_supported(source, quote, *, allow_transient=False):
     """Conservative provenance guard; quote=None checks for any eligible clause."""
     masked = QUOTED.sub(lambda match: ' ' * len(match[0]), normalize(source))
     for clause in re.findall(r'[^。！？!?\n;；]+[。！？!?;；]?', masked):
-        factual = re.sub(r'^(?:(?:米娅|Mia)[,， ]*)?(?:你好[,， ]*)?(?:请|帮我)?记住[：:,， ]*', '', clause.strip(), flags=re.I)
+        factual = REMEMBER_PREFIX.sub('', clause.strip())
         equivalent = quote is None or quote.rstrip('。!！;；').strip() == factual.rstrip('。!！;；').strip()
         reported = re.search(r'^(?!我|请|米娅).{1,8}(?:说|表示|声称)', clause.strip())
         if (factual and equivalent and not NONFACT.search(clause) and not TASK_REQUEST.search(factual) and not reported
@@ -323,7 +324,8 @@ class LLMMemoryExtractor:
                 'Negation must be respected; do not label "not sad" as negative.' if tracking['enabled'] else
                 '\nEmotion tracking is disabled. Do not produce or persist observations.')
             return provider.response_no_stream(instruction,
-                json.dumps({'user_excerpts': sources, 'existing_memories': context,
+                json.dumps({'user_excerpts': [REMEMBER_PREFIX.sub('', normalize(source)) for source in sources],
+                            'existing_memories': context,
                             'emotion_tracking_enabled': bool(tracking['enabled'])}, ensure_ascii=False))
         finally:
             client = getattr(provider, 'client', None)

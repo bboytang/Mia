@@ -1,0 +1,17 @@
+{
+  "sha": "715edd40facacba50ccf51b2306b3b0a78d14ec9",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38893872558",
+  "conclusion": "failure",
+  "requests": 6,
+  "executed_cases": 8,
+  "not_executed": [
+    "independent_positive_importance",
+    "independent_negative_importance"
+  ],
+  "review": "Existing seven pipeline cases pass; the independent activity/device source is genuinely saved but actual model returns all empty clue arrays after the clarified prompt. The original script stops at this logical metadata failure, so the new positive/negative importance controls are unexecuted. Do not infer their result.",
+  "file": "metadata-first-provider.json.gz",
+  "sha256": "147586d6391b8ad42ae272d100bbbf08881d05f38740d84810f8193bc2128e23",
+  "manual_metadata_backfill": false,
+  "frozen_retrieval_parameters_changed": false,
+  "next": "Retain failures and continue only after terminal logical-check failures to observe all remaining independent cases once; do not retry unfinished tasks or weaken any overall gate. Model choice clarification pending; continue current authorized model until user specifies otherwise."
+}

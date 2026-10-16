@@ -38,7 +38,11 @@ P21完成必要实现与GitHub验证。最近已验证运行源码642cb28：来�
 
 B04首轮[38891089842](https://github.com/bboytang/Mia/actions/runs/38891089842)已failure，39真实请求、12事实／15查询全部执行；S／L／A有真实贡献，候选小库无遗漏及无关空召回，但12条重要性元数据全null（含6条明确重要原句），三条活动器材记录线索为空，指定关联无扩展。结构0／15为同一前置E条件失败，不是十五种检索错误；相关12回答正确，另2澄清、1仅说稍等查记录。原提取／SQL／评分／消融／原文在retrieval-first-*，不手填字段、不改冻结权重，v1后续视作回归而非未看过的最终留出。
 
-当前第一项可执行工作：inflight测试入口复用明确协议三剧本，真实模型输出必须先通过实际验证器且可写，CI才有界暂停；本人原管理删除后放行原结果，要求原Worker真实返回、任务cancelled／无事实，再实际PID重启不复活。代码待推送／GitHub语法及实际运行，不修改生产队列或伪造模型结果。随后修复实际来源线索和明确重要性提取、补独立新语料／否定对照，保持冻结参数。当前没有在途真实run。任意自然更正、完整后台故障／身份矩阵、特点成长／趋势派生及其他P22项仍待，P23／P24未实施完成。真实跨日用户自测；共同往事澄清未答，不追加表达拦截。不自动日采，不部署。
+在途删除首轮[38892883235](https://github.com/bboytang/Mia/actions/runs/38892883235)源码dca17b8已failure／24请求，见inflight-first-*。三组真实“请记住”提取把命令放入source_quote、正文却省掉，来源守卫丢候选；CI要求真实可写结果的前置不成立，所以没进ready，更未执行删除／释放／最终重启。不能称队列缺陷或在途拒绝通过。新候选复用原前缀模式，仅在模型user_excerpts去掉记忆命令，原任务／来源索引／最终原文校验不改；原模型输出不加工。新增否定偏好及原始来源不变的生产者回归。
+
+715edd4澄清来源线索及“用户明确重要性而非当前心情”的元数据语义，冻结检索参数不变，四回归服务38893584177／BGE38893584166／身份38893584008／manager38893584050成功。辅助[38893872558](https://github.com/bboytang/Mia/actions/runs/38893872558)failure／6请求／8场景，原7通过，新设备事实虽保存但线索仍空；正／负重要性后两项未执行，见metadata-first-*，不能推定它们的结果。辅助脚本新候选允许已终态的逻辑检查失败后继续独立场景，以取得未执行对照；总通过仍要求所有项目通过，未完成任务停止，不评估重试。
+
+当前第一项可执行工作：推送并完成上述命令前缀／辅助观察修正的GitHub验证，随后定向在途复验与十场景实际辅助，继续同handle、不重复未修改源码取绿。当前无在途真实run。用户的最终上线模型选择及共同往事表达澄清均尚无答复，默认不换模型／Secrets、不追加表达拦截；继续现有授权模型。任意自然更正、完整后台故障／身份矩阵、特点成长／趋势派生及其他P22项仍待，P23／P24未实施完成。真实跨日用户自测，不自动日采，不部署。
 
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。

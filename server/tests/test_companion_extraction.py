@@ -152,6 +152,24 @@ class ExtractionValidationTests(unittest.TestCase):
         with self.assertRaises(MemoryError):
             self.validate('我不喜欢蓝色', proposal('我喜欢蓝色', source_quote='我不喜欢蓝色'))
 
+    def test_extractor_request_omits_only_command_prefix_and_preserves_original_provenance(self):
+        provider = Mock()
+        received = []
+
+        def response(instruction, payload):
+            text = json.loads(payload)['user_excerpts'][0]
+            received.append(text)
+            return {'memories': [proposal(text)], 'trait': None}
+
+        provider.response_no_stream.side_effect = response
+        sources = ['米娅，请记住我不喜欢蓝色']
+        raw = LLMMemoryExtractor(lambda: provider)(sources, [])
+        result = validate_output(raw, sources, [])
+        self.assertEqual(received, ['我不喜欢蓝色'])
+        self.assertEqual(sources, ['米娅，请记住我不喜欢蓝色'])
+        self.assertEqual(result['memories'][0]['content'], '我不喜欢蓝色')
+        self.assertEqual(result['memories'][0]['source_quote'], '我不喜欢蓝色')
+
     def test_remember_prefix_is_not_part_of_the_fact(self):
         source = '米娅，请记住我喜欢蓝色'
         self.assertEqual(self.validate(source, proposal('我喜欢蓝色'))['memories'][0]['content'], '我喜欢蓝色')

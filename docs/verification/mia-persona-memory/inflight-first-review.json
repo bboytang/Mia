@@ -1,0 +1,109 @@
+{
+  "sha": "dca17b80354ba99a31e8783f41e6a16c66292d60",
+  "runtime_sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38892883235",
+  "conclusion": "failure",
+  "requests": 24,
+  "inflight_deletion_accepted": false,
+  "full_P22_accepted": false,
+  "review": "All three finish original/correction/restart recall but the late remember request cannot produce a valid potentially writable candidate: actual model puts 请记住 inside source_quote while omitting it from content. The existing provenance check discards the candidate. The CI writable-result precondition fails, so its hold signal is never reached and deletion/release/final restart were NOT executed. This does not prove a queue cancellation defect or a successful in-flight denial; task failure/retries here follow the CI precondition exception.",
+  "next_change": "Strip only the existing leading remember-command prefix in model user_excerpts, preserving source indices, actual statements/negation, original task payload and final validation against original user sources. Never rewrite the model output to make it pass.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 8,
+      "failed_phase": "delete_while_genuine_validated_extraction_is_in_flight",
+      "file": "inflight-first-round-0.json.gz",
+      "sha256": "1b49c4336f95014f6a6dd628e78f0f56b1c5fe8e56c3084e6cc4557936743e8f",
+      "held_result_proof": null,
+      "remember_response": "😌当然可以，米娅会记得你每周五去星河书店参加读书会的习惯。那是个很美好的时光，享受阅读和交流的乐趣吧！📚🌟",
+      "last_real_model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"fact\",\n      \"content\": \"我每周五去星河书店参加读书会\",\n      \"source_index\": 0,\n      \"source_quote\": \"请记住我每周五去星河书店参加读书会\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"星河书店\", \"读书会\"],\n      \"trigger_terms\": [\"星河书店\", \"读书会\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "final_readonly_sqlite": {
+        "facts": [
+          "我每周五去星河书店参加读书会"
+        ],
+        "jobs": [
+          [
+            "committed",
+            null,
+            2
+          ],
+          [
+            "empty",
+            null,
+            2
+          ],
+          [
+            "failed",
+            "model",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "round": 1,
+      "requests": 8,
+      "failed_phase": "delete_while_genuine_validated_extraction_is_in_flight",
+      "file": "inflight-first-round-1.json.gz",
+      "sha256": "44e35e725e284ecb3d657747b656e506000182cd099dd65f1464fbec279dab9b",
+      "held_result_proof": null,
+      "remember_response": "😌当然可以，我已经记住了，你出门通勤通常坐四号线。下次如果你需要提醒或者分享其他信息，随时告诉我哦。😊",
+      "last_real_model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"fact\",\n      \"content\": \"我出门通勤通常坐四号线\",\n      \"source_index\": 0,\n      \"source_quote\": \"请记住我出门通勤通常坐四号线\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"出门通勤\"],\n      \"trigger_terms\": [\"出门通勤\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "final_readonly_sqlite": {
+        "facts": [
+          "我出门通勤通常坐四号线"
+        ],
+        "jobs": [
+          [
+            "committed",
+            null,
+            2
+          ],
+          [
+            "empty",
+            null,
+            2
+          ],
+          [
+            "failed",
+            "model",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "round": 2,
+      "requests": 8,
+      "failed_phase": "delete_while_genuine_validated_extraction_is_in_flight",
+      "file": "inflight-first-round-2.json.gz",
+      "sha256": "906da2e23f098c2ec49b88c60445a34b9e5f3517ee871b24dd76289cc2723f8f",
+      "held_result_proof": null,
+      "remember_response": "😌当然，我已经记住了，你喝茶时更喜欢普洱茶。下次我们一起品茶时，我会记得提醒你哦。😊",
+      "last_real_model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我喝茶时更喜欢普洱茶\",\n      \"source_index\": 0,\n      \"source_quote\": \"请记住我喝茶时更喜欢普洱茶\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"喝茶\"],\n      \"trigger_terms\": [\"更喜欢\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "final_readonly_sqlite": {
+        "facts": [
+          "我喝茶时更喜欢普洱茶"
+        ],
+        "jobs": [
+          [
+            "committed",
+            null,
+            2
+          ],
+          [
+            "empty",
+            null,
+            2
+          ],
+          [
+            "failed",
+            "model",
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}
