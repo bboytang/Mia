@@ -65,7 +65,7 @@ NONFACT = re.compile(r'假设|假如|如果|比如|例如|举例|小说|虚构|�
     r'他说|她说|你说|你刚才说|模型说|助手说|是否|是不是|难道|忘掉|忘记|不要记|别记|'
     r'\b(?:hypothetical|suppose|imagine|example|joking|fiction|forget)\b', re.I)
 TASK_REQUEST = re.compile(r'(?:^|[，,:：])\s*(?:(?:现在)?(?:请|帮我|麻烦你?|劳驾)(?:帮我)?'
-    r'(?:先|同时|再)?(?:查|读取|计算|告诉我|打开|关闭)|(?:查|算|看)一下)')
+    r'(?:先|同时|再)?(?:查|读取|计算|告诉我|打开|关闭)|(?:请)?(?:不要|别)(?:把.{0,8})?(?:记成|记作|记入|记下|记住|保存)|(?:查|算|看)一下)')
 LOW_VALUE = re.compile(r'^(?:你好|谢谢(?:你|您)?|非常感谢|多谢|再见|嗯+|好的?|哈哈+|早上好|晚安|hello|thanks)[。！!\s]*$|'
     r'^(?:我)?(?:今天|现在|此刻|刚刚|这会儿)(?:感觉|有点|很)?(?:开心|难过|生气|累|饿|困)', re.I)
 EXTRA_SENSITIVE = re.compile(r'过敏|年薪|月薪|薪资|账户余额|债务|高血压|确诊|用药|住院|心理治疗|生理期|\ballerg|\bincome\b', re.I)
@@ -324,7 +324,7 @@ class LLMMemoryExtractor:
                 'Negation must be respected; do not label "not sad" as negative.' if tracking['enabled'] else
                 '\nEmotion tracking is disabled. Do not produce or persist observations.')
             return provider.response_no_stream(instruction,
-                json.dumps({'user_excerpts': [REMEMBER_PREFIX.sub('', normalize(source)) for source in sources],
+                json.dumps({'user_excerpts': [REMEMBER_PREFIX.sub('', source) for source in sources],
                             'existing_memories': context,
                             'emotion_tracking_enabled': bool(tracking['enabled'])}, ensure_ascii=False))
         finally:

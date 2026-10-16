@@ -1,0 +1,263 @@
+{
+  "sha": "c625c55f61d03a30b421e6b5e134154f0a41ed0a",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38894890125",
+  "conclusion": "success",
+  "requests": 25,
+  "inflight_deletion_three_case_acceptance": true,
+  "overall_dialogue_semantic_acceptance": false,
+  "full_P22_accepted": false,
+  "review": "All three actual potentially writable model results pass the normal source validator before CI hold. The original scoped management deletes the supporting record, the untouched result returns to the original Worker, and actual job state becomes cancelled/memory_changed with native completion. Three distinct real PIDs per user and final empty facts prove no recovery resurrection. Each held task has one attempt. Round0 initial seed had real invalid habit category then one allowed original Worker retry (2 attempts); total is 25, not 24, and all outputs are retained.",
+  "semantic_limit": "Corrected-current-fact recall remains correct. Round2 final empty-memory tea answer again describes Mia own preference, which is allowed expression but does not answer the user question. This acceptance is the in-flight deletion mechanism, not universal speaker accuracy or full B01/B03/B04/B06/B08.",
+  "acknowledgement_scope": "The held remember request repeats an already stored corrected fact; the front-end acknowledgement occurs while that fact still exists, before later management deletion. The accepted job is not mislabeled as a newly committed source.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 9,
+      "mechanical_pass": true,
+      "server_pids": [
+        4381,
+        4694,
+        4794
+      ],
+      "file": "inflight-prefix-round-0.json.gz",
+      "sha256": "c58c1dc15535e813b1cb673a16150da283251eab9308334bd7498ce7e7d70b18",
+      "inflight_proof": {
+        "ready": {
+          "job_id": "62e93d3c5ac1fb958d0e0f6d3ca004bb30b8e00ccd9c1cf9307c1557f7b52038",
+          "source_sha256": "ddd0a0ee0e0de3f65fa67d659241ec16ffef874b11fdbb761f404baaad1dd296",
+          "real_model_outputs": 1,
+          "validated_fact": true
+        },
+        "finished": {
+          "job_id": "62e93d3c5ac1fb958d0e0f6d3ca004bb30b8e00ccd9c1cf9307c1557f7b52038",
+          "state": "cancelled",
+          "original_worker_returned": true,
+          "native_finished": true
+        },
+        "session_id": "32d91097-5979-4194-a4e7-acc7c7109ef4",
+        "response": "😌当然，我已经记住了，你每周五都会去星河书店参加读书会。那真是一个充满知识和乐趣的地方呢！下次去的时候，有没有什么特别想和我分享的书或者故事？😊",
+        "deleted_before_late_output_returned": true
+      },
+      "original_worker_observation": {
+        "job_id": "62e93d3c5ac1fb958d0e0f6d3ca004bb30b8e00ccd9c1cf9307c1557f7b52038",
+        "source_sha256": "ddd0a0ee0e0de3f65fa67d659241ec16ffef874b11fdbb761f404baaad1dd296",
+        "real_model_outputs": 1,
+        "validated_fact": true,
+        "phase": "original_worker_processed_late_output",
+        "state": "cancelled",
+        "original_worker_returned": true,
+        "native_finished": true
+      },
+      "late_real_model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"fact\",\n      \"content\": \"我每周五去星河书店参加读书会\",\n      \"source_index\": 0,\n      \"source_quote\": \"我每周五去星河书店参加读书会\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [\"星河书店\", \"读书会\"],\n      \"keywords\": [\"参加\"],\n      \"trigger_terms\": [\"星河书店\", \"读书会\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "after_restart_reply": "😌平静，关于您参加书店阅读活动的具体星期几，我在这里并没有记录到相关信息。如果您能想起是哪一天，或者是否有其他线索，我们可以一起回忆一下。😊",
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "jobs": [
+          [
+            "committed",
+            2,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "cancelled",
+            1,
+            "memory_changed"
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "observations": 0
+      }
+    },
+    {
+      "round": 1,
+      "requests": 8,
+      "mechanical_pass": true,
+      "server_pids": [
+        4874,
+        4996,
+        5094
+      ],
+      "file": "inflight-prefix-round-1.json.gz",
+      "sha256": "c0cd3093b9f036957dc63f1fcf5c424c947766160a045ecd6f729fc5c2bb27f3",
+      "inflight_proof": {
+        "ready": {
+          "job_id": "139d41d26d76eec7213a08873af287c17505d9d4597dde7883aa9e32b391cf1c",
+          "source_sha256": "d3de1d01aed8f2e89063ee105673274fc587309bd556ed602c001528e356a370",
+          "real_model_outputs": 1,
+          "validated_fact": true
+        },
+        "finished": {
+          "job_id": "139d41d26d76eec7213a08873af287c17505d9d4597dde7883aa9e32b391cf1c",
+          "state": "cancelled",
+          "original_worker_returned": true,
+          "native_finished": true
+        },
+        "session_id": "e356794d-7531-4337-a96b-1465916e484f",
+        "response": "😌当然，我已经记住了，你出门通勤通常坐四号线。下次如果你需要提醒或者分享其他信息，随时告诉我哦。😊",
+        "deleted_before_late_output_returned": true
+      },
+      "original_worker_observation": {
+        "job_id": "139d41d26d76eec7213a08873af287c17505d9d4597dde7883aa9e32b391cf1c",
+        "source_sha256": "d3de1d01aed8f2e89063ee105673274fc587309bd556ed602c001528e356a370",
+        "real_model_outputs": 1,
+        "validated_fact": true,
+        "phase": "original_worker_processed_late_output",
+        "state": "cancelled",
+        "original_worker_returned": true,
+        "native_finished": true
+      },
+      "late_real_model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"fact\",\n      \"content\": \"我出门通勤通常坐四号线\",\n      \"source_index\": 0,\n      \"source_quote\": \"我出门通勤通常坐四号线\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"出门\", \"通勤\", \"坐\"],\n      \"trigger_terms\": [\"出门通勤\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "after_restart_reply": "😌 平静，关于您平时上班搭地铁线路的事情，这需要您提供一些具体信息，比如您的工作地点或者家在哪里。这样我才能帮您确定您通常乘坐的地铁线路。您能告诉我您的工作地点或者家的大致位置吗？",
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "cancelled",
+            1,
+            "memory_changed"
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "observations": 0
+      }
+    },
+    {
+      "round": 2,
+      "requests": 8,
+      "mechanical_pass": true,
+      "server_pids": [
+        5156,
+        5386,
+        5490
+      ],
+      "file": "inflight-prefix-round-2.json.gz",
+      "sha256": "8cf7d8551ce06e5961e04c3f6882de4b93a64b2c344f122438e519806d529240",
+      "inflight_proof": {
+        "ready": {
+          "job_id": "c218675c83df78601214bb48e0b1ad98240ff88531f32c7b3678063aaa182f4f",
+          "source_sha256": "8cb640dc47261bc3c64cb1fccbaa98b7415cb76136ca4e386803967e10c13ad3",
+          "real_model_outputs": 1,
+          "validated_fact": true
+        },
+        "finished": {
+          "job_id": "c218675c83df78601214bb48e0b1ad98240ff88531f32c7b3678063aaa182f4f",
+          "state": "cancelled",
+          "original_worker_returned": true,
+          "native_finished": true
+        },
+        "session_id": "9db6a457-72b8-4a19-884e-c90b1917fd1d",
+        "response": "😌当然，我已经记住了，你喝茶时更喜欢普洱茶。下次我们一起品茶时，我会记得提醒你哦。😊",
+        "deleted_before_late_output_returned": true
+      },
+      "original_worker_observation": {
+        "job_id": "c218675c83df78601214bb48e0b1ad98240ff88531f32c7b3678063aaa182f4f",
+        "source_sha256": "8cb640dc47261bc3c64cb1fccbaa98b7415cb76136ca4e386803967e10c13ad3",
+        "real_model_outputs": 1,
+        "validated_fact": true,
+        "phase": "original_worker_processed_late_output",
+        "state": "cancelled",
+        "original_worker_returned": true,
+        "native_finished": true
+      },
+      "late_real_model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我喝茶时更喜欢普洱茶\",\n      \"source_index\": 0,\n      \"source_quote\": \"我喝茶时更喜欢普洱茶\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [],\n      \"keywords\": [\"喝茶\"],\n      \"trigger_terms\": [\"更喜欢\"],\n      \"emotional_weight\": null,\n      \"emotional_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "after_restart_reply": "😌 平常我喝的茶种类还挺多的，根据心情和天气来选择。有时候喜欢喝清新的绿茶，提神又健康；有时候又会选择醇香的普洱，口感浓郁。你呢，有没有什么特别喜欢的茶呢？😊",
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "cancelled",
+            1,
+            "memory_changed"
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "observations": 0
+      }
+    }
+  ]
+}

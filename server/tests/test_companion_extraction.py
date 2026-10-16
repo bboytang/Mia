@@ -77,6 +77,7 @@ class ExtractionValidationTests(unittest.TestCase):
             '旧话题先放一边，现在请查红盒的棋子数量。',
             '麻烦帮我计算这张订单的总价。',
             '帮我打开客厅的灯。',
+            '不要把它记成我的真实经历。', '请不要保存这段台词。',
         ]:
             with self.subTest(source=source):
                 self.assertEqual(self.validate(source, proposal(source))['memories'], [])
@@ -93,7 +94,8 @@ class ExtractionValidationTests(unittest.TestCase):
         old = [{'id': 'owned', 'content': '我看温度时更习惯用摄氏度。'}]
         for source in ['查一下temperature里的温度，用我平时习惯的单位告诉我。',
                        '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。',
-                       '“我喜欢蓝色”只是引用。', '“我喜欢蓝色”', '谢谢你', '我今天很累']:
+                       '“我喜欢蓝色”只是引用。', '“我喜欢蓝色”', '谢谢你', '我今天很累',
+                       '这只是小说台词：“我住在月球”；不要把它记成我的真实经历']:
             with self.subTest(source=source):
                 self.assertEqual(extractor([source], old), {'memories': [], 'trait': None})
         factory.assert_not_called()
@@ -169,6 +171,9 @@ class ExtractionValidationTests(unittest.TestCase):
         self.assertEqual(sources, ['米娅，请记住我不喜欢蓝色'])
         self.assertEqual(result['memories'][0]['content'], '我不喜欢蓝色')
         self.assertEqual(result['memories'][0]['source_quote'], '我不喜欢蓝色')
+        literal = '我喜欢蓝色，尤其是浅蓝色。'
+        LLMMemoryExtractor(lambda: provider)([literal], [])
+        self.assertEqual(received[-1], literal, 'An ordinary source must not be rewritten for the model')
 
     def test_remember_prefix_is_not_part_of_the_fact(self):
         source = '米娅，请记住我喜欢蓝色'

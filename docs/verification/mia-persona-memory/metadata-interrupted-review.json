@@ -1,0 +1,12 @@
+{
+  "sha": "c625c55f61d03a30b421e6b5e134154f0a41ed0a",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38894897225",
+  "conclusion": "failure",
+  "requests": 3,
+  "executed_cases": 3,
+  "file": "metadata-interrupted-provider.json.gz",
+  "sha256": "9ace8a85b7908639082215bd7fb9c4a404bdf3b6bf31315bbcd65e582e0b6b97",
+  "review": "The quoted-fiction model changes source quotation marks, so the unchanged provenance validator rejects it and task remains retry_wait. The auxiliary driver correctly stops an unfinished task instead of continuing/retrying it under another case. Later metadata and importance controls are not executed.",
+  "implementation_issue": "Prefix-only input cleanup unnecessarily also applied NFKC to every non-command source. Narrow it to only removing the existing command prefix, preserve ordinary punctuation, and recognize explicit do-not-save directives as ineligible source clauses. No model-output repair or provenance relaxation.",
+  "full_P22_accepted": false
+}
