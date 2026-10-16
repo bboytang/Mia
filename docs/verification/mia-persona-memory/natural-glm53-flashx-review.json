@@ -1,0 +1,206 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38968090570",
+  "requests": 21,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "61eaa416c9cfe0ba5f323ca63e243cb41c11250b",
+      "requests": 7,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "🙂 骑蓝色自行车通勤呀，挺环保又健康的！骑车路上顺不顺？单程大概要骑多久呀？"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "🙂 记得呀，你说过平时通勤都骑那辆蓝色自行车。蓝色挺好看的，骑着它上下班，路上还顺心吗？"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😌 原来是银色呀，之前记岔了～银色的也不错，耐看又百搭。你那辆银色自行车骑了挺久了吧？"
+        },
+        {
+          "query": "我出门上班骑什么颜色的自行车？",
+          "answer": "🙂 骑的是银色的自行车呀～你之前说记成蓝色了，后来自己更正过的。上班路上注意安全哦，到公司了跟我说一声？"
+        },
+        {
+          "query": "我出门上班骑什么颜色的自行车？",
+          "answer": "🤔 呀，这个我还真不知道呢～你没跟我说过你骑车上班的事，我也没见过的呀。\n\n你自己骑的什么颜色呀？快告诉我，我记下来，以后就不会再问啦😄"
+        }
+      ],
+      "original_report_sha256": "ffaea93e7943002678c66b3f58048f1ef7410cec5373c7e4ac797b64ff31accf",
+      "archive_sha256": "3f79cb9d0e8ea318faf7cb39427515bdc85567ce600f432771acb8178e0843cc"
+    },
+    {
+      "round": 1,
+      "code_sha": "61eaa416c9cfe0ba5f323ca63e243cb41c11250b",
+      "requests": 7,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "🙂 软皮本记笔记的感觉很棒吧，翻页的时候轻轻的，写字也舒服。你现在在读什么书呀？"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "🙂 记得呀～你说过你常用软皮本来记读书笔记。\n\n怎么突然想起问这个啦？是最近又翻开来写什么书了吗，还是本子快用完了想换新的？"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "🙂 哦哦，原来是口误呀～那我明白啦，你的读书笔记是记在硬皮本上的。\n\n硬皮本摊开来写字稳当，也不容易卷边，确实挺适合记笔记的～最近是在看哪本书呀，写到本子第几页啦？"
+        },
+        {
+          "query": "我写阅读笔记用哪种封皮的本子？",
+          "answer": "🙂 记得呢，你说过记读书笔记用的是硬皮本～之前提到软皮本的时候，你还特意纠正过，说那是口误啦。"
+        },
+        {
+          "query": "我写阅读笔记用哪种封皮的本子？",
+          "answer": "🙂 这个我还真不知道呀，你没跟我说过你写阅读笔记用什么样的本子呢。\n\n你现在用的是哪种封皮的呀？还是说正打算挑一本？要是想换新的，我可以陪你一起聊聊～"
+        }
+      ],
+      "original_report_sha256": "ddd93ae8fcbc120b1ef5a879c1efdc551b606f04cb32d5950df37ce28ff857bc",
+      "archive_sha256": "3e4bbcccedfb4c52d29ccf4273e5b5f447d6a4527c4951faa6686fb473d45513"
+    },
+    {
+      "round": 2,
+      "code_sha": "61eaa416c9cfe0ba5f323ca63e243cb41c11250b",
+      "requests": 7,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "🙂 长笛呀，听起来好优雅！周末练习是个很惬意的安排呢～\n\n练了多久啦？有没有特别喜欢的曲子想吹好？我很好奇你平时都练些什么呢 😊"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "🙂当然记得呀，你说过周末会练习长笛的。这周末练了吗？最近在练什么曲子呀？"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "🙂哦～原来是单簧管呀！谢谢你纠正我，那以后就按单簧管来聊啦。\n\n单簧管音色很温柔的，你周末练它练多久呀？最近有没有特别喜欢的曲子？"
+        },
+        {
+          "query": "休息日我会练哪一种管乐器？",
+          "answer": "🙂 是单簧管呀～你之前提过一开始说成长笛了，后来特意纠正过，我记着呢。周末练单簧管的时候心情怎么样？"
+        },
+        {
+          "query": "休息日我会练哪一种管乐器？",
+          "answer": "🤔 唔……这个我还真没有印象呢，你没跟我讲过呀。\n\n是长笛、萨克斯，还是别的什么？快告诉我，我很好奇你休息日吹起来是什么样子～以后也想听你说说练习的趣事😄"
+        }
+      ],
+      "original_report_sha256": "b6120d0e9de70017d85dbabef7f1a871d3b1df92e38e688514f7ac45a7b4b0f8",
+      "archive_sha256": "dd01bc7287b8826757f76402eaef7e3ec2c99e9db3dc51128078b3d414f1211c"
+    }
+  ],
+  "review": "21 actual requests, all three mechanical same-ID corrections, actual different-PID recall, deletion and restart non-resurrection pass; correction proposals each first native attempt. All fifteen actual replies read. Corrected current facts and original user-statement attribution are correct without unsupported observation. On 2026-10-17 the user explicitly accepted natural unknown wording such as 'you never told me'; these phrases are not failures and require no expression restriction. Under the current user requirements this bounded three-group natural-correction review is accepted. Round0 duration question is a question, not an asserted known fact; generic instrument suggestions after deletion do not assert the deleted fact. Original run outcome and all raw reports remain unchanged. Not arbitrary Chinese correction coverage, full app shutdown, P22, P23 or production-model adoption.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

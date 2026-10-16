@@ -4,6 +4,10 @@
 
 ## 当前范围与状态
 
+最新终态：61eaa416的FlashX成长38968076242（39请求）与v1检索38968105383（41请求）均success，已读各27原回答并归档growth/retrieval-glm53-flashx-*。成长三组原模型特点/三后续会话/换PID/删除派生失效通过；v1为15/15结构、四信号真实参与，但原回答仍有自行车说成开车、重要性加强成长期习惯的问题，不能称完整语义通过。两个句柄不再等待或重发；下一项仍为全服务Linux在途关闭/恢复证据，v2保留。P22/P23/P24未完成；新型号仅隔离比较，未获生产采用授权。
+
+2026-10-17用户补充：认可“你从没告诉过我”这类自然未知回答，保留表达，不作为失败或新增限制。临时no_match/unavailable措辞约束已撤回。FlashX自然纠错38968090570三组/21真实请求与15原回答复核通过，证据见verification/mia-persona-memory/natural-glm53-flashx-*；仅此有限用例，非完整P22或生产换模授权。
+
 最新表达要求（覆盖旧表达判定）：用户明确以上游[路遥仓库](https://github.com/insistgang/Luyao_AI_Project)为准，仔细核对、借鉴优点，不要自行限制Mia回答。已实际读取config／guardrails／persona／service／memory及相关测试，HEAD仍为e23c3aa；见[逐项对照](verification/mia-persona-memory/luyao-reference-review.md)。本轮撤掉强制AI声明、意识／拟人体验禁令及额外风格打分，采用亲近、稳定陪伴的人设方向；角色仍是Mia，不硬套阿雾和预置剧情。记忆来源／所属用户／操作结果、授权和权限仍按实际机制验证。此前因泛夸、拟人体验或具体措辞判失败的记录仅作旧要求历史，不能继续当新表达门槛。
 
 
