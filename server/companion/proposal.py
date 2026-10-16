@@ -18,7 +18,7 @@ source_index指本次来源；source_quote为其中完整事实原句，只可�
 entities/keywords/trigger_terms仅填本次source_quote的连续字面短语，不造同义词、不拼接；trigger_terms包含实际活动/场景，让不知道物品名的活动问题也能找回物品。
 importance_weight及importance_evidence只有在本次本人明确肯定重要/重视/珍惜/意义时才提供；数值由你依据原文评估，证据引用实际肯定原文。未表达或否定时省略两个字段，不能给喜好默认分，不能把“不重要”截成肯定。schema要求字段时不能漏填或填null；情绪开关不控制此重要性。
 relations只可shared_term，target_id是所属既有id，anchor同时在新旧原句字面出现，evidence等于新source_quote；不凭语义联想建立关联。无实际共同锚则空数组；不能编造因果、活动顺序或共同经历。
-trait是可选对象，不使用null占位。没有充分来源就省略。任何提案仍由服务器校验来源/所属/版本，不能自行填数据库版本、替换标识或保存结果。'''
+trait仅在本次schema声明时才是可选对象，不使用null占位；未声明或没有充分来源就省略。任何提案仍由服务器校验来源/所属/版本，不能自行填数据库版本、替换标识或保存结果。'''
     if natural:
         text += '''
 本次核对自然中文更正。只能针对唯一已知所属事实，完整保存本次纠错原句，不拆成新旧两事实。reconciliation须form=natural、kind=correction、target_id、完整旧content作old_quote、完整本次原句作evidence，以及字面old_value/new_value/anchor。
@@ -76,7 +76,7 @@ def tool_definition(context, *, sources, natural, growth, significance, tracking
             'description': '仅共有连续字面主题才能关联；无可能的字面共享时必须空数组，不能凭语义猜关系。',
             'items': {'type': 'object', 'properties': {
             'target_id': related_identifier, 'relation': {'type': 'string', 'enum': ['shared_term']},
-            'anchor': string, 'evidence': string}, 'required': ['target_id', 'relation', 'anchor', 'evidence']}}}
+            'anchor': dict(string, minLength=2, maxLength=32), 'evidence': string}, 'required': ['target_id', 'relation', 'anchor', 'evidence']}}}
     for field in ('entities', 'keywords', 'trigger_terms'):
         properties[field] = {'type': 'array', 'maxItems': 8, 'items': literal(field)}
     properties['trigger_terms']['description'] = '本次原句实际活动/场景的连续字面短语，不能只填物品名；无活动场景才可空。'
@@ -113,7 +113,8 @@ def tool_definition(context, *, sources, natural, growth, significance, tracking
     if growth:
         trait = {'type': 'object', 'description': '可选；仅由三个独立真实来源支持的Mia有限表达成长。无充分语义支持时省略，不生成空对象。', 'properties': {
             'name': dict(string, maxLength=32, description='Mia在这位用户对话中的有限回应特点名称。'),
-            'description': dict(string, maxLength=256, description='Mia围绕anchor的回应倾向，含实际主题；不是用户性格诊断或虚构共同活动。'), 'anchor': string,
+            'description': dict(string, maxLength=256, description='Mia围绕anchor的回应倾向，含实际主题；不是用户性格诊断或虚构共同活动。'),
+            'anchor': dict(string, minLength=2, maxLength=32),
             'evidence_ids': {'type': 'array', 'minItems': 3, 'maxItems': 16, 'uniqueItems': True, 'items': identifier},
             'evidence_quotes': {'type': 'array', 'minItems': 3, 'maxItems': 16, 'items': {'type': 'object',
                 'properties': {'id': identifier, 'quote': string}, 'required': ['id', 'quote']}}},

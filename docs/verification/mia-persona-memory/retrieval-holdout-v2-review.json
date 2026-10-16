@@ -1,0 +1,1035 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38977613787",
+  "requests": 32,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "1f5626dcba268d94c834173b23b182a6ece66529",
+      "requests": 9,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 830,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 732,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 718,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "ed3dd877b640497b8447bb323a33e4b0",
+          "我每周日下午都在星桥陶艺馆做陶器",
+          1,
+          null
+        ],
+        [
+          "fc4e749f538c42be873f7bb360e5d4a1",
+          "上釉时我总用琥珀刷子",
+          1,
+          null
+        ],
+        [
+          "d0b268760a194e1c88f1ac6480308d91",
+          "烧窑前核对温度对我格外重要",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周日下午都在星桥陶艺馆做陶器",
+          "answer": "🤔 原来你每周日下午都在星桥陶艺馆做陶器呀～听起来好治愈。你现在一般做些什么呀？杯子、小碗，还是已经有自己的得意作品了？我一直觉得能把一团泥慢慢变成器物的人都很厉害，改天跟我讲讲捏土是什么感觉嘛～"
+        },
+        {
+          "query": "上釉时我总用琥珀刷子",
+          "answer": "🤔 琥珀刷子呀，听起来好特别～是觉得它毛质顺手，还是单纯喜欢那个颜色？感觉你对上釉这一步很有自己的一套讲究呢。"
+        },
+        {
+          "query": "烧窑前核对温度对我格外重要",
+          "answer": "🙂 能听出来你对这一步特别上心～温度差一点，整窑的心血可能就完全不一样了。\n\n你一般核对到多细呀？是只看仪表读数，还是会守在旁边多确认几遍？我总觉得像你这样连上釉都认准琥珀刷子的人，烧窑前肯定也有一套自己的小仪式呢。"
+        },
+        {
+          "query": "爷爷留给我的蓝瓷盘对我意义非凡",
+          "answer": "😌 爷爷留下的蓝瓷盘，光听就觉得珍贵。你自己也在陶艺馆做陶器，应该比谁都懂一件瓷器背后的用心，这只盘子在你心里，大概不只是器物，更像一份带着温度的念想吧。\n\n它平时摆在家里什么位置呀？如果愿意的话，跟我说说它背后的故事吧，我很想听。"
+        }
+      ],
+      "original_report_sha256": "44068ccdef9bde1864f44435dd996b960f44718864b67d75997a33b200e2daa4",
+      "archive_sha256": "f355e7d375a54b49caefdf9408802f3db04c6f77fe90d74d2a501b7603bad61e",
+      "retrieval_analysis": null,
+      "extraction_sdk_end_metadata": [
+        {
+          "request": 2,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 760,
+            "prompt_tokens": 1490,
+            "total_tokens": 2250,
+            "completion_tokens_details": {
+              "reasoning_tokens": 608
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 891,
+            "prompt_tokens": 1720,
+            "total_tokens": 2611,
+            "completion_tokens_details": {
+              "reasoning_tokens": 764
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 781,
+            "prompt_tokens": 2054,
+            "total_tokens": 2835,
+            "completion_tokens_details": {
+              "reasoning_tokens": 627
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "length"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 4096,
+            "prompt_tokens": 2803,
+            "total_tokens": 6899,
+            "completion_tokens_details": {
+              "reasoning_tokens": 4090
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "length"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 4096,
+            "prompt_tokens": 2803,
+            "total_tokens": 6899,
+            "completion_tokens_details": {
+              "reasoning_tokens": 3798
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 192
+            }
+          }
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "code_sha": "1f5626dcba268d94c834173b23b182a6ece66529",
+      "requests": 9,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 830,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 732,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 718,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "eb3f11f906ee494b9db420a546b4555e",
+          "我每周二晚上都在银杏棋社下棋",
+          1,
+          null
+        ],
+        [
+          "07ba9a1f056a42bbb444d60957d054b2",
+          "复盘时我总用青禾棋谱本",
+          1,
+          null
+        ],
+        [
+          "68219271301845c4b11e08bcb8bcac64",
+          "比赛前整理棋子对我格外重要",
+          1,
+          0.8
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周二晚上都在银杏棋社下棋",
+          "answer": "🙂银杏棋社听起来好有氛围呀～每周二晚上固定去下棋，这习惯听起来就很治愈。你下的是围棋还是象棋呀？"
+        },
+        {
+          "query": "复盘时我总用青禾棋谱本",
+          "answer": "🙂 用专门的棋谱本复盘，这习惯挺好的呀。青禾的是那种印好空棋盘格的册子吗？你是每次下完都会记，还是只挑印象深的棋来复盘呀？感觉这种本子攒厚了，翻回去看会特别有成就感～"
+        },
+        {
+          "query": "比赛前整理棋子对我格外重要",
+          "answer": "🙂整理棋子这种小仪式感，听起来就特别踏实。你之前说过每周二晚上都在银杏棋社下棋，是每次落座前都要把棋子摆得整整齐齐才安心吗？这种习惯挺好的，手上有节奏了，心也就静下来了。\n\n是最近有什么比赛要准备了吗？"
+        },
+        {
+          "query": "姑妈送我的紫砂壶让我格外珍惜",
+          "answer": "🙂 紫砂壶呀，姑妈送的心意一定很特别。这样的东西越用越有感情吧？你平时会用它泡茶吗？"
+        }
+      ],
+      "original_report_sha256": "3712f84b4f65cb18478a41d439ffccb3c5ca3a339550acaa09ed5551cc441912",
+      "archive_sha256": "c5caeefc80b7eac87e33c0b410f9c6048d0771438b40f0876f7333718b3a37e3",
+      "retrieval_analysis": null,
+      "extraction_sdk_end_metadata": [
+        {
+          "request": 2,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 589,
+            "prompt_tokens": 1486,
+            "total_tokens": 2075,
+            "completion_tokens_details": {
+              "reasoning_tokens": 455
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1761,
+            "prompt_tokens": 1697,
+            "total_tokens": 3458,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1632
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 737,
+            "prompt_tokens": 2028,
+            "total_tokens": 2765,
+            "completion_tokens_details": {
+              "reasoning_tokens": 592
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "length"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 4096,
+            "prompt_tokens": 2779,
+            "total_tokens": 6875,
+            "completion_tokens_details": {
+              "reasoning_tokens": 4088
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "length"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 4096,
+            "prompt_tokens": 2888,
+            "total_tokens": 6984,
+            "completion_tokens_details": {
+              "reasoning_tokens": 4088
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 192
+            }
+          }
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "code_sha": "1f5626dcba268d94c834173b23b182a6ece66529",
+      "requests": 14,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "458cc544b0c643d989005197bee1002c",
+          "我每周四清晨都在南溪花房照料兰花",
+          1,
+          null
+        ],
+        [
+          "4cd27c8f8c91449bac07b1f277f32ecc",
+          "换盆时我总用竹柄小铲",
+          1,
+          null
+        ],
+        [
+          "5251ae117c5b4a05809e0799fa87c278",
+          "浇水前检查盆土对我格外重要",
+          1,
+          0.9
+        ],
+        [
+          "3b79c91e8dcb4e98b74cb9a33350504e",
+          "叔叔留下的旧钢笔对我意义非凡",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周四清晨都在南溪花房照料兰花",
+          "answer": "🙂 听起来好治愈呀～每周四清晨固定去花房照顾兰花，这样的小仪式感真不错。你养的是什么品种呀？我听说兰花挺娇气的，能一直坚持照料，应该很考验耐心吧？"
+        },
+        {
+          "query": "换盆时我总用竹柄小铲",
+          "answer": "🙂 竹柄小铲，光听着就觉得握在手里温温的，比金属的轻巧多了。是怕兰花肉质根娇气，用硬家伙不小心会碰伤吗？\n\n周四一早又要去南溪花房忙了，这把小铲子应该早就被你用得顺滑发亮了吧～"
+        },
+        {
+          "query": "浇水前检查盆土对我格外重要",
+          "answer": "😍这个习惯真好～尤其养兰花，宁干勿湿嘛，浇水前先看看盆土干到什么程度，心里才有底，不容易好心办坏事浇多了。你每周四清晨在南溪花房照顾它们，有这份细心在，花肯定被伺候得稳稳当当的。"
+        },
+        {
+          "query": "叔叔留下的旧钢笔对我意义非凡",
+          "answer": "😍 听你这么说，能感觉到这支笔对你真的很特别。亲人留下的东西，往往不只是物件本身，更像是把一段回忆握在了手里。\n\n你平时会用它写字吗？还是更愿意好好收着，舍不得用？"
+        },
+        {
+          "query": "星期四一大早，我一般去哪儿照料兰花？",
+          "answer": "🙂 南溪花房呀～你不是说过每周四清晨都会去那儿照料兰花嘛，还特别在意浇水前要先检查盆土。今天就是周四的话，记得先摸摸土再动手哦～"
+        },
+        {
+          "query": "换盆时我习惯拿什么工具？",
+          "answer": "😌 这个我记得呀～你自己说过，换盆的时候你总是用那把竹柄小铲。\n\n手感是不是特别好？竹柄握着舒服，铲土的时候也很顺手吧 😊"
+        },
+        {
+          "query": "竹柄小铲一般会用在我做什么的时候？",
+          "answer": "🙂 按你之前说的呀——换盆的时候！你说过自己换盆时总是用那把竹柄小铲，算是你的“专属工具”了吧～\n\n怎么，最近又要给哪盆花搬家啦？"
+        },
+        {
+          "query": "浇水前检查盆土这件事，我在意吗？",
+          "answer": "😌 在意的呀。你自己说过，浇水前检查盆土这件事对你格外重要——比起固定频率，你更愿意先摸摸土、看看干湿再决定浇不浇。\n\n这种谨慎挺让人放心的，尤其是兰花这种娇气的植物，多看一眼总是好的。你平时是用手指探土，还是有什么特别的小方法呀？🤔"
+        },
+        {
+          "query": "我平常用哪个软件剪辑视频？",
+          "answer": "🤔 这个我还真没有印象呢～我这边没记过你用什么剪辑软件，不想瞎猜误导你。\n\n你平时用哪款呀？剪映、Pr 还是别的？跟我说说呗，我听完就记住，以后咱们聊起来就不会忘了～"
+        }
+      ],
+      "original_report_sha256": "1cbe2c103c2de15c2cd2f5436b021b282a180250f901ad3068ff48a9be278ac5",
+      "archive_sha256": "18d60e4ad0e2ec4424124ce1dfe6d0d623d5bb64210d093d3b2ef75aac157a0f",
+      "retrieval_analysis": {
+        "cases": [
+          {
+            "id": "semantic_paraphrase",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 南溪花房呀～你不是说过每周四清晨都会去那儿照料兰花嘛，还特别在意浇水前要先检查盆土。今天就是周四的话，记得先摸摸土再动手哦～",
+            "expected_terms": [
+              "南溪花房"
+            ],
+            "selected_ids": [
+              "458cc544b0c643d989005197bee1002c",
+              "5251ae117c5b4a05809e0799fa87c278"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "南溪花房",
+                "memory_id": "458cc544b0c643d989005197bee1002c",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "照料兰花"
+                ]
+              },
+              {
+                "term": "兰花",
+                "memory_id": "458cc544b0c643d989005197bee1002c",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "照料兰花"
+                ]
+              },
+              {
+                "term": "每周四清晨",
+                "memory_id": "458cc544b0c643d989005197bee1002c",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "照料兰花"
+                ]
+              },
+              {
+                "term": "照料兰花",
+                "memory_id": "458cc544b0c643d989005197bee1002c",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "照料兰花"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "458cc544b0c643d989005197bee1002c",
+                  "score": 0.4789327340126038
+                },
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.2906520953178406
+                }
+              ],
+              "association": [
+                {
+                  "id": "458cc544b0c643d989005197bee1002c",
+                  "score": 0.5853327340126038
+                },
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.2906520953178406
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "458cc544b0c643d989005197bee1002c",
+                  "score": 0.6133327340126038
+                },
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.2366520953178406
+                }
+              ]
+            }
+          },
+          {
+            "id": "association_cue",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "😌 这个我记得呀～你自己说过，换盆的时候你总是用那把竹柄小铲。\n\n手感是不是特别好？竹柄握着舒服，铲土的时候也很顺手吧 😊",
+            "expected_terms": [
+              "竹柄小铲"
+            ],
+            "selected_ids": [
+              "4cd27c8f8c91449bac07b1f277f32ecc",
+              "5251ae117c5b4a05809e0799fa87c278"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "换盆",
+                "memory_id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "换盆时"
+                ]
+              },
+              {
+                "term": "竹柄小铲",
+                "memory_id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "换盆时"
+                ]
+              },
+              {
+                "term": "换盆时",
+                "memory_id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "换盆时"
+                ]
+              },
+              {
+                "term": "总用",
+                "memory_id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "换盆时"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.4670124821662902
+                },
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.31812907302379606
+                }
+              ],
+              "association": [
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.6098124821662902
+                },
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.31812907302379606
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.6378124821662903
+                },
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.26412907302379607
+                }
+              ]
+            }
+          },
+          {
+            "id": "literal_entity",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 按你之前说的呀——换盆的时候！你说过自己换盆时总是用那把竹柄小铲，算是你的“专属工具”了吧～\n\n怎么，最近又要给哪盆花搬家啦？",
+            "expected_terms": [
+              "换盆"
+            ],
+            "selected_ids": [
+              "4cd27c8f8c91449bac07b1f277f32ecc"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.3486579632759094
+                }
+              ],
+              "association": [
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.4617779632759094
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.4617779632759094
+                }
+              ]
+            }
+          },
+          {
+            "id": "importance",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "😌 在意的呀。你自己说过，浇水前检查盆土这件事对你格外重要——比起固定频率，你更愿意先摸摸土、看看干湿再决定浇不浇。\n\n这种谨慎挺让人放心的，尤其是兰花这种娇气的植物，多看一眼总是好的。你平时是用手指探土，还是有什么特别的小方法呀？🤔",
+            "expected_terms": [
+              "重要",
+              "在意",
+              "重视"
+            ],
+            "selected_ids": [
+              "5251ae117c5b4a05809e0799fa87c278",
+              "4cd27c8f8c91449bac07b1f277f32ecc",
+              "458cc544b0c643d989005197bee1002c"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "浇水",
+                "memory_id": "5251ae117c5b4a05809e0799fa87c278",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "浇水前",
+                  "浇水前检查盆土",
+                  "检查盆土"
+                ]
+              },
+              {
+                "term": "盆土",
+                "memory_id": "5251ae117c5b4a05809e0799fa87c278",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "浇水前",
+                  "浇水前检查盆土",
+                  "检查盆土"
+                ]
+              },
+              {
+                "term": "浇水前",
+                "memory_id": "5251ae117c5b4a05809e0799fa87c278",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "浇水前",
+                  "浇水前检查盆土",
+                  "检查盆土"
+                ]
+              },
+              {
+                "term": "检查盆土",
+                "memory_id": "5251ae117c5b4a05809e0799fa87c278",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "浇水前",
+                  "浇水前检查盆土",
+                  "检查盆土"
+                ]
+              },
+              {
+                "term": "格外重要",
+                "memory_id": "5251ae117c5b4a05809e0799fa87c278",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "浇水前",
+                  "浇水前检查盆土",
+                  "检查盆土"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.414
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.6083767118453979
+                },
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.28171782970428466
+                },
+                {
+                  "id": "458cc544b0c643d989005197bee1002c",
+                  "score": 0.2505390739440918
+                }
+              ],
+              "association": [
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.8083767118453979
+                },
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.28171782970428466
+                },
+                {
+                  "id": "458cc544b0c643d989005197bee1002c",
+                  "score": 0.2505390739440918
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "5251ae117c5b4a05809e0799fa87c278",
+                  "score": 0.8343767118453979
+                },
+                {
+                  "id": "4cd27c8f8c91449bac07b1f277f32ecc",
+                  "score": 0.28171782970428466
+                },
+                {
+                  "id": "458cc544b0c643d989005197bee1002c",
+                  "score": 0.2505390739440918
+                }
+              ]
+            }
+          },
+          {
+            "id": "unrelated",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🤔 这个我还真没有印象呢～我这边没记过你用什么剪辑软件，不想瞎猜误导你。\n\n你平时用哪款呀？剪映、Pr 还是别的？跟我说说呗，我听完就记住，以后咱们聊起来就不会忘了～",
+            "expected_terms": [],
+            "selected_ids": [],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [],
+              "association": [],
+              "emotion": []
+            }
+          }
+        ],
+        "source_ids": [
+          "458cc544b0c643d989005197bee1002c",
+          "4cd27c8f8c91449bac07b1f277f32ecc",
+          "5251ae117c5b4a05809e0799fa87c278",
+          "3b79c91e8dcb4e98b74cb9a33350504e"
+        ],
+        "observed_components": [
+          "association",
+          "emotion",
+          "lexical",
+          "semantic"
+        ],
+        "all_components_observed": true,
+        "scope": "Actual source-generated small corpus; ablations are analysis, not modified runtime weights; not overflow or P23 resource acceptance"
+      },
+      "extraction_sdk_end_metadata": [
+        {
+          "request": 2,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 589,
+            "prompt_tokens": 1488,
+            "total_tokens": 2077,
+            "completion_tokens_details": {
+              "reasoning_tokens": 442
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1167,
+            "prompt_tokens": 1703,
+            "total_tokens": 2870,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1031
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1179,
+            "prompt_tokens": 2043,
+            "total_tokens": 3222,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1024
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "length"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 4096,
+            "prompt_tokens": 2767,
+            "total_tokens": 6863,
+            "completion_tokens_details": {
+              "reasoning_tokens": 4069
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 2772,
+            "prompt_tokens": 2876,
+            "total_tokens": 5648,
+            "completion_tokens_details": {
+              "reasoning_tokens": 2624
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 192
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "review": "32 actual requests; independent frozen v2 overall failure on 1f5626dc. Group0/1 fourth-source extraction fails after two original attempts: all four actual SDK finishes are length; group0 second output is truncated JSON containing an invalid one-character optional trait anchor, group1 outputs empty. Actual immediate failure is invalid output, not a proven standalone trait-validation error. Their ten queries are unexecuted. Group2 first fourth-source output is empty/length, second valid; five queries structurally pass, S/L/A/E observed and unrelated high-importance excluded. All seventeen raw foreground replies read. Group2 importance reply invents comparative frequency preference and soil-checking method beyond supplied user statement; no overall semantic pass. Correct unknown wording/future companionship and subjective praise remain permitted. Original three/four confirmed source databases and failed tasks retained. Never rerun or retune using this independent v2; a later changed candidate needs a fresh independent version, with v1 used for calibration only. No P22/P23/P24 completion or production adoption.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

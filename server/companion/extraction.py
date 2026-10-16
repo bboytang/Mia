@@ -237,6 +237,26 @@ class EvidenceContext(list):
     pass
 
 
+def growth_eligible(context):
+    """Advertise growth only when the existing literal-anchor rule can be met.
+
+    This computes eligibility, never a proposed anchor, trait or evidence value.
+    Any valid length-2-or-more shared anchor contains a shared two-character pair.
+    The unchanged validator still checks the model's actual complete proposal.
+    """
+    facts = {row['id']: row for row in context}
+    if len(facts) < 3:
+        return False
+    shared = {}
+    for identifier, fact in facts.items():
+        content = fact['content']
+        for pair in {content[index:index + 2] for index in range(len(content) - 1)}:
+            shared.setdefault(pair, set()).add(identifier)
+    return any(len(ids) >= 3 and trait_supported([
+        item for identifier in ids for item in facts[identifier].get('evidence', [])
+    ]) for ids in shared.values())
+
+
 def context_for(store, owner, expected_consent=None):
     # A bounded reconciliation/evidence set, not an answer retrieval fallback.
     with store.lock:
@@ -484,8 +504,7 @@ class LLMMemoryExtractor:
         provider = self.factory()
         try:
             natural = len(sources) == 1 and natural_change_requested(sources[0], context)
-            growth = (not natural and len(context) >= 3 and trait_supported(
-                [item for fact in context for item in fact.get('evidence', [])]))
+            growth = not natural and growth_eligible(context)
             has_importance = any(IMPORTANCE.search(source) for source in sources)
             significance = not natural and len(sources) == 1 and has_importance
             base = (NATURAL_CHANGE_INSTRUCTIONS if natural else

@@ -14,6 +14,38 @@ def delta(arguments='', name=None, index=0, identity=None):
 
 
 class ProposalTests(unittest.TestCase):
+    def test_growth_schema_requires_possible_owned_shared_anchor_without_filling_output(self):
+        source = '我常用青瓷杯喝茶'
+        raw = json.dumps({'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
+            'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable', 'sensitive': False,
+            'entities': ['青瓷杯'], 'keywords': ['喝茶'], 'trigger_terms': ['喝茶']}]}, ensure_ascii=False)
+        class Provider:
+            calls = 0
+            def response_with_functions(self, session, dialogue, functions):
+                self.calls += 1
+                self.schema = functions[0]['function']['parameters']
+                yield None, [delta(raw, NAME)]
+        for texts, expected in [(['我喜欢书法', '他送我红围巾', '周末我会散步'], False),
+                                (['我观云会画图', '观云时我做笔记', '我周末去山顶观云'], True)]:
+            context = EvidenceContext([{'id': str(i), 'content': text, 'category': 'fact',
+                'content_version': 1, 'evidence_version': 1,
+                'evidence': [{'session_id': f's{i}', 'fingerprint': f'fp{i}'}]} for i, text in enumerate(texts)])
+            before = json.dumps(context)
+            provider = Provider()
+            result = LLMMemoryExtractor(lambda: provider)([source], context)
+            self.assertEqual(result, raw)
+            self.assertEqual(provider.calls, 1)
+            self.assertEqual('trait' in provider.schema['properties'], expected)
+            self.assertEqual(json.dumps(context), before)
+            self.assertIsNone(validate_output(result, [source], context)['trait'])
+            if expected:
+                anchor = provider.schema['properties']['trait']['properties']['anchor']
+                self.assertEqual((anchor['minLength'], anchor['maxLength']), (2, 32))
+        schema = tool_definition([{'id': 'one', 'content': '我观云会画图'}], sources=['观云时我做笔记'],
+                                 natural=False, growth=False, significance=False, tracking=False)
+        anchor = schema['function']['parameters']['properties']['memories']['items']['properties']['relations']['items']['properties']['anchor']
+        self.assertEqual((anchor['minLength'], anchor['maxLength']), (2, 32))
+
     def test_original_function_arguments_reach_existing_validator_unchanged_once(self):
         source = '我梳头用角梳，不是木梳'
         target = {'id': 'owned', 'content': '我平常用木梳梳头', 'category': 'fact',

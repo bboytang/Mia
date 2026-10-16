@@ -14,7 +14,7 @@ import numpy as np
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
-from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, explicit_change, normalize, validate_output
+from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, explicit_change, growth_eligible, normalize, validate_output
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryStore, MemoryError
 from server.companion.semantic import SemanticMemoryIndex
@@ -231,6 +231,27 @@ class ExtractionValidationTests(unittest.TestCase):
             fact['evidence'][0]['fingerprint'] = 'one-source'
         self.assertIs(extractor(['我喜欢观云'], context), raw)
         self.assertNotIn('可以审阅，不代表语义支持已成立', provider.response_no_stream.call_args.args[0])
+
+    def test_growth_eligibility_requires_possible_shared_anchor_and_original_source_matching(self):
+        def context(texts):
+            return [{'id': str(i), 'content': text, 'category': 'fact',
+                     'evidence': [{'session_id': f's{i}', 'fingerprint': f'fp{i}'}]}
+                    for i, text in enumerate(texts)]
+        eligible = context(['我观云会画图', '观云时我做笔记', '我周末去山顶观云'])
+        before = json.dumps(eligible)
+        self.assertTrue(growth_eligible(eligible))
+        self.assertEqual(json.dumps(eligible), before)
+        self.assertFalse(growth_eligible(eligible[:2]))
+        self.assertFalse(growth_eligible(context(['我喜欢书法', '他送我红围巾', '周末我会散步'])))
+        self.assertFalse(growth_eligible(context(['我观云会画图', '观云时我做笔记', '周末我练习写字'])))
+        unrelated = context(['另一个独立话题'])[0]
+        unrelated['id'] = 'other'
+        self.assertTrue(growth_eligible(eligible + [unrelated]))
+        for field in ('session_id', 'fingerprint'):
+            repeated = context(['我观云会画图', '观云时我做笔记', '我周末去山顶观云'])
+            for fact in repeated:
+                fact['evidence'][0][field] = 'same'
+            self.assertFalse(growth_eligible(repeated))
 
     def test_focused_importance_keeps_source_and_original_positive_or_negative_value(self):
         for source, weight, evidence in [('修复老书柜对我格外重要', 0.73, '格外重要'),

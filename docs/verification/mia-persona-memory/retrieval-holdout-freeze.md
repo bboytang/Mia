@@ -1,5 +1,9 @@
 # P22 独立检索v2单次隔离评估冻结
 
+结果追加：单次1f5626dc/38977613787已failure/32请求，详见retrieval-holdout-v2-*；10查询未执行、另5结构通过但原回复语义未过。原冻结元数据与失败不改，禁止重跑v2；后续候选改变需另冻新独立版本。
+
+三份CI的dataset_sha256均与原Git blob的LF字节SHA256 `bb3bbaca6e74660bab1d6665889d6f2640ece2b85957ac7a558d3e5867418263`一致。Windows工作区CRLF字节不能直接代替该摘要，核验使用git cat-file原对象；没有转换或修补原CI报告。
+
 冻结时本地/远程基线：`e8bd4c92064bf88ad231b94f7be21b03d3c928dd`。实际dispatch被测SHA在工作记录和run中登记。
 语料：`server/tests/fixtures/persona_memory_retrieval_p22_v2.json`，Git blob `4a64401fc047d1ba2a35aaca15d24c8df3476b2e`，与原0dfa6a0冻结对象相同；仅核对对象，未改语料。
 指定型号：glm-5.3-flashx；授权范围仍为隔离CI比较，非生产采用。沿用原4096输出/16384短上下文、30秒HTTP、0 SDK重试、Worker两次总尝试及20请求/轮上限。

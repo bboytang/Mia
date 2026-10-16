@@ -1,5 +1,7 @@
 # Mia 本地 Codex 接续指令（2026-10-16）
 
+2026-10-17最新状态覆盖下文初始基线：关闭v2/38976945496三组30请求/12PID通过，shutdown-complete-*保存；独立检索v2/38977613787已执行且失败32请求，retrieval-holdout-v2-*保存，禁止再把v2当未执行或重复运行。当前候选与第一项真实CI以mia-persona-memory-handoff.md顶部和worklog为准；P22/P23/P24尚未完成。下文139bc0f与旧run为原始交接，不重置或重复导入补充包。
+
 ## 目标和起点
 
 继续完整目标 **推进 P21—P24**，先读仓库 AGENTS.md、docs/mia-persona-memory-handoff.md、docs/mia-persona-memory-implementation.md、docs/mia-persona-memory-worklog.md，以及本文件；实施计划和原始证据是范围依据。不要只重写方案或缩减为已有模块能通过的子集。每完成一步更新交接、工作记录和精确证据。

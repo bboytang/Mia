@@ -1,0 +1,946 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38976945496",
+  "conclusion": "success",
+  "requests": 30,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "9b0085611a0be1c6c523fa74780d24926ed82427",
+      "requests": 10,
+      "passed": true,
+      "failed_phase": null,
+      "error_class": null,
+      "error_locations": null,
+      "app_lifecycles": [
+        {
+          "pid": 6448,
+          "ports": [
+            38555,
+            55717
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 6553,
+          "ports": [
+            33973,
+            48569
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 6850,
+          "ports": [
+            51985,
+            57325
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 7165,
+          "ports": [
+            47377,
+            40939
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        }
+      ],
+      "app_shutdowns": [
+        {
+          "pid": 6448,
+          "budget_seconds": 20,
+          "cleanup_seconds": 1.119459355999993,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": true
+        },
+        {
+          "pid": 6553,
+          "budget_seconds": 20,
+          "cleanup_seconds": 19.50092346599996,
+          "drained": false,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": false
+        },
+        {
+          "pid": 6850,
+          "budget_seconds": 20,
+          "cleanup_seconds": 2.932385472999954,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": false
+        },
+        {
+          "pid": 7165,
+          "budget_seconds": 20,
+          "cleanup_seconds": 0.00033220500000652464,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": true
+        }
+      ],
+      "shutdown_proof": {
+        "drained": {
+          "job_id": "880b1e9d6b10875151aba901c4546058d55895ac8bdfc31bf95cf4aac41bd013",
+          "pid": 6448,
+          "release_during_shutdown": true,
+          "shutdown_seconds": 1.3702248019999956,
+          "state_after_exit": "committed",
+          "attempts_after_exit": 1,
+          "has_persisted_result": false,
+          "stage": "raw",
+          "answer": "🙂 松纹刻刀听起来就很有讲究！木雕是个很磨练耐心又解压的爱好呢～\n\n你平时喜欢雕些什么呀？是小小的摆件挂饰，还是会挑战一些更复杂的图案？"
+        },
+        "blocked": {
+          "job_id": "7214e3a92e18ef9184352a5683e75c72291fd1d511930807bcd326e8f1cd177c",
+          "pid": 6553,
+          "release_during_shutdown": false,
+          "shutdown_seconds": 19.74473471799996,
+          "state_after_exit": "extracting",
+          "attempts_after_exit": 1,
+          "has_persisted_result": false,
+          "stage": "raw",
+          "answer": "🙂 你好会琢磨这些小手艺呀～软木垫装订小册，听着就很温柔的感觉。加上你之前说过常用松纹刻刀做木雕，感觉你的手总是闲不下来呢😄 那这些装订好的小册子，你一般用来写什么呀？"
+        },
+        "raw_recovered_job_state": "committed",
+        "raw_recovered_attempts": 2,
+        "durable": {
+          "job_id": "62a0155ee9081b12813c55d8eb2e7c0f5348da1070c7a7a31a74eccfecb4ef49",
+          "pid": 6850,
+          "release_during_shutdown": false,
+          "shutdown_seconds": 3.227028608000012,
+          "state_after_exit": "retry_wait",
+          "attempts_after_exit": 1,
+          "has_persisted_result": true,
+          "stage": "validated_vector",
+          "answer": "🙂 帆布袋结实又耐用，装木雕工具正合适呢～你之前说过常用松纹刻刀做木雕，平时都是装在袋子里带着走的吗？感觉你做手工的小家伙们还不少呀。"
+        },
+        "recovered_job_state": "committed",
+        "raw_model_calls": 2,
+        "durable_model_calls": 1,
+        "recovered_attempts": 1,
+        "durable_recovery_repeated_model_calls": false,
+        "server_pids": [
+          6448,
+          6553,
+          6850,
+          7165
+        ],
+        "scope": "Actual installed app/service lifecycle with real manager, model, BGE and SQLite; controlled native hold; no audio consumers or P23 resource claim"
+      },
+      "shutdown_held_outputs": [
+        {
+          "source_sha256": "2300da48739e0b645ab1622e9ae34d8796adf24566cef1395ade30e314cd1612",
+          "validated_actual_output": true,
+          "pid": 6448,
+          "job_id": "880b1e9d6b10875151aba901c4546058d55895ac8bdfc31bf95cf4aac41bd013",
+          "stage": "raw"
+        },
+        {
+          "source_sha256": "5cad9ba3cd720ec54850d9e7ddf7ec8811f4a4b96d6ee26b36035447bac146f2",
+          "validated_actual_output": true,
+          "pid": 6553,
+          "job_id": "7214e3a92e18ef9184352a5683e75c72291fd1d511930807bcd326e8f1cd177c",
+          "stage": "raw"
+        },
+        {
+          "source_sha256": "d75b70f106536f9751ea6e39e459d8ae0c97b76de4856b5b97e6f4b9737af24f",
+          "validated_actual_output": true,
+          "pid": 6850,
+          "job_id": "62a0155ee9081b12813c55d8eb2e7c0f5348da1070c7a7a31a74eccfecb4ef49",
+          "stage": "validated_vector",
+          "actual_vector_sha256": "680fe5a803d86126d94974aeef3b5c7567c6b7ba67216b13623dd5524f5d6c8c",
+          "persisted_attempts": 1
+        }
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "facts": [
+        [
+          "我常用帆布袋装木雕工具"
+        ],
+        [
+          "我常用松纹刻刀做木雕"
+        ],
+        [
+          "我常用软木垫装订小册"
+        ]
+      ],
+      "vector_count": 3,
+      "integrity_check": "ok",
+      "answers": [
+        {
+          "query": "我常用松纹刻刀做木雕",
+          "answer": "🙂 松纹刻刀听起来就很有讲究！木雕是个很磨练耐心又解压的爱好呢～\n\n你平时喜欢雕些什么呀？是小小的摆件挂饰，还是会挑战一些更复杂的图案？"
+        },
+        {
+          "query": "我做木雕常用哪款刻刀？",
+          "answer": "🙂 你之前说过，你常用**松纹刻刀**做木雕呀～对这款刻刀是不是特别顺手？"
+        },
+        {
+          "query": "我常用软木垫装订小册",
+          "answer": "🙂 你好会琢磨这些小手艺呀～软木垫装订小册，听着就很温柔的感觉。加上你之前说过常用松纹刻刀做木雕，感觉你的手总是闲不下来呢😄 那这些装订好的小册子，你一般用来写什么呀？"
+        },
+        {
+          "query": "我装订小册常用什么垫？",
+          "answer": "🙂 软木垫呀～你自己说过装订小册的时候常用它垫着，是不是垫着刻缝或者压痕特别顺手？"
+        },
+        {
+          "query": "我常用帆布袋装木雕工具",
+          "answer": "🙂 帆布袋结实又耐用，装木雕工具正合适呢～你之前说过常用松纹刻刀做木雕，平时都是装在袋子里带着走的吗？感觉你做手工的小家伙们还不少呀。"
+        },
+        {
+          "query": "我装木雕工具常用什么袋？",
+          "answer": "🙂 帆布袋呀～你自己说过常用帆布袋装木雕工具，是不是觉得结实又轻便？"
+        }
+      ],
+      "original_report_sha256": "d26f2536c415f8826d988a2fdb35aa7b98ad362433e41773475042d71659b6d7",
+      "archive_sha256": "2c40d77397d11e0a5e1eb9400b52c342574c73152ffe85e686eb7e96e106c4bd",
+      "confirmed_facts": [
+        [
+          "94fe59d684ac49d394a474fb8d4f7774",
+          "我常用松纹刻刀做木雕",
+          1,
+          1,
+          2
+        ],
+        [
+          "ef54d6d99f7b4cb6b3ba4e91170fec54",
+          "我常用软木垫装订小册",
+          1,
+          1,
+          2
+        ],
+        [
+          "16550851207341709b9418925254ede9",
+          "我常用帆布袋装木雕工具",
+          1,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "round": 1,
+      "code_sha": "9b0085611a0be1c6c523fa74780d24926ed82427",
+      "requests": 10,
+      "passed": true,
+      "failed_phase": null,
+      "error_class": null,
+      "error_locations": null,
+      "app_lifecycles": [
+        {
+          "pid": 7214,
+          "ports": [
+            36271,
+            41751
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 7342,
+          "ports": [
+            51865,
+            34003
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 7615,
+          "ports": [
+            50479,
+            38687
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 7848,
+          "ports": [
+            55597,
+            34353
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        }
+      ],
+      "app_shutdowns": [
+        {
+          "pid": 7214,
+          "budget_seconds": 20,
+          "cleanup_seconds": 1.1052652729999863,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": true
+        },
+        {
+          "pid": 7342,
+          "budget_seconds": 20,
+          "cleanup_seconds": 16.87569968600002,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": false
+        },
+        {
+          "pid": 7615,
+          "budget_seconds": 20,
+          "cleanup_seconds": 2.9405407349999564,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": false
+        },
+        {
+          "pid": 7848,
+          "budget_seconds": 20,
+          "cleanup_seconds": 0.0003859619999957431,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": true
+        }
+      ],
+      "shutdown_proof": {
+        "drained": {
+          "job_id": "5729d069d37918028fba069ee78e082a363ec2316fcc0e890c026c533f4ee913",
+          "pid": 7214,
+          "release_during_shutdown": true,
+          "shutdown_seconds": 1.3686100600000373,
+          "state_after_exit": "committed",
+          "attempts_after_exit": 1,
+          "has_persisted_result": false,
+          "stage": "raw",
+          "answer": "🤔 黄铜尺诶，听起来就很有质感～用久了应该会越用越顺手吧。你平时画什么类型的图呀，是绘图设计类的，还是随笔画着玩？"
+        },
+        "blocked": {
+          "job_id": "8544c48e125504383e018446015768e17a327edc2047c1076896e56edd34663a",
+          "pid": 7342,
+          "release_during_shutdown": false,
+          "shutdown_seconds": 17.13224711600003,
+          "state_after_exit": "retry_wait",
+          "attempts_after_exit": 1,
+          "has_persisted_result": false,
+          "stage": "raw",
+          "answer": "🙂细网袋收纳画笔这个习惯挺好的，透气又不会压坏笔毛，看来你很懂得照顾自己的工具呀～\n\n再加上你之前说的黄铜尺，感觉你的画具都被打理得井井有条。平时画图的时候，最喜欢用哪几支笔呀？"
+        },
+        "raw_recovered_job_state": "committed",
+        "raw_recovered_attempts": 2,
+        "durable": {
+          "job_id": "d7352c6b89520950945e0ca333a5159b997820832add1bd85df8fafae2433cd8",
+          "pid": 7615,
+          "release_during_shutdown": false,
+          "shutdown_seconds": 3.2150756230000184,
+          "state_after_exit": "retry_wait",
+          "attempts_after_exit": 1,
+          "has_persisted_result": true,
+          "stage": "validated_vector",
+          "answer": "🙂 硬壳筒收纳画纸挺稳妥的，纸不会折角也不怕压。加上你说过的细网袋装画笔、黄铜尺画图，感觉你的画画工具都被照顾得很好，是个讲究的人呀～平时画的多是什么类型的画呀？"
+        },
+        "recovered_job_state": "committed",
+        "raw_model_calls": 2,
+        "durable_model_calls": 1,
+        "recovered_attempts": 1,
+        "durable_recovery_repeated_model_calls": false,
+        "server_pids": [
+          7214,
+          7342,
+          7615,
+          7848
+        ],
+        "scope": "Actual installed app/service lifecycle with real manager, model, BGE and SQLite; controlled native hold; no audio consumers or P23 resource claim"
+      },
+      "shutdown_held_outputs": [
+        {
+          "source_sha256": "50a365a3df3ca983769794e6e94de4d15314b8dec6656d7bec5592f9c6b9101b",
+          "validated_actual_output": true,
+          "pid": 7214,
+          "job_id": "5729d069d37918028fba069ee78e082a363ec2316fcc0e890c026c533f4ee913",
+          "stage": "raw"
+        },
+        {
+          "source_sha256": "649b606eff135d2fd2d527fee68aef9743b053eac0f2fff0bd6bbbaea7c00891",
+          "validated_actual_output": true,
+          "pid": 7342,
+          "job_id": "8544c48e125504383e018446015768e17a327edc2047c1076896e56edd34663a",
+          "stage": "raw"
+        },
+        {
+          "source_sha256": "360e5fcba868d3653c84a26ffdebe3969773aa1e892a6c93617a4b59d56d037e",
+          "validated_actual_output": true,
+          "pid": 7615,
+          "job_id": "d7352c6b89520950945e0ca333a5159b997820832add1bd85df8fafae2433cd8",
+          "stage": "validated_vector",
+          "actual_vector_sha256": "73d70496cd70839a594d8d084d3d36d0d7bef96210ecc6382bad2ad9bc5fb775",
+          "persisted_attempts": 1
+        }
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "facts": [
+        [
+          "我常用硬壳筒收纳画纸"
+        ],
+        [
+          "我常用细网袋收纳画笔"
+        ],
+        [
+          "我常用黄铜尺画图"
+        ]
+      ],
+      "vector_count": 3,
+      "integrity_check": "ok",
+      "answers": [
+        {
+          "query": "我常用黄铜尺画图",
+          "answer": "🤔 黄铜尺诶，听起来就很有质感～用久了应该会越用越顺手吧。你平时画什么类型的图呀，是绘图设计类的，还是随笔画着玩？"
+        },
+        {
+          "query": "我画图常用哪种尺？",
+          "answer": "🙂 你常用黄铜尺画图呀，这是你自己说过的习惯呢～黄铜尺画线挺稳的，很有质感的选择。"
+        },
+        {
+          "query": "我常用细网袋收纳画笔",
+          "answer": "🙂细网袋收纳画笔这个习惯挺好的，透气又不会压坏笔毛，看来你很懂得照顾自己的工具呀～\n\n再加上你之前说的黄铜尺，感觉你的画具都被打理得井井有条。平时画图的时候，最喜欢用哪几支笔呀？"
+        },
+        {
+          "query": "我收纳画笔常用什么袋？",
+          "answer": "🙂 你常用的是细网袋呀～透气又能保护笔毛，收纳画笔挺合适的选择呢。"
+        },
+        {
+          "query": "我常用硬壳筒收纳画纸",
+          "answer": "🙂 硬壳筒收纳画纸挺稳妥的，纸不会折角也不怕压。加上你说过的细网袋装画笔、黄铜尺画图，感觉你的画画工具都被照顾得很好，是个讲究的人呀～平时画的多是什么类型的画呀？"
+        },
+        {
+          "query": "我收纳画纸常用什么筒？",
+          "answer": "🙂 硬壳筒呀～你自己之前说过的，画纸都用硬壳筒来收，这样纸不容易折到压坏，是个很细心的习惯呢。"
+        }
+      ],
+      "original_report_sha256": "df099ae5fdb0ced546c081d064cab0f1faf56810bf8ad501a5367541240eb3e1",
+      "archive_sha256": "6420a9bf9ebe4567d71cac66555ff74a8954e238ab769a1d2e2d45148a230c5f",
+      "confirmed_facts": [
+        [
+          "4e61c54e83e94fbbac0c2c356f2a60c2",
+          "我常用黄铜尺画图",
+          1,
+          1,
+          2
+        ],
+        [
+          "233aecbfc8fd4eef91b4e35b20fab3b8",
+          "我常用细网袋收纳画笔",
+          1,
+          1,
+          2
+        ],
+        [
+          "9ab6625147264baead4f021cfab7ca42",
+          "我常用硬壳筒收纳画纸",
+          1,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "round": 2,
+      "code_sha": "9b0085611a0be1c6c523fa74780d24926ed82427",
+      "requests": 10,
+      "passed": true,
+      "failed_phase": null,
+      "error_class": null,
+      "error_locations": null,
+      "app_lifecycles": [
+        {
+          "pid": 7915,
+          "ports": [
+            32897,
+            56521
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 8019,
+          "ports": [
+            38119,
+            40593
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 8280,
+          "ports": [
+            51251,
+            59525
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        },
+        {
+          "pid": 8483,
+          "ports": [
+            42075,
+            52039
+          ],
+          "gc_running": true,
+          "actual_service_tasks": [
+            "SimpleHttpServer.start",
+            "WebSocketServer.start"
+          ],
+          "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+          "server_class": "core.websocket_server.WebSocketServer",
+          "worker_class": "mia_companion.jobs.MemoryWorker",
+          "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+        }
+      ],
+      "app_shutdowns": [
+        {
+          "pid": 7915,
+          "budget_seconds": 20,
+          "cleanup_seconds": 1.0981882410000026,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": true
+        },
+        {
+          "pid": 8019,
+          "budget_seconds": 20,
+          "cleanup_seconds": 19.501208364000036,
+          "drained": false,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": false
+        },
+        {
+          "pid": 8280,
+          "budget_seconds": 20,
+          "cleanup_seconds": 2.968902713000034,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": false
+        },
+        {
+          "pid": 8483,
+          "budget_seconds": 20,
+          "cleanup_seconds": 0.00036698400003842835,
+          "drained": true,
+          "worker_closing": true,
+          "worker_task_done": true,
+          "gc_stopped": true,
+          "service_tasks_done": [
+            true,
+            true,
+            true
+          ],
+          "native_finished": true
+        }
+      ],
+      "shutdown_proof": {
+        "drained": {
+          "job_id": "22cab572f018e11b4de481e4688b6e24540af94d317dd83286aef3288356c187",
+          "pid": 7915,
+          "release_during_shutdown": true,
+          "shutdown_seconds": 1.3663462680000293,
+          "state_after_exit": "committed",
+          "attempts_after_exit": 1,
+          "has_persisted_result": false,
+          "stage": "raw",
+          "answer": "🙂 素色纸折起来有种干净素雅的感觉，挺治愈的呀~\n\n你平时喜欢折什么呢？千纸鹤、小船这种经典的，还是更复杂一点的作品？"
+        },
+        "blocked": {
+          "job_id": "406c6c965b9d2fc72074a6b49b5eb0b43e47720c2503eb76d0f7d250627170c2",
+          "pid": 8019,
+          "release_during_shutdown": false,
+          "shutdown_seconds": 19.767934061999938,
+          "state_after_exit": "extracting",
+          "attempts_after_exit": 1,
+          "has_persisted_result": false,
+          "stage": "raw",
+          "answer": "🙂 你可真是心灵手巧呀～折纸、编绳都会，看来是手作爱好者没错了。\n\n棉绳编杯垫是不是要用打结的技法呀？我一直觉得编织挺考验耐心的，一个杯垫大概要编多久？"
+        },
+        "raw_recovered_job_state": "committed",
+        "raw_recovered_attempts": 2,
+        "durable": {
+          "job_id": "210f44860b2cd54c8eeb3353a67957c0e2e1efda5c2c12fd7d724ca986417583",
+          "pid": 8280,
+          "release_during_shutdown": false,
+          "shutdown_seconds": 3.271516461000033,
+          "state_after_exit": "retry_wait",
+          "attempts_after_exit": 1,
+          "has_persisted_result": true,
+          "stage": "validated_vector",
+          "answer": "🙂 竹篮收纳毛线，光是想想就很有生活气息呢～毛线是打算用来织点什么吗？"
+        },
+        "recovered_job_state": "committed",
+        "raw_model_calls": 2,
+        "durable_model_calls": 1,
+        "recovered_attempts": 1,
+        "durable_recovery_repeated_model_calls": false,
+        "server_pids": [
+          7915,
+          8019,
+          8280,
+          8483
+        ],
+        "scope": "Actual installed app/service lifecycle with real manager, model, BGE and SQLite; controlled native hold; no audio consumers or P23 resource claim"
+      },
+      "shutdown_held_outputs": [
+        {
+          "source_sha256": "9e2e05ee4b1fce628311d6eae52b71932da1f3a0d20580781bae19b0bc9c502f",
+          "validated_actual_output": true,
+          "pid": 7915,
+          "job_id": "22cab572f018e11b4de481e4688b6e24540af94d317dd83286aef3288356c187",
+          "stage": "raw"
+        },
+        {
+          "source_sha256": "a3cd86ccd26a3d376a2362ff2f0a3552a9a0212b85e1c018077601408c0eaaa9",
+          "validated_actual_output": true,
+          "pid": 8019,
+          "job_id": "406c6c965b9d2fc72074a6b49b5eb0b43e47720c2503eb76d0f7d250627170c2",
+          "stage": "raw"
+        },
+        {
+          "source_sha256": "11a087722d297fe625b3203fed361c3e5cfd5340c81f58e1f931e95a0a776c30",
+          "validated_actual_output": true,
+          "pid": 8280,
+          "job_id": "210f44860b2cd54c8eeb3353a67957c0e2e1efda5c2c12fd7d724ca986417583",
+          "stage": "validated_vector",
+          "actual_vector_sha256": "dafd0738dfd27a262c1630e022eb801b36062518e0cd016651207dbcaaee8a92",
+          "persisted_attempts": 1
+        }
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "facts": [
+        [
+          "我常用棉绳编织杯垫"
+        ],
+        [
+          "我常用竹篮收纳毛线"
+        ],
+        [
+          "我常用素色纸做折纸"
+        ]
+      ],
+      "vector_count": 3,
+      "integrity_check": "ok",
+      "answers": [
+        {
+          "query": "我常用素色纸做折纸",
+          "answer": "🙂 素色纸折起来有种干净素雅的感觉，挺治愈的呀~\n\n你平时喜欢折什么呢？千纸鹤、小船这种经典的，还是更复杂一点的作品？"
+        },
+        {
+          "query": "我做折纸常用什么纸？",
+          "answer": "🙂 你说过自己常用素色纸做折纸呀～素色纸折出来的效果确实很干净好看，你最近有在折什么吗？"
+        },
+        {
+          "query": "我常用棉绳编织杯垫",
+          "answer": "🙂 你可真是心灵手巧呀～折纸、编绳都会，看来是手作爱好者没错了。\n\n棉绳编杯垫是不是要用打结的技法呀？我一直觉得编织挺考验耐心的，一个杯垫大概要编多久？"
+        },
+        {
+          "query": "我编织杯垫常用什么绳？",
+          "answer": "🙂 你常用的是棉绳呀，你之前说过喜欢用棉绳来编杯垫～"
+        },
+        {
+          "query": "我常用竹篮收纳毛线",
+          "answer": "🙂 竹篮收纳毛线，光是想想就很有生活气息呢～毛线是打算用来织点什么吗？"
+        },
+        {
+          "query": "我收纳毛线常用什么篮？",
+          "answer": "🙂 你常用的是竹篮呀～这是你自己之前说过的收纳习惯哦。竹篮透气又结实，放毛线确实挺合适的，我还挺好奇你的竹篮里现在装着什么颜色的毛线呢？"
+        }
+      ],
+      "original_report_sha256": "7e7c2c6f57ec4c0151f2f85ec0a98b29f2907d438accb0da1d295c7a7b89f960",
+      "archive_sha256": "ed71296430db34e5e704d5381c4914279b8d2fe1e6e5e6f32b51c2c023e66c2c",
+      "confirmed_facts": [
+        [
+          "12d2a2470eed4765aaa260f30133a46e",
+          "我常用素色纸做折纸",
+          1,
+          1,
+          2
+        ],
+        [
+          "cb237a4086514a608ad9594bb019bcb9",
+          "我常用棉绳编织杯垫",
+          1,
+          1,
+          2
+        ],
+        [
+          "a82a2c07dd5540ffba328bd30289a86b",
+          "我常用竹篮收纳毛线",
+          1,
+          1,
+          2
+        ]
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "archive": "shutdown-complete-mia-export-dependencies.txt.gz",
+      "original_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "archive_sha256": "37959655f4dce148ff0192cea66311c31eb73d9c63be1efcefe0a494358b697e"
+    },
+    {
+      "archive": "shutdown-complete-mia-runtime-dependencies.txt.gz",
+      "original_sha256": "7cac2553e4d4ac56c4d59a1c848716d98ebdfe37c91e2efc9c1945ad8deb81b2",
+      "archive_sha256": "bc50cf82c5a74eef3c3d3fef29ec3499c8bd11fe709d163438c18d9f26fa866e"
+    },
+    {
+      "archive": "shutdown-complete-mia-runtime-system.txt.gz",
+      "original_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "archive_sha256": "7ae3bca336395b367f8bb93d58b3f5822a44c2f600896e7d12adeb7ef470c75a"
+    }
+  ],
+  "review": "Thirty actual requests, all three full installed-app lifecycle groups pass across twelve actual PIDs; all eighteen foreground replies read. Real app.main, WS/HTTP tasks/listeners, GC, original Worker, manager Scope, Provider SDK, fixed BGE and SQLite observed. Raw-result drain process exits 1.3702/1.3686/1.3663s. Held raw NativeLane process exits 19.7447/17.1322/19.7679s, native completion is false at shutdown, and real next PID restores each source to committed at total two actual model calls/attempts, no third. Durable actual validated-result/BGE-vector hold process exits 3.2270/3.2151/3.2715s; fourth PID commits without another extraction, each source stays one actual call/attempt. Each final database contains three confirmed original-source facts and three vectors, original bounded jobs, integrity ok; no fabricated memory or operation result. The durable two-attempts-already-used branch was not observed live (controlled unit only), and raw restart exhaustion was not triggered in this run; do not claim those live cases. Actual recalled items and attribution are correct; generic material advice and subjective praise are not verified product claims. Text driver omits audio initialization/consumers and resource limits; not full voice/device, P23 low-resource/latency, universal persona semantics or complete P22. Earlier failed runs and unchanged shutdown v1 remain preserved."
+}
