@@ -14,7 +14,7 @@ import numpy as np
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
-from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, validate_output
+from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, explicit_change, validate_output
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryStore, MemoryError
 from server.companion.semantic import SemanticMemoryIndex
@@ -105,6 +105,32 @@ class ExtractionValidationTests(unittest.TestCase):
         enabled.tracking = {'enabled': 1}
         extractor(['我今天很累'], enabled)
         self.assertEqual(factory.call_count, 4, 'Authorized transient observation must still reach the extractor')
+
+    def test_full_owned_quotation_reconciliation_uses_user_data_without_model_guessing(self):
+        target = {'id': 'owned', 'content': '我喜欢蓝色', 'category': 'preference',
+                  'content_version': 2, 'evidence_version': 3, 'keywords': '["蓝色","喜欢"]'}
+        factory = Mock()
+        extractor = LLMMemoryExtractor(factory)
+        for prefix, mode, new in [('更正：', 'correction', '我喜欢绿色'),
+                                  ('以前：', 'time_change', '现在：我喜欢绿色'),
+                                  ('不确定：', 'conflict', '我喜欢绿色')]:
+            source = prefix + target['content'] + '；' + new
+            result = validate_output(extractor([source], [target]), [source], [target])['memories'][0]
+            self.assertEqual(result['reconciliation']['kind'], mode)
+            self.assertEqual(result['reconciliation']['target_version'], 2)
+            self.assertEqual(result['category'], 'preference')
+            self.assertEqual(result['source_index'], 0)
+            self.assertEqual(result['kind'], 'explicit')
+            self.assertEqual(result['keywords'], ['喜欢'])
+        factory.assert_not_called()
+        source = '更正：我喜欢蓝色；我喜欢绿色'
+        self.assertIsNone(explicit_change(source, []))
+        self.assertIsNone(explicit_change(source, [target, dict(target, id='ambiguous')]))
+        for unsupported in ['引用“' + source + '”', '更正：我喜欢蓝；我喜欢绿色',
+                            source + '；我喜欢紫色', '更正：我喜欢蓝色；我被确诊为糖尿病',
+                            '以前：我喜欢蓝色；我喜欢绿色']:
+            with self.subTest(source=unsupported):
+                self.assertIsNone(explicit_change(unsupported, [target]))
 
     def test_retrieved_old_fact_is_not_a_source_for_a_new_lookup(self):
         old = '我看温度时更习惯用摄氏度。'

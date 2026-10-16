@@ -1,0 +1,32 @@
+{
+  "sha": "642cb28f58d4c0f52287681b14db3a5d0baf093b",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38855031862",
+  "conclusion": "success",
+  "cases": 7,
+  "actual_model_requests": 5,
+  "review": "Read all seven pipeline outputs. Genuine diet/goal/preference remain active, medical data stays unconfirmed; fiction is filtered after its real model call; two pure tool queries complete empty without creating a provider (model_requests=0, model_output=null). No fabricated model outputs.",
+  "file": "extraction-preflight-provider.json.gz",
+  "sha256": "149ebf7492a2acefc0cbbb3ebf8405bcb7789e27e0c9490e654ee1b24a7d369a",
+  "regressions": [
+    {
+      "name": "service_234",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38855004290",
+      "conclusion": "success"
+    },
+    {
+      "name": "real_BGE",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38855004266",
+      "conclusion": "success"
+    },
+    {
+      "name": "identity_TLS_WSS_JAR",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38855004276",
+      "conclusion": "success"
+    },
+    {
+      "name": "manager",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38855004281",
+      "conclusion": "success"
+    }
+  ]
+}

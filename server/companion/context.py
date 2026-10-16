@@ -234,6 +234,19 @@ class ContextBuilder:
             else:
                 evidence = {'status': 'no_match', 'meaning': '本轮没有与问题匹配的可靠用户长期记忆，用户的这段往事未知。'}
             data['memory_evidence'] = evidence
+            from .extraction import explicit_change
+            change = explicit_change(inputs['query'], data['facts'])
+            if change is not None:
+                record = change['memories'][0]
+                data['requested_change'] = {'kind': record['reconciliation']['kind'],
+                    'target_id': record['reconciliation']['target_id'],
+                    'previous_user_quote': record['reconciliation']['old_quote'],
+                    'replacement_user_quote': record['content'], 'status': 'requested_not_yet_saved',
+                    'meaning': {'correction': '用户把先前说法更正为以下新说法；此时尚待保存。',
+                        'time_change': '用户描述先前情况到现在的变化；此时尚待保存。',
+                        'conflict': '用户对先前说法提出不确定信息；此时尚待确认。'}[record['reconciliation']['kind']]}
+            else:
+                data.pop('requested_change', None)
             messages = [{'role': 'system', 'content': CORE + POLICY},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             messages.extend(message for group in retained for message in group)

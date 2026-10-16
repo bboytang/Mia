@@ -108,7 +108,8 @@ class EvidenceContext(list):
 def context_for(store, owner, expected_consent=None):
     # A bounded reconciliation/evidence set, not an answer retrieval fallback.
     with store.lock:
-        rows = store.db.execute('SELECT m.id,m.content,x.content_version,x.evidence_version FROM memories m '
+        rows = store.db.execute('SELECT m.id,m.content,m.category,x.content_version,x.evidence_version,'
+            'x.entities,x.keywords,x.trigger_terms FROM memories m '
             "JOIN mia_memory_meta x ON x.memory_id=m.id WHERE m.owner=? AND m.confirmed=1 AND x.state='active' "
             'ORDER BY m.updated_at DESC,m.rowid DESC LIMIT 8', (owner,)).fetchall()
         from .emotions import consent
@@ -265,12 +266,48 @@ def validate_output(value, sources, context):
     return result
 
 
+def explicit_change(source, context):
+    """Recognize only the existing full-quotation reconciliation protocol.
+
+    The owned context and normal validator remain authoritative; ambiguous or
+    unsupported text continues through the ordinary extraction path.
+    """
+    normalized = normalize(source)
+    matches = []
+    for target in context:
+        for mode, prefix in (('correction', '更正：'), ('time_change', '以前：'), ('conflict', '不确定：')):
+            start = normalize(prefix + target['content'] + '；')
+            if not normalized.startswith(start):
+                continue
+            quote = normalized[len(start):].strip()
+            record = {'category': target.get('category', 'fact'), 'content': quote,
+                'source_index': 0, 'source_quote': quote, 'kind': 'explicit', 'subject': 'user',
+                'value': 'durable', 'sensitive': False,
+                'reconciliation': {'target_id': target['id'], 'kind': mode,
+                    'old_quote': target['content'], 'evidence': normalized}}
+            from .retrieval import terms
+            for key in ('entities', 'keywords', 'trigger_terms'):
+                record[key] = [term for term in terms(target.get(key)) if term in quote][:8]
+            raw = {'memories': [record], 'trait': None}
+            try:
+                result = validate_output(raw, [source], context)
+            except MemoryError:
+                continue
+            if result['memories']:
+                matches.append(raw)
+    return matches[0] if len(matches) == 1 else None
+
+
 class LLMMemoryExtractor:
     def __init__(self, factory):
         self.factory = factory
 
     def __call__(self, sources, context):
         tracking = getattr(context, 'tracking', {'enabled': 0})
+        if len(sources) == 1:
+            change = explicit_change(sources[0], context)
+            if change is not None:
+                return change
         if not any(source_supported(source, None, allow_transient=bool(tracking['enabled'])) for source in sources):
             return {'memories': [], 'trait': None}
         provider = self.factory()

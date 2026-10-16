@@ -1,0 +1,114 @@
+{
+  "sha": "642cb28f58d4c0f52287681b14db3a5d0baf093b",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38855205246",
+  "conclusion": "failure",
+  "requests": 18,
+  "full_P22_accepted": false,
+  "correction_accepted": false,
+  "review": "All three original facts save and genuine interaction events activate. Actual model treats correction as two facts coexisting, proposes inferred/correction as wrong kind or source_index 1 for a single source, and omits valid reconciliation. Validator fails closed, retaining original facts. Restart, third-wording and deletion phases were NOT reached.",
+  "next_change": "Parse existing explicit full-quotation reconciliation from uniquely owned current context and validate with unchanged provenance/version policy; reuse that parsed request as untrusted foreground data labeled requested/not yet saved. Not arbitrary natural-language reconciliation acceptance.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "file": "correction-first-round-0.json.gz",
+      "sha256": "7b14ee06afc19471e15143c3f056d57da021ee2ee31b174717a9a263f151e2d4",
+      "original_recall": "😍关爱 当然记得呢，你每周三去星河书店参加读书会，那是个很温馨的活动吧。有没有什么好书推荐给我呢？😊",
+      "correction_reply": "😊 哦，原来是这样！你每周三和周五都去星河书店参加读书会呢，真是个爱书的人。两个时间都去，是不是每次都有不同的收获呢？有没有什么特别喜欢的书籍或者作者想要和我分享的呢？😊",
+      "final_readonly_sqlite": {
+        "facts": [
+          [
+            "我每周三去星河书店参加读书会",
+            "active"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            null,
+            1
+          ],
+          [
+            "empty",
+            null,
+            1
+          ],
+          [
+            "failed",
+            "invalid_output",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "round": 1,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "file": "correction-first-round-1.json.gz",
+      "sha256": "45301136112c70d907472f1f5ae2e651ec3ed07c9d882d175acf1b4f454e644a",
+      "original_recall": "😌当然记得，你经常提到出门通勤会选择坐二号线呢。这个路线对你来说很方便吧？",
+      "correction_reply": "😌好的，明白了。你出门通勤时，有时候会选择坐二号线，有时候又坐四号线。这两个路线对你来说都很方便吧？有没有哪个路线让你觉得特别有特色呢？😊",
+      "final_readonly_sqlite": {
+        "facts": [
+          [
+            "我出门通勤通常坐二号线",
+            "active"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            null,
+            1
+          ],
+          [
+            "empty",
+            null,
+            1
+          ],
+          [
+            "failed",
+            "invalid_output",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "round": 2,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "file": "correction-first-round-2.json.gz",
+      "sha256": "38f2f90812e83ca9e73221abfc233c2d256f69d35fcbe980b1781c425a110587",
+      "original_recall": "😌当然记得，你提到你喝茶时更喜欢乌龙茶，那种茶香浓郁，回味悠长，确实很符合你的品味呢。下次我们一起喝茶，我也要尝尝你说的乌龙茶。😍",
+      "correction_reply": "😌好的，明白了。原来你之前说更喜欢乌龙茶，现在又提到了普洱茶。两种茶各有特色，乌龙茶香气浓郁，普洱茶则口感醇厚。下次我们可以一起尝试这两种茶，看看哪一种更合你的心意。😍",
+      "final_readonly_sqlite": {
+        "facts": [
+          [
+            "我喝茶时更喜欢乌龙茶",
+            "active"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            null,
+            1
+          ],
+          [
+            "empty",
+            null,
+            1
+          ],
+          [
+            "failed",
+            "invalid_output",
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}
