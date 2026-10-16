@@ -153,7 +153,8 @@ async def evaluate(args, report):
         report['db_retry_did_not_repeat_model'] = report['cases'][0]['sdk_calls'] == 1
         report['confirmed_fact_count'] = store.db.execute('SELECT COUNT(*) FROM memories WHERE owner=? AND confirmed=1', (scope.owner,)).fetchone()[0]
         report['pending_fact_count'] = store.db.execute('SELECT COUNT(*) FROM memories WHERE owner=? AND confirmed=0', (scope.owner,)).fetchone()[0]
-        # P18 uses the same installed SDK/Worker and actual BGE. Outputs remain fixtures.
+        # P18 retains the same Worker and real BGE; the explicit user protocol
+        # no longer needs an SDK response. Ordinary extraction above still uses SDK fixtures.
         report['maintenance'] = []
         target = targets['neutral']
         second = MemoryStore(Path(folder) / 'facts.sqlite3')
@@ -179,9 +180,14 @@ async def evaluate(args, report):
                 assert store.db.execute('SELECT content FROM memories WHERE id=?', (target,)).fetchone()[0] == old
                 with store.db:
                     store.db.execute('UPDATE mia_jobs SET next_attempt_at=0 WHERE id=?', (accepted['id'],))
-            await worker.run_once()
+            if mode == 'correction':
+                assert json.loads(jobs.current(accepted)['validated_result'])['_schema'] == 1
+                with patch.object(worker, 'resolve', side_effect=AssertionError('DB retry resolved the extractor again')):
+                    await worker.run_once()
+            else:
+                await worker.run_once()
             assert jobs.current(accepted)['state'] == 'committed', jobs.current(accepted)
-            assert len(requests) - start == 1, 'DB retry called the model again'
+            assert len(requests) == start, 'Explicit user reconciliation called the model'
             try:
                 await other_builder.validate(cached, policy)
             except ContextError:
@@ -202,7 +208,8 @@ async def evaluate(args, report):
                 assert new_id not in fresh.diagnostics()['selected_fact_ids']
                 assert json.loads(jobs.current(accepted)['validated_result']) == {'confirmation_required': True}
             report['maintenance'].append({'kind': mode, 'state': 'committed', 'sdk_calls': len(requests) - start,
-                'old_context_rejected': True, 'old_fact_not_current': True})
+                'old_context_rejected': True, 'old_fact_not_current': True,
+                'producer': 'validated_explicit_user_protocol', 'retry_reused_validation': mode == 'correction'})
         second.close()
         # P19/P20 installed mechanisms: real BGE, synthetic outputs and an EXPLICIT simulated clock.
         from mia_companion import emotions
