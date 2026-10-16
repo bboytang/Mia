@@ -14,6 +14,7 @@ from server.companion import xiaozhi_adapter as mia
 from server.companion.context import ContextBuilder, ContextError, ContextLimits
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryError, MemoryStore
+from server.companion.persona import CORE
 from server.companion.semantic import SemanticMemoryIndex
 
 
@@ -106,7 +107,7 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(await self.builder.complete(reflection, self.policy, '😌我会尊重你喜欢蓝色的偏好。'))
         types = {row[0] for row in self.store.db.execute("SELECT event_type FROM mia_events WHERE state='active'")}
         self.assertEqual(types, {'boundary', 'reflection'})
-        self.assertIn('cannot be rewritten', reflection.request_json)
+        self.assertTrue(reflection.request()['messages'][0]['content'].startswith(CORE))
         unrelated = await self.bundle('今天吃什么', turn='other-topic')
         self.assertTrue(any(item['type'] == 'boundary' and item['state'] == 'active'
             for item in json.loads(unrelated.inputs_json)['events']))
