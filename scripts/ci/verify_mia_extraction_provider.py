@@ -101,6 +101,7 @@ async def evaluate(report, secret):
         for name, text, expected in cases:
             admitted = await worker.submit(TurnCompleted(policy.scope, 'live-synthetic', name, name, text, 0))
             started = time.perf_counter()
+            captured_before = len(outputs)
             await worker.run_once()  # No evaluation retry or parameter tuning.
             task = jobs.current(admitted)
             found = store.db.execute('SELECT m.content,m.confirmed FROM memories m JOIN mia_source_meta s ON s.memory_id=m.id '
@@ -110,7 +111,9 @@ async def evaluate(report, secret):
             if expected == 'pending' and passed:
                 passed = json.loads(task['validated_result']) == {'confirmation_required': True}
             report['cases'].append({'name': name, 'source': text, 'expected': expected, 'state': task['state'],
-                'error_category': task['error_category'], 'pipeline_semantic_pass': passed, 'model_output': outputs[-1] if outputs else '',
+                'error_category': task['error_category'], 'pipeline_semantic_pass': passed,
+                'model_requests': len(outputs) - captured_before,
+                'model_output': outputs[-1] if len(outputs) > captured_before else None,
                 'stored': [dict(row) for row in found], 'elapsed_ms': (time.perf_counter() - started) * 1000})
             if not passed:
                 raise AssertionError('P17 provider sample did not pass; no retry performed')

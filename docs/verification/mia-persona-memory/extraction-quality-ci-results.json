@@ -48,8 +48,12 @@
   "tools_recheck": {
     "sha": "180eda1fb05eefdcf55f77449ac12c665730a57b",
     "url": "https://github.com/bboytang/Mia/actions/runs/38854020949",
-    "status": "in_progress",
-    "scope": "changed extraction and event behavior plus raw real SDK tool deltas; same frozen tool questions; no parallel pass claimed"
+    "status": "completed",
+    "scope": "changed extraction and event behavior plus raw real SDK tool deltas; same frozen tool questions; no parallel pass claimed",
+    "conclusion": "failure",
+    "requests": 96,
+    "evidence": "tools-quality-review.json",
+    "automatic_structural_passes": 24
   },
   "correction_preparation": {
     "sha": "61e185030c58bbc6cba6867552adb7c17ad5980d",

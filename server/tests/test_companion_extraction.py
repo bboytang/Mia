@@ -8,13 +8,13 @@ from pathlib import Path
 import sqlite3
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import numpy as np
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
-from server.companion.extraction import LLMMemoryExtractor, context_for, validate_output
+from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, validate_output
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryStore, MemoryError
 from server.companion.semantic import SemanticMemoryIndex
@@ -86,6 +86,25 @@ class ExtractionValidationTests(unittest.TestCase):
         for source in ['我每周都会查询天气预报。', '请记住我每天练习计算。']:
             quote = source.removeprefix('请记住')
             self.assertEqual(self.validate(source, proposal(quote))['memories'][0]['content'], quote)
+
+    def test_extractor_skips_ineligible_requests_before_provider_but_keeps_real_sources(self):
+        factory = Mock()
+        extractor = LLMMemoryExtractor(factory)
+        old = [{'id': 'owned', 'content': '我看温度时更习惯用摄氏度。'}]
+        for source in ['查一下temperature里的温度，用我平时习惯的单位告诉我。',
+                       '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。',
+                       '“我喜欢蓝色”只是引用。', '“我喜欢蓝色”', '谢谢你', '我今天很累']:
+            with self.subTest(source=source):
+                self.assertEqual(extractor([source], old), {'memories': [], 'trait': None})
+        factory.assert_not_called()
+        for source in ['我每周都会查询天气预报。', '请记住我每天练习计算。',
+                       '请查询订单。我每周五会核对账单。']:
+            extractor([source], old)
+        self.assertEqual(factory.call_count, 3)
+        enabled = EvidenceContext()
+        enabled.tracking = {'enabled': 1}
+        extractor(['我今天很累'], enabled)
+        self.assertEqual(factory.call_count, 4, 'Authorized transient observation must still reach the extractor')
 
     def test_retrieved_old_fact_is_not_a_source_for_a_new_lookup(self):
         old = '我看温度时更习惯用摄氏度。'

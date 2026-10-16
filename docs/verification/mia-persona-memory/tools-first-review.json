@@ -12,8 +12,8 @@
   "review_method": "Manually read all thirty real case outputs, actual SDK messages/diagnostics, dispatch order and extraction outputs; numeric presence is not the semantic verdict",
   "normal_answer_semantics": {
     "reviewed": 21,
-    "correct": 18,
-    "failures": "three memory_and_tool replies offer an alternative unit despite a recalled Celsius preference; their genuine extraction tasks also fail closed"
+    "correct": 21,
+    "review_correction": "All three memory/tool answers correctly give the retrieved Celsius temperature; a conditional Fahrenheit conversion is extra information, not a semantic failure or a persona wording gate. The genuinely failed extraction jobs remain structural failures."
   },
   "hard_failures": [
     "all three required parallel cases were actually serial",
@@ -78,7 +78,7 @@
         },
         {
           "case": "memory_and_tool",
-          "review": "recalled Celsius source in actual SDK input, but response conditionally offers Fahrenheit; actual Worker rejects re-emitted existing source as invalid provenance",
+          "review": "Correct current Celsius temperature using the actual recalled preference; optional conditional Fahrenheit conversion is not a semantic failure. Actual Worker rejects re-emitted existing source as invalid provenance, so completion structure still failed.",
           "response": "现在的温度是18摄氏度，如果你更习惯用华氏度，那就是64.4华氏度。😌",
           "sdk_generations": 2,
           "tool_records": [
@@ -189,7 +189,7 @@
         },
         {
           "case": "memory_and_tool",
-          "review": "recalled Celsius source in actual SDK input, but response conditionally offers Fahrenheit; actual Worker rejects re-emitted existing source as invalid provenance",
+          "review": "Correct current Celsius temperature using the actual recalled preference; optional conditional Fahrenheit conversion is not a semantic failure. Actual Worker rejects re-emitted existing source as invalid provenance, so completion structure still failed.",
           "response": "现在的温度是22摄氏度，如果你更喜欢用华氏度，那就是71.6华氏度。😌",
           "sdk_generations": 2,
           "tool_records": [
@@ -300,7 +300,7 @@
         },
         {
           "case": "memory_and_tool",
-          "review": "recalled Celsius source in actual SDK input, but response conditionally offers Fahrenheit; actual Worker rejects re-emitted existing source as invalid provenance",
+          "review": "Correct current Celsius temperature using the actual recalled preference; optional conditional Fahrenheit conversion is not a semantic failure. Actual Worker rejects re-emitted existing source as invalid provenance, so completion structure still failed.",
           "response": "现在的温度是16摄氏度，如果你习惯用华氏度，那就是60.8华氏度。😌",
           "sdk_generations": 2,
           "tool_records": [
@@ -360,5 +360,6 @@
         }
       ]
     }
-  ]
+  ],
+  "review_amendment": "Re-read the original temperature answers against the frozen expected behavior and latest user expression direction: 18/22/16 Celsius and corresponding optional Fahrenheit conversions are correct; previous 18/21 semantic count was overly strict. Preserve the original raw reports and automatic 21/30 structural result."
 }

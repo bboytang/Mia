@@ -74,15 +74,15 @@ def normalize(value):
 
 
 def source_supported(source, quote, *, allow_transient=False):
-    """Conservative provenance guard; semantic quality is separately evaluated."""
+    """Conservative provenance guard; quote=None checks for any eligible clause."""
     masked = QUOTED.sub(lambda match: ' ' * len(match[0]), normalize(source))
     for clause in re.findall(r'[^。！？!?\n;；]+[。！？!?;；]?', masked):
         factual = re.sub(r'^(?:(?:米娅|Mia)[,， ]*)?(?:你好[,， ]*)?(?:请|帮我)?记住[：:,， ]*', '', clause.strip(), flags=re.I)
-        equivalent = quote.rstrip('。!！;；').strip() == factual.rstrip('。!！;；').strip()
+        equivalent = quote is None or quote.rstrip('。!！;；').strip() == factual.rstrip('。!！;；').strip()
         reported = re.search(r'^(?!我|请|米娅).{1,8}(?:说|表示|声称)', clause.strip())
-        if (equivalent and not NONFACT.search(clause) and not TASK_REQUEST.search(factual) and not reported
+        if (factual and equivalent and not NONFACT.search(clause) and not TASK_REQUEST.search(factual) and not reported
                 and not re.search(r'[?？]\s*$|吗\s*$', clause)):
-            return allow_transient or not LOW_VALUE.search(quote)
+            return allow_transient or not LOW_VALUE.search(factual)
     return False
 
 
@@ -270,9 +270,11 @@ class LLMMemoryExtractor:
         self.factory = factory
 
     def __call__(self, sources, context):
+        tracking = getattr(context, 'tracking', {'enabled': 0})
+        if not any(source_supported(source, None, allow_transient=bool(tracking['enabled'])) for source in sources):
+            return {'memories': [], 'trait': None}
         provider = self.factory()
         try:
-            tracking = getattr(context, 'tracking', {'enabled': 0})
             instruction = INSTRUCTIONS + ('\nEmotion tracking is explicitly enabled. Also return observations: at most one '
                 '{"source_index":0,"source_quote":"complete real first-person sentence","subject":"user",'
                 '"source_kind":"self_report|inferred","tendency":"positive|negative|neutral|mixed","confidence":0.9}. '

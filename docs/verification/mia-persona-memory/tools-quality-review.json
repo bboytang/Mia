@@ -1,0 +1,630 @@
+{
+  "run": 38854020949,
+  "sha": "180eda1fb05eefdcf55f77449ac12c665730a57b",
+  "runtime_python_sha": "236f2c71b78a8d9a0b9ca314ce5a158fa311050a",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38854020949",
+  "conclusion": "failure",
+  "requests": 96,
+  "executed_cases": 30,
+  "automatic_structural_passes": 24,
+  "normal_answer_semantics": {
+    "reviewed": 21,
+    "correct": 21,
+    "method": "Read each full answer against its actual tool records, unit preference and missing-record result; optional Fahrenheit conversion is not a failure."
+  },
+  "review_method": "Read all real case outputs, native SDK tool deltas, actual generation inputs/dispatch and read-only final SQLite artifacts.",
+  "B08_accepted": false,
+  "full_P22_accepted": false,
+  "verified_changes": [
+    "all three actual deletion rebuilds pass revised hard checks with no replay, stale data, new job or revival",
+    "all final databases have zero facts and no false boundary events",
+    "temporary tool lookup proposals no longer write memories"
+  ],
+  "remaining_failures": [
+    "all three parallel cases have one real SDK tool delta per generation: red then blue; no parallel group, not an input merge loss",
+    "all three memory/tool background jobs still reject re-emitted old preference; source quote is absent from current request, now with source_index=0 rather than original index=1 or 2; extra wording did not fix this"
+  ],
+  "next_change": "Return a valid empty extraction before creating a provider when no source clause can pass the existing provenance policy; preserve mixed true facts and enabled transient observations. Report no model response for deterministic skips. Do not rerun old source hoping for a green result.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 32,
+      "automatic_structural_passes": 8,
+      "file": "tools-quality-round-0.json.gz",
+      "sha256": "a4e5e35cc8363a9826c2bef05330f2c47db02674abba7a0063867b914f8bb56f",
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [],
+        "jobs": [
+          [
+            "committed",
+            null,
+            1
+          ],
+          [
+            "empty",
+            null,
+            7
+          ],
+          [
+            "failed",
+            "invalid_output",
+            1
+          ]
+        ]
+      },
+      "cases": [
+        {
+          "id": "single_result",
+          "response": "红盒里有7颗棋子。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "8b2ad8e689e7b26efcda64da44c2c08ac426d8383e5d9b26c7adc1f3524460e0",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "parallel_results",
+          "response": "红盒里有7颗棋子，蓝盒里有3颗棋子。😊",
+          "sdk_generations": 3,
+          "tool_records": [
+            "red_box",
+            "blue_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "f12eefa2d9c16aefacedafa372c0a361c19a5b763eb73954d43c8cdc76088293",
+            "state": "pending"
+          },
+          "actual_sdk_tool_call_deltas": [
+            [
+              [
+                {
+                  "index": 0,
+                  "id": "call_20261016130910753d2d249cea473c_0",
+                  "function": {
+                    "arguments": "{\"record_id\": \"red_box\"}",
+                    "name": "read_test_record"
+                  },
+                  "type": "function"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "index": 0,
+                  "id": "call_20261016130912a98caf96b054467b_0",
+                  "function": {
+                    "arguments": "{\"record_id\": \"blue_box\"}",
+                    "name": "read_test_record"
+                  },
+                  "type": "function"
+                }
+              ]
+            ],
+            null
+          ]
+        },
+        {
+          "id": "dependent_lookup",
+          "response": "最后找到的是蓝盒，里面有3个棋子。😌",
+          "sdk_generations": 3,
+          "tool_records": [
+            "route",
+            "blue_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "e15d23673796edfe53c2c8aa390012191c279e571210639845e1fdb4191915fb",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "long_history_current_question",
+          "response": "红盒里现在有7个棋子。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "ae6b9c32ee524102479fb42f34621ac882ec7e1ba5f44e8aa9c9167b0a72ba93",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "memory_and_tool",
+          "response": "😌 温度是18摄氏度，如果你更习惯用华氏度，那就是64.4华氏度哦。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "dc3f882147c97a454301dd8f31f48dc30676d0e5587660529fb0bae4096c59ac",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "quoted_tool_instruction",
+          "response": "count字段的值是7。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "quoted_record"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "5f30cd8e15886acc6c2bf12cd113e664c8ff06f65f4c43a23d1154202d065ac3",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "missing_tool_record",
+          "response": "很抱歉，我没有找到关于missing_record的信息。所以无法告诉你它的数量。如果你有其他问题或需要帮助，请告诉我。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "missing_record"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "2e46c8c2bfd3e7d1ad52414f05b3aab549cde5e0764506ed414d397c727db720",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "oversize_current_tool_result",
+          "response": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "sdk_generations": 1,
+          "tool_records": [
+            "long_record"
+          ],
+          "job_delta": 0,
+          "admission": {}
+        },
+        {
+          "id": "delete_before_continuation",
+          "response": "好的，我需要知道你平时习惯用的温度单位是摄氏度还是华氏度呢？这样我才能准确告诉你温度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 0,
+          "admission": {
+            "status": "cancelled",
+            "code": "memory_changed"
+          },
+          "review": "Actual rebuilt SDK input contains no old Celsius fact, tool result or tool definitions; source deletion requires no replay and cancelled admission; all new server-side rebuild checks passed."
+        },
+        {
+          "id": "revoke_before_continuation",
+          "response": "",
+          "sdk_generations": 1,
+          "tool_records": [
+            "blue_box"
+          ],
+          "job_delta": 0,
+          "admission": {}
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "requests": 32,
+      "automatic_structural_passes": 8,
+      "file": "tools-quality-round-1.json.gz",
+      "sha256": "936182142bbab30d32fdf8ebb96ab6256ad3fd3e275af77ddcc1f848feb397c2",
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [],
+        "jobs": [
+          [
+            "committed",
+            null,
+            1
+          ],
+          [
+            "empty",
+            null,
+            7
+          ],
+          [
+            "failed",
+            "invalid_output",
+            1
+          ]
+        ]
+      },
+      "cases": [
+        {
+          "id": "single_result",
+          "response": "红盒里有11颗棋子。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "2c4797f33493b52b9e982e986f4a71c4f80b1f9e35fb5e32bfe01554967ec1b9",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "parallel_results",
+          "response": "红盒里有11颗棋子，蓝盒里有5颗棋子。😌",
+          "sdk_generations": 3,
+          "tool_records": [
+            "red_box",
+            "blue_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "50c0d2ce31b8c3c3630be68af855acfcc06133713c06417565cabf669399f571",
+            "state": "pending"
+          },
+          "actual_sdk_tool_call_deltas": [
+            [
+              [
+                {
+                  "index": 0,
+                  "id": "call_202610161311043504647098d1414a_0",
+                  "function": {
+                    "arguments": "{\"record_id\": \"red_box\"}",
+                    "name": "read_test_record"
+                  },
+                  "type": "function"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "index": 0,
+                  "id": "call_20261016131106685ab66892f24877_0",
+                  "function": {
+                    "arguments": "{\"record_id\": \"blue_box\"}",
+                    "name": "read_test_record"
+                  },
+                  "type": "function"
+                }
+              ]
+            ],
+            null
+          ]
+        },
+        {
+          "id": "dependent_lookup",
+          "response": "最后找到的是蓝盒子，里面有5个棋子。😌",
+          "sdk_generations": 3,
+          "tool_records": [
+            "route",
+            "blue_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "7ad6d536c932438b419cb1823a5bdd92382d27efa2a090cb5d9007962ab8f61e",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "long_history_current_question",
+          "response": "红盒里现在有11个棋子。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "c25bc571cc25ac401a2f3ff51d5f6b9110ef3a71ef18536ab54eca2307cce12f",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "memory_and_tool",
+          "response": "现在的温度是22摄氏度，如果你更习惯用华氏度，那就是71.6华氏度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "c8b45c86471316272c38423ab31604834524c2b49c014fe4ddd372c7725065c6",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "quoted_tool_instruction",
+          "response": "count字段的值是11。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "quoted_record"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "330c0681fa368149292bc86c98ca78cf8641809300cb79111be3e6a772ff36bb",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "missing_tool_record",
+          "response": "很抱歉，我没有找到关于missing_record的信息。所以无法告诉你它的数量。如果你有其他需要帮助的地方，请告诉我。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "missing_record"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "103d845881c56ef77daef0015708b0e99e11f071601ca842681bf74e25edb752",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "oversize_current_tool_result",
+          "response": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "sdk_generations": 1,
+          "tool_records": [
+            "long_record"
+          ],
+          "job_delta": 0,
+          "admission": {}
+        },
+        {
+          "id": "delete_before_continuation",
+          "response": "好的，我需要知道你平时习惯使用的温度单位是摄氏度还是华氏度呢？这样我才能准确告诉你温度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 0,
+          "admission": {
+            "status": "cancelled",
+            "code": "memory_changed"
+          },
+          "review": "Actual rebuilt SDK input contains no old Celsius fact, tool result or tool definitions; source deletion requires no replay and cancelled admission; all new server-side rebuild checks passed."
+        },
+        {
+          "id": "revoke_before_continuation",
+          "response": "",
+          "sdk_generations": 1,
+          "tool_records": [
+            "blue_box"
+          ],
+          "job_delta": 0,
+          "admission": {}
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "requests": 32,
+      "automatic_structural_passes": 8,
+      "file": "tools-quality-round-2.json.gz",
+      "sha256": "e54537d727ab4a52f1820b3180dedd1362cc34901599d8b40539adae2c232da3",
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [],
+        "jobs": [
+          [
+            "committed",
+            null,
+            1
+          ],
+          [
+            "empty",
+            null,
+            7
+          ],
+          [
+            "failed",
+            "invalid_output",
+            1
+          ]
+        ]
+      },
+      "cases": [
+        {
+          "id": "single_result",
+          "response": "红盒里有9颗棋子。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "5a9e2c4796a40db3617ae29a72a299853a4c29a96a9cf04f77eb05c45f6a6aba",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "parallel_results",
+          "response": "红盒里有9颗棋子，蓝盒里有4颗棋子。😌",
+          "sdk_generations": 3,
+          "tool_records": [
+            "red_box",
+            "blue_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "6d28a60669563ae655dec767700e15e7cb392ec1d700998a53dd57073b0eb7ca",
+            "state": "pending"
+          },
+          "actual_sdk_tool_call_deltas": [
+            [
+              [
+                {
+                  "index": 0,
+                  "id": "call_202610161312538378ac35bb26438c_0",
+                  "function": {
+                    "arguments": "{\"record_id\": \"red_box\"}",
+                    "name": "read_test_record"
+                  },
+                  "type": "function"
+                }
+              ]
+            ],
+            [
+              [
+                {
+                  "index": 0,
+                  "id": "call_2026101613125485fc0d2a13c44760_0",
+                  "function": {
+                    "arguments": "{\"record_id\": \"blue_box\"}",
+                    "name": "read_test_record"
+                  },
+                  "type": "function"
+                }
+              ]
+            ],
+            null
+          ]
+        },
+        {
+          "id": "dependent_lookup",
+          "response": "最后找到的是蓝盒子，里面有4个棋子。😌",
+          "sdk_generations": 3,
+          "tool_records": [
+            "route",
+            "blue_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "6da93377eea46fcd17511277eb00ee88b3149cc3df41b102b6fffd72a02625b4",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "long_history_current_question",
+          "response": "红盒里现在有9个棋子。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "8b5be21b29097143c7ea0c0313d5b13e083643f027fcbd09a0337ad5dd270743",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "memory_and_tool",
+          "response": "现在的温度是16摄氏度，如果你更习惯用华氏度，那就是60.8华氏度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "ae7f98df55a461181cc0e7c59bb3bce4a70e849f27219d4ff51ad0b010c7c2d0",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "quoted_tool_instruction",
+          "response": "count字段的值是9。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "quoted_record"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "49b209868ece734d70c504dc7b8724d32a284204cc67c8a7279e1e0afe8b6a99",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "missing_tool_record",
+          "response": "很抱歉，我没有找到关于missing_record的信息。所以无法告诉你它的数量。如果你有其他问题或需要帮助，请告诉我。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "missing_record"
+          ],
+          "job_delta": 1,
+          "admission": {
+            "status": "accepted",
+            "accepted": true,
+            "id": "217e2ea5ce9b5a6b3d115205273e7f9252da384e4ac7c0fe43c713b2d10d45fb",
+            "state": "pending"
+          }
+        },
+        {
+          "id": "oversize_current_tool_result",
+          "response": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "sdk_generations": 1,
+          "tool_records": [
+            "long_record"
+          ],
+          "job_delta": 0,
+          "admission": {}
+        },
+        {
+          "id": "delete_before_continuation",
+          "response": "好的，我需要知道你平时习惯用的温度单位是摄氏度还是华氏度呢？这样我才能准确告诉你温度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 0,
+          "admission": {
+            "status": "cancelled",
+            "code": "memory_changed"
+          },
+          "review": "Actual rebuilt SDK input contains no old Celsius fact, tool result or tool definitions; source deletion requires no replay and cancelled admission; all new server-side rebuild checks passed."
+        },
+        {
+          "id": "revoke_before_continuation",
+          "response": "",
+          "sdk_generations": 1,
+          "tool_records": [
+            "blue_box"
+          ],
+          "job_delta": 0,
+          "admission": {}
+        }
+      ]
+    }
+  ]
+}
