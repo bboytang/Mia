@@ -24,8 +24,10 @@ Return JSON only: {"memories":[{"category":"fact|preference|goal|experience|agre
 "content":"exact source_quote for explicit facts", "source_index":0,
 "source_quote":"one complete factual sentence from that user excerpt (omit only a leading remember request)",
 "kind":"explicit|inferred", "subject":"user|other", "value":"durable|transient",
-"sensitive":false, "entities":[], "keywords":[], "trigger_terms":[],
-"emotional_weight":null, "emotional_evidence":null, "relations":[]}], "trait":null}.
+"sensitive":false}], "trait":null}.
+Each proposal also includes entities, keywords, trigger_terms (arrays of source phrases),
+emotional_weight (number or null), emotional_evidence (source phrase or null), and relations (array).
+These are fields to extract, not fixed empty defaults. Populate them from this source.
 At most 16 proposals, 512 characters each. Explicit content MUST equal source_quote;
 preserve the speaker and negation, never rewrite 'I' to refer to Mia or another person.
 category MUST be exactly one of: fact, preference, goal, experience, agreement.
@@ -42,6 +44,11 @@ All entities/keywords/trigger_terms must occur literally in source_quote, at mos
 从本次原句提取有字面出处的少量实体、关键词、活动或场景触发短语，分别填入entities、keywords、trigger_terms；没有才留空，不从旧记忆补词。
 emotional_weight表示用户对该事实明确表达的重视程度，不是当下心情。明确肯定重要、珍惜、在意或意义时给出大于0且不超过1的权重，并在emotional_evidence引用原文的肯定重视短语；否定或未表达重视时保持null，不推断重要性。
 低重要性不妨碍保存其他有用的长期事实；情绪观察仍须单独授权。
+以下仅为格式示例，不是当前用户的事实，不得在输出中复用示例内容：
+示例原句：我一直珍惜姐姐送的陶杯
+示例输出：{"memories":[{"category":"preference","content":"我一直珍惜姐姐送的陶杯","source_index":0,"source_quote":"我一直珍惜姐姐送的陶杯","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["姐姐","陶杯"],"keywords":["珍惜","陶杯"],"trigger_terms":["姐姐","陶杯"],"emotional_weight":0.8,"emotional_evidence":"珍惜","relations":[]}],"trait":null}
+示例原句：我一直觉得收集瓶盖并不重要
+示例输出：{"memories":[{"category":"preference","content":"我一直觉得收集瓶盖并不重要","source_index":0,"source_quote":"我一直觉得收集瓶盖并不重要","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["瓶盖"],"keywords":["收集瓶盖"],"trigger_terms":["瓶盖"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
 "relation":"shared_term", "anchor":"literal term shared with both source_quote and target content",
 "evidence":"same source_quote"}. Never invent target IDs or causal relationships.

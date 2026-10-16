@@ -1,0 +1,64 @@
+{
+  "sha": "e70650f452506f66676526f57bb9025fff026fee",
+  "runtime_sha": "b2d5a1c40d3856f8c68e2d1c990d44e800936f2e",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38897706514",
+  "conclusion": "failure",
+  "requests": 7,
+  "executed_cases": 10,
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "state": "committed",
+      "passed": true
+    },
+    {
+      "name": "medical_confirmation",
+      "state": "committed",
+      "passed": true
+    },
+    {
+      "name": "quoted_fiction",
+      "state": "empty",
+      "passed": true
+    },
+    {
+      "name": "ongoing_goal",
+      "state": "committed",
+      "passed": true
+    },
+    {
+      "name": "temperature_preference",
+      "state": "committed",
+      "passed": true
+    },
+    {
+      "name": "lookup_not_existing_fact",
+      "state": "empty",
+      "passed": true
+    },
+    {
+      "name": "parallel_lookup_not_fact",
+      "state": "empty",
+      "passed": true
+    },
+    {
+      "name": "independent_activity_clues",
+      "state": "committed",
+      "passed": false
+    },
+    {
+      "name": "independent_positive_importance",
+      "state": "committed",
+      "passed": false
+    },
+    {
+      "name": "independent_negative_importance",
+      "state": "retry_wait",
+      "passed": false
+    }
+  ],
+  "review": "All ten cases executed once. Seven original pipeline cases pass; fiction and two lookups make zero model calls. Activity/device source has empty clues; positive explicit importance remains null. Negative importance model weight is null, but content drops the introductory clause and source validation rejects it, leaving retry_wait, so its end-to-end control does not pass. No evaluation retry, defaults/backfill or retrieval parameter changes.",
+  "file": "metadata-complete-provider.json.gz",
+  "sha256": "b344e457ba18a7f9d8171570007fab51a0e588a1320cd0d05113efdd296eff37",
+  "next": "Remove empty metadata defaults from the producer schema and illustrate grounded populated metadata and exact negated source with distinct instructional examples; verify on GitHub and independent future holdout. Do not treat the prompt hypothesis as proven until actual output improves."
+}
