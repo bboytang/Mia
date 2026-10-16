@@ -114,6 +114,17 @@ entities/keywords/trigger_terms必须是真JSON数组，sensitive必须是布尔
 输出：{"memories":[{"category":"fact","content":"我浇花用陶壶，不是塑料壶，刚才说错了","source_index":0,"source_quote":"我浇花用陶壶，不是塑料壶，刚才说错了","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["陶壶","塑料壶"],"keywords":["浇花"],"trigger_terms":["浇花"],"importance_weight":null,"importance_evidence":null,"relations":[],"reconciliation":{"form":"natural","kind":"correction","target_id":"example-only","old_quote":"我浇花用塑料壶","evidence":"我浇花用陶壶，不是塑料壶，刚才说错了","old_value":"塑料壶","new_value":"陶壶","anchor":"浇花"}}],"trait":null}
 '''
 
+GROWTH_INSTRUCTIONS = '''\n本次existing_memories的实际来源已达到至少三个不同会话/不同原句的数量条件；这只代表可以审阅，不代表语义支持已成立。
+在提取本次新事实之后，请审阅这些既有事实是否反复支持同一个具体主题：共同anchor须为每个引用原句都有的连续字面短语。
+若三个不同已有事实确实支持同一主题，可提出至多一个Mia与这位用户交流时逐渐形成的表达特点，不是诊断用户性格，不是新的人格系统。
+description描述Mia围绕该主题的回应倾向，必须含anchor；不能据用户爱好编造Mia已有共同活动、目击或新经历，也不能改写固定核心。
+trait不能只填name/description：必须同时给evidence_ids、anchor和evidence_quotes，引用输入里三个实际所属id和各自字面原句。
+例如仅在三个真实既有事实都提到观云且来源独立时，可描述Mia聊到观云时愿意细问观察细节；没有这样的输入时不能复制例子。
+trait对象格式为name/description/evidence_ids/anchor/evidence_quotes；evidence_quotes每项是id/quote，id必须来自对应已有事实，quote必须是其中含anchor的连续原文。
+只能引用本次提取前的既有事实，不能给尚未保存的新句编造id或来源；不满足语义/独立来源条件仍填trait:null。
+新的memories依然只来自本次user_excerpts，不重抄旧事实。重要性仍逐条依据原句，与特点是否成立无关。
+'''
+
 REMEMBER_PREFIX = re.compile(r'^(?:(?:米娅|Mia)[,， ]*)?(?:你好[,， ]*)?(?:请|帮我)?记住[：:,， ]*', re.I)
 QUOTED = re.compile(r'“[^”]*”|「[^」]*」|『[^』]*』|‘[^’]*’|"[^"\n]*"|\'[^\'\n]*\'')
 NONFACT = re.compile(r'假设|假如|如果|比如|例如|举例|小说|虚构|扮演|开玩笑|玩笑|段子|引用|'
@@ -435,6 +446,9 @@ class LLMMemoryExtractor:
                 'They describe source-stated significance, not mood tracking. '
                 '情绪开关仅控制observations；用户对事情明确表达的重要性仍须依据本次原句提取，'
                 '有肯定原文时输出你评估的权重与原文证据，不能因未授权情绪跟踪而统一填null。')
+            if not natural and len(context) >= 3 and trait_supported(
+                    [item for fact in context for item in fact.get('evidence', [])]):
+                instruction += GROWTH_INSTRUCTIONS
             feedback = getattr(context, 'validation_feedback', None)
             if feedback:
                 instruction += ('\nThe previous attempt for THIS task failed server validation. '

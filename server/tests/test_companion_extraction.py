@@ -212,6 +212,25 @@ class ExtractionValidationTests(unittest.TestCase):
         result = self.validate(source, proposal('我喜欢绿色'))
         self.assertEqual([item['content'] for item in result['memories']], ['我喜欢绿色'])
 
+    def test_growth_review_uses_actual_prior_evidence_without_changing_model_result(self):
+        context = EvidenceContext([{'id': str(i), 'category': 'fact', 'content': f'我在第{i}次观云时画草图',
+            'content_version': 1, 'evidence_version': 1,
+            'evidence': [{'session_id': f's{i}', 'fingerprint': f'fp{i}'}]} for i in range(3)])
+        before = json.dumps(context)
+        raw = {'memories': [proposal('我喜欢观云')], 'trait': None}
+        provider = Mock()
+        provider.response_no_stream.return_value = raw
+        extractor = LLMMemoryExtractor(lambda: provider)
+        self.assertIs(extractor(['我喜欢观云'], context), raw)
+        self.assertIn('可以审阅，不代表语义支持已成立', provider.response_no_stream.call_args.args[0])
+        self.assertEqual(json.loads(provider.response_no_stream.call_args.args[1])['existing_memories'], context)
+        self.assertEqual(json.dumps(context), before)
+        self.assertEqual(provider.response_no_stream.call_count, 1)
+        for fact in context:
+            fact['evidence'][0]['fingerprint'] = 'one-source'
+        self.assertIs(extractor(['我喜欢观云'], context), raw)
+        self.assertNotIn('可以审阅，不代表语义支持已成立', provider.response_no_stream.call_args.args[0])
+
     def test_cannot_drop_negation_or_change_subject_with_a_substring(self):
         for quote in ['喜欢蓝色', '我朋友喜欢蓝色']:
             source = '我不喜欢蓝色，但我朋友喜欢蓝色'

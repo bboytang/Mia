@@ -28,6 +28,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 校验反馈候选`8f3a81d0d5b5cc7647c2b2469e3c616cc28846d7`已推送，自然纠错[38948366421](https://github.com/bboytang/Mia/actions/runs/38948366421)单次运行中；服务38948363595/BGE38948363545/身份38948363568/manager38948363624/提取语法38948363551均success。Scope38948211936仍in_progress，同handle跟踪。
+- 下一成长候选在原一次提取中，仅当三个实际独立会话/原句达到结构资格时追加成长审阅；主题/有限表达倾向/实际证据id与引文仍须原模型生成并过原校验，数量合格不等于语义支持。无另建系统/第二次模型调用/预置特点，普通与自然纠错来源不改。62项本地回归通过，待精确SHA growth验证；原首轮失败及harness规范化修复保留。
 - 新结果：f3fd25f7自然纠错38946424108为19真实请求（6/6/7），第三组同ID更正/换PID召回/删除后重启不复活通过；第一组非字面anchor、第二组非字面关键词被拒绝，整体失败，原回答仍有无来源目击。[natural-projected原文](verification/mia-persona-memory/natural-projected-review.json)。v1检索38946430905为39请求/14结构通过（15项执行），五个实际重要性非空，演奏热身仍null，且原回答有无依据事实组合，整体失败；[retrieval-categorical原文](verification/mia-persona-memory/retrieval-categorical-review.json)。独立v2未执行。
 - Scope测试41181be5已推送，真实矩阵[38948211936](https://github.com/bboytang/Mia/actions/runs/38948211936)单次启动，待终态。前两次HTTPS push中断，首次其后dispatch因远程尚无scope选项422未创建run；第三次正常Git设置push成功后才启动上述run，不重复。
 - 当前候选给原Worker同一任务的原第二次尝试传递真实服务器校验诊断；每次仍一次原Provider调用，两次总上限不变；不修改模型输出/原句/校验门槛。反馈仅进程内、有界、按job隔离，不持久化用户或模型正文；数据库validated重试与Scope恢复机制保持。细化字面anchor/clue错误原因，61项本地回归通过（含另Scope任务不收到该反馈、原提案不改、一事实与两次上限）。待精确SHA自然纠错验证，不能提前称修好。
