@@ -34,7 +34,11 @@ P21完成必要实现与GitHub验证。最近已验证运行源码642cb28：来�
 
 真实复验[38889408684](https://github.com/bboytang/Mia/actions/runs/38889408684)已success／18请求；三组同ID纠正、active旧事件失效、两次不同PID重启及第三问法／本人删除／0事实无事件复活的完整机械链通过。人工复核不报整体语义通过：0／1组正确用新事实，2组把用户问“我平常喝哪种茶”答成Mia的“我更喜欢普洱茶，你呢”，删除后也答自己的偏好，属于答错对象而非禁止拟人喜好。证据[明确协议复核](verification/mia-persona-memory/correction-quoted-review.json)及精确correction-ci-results.json。
 
-当前第一项可执行工作：公共上下文新增一句明确当前消息第一人称归用户的语义说明，当前原文／事实原句／输出方式不改，无新输出正则或固定答句；新候选待推送／GitHub回归后对相同三独立场景复验。当前无在途真实run；不得把绿色机械报告当完整语义验收。任意自然更正、后台在途删除竞态、特点成长／趋势派生及完整B01／B03／B04／B06矩阵仍待。P23／P24未实施完成。真实跨日验收用户接管；共同往事表达澄清无答案，不追加相关表达拦截。不自动日采，不部署。
+当前运行源码7ef9a46已通过服务38890285057、BGE38890285669、身份38890285029、manager38890285089。公共上下文澄清当前消息第一人称归用户，实际复验[38890796048](https://github.com/bboytang/Mia/actions/runs/38890796048)success／18请求，三组新事实均以正确用户主体回答、删除后无旧事实断言；全部15回答和三库／PID已读，明确协议流程＋本三组语义通过，见correction-speaker-*。4013ced只新增B04测试入口，服务38890982491／manager38890982374／语法38890982397全部success，运行模块仍7ef9a46。
+
+B04首轮[38891089842](https://github.com/bboytang/Mia/actions/runs/38891089842)已failure，39真实请求、12事实／15查询全部执行；S／L／A有真实贡献，候选小库无遗漏及无关空召回，但12条重要性元数据全null（含6条明确重要原句），三条活动器材记录线索为空，指定关联无扩展。结构0／15为同一前置E条件失败，不是十五种检索错误；相关12回答正确，另2澄清、1仅说稍等查记录。原提取／SQL／评分／消融／原文在retrieval-first-*，不手填字段、不改冻结权重，v1后续视作回归而非未看过的最终留出。
+
+当前第一项可执行工作：inflight测试入口复用明确协议三剧本，真实模型输出必须先通过实际验证器且可写，CI才有界暂停；本人原管理删除后放行原结果，要求原Worker真实返回、任务cancelled／无事实，再实际PID重启不复活。代码待推送／GitHub语法及实际运行，不修改生产队列或伪造模型结果。随后修复实际来源线索和明确重要性提取、补独立新语料／否定对照，保持冻结参数。当前没有在途真实run。任意自然更正、完整后台故障／身份矩阵、特点成长／趋势派生及其他P22项仍待，P23／P24未实施完成。真实跨日用户自测；共同往事澄清未答，不追加表达拦截。不自动日采，不部署。
 
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。

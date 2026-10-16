@@ -1,19 +1,28 @@
 {
-  "runtime_sha": "6be70f74c1af16720712b9a42feeab20bbfa5645",
+  "runtime_sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
   "regressions": [
     {
       "name": "service",
-      "url": "https://github.com/bboytang/Mia/actions/runs/38889180420",
+      "sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38890285057",
       "conclusion": "success"
     },
     {
-      "name": "manager",
-      "url": "https://github.com/bboytang/Mia/actions/runs/38889180348",
+      "name": "real_BGE",
+      "sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38890285669",
       "conclusion": "success"
     },
     {
       "name": "identity_TLS_WSS_JAR",
-      "url": "https://github.com/bboytang/Mia/actions/runs/38889180501",
+      "sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38890285029",
+      "conclusion": "success"
+    },
+    {
+      "name": "manager",
+      "sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38890285089",
       "conclusion": "success"
     }
   ],
@@ -42,5 +51,31 @@
     "evidence": "correction-quoted-review.json"
   },
   "full_P22_accepted": false,
-  "arbitrary_natural_correction": "not_accepted"
+  "arbitrary_natural_correction": "not_accepted",
+  "canonical_runtime_sha": "6be70f74c1af16720712b9a42feeab20bbfa5645",
+  "initial_regressions": [
+    {
+      "name": "service",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38889180420",
+      "conclusion": "success"
+    },
+    {
+      "name": "manager",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38889180348",
+      "conclusion": "success"
+    },
+    {
+      "name": "identity_TLS_WSS_JAR",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38889180501",
+      "conclusion": "success"
+    }
+  ],
+  "speaker_recheck": {
+    "sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+    "url": "https://github.com/bboytang/Mia/actions/runs/38890796048",
+    "conclusion": "success",
+    "requests": 18,
+    "explicit_protocol_three_case_semantic_acceptance": true,
+    "evidence": "correction-speaker-review.json"
+  }
 }

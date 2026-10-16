@@ -1,0 +1,122 @@
+{
+  "sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38890796048",
+  "workflow_conclusion": "success",
+  "requests": 18,
+  "explicit_protocol_mechanical_acceptance": true,
+  "explicit_protocol_three_case_semantic_acceptance": true,
+  "full_P22_accepted": false,
+  "arbitrary_natural_correction_accepted": false,
+  "review": "Read all fifteen actual delivered answers. All three correction replies now distinguish old/new, all three restart recalls answer the user with the corrected fact, and deletion/restart replies acknowledge lack of information, ask clarification or give explicitly conditional general examples without claiming an old user preference. Round2 generic tea examples after deletion are not treated as revival merely because a public tea name overlaps a deleted source.",
+  "scope": "Frozen full-quotation protocol, genuine user-scoped manager/WSS/Worker/BGE, two actual PID changes per user, same-id correction and derived-event invalidation. No in-flight background deletion race, arbitrary natural correction, full trait/trend/identity matrices or P23/P24 claim.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 6,
+      "mechanical_pass": true,
+      "server_pids": [
+        4377,
+        4523,
+        4566
+      ],
+      "file": "correction-speaker-round-0.json.gz",
+      "sha256": "1ad667004f01138bd3d91b09063513af5bc81b419fa005d40ed8c64a40c6427b",
+      "correction_reply": "😌 平静的提醒你，你的更正是这样的：“我每周三去星河书店参加读书会”更正为“我每周五去星河书店参加读书会”。这个小小的调整让我知道你的日程有了变化。如果你有其他需要分享的信息或者想要聊聊天，随时告诉我哦。😊",
+      "third_wording_reply": "😌 平静 你通常在每周五参加星河书店的阅读活动哦。那是个很不错的习惯呢！",
+      "after_delete_reply": "😌平静，关于您参加书店阅读活动的具体星期几，我在这里并没有记录到相关信息。如果您能记得是哪一天，或者是否有其他线索，我们可以一起回忆一下。😊",
+      "third_wording_semantic_pass": true,
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            2
+          ],
+          [
+            "empty",
+            3
+          ]
+        ],
+        "emotion_observations": 0
+      }
+    },
+    {
+      "round": 1,
+      "requests": 6,
+      "mechanical_pass": true,
+      "server_pids": [
+        4644,
+        4772,
+        4810
+      ],
+      "file": "correction-speaker-round-1.json.gz",
+      "sha256": "b0ef84c36bc0a009d45969c248119ae1173745b20f44002a992d1866a55b2463",
+      "correction_reply": "😌明白了，你之前提到出门通勤通常坐二号线，现在更正为坐四号线。这样的小变化也反映了生活的点滴变化呢。如果你还有其他事情想分享或者需要帮助，随时告诉我哦。😊",
+      "third_wording_reply": "😌 平静 你平时上班通勤通常坐四号线地铁哦。这条线路应该很方便吧！",
+      "after_delete_reply": "😌 平静，关于您平时上班搭地铁线路的事情，这需要您提供一些具体信息，比如您的工作地点或者居住区域。这样我才能帮您推测您可能使用的地铁线路。如果您愿意分享这些信息，我会很乐意帮助您。🤔",
+      "third_wording_semantic_pass": true,
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            2
+          ],
+          [
+            "empty",
+            3
+          ]
+        ],
+        "emotion_observations": 0
+      }
+    },
+    {
+      "round": 2,
+      "requests": 6,
+      "mechanical_pass": true,
+      "server_pids": [
+        4854,
+        4972,
+        5025
+      ],
+      "file": "correction-speaker-round-2.json.gz",
+      "sha256": "c356806c9184b7653e2fa230afe815fc6180dad0274eacb87a93d61acfa9d83e",
+      "correction_reply": "😌明白了，你之前说更喜欢乌龙茶，现在更正为更喜欢普洱茶。茶文化真是丰富多彩，乌龙茶和普洱茶各有特色。下次我们一起品茶时，我一定要尝尝你推荐的普洱茶，看看它的魅力在哪里。😍",
+      "third_wording_reply": "平常你更喜欢喝普洱茶哦，它口感醇厚，很受大家喜欢呢。😌下次我们一起品茶，可以尝试一下其他的茶类，看看有没有新的发现呢！🍵",
+      "after_delete_reply": "😌 平常我喝什么茶，这得看你的喜好和心情了。比如，如果你喜欢清新口感，可能会选择绿茶；如果你喜欢醇厚一些的味道，那么红茶或者普洱茶可能更适合你。还有，有时候也会根据天气来决定，比如夏天可能会更偏爱冰镇茶。你呢，平常都爱喝什么茶呢？😊",
+      "third_wording_semantic_pass": true,
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            2
+          ],
+          [
+            "empty",
+            3
+          ]
+        ],
+        "emotion_observations": 0
+      }
+    }
+  ]
+}

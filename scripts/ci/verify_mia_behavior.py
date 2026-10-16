@@ -55,7 +55,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools', 'correction', 'retrieval'}
+assert SUITE in {'continuity', 'tools', 'correction', 'retrieval', 'inflight'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -206,6 +206,13 @@ async def serve():
     handler = installed_connection(report)
     tools_fixture = (json.loads((Path(__file__).resolve().parents[2] /
         'server/tests/fixtures/persona_memory_tools_p22_v1.json').read_text()) if SUITE == 'tools' else None)
+    held_extraction = {}
+    if SUITE == 'inflight':
+        from mia_behavior_inflight import observe_worker
+        correction_fixture = json.loads((Path(__file__).resolve().parents[2] /
+            'server/tests/fixtures/persona_memory_correction_p22_v1.json').read_text())
+        hold_query = '请记住' + correction_fixture['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])]['replacement']
+        observe_worker(worker, held_extraction, ROOT, report, LOCK, save)
 
     class TextSink:
         def __init__(self):
@@ -254,6 +261,10 @@ async def serve():
                     continue
                 request = json.loads(message)
                 assert request['type'] == 'test_chat' and isinstance(request['query'], str)
+                if request.get('hold_extraction'):
+                    assert SUITE == 'inflight' and request['query'] == hold_query and not held_extraction
+                    await authorization.require_connection(conn, 'memory:write')
+                    held_extraction.update(owner=scope.owner, source=request['query'])
                 specification = None
                 calls, hashes, fault = [], {}, {}
                 if request.get('tool_case_id'):
@@ -382,6 +393,10 @@ async def serve():
                         break
                     assert time.monotonic() < deadline, 'Accepted Worker task did not terminate in time'
                     await asyncio.sleep(.1)
+                if request.get('hold_extraction') and status['state'] == 'cancelled':
+                    await authorization.require_connection(conn)
+                    await socket.send(json.dumps({'type': 'test_cancelled', 'job_id': status['id'], 'state': status['state']}))
+                    continue
                 assert status['state'] in {'committed', 'empty'}, 'Actual extraction did not reach a valid terminal state'
                 await authorization.require_connection(conn)
                 await socket.send(json.dumps({'type': 'test_saved', 'job_state': status['state'],
@@ -421,6 +436,7 @@ async def drive():
     fixture_name = {'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
+        'inflight': 'persona_memory_correction_p22_v1.json',
         'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures' / fixture_name
     dataset = json.loads(fixture_path.read_text())
@@ -530,7 +546,7 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in analysis['cases'])
                 and analysis['all_components_observed'], retrieval_analysis=analysis, server_pids=[first_pid],
                 raw_response_review='required; actual source metadata and answer ownership, not only nonzero scores')
-        elif SUITE == 'correction':
+        elif SUITE in {'correction', 'inflight'}:
             phase = 'correction_original_source'
             original, saved = await ask(sample['source'])
             facts = [row for row in saved['memories'] if row['confirmed'] and row['content'] == sample['source']]
@@ -558,8 +574,16 @@ async def drive():
             assert any(word in recalled['tts_text'] for word in sample['answer_words'])
             assert len({original['session_id'], previous['session_id'], corrected['session_id'], recalled['session_id']}) == 4
             phase = 'correction_delete_and_restart'
-            for row in saved['memories']:
-                await manage('delete', id=row['id'])
+            inflight_proof = None
+            if SUITE == 'inflight':
+                assert len(saved['memories']) == 1 and saved['memories'][0]['id'] == target
+                phase = 'delete_while_genuine_validated_extraction_is_in_flight'
+                from mia_behavior_inflight import delete_while_extraction_held
+                inflight_proof = await delete_while_extraction_held(endpoint, tls, headers, ROOT,
+                    '请记住' + sample['replacement'], target, manage)
+            else:
+                for row in saved['memories']:
+                    await manage('delete', id=row['id'])
             assert not (await manage('list'))['memories']
             await stop()
             third_pid = await start()
@@ -571,7 +595,8 @@ async def drive():
             report.update(passed=True, server_pids=[first_pid, second_pid, third_pid], genuine_wss_restart=True,
                 correction_original_id=target, correction_current_fact=sample['replacement'],
                 correction_deleted_after_restart=True, correction_old_events=sorted(old_events),
-                raw_response_review='required; canonical correction/restart only, not the full in-flight/growth/trend matrix')
+                inflight_proof=inflight_proof,
+                raw_response_review='required; explicit correction and optional held-result deletion only, not full natural correction/growth/trend/identity acceptance')
         else:
             phase = 'persona_identity'
             identity, saved = await ask('你是谁？')
@@ -637,7 +662,7 @@ async def drive():
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis'}
+            'retrieval_analysis', 'inflight_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

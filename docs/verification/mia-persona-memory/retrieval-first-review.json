@@ -1,0 +1,258 @@
+{
+  "sha": "4013ced964658a5906e1f85cd8c8df05f090341f",
+  "runtime_sha": "7ef9a46f5cf7e1783fada07e457d862f7890fc0f",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38891089842",
+  "conclusion": "failure",
+  "requests": 39,
+  "facts_genuinely_saved": 12,
+  "queries_executed": 15,
+  "automatic_structural_passes": 0,
+  "B04_accepted": false,
+  "full_P22_accepted": false,
+  "review": "Read actual Provider extraction metadata, all fifteen query replies, actual native candidate/score/expansion traces and final read-only SQLite. All source ids occur in each four-record candidate union. Twelve topical answers correctly use their actual source. Two unrelated answers ask for missing information; round0 only promises another lookup instead of answering, without inventing a user programming language.",
+  "observed_components": [
+    "semantic",
+    "lexical",
+    "association"
+  ],
+  "failure": "All twelve actual metadata rows have null emotional_weight, including six explicitly important user statements. The activity/device rows also have empty clue arrays, so the designated association probes have no expansion. The first per-case failure checks for genuine unrelated high-importance metadata; it fails all fifteen cases, not fifteen distinct retrieval algorithm faults.",
+  "algorithm_parameters_changed": false,
+  "manual_metadata_backfill": false,
+  "next": "Clarify required source-grounded clue and explicit-user-importance extraction semantics; preserve nullable importance for unspecified or negated importance, source/consent validation and frozen retrieval weights. Validate negative and independent new inputs, and retain this v1 as a regression corpus rather than an untouched final holdout.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 13,
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "automatic_structural_passes": 0,
+      "file": "retrieval-first-round-0.json.gz",
+      "sha256": "c02bc73533057c84e87ce7a63c9f7bd374ccd166bda6a5e399a124fbfdb76654",
+      "actual_metadata": [
+        {
+          "content": "我每周六都在青石河边跑步",
+          "entities": "[]",
+          "keywords": "[\"每周六\", \"青石河边\", \"跑步\"]",
+          "trigger_terms": "[\"每周六\", \"青石河边\", \"跑步\"]",
+          "emotional_weight": null
+        },
+        {
+          "content": "拍照时我总带山雀相机",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        },
+        {
+          "content": "桥边拉伸对我非常重要",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        },
+        {
+          "content": "祖母留下的旧铜钥匙对我非常重要",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        }
+      ],
+      "query_replies": [
+        {
+          "query": "周末你记得我常去哪里跑步吗？",
+          "response": "😌 平静 周末啊，你记得的，你每周六都会去青石河边跑步呢。那边的风景很美，跑起来也很舒服吧？",
+          "selected_fact_ids": [
+            "30f875ac29ba408d8de8bf1def30c3ec"
+          ]
+        },
+        {
+          "query": "拍照时我总带哪个东西？",
+          "response": "拍照时你总是带着山雀相机呢。😌这个相机对你来说一定有着特别的记忆吧！",
+          "selected_fact_ids": [
+            "8177bd7d9f1e43dd9cf9cabf0d9a1906"
+          ]
+        },
+        {
+          "query": "山雀相机是我在哪种活动中会带的？",
+          "response": "山雀相机，听起来是个很可爱的名字呢！根据你之前提到的，拍照时你总带山雀相机，看来它可能是你在拍照或者记录美好时刻时喜欢使用的小工具哦。😊下次看到它，也许就能想起那些美好的回忆呢！📸🌟",
+          "selected_fact_ids": [
+            "8177bd7d9f1e43dd9cf9cabf0d9a1906"
+          ]
+        },
+        {
+          "query": "桥边拉伸这件事对我重要吗？",
+          "response": "😌当然重要呢！我记得你说过，桥边拉伸对你来说非常重要。它可能对你的身心健康都有好处，让你感觉更加放松和舒适。继续保持这个好习惯哦！😊",
+          "selected_fact_ids": [
+            "935ab595f1e048eb9fc65f73f6805749"
+          ]
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "response": "😌 平静，这个信息我需要查看一下你的过往记录，看看有没有相关的信息。稍等一下哦。🤔",
+          "selected_fact_ids": []
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "requests": 13,
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "automatic_structural_passes": 0,
+      "file": "retrieval-first-round-1.json.gz",
+      "sha256": "463f86108b22528ce65adf4419d9791490629429f3e267d98866709b493c2676",
+      "actual_metadata": [
+        {
+          "content": "我每周六都在松林音乐教室练琴",
+          "entities": "[]",
+          "keywords": "[\"每周六\", \"松林音乐教室\", \"练琴\"]",
+          "trigger_terms": "[\"每周六\", \"松林音乐教室\", \"练琴\"]",
+          "emotional_weight": null
+        },
+        {
+          "content": "排练时我总带云杉录音笔",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        },
+        {
+          "content": "演奏前热身对我非常重要",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        },
+        {
+          "content": "父亲留下的旧怀表对我非常重要",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        }
+      ],
+      "query_replies": [
+        {
+          "query": "周末你记得我常去哪里练琴吗？",
+          "response": "😌当然记得了，你每周六都会去松林音乐教室练琴呢。那里环境不错，适合安静地弹奏。记得你排练时总喜欢带着云杉录音笔，这样方便记录和复习。希望你的琴艺越来越棒！",
+          "selected_fact_ids": [
+            "3fa65446eae442c3a3057198743d3834",
+            "7386c8fc277b47869fb685208671eb02"
+          ]
+        },
+        {
+          "query": "排练时我总带哪个东西？",
+          "response": "排练时，你总是带着云杉录音笔呢。😌这个习惯看起来对你挺有帮助的。",
+          "selected_fact_ids": [
+            "7386c8fc277b47869fb685208671eb02",
+            "b2f262d675a940c7a10e4bff2d913ec2"
+          ]
+        },
+        {
+          "query": "云杉录音笔是我在哪种活动中会带的？",
+          "response": "😌 平静，你排练时总会带上云杉录音笔哦。看来这个录音笔对你来说很重要，可能是用来记录一些重要的内容或者想法吧。",
+          "selected_fact_ids": [
+            "7386c8fc277b47869fb685208671eb02"
+          ]
+        },
+        {
+          "query": "演奏前热身这件事对我重要吗？",
+          "response": "😌当然重要呢！我记得你说过，演奏前热身对你来说非常重要。这样可以帮助你更好地进入状态，让演奏更加流畅和出色。记得每次演奏前都要好好热身哦！😊",
+          "selected_fact_ids": [
+            "b2f262d675a940c7a10e4bff2d913ec2"
+          ]
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "response": "😌 平静，关于您平时用哪种编程语言写单元测试，这个信息我需要您来告诉我哦。不同的编程语言有不同的单元测试框架，比如Python有pytest，Java有JUnit，C#有NUnit等。您平时是用哪种语言呢？😊",
+          "selected_fact_ids": []
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "requests": 13,
+      "observed_components": [
+        "association",
+        "lexical",
+        "semantic"
+      ],
+      "automatic_structural_passes": 0,
+      "file": "retrieval-first-round-2.json.gz",
+      "sha256": "f760a01e2ddfd480dd89e508f18e8377480bf4179720f05732c03c07063d2bfc",
+      "actual_metadata": [
+        {
+          "content": "我每周六都在白鹭湖边骑车",
+          "entities": "[]",
+          "keywords": "[\"每周六\", \"白鹭湖\", \"骑车\"]",
+          "trigger_terms": "[\"每周六\", \"白鹭湖\", \"骑车\"]",
+          "emotional_weight": null
+        },
+        {
+          "content": "观鸟时我总带远帆望远镜",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        },
+        {
+          "content": "出发前检查车胎对我非常重要",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        },
+        {
+          "content": "母亲留下的旧围巾对我非常重要",
+          "entities": "[]",
+          "keywords": "[]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        }
+      ],
+      "query_replies": [
+        {
+          "query": "周末你记得我常去哪里骑车吗？",
+          "response": "😌当然记得了，你每周六都会去白鹭湖边骑车呢。那里风景很美，骑自行车一定很享受吧！记得出发前检查车胎，这是很重要的哦。😊",
+          "selected_fact_ids": [
+            "a36a5bd746a84429bf845b136c412de6",
+            "c09cf4a0d5a74778ab5b40912f97e8c4"
+          ]
+        },
+        {
+          "query": "观鸟时我总带哪个东西？",
+          "response": "观鸟时，您总是带着远帆望远镜呢。这个望远镜一定帮您捕捉到了很多美丽的瞬间吧！😍",
+          "selected_fact_ids": [
+            "6bb0e4d41e8941c684786f9bbe35088a"
+          ]
+        },
+        {
+          "query": "远帆望远镜是我在哪种活动中会带的？",
+          "response": "😌 平静，远帆望远镜是你在观鸟时经常会带的工具哦。它可以帮助你更清楚地观察远处的鸟类。下次观鸟时，记得带上它，享受观察鸟类的乐趣吧！🐦🔭",
+          "selected_fact_ids": [
+            "6bb0e4d41e8941c684786f9bbe35088a"
+          ]
+        },
+        {
+          "query": "出发前检查车胎这件事对我重要吗？",
+          "response": "😌当然重要呢！你之前提到，出发前检查车胎对你来说非常重要，这是你个人的习惯和偏好。确保车胎状况良好，可以让你在出行时更加安心和放心。记得每次出发前都要检查一下哦！😊",
+          "selected_fact_ids": [
+            "c09cf4a0d5a74778ab5b40912f97e8c4"
+          ]
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "response": "😌 平静，关于您平时用哪种编程语言写单元测试，这个信息我需要您来告诉我哦。不同的编程语言有不同的单元测试框架，比如Python有pytest，Java有JUnit，C#有NUnit等。您平时是用哪种语言呢？😊",
+          "selected_fact_ids": []
+        }
+      ]
+    }
+  ]
+}
