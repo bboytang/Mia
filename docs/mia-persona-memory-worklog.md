@@ -2,6 +2,7 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- 实际关闭候选d106a6868694f8f96d902635844ef0a96550c3a7已精确发布，工作树干净。shutdown整链[38973027072](https://github.com/bboytang/Mia/actions/runs/38973027072)仅单次创建，最新确认in_progress，正在临时runner安装固定上游完整导入依赖；没有完整app实测结果。相同SHA服务38972988087、真实manager38972988065、行为语法38972988164均已success。下一次只跟踪38973027072，保留真实依赖/导入/生命周期任何失败；独立v2仍未执行，P22/P23/P24未完成。
 - aef41df9故障38971357457终态failure/27请求，最终非空坏JSON门槛明确false、原六空输出不修补。独立正常恢复这次实际完成：六SDK APITimeoutError→ReadTimeout、原两attempts、12重复同ID、三事实首次正常提交及换PID正确乐器召回，空闲关闭实际0.2167/0.1405/0.1171秒。12原回答已读，faults-independent-glm53-flashx-*完整原报告/SQL/哈希和proof保留；不是全服务或在途关闭通过。
 - 新shutdown候选直接导入安装后完整ConnectionHandler/app，无fake logger/util；原app.main启动真实WS/HTTP/GC及原Worker，以真实SIGTERM关闭。三组合成用户分别保持已通过原validator且绑定实际extracting任务ID的原模型提案；一项关闭后1秒释放并提交/换PID召回，另一项保持45秒且要求整个进程20秒内退出、持久任务由第三PID按原两attempts恢复，核对唯一两事实/两向量。实际stdin管道与服务监听/退出探测，辅助WSS文本驱动仅取消自己的轮询，不额外等Worker。省略音频消费者；未称全语音或P23通过。
 - shutdown额外依赖仅临时Ubuntu runner：固定上游requirements、CPU torch/torchaudio2.2.2及现有BGE制备依赖；完整直接版本/未锁传递依赖/系统范围见runtime-shutdown-contract.md，保存pip freeze与dpkg实际版本，不装本机、不启第二记忆服务。32项本地Worker/CI相关测试通过（7.340秒），最后任务ID绑定后保持器2项复验通过；Python/冻结三组/YAML/diff检查通过。实际全导入、Java及Linux生命周期仍待精确候选CI，不以代码存在冒称通过。P22/P23/P24未完成，v2保留。

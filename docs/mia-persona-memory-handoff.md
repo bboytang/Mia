@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+当前首项：跟踪精确d106a686的shutdown38973027072（已确认in_progress、临时runner完整依赖安装中），不要重复启动。该SHA服务38972988087、manager38972988065、行为语法38972988164已success；这些不替代实际app/进程关闭。终态后读取实际导入、监听、SIGTERM、全部退出时间、原SQLite任务与第三PID恢复结果，保存失败和原回答。独立v2/P23/P24前置未满足，完整目标继续，生产模型未改。
+
 最新接续覆盖下方旧记录：faults38971357457已failure/27请求，非空坏JSON未证；独立正常恢复/换PID召回/空闲关闭实际完成，原完整证据在faults-independent-glm53-flashx-*。当前shutdown候选使用实际app.main/完整类导入/真实WS/HTTP/GC/同Worker/SIGTERM，三组受控真实已校验结果保持与跨PID恢复；32本地相关项及最后保持器2项复验通过，真实完整导入/Java/Linux待精确SHA CI。具体安装版本与边界见verification/mia-persona-memory/runtime-shutdown-contract.md；仅临时runner安装。本候选不改生产模型/Secrets/事实库/两attempts，音频消费者省略，P22/P23/P24未完成，v2未消耗。
 
 最新接续：aef41df9已发布，服务CI38971228481/行为语法38971228546 success。旧tools38970299198终态success/30场景66请求，实际原生并行三组观察到，全部场景与预热回答已复核，tools-glm53-flashx-*保留具体局限。新faults38971357457为改进控制流候选唯一真实整链句柄；保持8预算及所有原门槛，即使非空坏JSON未证也继续独立正常恢复/换PID检查，最终不得冒称通过。优先跟踪此句柄，继续全服务在途关闭真实验证；P22/P23/P24未完成。

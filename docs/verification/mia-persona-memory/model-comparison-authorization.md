@@ -16,4 +16,4 @@
 
 SHA61eaa416：Flash [38967571902](https://github.com/bboytang/Mia/actions/runs/38967571902)已failure，4项执行/3请求，前三通过，第四项原Worker30秒timeout，6项未执行。第三请求没有原提案/最终metadata，不称SDK HTTP超时或内容错误。FlashX [38967588609](https://github.com/bboytang/Mia/actions/runs/38967588609)success，十项/七真实请求全通过，原重要性0.8实际保存，实际request/response_model/usage已核对。原提取/提案模块blob与2a3baf73相同，没有改生产者来取得这次通过。完整原报告及hash分别见metadata-glm53-flash-*与metadata-glm53-flashx-*。
 
-FlashX实际manager/BGE成长38968076242、自然纠错38968090570、v1检索38968105383均各单次在途；继续同handle，不重发。辅助通过不等于P22，不决定生产采用；独立v2未使用。
+FlashX实际manager/BGE成长38968076242、自然纠错38968090570、v1检索38968105383均已终态success，分别39/21/41请求；原回答与SQL已读并归档，具体语义局限见growth/natural/retrieval-glm53-flashx-*。用户明确接受自然“你从没告诉过我”措辞，不能据此判失败或加限制。隔离Scope38970303359（36请求）与工具38970299198（30场景/66请求）也已通过指定机械与预期结果，具体局限在对应档案。故障38970307413失败18请求；改进控制流38971357457仍失败27请求，非空坏JSON未证，但正常恢复/换PID召回这次实际执行，完整原证据保留。实际app关闭候选d106a686/38973027072在途，不重复启动。以上不决定生产采用或证明完整P22；独立v2未使用。
