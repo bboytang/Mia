@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+最新覆盖：成长01f387f6/38982225986已success，39请求/27原回答已读，三组特点/后续会话/3PID/删除失效链完成，growth-persistence-feedback-*保存，原回答习惯泛化等局限不隐去。独立v3 faf4ce41/38983017682单次in_progress、精确SHA已核对，只跟踪同句柄，不重发v2。新增B07当前真实日期情绪授权/停用/管理纠正/删除/3PID候选，只加CI入口、不改运行模块或时钟；静态检查通过，真实Java/Provider/观察尚未执行，见emotion-current-calendar-contract.md。真实跨七日自测仍由用户完成，P22未整体验收，P23/P24继续原顺序。
+
 当前唯一在途行为句柄：01f387f6/成长38982225986（隔离FlashX、headSha已核对）；该SHA服务38982182016、manager38982181930、身份38982182033、真实向量38982181957、语法38982182000全success。新独立v3在首次请求前冻结，入口retrieval_holdout_v3；运行Python与原检索driver不改，见retrieval-holdout-v3-freeze.md。先读取成长终态再执行新v3，原v2不得重跑，实际语义仍待原回答复核，不提前称P22完成。P23/P24仍按原前置推进。
 
 最新覆盖：4b81c927校准v1/38980235375已success/39请求、15结构检查、27原回答已读；retrieval-growth-eligibility-*归档，语义局限不扩大成整体通过。成长38980239326已failure/34请求、22回答已读，前两组完整链通过；第三组模型实际给出特点但description含“诊断”，被既有持久资格静默跳过，growth-persistence-policy-*保留原失败。当前候选只把既有资格前置为Worker反馈，并移除特点字段说明中的政策回声，原两attempts与持久规则不变；68本地项通过，Windows权限断言另由Linux验证。待精确SHA成长及基础CI，不重发旧句柄/独立v2；P22→P23→P24完整顺序保持，关闭已完成、P22其余与新独立验收仍待完成。

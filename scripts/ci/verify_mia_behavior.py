@@ -61,7 +61,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'shutdown', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'shutdown', 'emotions', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -630,6 +630,7 @@ async def drive():
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
         'retrieval_holdout': 'persona_memory_retrieval_p22_v2.json',
         'retrieval_holdout_v3': 'persona_memory_retrieval_p22_v3.json',
+        'emotions': 'persona_memory_emotions_p22_v1.json',
         'recovery': 'persona_memory_recovery_p22_v1.json',
         'inflight': 'persona_memory_correction_p22_v1.json',
         'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
@@ -754,6 +755,15 @@ async def drive():
             report = json.loads(REPORT.read_text())
             report.update(passed=True, shutdown_proof=proof, server_pids=proof['server_pids'],
                 raw_response_review='required; actual app/service/process lifecycle, controlled native hold, audio consumers omitted; not P23 resources')
+        elif SUITE == 'emotions':
+            phase = 'actual_current_calendar_emotion_lifecycle'
+            from mia_behavior_emotions import drive_emotions
+            def checkpoint(proof):
+                (ROOT / 'emotions-proof.json').write_text(json.dumps(proof, ensure_ascii=False, indent=2))
+            proof = await drive_emotions(sample, ask, manage, start, stop, first_pid, checkpoint)
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, emotions_proof=proof, server_pids=proof['server_pids'],
+                raw_response_review='required; current-calendar controlled chain only; seven-day acceptance is user self-test')
         elif SUITE == 'tools':
             phase = 'ten_real_tool_and_context_scenarios'
             from mia_behavior_tools import drive_tools
@@ -948,11 +958,13 @@ async def drive():
             await stop()
         except Exception as error:
             report.update(passed=False, shutdown_error_class=type(error).__name__)
+        if SUITE == 'emotions' and (ROOT / 'emotions-proof.json').exists():
+            report['emotions_proof'] = json.loads((ROOT / 'emotions-proof.json').read_text())
         decision_keys = {'passed', 'error_class', 'failed_phase', 'error_locations', 'server_pids', 'genuine_wss_restart',
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof', 'faults_proof', 'shutdown_proof'}
+            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof', 'faults_proof', 'shutdown_proof', 'emotions_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

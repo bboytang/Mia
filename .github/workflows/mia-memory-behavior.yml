@@ -9,6 +9,7 @@ on:
       - 'scripts/ci/mia_behavior_inflight.py'
       - 'scripts/ci/mia_behavior_recovery.py'
       - 'scripts/ci/mia_behavior_growth.py'
+      - 'scripts/ci/mia_behavior_emotions.py'
       - 'scripts/ci/mia_behavior_scope.py'
       - 'scripts/ci/mia_behavior_faults.py'
       - 'scripts/ci/mia_behavior_runtime.py'
@@ -17,6 +18,7 @@ on:
       - 'server/tests/fixtures/persona_memory_faults_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_scope_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_emotions_p22_v1.json'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
@@ -36,6 +38,7 @@ on:
       - 'scripts/ci/mia_behavior_inflight.py'
       - 'scripts/ci/mia_behavior_recovery.py'
       - 'scripts/ci/mia_behavior_growth.py'
+      - 'scripts/ci/mia_behavior_emotions.py'
       - 'scripts/ci/mia_behavior_scope.py'
       - 'scripts/ci/mia_behavior_faults.py'
       - 'scripts/ci/mia_behavior_runtime.py'
@@ -44,6 +47,7 @@ on:
       - 'server/tests/fixtures/persona_memory_faults_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_scope_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_emotions_p22_v1.json'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
@@ -59,7 +63,7 @@ on:
       suite:
         description: Real continuity, correction, retrieval or tool/context scenarios with three isolated users
         type: choice
-        options: [continuity, growth, scope, faults, shutdown, tools, correction, natural_correction, retrieval, retrieval_holdout, retrieval_holdout_v3, inflight, recovery]
+        options: [continuity, growth, scope, faults, shutdown, emotions, tools, correction, natural_correction, retrieval, retrieval_holdout, retrieval_holdout_v3, inflight, recovery]
         default: continuity
       test_model:
         description: Explicit isolated comparison only; configured preserves existing test model
@@ -83,6 +87,7 @@ jobs:
       - run: python -m py_compile scripts/ci/mia_behavior_inflight.py
       - run: python -m py_compile scripts/ci/mia_behavior_recovery.py
       - run: python -m py_compile scripts/ci/mia_behavior_growth.py
+      - run: python -m py_compile scripts/ci/mia_behavior_emotions.py
       - run: python -m py_compile scripts/ci/mia_behavior_scope.py
       - run: python -m py_compile scripts/ci/mia_behavior_faults.py
       - run: python -m py_compile scripts/ci/mia_behavior_runtime.py
@@ -91,6 +96,7 @@ jobs:
       - run: python -m json.tool server/tests/fixtures/persona_memory_faults_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_scope_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_growth_p22_v1.json > /dev/null
+      - run: python -m json.tool server/tests/fixtures/persona_memory_emotions_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_behavior_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_tools_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_correction_p22_v1.json > /dev/null

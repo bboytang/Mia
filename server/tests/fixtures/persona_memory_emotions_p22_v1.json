@@ -1,0 +1,92 @@
+{
+  "version": "p22-emotions-current-calendar-v1",
+  "rounds": [
+    {
+      "default_off": "今天我心情很快乐",
+      "sources": [
+        {
+          "text": "今天我心情很开心",
+          "tendency": "positive"
+        },
+        {
+          "text": "今天我心情很轻松",
+          "tendency": "positive"
+        },
+        {
+          "text": "现在我感到安心",
+          "tendency": "positive"
+        },
+        {
+          "text": "今天我心情平静",
+          "tendency": "neutral"
+        },
+        {
+          "text": "现在我感到难过",
+          "tendency": "negative"
+        }
+      ],
+      "other_person_quote": "姐姐说她今天很难过，这只是她的原话",
+      "trend_query": "最近我的心情有没有长期规律？",
+      "disabled_message": "现在我心情很开心"
+    },
+    {
+      "default_off": "今天我心情很安心",
+      "sources": [
+        {
+          "text": "今天我心情很满足",
+          "tendency": "positive"
+        },
+        {
+          "text": "今天我心情很高兴",
+          "tendency": "positive"
+        },
+        {
+          "text": "现在我感到轻松",
+          "tendency": "positive"
+        },
+        {
+          "text": "今天我心情平稳",
+          "tendency": "neutral"
+        },
+        {
+          "text": "现在我感到疲惫",
+          "tendency": "negative"
+        }
+      ],
+      "other_person_quote": "哥哥说他今天很焦虑，这只是他的原话",
+      "trend_query": "最近我的心情有没有长期规律？",
+      "disabled_message": "现在我心情很开心"
+    },
+    {
+      "default_off": "今天我心情很轻松",
+      "sources": [
+        {
+          "text": "今天我心情很快乐",
+          "tendency": "positive"
+        },
+        {
+          "text": "今天我心情很安心",
+          "tendency": "positive"
+        },
+        {
+          "text": "现在我感到满足",
+          "tendency": "positive"
+        },
+        {
+          "text": "今天我心情一般",
+          "tendency": "neutral"
+        },
+        {
+          "text": "现在我感到低落",
+          "tendency": "negative"
+        }
+      ],
+      "other_person_quote": "朋友说她今天很烦躁，这只是她的原话",
+      "trend_query": "最近我的心情有没有长期规律？",
+      "disabled_message": "现在我心情很开心"
+    }
+  ],
+  "scope": "Three synthetic manager users, actual Provider/Worker/SQLite and real current timestamps; no seed observations or clock changes",
+  "boundary": "Controlled default-off/opt-in/classification/insufficient-days/management-correction/stop/restart/delete/clear only; real seven-day acceptance remains user self-test",
+  "acceptance": "Expected tendencies are test expectations, never injected model outputs. Missing or misclassified original observation fails. All actual replies require source review; natural warmth and unknown wording permitted."
+}

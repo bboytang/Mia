@@ -2,6 +2,9 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- 01f387f6成长38982225986终态success/39请求，27原回答逐条已读；三组原模型实际特点、三个后续新会话、每组3真实PID及删除特点/事件失效完成，growth-persistence-feedback-*保存原报告/SQL/proof/哈希。所有四源首次提交，所以此次不冒称观察到了真实第二尝试反馈（该分支由受控单测证明）；木作草图泛化为学新东西、植物拓印“喜欢”说成“最喜欢”等仍保留语义局限，不报完整P22/通用零错误。faf4ce41服务38982544558、manager38982544478、行为语法38982544486均success（语法不是新实际行为）。独立v3[38983017682](https://github.com/bboytang/Mia/actions/runs/38983017682)仅单次创建，精确headSha=faf4ce41308ac4446258fc7b0d9167824d40f22b，已核对in_progress，原v2失败不重跑。
+- 等待期间补B07当前真实日期授权生命周期入口：三独立合成用户、五实际来源/会话，由原模型分类并经原Worker保存；默认关闭、他人引用、真实不足七日、管理纠正/停用/换PID/单删/清空/再换PID全链及途中原查询证据。无时钟修改、预置观察/模型结果、额外attempt或运行模块变更；真正七日自测继续交用户。原Python AST/YAML/JSON与样本结构检查通过，不以此称Java或整链通过，实际Actions待新精确SHA。完整边界见emotion-current-calendar-contract.md；P22余项/独立v3与最终相关回归尚未收尾，P23/P24未完成。
+
 - 资格反馈修复01f387f690bbdb4dbaa1ef7d64c7c694b7781a0c已精确发布，五项基础CI全success：服务38982182016、manager38982181930、身份38982182033、真实向量38982181957、提取语法38982182000。隔离FlashX成长[38982225986](https://github.com/bboytang/Mia/actions/runs/38982225986)单次创建且headSha核对为01f387f6，最新in_progress，不重发。等待期间准备独立新v3语料与原harness路由；只更改测试入口，运行Python和原检索driver不变，实际来源/重要性/回答仍须真实生成。冻结对象/边界见retrieval-holdout-v3-freeze.md；先读成长终态，v3尚未执行，原v2失败不改写，P22/P23/P24保持未完成。
 
 - 4b81c927校准v1/38980235375终态success：39真实请求、15结构检查、27原回答已读，三组四来源均首次提交；retrieval-growth-eligibility-*保存原报告/SQL/哈希。泛化与感官/材料表达局限保留，不等同独立留出或整体语义通过。成长38980239326终态failure/34请求、22原回答已读，前两组完整生命周期通过，第三组四事实首次提交但特点未保存。实际模型已经返回三来源特点，description带“不做用户性格诊断”，被MemoryStore._trait既有SENSITIVE检查静默跳过；不是模型没有产出或数据库故障。growth-persistence-policy-*保留未修改的原失败与SQL。
