@@ -14,7 +14,7 @@ import numpy as np
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
-from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, explicit_change, validate_output
+from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, context_for, explicit_change, normalize, validate_output
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryStore, MemoryError
 from server.companion.semantic import SemanticMemoryIndex
@@ -141,6 +141,49 @@ class ExtractionValidationTests(unittest.TestCase):
         for index in [0, 1, 2]:
             with self.subTest(index=index), self.assertRaises(MemoryError):
                 self.validate(source, proposal(old, source_index=index), context)
+
+    def test_natural_correction_requires_owned_unique_literal_target_and_keeps_raw_result(self):
+        target = {'id': 'owned', 'content': '我平常用木梳梳头', 'category': 'fact',
+                  'content_version': 2, 'evidence_version': 3}
+        for source in ('我梳头用角梳，之前说木梳是口误', '我梳头用角梳，不是木梳'):
+            proof = {'form': 'natural', 'kind': 'correction', 'target_id': 'owned',
+                     'old_quote': target['content'], 'evidence': source,
+                     'old_value': '木梳', 'new_value': '角梳', 'anchor': '梳头'}
+            item = proposal(source, reconciliation=proof)
+            before = json.dumps(item, ensure_ascii=False, sort_keys=True)
+            record = self.validate(source, item, [target])['memories'][0]
+            self.assertEqual(record['replaces_id'], 'owned')
+            self.assertEqual(record['content'], normalize(source))
+            self.assertEqual(record['reconciliation']['target_evidence_version'], 3)
+            self.assertEqual(json.dumps(item, ensure_ascii=False, sort_keys=True), before)
+            with self.assertRaises(MemoryError):
+                self.validate(source, proposal(source), [target])
+            for changes in ({'target_id': 'foreign'}, {'old_value': '塑料梳'},
+                            {'new_value': '铁梳'}, {'anchor': '洗头'},
+                            {'evidence': 'fabricated'}, {'kind': 'time_change'},
+                            {'new_value': '木梳'}):
+                with self.subTest(changes=changes), self.assertRaises(MemoryError):
+                    self.validate(source, proposal(source, reconciliation=dict(proof, **changes)), [target])
+            ambiguous = dict(target, id='another', content='旅行时我用木梳梳头')
+            with self.assertRaises(MemoryError):
+                self.validate(source, item, [target, ambiguous])
+        for source in ('我梳头用角梳，木梳放在桌上', '我不确定梳头用角梳还是木梳',
+                       '我可能梳头用角梳，不是木梳', '我以前梳头用木梳，现在用角梳，不是木梳'):
+            proof = dict(proof, evidence=source)
+            with self.assertRaises(MemoryError):
+                self.validate(source, proposal(source, reconciliation=proof), [target])
+
+    def test_first_person_correction_intro_is_not_other_speaker_evidence(self):
+        provider = Mock()
+        extractor = LLMMemoryExtractor(lambda: provider)
+        source = '之前说的梳子记错了，我用角梳，不是木梳'
+        extractor([source], [])
+        self.assertEqual(provider.response_no_stream.call_count, 1)
+        self.assertEqual(json.loads(provider.response_no_stream.call_args.args[1])['user_excerpts'], [source])
+        for foreign in ('之前小张说我用木梳是口误', '小张说我用角梳，不是木梳'):
+            result = extractor([foreign], [])
+            self.assertEqual(result, {'memories': [], 'trait': None})
+        self.assertEqual(provider.response_no_stream.call_count, 1)
 
     def test_mixed_quote_and_real_statement_only_keep_actual_statement(self):
         source = '“我喜欢蓝色”只是引用。我喜欢绿色。'
@@ -322,6 +365,27 @@ class ExtractionPipelineTests(unittest.IsolatedAsyncioTestCase):
         await self.worker.submit(TurnCompleted(self.scope, 's', 'one', 'one', self.source, 0))
         self.assertFalse(await self.worker.run_once())
         self.assertEqual(self.calls, 1)
+
+    async def test_natural_correction_commits_same_fact_and_replaces_old_source_and_vector(self):
+        await self.admit()
+        await self.worker.run_once()
+        target = self.store.list_memories(self.scope.owner)[0]['id']
+        self.source = '我喜欢绿色，不是蓝色，之前说错了'
+        self.output = {'memories': [proposal(self.source, reconciliation={
+            'form': 'natural', 'kind': 'correction', 'target_id': target,
+            'old_quote': '我喜欢蓝色', 'evidence': self.source,
+            'old_value': '蓝色', 'new_value': '绿色', 'anchor': '喜欢'})]}
+        accepted = await self.admit('natural-correction')
+        await self.worker.run_once()
+        self.assertEqual(self.jobs.current(accepted)['state'], 'committed')
+        records = self.store.list_memories(self.scope.owner)
+        self.assertEqual([(r['id'], r['content']) for r in records], [(target, normalize(self.source))])
+        self.assertEqual(records[0]['source'], normalize(self.source))
+        self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM sources WHERE excerpt=?',
+                                             ('我喜欢蓝色',)).fetchone()[0], 0)
+        self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_vectors').fetchone()[0], 1)
+        self.assertEqual(self.store.snapshot(self.scope.owner)['revision'], 1)
+        self.assertEqual(self.calls, 2)
 
     async def test_model_importance_reaches_existing_metadata_and_retrieval_signal(self):
         self.source = '维护旧书对我很有意义'

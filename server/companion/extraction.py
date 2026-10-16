@@ -66,6 +66,16 @@ Use correction only for explicit '更正：old_quote；new fact', time_change on
 '以前：old_quote；现在：new fact'. Preserve 现在： in the new clause.
 For uncertainty use conflict with '不确定：old_quote；new fact'; it requires confirmation.
 Never reconcile by similarity alone. Do not supply replaces_id; the server decides.
+For an ordinary Chinese self-correction, reconciliation may instead include
+form="natural", kind="correction", target_id, old_quote, evidence, old_value,
+new_value and anchor. old_quote is the COMPLETE owned existing fact, evidence is
+the COMPLETE actual user correction, and source_quote/content preserve that complete
+correction sentence. old_value must occur in both the existing fact and correction;
+new_value must occur in the correction and differ from the existing fact. anchor is
+a literal shared topic phrase. Use this only for an explicit correction of an earlier
+mistake or explicit denial of the old value, never for a guess, quotation or uncertain change.
+The target must be unique among existing facts with this anchor and old_value.
+Do not emit the correction as an unrelated new fact when the target cannot be proved.
 Optional trait requires name, description, evidence_ids, anchor and evidence_quotes
 [{"id":"existing fact id","quote":"literal existing fact quotation"}]. Its anchor must
 occur in every quoted fact and description; at least three distinct sessions and sources
@@ -87,6 +97,9 @@ LOW_VALUE = re.compile(r'^(?:你好|谢谢(?:你|您)?|非常感谢|多谢|再�
     r'^(?:我)?(?:今天|现在|此刻|刚刚|这会儿)(?:感觉|有点|很)?(?:开心|难过|生气|累|饿|困)', re.I)
 EXTRA_SENSITIVE = re.compile(r'过敏|年薪|月薪|薪资|账户余额|债务|高血压|确诊|用药|住院|心理治疗|生理期|\ballerg|\bincome\b', re.I)
 IMPORTANCE = re.compile(r'重要|珍惜|关键|难忘|意义|在意|铭记|\bimportant\b', re.I)
+CORRECTION_MARKER = re.compile(r'更正|记错|说错|口误')
+NATURAL_CORRECTION_REQUEST = re.compile(
+    r'(?:之前|前面|刚才).{0,32}(?:记错|说错|口误)|更正')
 
 
 def normalize(value):
@@ -100,6 +113,9 @@ def source_supported(source, quote, *, allow_transient=False):
         factual = REMEMBER_PREFIX.sub('', clause.strip())
         equivalent = quote is None or quote.rstrip('。!！;；').strip() == factual.rstrip('。!！;；').strip()
         reported = re.search(r'^(?!我|请|米娅).{1,8}(?:说|表示|声称)', clause.strip())
+        if (reported and re.match(r'^(?:我)?(?:之前|前面|刚才)(?:我)?说', clause.strip())
+                and '我' in factual and NATURAL_CORRECTION_REQUEST.search(factual)):
+            reported = None  # Actual first-person correction, not another speaker's report.
         if (factual and equivalent and not NONFACT.search(clause) and not TASK_REQUEST.search(factual) and not reported
                 and not re.search(r'[?？]\s*$|吗\s*$', clause)):
             return allow_transient or not LOW_VALUE.search(factual)
@@ -147,7 +163,10 @@ def context_for(store, owner, expected_consent=None):
 def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive):
     proof = proposed.get('reconciliation')
     if proof is None:
-        if re.search(r'(?:更正|以前|不确定):', normalize(source)):
+        denied_values = re.findall(r'不是([^，,。；;！？!?]{2,32})', normalize(source))
+        denies_known = any(term in fact['content'] for term in denied_values for fact in known.values())
+        if (re.search(r'(?:更正|以前|不确定):', normalize(source))
+                or (known and NATURAL_CORRECTION_REQUEST.search(normalize(source))) or denies_known):
             raise MemoryError('invalid_input', 'Reconciliation instruction needs classification')
         return None
     if not isinstance(proof, dict):
@@ -161,6 +180,29 @@ def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive)
             or proof.get('old_quote') != target['content'] or quote == target['content']):
         raise MemoryError('invalid_input', 'Reconciliation lacks owned explicit evidence')
     evidence = proof.get('evidence')
+    if proof.get('form') == 'natural':
+        actual = normalize(source)
+        values = [proof.get(key) for key in ('old_value', 'new_value', 'anchor')]
+        if any(not isinstance(term, str) or not 2 <= len(term.strip()) <= 32 for term in values):
+            raise MemoryError('invalid_input', 'Natural correction lacks literal values')
+        old, new, anchor = [normalize(term.strip()) for term in values]
+        matching = [fact for fact in known.values() if old in fact['content'] and anchor in fact['content']]
+        denied = re.search(r'不是\s*' + re.escape(old), actual)
+        uncertain = re.search(r'不确定|记不清|可能|也许|或许|大概|似乎|好像', actual)
+        temporal = (re.search(r'以前|过去|曾经', actual) and re.search(r'现在|如今', actual)
+                    and not CORRECTION_MARKER.search(actual))
+        if (mode != 'correction' or not isinstance(evidence, str) or normalize(evidence) != actual
+                or quote.rstrip('。!！') != actual.rstrip('。!！') or not source_supported(source, quote)
+                or QUOTED.search(actual) or NONFACT.search(source)
+                or uncertain or temporal
+                or not (CORRECTION_MARKER.search(actual) or denied)
+                or len(matching) != 1 or matching[0]['id'] != target_id
+                or old not in actual or new not in actual or anchor not in actual
+                or old == new or old in new or new in old or new in target['content']
+                or anchor in {old, new}):
+            raise MemoryError('invalid_input', 'Natural correction lacks unique explicit evidence')
+        return {'target_id': target_id, 'kind': mode, 'target_version': target['content_version'],
+                'target_evidence_version': target['evidence_version']}
     expected = normalize(prefixes[mode] + target['content'] + '；' + quote)
     if (not isinstance(evidence, str) or normalize(evidence) != expected
             or expected not in normalize(source) or not source_supported(source, quote)

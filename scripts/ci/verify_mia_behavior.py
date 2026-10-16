@@ -46,6 +46,7 @@ from core.providers.tts.dto.dto import TTSMessageDTO, SentenceType, ContentType
 from plugins_func.register import Action, ActionResponse
 from mia_companion.authorization import PrivateAuthorizationRequired, load_private_config
 from mia_companion.context import ContextBuilder
+from mia_companion.extraction import normalize
 from mia_companion.persona import PersonaGuardrail
 from mia_companion.semantic import SemanticMemoryIndex
 from mia_companion import authorization, reply, xiaozhi_adapter as adapter
@@ -601,6 +602,7 @@ async def drive():
                 and analysis['all_components_observed'], retrieval_analysis=analysis, server_pids=[first_pid],
                 raw_response_review='required; actual source metadata and answer ownership, not only nonzero scores')
         elif SUITE in {'correction', 'natural_correction', 'inflight'}:
+            replacement_fact = normalize(sample['replacement'])
             phase = 'correction_original_source'
             original, saved = await ask(sample['source'])
             facts = [row for row in saved['memories'] if row['confirmed'] and row['content'] == sample['source']]
@@ -616,7 +618,7 @@ async def drive():
                 else '更正：' + sample['source'] + '；' + sample['replacement'])
             corrected, saved = await ask(correction_query)
             current = [row for row in saved['memories'] if row['id'] == target]
-            assert len(current) == 1 and current[0]['confirmed'] and current[0]['content'] == sample['replacement']
+            assert len(current) == 1 and current[0]['confirmed'] and current[0]['content'] == replacement_fact
             assert not old_events.intersection(row['id'] for row in saved['events'] if row['state'] == 'active')
             phase = 'correction_restart_and_third_wording'
             await stop()
@@ -625,7 +627,7 @@ async def drive():
             recalled, saved = await ask(sample['query'])
             assert target in recalled['diagnostics']['selected_fact_ids']
             facts = json.loads(recalled['input']['messages'][1]['content'])['mia_context']['facts']
-            assert any(row['id'] == target and row['content'] == sample['replacement'] for row in facts)
+            assert any(row['id'] == target and row['content'] == replacement_fact for row in facts)
             assert all(row['content'] != sample['source'] for row in facts)
             assert any(word in recalled['tts_text'] for word in sample['answer_words'])
             assert len({original['session_id'], previous['session_id'], corrected['session_id'], recalled['session_id']}) == 4
@@ -649,7 +651,7 @@ async def drive():
             assert all(row['state'] != 'active' for row in saved['events'])
             report = json.loads(REPORT.read_text())
             report.update(passed=True, server_pids=[first_pid, second_pid, third_pid], genuine_wss_restart=True,
-                correction_original_id=target, correction_current_fact=sample['replacement'],
+                correction_original_id=target, correction_current_fact=replacement_fact,
                 correction_deleted_after_restart=True, correction_old_events=sorted(old_events),
                 inflight_proof=inflight_proof,
                 raw_response_review='required; this selected correction corpus and optional held-result deletion only, not arbitrary natural correction/growth/trend/identity acceptance')

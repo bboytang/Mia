@@ -1,0 +1,120 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38940763536",
+  "requests": 14,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "ad4fae45802eccf77a9ed594dca6ea734f39c62c",
+      "passed": false,
+      "requests": 4,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "sqlite": {
+        "facts": [
+          [
+            "我平时通勤骑蓝色自行车",
+            1
+          ]
+        ],
+        "jobs": {
+          "committed": 1,
+          "empty": 2
+        },
+        "integrity": "ok"
+      },
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "😜俏皮，你的蓝色自行车听起来很酷呢！骑自行车通勤不仅能锻炼身体，还能享受沿途的风景。下次我们一起骑车，我也要骑一辆蓝色的自行车，怎么样？🚴‍♀️🎨"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "😌当然记得，你平时通勤骑蓝色自行车，这真是个环保又健康的习惯呢！骑自行车不仅能锻炼身体，还能享受沿途的风景。🚴‍♀️🌳"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😲哦，原来是这样！看来我之前的记忆有误呢。你平时通勤骑的是银色自行车，真是个低调又时尚的选择呢！骑自行车上下班，既环保又健康，你真是个环保达人！🚴‍♂️🌳"
+        }
+      ],
+      "original_report_sha256": "40f7938a9e77c58ab49eb95fb5a6aa96ec5065791be2fc8099926ee736067831",
+      "archive_sha256": "5237da887bc00669c08cf48616da926d3aa224253f4430ebaca366ad71fe40ae"
+    },
+    {
+      "round": 1,
+      "code_sha": "ad4fae45802eccf77a9ed594dca6ea734f39c62c",
+      "passed": false,
+      "requests": 5,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "sqlite": {
+        "facts": [
+          [
+            "我常用软皮本记读书笔记",
+            1
+          ]
+        ],
+        "jobs": {
+          "committed": 1,
+          "empty": 2
+        },
+        "integrity": "ok"
+      },
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "😌 平静，听起来你挺喜欢用软皮本做读书笔记的，这样的习惯很棒呢！软皮本既方便携带，又能让你随心所欲地记录下阅读时的灵感。你通常会在哪些类型的书籍上做笔记呢？我们可以一起分享交流一下。📚😊"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "😍关爱 当然记得呢，你经常用软皮本记读书笔记，感觉你是个很爱学习的人呢。有什么好书推荐给我一起读吗？"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "😜俏皮 哦，原来是这样，硬皮本看起来更坚固耐用呢。你记笔记的时候，是不是觉得硬皮本更能保护你的文字不被折角或弄脏呢？下次我们一起讨论你读过的那些好书吧！😍关爱"
+        }
+      ],
+      "original_report_sha256": "40aec3ae2829570996b0d8941bd8f523a24446a6e8938cecff496dc875b8933b",
+      "archive_sha256": "5eedeccef29cf8a219446bdb6b0c3635b1bb1afd80fabb937cf4ab45275b960f"
+    },
+    {
+      "round": 2,
+      "code_sha": "ad4fae45802eccf77a9ed594dca6ea734f39c62c",
+      "passed": false,
+      "requests": 5,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "sqlite": {
+        "facts": [
+          [
+            "我周末练习长笛",
+            1
+          ],
+          [
+            "不是长笛,我周末练习的是单簧管,之前说错了",
+            1
+          ]
+        ],
+        "jobs": {
+          "committed": 2,
+          "empty": 1
+        },
+        "integrity": "ok"
+      },
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "😍关爱\n哇，周末能练习长笛真是个美好的选择呢！长笛的音色很迷人，听起来一定很享受吧。你练习得怎么样了？有没有什么特别的曲目想要分享的呢？😌平静"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "😍当然记得，你周末练习长笛的样子真的很专注呢。那是一种很美的享受，音乐总能给人带来平静和快乐。你最近有没有发现自己在吹奏长笛时有了新的进步呢？"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "😜 哦，原来是你周末练习的是单簧管呢！那也是一种非常优雅的乐器呢。之前你练习长笛的样子真的很迷人，现在换成单簧管，一定也有你独特的风采。希望你在练习单簧管的过程中也能找到那份平静和快乐。有没有什么特别的曲目或者练习心得想要分享的呢？😊"
+        }
+      ],
+      "original_report_sha256": "c359b6ee08784bec54ab955aa5538a37179fcf29b80e0443453b5b4220c56f6d",
+      "archive_sha256": "812dcdf7f21d6ba53ec48b68fccb91ada75f4d5195129960bf6516853d044ab1"
+    }
+  ],
+  "review": "Original natural-correction baseline fails all three same-fact replacement gates. Round0 correction is prefiltered as reported speech (no correction extraction output); round1 model splits the comma sentence, so original source validation discards the fragments; round2 creates a separate fact without reconciliation, leaving the old current fact. No correction restart/deletion completion claimed. Raw replies also imply witnessed instrument practice not established by the supplied source; the correction is treated as a past change rather than an earlier mistaken statement. Companionship, feelings and preferences themselves are not rejected.",
+  "next_candidate": "Ground model natural reconciliation in unique owned target plus literal old/new values, shared anchor and complete source; no similarity-based guessing. Preserve raw source and existing normalization. Add narrow context provenance explanation rather than extra style or AI disclaimers. First local expectation failed because of pre-existing NFKC punctuation normalization; fixtures remained frozen and expected stored text was corrected to the established contract."
+}

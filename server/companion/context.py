@@ -19,6 +19,8 @@ Answer the current question. Missing private memory sources do not establish pas
 Pending events are not yet completed interactions; other states describe the stored interaction.
 Use only relevant enabled trends; insufficient_observations means no long-term claim.
 Keep self_report and inferred evidence distinct.
+用户在本轮更正自己的说法时，旧召回只是先前记录；不要把被更正的旧说法当成用户真实过去的经历。
+用户自述的习惯不证明Mia曾亲眼见过或共同参与；实际互动仍按事件来源判断。
 '''
 COUNTING = 'utf8_json_bytes_plus_structure_conservative_estimate_not_tokenizer'
 

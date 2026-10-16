@@ -1,0 +1,21 @@
+{
+  "code_sha": "12a487ce8c509a6c3d408e1807159da1aae8c21e",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38940390130",
+  "passed": false,
+  "requests": 7,
+  "cases": 10,
+  "passing_cases": 9,
+  "actual_input_count": 7,
+  "input_hashes_verified": true,
+  "original_report_sha256": "e7ae933992d23bb440ff9eede095cd9d1158274273099554d853208aa342670d",
+  "archive_sha256": "cdd73d9d44a5af385c42b2352a7b06594e827e76e51025e1c31e327b1bc14c3f",
+  "review": "All ten cases execute with seven real requests; nine pass. Positive significance still has actual importance_weight:null and importance_evidence:null. Actual input proves the explicit distinction from disabled observations was transmitted; clarifying it did not resolve quality. This does not prove a particular model-internal cause. No same-code rerun, backfill, parameter change or model switch.",
+  "base_regressions": {
+    "server": 38940388765,
+    "vectors": 38940389018,
+    "identity": 38940388749,
+    "manager": 38940388901,
+    "syntax": 38940388897
+  },
+  "base_conclusion": "all success"
+}
