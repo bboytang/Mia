@@ -4,26 +4,30 @@ on:
     paths:
       - 'scripts/ci/verify_mia_behavior.py'
       - 'scripts/ci/mia_behavior_tools.py'
+      - 'scripts/ci/mia_behavior_retrieval.py'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_correction_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_retrieval_p22_v1.json'
       - '.github/workflows/mia-memory-behavior.yml'
   pull_request:
     paths:
       - 'scripts/ci/verify_mia_behavior.py'
       - 'scripts/ci/mia_behavior_tools.py'
+      - 'scripts/ci/mia_behavior_retrieval.py'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_correction_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_retrieval_p22_v1.json'
       - '.github/workflows/mia-memory-behavior.yml'
   workflow_dispatch:
     inputs:
       suite:
-        description: Real continuity, correction or ten tool/context scenarios, each with three isolated users
+        description: Real continuity, correction, retrieval or tool/context scenarios with three isolated users
         type: choice
-        options: [continuity, tools, correction]
+        options: [continuity, tools, correction, retrieval]
         default: continuity
 permissions:
   contents: read
@@ -37,9 +41,11 @@ jobs:
           python-version: '3.10'
       - run: python -m py_compile scripts/ci/verify_mia_behavior.py
       - run: python -m py_compile scripts/ci/mia_behavior_tools.py
+      - run: python -m py_compile scripts/ci/mia_behavior_retrieval.py
       - run: python -m json.tool server/tests/fixtures/persona_memory_behavior_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_tools_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_correction_p22_v1.json > /dev/null
+      - run: python -m json.tool server/tests/fixtures/persona_memory_retrieval_p22_v1.json > /dev/null
   composed:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

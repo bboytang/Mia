@@ -55,7 +55,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools', 'correction'}
+assert SUITE in {'continuity', 'tools', 'correction', 'retrieval'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -191,6 +191,17 @@ async def serve():
     worker = runtime._mia_worker
     store = worker.jobs.store
     index = SemanticMemoryIndex(store, reply._encoder)
+    if SUITE == 'retrieval':
+        actual_retrieve = index.retrieve
+
+        async def observed_retrieve(*args, **kwargs):
+            value = await actual_retrieve(*args, **kwargs)
+            with LOCK:
+                report.setdefault('retrievals', []).append(json.loads(json.dumps(value)))
+                save(report)
+            return value
+
+        index.retrieve = observed_retrieve
     transport = AuthManager('synthetic-behavior-transport')
     handler = installed_connection(report)
     tools_fixture = (json.loads((Path(__file__).resolve().parents[2] /
@@ -289,6 +300,7 @@ async def serve():
                     jobs_before = store.db.execute('SELECT COUNT(*) FROM mia_jobs WHERE owner=?', (scope.owner,)).fetchone()[0]
                 conn.sentence_id = str(uuid.uuid4())
                 llm._mia_requests.clear()
+                retrieval_start = len(report.get('retrievals', []))
                 completed = await asyncio.to_thread(conn.chat, request['query'])
                 if specification is None:
                     assert completed is True, 'Installed chat did not complete'
@@ -309,6 +321,7 @@ async def serve():
                     'input': turn.bundle.request() if turn else {key: last_request[key] for key in ('messages', 'tools', 'max_tokens') if key in last_request},
                     'tool_case_id': specification['id'] if specification else None, 'tool_calls': calls,
                     'installed_tool_sources': hashes, 'sdk_requests': list(llm._mia_requests),
+                    'retrievals': list(report.get('retrievals', [])[retrieval_start:]),
                     'context_status': conn._mia_context_status, 'fault': fault,
                     'job_delta': jobs_after - jobs_before, 'admission_status': dict(conn._mia_job_status or {}),
                     'history_fixture': specification.get('history_fixture') if specification else None}
@@ -407,6 +420,7 @@ async def drive():
     from websockets.asyncio.client import connect
     fixture_name = {'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
+        'retrieval': 'persona_memory_retrieval_p22_v1.json',
         'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures' / fixture_name
     dataset = json.loads(fixture_path.read_text())
@@ -508,6 +522,14 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        elif SUITE == 'retrieval':
+            phase = 'actual_source_generated_four_component_retrieval'
+            from mia_behavior_retrieval import drive_retrieval
+            analysis = await drive_retrieval(sample, ask)
+            report = json.loads(REPORT.read_text())
+            report.update(passed=all(row['structural_pass'] for row in analysis['cases'])
+                and analysis['all_components_observed'], retrieval_analysis=analysis, server_pids=[first_pid],
+                raw_response_review='required; actual source metadata and answer ownership, not only nonzero scores')
         elif SUITE == 'correction':
             phase = 'correction_original_source'
             original, saved = await ask(sample['source'])
@@ -614,7 +636,8 @@ async def drive():
         decision_keys = {'passed', 'error_class', 'failed_phase', 'error_locations', 'server_pids', 'genuine_wss_restart',
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
-            'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events'}
+            'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
+            'retrieval_analysis'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

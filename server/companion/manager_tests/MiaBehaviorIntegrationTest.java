@@ -51,7 +51,7 @@ class MiaBehaviorIntegrationTest {
         String endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
         String model = System.getenv("MIA_TEST_LLM_MODEL");
         String suite = System.getenv().getOrDefault("MIA_BEHAVIOR_SUITE", "continuity");
-        assertTrue(suite.equals("continuity") || suite.equals("tools") || suite.equals("correction"));
+        assertTrue(suite.equals("continuity") || suite.equals("tools") || suite.equals("correction") || suite.equals("retrieval"));
         assertNotNull(key, "Dedicated test provider not configured");
         assertNotNull(endpoint, "Dedicated test endpoint not configured");
         assertNotNull(model, "Dedicated test model not configured");

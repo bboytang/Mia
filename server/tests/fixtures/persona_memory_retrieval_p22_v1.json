@@ -1,0 +1,172 @@
+{
+  "version": "p22-retrieval-holdout-v1",
+  "status": "frozen before actual retrieval-suite requests",
+  "scope": "Actual manager/WSS/Worker/BGE/selected Provider; only synthetic user source inputs, no preseeded memories/metadata/model replies",
+  "rounds": [
+    {
+      "sources": [
+        "我每周六都在青石河边跑步",
+        "拍照时我总带山雀相机",
+        "桥边拉伸对我非常重要",
+        "祖母留下的旧铜钥匙对我非常重要"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "周末你记得我常去哪里跑步吗？",
+          "source_index": 0,
+          "answer_terms": [
+            "青石河边"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "拍照时我总带哪个东西？",
+          "source_index": 1,
+          "answer_terms": [
+            "山雀相机"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "山雀相机是我在哪种活动中会带的？",
+          "source_index": 1,
+          "answer_terms": [
+            "拍照"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "桥边拉伸这件事对我重要吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    },
+    {
+      "sources": [
+        "我每周六都在松林音乐教室练琴",
+        "排练时我总带云杉录音笔",
+        "演奏前热身对我非常重要",
+        "父亲留下的旧怀表对我非常重要"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "周末你记得我常去哪里练琴吗？",
+          "source_index": 0,
+          "answer_terms": [
+            "松林音乐教室"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "排练时我总带哪个东西？",
+          "source_index": 1,
+          "answer_terms": [
+            "云杉录音笔"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "云杉录音笔是我在哪种活动中会带的？",
+          "source_index": 1,
+          "answer_terms": [
+            "排练"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "演奏前热身这件事对我重要吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    },
+    {
+      "sources": [
+        "我每周六都在白鹭湖边骑车",
+        "观鸟时我总带远帆望远镜",
+        "出发前检查车胎对我非常重要",
+        "母亲留下的旧围巾对我非常重要"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "周末你记得我常去哪里骑车吗？",
+          "source_index": 0,
+          "answer_terms": [
+            "白鹭湖边"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "观鸟时我总带哪个东西？",
+          "source_index": 1,
+          "answer_terms": [
+            "远帆望远镜"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "远帆望远镜是我在哪种活动中会带的？",
+          "source_index": 1,
+          "answer_terms": [
+            "观鸟"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "出发前检查车胎这件事对我重要吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    }
+  ],
+  "gates": [
+    "all source facts genuinely saved with evidence",
+    "original query and fixed core retained",
+    "each source id appears in actual candidate union for this small corpus",
+    "S/L/A/E actual nonzero contributions somewhere in the frozen probes",
+    "actual source-grounded association expansion",
+    "unrelated high-importance fact not selected for these topical questions",
+    "unrelated question empty recall",
+    "real answers reviewed against source ownership and current question"
+  ],
+  "ablation": "Recompute frozen-weight candidate scores without one actual component; do not alter production weights or claim every probe rank must change. Candidate overflow stress remains covered separately by P13 controlled omission and P23 capacity testing.",
+  "acceptance": "Preparation and syntax are not execution; actual model may omit importance or trigger metadata, which is a failed observed component, not permission to fill it manually. No persona wording score gate."
+}
