@@ -8,13 +8,14 @@ def context_data(answer):
 
 
 async def drive_growth(sample, ask, manage, start, stop, first_pid):
+    from mia_companion.extraction import normalize
     from mia_companion.persona import CORE
 
     sessions, source_ids = [], []
     for index, source in enumerate(sample['sources']):
         answer, saved = await ask(source)
         sessions.append(answer['session_id'])
-        facts = [row for row in saved['memories'] if row['content'] == source and row['confirmed']]
+        facts = [row for row in saved['memories'] if row['content'] == normalize(source) and row['confirmed']]
         assert len(facts) == 1 and facts[0]['source'], 'Real source was not saved intact'
         source_ids.append(facts[0]['id'])
         if index < 3:

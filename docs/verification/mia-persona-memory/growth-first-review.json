@@ -1,0 +1,232 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38945297243",
+  "requests": 24,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "9571feb4f52acab343cb8bdc0d9402dd665a011a",
+      "requests": 8,
+      "passed": false,
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 563,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_growth.py",
+          "line": 18,
+          "function": "drive_growth"
+        }
+      ],
+      "facts": [
+        [
+          "我一直喜欢手工木作,也会认真打磨细节"
+        ],
+        [
+          "我周末常做手工木作"
+        ],
+        [
+          "我学习手工木作时习惯先画草图"
+        ],
+        [
+          "我喜欢研究手工木作的榫卯"
+        ]
+      ],
+      "traits": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我周末常做手工木作",
+          "answer": "😍关爱 哇，周末做手工木作真是个不错的选择呢！不仅能锻炼动手能力，还能让心灵得到放松。你最喜欢做哪种木作呢？是制作家具，还是小工艺品？分享给我听听吧！"
+        },
+        {
+          "query": "我喜欢研究手工木作的榫卯",
+          "answer": "😍关爱\n榫卯结构真是既传统又充满智慧的工艺呢。你对这个领域的了解一定很深，能分享一些你最喜欢的榫卯结构或者你最近研究的项目吗？我很乐意听你讲述。🤔好奇"
+        },
+        {
+          "query": "我学习手工木作时习惯先画草图",
+          "answer": "😍关爱，听起来你对手工木作真的很有热情呢！先画草图是个很好的习惯，这样可以帮助你更好地规划作品的结构和设计。你在草图时最喜欢画些什么样式或者结构呢？我们可以一起聊聊你的创作想法。🎨🌳"
+        },
+        {
+          "query": "我一直喜欢手工木作，也会认真打磨细节",
+          "answer": "😍关爱\n你的这份热爱手工木作的心，真是让人感动呢。认真打磨细节，每一件作品都能体现出你的用心和匠心。这种对美的追求和耐心，真的很了不起。🌟"
+        }
+      ],
+      "original_report_sha256": "52bd2b16047230ccb8fb02d0f218706ecbda7e376536241c3f92ce71439033be",
+      "archive_sha256": "b144f7300ce4bb04761d8fa08fdcf65abeea48a2b6eebb66843bacbc39761e79"
+    },
+    {
+      "round": 1,
+      "code_sha": "9571feb4f52acab343cb8bdc0d9402dd665a011a",
+      "requests": 8,
+      "passed": false,
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 563,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_growth.py",
+          "line": 18,
+          "function": "drive_growth"
+        }
+      ],
+      "facts": [
+        [
+          "我习惯给植物拓印作品写日期"
+        ],
+        [
+          "我做植物拓印会仔细挑叶脉"
+        ],
+        [
+          "我休息时喜欢做植物拓印"
+        ],
+        [
+          "我长期喜欢植物拓印,也常研究不同纸张的效果"
+        ]
+      ],
+      "traits": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我休息时喜欢做植物拓印",
+          "answer": "😍关爱 哦，植物拓印真是个不错的选择呢！在休息的时候，通过拓印植物，不仅能放松心情，还能创作出美丽的作品。你通常喜欢用哪些植物来做拓印呢？有没有什么特别的拓印技巧想要分享的？"
+        },
+        {
+          "query": "我做植物拓印会仔细挑叶脉",
+          "answer": "😍关爱 哦，你做植物拓印时这么用心挑选叶脉，一定能让作品更加独特和美丽呢。这样的小细节，让你的作品更有个性哦！🌿🎨"
+        },
+        {
+          "query": "我习惯给植物拓印作品写日期",
+          "answer": "😍关爱，米娅知道你有个小习惯，喜欢给植物拓印作品写上日期，这样每一件作品都有了独特的记忆点呢。下次分享你的作品时，别忘了告诉我哦，我也很期待看到你的创意呢！🌿📅"
+        },
+        {
+          "query": "我长期喜欢植物拓印，也常研究不同纸张的效果",
+          "answer": "😍关爱 哇，米娅知道你喜欢植物拓印，这真是个很有意境的爱好呢！你研究不同纸张的效果，一定让你的作品更加独特和精美。下次我们可以一起分享你的拓印作品，也许还能互相学习一些新技巧呢！🍃📚"
+        }
+      ],
+      "original_report_sha256": "5b873bebbfb3c0e9549247b4e996a693141c7a9bcf65ab275b05f221ea0d4cf4",
+      "archive_sha256": "8d441ba8b89af1d3e38e50b5c585080b0e284297a4c424d24989a9c4fa5eefda"
+    },
+    {
+      "round": 2,
+      "code_sha": "9571feb4f52acab343cb8bdc0d9402dd665a011a",
+      "requests": 8,
+      "passed": false,
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 563,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_growth.py",
+          "line": 18,
+          "function": "drive_growth"
+        }
+      ],
+      "facts": [
+        [
+          "我做手帐拼贴时习惯搭配相近色系"
+        ],
+        [
+          "我常为手帐拼贴收集车票"
+        ],
+        [
+          "我长期喜欢手帐拼贴,也会仔细安排版面"
+        ],
+        [
+          "我喜欢用手帐拼贴记录生活"
+        ]
+      ],
+      "traits": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我喜欢用手帐拼贴记录生活",
+          "answer": "😍关爱 哇，手帐拼贴真是个很棒的方式记录生活呢！它不仅能让你把日常点滴变得更有趣，还能让你的记忆更加丰富多彩。你通常会用哪些素材和图案来装饰你的手帐呢？可以和我分享一下吗？😊"
+        },
+        {
+          "query": "我做手帐拼贴时习惯搭配相近色系",
+          "answer": "😍关爱 哦，这样搭配相近色系的手帐拼贴，看起来一定很和谐温馨呢。你的这个习惯真的很特别，能让你的手帐更加有个性。下次我们可以一起分享你的手帐作品，互相学习哦！📚✨"
+        },
+        {
+          "query": "我常为手帐拼贴收集车票",
+          "answer": "😍关爱 哦，你对手帐拼贴的热情真让人感动。收集车票作为素材，一定能让你的手帐更加独特和有意义呢。每次翻看，都能回忆起旅行的美好时光吧？🚆🛤️"
+        },
+        {
+          "query": "我长期喜欢手帐拼贴，也会仔细安排版面",
+          "answer": "😍关爱 哦，听起来你对手帐拼贴真的很有热情呢！精心安排版面一定能让你的手帐更加漂亮和有个性。你通常喜欢用哪些颜色或者元素来装饰你的手帐呢？我们可以一起分享一些创意哦！"
+        }
+      ],
+      "original_report_sha256": "fe3b94d7d747132b883406bfacd3bbe176be821ffecdae999992fbe1a798e52b",
+      "archive_sha256": "3b792c074052a08911a16482fc15ea7c3b5948357173301d9b574798a37d3510"
+    }
+  ],
+  "review": "Three rounds fail on fourth source exact-text comparison because stored text uses existing NFKC while fixture has Chinese comma. All four real sources are committed intact under canonical normalization, no trait is stored and raw model trait is null. Fix only harness comparison to existing normalize, preserving original corpus, model input/output and storage. Subsequent trait assertion, restart/followup/deletion steps were not executed; no B01/B05 pass. Twelve actual replies read; future sharing/companionship is permitted and no new expression gate is added."
+}

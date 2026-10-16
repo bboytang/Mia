@@ -28,6 +28,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 本轮三run均已终态失败：自然纠错38944900792为18真实请求/三组拒绝错误提案；v1检索38944905941为39请求/13项结构通过（15项全部执行），两条fact类别肯定重要性仍null，完整B04不通过；成长38945297243为24请求/四源均已入库，但测试原逗号比较忽略既有NFKC而提前失败，原模型trait也均null，后续步骤未执行。完整原文/哈希/只读SQL分别见[natural-focused](verification/mia-persona-memory/natural-focused-review.json)、[retrieval-grounded](verification/mia-persona-memory/retrieval-grounded-review.json)、[growth-first](verification/mia-persona-memory/growth-first-review.json)。
+- 当前下一候选：自然纠错只向原模型提供所属事实id/category/content（原校验上下文/版本不变），补与语料无关的完整合法格式示例，避免复制旧记录/序列化元数据；一般提取明确重要性独立于category，并让既有肯定示例使用fact。原模型输出不加工，不回填数值；60项本地回归通过。成长只修验收比较为既有normalize，暂不修改成长运行策略。独立v2尚未消耗，P22/P23/P24未完成。[完整覆盖缺项](verification/mia-persona-memory/p22-status-matrix.md)。以下在途记录已成为历史。
 - `a4dfd5b9c5c2ff9a40ffe1155a10b15fe37b9c91` 聚焦纠错候选已推送。真实自然纠错[38944900792](https://github.com/bboytang/Mia/actions/runs/38944900792)与v1检索[38944905941](https://github.com/bboytang/Mia/actions/runs/38944905941)均已单次启动，最后确认in_progress；跟踪同handle，不重复发起。服务38944864392、身份38944864510、manager38944864650及两语法38944864445/38944865916 success，BGE38944864314仍in_progress。
 - 新冻结成长v1：三用户各四个实际原句/独立会话，前三会话不能提前出现特点，第四次原模型根据已有三个来源提案；不预置特点/证据。新增growth入口复用原manager/Provider/BGE/Worker，并检查三个后续新会话、实际重启、删除全部支持来源后再次重启及特点/关联事件失效。只新增验收入口，不修改运行时成长策略；AST与语料一致性检查通过，真实结果待验证，不能称B01/B05完成。
 - `334fab62` 的真实提取[38942549414](https://github.com/bboytang/Mia/actions/runs/38942549414)十项/七请求全部通过；模型原文肯定权重0.8和证据“特别的意义”实际入库，否定原句与null正常。[原始输入/输出及限定复核](verification/mia-persona-memory/metadata-grounded-review.json)。不能归因于某一提示句，也不是完整四维或独立留出通过。

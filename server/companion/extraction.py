@@ -55,7 +55,7 @@ importance_weight表示用户对该事实明确表达的重视程度，不是当
 示例原句：我一直觉得收集瓶盖并不重要
 示例输出：{"memories":[{"category":"preference","content":"我一直觉得收集瓶盖并不重要","source_index":0,"source_quote":"我一直觉得收集瓶盖并不重要","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["瓶盖"],"keywords":["收集瓶盖"],"trigger_terms":["瓶盖"],"importance_weight":null,"importance_evidence":null,"relations":[]}],"trait":null}
 示例原句：整理好旧相册对我很有意义
-示例输出：{"memories":[{"category":"experience","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"importance_weight":0.8,"importance_evidence":"很有意义","relations":[]}],"trait":null}
+示例输出：{"memories":[{"category":"fact","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"importance_weight":0.8,"importance_evidence":"很有意义","relations":[]}],"trait":null}
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
 "relation":"shared_term", "anchor":"literal term shared with both source_quote and target content",
 "evidence":"same source_quote"}. Never invent target IDs or causal relationships.
@@ -84,6 +84,8 @@ Use {"memories":[],"trait":null} for a valid empty result, not malformed JSON.
 最后逐条核对本次原句：明确肯定重视或意义时，importance_evidence摘录该肯定原文，
 importance_weight填写你依据原文评估的数值；否定或没有表达重视时，两者才为null。
 不要因为句子没有喜怒哀乐就把明确意义填成null，也不要把示例的数值或null当成通用默认值。
+重要性与category独立：fact、preference、experience中任何类别都可明确重要或没有表达重要。
+先依据原句判断肯定/否定的重要性及证据，再选类别；不能把fact类别的权重一律置null。
 '''
 
 NATURAL_CHANGE_INSTRUCTIONS = '''你是现有长期记忆提取器，本次任务是核对用户对先前说法的明确更正。
@@ -105,6 +107,11 @@ importance_weight和importance_evidence只依据本次原句明确表达的重�
 relations填[]，trait填null；不推测新特点，不复制旧事实或原提示示例。
 顶层提供memories数组和trait:null；在单条记录内提供上述字段及reconciliation对象。
 任何数字、id、正文或证据都须由实际输入支持，不得填占位符或把没有成功的更正说成已保存。
+输出不能复制旧事实记录；单条事实不带id、content_version、evidence_version、来源列表evidence或嵌套trait字段；reconciliation.evidence仍必须提供。
+entities/keywords/trigger_terms必须是真JSON数组，sensitive必须是布尔值；没有明确重要性时两重要性字段都是null。
+以下是与实际输入无关的格式示例，不得复制示例内容：
+输入：user_excerpts=["我浇花用陶壶，不是塑料壶，刚才说错了"]，existing_memories=[{"id":"example-only","category":"fact","content":"我浇花用塑料壶"}]
+输出：{"memories":[{"category":"fact","content":"我浇花用陶壶，不是塑料壶，刚才说错了","source_index":0,"source_quote":"我浇花用陶壶，不是塑料壶，刚才说错了","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["陶壶","塑料壶"],"keywords":["浇花"],"trigger_terms":["浇花"],"importance_weight":null,"importance_evidence":null,"relations":[],"reconciliation":{"form":"natural","kind":"correction","target_id":"example-only","old_quote":"我浇花用塑料壶","evidence":"我浇花用陶壶，不是塑料壶，刚才说错了","old_value":"塑料壶","new_value":"陶壶","anchor":"浇花"}}],"trait":null}
 '''
 
 REMEMBER_PREFIX = re.compile(r'^(?:(?:米娅|Mia)[,， ]*)?(?:你好[,， ]*)?(?:请|帮我)?记住[：:,， ]*', re.I)
@@ -405,8 +412,13 @@ class LLMMemoryExtractor:
             return {'memories': [], 'trait': None}
         provider = self.factory()
         try:
-            base = (NATURAL_CHANGE_INSTRUCTIONS if len(sources) == 1 and natural_change_requested(sources[0], context)
-                    else INSTRUCTIONS)
+            natural = len(sources) == 1 and natural_change_requested(sources[0], context)
+            base = NATURAL_CHANGE_INSTRUCTIONS if natural else INSTRUCTIONS
+            # Natural correction needs only owned identity/category/text. Keep
+            # versions/evidence in the validator's original context, not an
+            # output-shaped record that invites copying serialized metadata.
+            model_context = ([{key: fact[key] for key in ('id', 'category', 'content')} for fact in context]
+                             if natural else context)
             instruction = base + ('\nEmotion tracking is explicitly enabled. Also return observations: at most one '
                 '{"source_index":0,"source_quote":"complete real first-person sentence","subject":"user",'
                 '"source_kind":"self_report|inferred","tendency":"positive|negative|neutral|mixed","confidence":0.9}. '
@@ -421,7 +433,7 @@ class LLMMemoryExtractor:
                 '有肯定原文时输出你评估的权重与原文证据，不能因未授权情绪跟踪而统一填null。')
             return provider.response_no_stream(instruction,
                 json.dumps({'user_excerpts': [REMEMBER_PREFIX.sub('', source) for source in sources],
-                            'existing_memories': context,
+                            'existing_memories': model_context,
                             'emotion_tracking_enabled': bool(tracking['enabled'])}, ensure_ascii=False))
         finally:
             client = getattr(provider, 'client', None)

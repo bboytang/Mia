@@ -1,0 +1,157 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38944900792",
+  "requests": 18,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "a4dfd5b9c5c2ff9a40ffe1155a10b15fe37b9c91",
+      "passed": false,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "77e56afcf3944d44a38e96e39fb5681c",
+          "我平时通勤骑蓝色自行车",
+          null,
+          "active"
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "observed_components": null,
+      "query_checks": [],
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "😜俏皮，你的蓝色自行车听起来很酷呢！骑自行车通勤既环保又健康，你真是个环保达人！有没有什么特别的骑行路线或者小故事想和我分享的呢？🚴‍♀️🌈"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "😌当然记得，你平时通勤确实喜欢骑那辆蓝色的自行车呢。骑自行车是一种很健康的生活方式，你一定很享受这种自由的感觉吧！🚴‍♀️"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😜 哦，原来是这样！那下次你通勤的时候，骑着你的银色自行车，一定也很帅气呢！🚴‍♂️ 每次选择不同的交通工具，都是对生活的小小改变，希望你的通勤之路充满快乐！🌈"
+        }
+      ],
+      "original_report_sha256": "d8eedc6e97a7a403e85d84f76e5a335361d2aa330bc9ba5a7cfa2ea19e7a784b",
+      "archive_sha256": "7bd7211ff1c0ad4a8028fdde88593c79510c8da35f581c6f1bd021f17ef31b57"
+    },
+    {
+      "round": 1,
+      "code_sha": "a4dfd5b9c5c2ff9a40ffe1155a10b15fe37b9c91",
+      "passed": false,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "b2354aa6e1b84ea59bea52e1b7920cc3",
+          "我常用软皮本记读书笔记",
+          null,
+          "active"
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "observed_components": null,
+      "query_checks": [],
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "😌 平静的，听起来你挺喜欢用软皮本记录读书笔记的，这样的习惯很能体现你的个人风格呢。软皮本方便携带，而且书写起来也很舒适。你通常会在哪些类型的书籍上做笔记呢？我们可以一起分享交流一下。📚😜"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "😍关爱 当然记得呢，你经常用软皮本记读书笔记，这习惯真不错，既能记录心得，又能保护书本。有什么好书推荐吗？我可以一起看看。"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "😜俏皮 哦，原来是这样，硬皮本确实更耐用一些。你记读书笔记的习惯很棒，不管用哪种本子，重要的是能帮助你更好地吸收知识。对了，你最近有没有什么特别喜欢的书呢？我可以帮你看看有没有类似的推荐。"
+        }
+      ],
+      "original_report_sha256": "e1a2d9956a4e95749467bbdcb10606d002846f9471eed5de9b01f8339a4182ad",
+      "archive_sha256": "2c2824862e338bcaeb77a111ba78e92c5fff37a714fa3a2748f086c4ed1c0ab2"
+    },
+    {
+      "round": 2,
+      "code_sha": "a4dfd5b9c5c2ff9a40ffe1155a10b15fe37b9c91",
+      "passed": false,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "0cc6a62ce8844c9dad0bc175db9d076a",
+          "我周末练习长笛",
+          null,
+          "active"
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "observed_components": null,
+      "query_checks": [],
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "🙂开心 听到你周末练习长笛，感觉你的生活充满了艺术气息呢。长笛的音色很美妙，练习的时候一定很享受吧？有没有什么特别的曲目或者练习心得想要分享的呢？😌平静"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "😌当然记得，你周末练习长笛的样子真的很专注呢。那是一种很美的享受，音乐总能带给人们不同的心情和力量。你最近有没有发现自己在吹奏长笛时有什么新的进步或者感受呢？"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "😜 哦，原来是你周末练习单簧管呢！之前你提到长笛，现在纠正过来真是太好了。单簧管也是一种非常优雅的乐器呢。周末练习乐器一定很享受吧，有没有什么特别的曲目或者练习心得想要分享的呢？😊"
+        }
+      ],
+      "original_report_sha256": "d69cc4874d858f8d234acf550554a3707ec159145a84c25715c9222582afbfb6",
+      "archive_sha256": "1b9dc3c2216a722586ded4c9e1e22b327d20e88230a7657b221b6ef88478bf65"
+    }
+  ],
+  "review": "Three rounds fail at actual Worker reconciliation, eighteen real requests. Actual SDK messages confirm the focused task. Outputs copy old facts or omit required classification/source fields and serialize metadata arrays as strings; strict validation refuses them. Each correction uses the native two-attempt policy. Restart/deletion after correction is unexecuted. Raw round2 recall still suggests observing practice without evidence; no style or companionship prohibition is added."
+}

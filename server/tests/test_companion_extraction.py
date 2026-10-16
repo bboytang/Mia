@@ -201,6 +201,9 @@ class ExtractionValidationTests(unittest.TestCase):
         self.assertEqual(provider.response_no_stream.call_count, 1)
         payload = json.loads(provider.response_no_stream.call_args.args[1])
         self.assertEqual(payload['user_excerpts'], [quote])
+        self.assertEqual(payload['existing_memories'], [{key: target[key] for key in ('id', 'category', 'content')}])
+        self.assertEqual(target['content_version'], 2)
+        self.assertEqual(target['evidence_version'], 3)
         self.assertEqual(sources, ['请记住' + quote])
         self.assertEqual(validate_output(result, sources, [target])['memories'][0]['replaces_id'], 'owned')
 
