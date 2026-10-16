@@ -700,8 +700,10 @@ async def drive():
             from mia_behavior_faults import drive_faults
             proof = await drive_faults(endpoint, tls, headers, ROOT, sample, ask, manage, start, stop, first_pid)
             report = json.loads(REPORT.read_text())
-            report.update(passed=True, faults_proof=proof, server_pids=proof['server_pids'],
+            report.update(passed=proof['passed'], faults_proof=proof, server_pids=proof['server_pids'],
                 raw_response_review='required; controlled real failures and normal recovery, not full P23 lifecycle')
+            if not proof['passed']:
+                report['failed_phase'] = 'required_real_fault_not_observed'
         elif SUITE == 'scope':
             phase = 'real_multi_user_agent_device_matrix'
             from mia_behavior_scope import drive_scope

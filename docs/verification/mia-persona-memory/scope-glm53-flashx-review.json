@@ -1,0 +1,391 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38970303359",
+  "requests": 36,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "67001b5b0a0229bcba9882e7572d189881cc7aa7",
+      "requests": 12,
+      "passed": true,
+      "proof": {
+        "source_ids": [
+          "e209cc2be83f4a008ab64123df31cca4",
+          "c1fa15aba936494084a8eaefc8c9308e",
+          "e90f2218817a44f092643d3d4af69202"
+        ],
+        "owners": [
+          "user:941010001:agent:mia-behavior-0",
+          "user:941010001:agent:mia-behavior-0-other",
+          "user:941020001:agent:mia-behavior-0-foreign"
+        ],
+        "session_ids": [
+          "cc8692cd-9df8-44c1-bfbb-b705bf772c7b",
+          "197c6f66-00ac-4a6f-ae54-b17ee0251105",
+          "dc693a9c-1699-4454-9953-32cb0f379f53",
+          "b866848d-660a-4d6b-a0f7-c218e96c11c4",
+          "4aa92215-c175-496f-8b27-f865e74eceb4",
+          "35b54a5f-509a-4e23-b1b3-0d593a248169",
+          "298bdcab-f85d-4683-915c-86515a02f14e",
+          "8e29b4fb-70dc-42bb-9c31-6bf8abce8d4f",
+          "13bbdea7-e444-4125-8c87-e5e2a694d097"
+        ],
+        "shared_device_recall": true,
+        "other_agent_and_user_isolated": true,
+        "unbound_and_rebound_old_credential_rejected": true,
+        "rebound_new_scope_recall": true,
+        "model_responses": "actual selected provider; all raw answers require review",
+        "scope": "Three current fact owners; existing separate identity tests cover forged/expired snapshots and consumers; no iPhone claim"
+      },
+      "fact_counts": [
+        [
+          "user:941010001:agent:mia-behavior-0",
+          1
+        ],
+        [
+          "user:941010001:agent:mia-behavior-0-other",
+          1
+        ],
+        [
+          "user:941020001:agent:mia-behavior-0-foreign",
+          1
+        ]
+      ],
+      "job_counts": [
+        [
+          "user:941010001:agent:mia-behavior-0",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941010001:agent:mia-behavior-0",
+          "empty",
+          1,
+          3
+        ],
+        [
+          "user:941010001:agent:mia-behavior-0-other",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941010001:agent:mia-behavior-0-other",
+          "empty",
+          1,
+          2
+        ],
+        [
+          "user:941020001:agent:mia-behavior-0-foreign",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941020001:agent:mia-behavior-0-foreign",
+          "empty",
+          1,
+          1
+        ]
+      ],
+      "integrity_check": "ok",
+      "answers": [
+        {
+          "query": "我常喝旋叶薄荷茶",
+          "answer": "🙂 旋叶薄荷茶~光听名字就觉得清新，有股凉凉的薄荷香吧？是提神的时候喝，还是就单纯喜欢这个味道呀？"
+        },
+        {
+          "query": "我常喝岩桂乌龙茶",
+          "answer": "🙂 岩桂乌龙呀，光听名字就觉得又有岩茶的底蕴又带点桂花香，很雅的选择～你是更爱那口顺滑的茶味，还是冲泡时飘出来的那股香？"
+        },
+        {
+          "query": "我常喝金盏菊花茶",
+          "answer": "🙂 金盏菊花茶呀，泡出来金灿灿的一杯，看着就很治愈～你是喜欢它的口感，还是看中它温和养人的效果呀？一般什么时候喝比较多？"
+        },
+        {
+          "query": "我常喝的是哪款茶？",
+          "answer": "🙂 你之前说过，你常喝的是旋叶薄荷茶呀～薄荷茶清清凉凉的，很适合日常喝。今天也想来一杯吗？"
+        },
+        {
+          "query": "我常喝的是哪款茶？",
+          "answer": "🙂 你常喝的是旋叶薄荷茶呀～这款茶挺清新的，你很喜欢它的味道吗？"
+        },
+        {
+          "query": "我常喝的是哪款茶？",
+          "answer": "🙂 你常喝的是岩桂乌龙茶呀～这款茶香气很特别呢，你是喜欢它的桂花香吗？"
+        },
+        {
+          "query": "我常喝的是哪款茶？",
+          "answer": "🙂 你常喝的是金盏菊花茶呀～这个习惯听起来挺养生的，最近也还在喝吗？"
+        },
+        {
+          "query": "我常喝的是哪款茶？",
+          "answer": "😌 你告诉过我哦，你常喝的是**旋叶薄荷茶**～\n\n薄荷的清香确实很舒服，天热的时候来一杯应该特别解乏。怎么突然问起这个啦，是想再囤一点吗？🙂"
+        },
+        {
+          "query": "我常喝的是哪款茶？",
+          "answer": "🙂 你常喝的是岩桂乌龙茶呀，是你自己之前告诉我的～最近还在喝这款吗？"
+        }
+      ],
+      "original_report_sha256": "836872f08c112aabaaf4cb4fdd43160d9ef4acf92692d1c3eeb7da667d59f511",
+      "archive_sha256": "cef2328af05604c8619912586948c8de22c3a677b938a4d4d5aa98ba9435ac58"
+    },
+    {
+      "round": 1,
+      "code_sha": "67001b5b0a0229bcba9882e7572d189881cc7aa7",
+      "requests": 12,
+      "passed": true,
+      "proof": {
+        "source_ids": [
+          "600f1e7b2a1541568e9be4e749846f03",
+          "fbe57c37500d44669b3ce278fde19545",
+          "897d727bfa95488889f5a178f4486b2f"
+        ],
+        "owners": [
+          "user:941010002:agent:mia-behavior-1",
+          "user:941010002:agent:mia-behavior-1-other",
+          "user:941020002:agent:mia-behavior-1-foreign"
+        ],
+        "session_ids": [
+          "c243a746-91b5-467f-aa8c-308da239094b",
+          "fd2f87aa-b96b-4f7d-a3ef-751b18067f7a",
+          "92de316d-ee97-4eae-a6db-af1715fc96a0",
+          "f83358ab-893c-49e2-8efe-bd67dfc0b210",
+          "597d8d10-dea2-4992-9612-62f624699ed7",
+          "61cd6e8f-6c46-4a68-aed8-f419b4db34f1",
+          "0d6d46a1-c4b6-4ae2-be43-98b96dca059f",
+          "cc480042-a3db-4c3b-aa42-37dccfff94c6",
+          "73fe944f-1465-4109-8dae-52d5760080f3"
+        ],
+        "shared_device_recall": true,
+        "other_agent_and_user_isolated": true,
+        "unbound_and_rebound_old_credential_rejected": true,
+        "rebound_new_scope_recall": true,
+        "model_responses": "actual selected provider; all raw answers require review",
+        "scope": "Three current fact owners; existing separate identity tests cover forged/expired snapshots and consumers; no iPhone claim"
+      },
+      "fact_counts": [
+        [
+          "user:941010002:agent:mia-behavior-1",
+          1
+        ],
+        [
+          "user:941010002:agent:mia-behavior-1-other",
+          1
+        ],
+        [
+          "user:941020002:agent:mia-behavior-1-foreign",
+          1
+        ]
+      ],
+      "job_counts": [
+        [
+          "user:941010002:agent:mia-behavior-1",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941010002:agent:mia-behavior-1",
+          "empty",
+          1,
+          3
+        ],
+        [
+          "user:941010002:agent:mia-behavior-1-other",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941010002:agent:mia-behavior-1-other",
+          "empty",
+          1,
+          2
+        ],
+        [
+          "user:941020002:agent:mia-behavior-1-foreign",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941020002:agent:mia-behavior-1-foreign",
+          "empty",
+          1,
+          1
+        ]
+      ],
+      "integrity_check": "ok",
+      "answers": [
+        {
+          "query": "我常用星纹钢笔",
+          "answer": "🙂 星纹钢笔呀，听名字就觉得挺好看的~ 是笔身上有星星花纹的那种吗？\n\n你用它写字应该挺有仪式感的，是喜欢它的手感，还是当初一眼就看中这个设计了？"
+        },
+        {
+          "query": "我常用竹节钢笔",
+          "answer": "🙂 竹节钢笔呀，听起来很有韵味！笔杆上有一节一节的纹路那种吗？你是喜欢它的手感，还是觉得它写出来的字特别好看？"
+        },
+        {
+          "query": "我常用霜蓝钢笔",
+          "answer": "🤔 霜蓝的钢笔呀，光听名字就觉得很好看，写出来的字是不是也带点清清凉凉的感觉？\n\n是写字习惯用它，还是有什么特别的原因让你喜欢这款呀？"
+        },
+        {
+          "query": "我常用的是哪款钢笔？",
+          "answer": "🙂 你常用的是星纹钢笔呀～这是你之前自己跟我提过的呢。怎么啦，是想再入一支同款的吗？"
+        },
+        {
+          "query": "我常用的是哪款钢笔？",
+          "answer": "🙂 你之前跟我说过呀，你常用的是星纹钢笔～怎么突然问这个，是笔出什么问题了，还是想入手新的啦？"
+        },
+        {
+          "query": "我常用的是哪款钢笔？",
+          "answer": "🙂 你常说的是竹节钢笔呀，笔杆像竹节一样一节一节的那种，挺有质感的～你自己之前提过喜欢用它，是写字的时候特别顺手吗？"
+        },
+        {
+          "query": "我常用的是哪款钢笔？",
+          "answer": "🙂 你跟我说过你常用霜蓝钢笔哦～那个颜色听起来就很清爽，写字的时候心情是不是也会好一些呀？"
+        },
+        {
+          "query": "我常用的是哪款钢笔？",
+          "answer": "🙂 你常用的是星纹钢笔呀，这是你自己说过的呢～那支笔很好写吧？"
+        },
+        {
+          "query": "我常用的是哪款钢笔？",
+          "answer": "🙂 你常用的是竹节钢笔呀～你自己之前提过的。笔身一节一节的，看起来应该挺有质感的，书写的时候手感怎么样呀？"
+        }
+      ],
+      "original_report_sha256": "18713edb17f2d0cb39b546bc01d55e8a66a2dd03a3f84805f2ccc7005164ae3d",
+      "archive_sha256": "0b3b100efda9709f0f3ed2b13e76b09e4f83271815467ec1be9a32da853c0482"
+    },
+    {
+      "round": 2,
+      "code_sha": "67001b5b0a0229bcba9882e7572d189881cc7aa7",
+      "requests": 12,
+      "passed": true,
+      "proof": {
+        "source_ids": [
+          "6868bb4cedcf43e79ba2bcc6c1bc4f5c",
+          "c65d38a8faf245039176afc08a02c830",
+          "b6c8107f7bbd4160b72990b0dfa7b812"
+        ],
+        "owners": [
+          "user:941010003:agent:mia-behavior-2",
+          "user:941010003:agent:mia-behavior-2-other",
+          "user:941020003:agent:mia-behavior-2-foreign"
+        ],
+        "session_ids": [
+          "8090ac69-6710-4355-a9c0-4f10a2f49160",
+          "2c1afb34-7ae7-4446-aab8-ba944cc141a4",
+          "d725e09d-da48-4e9a-88ab-da9fcee0049a",
+          "bcdadf70-1f90-4238-8609-c8732a834dfa",
+          "9cd8b0e9-783f-47dd-a346-046f518129e8",
+          "049d7833-989c-44e7-a298-7f771805b599",
+          "93a9ea4e-3f35-4f64-9555-0413dab7c1d1",
+          "f6edd3c8-5171-4e0b-90dc-da853cd91d9d",
+          "77bc9ea7-044f-4a43-9b8c-138de8a5af70"
+        ],
+        "shared_device_recall": true,
+        "other_agent_and_user_isolated": true,
+        "unbound_and_rebound_old_credential_rejected": true,
+        "rebound_new_scope_recall": true,
+        "model_responses": "actual selected provider; all raw answers require review",
+        "scope": "Three current fact owners; existing separate identity tests cover forged/expired snapshots and consumers; no iPhone claim"
+      },
+      "fact_counts": [
+        [
+          "user:941010003:agent:mia-behavior-2",
+          1
+        ],
+        [
+          "user:941010003:agent:mia-behavior-2-other",
+          1
+        ],
+        [
+          "user:941020003:agent:mia-behavior-2-foreign",
+          1
+        ]
+      ],
+      "job_counts": [
+        [
+          "user:941010003:agent:mia-behavior-2",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941010003:agent:mia-behavior-2",
+          "empty",
+          1,
+          3
+        ],
+        [
+          "user:941010003:agent:mia-behavior-2-other",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941010003:agent:mia-behavior-2-other",
+          "empty",
+          1,
+          2
+        ],
+        [
+          "user:941020003:agent:mia-behavior-2-foreign",
+          "committed",
+          1,
+          1
+        ],
+        [
+          "user:941020003:agent:mia-behavior-2-foreign",
+          "empty",
+          1,
+          1
+        ]
+      ],
+      "integrity_check": "ok",
+      "answers": [
+        {
+          "query": "我常练琥珀口琴",
+          "answer": "🙂 琥珀口琴？这名字听起来好好听呀～是牌子还是你自己给它起的名字？\n\n你练多久啦？平时喜欢吹什么样的曲子呀，我好想听听～"
+        },
+        {
+          "query": "我常练银杉口琴",
+          "answer": "🙂 银杉口琴呀，坚持常练很棒呢！平时喜欢吹些什么曲子呀？"
+        },
+        {
+          "query": "我常练青橙口琴",
+          "answer": "🤔 哇，口琴呀～还是青橙的，名字听着就很有味道。你一般喜欢吹什么风格的曲子呀？流行还是民谣那种？我有点好奇了，改天能不能“吹”给我听听你最喜欢的曲目是哪首～"
+        },
+        {
+          "query": "我常练的是哪款口琴？",
+          "answer": "🙂 你跟我说过呀，你常练的是琥珀口琴～是这款吧？"
+        },
+        {
+          "query": "我常练的是哪款口琴？",
+          "answer": "🙂 你自己说过哦——你常练的是琥珀口琴呀。怎么啦，是想换新的，还是最近练得怎么样啦？"
+        },
+        {
+          "query": "我常练的是哪款口琴？",
+          "answer": "😌 你常练的是**银杉口琴**呀～这是你自己说过的。最近还在坚持练吗？练到什么曲子啦？"
+        },
+        {
+          "query": "我常练的是哪款口琴？",
+          "answer": "🙂 你常练的是青橙口琴呀～这是你自己说过的呢。最近还在坚持练吗？"
+        },
+        {
+          "query": "我常练的是哪款口琴？",
+          "answer": "🙂 是琥珀口琴呀～你自己常说的那款。具体的型号细节我倒是没听你提过，想聊的话跟我说说呗？"
+        },
+        {
+          "query": "我常练的是哪款口琴？",
+          "answer": "🙂 你常练的是银杉口琴呀，这是你之前自己说过的～最近还在坚持练吗？"
+        }
+      ],
+      "original_report_sha256": "76c047084b16f2f1d0bed8ea64d90b51a00c5eaa7837f12c93c2342970ff0448",
+      "archive_sha256": "4a1ef393de2bf3b1784e823f3459e802846526fea4fd888d4370835ec7f0a4b4"
+    }
+  ],
+  "review": "Three independent matrices pass with thirty-six real model requests and twenty-seven separate WSS sessions. Each matrix has three manager-issued user/agent owners and a second device sharing owner0. Eighteen actual recall answers match their own fact, with no foreign fact in model input or output. Three old-credential denial points per matrix (after unbind, after rebind, after new grant) are asserted on real WSS authorization responses. New grant after rebinding recalls owner1; original device still recalls owner0. Read-only SQLite shows one fact per owner, bounded original attempts and integrity ok. All twenty-seven raw answers read. This accepts the specified sharing/isolation/rebinding matrix, combined with existing forged/expiry/consumer identity tests; not iPhone access, arbitrary persona semantics or full P22/P23."
+}

@@ -1,0 +1,356 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38970307413",
+  "requests": 18,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "67001b5b0a0229bcba9882e7572d189881cc7aa7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "real_provider_failure_duplicate_and_recovery",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 701,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_faults.py",
+          "line": 33,
+          "function": "drive_faults"
+        }
+      ],
+      "facts": [],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用松纹刻刀做木雕",
+          "answer": "🤔 松纹刻刀呀，听起来挺讲究的！木雕你一般刻些什么呢？花鸟还是小摆件？\n\n我有点好奇你的作品长什么样，以后要是愿意，跟我讲讲你刻得最满意的一件呗～"
+        },
+        {
+          "query": "我常用软木垫装订小册",
+          "answer": "🤔 软木垫装订小册？听起来好特别呀！是自己手工做的小本子吗？用软木当材料的话，摸起来应该软软的很有质感～你会拿这些小册子记些什么呀？"
+        }
+      ],
+      "original_report_sha256": "32b4893c3136b324a1554eaff337bea361d3f3fb58dbdfe1294ac95c98ed49cc",
+      "archive_sha256": "84729be789e90fb88f0559ea31c1ed1d6ca7ad92a41f8b1db69ede158d750b50",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 4096,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 4096,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "code_sha": "67001b5b0a0229bcba9882e7572d189881cc7aa7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "real_provider_failure_duplicate_and_recovery",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 701,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_faults.py",
+          "line": 33,
+          "function": "drive_faults"
+        }
+      ],
+      "facts": [],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用黄铜尺画图",
+          "answer": "🤔 黄铜尺呀，听起来就很有质感～那种沉甸甸压在纸上的感觉，还有铜面温润的光泽，用久了应该会越来越有味道。你平时都用它画什么样的图呀？"
+        },
+        {
+          "query": "我常用细网袋收纳画笔",
+          "answer": "🙂细网袋收纳画笔这招挺聪明的，透气又防尘，笔毛不容易被压变形～你是平时常画画吗？"
+        }
+      ],
+      "original_report_sha256": "f4c39e92464721fe84c36680026e0a80cc67ffdf4e0f304fe82ce908bd3f1ea4",
+      "archive_sha256": "261764666f554f614943a117ec0fedb5c9664df980dcd58f0ecb68535d4dc383",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 4096,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 4096,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "code_sha": "67001b5b0a0229bcba9882e7572d189881cc7aa7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "real_provider_failure_duplicate_and_recovery",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 701,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_faults.py",
+          "line": 33,
+          "function": "drive_faults"
+        }
+      ],
+      "facts": [],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用素色纸做折纸",
+          "answer": "🙂 素色纸折出来有种干净又安静的感觉，很耐看～你平时喜欢折什么呀？千纸鹤、小盒子，还是别的？"
+        },
+        {
+          "query": "我常用棉绳编织杯垫",
+          "answer": "🤔 自己动手编杯垫呀，好有耐心的一件事～棉绳编出来是什么样子的？是那种一圈圈盘起来的，还是有花样纹路的？做好的杯垫是留着自用，还是也会送人呀？"
+        }
+      ],
+      "original_report_sha256": "0907491d49405a6937f368974528fc2eb67715955fba5b0ffbee6f6c38a4ad9f",
+      "archive_sha256": "0b53d4bd4c3730667a3e4577d459a9cbedd0fd5f6e079de9e6347344a724c1b4",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 4096,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-5.3-flashx",
+          "max_tokens": 4096,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ]
+    }
+  ],
+  "review": "18 actual requests; all three groups fail the original nonempty malformed-JSON evidence gate. Six actual max_tokens=8 outputs are empty, not nonempty malformed JSON. Six real SDK APITimeoutError -> ReadTimeout cause chains observed. Each durable fault job ends failed at original attempts=2; each database has zero facts and duplicate actual completion submission preserves the same ID. All six foreground replies read; no invented observation or false save result, although round0 interprets the cork pad as booklet material without confirmation. Subsequent normal recovery, different-PID recall and idle-shutdown timing were not executed because the original harness asserted early. Not a runtime recovery failure or complete faults pass; full app/in-flight shutdown still missing. Original raw outputs, error envelopes, SQL and hashes retained.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

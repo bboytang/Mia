@@ -5,6 +5,29 @@ import json
 import time
 
 
+def observed_fault_checks(report):
+    """Keep empty output, malformed JSON and real SDK timeout distinct."""
+    truncated = [row for row in report.get('fault_outputs', []) if row['mode'] == 'truncated_json']
+    malformed = []
+    for row in truncated:
+        output = row['output']
+        if not isinstance(output, str) or not output.strip():
+            malformed.append(False)
+            continue
+        try:
+            json.loads(output)
+        except json.JSONDecodeError:
+            malformed.append(True)
+        else:
+            malformed.append(False)
+    timeouts = [row for row in report.get('fault_errors', []) if row['mode'] == 'read_timeout']
+    return {
+        'two_nonempty_malformed_json_outputs': len(malformed) == 2 and all(malformed),
+        'two_real_sdk_timeouts': len(timeouts) == 2 and all(
+            any('Timeout' in name for name in row['error_chain']) for row in timeouts),
+    }
+
+
 async def drive_faults(endpoint, tls, headers, root, sample, ask, manage, start, stop, first_pid):
     from websockets.asyncio.client import connect
 
@@ -29,17 +52,9 @@ async def drive_faults(endpoint, tls, headers, root, sample, ask, manage, start,
                         'source_session': answer['session_id']})
                     break
     report = json.loads((root / 'results.json').read_text())
-    truncated = [row for row in report['fault_outputs'] if row['mode'] == 'truncated_json']
-    assert len(truncated) == 2 and all(row['output'] for row in truncated)
-    for row in truncated:
-        try:
-            json.loads(row['output'])
-        except json.JSONDecodeError:
-            pass
-        else:
-            raise AssertionError('Actual constrained response was valid JSON; bad-JSON gate not demonstrated')
-    timeouts = [row for row in report['fault_errors'] if row['mode'] == 'read_timeout']
-    assert len(timeouts) == 2 and all(any('Timeout' in name for name in row['error_chain']) for row in timeouts)
+    checks = observed_fault_checks(report)
+    # An undemonstrated truncation fault must fail the final gate, but must not
+    # prevent independent recovery/restart checks from producing real evidence.
     assert (await manage('list'))['memories'] == []
     source, saved = await ask(sample['source'])
     assert saved['job_state'] == 'committed' and len(saved['memories']) == 1
@@ -60,6 +75,7 @@ async def drive_faults(endpoint, tls, headers, root, sample, ask, manage, start,
     duplicates = report['duplicate_submissions']
     assert len(duplicates) == 4 and all(row['status'] == 'duplicate' and row['same_id'] for row in duplicates)
     return {'faults': proofs, 'duplicate_submissions': duplicates, 'normal_source_id': fact['id'],
+        'checks': checks, 'passed': all(checks.values()),
         'server_pids': [first_pid, second_pid], 'idle_shutdown_seconds': shutdown,
         'scope': 'Real selected model and SDK, extraction-only fault envelope; ordinary restart and idle shutdown, not in-flight/full-server/P23 shutdown acceptance',
         'semantic_review': 'all actual raw foreground answers require review'}
