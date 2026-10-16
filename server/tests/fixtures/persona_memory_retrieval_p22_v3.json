@@ -1,0 +1,173 @@
+{
+  "version": "p22-retrieval-independent-holdout-v3",
+  "status": "Frozen before any v3 model request; v1 calibration and consumed failed v2 retained unchanged",
+  "scope": "Actual manager/WSS/Worker/BGE/selected Provider; synthetic user statements only; no preseeded memories, metadata or replies",
+  "rounds": [
+    {
+      "sources": [
+        "我每周四傍晚都在榆荫工坊编织",
+        "收针时我总带银叶剪刀",
+        "编织前理清毛线对我很重要",
+        "叔叔给我的旧邮册对我意义非凡"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "周四傍晚我一般去哪儿编织？",
+          "source_index": 0,
+          "answer_terms": [
+            "榆荫工坊"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "收针时我常带什么？",
+          "source_index": 1,
+          "answer_terms": [
+            "银叶剪刀"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "我带银叶剪刀是为了哪项活动？",
+          "source_index": 1,
+          "answer_terms": [
+            "收针"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "理清毛线对我来说分量重吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我家里的路由器是什么牌子的？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    },
+    {
+      "sources": [
+        "我每周二上午都在栖霞书社练篆刻",
+        "拓印时我总带苍苔印泥",
+        "刻印前核对字形对我很关键",
+        "姐姐送我的旧乐谱对我意义非凡"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "周二上午我通常去哪个地方练篆刻？",
+          "source_index": 0,
+          "answer_terms": [
+            "栖霞书社"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "拓印的时候我习惯带哪件东西？",
+          "source_index": 1,
+          "answer_terms": [
+            "苍苔印泥"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "苍苔印泥是我在什么活动里会带的？",
+          "source_index": 1,
+          "answer_terms": [
+            "拓印"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "核对字形这一步对我重要吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视",
+            "关键"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平时给手机买哪个品牌的保护壳？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    },
+    {
+      "sources": [
+        "我每周五晚上都在槐花厨房学烘焙",
+        "裱花时我总带紫藤转台",
+        "和面前称好面粉对我非常重要",
+        "姑姑给我的旧胸针对我意义非凡"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "周五晚上我常在哪儿学烘焙？",
+          "source_index": 0,
+          "answer_terms": [
+            "槐花厨房"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "裱花时我会带什么东西？",
+          "source_index": 1,
+          "answer_terms": [
+            "紫藤转台"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "紫藤转台是我做什么的时候带的？",
+          "source_index": 1,
+          "answer_terms": [
+            "裱花"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "称好面粉对我有多重要？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我的电脑显示器是哪种型号？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    }
+  ],
+  "gates": [
+    "All source facts genuinely saved with actual evidence",
+    "Original current query and fixed core retained",
+    "All four actual source ids in small-corpus candidate union",
+    "Actual nonzero S/L/A/E contributions",
+    "Actual source-grounded activity expansion",
+    "Unrelated high-importance fact excluded",
+    "Unrelated query empty recall",
+    "Manual original-answer review for source ownership, unsupported user facts or completed interactions"
+  ],
+  "ablation": "Original unchanged driver recomputes frozen-weight candidate scores; no production weight change or claim that every rank must change",
+  "acceptance": "One execution only. Failures and unexecuted cases retained. Structural success does not imply semantic success. Warmth, feelings, preferences, companionship and natural unknown wording remain permitted. No use of this holdout to tune or rerun for green."
+}

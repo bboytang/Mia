@@ -61,7 +61,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'shutdown', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'shutdown', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -330,7 +330,7 @@ async def serve():
         from mia_behavior_recovery import observe_commit
         observe_commit(worker, recovery_control, ROOT, report, LOCK, save)
     index = SemanticMemoryIndex(store, reply._encoder)
-    if SUITE in {'retrieval', 'retrieval_holdout'}:
+    if SUITE in {'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3'}:
         actual_retrieve = index.retrieve
 
         async def observed_retrieve(*args, **kwargs):
@@ -629,6 +629,7 @@ async def drive():
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
         'retrieval_holdout': 'persona_memory_retrieval_p22_v2.json',
+        'retrieval_holdout_v3': 'persona_memory_retrieval_p22_v3.json',
         'recovery': 'persona_memory_recovery_p22_v1.json',
         'inflight': 'persona_memory_correction_p22_v1.json',
         'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
@@ -824,7 +825,7 @@ async def drive():
             report = json.loads(REPORT.read_text())
             report.update(passed=True, server_pids=[first_pid, second_pid], genuine_wss_restart=True,
                 recovery_proof=proof, raw_response_review='required; real SQLite failure and recovery only, not full B03')
-        elif SUITE in {'retrieval', 'retrieval_holdout'}:
+        elif SUITE in {'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3'}:
             phase = 'actual_source_generated_four_component_retrieval'
             from mia_behavior_retrieval import drive_retrieval
             analysis = await drive_retrieval(sample, ask)

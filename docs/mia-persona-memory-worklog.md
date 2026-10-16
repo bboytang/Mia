@@ -2,6 +2,8 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- 资格反馈修复01f387f690bbdb4dbaa1ef7d64c7c694b7781a0c已精确发布，五项基础CI全success：服务38982182016、manager38982181930、身份38982182033、真实向量38982181957、提取语法38982182000。隔离FlashX成长[38982225986](https://github.com/bboytang/Mia/actions/runs/38982225986)单次创建且headSha核对为01f387f6，最新in_progress，不重发。等待期间准备独立新v3语料与原harness路由；只更改测试入口，运行Python和原检索driver不变，实际来源/重要性/回答仍须真实生成。冻结对象/边界见retrieval-holdout-v3-freeze.md；先读成长终态，v3尚未执行，原v2失败不改写，P22/P23/P24保持未完成。
+
 - 4b81c927校准v1/38980235375终态success：39真实请求、15结构检查、27原回答已读，三组四来源均首次提交；retrieval-growth-eligibility-*保存原报告/SQL/哈希。泛化与感官/材料表达局限保留，不等同独立留出或整体语义通过。成长38980239326终态failure/34请求、22原回答已读，前两组完整生命周期通过，第三组四事实首次提交但特点未保存。实际模型已经返回三来源特点，description带“不做用户性格诊断”，被MemoryStore._trait既有SENSITIVE检查静默跳过；不是模型没有产出或数据库故障。growth-persistence-policy-*保留未修改的原失败与SQL。
 - 新候选把同一既有持久化资格检查前置到validate_output，拒绝时走原Worker同job诊断和最多两次尝试，提交前不保存部分事实；持久层规则、模型原输出、来源/版本/Scope均不改。特点schema/任务说明改为正向描述实际回应倾向，避免把说明抄入特点；不改前台人格或增表达拦截。新增三类原资格拒绝及真实MemoryStore/Worker受控双尝试回归，原首提案不变、第二次独立Provider结果提交。68项本地提取/提案/Worker通过（11.068秒）；此前含memory的82项有81通过、POSIX0600断言在Windows观察0666而失败，原Linux规则不改，待Linux CI。一次受限启动Python失败后正常授权调用完成，不是测试失败。下一步精确候选单次成长CI及相关基础回归；v2失败保持、不得重发，P22/P23/P24尚未完成。
 
