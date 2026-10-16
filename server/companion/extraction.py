@@ -43,13 +43,15 @@ source_quote and proposed content; they remain unconfirmed and never alter Mia's
 All entities/keywords/trigger_terms must occur literally in source_quote, at most 8 each,
 32 characters each. No invented synonyms.
 从本次原句提取有字面出处的少量实体、关键词、活动或场景触发短语，分别填入entities、keywords、trigger_terms；没有才留空，不从旧记忆补词。
+trigger_terms应包含原句里的活动／场景短语，让只提到活动、尚不知道物品名的问题也能找到该物品，不只重复实体名。
 emotional_weight表示用户对该事实明确表达的重视程度，不是当下心情。明确肯定重要、珍惜、在意或意义时给出大于0且不超过1的权重，并在emotional_evidence引用原文的肯定重视短语；否定或未表达重视时保持null，不推断重要性。
+原句明确肯定“重要”或“有意义”就应填写重视权重，不要求用户同时表达喜怒哀乐；“不重要”是否定，不能给肯定重视权重。
 低重要性不妨碍保存其他有用的长期事实；情绪观察仍须单独授权。
 以下仅为格式示例，不是当前用户的事实，不得在输出中复用示例内容：
-示例原句：我每周六去榆树公园散步
-示例输出：{"memories":[{"category":"fact","content":"我每周六去榆树公园散步","source_index":0,"source_quote":"我每周六去榆树公园散步","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["榆树公园"],"keywords":["每周六","散步"],"trigger_terms":["榆树公园","散步"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
-示例原句：我一直珍惜姐姐送的陶杯
-示例输出：{"memories":[{"category":"preference","content":"我一直珍惜姐姐送的陶杯","source_index":0,"source_quote":"我一直珍惜姐姐送的陶杯","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["姐姐","陶杯"],"keywords":["珍惜","陶杯"],"trigger_terms":["姐姐","陶杯"],"emotional_weight":0.8,"emotional_evidence":"珍惜","relations":[]}],"trait":null}
+示例原句：我每次写生都会带帆布画袋
+示例输出：{"memories":[{"category":"fact","content":"我每次写生都会带帆布画袋","source_index":0,"source_quote":"我每次写生都会带帆布画袋","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["帆布画袋"],"keywords":["写生","帆布画袋"],"trigger_terms":["写生"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
+示例原句：整理好旧相册对我很有意义
+示例输出：{"memories":[{"category":"experience","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"emotional_weight":0.8,"emotional_evidence":"很有意义","relations":[]}],"trait":null}
 示例原句：我一直觉得收集瓶盖并不重要
 示例输出：{"memories":[{"category":"preference","content":"我一直觉得收集瓶盖并不重要","source_index":0,"source_quote":"我一直觉得收集瓶盖并不重要","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["瓶盖"],"keywords":["收集瓶盖"],"trigger_terms":["瓶盖"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
