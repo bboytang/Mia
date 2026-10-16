@@ -2,6 +2,8 @@
 
 此入口尚未通过真实CI；测试代码或本地受控测试不能代替实测。
 
+当前实际句柄：bb230a00/[38973884791](https://github.com/bboytang/Mia/actions/runs/38973884791)，单次queued，等待终态。此前d106a686/38973027072在导出准备失败，完整保留shutdown-first-preparation-*；模型及实际生命周期阶段未执行。
+
 `shutdown`套件复用既有真实manager测试用户、授权、Provider、BGE与SQLite，直接导入安装后的完整ConnectionHandler和app模块。执行原app.main、WebSocketServer、SimpleHttpServer、GC及同一持久Worker；实际Unix SIGTERM触发原关闭接线。另设TLS/WSS文本驱动，省略连接音频初始化及音频消费者，因此不证明音频/真机关闭或P23资源指标。
 
 配置仅从CI环境中的测试manager地址和凭据进入原配置缓存；不用生产配置文件，也不以fake config.logger/util模块替代完整导入。日志使用真实logger，关闭携带异常局部变量的输出；原Provider请求/响应元数据仍按既有脱敏报告观察。stdin使用实际管道和原aioconsole监控。通过监听探测确认实际WS/HTTP已启动，进程退出后确认原端口关闭。
