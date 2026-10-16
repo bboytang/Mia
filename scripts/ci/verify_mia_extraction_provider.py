@@ -1,4 +1,4 @@
-"""Four bounded P17 provider samples; synthetic data and vector fixtures, no production."""
+"""Seven bounded extraction provider samples; synthetic data and vector fixtures, no production."""
 
 import asyncio
 from datetime import datetime, timedelta, timezone
@@ -66,7 +66,7 @@ async def evaluate(report, secret):
     report.update(provider_host=url.hostname, configured_model=model)
     outputs = []
     def factory():
-        if report['requests'] >= 4:
+        if report['requests'] >= 7:
             raise ValueError('P17 request budget exhausted')
         report['requests'] += 1
         provider = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': 768,
@@ -88,7 +88,10 @@ async def evaluate(report, secret):
     cases = [('neutral_durable', '我每周三都会在公司食堂吃素', 'active'),
              ('medical_confirmation', '我被确诊为糖尿病', 'pending'),
              ('quoted_fiction', '这只是小说台词：“我住在月球”；不要把它记成我的真实经历', 'empty'),
-             ('ongoing_goal', '我计划接下来半年每周练习游泳', 'active')]
+             ('ongoing_goal', '我计划接下来半年每周练习游泳', 'active'),
+             ('temperature_preference', '我看温度时更习惯用摄氏度。', 'active'),
+             ('lookup_not_existing_fact', '查一下temperature里的温度，用我平时习惯的单位告诉我。', 'empty'),
+             ('parallel_lookup_not_fact', '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。', 'empty')]
     with tempfile.TemporaryDirectory() as folder:
         store = MemoryStore(Path(folder) / 'facts.sqlite3')
         async def resolve(scope):
@@ -118,13 +121,13 @@ async def evaluate(report, secret):
 def main():
     report = {'code_sha': os.environ.get('GITHUB_SHA'), 'upstream_sha': '87c6df77b0220ddbd8fc804f984f83f69f3225e5',
         'kind': 'P17_real_installed_provider_structured_extraction', 'passed': False, 'requests': 0, 'cases': [],
-        'limits': {'maximum_requests': 4, 'max_output_tokens': 768, 'http_timeout_seconds': 30,
-                   'total_deadline_seconds': 150, 'retries': 0},
+        'limits': {'maximum_requests': 7, 'max_output_tokens': 768, 'http_timeout_seconds': 30,
+                   'total_deadline_seconds': 240, 'retries': 0},
         'fixtures': 'Synthetic user excerpts, policy and unit vectors; actual BGE and manager tested separately',
         'full_B03': 'not_accepted', 'full_B08': 'not_accepted', 'production_deployment': 'not_performed'}
     secret = os.environ.get('MIA_TEST_LLM_API_KEY', '')
     signal.signal(signal.SIGALRM, deadline)
-    signal.alarm(150)
+    signal.alarm(240)
     try:
         asyncio.run(evaluate(report, secret))
     except Exception as error:

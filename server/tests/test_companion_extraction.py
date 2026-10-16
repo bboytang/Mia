@@ -69,6 +69,32 @@ class ExtractionValidationTests(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertEqual(self.validate(source, proposal(quote))['memories'], [])
 
+    def test_tool_requests_do_not_become_durable_facts(self):
+        for source in [
+            '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。',
+            '请先读取route，再按其中的next_record继续查。',
+            '查一下temperature里的温度，用我平时习惯的单位告诉我。',
+            '旧话题先放一边，现在请查红盒的棋子数量。',
+            '麻烦帮我计算这张订单的总价。',
+            '帮我打开客厅的灯。',
+        ]:
+            with self.subTest(source=source):
+                self.assertEqual(self.validate(source, proposal(source))['memories'], [])
+        source = '请查询订单。我每周五会核对账单。'
+        result = self.validate(source, proposal('我每周五会核对账单。'))
+        self.assertEqual(result['memories'][0]['content'], '我每周五会核对账单。')
+        for source in ['我每周都会查询天气预报。', '请记住我每天练习计算。']:
+            quote = source.removeprefix('请记住')
+            self.assertEqual(self.validate(source, proposal(quote))['memories'][0]['content'], quote)
+
+    def test_retrieved_old_fact_is_not_a_source_for_a_new_lookup(self):
+        old = '我看温度时更习惯用摄氏度。'
+        context = [{'id': 'owned', 'content': old, 'content_version': 1, 'evidence_version': 1}]
+        source = '查一下temperature里的温度，用我平时习惯的单位告诉我。'
+        for index in [0, 1, 2]:
+            with self.subTest(index=index), self.assertRaises(MemoryError):
+                self.validate(source, proposal(old, source_index=index), context)
+
     def test_mixed_quote_and_real_statement_only_keep_actual_statement(self):
         source = '“我喜欢蓝色”只是引用。我喜欢绿色。'
         result = self.validate(source, proposal('我喜欢绿色'))
