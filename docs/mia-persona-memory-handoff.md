@@ -28,6 +28,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 2a3baf73辅助38963455271已failure：3请求、4项实际执行，前三项（中性事实/医疗待确认/引用为空）通过，持续计划被模型标inferred并造对无关旧事实的shared_term关系，原validator拒绝后retry_wait；按原辅助入口unfinished门槛失败，余6项未执行。schema没有声明该relations字段但模型仍输出，不能声称schema强制有效。metadata-task-options-*完整保留。自然纠错38963414931、成长38963428063、检索38963440053最后再次确认in_progress；跟踪同句柄，不重复启动。该候选服务/BGE/身份/manager四基础均已success。
+
 - 最新发布代码候选2a3baf73f24fc86f5a364a649b3e0dc312691ba7（Git数据API逐对象同SHA核对、非强制快进）。四项各单次创建并确认在途：自然纠错[38963414931](https://github.com/bboytang/Mia/actions/runs/38963414931)、成长[38963428063](https://github.com/bboytang/Mia/actions/runs/38963428063)、v1检索[38963440053](https://github.com/bboytang/Mia/actions/runs/38963440053)、辅助十项[38963455271](https://github.com/bboytang/Mia/actions/runs/38963455271)。基础服务38963357454和提取语法38963357628已success，manager38963357455/BGE38963357469/身份38963357450在途。下次只跟踪同handle，读取原文/实际SDK/SQL，不重发。
 - 78b8965b四项均已失败终态并归档；以下旧“在途”仅历史。下一独立实现项是全服务共同关闭期限：先补实际生命周期验证，再按证据修复；不把Worker单项或模拟时钟当P23全服务验收。P22/P23/P24仍未完成，独立v2未消耗。
 

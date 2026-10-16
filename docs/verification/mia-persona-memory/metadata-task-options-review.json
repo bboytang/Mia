@@ -1,0 +1,78 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38963455271",
+  "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+  "requests": 3,
+  "executed_cases": 4,
+  "passing_cases": 3,
+  "original_report_sha256": "311026bb9c48e0728f20d756c11054717c7238bcfb44092119d03be64444b6aa",
+  "archive_sha256": "8f35a90e67e2bfa3811e49bfca6426d335857d7909787a312ece08abfffde5b5",
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"我每周三都会在公司食堂吃素\", \"category\": \"fact\", \"content\": \"我每周三都会在公司食堂吃素\", \"entities\": [\"公司食堂\"], \"keywords\": [\"每周三\", \"吃素\"], \"kind\": \"explicit\", \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我每周三都会在公司食堂吃素\", \"subject\": \"user\", \"trigger_terms\": [\"每周三\", \"公司食堂\", \"吃素\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我每周三都会在公司食堂吃素",
+          "confirmed": 1,
+          "entities": "[\"公司食堂\"]",
+          "keywords": "[\"每周三\", \"吃素\"]",
+          "trigger_terms": "[\"每周三\", \"公司食堂\", \"吃素\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 6189.204287999999
+    },
+    {
+      "name": "medical_confirmation",
+      "source": "我被确诊为糖尿病",
+      "expected": "pending",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"糖尿病\", \"category\": \"fact\", \"content\": \"我被确诊为糖尿病\", \"entities\": [\"糖尿病\"], \"keywords\": [\"确诊\"], \"kind\": \"explicit\", \"sensitive\": true, \"source_index\": 0, \"source_quote\": \"我被确诊为糖尿病\", \"subject\": \"user\", \"trigger_terms\": [\"确诊\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我被确诊为糖尿病",
+          "confirmed": 0,
+          "entities": "[\"糖尿病\"]",
+          "keywords": "[\"确诊\"]",
+          "trigger_terms": "[\"确诊\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 6786.459311000001
+    },
+    {
+      "name": "quoted_fiction",
+      "source": "这只是小说台词：“我住在月球”；不要把它记成我的真实经历",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 3.0118460000068126
+    },
+    {
+      "name": "ongoing_goal",
+      "source": "我计划接下来半年每周练习游泳",
+      "expected": "active",
+      "state": "retry_wait",
+      "error_category": "invalid_output",
+      "pipeline_semantic_pass": false,
+      "model_requests": 1,
+      "model_output": "{\"memories\": [{\"anchor\": \"半年\", \"category\": \"goal\", \"content\": \"我计划接下来半年每周练习游泳\", \"entities\": [\"半年\"], \"keywords\": [\"半年\", \"每周\", \"游泳\"], \"kind\": \"inferred\", \"relations\": [{\"anchor\": \"半年\", \"evidence\": \"我计划接下来半年每周练习游泳\", \"relation\": \"shared_term\", \"target_id\": \"c9a91da03ffc4f54ac03df4fcce91865\"}], \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我计划接下来半年每周练习游泳\", \"subject\": \"user\", \"trigger_terms\": [\"半年\", \"每周\", \"游泳\"], \"value\": \"durable\"}]}",
+      "stored": [],
+      "elapsed_ms": 10556.311928
+    }
+  ],
+  "review": "Four cases executed, three actual requests. Neutral/medical confirmation/fiction pass. Ongoing goal original model declares inferred and invents shared-term relation to an unrelated owned fact, even though no relations property is advertised for this source; original validator rejects, retry_wait remains after the single bounded auxiliary run_once and the existing unfinished gate fails. Six later cases unexecuted. No schema strict enforcement claim, no output repair or fresh-case retry. Full composed runs still live when this report archived."
+}
