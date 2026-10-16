@@ -28,6 +28,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 新scope测试入口补同用户同Agent多设备共享、同用户其他Agent及其他用户隔离、第二设备解绑/重绑/新旧凭据；三轮均真实manager签发/模型/BGE/原Worker，不预置事实。AST/固定语料检查通过，待精确SHA Actions，不将入口存在称B06验收完成。
 - 最新已推送运行候选`f3fd25f71478389e1db9e755039f3531072017b4`：自然纠错[38946424108](https://github.com/bboytang/Mia/actions/runs/38946424108)、v1检索[38946430905](https://github.com/bboytang/Mia/actions/runs/38946430905)已各单次启动，待终态/原文复核；不得重发。成长首轮已终态失败，harness规范化比较随此候选修正，尚未复跑；未改变运行时特点策略或声称特点生成成功。
 - 本轮三run均已终态失败：自然纠错38944900792为18真实请求/三组拒绝错误提案；v1检索38944905941为39请求/13项结构通过（15项全部执行），两条fact类别肯定重要性仍null，完整B04不通过；成长38945297243为24请求/四源均已入库，但测试原逗号比较忽略既有NFKC而提前失败，原模型trait也均null，后续步骤未执行。完整原文/哈希/只读SQL分别见[natural-focused](verification/mia-persona-memory/natural-focused-review.json)、[retrieval-grounded](verification/mia-persona-memory/retrieval-grounded-review.json)、[growth-first](verification/mia-persona-memory/growth-first-review.json)。
 - 当前下一候选：自然纠错只向原模型提供所属事实id/category/content（原校验上下文/版本不变），补与语料无关的完整合法格式示例，避免复制旧记录/序列化元数据；一般提取明确重要性独立于category，并让既有肯定示例使用fact。原模型输出不加工，不回填数值；60项本地回归通过。成长只修验收比较为既有normalize，暂不修改成长运行策略。独立v2尚未消耗，P22/P23/P24未完成。[完整覆盖缺项](verification/mia-persona-memory/p22-status-matrix.md)。以下在途记录已成为历史。

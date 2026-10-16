@@ -1,0 +1,9 @@
+{
+  "version": "p22-real-scope-v1",
+  "purpose": "Three independent real-manager user/agent/device matrices; no preinstalled memories",
+  "rounds": [
+    {"sources": ["我常喝旋叶薄荷茶", "我常喝岩桂乌龙茶", "我常喝金盏菊花茶"], "terms": ["旋叶薄荷茶", "岩桂乌龙茶", "金盏菊花茶"], "query": "我常喝的是哪款茶？"},
+    {"sources": ["我常用星纹钢笔", "我常用竹节钢笔", "我常用霜蓝钢笔"], "terms": ["星纹钢笔", "竹节钢笔", "霜蓝钢笔"], "query": "我常用的是哪款钢笔？"},
+    {"sources": ["我常练琥珀口琴", "我常练银杉口琴", "我常练青橙口琴"], "terms": ["琥珀口琴", "银杉口琴", "青橙口琴"], "query": "我常练的是哪款口琴？"}
+  ]
+}

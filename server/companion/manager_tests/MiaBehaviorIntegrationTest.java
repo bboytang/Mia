@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +46,25 @@ class MiaBehaviorIntegrationTest {
         return mapper.readTree(http.exchange(path, HttpMethod.POST, new HttpEntity<>(body, headers), String.class).getBody());
     }
 
+    private Map<String, Object> peer(long user, String token, String agent, String device, String client, String kind) throws Exception {
+        db.update("INSERT INTO ai_device(id,mac_address,user_id,agent_id,board,auto_update) VALUES (?,?,?,?,?,0)",
+            device, device, user, agent, "MIA_CI");
+        JsonNode code = post("/device/mia-auth/code", Map.of("device_id", device), token);
+        assertEquals(0, code.path("code").asInt());
+        JsonNode grant = post("/device/mia-auth/exchange", Map.of("device_id", device, "client_id", client,
+            "authorization_code", code.path("data").path("authorization_code").asText()), null);
+        assertEquals(0, grant.path("code").asInt());
+        return Map.of("kind", kind, "device_id", device, "client_id", client, "agent_id", agent,
+            "private_credential", grant.path("data").path("private_credential").asText());
+    }
+
     @Test
     void threeIndependentUsersUseActualSelectedProviderAndPersistentVoiceBridge() throws Exception {
         String key = System.getenv("MIA_TEST_LLM_API_KEY");
         String endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
         String model = System.getenv("MIA_TEST_LLM_MODEL");
         String suite = System.getenv().getOrDefault("MIA_BEHAVIOR_SUITE", "continuity");
-        assertTrue(suite.equals("continuity") || suite.equals("growth") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("inflight") || suite.equals("recovery"));
+        assertTrue(suite.equals("continuity") || suite.equals("growth") || suite.equals("scope") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("inflight") || suite.equals("recovery"));
         assertNotNull(key, "Dedicated test provider not configured");
         assertNotNull(endpoint, "Dedicated test endpoint not configured");
         assertNotNull(model, "Dedicated test model not configured");
@@ -89,6 +102,20 @@ class MiaBehaviorIntegrationTest {
             env.put("MIA_SCOPE_USER_TOKEN", token);
             env.put("MIA_BEHAVIOR_ROUND", Integer.toString(round));
             env.put("MIA_BEHAVIOR_SUITE", suite);
+            if (suite.equals("scope")) {
+                long otherUser = 941020001L + round;
+                String otherAgent = agent + "-other", foreignAgent = agent + "-foreign";
+                db.update("INSERT INTO sys_user(id,username,super_admin,status) VALUES (?,?,0,1)", otherUser, foreignAgent);
+                for (var entry : Map.of(otherAgent, user, foreignAgent, otherUser).entrySet()) {
+                    db.update("INSERT INTO ai_agent(id,user_id,agent_name,system_prompt,llm_model_id) VALUES (?,?,?,?,?)",
+                        entry.getKey(), entry.getValue(), "Synthetic scope user", "用自然简短的中文聊天。", selected);
+                }
+                env.put("MIA_BEHAVIOR_PEERS", mapper.writeValueAsString(List.of(
+                    peer(user, token, agent, "02:00:00:00:08:0" + round, client + "-shared", "shared_device"),
+                    peer(user, token, otherAgent, "02:00:00:00:09:0" + round, client + "-agent", "other_agent"),
+                    peer(otherUser, tokens.createToken(otherUser).getData().getToken(), foreignAgent,
+                        "02:00:00:00:0a:0" + round, client + "-user", "other_user"))));
+            }
             Process running = process.start();
             if (!running.waitFor(300, TimeUnit.SECONDS)) {
                 running.destroyForcibly();

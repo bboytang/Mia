@@ -56,7 +56,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'growth', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'growth', 'scope', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -67,6 +67,8 @@ def save(report):
         value = os.environ.get(name)
         if value:
             text = text.replace(value, '[REDACTED]')
+    for peer in json.loads(os.environ.get('MIA_BEHAVIOR_PEERS', '[]')):
+        text = text.replace(peer['private_credential'], '[REDACTED]')
     REPORT.write_text(text + '\n')
 
 
@@ -415,7 +417,7 @@ async def serve():
                 assert status['state'] in {'committed', 'empty'}, 'Actual extraction did not reach a valid terminal state'
                 await authorization.require_connection(conn)
                 await socket.send(json.dumps({'type': 'test_saved', 'job_state': status['state'],
-                    'memories': store.list_memories(scope.owner), 'personality': store.personality(scope.owner),
+                    'scope_snapshot': scope.snapshot(), 'memories': store.list_memories(scope.owner), 'personality': store.personality(scope.owner),
                     'events': store.handle(scope.owner, {'action': 'events'})['events']}))
         except PrivateAuthorizationRequired:
             await socket.send(json.dumps({'type': 'mia_authorization', 'status': 'required'}))
@@ -449,7 +451,7 @@ async def serve():
 
 async def drive():
     from websockets.asyncio.client import connect
-    fixture_name = {'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
+    fixture_name = {'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
@@ -508,8 +510,15 @@ async def drive():
                 raise AssertionError('WSS service exceeded bounded shutdown')
             assert process.returncode == 0, 'WSS service did not shut down cleanly'
 
-    async def ask(query, tool_case=None):
-        async with connect(endpoint, ssl=tls, additional_headers=headers, open_timeout=10) as socket:
+    def peer_headers(peer):
+        if peer is None:
+            return headers
+        return {'device-id': peer['device_id'], 'client-id': peer['client_id'],
+            'authorization': 'Bearer ' + transport.generate_token(peer['client_id'], peer['device_id']),
+            'mia-private-credential': peer['private_credential']}
+
+    async def ask(query, tool_case=None, *, peer=None):
+        async with connect(endpoint, ssl=tls, additional_headers=peer_headers(peer), open_timeout=10) as socket:
             hello = json.loads(await socket.recv())
             assert hello['type'] == 'hello'
             async def exchange(text, specification=None):
@@ -534,8 +543,8 @@ async def drive():
                 await exchange('你好。')
             return await exchange(query, tool_case)
 
-    async def manage(action, expect_denial=False, **fields):
-        async with connect(endpoint, ssl=tls, additional_headers=headers, open_timeout=10) as socket:
+    async def manage(action, expect_denial=False, *, peer=None, **fields):
+        async with connect(endpoint, ssl=tls, additional_headers=peer_headers(peer), open_timeout=10) as socket:
             first = json.loads(await socket.recv())
             if expect_denial:
                 assert first['type'] == 'mia_authorization' and first['status'] == 'required'
@@ -557,6 +566,13 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        elif SUITE == 'scope':
+            phase = 'real_multi_user_agent_device_matrix'
+            from mia_behavior_scope import drive_scope
+            proof = await drive_scope(sample, ask, manage, json.loads(os.environ['MIA_BEHAVIOR_PEERS']))
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, scope_proof=proof, server_pids=[first_pid],
+                raw_response_review='required for all actual source and cross-device/scope answers')
         elif SUITE == 'growth':
             phase = 'real_three_session_growth_and_invalidation'
             from mia_behavior_growth import drive_growth
@@ -731,7 +747,7 @@ async def drive():
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof'}
+            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.
