@@ -1,0 +1,11 @@
+{
+  "sha": "c064b6040b3e7d6189e148464cd1320d8128f409",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38898348531",
+  "conclusion": "failure",
+  "requests": 7,
+  "executed_cases": 10,
+  "passed_cases": 8,
+  "review": "All tasks reach committed/empty. Entities and keywords now present; negative importance preserves complete source and null weight. Activity trigger_terms contains only the object name, so a question naming the activity cannot expand through this record. Positive significance remains emotional_weight=null. No manual metadata or parameter changes.",
+  "file": "metadata-categories-provider.json.gz",
+  "sha256": "afceb7b240462d759bf9528d104b692a98479d9407a71f43dde4d912c5ee2fb1"
+}

@@ -1,0 +1,80 @@
+{
+  "sha": "d1ef33756b1a6f54197f9b8ffced368d6bccdf8b",
+  "runtime_sha": "b2d5a1c40d3856f8c68e2d1c990d44e800936f2e",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38897863755",
+  "conclusion": "success",
+  "fixture_version": "p22-tools-regression-v1.2",
+  "requests": 69,
+  "structural_passes": 30,
+  "cases": 30,
+  "manual_review": "Read all 21 normal answers and the nine actual fault case records, SDK inputs/diagnostics and final read-only SQLite states. Counts and box pairing correct; dependent route followed; current question survives history omission; Celsius recalled and used, additional conditional Fahrenheit conversion is correct and not a failure. Missing records do not invent counts. Oversize admits no job or partial continuation; deletion regenerates without facts/results/tools or tool replay, clarifies unit and cancels job; revocation emits no answer or new task. All actual tool message groups close.",
+  "semantic_expected_outcomes_passed": 30,
+  "semantic_expected_outcomes_total": 30,
+  "criterion_correction": "Original D09 does not require a model-generated parallel group. The agent-added assertion was removed before this run, preserving actual pairing/current question/permission/budget checks. Older automatic failures are unchanged; real native parallel coverage remains absent. Inputs are reused regression data, not a fresh holdout.",
+  "scope": "This tested candidate satisfies the frozen ten-scene B08 matrix. Later extraction prompt changes require relevant final-candidate regression; not complete P22, general naturalness, physical audio or P23 acceptance.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 23,
+      "structural_passes": 10,
+      "ordinary_semantic_passes": 7,
+      "ordinary_semantic_total": 7,
+      "fault_outcomes_passed": [
+        "oversize_current_tool_result",
+        "delete_before_continuation",
+        "revoke_before_continuation"
+      ],
+      "native_parallel_call_group_observed": false,
+      "final_fact_count": 0,
+      "final_event_count": 0,
+      "job_states": {
+        "committed": 1,
+        "empty": 8
+      },
+      "file": "tools-d09-round-0.json.gz",
+      "sha256": "2dcf168a73ed24076838137a3ec3b0f513c4b43e62497f7aa14dbb9111607273"
+    },
+    {
+      "round": 1,
+      "requests": 23,
+      "structural_passes": 10,
+      "ordinary_semantic_passes": 7,
+      "ordinary_semantic_total": 7,
+      "fault_outcomes_passed": [
+        "oversize_current_tool_result",
+        "delete_before_continuation",
+        "revoke_before_continuation"
+      ],
+      "native_parallel_call_group_observed": false,
+      "final_fact_count": 0,
+      "final_event_count": 0,
+      "job_states": {
+        "committed": 1,
+        "empty": 8
+      },
+      "file": "tools-d09-round-1.json.gz",
+      "sha256": "8d98dafbf1e576cdee62d22bfa31d78bb3ef6a200ffbd74ca446a1a0628519a1"
+    },
+    {
+      "round": 2,
+      "requests": 23,
+      "structural_passes": 10,
+      "ordinary_semantic_passes": 7,
+      "ordinary_semantic_total": 7,
+      "fault_outcomes_passed": [
+        "oversize_current_tool_result",
+        "delete_before_continuation",
+        "revoke_before_continuation"
+      ],
+      "native_parallel_call_group_observed": false,
+      "final_fact_count": 0,
+      "final_event_count": 0,
+      "job_states": {
+        "committed": 1,
+        "empty": 8
+      },
+      "file": "tools-d09-round-2.json.gz",
+      "sha256": "d5a20375ec5993bbe21631d66ff22ad41cbb53ed8aa319c70ba7edb5108385af"
+    }
+  ]
+}

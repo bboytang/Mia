@@ -11,6 +11,7 @@ on:
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_correction_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_retrieval_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_retrieval_p22_v2.json'
       - '.github/workflows/mia-memory-behavior.yml'
   pull_request:
     paths:
@@ -23,13 +24,14 @@ on:
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_correction_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_retrieval_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_retrieval_p22_v2.json'
       - '.github/workflows/mia-memory-behavior.yml'
   workflow_dispatch:
     inputs:
       suite:
         description: Real continuity, correction, retrieval or tool/context scenarios with three isolated users
         type: choice
-        options: [continuity, tools, correction, retrieval, inflight]
+        options: [continuity, tools, correction, retrieval, retrieval_holdout, inflight]
         default: continuity
 permissions:
   contents: read
@@ -49,6 +51,7 @@ jobs:
       - run: python -m json.tool server/tests/fixtures/persona_memory_tools_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_correction_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_retrieval_p22_v1.json > /dev/null
+      - run: python -m json.tool server/tests/fixtures/persona_memory_retrieval_p22_v2.json > /dev/null
   composed:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

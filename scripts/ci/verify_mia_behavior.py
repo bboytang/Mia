@@ -55,7 +55,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools', 'correction', 'retrieval', 'inflight'}
+assert SUITE in {'continuity', 'tools', 'correction', 'retrieval', 'retrieval_holdout', 'inflight'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -191,7 +191,7 @@ async def serve():
     worker = runtime._mia_worker
     store = worker.jobs.store
     index = SemanticMemoryIndex(store, reply._encoder)
-    if SUITE == 'retrieval':
+    if SUITE in {'retrieval', 'retrieval_holdout'}:
         actual_retrieve = index.retrieve
 
         async def observed_retrieve(*args, **kwargs):
@@ -436,6 +436,7 @@ async def drive():
     fixture_name = {'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
+        'retrieval_holdout': 'persona_memory_retrieval_p22_v2.json',
         'inflight': 'persona_memory_correction_p22_v1.json',
         'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures' / fixture_name
@@ -538,7 +539,7 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
-        elif SUITE == 'retrieval':
+        elif SUITE in {'retrieval', 'retrieval_holdout'}:
             phase = 'actual_source_generated_four_component_retrieval'
             from mia_behavior_retrieval import drive_retrieval
             analysis = await drive_retrieval(sample, ask)

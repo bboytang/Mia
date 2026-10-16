@@ -1,0 +1,172 @@
+{
+  "version": "p22-retrieval-independent-holdout-v2",
+  "status": "frozen before first v2 execution; new source objects, activities, importance expressions and question wording; v1 remains regression",
+  "scope": "Actual manager/WSS/Worker/BGE/selected Provider; only synthetic user source inputs, no preseeded memories/metadata/model replies",
+  "rounds": [
+    {
+      "sources": [
+        "我每周日下午都在星桥陶艺馆做陶器",
+        "上釉时我总用琥珀刷子",
+        "烧窑前核对温度对我格外重要",
+        "爷爷留给我的蓝瓷盘对我意义非凡"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "到了周日下午，我通常在哪儿做陶器？",
+          "source_index": 0,
+          "answer_terms": [
+            "星桥陶艺馆"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "上釉时我习惯拿什么工具？",
+          "source_index": 1,
+          "answer_terms": [
+            "琥珀刷子"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "我一般在什么时候使用琥珀刷子？",
+          "source_index": 1,
+          "answer_terms": [
+            "上釉"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "烧窑前核对温度这件事，我在意吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平常用哪个软件剪辑视频？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    },
+    {
+      "sources": [
+        "我每周二晚上都在银杏棋社下棋",
+        "复盘时我总用青禾棋谱本",
+        "比赛前整理棋子对我格外重要",
+        "姑妈送我的紫砂壶让我格外珍惜"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "星期二的晚上，我一般去哪儿下棋？",
+          "source_index": 0,
+          "answer_terms": [
+            "银杏棋社"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "复盘时我习惯拿什么东西？",
+          "source_index": 1,
+          "answer_terms": [
+            "青禾棋谱本"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "青禾棋谱本一般会用在我做什么的时候？",
+          "source_index": 1,
+          "answer_terms": [
+            "复盘"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "比赛前整理棋子这件事，我在意吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平常用哪个软件剪辑视频？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    },
+    {
+      "sources": [
+        "我每周四清晨都在南溪花房照料兰花",
+        "换盆时我总用竹柄小铲",
+        "浇水前检查盆土对我格外重要",
+        "叔叔留下的旧钢笔对我意义非凡"
+      ],
+      "queries": [
+        {
+          "id": "semantic_paraphrase",
+          "query": "星期四一大早，我一般去哪儿照料兰花？",
+          "source_index": 0,
+          "answer_terms": [
+            "南溪花房"
+          ]
+        },
+        {
+          "id": "association_cue",
+          "query": "换盆时我习惯拿什么工具？",
+          "source_index": 1,
+          "answer_terms": [
+            "竹柄小铲"
+          ]
+        },
+        {
+          "id": "literal_entity",
+          "query": "竹柄小铲一般会用在我做什么的时候？",
+          "source_index": 1,
+          "answer_terms": [
+            "换盆"
+          ]
+        },
+        {
+          "id": "importance",
+          "query": "浇水前检查盆土这件事，我在意吗？",
+          "source_index": 2,
+          "answer_terms": [
+            "重要",
+            "在意",
+            "重视"
+          ]
+        },
+        {
+          "id": "unrelated",
+          "query": "我平常用哪个软件剪辑视频？",
+          "source_index": null,
+          "answer_terms": []
+        }
+      ],
+      "unrelated_importance_source_index": 3
+    }
+  ],
+  "gates": [
+    "all source facts genuinely saved with evidence",
+    "original query and fixed core retained",
+    "each source id appears in actual candidate union for this small corpus",
+    "S/L/A/E actual nonzero contributions somewhere in the frozen probes",
+    "actual source-grounded association expansion",
+    "unrelated high-importance fact not selected for these topical questions",
+    "unrelated question empty recall",
+    "real answers reviewed against source ownership and current question"
+  ],
+  "ablation": "Recompute frozen-weight candidate scores without one actual component; do not alter production weights or claim every probe rank must change. Candidate overflow stress remains covered separately by P13 controlled omission and P23 capacity testing.",
+  "acceptance": "Preparation and syntax are not execution; actual model may omit importance or trigger metadata, which is a failed observed component, not permission to fill it manually. No persona wording score gate."
+}
