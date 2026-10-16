@@ -6,5 +6,16 @@
   "requests": 96,
   "B08_accepted": false,
   "evidence": "tools-first-review.json",
-  "next": "Correct harness deletion expectation and admission/error traces; GitHub syntax check; then address actual B03 extraction quality and selected-provider parallel evidence before another real tools run"
+  "next": "Correct harness deletion expectation and admission/error traces; GitHub syntax check; then address actual B03 extraction quality and selected-provider parallel evidence before another real tools run",
+  "harness_correction_sha": "5498b28d9ffb633ebcfc73218c6f83eb63886a40",
+  "harness_syntax": {
+    "run": "https://github.com/bboytang/Mia/actions/runs/38853421670",
+    "conclusion": "success",
+    "scope": "syntax and two JSON parses only; actual composed job skipped; corrected rebuild predicate not yet exercised live"
+  },
+  "service_regression": {
+    "run": "https://github.com/bboytang/Mia/actions/runs/38853421693",
+    "sha": "5498b28d9ffb633ebcfc73218c6f83eb63886a40",
+    "conclusion": "success"
+  }
 }
