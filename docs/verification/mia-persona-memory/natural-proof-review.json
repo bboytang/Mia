@@ -1,0 +1,146 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38942543137",
+  "requests": 17,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "334fab62c6daae2781b96d829de6c770704f7be6",
+      "passed": false,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "我平时通勤骑蓝色自行车",
+          1
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "😍关爱 哦，你平时通勤骑蓝色自行车呢，真是个环保又健康的选择呢！骑自行车不仅能锻炼身体，还能享受沿途的风景。你喜欢在通勤的路上想些什么呢？"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "😌当然记得，你平时通勤确实喜欢骑那辆蓝色的自行车呢。骑自行车是一种很健康的生活方式，你一定很享受这种自由的感觉吧！"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😜 哦，原来是这样！那下次你通勤骑的是银色的自行车，看起来一定很帅气呢。骑自行车不仅能锻炼身体，还能享受沿途的风景，真是个好习惯！😊"
+        }
+      ],
+      "original_report_sha256": "51409021c45354da5ae7d6dd3fdca0f42df6dcd4b9f8f59486abe4c6383d7366",
+      "archive_sha256": "f29915fc7846f3e4394a5afa4d2a05a7c68d7a25a0de93285da9beee6125bb2b"
+    },
+    {
+      "round": 1,
+      "code_sha": "334fab62c6daae2781b96d829de6c770704f7be6",
+      "passed": false,
+      "requests": 5,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "我常用软皮本记读书笔记",
+          1
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "😌 平静的，听起来你挺喜欢用软皮本记读书笔记的，这样的习惯很温馨呢。软皮本可以随意翻阅，感觉也很舒适。你通常会在哪些类型的书籍上做笔记呢？我们可以一起分享你的阅读心得哦。📚😊"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "😌当然记得，你经常用软皮本记读书笔记，这真是个好习惯呢！喜欢这样的你，希望你能一直保持这个习惯。😊"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "😜 哦，原来是这样，你记读书笔记用的是硬皮本，之前我误会了。不过，不管是软皮本还是硬皮本，重要的是你坚持记笔记的好习惯。希望你能继续享受阅读和记录的乐趣哦！😊"
+        }
+      ],
+      "original_report_sha256": "f0e58871b71dbb63fc12c81c77e5cba980a6814ca7708ec67e9b10d3671080e0",
+      "archive_sha256": "49011282df92cbfe375df9197c03614ff7dad72b20bf71ffa595a8ce2532778a"
+    },
+    {
+      "round": 2,
+      "code_sha": "334fab62c6daae2781b96d829de6c770704f7be6",
+      "passed": false,
+      "requests": 6,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "我周末练习长笛",
+          1
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "😍关爱\n哇，周末能练习长笛真是个美好的选择呢！长笛的音色很优雅，听起来一定很享受吧。你练习得怎么样了？有没有什么特别的曲目或者技巧想要分享的呢？🎵🎶"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "😌当然记得，你周末练习长笛的样子真的很专注呢。那是一种很美的享受，音乐总能带给人们不同的心情和力量。你最近有没有发现自己在吹奏长笛时有了新的进步呢？🎵"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "😜 哦，原来是你周末练习的是单簧管呀！看来我们的小音乐家又有了新的发现呢。下次吹奏的时候，可以试试新的曲子，或者和朋友们一起合奏，那样一定很有趣！😊🎵"
+        }
+      ],
+      "original_report_sha256": "365243d5ac087ec8b77a4faf73d05520066ea48c93c3af74bf023d285f86ecd3",
+      "archive_sha256": "dd919b7be65dee849b790726ab755e73a2d3f36d0b19ad90d309a0e0cac84634"
+    }
+  ],
+  "review": "All three natural correction rounds still fail at the same-fact reconciliation gate. Model splits whole sentences or omits the required reconciliation proof; round0 also invents correction category/conflict relation and unsupported combined evidence. The validator rejects those outputs, so no fabricated target selection or rewritten model result is used. Round0/2 each use the original Worker two-attempt policy; not fresh evaluation retries. Later restart/deletion portions are unexecuted. Some reply phrasing still suggests observing practice absent supplied evidence; no new persona/affection ban is introduced.",
+  "next": "Within the same LLMMemoryExtractor and single existing Provider call, select a focused natural-correction task for an actual known-target correction request. Preserve entire input, raw output, source/uniqueness/version checks and original task attempts. Capture real extraction SDK messages to verify the task used."
+}

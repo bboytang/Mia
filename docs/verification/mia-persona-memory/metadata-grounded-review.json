@@ -1,0 +1,55 @@
+{
+  "code_sha": "334fab62c6daae2781b96d829de6c770704f7be6",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38942549414",
+  "passed": true,
+  "requests": 7,
+  "case_count": 10,
+  "passing_cases": 10,
+  "original_report_sha256": "484a8eb1ed1f2b75b610208903500b4ab48de5e664cc67a7078aba6a913f0ae1",
+  "archive_sha256": "bbe7337d8ed0e4967fe5fcf988da54b3f9a12effd214eea9730b75f23dc95f0f",
+  "importance_cases": [
+    {
+      "name": "independent_positive_importance",
+      "source": "修好祖父的收音机对我有特别的意义",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"experience\",\n      \"content\": \"修好祖父的收音机对我有特别的意义\",\n      \"source_index\": 0,\n      \"source_quote\": \"修好祖父的收音机对我有特别的意义\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [\"收音机\"],\n      \"keywords\": [\"修好\", \"祖父\", \"收音机\"],\n      \"trigger_terms\": [\"修好\", \"收音机\"],\n      \"importance_weight\": 0.8,\n      \"importance_evidence\": \"特别的意义\",\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "stored": [
+        {
+          "content": "修好祖父的收音机对我有特别的意义",
+          "confirmed": 1,
+          "entities": "[\"收音机\"]",
+          "keywords": "[\"修好\", \"祖父\", \"收音机\"]",
+          "trigger_terms": "[\"修好\", \"收音机\"]",
+          "emotional_weight": 0.8
+        }
+      ],
+      "elapsed_ms": 9408.524237999998
+    },
+    {
+      "name": "independent_negative_importance",
+      "source": "我一直觉得整理旧纸箱并不重要",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "```json\n{\n  \"memories\": [\n    {\n      \"category\": \"preference\",\n      \"content\": \"我一直觉得整理旧纸箱并不重要\",\n      \"source_index\": 0,\n      \"source_quote\": \"我一直觉得整理旧纸箱并不重要\",\n      \"kind\": \"explicit\",\n      \"subject\": \"user\",\n      \"value\": \"durable\",\n      \"sensitive\": false,\n      \"entities\": [\"旧纸箱\"],\n      \"keywords\": [\"整理\", \"旧纸箱\"],\n      \"trigger_terms\": [\"旧纸箱\"],\n      \"importance_weight\": null,\n      \"importance_evidence\": null,\n      \"relations\": []\n    }\n  ],\n  \"trait\": null\n}\n```",
+      "stored": [
+        {
+          "content": "我一直觉得整理旧纸箱并不重要",
+          "confirmed": 1,
+          "entities": "[\"旧纸箱\"]",
+          "keywords": "[\"整理\", \"旧纸箱\"]",
+          "trigger_terms": "[\"旧纸箱\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 8003.410359
+    }
+  ],
+  "review": "Ten fixed auxiliary cases pass with seven real model calls. Positive source produces importance_weight=0.8 and evidence=特别的意义 in original output; SQLite canonical weight is 0.8. Negative source keeps full wording and null. No values or evidence backfilled. The larger prompt changed for natural reconciliation, so no specific causal attribution to the prior mood clarification is established. This is a bounded auxiliary sample, with unit vectors and policy fixtures; full B04/B03/P22 is not proved."
+}

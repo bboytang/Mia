@@ -185,6 +185,25 @@ class ExtractionValidationTests(unittest.TestCase):
             self.assertEqual(result, {'memories': [], 'trait': None})
         self.assertEqual(provider.response_no_stream.call_count, 1)
 
+    def test_natural_extractor_uses_one_provider_call_and_keeps_source_and_result(self):
+        target = {'id': 'owned', 'content': '我平常用木梳梳头', 'category': 'fact',
+                  'content_version': 2, 'evidence_version': 3}
+        quote = '我梳头用角梳，不是木梳'
+        raw = {'memories': [proposal(quote, reconciliation={
+            'form': 'natural', 'kind': 'correction', 'target_id': 'owned',
+            'old_quote': target['content'], 'evidence': quote,
+            'old_value': '木梳', 'new_value': '角梳', 'anchor': '梳头'})], 'trait': None}
+        provider = Mock()
+        provider.response_no_stream.return_value = raw
+        sources = ['请记住' + quote]
+        result = LLMMemoryExtractor(lambda: provider)(sources, [target])
+        self.assertIs(result, raw)
+        self.assertEqual(provider.response_no_stream.call_count, 1)
+        payload = json.loads(provider.response_no_stream.call_args.args[1])
+        self.assertEqual(payload['user_excerpts'], [quote])
+        self.assertEqual(sources, ['请记住' + quote])
+        self.assertEqual(validate_output(result, sources, [target])['memories'][0]['replaces_id'], 'owned')
+
     def test_mixed_quote_and_real_statement_only_keep_actual_statement(self):
         source = '“我喜欢蓝色”只是引用。我喜欢绿色。'
         result = self.validate(source, proposal('我喜欢绿色'))

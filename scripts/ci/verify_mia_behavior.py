@@ -91,6 +91,9 @@ def selected_provider(configuration, report, purpose):
                 request['diagnostics'] = turn.bundle.diagnostics() if turn else None
                 provider._mia_requests.append(request)
                 report.setdefault('sdk_requests', []).append(request)
+            else:
+                report.setdefault('extraction_sdk_requests', []).append(
+                    json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'max_tokens') if key in kwargs})))
             save(report)
         return create(*args, **kwargs)
 

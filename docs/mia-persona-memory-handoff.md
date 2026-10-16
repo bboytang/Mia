@@ -28,6 +28,10 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- `334fab62` 的真实提取[38942549414](https://github.com/bboytang/Mia/actions/runs/38942549414)十项/七请求全部通过；模型原文肯定权重0.8和证据“特别的意义”实际入库，否定原句与null正常。[原始输入/输出及限定复核](verification/mia-persona-memory/metadata-grounded-review.json)。不能归因于某一提示句，也不是完整四维或独立留出通过。
+- 同SHA自然纠错[38942543137](https://github.com/bboytang/Mia/actions/runs/38942543137)17请求仍三组失败：模型拆句/遗漏协调证明，第一组还造了非法category/relation/拼接证据；原校验器拒绝。第一/三组各两次是原Worker生产尝试，不是重新评估取绿；后半段重启/删除未完成。[原文与SQL状态](verification/mia-persona-memory/natural-proof-review.json)保留。
+- 新聚焦候选仍在同一LLMMemoryExtractor内、一次原Provider调用；仅对真实已知上下文的自然更正选择更正任务，要求原模型完整输出证明，不后处理拼造事实。普通事实/重要性/趋势路径保持；原输入、原输出、两次总尝试及版本/唯一目标/不确定拒绝不变。验证报告记录实际extraction SDK messages。60项提取/维护/Worker本地回归通过，真实效果待精确SHA的自然纠错及v1四维整链。
+
 - 新增接续：`12a487ce8c509a6c3d408e1807159da1aae8c21e` 的重要性边界真实提取38940390130仍9/10失败，七次真实输入与哈希证明开关说明已传入；不能认定模型忽略开关是根因。[原文与复核](verification/mia-persona-memory/metadata-consent-review.json)。服务38940388765、BGE38940389018、身份38940388749、manager38940388901、语法38940388897均success。
 - 自然纠错v1三组语料已在 `ad4fae45` 冻结，未改运行时的首轮[38940763536](https://github.com/bboytang/Mia/actions/runs/38940763536)14请求、三组均未达到同ID更正：第一组预检误作转述，第二组模型拆句被丢弃，第三组作为新事实保存而旧事实仍当前。重启/删除后半段未执行；原回答还有无来源的目击练习细节。[完整失败/SQL摘要](verification/mia-persona-memory/natural-first-review.json)保留，不把自然亲近本身判失败。
 - 自然纠错候选新增模型原提案 `form=natural`：实际旧/新值与共同主题须有字面来源、唯一所属目标、完整原句证据和原版本；拒绝他人目标、歧义、无明确纠正、不确定/真实时间变化及缺少分类。沿用原Worker/事务/向量/事件维护，不按相似度猜目标、不拼造标准用户命令。仅允许明确第一人称纠错前缀进入原模型预检。上下文补充旧更正说法不等于真实过去、用户自述不证明Mia目击；不新增AI免责声明或拟人风格限制。本地59项提取/维护/Worker、49项上下文/连续性/回复测试通过；真实效果待新SHA验证。
@@ -37,7 +41,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 - `62d576d` 行为38932388755仅syntax成功，composed skipped；后续单次运行的[恢复38937376427](https://github.com/bboytang/Mia/actions/runs/38937376427)已success。三用户共9真实请求：真实写锁失败、validated结果存活、原子进程被kill、不同PID恢复，提取/resolver不重复、各1事实/1向量/1committed+1empty、三库完整性通过。六条回答已读，三条新会话召回均回答本人事实；[原文/SQL摘要及限定复核](verification/mia-persona-memory/recovery-first-review.json)。只验收B03这个故障路径，不代表完整P22/P23。
 - 上一运行候选 `6fe7e356c55e8db34404875b18f8d2d125e4c159` 已推送：只统一提取提示完整字段契约与逐来源重要性核对，原校验器、存储、模型和检索参数不变。本地45项提取/Worker修改前后通过；服务38938427388、BGE38938427379、身份38938427390、manager38938427261及语法38938427292均success。
 - 单次真实提取[38938475733](https://github.com/bboytang/Mia/actions/runs/38938475733)已failure，十项/七请求/九通过；肯定意义仍由模型原样输出null。[完整失败证据及基础回归](verification/mia-persona-memory/metadata-contract-review.json)已归档，不把提示结构修订称真实质量修好。固定上游基类确实将system/user传给既有response生成器，源码检查未发现系统提示丢失；不能据此断言模型选择null的具体原因。
-- 下一项：P22的重要性语义质量仍未解决，不重跑同候选取绿、不手填数值；独立v2尚未消耗。继续原计划自然纠错、完整身份/成长及其他故障矩阵；P22未整体验收，P23/P24未完成。上述run均已终态，无在途任务。无生产部署、自动日采或新表达限制。
+- 下一项：提交当前聚焦纠错候选，分别单次执行自然纠错与v1四维整链；重要性辅助已通过，完整检索质量仍待验证，独立v2尚未消耗。继续原计划完整身份/成长及其他故障矩阵；P22未整体验收，P23/P24未完成。334fab62既有run均已终态。无生产部署、自动日采或新表达限制。
 
 ### 先前候选与证据（历史，不作为当前在途状态）
 
