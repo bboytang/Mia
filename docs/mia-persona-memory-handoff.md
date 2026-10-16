@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+当前第一项：跟踪精确e0ec157a的shutdown/FlashX38974837753及faults/configured38974841980（各一次、headSha已核对，创建时queued）；语法38974725259 success。配置模型故障回归与FlashX结果按型号分开，不能把组合历史证据称单型号全通过。旧bb230a00关闭任务已准备失败并归档，无模型/app结果。新候选只补导出venv的pip25.3/typing_extensions4.16.0；服务模型、torch2.2.2和原固定资产hash不改。之后继续实际app关闭/恢复与P22余项，满足后P23→P24；不重发这些在途任务。
+
 最新覆盖：bb230a00/shutdown38973884791已failure并归档shutdown-export-install-*，停在临时导出venv的typing_extensions元数据/CPU索引构建依赖错误；完整模型/app未执行。新候选只在该venv固定pip25.3和预装typing_extensions4.16.0，运行torch2.2.2/导出torch2.6.0/既有资产校验不改，待新精确提交单次CI。P22矩阵主表已按现有有限真实证据同步；全服务在途关闭、独立v2及最终组合仍待验证，P23/P24未完成。
 
 当前唯一待跟踪关闭句柄：bb230a004daab63a3a0a18b36072f04549b4d45d/shutdown38973884791（单次、已核对queued），该SHA行为语法38973818397 success；仅隔离原BGE导出器torch2.6.0与上游运行Python torch2.2.2，原固定资产校验不变。旧38973027072已失败并归档，不再等待或同代码重发。首项仍是该run真实依赖/固定资产/完整导入/监听/SIGTERM/进程退出/第三PID恢复取证，之后补P22其余门槛与独立v2，满足后进P23/P24；无生产采用/部署。
