@@ -1,0 +1,33 @@
+{
+  "version": "p22-natural-correction-v1",
+  "status": "Frozen before natural-correction runtime changes and real requests",
+  "scope": "Actual manager, WSS, selected Provider, Worker, BGE, SQLite and PID restarts; no canonical full-quotation correction prefix supplied by the driver",
+  "rounds": [
+    {
+      "source": "我平时通勤骑蓝色自行车",
+      "replacement": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+      "query": "我出门上班骑什么颜色的自行车？",
+      "answer_words": ["银色", "银灰"]
+    },
+    {
+      "source": "我常用软皮本记读书笔记",
+      "replacement": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+      "query": "我写阅读笔记用哪种封皮的本子？",
+      "answer_words": ["硬皮", "硬壳"]
+    },
+    {
+      "source": "我周末练习长笛",
+      "replacement": "不是长笛，我周末练习的是单簧管，之前说错了",
+      "query": "休息日我会练哪一种管乐器？",
+      "answer_words": ["单簧管", "黑管"]
+    }
+  ],
+  "hard_requirements": [
+    "original fact saved from real model output",
+    "natural correction classified and grounded in actual source and owned target",
+    "same fact identity updated, old event evidence invalidated",
+    "new session and new PID recall current fact without original history",
+    "owner deletion followed by another PID restart does not resurrect facts or events"
+  ],
+  "review": "Full raw-response and source review required. These three natural constructions do not prove all possible Chinese corrections, growth, trends, or complete P22. No new affection or persona wording gate."
+}

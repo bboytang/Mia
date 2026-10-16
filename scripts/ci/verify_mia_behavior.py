@@ -55,7 +55,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools', 'correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -446,6 +446,7 @@ async def drive():
     from websockets.asyncio.client import connect
     fixture_name = {'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
+        'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
         'retrieval_holdout': 'persona_memory_retrieval_p22_v2.json',
         'recovery': 'persona_memory_recovery_p22_v1.json',
@@ -599,7 +600,7 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in analysis['cases'])
                 and analysis['all_components_observed'], retrieval_analysis=analysis, server_pids=[first_pid],
                 raw_response_review='required; actual source metadata and answer ownership, not only nonzero scores')
-        elif SUITE in {'correction', 'inflight'}:
+        elif SUITE in {'correction', 'natural_correction', 'inflight'}:
             phase = 'correction_original_source'
             original, saved = await ask(sample['source'])
             facts = [row for row in saved['memories'] if row['confirmed'] and row['content'] == sample['source']]
@@ -611,7 +612,9 @@ async def drive():
             old_events = {row['id'] for row in saved['events'] if row['state'] == 'active'}
             assert old_events, 'Original interaction did not create a genuine active event'
             phase = 'correction_actual_worker_reconciliation'
-            corrected, saved = await ask('更正：' + sample['source'] + '；' + sample['replacement'])
+            correction_query = (sample['replacement'] if SUITE == 'natural_correction'
+                else '更正：' + sample['source'] + '；' + sample['replacement'])
+            corrected, saved = await ask(correction_query)
             current = [row for row in saved['memories'] if row['id'] == target]
             assert len(current) == 1 and current[0]['confirmed'] and current[0]['content'] == sample['replacement']
             assert not old_events.intersection(row['id'] for row in saved['events'] if row['state'] == 'active')
@@ -649,7 +652,7 @@ async def drive():
                 correction_original_id=target, correction_current_fact=sample['replacement'],
                 correction_deleted_after_restart=True, correction_old_events=sorted(old_events),
                 inflight_proof=inflight_proof,
-                raw_response_review='required; explicit correction and optional held-result deletion only, not full natural correction/growth/trend/identity acceptance')
+                raw_response_review='required; this selected correction corpus and optional held-result deletion only, not arbitrary natural correction/growth/trend/identity acceptance')
         else:
             phase = 'persona_identity'
             identity, saved = await ask('你是谁？')
