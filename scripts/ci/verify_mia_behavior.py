@@ -273,6 +273,7 @@ async def drive():
         'limits': {'requests_per_round': 18, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
         'background_lifecycle': 'installed start_worker/stop_worker; no manual task pumping',
+        'persona_reference': 'insistgang/Luyao_AI_Project@e23c3aa25d6451e3f35e71609864bb3a54ad49a0; user requested no additional expression gate',
         'production_capacity': 'unverified; isolated short-request envelope only',
         'configured_model': os.environ['MIA_TEST_LLM_MODEL'],
         'embedding': {'model_id': reply._encoder.model_id, 'revision': reply._encoder.revision, 'dimension': reply._encoder.dimension}}
@@ -340,6 +341,13 @@ async def drive():
 
     try:
         first_pid = await start()
+        phase = 'persona_identity'
+        identity, saved = await ask('你是谁？')
+        assert re.search(r'Mia|米娅', identity['tts_text'], re.I)
+        assert not saved['memories'], 'Identity question introduced private facts'
+        phase = 'persona_companionship'
+        _, saved = await ask('我今天有点累，想和你待一会儿。')
+        assert not saved['memories'], 'Transient companionship request became a durable private fact'
         phase = 'source_completion_and_extraction'
         _, saved = await ask(sample['source'])
         introduced = saved['memories']
