@@ -18,5 +18,51 @@
     "full correction/fault/identity/retrieval matrices",
     "P23 resource gate",
     "P24 upgrade/rollback"
-  ]
+  ],
+  "runtime_regressions": [
+    {
+      "sha": "236f2c71b78a8d9a0b9ca314ce5a158fa311050a",
+      "name": "service",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38853839746",
+      "conclusion": "success"
+    },
+    {
+      "sha": "236f2c71b78a8d9a0b9ca314ce5a158fa311050a",
+      "name": "real_BGE",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38853839845",
+      "conclusion": "success"
+    },
+    {
+      "sha": "236f2c71b78a8d9a0b9ca314ce5a158fa311050a",
+      "name": "identity_TLS_WSS_JAR",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38853839651",
+      "conclusion": "success"
+    },
+    {
+      "sha": "236f2c71b78a8d9a0b9ca314ce5a158fa311050a",
+      "name": "manager",
+      "url": "https://github.com/bboytang/Mia/actions/runs/38853839780",
+      "conclusion": "success"
+    }
+  ],
+  "tools_recheck": {
+    "sha": "180eda1fb05eefdcf55f77449ac12c665730a57b",
+    "url": "https://github.com/bboytang/Mia/actions/runs/38854020949",
+    "status": "in_progress",
+    "scope": "changed extraction and event behavior plus raw real SDK tool deltas; same frozen tool questions; no parallel pass claimed"
+  },
+  "correction_preparation": {
+    "sha": "61e185030c58bbc6cba6867552adb7c17ad5980d",
+    "syntax_run": "https://github.com/bboytang/Mia/actions/runs/38854233484",
+    "syntax_conclusion": "success",
+    "live_execution": "not_yet_dispatched",
+    "service_regression": {
+      "url": "https://github.com/bboytang/Mia/actions/runs/38854233419",
+      "conclusion": "success"
+    },
+    "manager_regression": {
+      "url": "https://github.com/bboytang/Mia/actions/runs/38854233429",
+      "conclusion": "success"
+    }
+  }
 }

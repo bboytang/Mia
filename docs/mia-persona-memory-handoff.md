@@ -26,9 +26,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-P21完成必要实现与GitHub验证。当前运行模块仍为cb52464，服务230项／38849860894、BGE38849860744、实际身份／TLS／WSS／JAR38849861009、manager38849860897全部success。真实连续性v1.1的38851330956已终态failure，54次实际请求，三组均完成真正三个active后续会话；原文及复核见behavior-third-*，不能继续按旧在途描述等待。共同往事表达边界尚无用户答复，不增添相应运行期表达拦截。
+P21完成必要实现与GitHub验证。当前运行Python模块为236f2c7：提取器a16a805排除临时工具请求来源，中文明确已有记忆不是新来源；事件236f2c7排除“分别”的单字边界误判。236f2c7服务38853839746、真实BGE38853839845、身份／TLS／WSS／JAR38853839651、manager38853839780全部success。七项实际原Provider提取38853748642成功、7请求；逐条原文及结果见[提取质量证据](verification/mia-persona-memory/extraction-quality-ci-results.json)。模型仍曾误提临时查询，是来源守卫正确丢弃，不称模型提案全正确。Mia人设和回答表达规则没有因此新增限制。
 
-当前第一项可执行工作：工具驱动a12b396的真实run [38852561891](https://github.com/bboytang/Mia/actions/runs/38852561891)已终态failure，96次真实模型请求、三十场景完整执行，自动结构21／30。原文／逐项语义复核／hash见[工具证据](verification/mia-persona-memory/tools-first-review.json)。三组模型均串行读取，不能称真实并行；温度偏好已召回，但模型回复仍条件性给另一单位，提取器又重发旧来源，被校验器拒绝；部分工具请求被当成长久事实写入，B03质量尚未通过。删除后实际执行已有P15安全重建，旧事实／结果／工具不入第二次请求、不重放、无新任务，原测试错要求立即limited，现仅修正CI预期与admission／逐场景错误诊断。5498b28修正后的语法／两JSON检查38853421670已success（真实组合skipped），重建检查尚未真实复验；先处理真实提取质量与并行证据后定向复验；不靠同源码重复取绿。完整B01／B03／B04／B06及纠错矩阵仍待补，P23／P24随后推进。跨日验收用户接管，不自动采集，不部署。
+当前第一项可执行工作：继续真实工具复验[38854020949](https://github.com/bboytang/Mia/actions/runs/38854020949)同handle，源码180eda1，当前in_progress，不能重启。第一轮38852561891的96请求／30场景21结构通过及全部原文仍见tools-first-*；提取误存／旧来源重发及伪边界已修复后才启动本轮，不重复旧源码取绿。新增透明记录SDK实际tool_call片段以定位模型串行或合并问题，并行硬门槛不改；删除改为核验现存P15安全重建（丢旧事实／结果／工具、不重放、无新任务），修正后尚待实际结果。
+
+下一独立入口correction已在61e1850接好，三组冻结来源经原更正协议／真实Worker协调、真实事件失效、第三问法、两次不同PID重启及删除无复活；38854233484只证明语法／三JSON成功，尚未手动发真实correction。61e1850服务38854233419／manager38854233429均success。需先取得当前工具终态及归档，再定向执行纠错入口；规范明确这不替代任意自然纠错、后台在途删除竞态、特点成长／趋势派生及完整B01／B03／B04／B06矩阵。P23／P24随后推进。真实连续性v1.1的38851330956保留54请求与失败原文；共同往事表达澄清无用户答复，不追加表达拦截。跨日验收用户接管，不自动采集，不部署。
 
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
@@ -159,4 +161,4 @@ docs/mia-persona-memory-worklog.md
 
 每次接续更新此文件的当前范围、基线、下一步和证据定位；历史事实只追加到工作记录，不让“当前下一步”长期保留过期信息。
 
-最新接续补充：当前精确源码、在途handle与第一项动作见上方“下一步”。38851330956已结束，原文保留behavior-third-*；B08工具真实38852561891已failure，当前无在途真实模型run；三十原输出与失败归档，不能把语法绿称行为通过。2026-10-16再次读取路遥main的config.py／guardrails.py，并通过GitHub API核对HEAD仍e23c3aa，与逐文件复核清单一致。没有新日采或部署。
+最新接续补充：当前精确源码、在途handle与第一项动作见上方“下一步”。38851330956已结束，原文保留behavior-third-*；B08工具真实38852561891已failure，复验38854020949在途；第一轮三十原输出与失败归档，不能把语法绿称行为通过。2026-10-16再次读取路遥main的config.py／guardrails.py，并通过GitHub API核对HEAD仍e23c3aa，与逐文件复核清单一致。没有新日采或部署。
