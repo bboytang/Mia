@@ -3,7 +3,7 @@
   "reference_repository": "https://github.com/insistgang/Luyao_AI_Project",
   "reference_sha": "e23c3aa25d6451e3f35e71609864bb3a54ad49a0",
   "runtime_sha": "b6e8c25bc0ba725562d59af49a48002699cf69af",
-  "candidate_sha": "3529dcab17d43b0b6911cfbe3b944a2a4d185e07",
+  "candidate_sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
   "runtime_tree_unchanged_since_runtime_sha": true,
   "new_composed_run_actual_requests": 49,
   "previous_composed_requests": 26,
@@ -91,9 +91,38 @@
       "sha": "3529dca",
       "scope": "manual actual manager/BGE/provider three-user composed rerun",
       "status": "failure"
+    },
+    {
+      "id": 38849860894,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38849860894",
+      "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
+      "scope": "230 service tests including real SQLite deletion/no-match distinction",
+      "status": "in_progress"
+    },
+    {
+      "id": 38849860744,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38849860744",
+      "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
+      "scope": "actual BGE and controlled integration regressions",
+      "status": "in_progress"
+    },
+    {
+      "id": 38849861009,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38849861009",
+      "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
+      "scope": "actual manager authorization/TLS/WSS and JAR",
+      "status": "in_progress"
+    },
+    {
+      "id": 38849860897,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38849860897",
+      "sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
+      "scope": "manager baseline regression",
+      "status": "in_progress"
     }
   ],
   "deployment": false,
   "local_automated_tests_or_builds": false,
-  "composed_review": "behavior-luyao-review.json"
+  "composed_review": "behavior-luyao-review.json",
+  "candidate_scope": "Explicit memory_evidence state/description for matched, healthy no-match and unavailable; no new response-style gate"
 }
