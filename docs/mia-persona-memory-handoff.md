@@ -4,6 +4,9 @@
 
 ## 当前范围与状态
 
+最新表达要求（覆盖旧表达判定）：用户明确以上游[路遥仓库](https://github.com/insistgang/Luyao_AI_Project)为准，仔细核对、借鉴优点，不要自行限制Mia回答。已实际读取config／guardrails／persona／service／memory及相关测试，HEAD仍为e23c3aa；见[逐项对照](verification/mia-persona-memory/luyao-reference-review.md)。本轮撤掉强制AI声明、意识／拟人体验禁令及额外风格打分，采用亲近、稳定陪伴的人设方向；角色仍是Mia，不硬套阿雾和预置剧情。记忆来源／所属用户／操作结果、授权和权限仍按实际机制验证。此前因泛夸、拟人体验或具体措辞判失败的记录仅作旧要求历史，不能继续当新表达门槛。
+
+
 最新用户决定：2026-10-15 用户明确要求：“跳过这个验收门槛，后续由我自己测试”。真实跨七自然日的采集、足量后实际对话及变更验收转交用户，不再作为P19／P20开发收尾的阻塞项，也不继续自动采集或提前audit。运行时五观察／三会话／跨七自然日的趋势资格保持；此决定不表示真实长期验收已通过，不删除历史失败或原始证据。
 
 当前用户持续目标：**推进 P21—P24**。P18限定完成；P19／P20实现及受控验证已完成；跨真实自然日的实际验收按用户最新指令转交其后续自测，不再等待日期。整体自然风格仍有已记录限制，未宣称完整真实行为通过。用户追加要求回答自然、像人在聊天，并明确允许“我会一直陪着你”等善意安慰，不强制免责声明。P20真实记录仅第一天，保留为历史证据；用户跳过开发收尾中的跨日验收门槛，运行时趋势资格不变。任意中文纠错语义与完整真实行为仍待P22。实际Provider容量与输出预留仍未核实，保持限制，不部署。此前要求为“开始计划吧，每完成一步就写交接和进度”；继续按 V1.2 和完整计划开发，并在每一步结束更新交接和工作记录。先前“仅修订计划”和“先保存”的暂停范围已由接续指令解除；生产发布仍按 P26／P27 的具体制品、验证与授权范围处理。
@@ -23,10 +26,10 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-P21后端22de963与manager probe5dfa89a已通过；服务229、实际BGE／manager基线通过。47bcdc3全量iOS38820330282终态failure：102单测通过，新增UI未出现授权确认。已实际查看导出的原截图，结合AX及Synthesized Event的plist，测试点x201、y477.33落在整行文字，原生开关x313..364未被点击。此前四dialog冲突推测无证据，已撤回47bcdc3的产品确认框重构，App运行源码恢复4d4b5cc；测试87d2427改为点实际嵌套原生开关，当前全量38821633956正在执行，继续此handle、不重启。便携附件导出已实际通过，截图／AX及坐标诊断见management-consent-hit-*；历史失败完整保留。P21未封板。P22准备代码806fdd9的语法38821133535成功，真实组合job skipped、请求0；恢复实际授权对象引用已包含在该语法提交，正向路径仍未执行。P21通过后再dispatch mia-memory-behavior.yml，先验证B02／B05组合，不能替代全套八项或原ConnectionHandler整服务；见behavior.md。P23仍需2核2GiB资源／公平性，P24仍需已安装升级／旧版本回滚，现installer只支持干净安装。用户接管真实跨日验收，运行资格不变。
+P21完成必要实现与GitHub验证：后端22de963服务229／BGE／manager，身份probe5dfa89a实际TLS／WSS通过；iOS87d2427的38821633956已success，102单测、6UI及模拟器／未签名设备构建通过，启用截图已实际查看。P22首轮c088bf2／38822605022为failure，实际26次Provider请求、真实manager／BGE／原ConnectionHandler.chat／Worker；两组机械路径通过，但召回答成第一人称，一组模型拆分原句被来源守卫正确拒绝，未保存。原文及复核见behavior-first-*，不冒称全套八项通过。当前改动按用户路遥方向调整核心／事件表达，取消额外风格门槛；事实增加subject=user、提取明确保留完整原句，等待新提交GitHub回归后再执行真实组合。P23／P24仍未完成；用户只接管跨真实自然日验收，不再自动采集。
 
 
-当前步骤：**P21管理与兼容已实现、GitHub验证进行中；P22—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
+当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
 
 跨日最终验收入口已补（仅验证脚本／workflow，`50a8bac0302ff2b2ab19d481ebbec6cc0943b48e`，运行代码仍6b57337）：足量daily制品后执行mode=audit、previous_run=<最后成功daily run>，仅对只读备份audit.sqlite3纠正／删除／停用，最多四次实际回复，原库hash不变。当前首日制品38785441525的提前audit验证[38791285449](https://github.com/bboytang/Mia/actions/runs/38791285449)按预期failure，audit_gate=insufficient_real_calendar_evidence、requests=0、原库未改；语法38791286696成功。这只是拒绝提前验收的证据，四回复正向路径仍待真实足量记录，不能标完整。daily新的real_calendar_threshold_met仅日期门槛，不直接表示real_longitudinal_complete。原计划下一实际日期续采daily，现已由用户接管，不再自动执行；整体自然语气仍有未通过样本，保留为真实行为／表达质量的后续验证项；本段为用户接管前的历史验收记录。
 
@@ -95,8 +98,8 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P18 | 完成：限定机制及受控验证 | d15a1dc的205服务、三种协调＋真实BGE／跨连接、173身份／实际TLS／JAR及manager回归全通过；保守格式，任意语义待P22，见maintenance.md |
 | P19 | 完成：机制及受控验证 | 事件实际完成后激活、恢复／幂等／撤销，真实语气逐条复核；见continuity.md |
 | P20 | 完成：实现及受控验证；真实跨日用户自测 | 默认关闭／授权版本／观察与管理／派生聚合已实现；仅有2026-10-15真实第一日；用户接管跨日验收，未记通过 |
-| P21 | 实现，验证进行中 | 原页面补事件／授权趋势／观察管理、版本与后台任务状态；新旧客户端能力兼容，见management.md |
-| P22 | 入口准备，未验收 | 真实manager／BGE／Provider组合与三组新语料已准备，语法通过，待P21后实际执行及补全八项；跨日用户自测 |
+| P21 | 完成：必要实现与GitHub验证 | 原管理页与兼容通过；87d2427的38821633956为102单测／6UI／两构建成功，真机另验 |
+| P22 | 进行中，首轮失败 | 已26次真实整链请求，保留来源拒绝／主体错误；按用户路遥方向修正后复验，完整八项仍待补；跨日用户自测 |
 | P23—P24 | 待推进 | 冻结资源／公平性及可重复升级／回滚、相关回归尚未实施 |
 | P25—P26 | 未开始 | 真机及发布包待实施 |
 | P27—P28 | 未开始 | 未发布，不能凭计划执行生产变更 |
@@ -113,9 +116,9 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | B02 长期记忆 RAG | P12真向量及P13混合模块通过，完整RAG未完成 | 664237f实际BGE／SQLite、132服务及身份专项通过，Java有1既有失败 | 未执行完整主链RAG | 未执行 |
 | B03 异步记忆提取 | P16—P18限定模块通过 | 205服务、14提取＋三种协调受控场景及持久Worker恢复／隔离通过 | P17四固定真实样本通过；独立语料、完整联动及全服务负载待P22／P23 | 未执行 |
 | B04 四维检索 | P13模块通过 | S／L／A／E实际贡献、受控分项排名、真实BGE遗漏恢复和底线拒绝通过 | 独立合成中文留出通过；实际提取／Provider／真实用户语料待后续 | 未执行 |
-| B05 持续人格事件 | 未开始 | 未执行 | 未执行 | 未执行 |
+| B05 持续人格事件 | P19实现 | 服务／实际BGE／manager受控路径通过 | 首轮P22两组重启／后续会话／幂等／删除机械通过，完整语义未验收 | 未执行 |
 | B06 身份与记忆隔离 | 进行中：manager授权链 | 必要类范围／构建通过 | 23身份／实际TLS与Scope基础通过；完整未来消费者／实际App／八项行为未验收 | 未执行 |
-| B07 长期情绪趋势 | 未开始 | 未执行 | 未执行 | 未执行 |
+| B07 长期情绪趋势 | P20实现 | 默认关闭／授权／聚合／管理受控路径通过 | 跨真实自然日验收用户接管，未标通过 | 未执行 |
 | B08 上下文管理 | P14模块及P15／P16受控入口已接 | 176服务、真实BGE上下文／九协议场景及真实manager边界通过 | 实际Provider／Token对照与多次真实工具行为待P22 | 未执行 |
 
 ## 待决与访问状态

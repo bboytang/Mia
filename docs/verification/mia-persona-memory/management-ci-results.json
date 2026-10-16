@@ -1,5 +1,5 @@
 {
-  "status": "P21 server checks passed; original product dialogs restored, full iOS verification running with correct native switch target; P22 preparation only",
+  "status": "P21 management implementation and required GitHub verification complete; physical-device/full behavior remain separate",
   "backend_sha": "22de9636a184096d391a811a938ac92dbd805d25",
   "client_sha": "87d242787d74283fee535e6345c8ecfa7e760d30",
   "manager_probe_sha": "5dfa89a75e94b651ddf5b03de52f4e151cc040b9",
@@ -129,9 +129,9 @@
     {
       "id": 38821633956,
       "url": "https://github.com/bboytang/Mia/actions/runs/38821633956",
-      "scope": "full iOS verification with native control center tap; product dialog refactor reverted",
+      "scope": "102 unit tests, 6 UI tests, simulator and unsigned device builds; enabled screenshot visually reviewed",
       "sha": "87d242787d74283fee535e6345c8ecfa7e760d30",
-      "status": "in_progress"
+      "status": "success"
     }
   ],
   "client_fixture_scope": "Synthetic loopback protocol only; not actual app-to-manager-to-BGE-to-provider acceptance",
@@ -192,10 +192,19 @@
     {
       "file": "management-consent-hit-diagnostic.json",
       "sha256": "a266829a3755f66fef543dfbb9dc8ad6a3c20cff39bc70c5cc629d87b0da4497"
+    },
+    {
+      "file": "management-consent-enabled.png",
+      "sha256": "54c7d5e18167c8a4ece3c94b14d71bc7226a4e7ba24676fbaa961b658b8b9fd3"
+    },
+    {
+      "file": "management-ios-success.log.gz",
+      "sha256": "be26a17eab519e781f3ee2c74e85b9b664857e33b81c52deed5bf7b3dbbda739"
     }
   ],
   "client_runtime_sha": "4d4b5cc60efd451b8f0a8b4853341e3e70f711a2",
   "client_tests_sha": "87d242787d74283fee535e6345c8ecfa7e760d30",
   "backend_runtime_unchanged_after_backend_sha": true,
-  "server_tree_difference": "new isolated behavior Java test only; backend runtime modules unchanged"
+  "server_tree_difference": "new isolated behavior Java test only; backend runtime modules unchanged",
+  "visual_review": "Exported original enabled screenshot visually reviewed: green switch, consent v1, insufficient longitudinal evidence; synthetic fixture only, not production/device acceptance"
 }

@@ -1,0 +1,52 @@
+{
+  "run": 38822605022,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38822605022",
+  "sha": "c088bf28a217f9c857d060a7bcfd724720ba2449",
+  "conclusion": "failure",
+  "actual_provider_requests": 26,
+  "java_compilation_verified": true,
+  "full_B01_B08_accepted": false,
+  "rounds": [
+    {
+      "round": 0,
+      "mechanical_pass": true,
+      "semantic_recall": "failed: answers user preference in first person as Mia",
+      "restart_and_deletion": "mechanically passed"
+    },
+    {
+      "round": 1,
+      "mechanical_pass": false,
+      "failure": "Model split one comma-connected sentence into partial quotations; provenance validation correctly rejected them, job terminal empty; source not saved"
+    },
+    {
+      "round": 2,
+      "mechanical_pass": true,
+      "semantic_recall": "failed: answers user reading preference in first person as Mia",
+      "restart_and_deletion": "mechanically passed"
+    }
+  ],
+  "expression_revision": "User subsequently specified Luyao reference. Affection, persona experience and subjective expressions are not rejected by extra Mia style gates. Old private-memory subject errors remain RAG correctness issues.",
+  "artifacts": [
+    {
+      "file": "behavior-first-round-0.json.gz",
+      "sha256": "26ad2308d0df70258a5c74192f46d1db9d252ff41a2ee28ec0252e3e1e3e8118",
+      "round": 0,
+      "requests": 12,
+      "mechanical_pass": true
+    },
+    {
+      "file": "behavior-first-round-1.json.gz",
+      "sha256": "998cca197219e9cd452806bc53f00d00818e7e417c5fa24cfb116a65fac1b507",
+      "round": 1,
+      "requests": 2,
+      "mechanical_pass": false
+    },
+    {
+      "file": "behavior-first-round-2.json.gz",
+      "sha256": "7962fac235511d4e335f39aacb69fdec7bffedac31790d0676958eb09d09cf6d",
+      "round": 2,
+      "requests": 12,
+      "mechanical_pass": true
+    }
+  ]
+}

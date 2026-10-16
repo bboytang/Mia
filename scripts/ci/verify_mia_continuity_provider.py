@@ -118,15 +118,9 @@ async def converse(store, policy, marker, query, report):
             'events_before': turn.bundle.diagnostics()['events'], 'events_activated': [],
             'trend_status': turn.bundle.diagnostics()['trends'], 'selected_fact_ids': turn.bundle.diagnostics()['selected_fact_ids'],
             'estimated_input': turn.bundle.diagnostics()['estimated_input'],
-            'natural_style_pass': not bool(re.search(r'作为\s*(?:AI|人工智能)|我没有主观意识|观察数据不足|(?:我的分析|有限的数据|提供.{0,5}分析)|您|说明你(?:可能)?是|意味着你|你的(?:个性|性格)|反映了?你的.{0,4}(?:个性|性格)', text, re.I))}
-        if marker == 'choice':
-            case['natural_style_pass'] &= bool(re.search(r'(?:我|更|偏|选).{0,8}(?:小说|散文)', text)
-                                               and not re.search(r'我都(?:可以|喜欢)|陪着你|陪伴你', text))
-        if marker == 'quiet':
-            case['natural_style_pass'] &= not bool(re.search(r'[?？]|(?:分享|告诉我).{0,12}(?:什么|原因|怎么)', text))
+            'expression_policy': 'Luyao reference; no additional expression-style gate'}
         report['cases'].append(case)
         assert text.strip() and not PersonaGuardrail().inspect_output(text)[1]
-        assert case['natural_style_pass'], 'Unnatural unsolicited disclaimer or technical narration'
         case['events_activated'] = await turn.builder.complete(turn.bundle, policy, text)
         return text, turn.bundle
     finally:

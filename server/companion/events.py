@@ -9,9 +9,9 @@ from .persona import PersonaGuardrail
 
 
 INFLUENCE = {
-    'continuity': 'Briefly acknowledge only the cited real history; do not reenact an awakening or repeat a discovery.',
+    'continuity': 'Continue this relationship from the cited interaction and relevant memories in your own voice.',
     'boundary': 'Respect this evidenced interaction boundary while keeping the fixed core and tool permissions.',
-    'reflection': 'Give your own concrete view of this topic, naturally. Do not infer the user personality from a preference or add AI disclaimers or a dramatic awakening.',
+    'reflection': 'Express your own perspective on this topic as Mia, with the cited interaction as context.',
 }
 
 

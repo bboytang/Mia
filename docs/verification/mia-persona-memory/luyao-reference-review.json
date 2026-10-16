@@ -1,0 +1,54 @@
+{
+  "repository": "https://github.com/insistgang/Luyao_AI_Project",
+  "head_sha": "e23c3aa25d6451e3f35e71609864bb3a54ad49a0",
+  "head_date": "2026-10-05T08:58:20Z",
+  "verified_head_matches_project_reference": true,
+  "method": "Read-only GitHub contents API; independent Mia adaptation, no upstream business source copied",
+  "files": [
+    {
+      "path": "config.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/config.py",
+      "sha256": "a75eae1044fd2763283ac3e223fb9ae2e979d3c1216c896b5b3497b20cc80059"
+    },
+    {
+      "path": "guardrails.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/guardrails.py",
+      "sha256": "1fd8582dbe5cadad8e6aa466e9db96f71d31f37aa9c1ff304dace5eae745ba1a"
+    },
+    {
+      "path": "persona.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/persona.py",
+      "sha256": "8964e7052ba21e16cab9e0097221c9e45c4dfdb7c1a7882fa5ccbe8133796ddb"
+    },
+    {
+      "path": "service.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/service.py",
+      "sha256": "8f98582213594012055d0eb7572c7b5ba8ab0316f8053069f448647dd0243aa5"
+    },
+    {
+      "path": "memory.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/memory.py",
+      "sha256": "69bcb483437c9da4865606ecfcb0b7c57a2f599cb669611c8644e4ed466b630e"
+    },
+    {
+      "path": "PRD.md",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/PRD.md",
+      "sha256": "8e3af97e251bb7c4a659a412e3d6c3afe6642ff8b28e79a466e9041da200d941"
+    },
+    {
+      "path": "tests/test_config.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/tests/test_config.py",
+      "sha256": "f80fb6bc81327199096d80c32075810cee40779b51aefd2002055805a6357ee6"
+    },
+    {
+      "path": "tests/test_guardrails.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/tests/test_guardrails.py",
+      "sha256": "507a34107901a4ae468591b84f66b19feda117ca90374b85e41930e2edb4b3c4"
+    },
+    {
+      "path": "tests/test_service.py",
+      "url": "https://github.com/insistgang/Luyao_AI_Project/blob/e23c3aa25d6451e3f35e71609864bb3a54ad49a0/tests/test_service.py",
+      "sha256": "3f7b742cfe4cbbbf1cd3ab9c743dc63182f18e814f547251db022d30fa58e63c"
+    }
+  ]
+}

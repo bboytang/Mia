@@ -1,5 +1,7 @@
 # Mia 人格认知与长期记忆：V1.2 完整实施与接续计划
 
+最新用户表达决定：以上游[路遥仓库](https://github.com/insistgang/Luyao_AI_Project)为参考，仔细核对并借鉴，不额外限制Mia回答。人格／表达以稳定沉浸式陪伴为方向；此前强制AI／无意识声明、拟人体验禁止及额外正则风格评分被此决定覆盖。记忆正确性、来源与权限门槛保留。逐项实码核对见[路遥复核](verification/mia-persona-memory/luyao-reference-review.md)。
+
 更新：2026-10-14。依据：[V1.2 最终方案](mia-persona-memory-v1.2.md)。本文件列出执行步骤；当前用户已要求开始计划并逐步写交接和进度，具体执行状态与授权范围见交接文件。列出的未执行步骤不能视为已完成或已发布。
 
 唯一接续入口：[当前交接状态](mia-persona-memory-handoff.md)。每次工作结束追加[工作记录](mia-persona-memory-worklog.md)，同步交接状态。计划、决策、源码和证据使用仓库相对路径或稳定远程标识，不依赖某台设备的绝对路径、旧 Codex 对话或临时目录。

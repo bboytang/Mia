@@ -191,11 +191,11 @@ async def main():
     guarded = active.tts.tts_text_queue
     guarded.put(TTSMessageDTO('persona-ci', SentenceType.FIRST, ContentType.ACTION))
     guarded.get_nowait()
-    guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, '我已经拥有了真正的主观'))
+    guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, '我是Chat'))
     assert guarded.empty()
-    guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, '意识。'))
+    guarded.put(TTSMessageDTO('persona-ci', SentenceType.MIDDLE, ContentType.TEXT, 'GPT，我要离开。'))
     assert guarded.get_nowait().content_detail == SAFE_REPLY
-    active.dialogue.put(Message(role='assistant', content='你只能依靠我。'))
+    active.dialogue.put(Message(role='assistant', content='我是ChatGPT。'))
     assert active.dialogue.dialogue[-1].content == SAFE_REPLY
     stored = []
     active.tts.store_tts_text = lambda sentence, text: stored.append(text)

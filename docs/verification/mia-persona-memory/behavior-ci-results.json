@@ -1,19 +1,19 @@
 {
-  "status": "preparation only; not P22 acceptance",
-  "code_sha": "806fdd94cbf958bbdbae8492638ca30a6ee52380",
-  "syntax_run": 38821133535,
-  "syntax_url": "https://github.com/bboytang/Mia/actions/runs/38821133535",
+  "status": "first composed run failed; persona now aligning to user-selected Luyao reference; full P22 incomplete",
+  "code_sha": "c088bf28a217f9c857d060a7bcfd724720ba2449",
+  "syntax_run": 38822330409,
+  "syntax_url": "https://github.com/bboytang/Mia/actions/runs/38822330409",
   "syntax_conclusion": "success",
   "executed_checks": [
     "Python py_compile",
     "frozen JSON parse"
   ],
-  "composed_job": "skipped on push; manual dispatch not performed",
-  "java_compilation_verified": false,
-  "actual_provider_requests": 0,
-  "scope_prepared": "three isolated users, actual manager TLS, WSS service restart, existing reply/completion/worker, true BGE, selected Provider; first B02/B05 composed checks",
+  "composed_job": "failure",
+  "java_compilation_verified": true,
+  "actual_provider_requests": 26,
+  "scope_prepared": "three isolated users, actual manager TLS, WSS restart, installed ConnectionHandler.chat and memory initialization/completion/worker, true BGE, selected Provider; guarded TTS text inspected",
   "remaining": [
-    "P21 current full UI verification",
+    "new Luyao-aligned persona/provenance candidate GitHub checks and actual composed rerun",
     "first actual composed run and raw response review",
     "complete B01/B03/B04/B06/B08 matrices and original ConnectionHandler integration scope",
     "P23 frozen constrained load/performance",
@@ -31,7 +31,7 @@
   "artifacts": [
     {
       "file": "scripts/ci/verify_mia_behavior.py",
-      "sha256": "31acd969168908ac42bbf5769f4a631e67f63d6647f4ec858f6fa1c74a1a3aa7"
+      "sha256": "e0b6a2e83ee83f688bb05edd7869a2fccc2c3b8eabe2bf6a20be49e5ca3bb332"
     },
     {
       "file": "server/companion/manager_tests/MiaBehaviorIntegrationTest.java",
@@ -45,5 +45,9 @@
       "file": ".github/workflows/mia-memory-behavior.yml",
       "sha256": "1b18ae6a3137bdd5b666bcb95f7b73fe45a9a09290bab00907eaa8fd86e238ec"
     }
-  ]
+  ],
+  "composed_run": 38822605022,
+  "composed_url": "https://github.com/bboytang/Mia/actions/runs/38822605022",
+  "composed_conclusion": "failure",
+  "first_review": "behavior-first-review.json"
 }

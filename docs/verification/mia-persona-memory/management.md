@@ -1,6 +1,6 @@
 # P21 必要管理与兼容
 
-状态：实现与GitHub验证进行中。仍使用原“记忆与成长”页面、现有WebSocket连接和mia_memory的request_id／action，不新增聊天页、管理站点或端口。
+状态：必要实现与GitHub验证完成，真机与完整真实行为另验。仍使用原“记忆与成长”页面、现有WebSocket连接和mia_memory的request_id／action，不新增聊天页、管理站点或端口。
 
 list／personality及旧事实操作的result继续保留memories／paused／personality，新增可选management={version:1,actions:[…]}。旧客户端忽略未知字段；新客户端缺失能力声明时只提供原操作。事件返回最多100条既有有界双方互动片段、状态及版本；片段来自既有来源表，删除来源仍清片段，不新增聊天历史保存。
 
@@ -15,3 +15,5 @@ list／personality及旧事实操作的result继续保留memories／paused／per
 页面验证：22de963／4d4b5cc均102单测通过、新增UI失败。定向38816799405的AX证明入口只有2.3px露出，测试依据isHittable误停滚动；已撤回未证实的产品导航修改。3550c05的38818850351整行可见修正使导航及默认关闭通过，但点击开关未出现启用确认。47bcdc3把四个confirmationDialog统一为一个明确操作状态，保持授权说明与四项原操作，全量38820330282仍在途。原AX／截图制品保留，新workflow导出便携附件便于检查；未提前称修复或P21完成。见[原AX](management-navigation-ax.txt)、[诊断与制品](management-navigation-diagnostic.json)。
 
 最新38820330282终态失败但102单测通过。原截图已实际查看，AX和合成触摸plist证明点击x201落在文字，原生开关在x313..364，未真正切换。撤回未证实的四dialog冲突重构，运行源码恢复4d4b5cc；仅测试改点内层原生开关。新全量结果待CI，仍不标P21完成。便携附件导出实际通过；见management-consent-hit-diagnostic.json及原PNG／AX。
+
+最终P21结果：87d2427的[38821633956](https://github.com/bboytang/Mia/actions/runs/38821633956)success，102单测、6UI、模拟器与未签名设备构建通过。启用截图已实际查看并保存management-consent-enabled.png，原始完整日志无损归档management-ios-success.log.gz。历史失败不删除；本页先前在途描述为历史状态。后续路遥人格／整链变更另做回归，不将合成页面结果冒称真机或真实App→manager整链。

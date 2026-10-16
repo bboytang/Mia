@@ -91,6 +91,7 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn(role, request['messages'][0]['content'])
         self.assertEqual(request['messages'][-1], {'role': 'user', 'content': '我喜欢什么颜色？'})
         self.assertEqual([r['id'] for r in self.data(bundle)['facts']], [own])
+        self.assertTrue(all(r['subject'] == 'user' for r in self.data(bundle)['facts']))
         self.assertEqual(self.data(bundle)['role_data'], role)
         self.assertNotIn('FOREIGN_PRIVATE', bundle.request_json)
         self.assertEqual(history, [{'role': 'user', 'content': '旧问题'}, {'role': 'assistant', 'content': '旧回答'}])
