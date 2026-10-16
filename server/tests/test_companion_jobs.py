@@ -185,7 +185,9 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         original = json.dumps(bad)
         provider = Mock()
         provider.response_no_stream.side_effect = [bad, self.output, self.output]
+        resolved_owners = []
         async def resolve(scope):
+            resolved_owners.append(scope.owner)
             return LLMMemoryExtractor(lambda: provider)
         self.worker.resolve = resolve
         own = await self.worker.submit(self.event('feedback'))
@@ -193,19 +195,29 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.row(own)['state'], 'retry_wait')
         self.assertEqual(self.row(own)['attempts'], 1)
         self.assertEqual(self.store.list_memories(self.scope.owner), [])
+        # The native loop polls while retry_wait is not due; diagnostic state
+        # must survive those polls, not only a manually advanced clock.
+        for _ in range(3):
+            self.assertFalse(await self.worker.run_once())
+        self.assertIn(own['id'], self.worker.validation_feedback)
         peer = await self.worker.submit(self.event('other-task', scope=self.peer))
         self.now[0] += 2
         await self.worker.run_once()
-        self.assertEqual(self.row(peer)['state'], 'committed')
         await self.worker.run_once()
+        self.assertEqual(self.row(peer)['state'], 'committed')
+        self.assertEqual(self.row(peer)['attempts'], 1)
         self.assertEqual(self.row(own)['state'], 'committed')
         self.assertEqual(self.row(own)['attempts'], 2)
         calls = provider.response_no_stream.call_args_list
         self.assertEqual(len(calls), 3)
         self.assertNotIn('previous attempt for THIS task failed', calls[0].args[0])
-        self.assertNotIn('previous attempt for THIS task failed', calls[1].args[0])
-        self.assertIn('keywords clue must occur as a contiguous literal substring', calls[2].args[0])
-        self.assertEqual(json.loads(calls[2].args[1])['user_excerpts'], ['我喜欢蓝色'])
+        for owner, call in zip(resolved_owners[1:], calls[1:]):
+            if owner == self.scope.owner:
+                self.assertIn('keywords clue must occur as a contiguous literal substring', call.args[0])
+            else:
+                self.assertEqual(owner, self.peer.owner)
+                self.assertNotIn('previous attempt for THIS task failed', call.args[0])
+            self.assertEqual(json.loads(call.args[1])['user_excerpts'], ['我喜欢蓝色'])
         self.assertEqual(json.dumps(bad), original)
         self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
         self.assertEqual(len(self.store.list_memories(self.peer.owner)), 1)

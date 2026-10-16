@@ -28,6 +28,9 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- Scope矩阵38948211936已success：三轮36真实请求/27独立WSS会话，三用户/Agent事实范围及同范围多设备共享、旧凭据三处拒绝与重绑新Scope召回通过；27原回答逐条已读，18召回只含本人事实。各库三个owner各一事实、完整性ok；[完整原文/SQL](verification/mia-persona-memory/scope-first-review.json)。仅验收所列B06矩阵，最终相关回归和App真机范围分别记录。
+- 自然纠错38948366421已failure/21请求，两组机械生命周期通过、一组非字面关键词拒绝；实际SDK证明0次诊断送达，不能将改善归因于反馈。[原文及根因](verification/mia-persona-memory/natural-feedback-review.json)。已复现ready()不包含退避未到期任务、导致缓存过早清理；候选改按实际活动任务保留。加入三次退避轮询前失败，修复后62项本地通过；中间测试还错误假设两个任务先后，改按真实Scope核对反馈归属，不变更调度机制或门槛。
+- 成长3dd11dcf/38948865306已failure/24请求：四原句均保存，已越过规范化比较，确实停在trait存在断言；实际输入证明成长说明与三个独立已存来源已送达，原模型仍null。后续未执行，[growth-review原文](verification/mia-persona-memory/growth-review-review.json)保留。下一步仍需改进同一提取任务的真实特点生成，不能预置或把null变成特点。
 - 校验反馈候选`8f3a81d0d5b5cc7647c2b2469e3c616cc28846d7`已推送，自然纠错[38948366421](https://github.com/bboytang/Mia/actions/runs/38948366421)单次运行中；服务38948363595/BGE38948363545/身份38948363568/manager38948363624/提取语法38948363551均success。Scope38948211936仍in_progress，同handle跟踪。
 - 下一成长候选在原一次提取中，仅当三个实际独立会话/原句达到结构资格时追加成长审阅；主题/有限表达倾向/实际证据id与引文仍须原模型生成并过原校验，数量合格不等于语义支持。无另建系统/第二次模型调用/预置特点，普通与自然纠错来源不改。62项本地回归通过，待精确SHA growth验证；原首轮失败及harness规范化修复保留。
 - 新结果：f3fd25f7自然纠错38946424108为19真实请求（6/6/7），第三组同ID更正/换PID召回/删除后重启不复活通过；第一组非字面anchor、第二组非字面关键词被拒绝，整体失败，原回答仍有无来源目击。[natural-projected原文](verification/mia-persona-memory/natural-projected-review.json)。v1检索38946430905为39请求/14结构通过（15项执行），五个实际重要性非空，演奏热身仍null，且原回答有无依据事实组合，整体失败；[retrieval-categorical原文](verification/mia-persona-memory/retrieval-categorical-review.json)。独立v2未执行。

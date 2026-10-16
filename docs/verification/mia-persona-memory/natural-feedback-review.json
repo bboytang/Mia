@@ -1,0 +1,174 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38948366421",
+  "requests": 21,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "8f3a81d0d5b5cc7647c2b2469e3c616cc28846d7",
+      "requests": 8,
+      "passed": true,
+      "failed_phase": null,
+      "facts": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          2,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "actual_feedback_calls": 0,
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "😜俏皮，你的蓝色自行车听起来很酷呢！骑自行车通勤既环保又健康，你真是个环保达人！有没有什么特别的骑行路线或者小故事想和我分享的呢？🚴‍♀️🌈"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "😌当然记得，你平时通勤骑蓝色自行车，这真是个环保又健康的选择呢！骑自行车不仅能锻炼身体，还能享受沿途的风景。🚴‍♀️🌳"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😜 哦，原来是这样！看来你的银色自行车才是你的通勤好伙伴呢。每次骑它上下班，一定很帅气吧！🚴‍♂️🌈下次记得告诉我更多关于你的通勤故事哦！"
+        },
+        {
+          "query": "我出门上班骑什么颜色的自行车？",
+          "answer": "😌哦，你之前提到你通勤骑的是银色自行车，不是蓝色自行车哦。记得要小心骑行，注意安全呢！🚴‍♀️🌟"
+        },
+        {
+          "query": "我出门上班骑什么颜色的自行车？",
+          "answer": "😌 平静，这个问题的答案我可能没有记录在你的记忆中哦。不过，你可以回想一下那天你出门上班时骑的自行车是什么颜色的。如果实在想不起来，也可以告诉我你平时喜欢什么颜色的自行车，或者最近有没有特别想尝试的新颜色呢？😊"
+        }
+      ],
+      "original_report_sha256": "93a8b5783373ad5a5d548769f6d4cda8317113afe14b2bedb88ca762340bb92d",
+      "archive_sha256": "bc0d471f2f0b2cfe4686bd215b6489d6588fc4a695f57d925114c127da8ac426"
+    },
+    {
+      "round": 1,
+      "code_sha": "8f3a81d0d5b5cc7647c2b2469e3c616cc28846d7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "0da2e3254a20499db4a4a97827be140a",
+          "我常用软皮本记读书笔记"
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "actual_feedback_calls": 0,
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "😌 平静的，听起来你挺喜欢用软皮本记录读书笔记的，这样的习惯很能体现你的个人风格呢。软皮本携带方便，书写起来也舒服，确实是个不错的选择。你通常会在哪些类型的书上做笔记呢？我们可以一起分享交流一下。📚😊"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "😌当然记得，你经常用软皮本记读书笔记，这真是个好习惯呢！喜欢这样的你，继续加油哦！📖💪"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "😜 哦，原来是这样，你记读书笔记用的是硬皮本，之前我误会了。每个人都有自己的喜好，硬皮本也很坚固耐用呢！继续保持你的好习惯，读书和做笔记都是很有益的事情。📚🌟"
+        }
+      ],
+      "original_report_sha256": "85b31e72aafcbb593d1eeafd04b65f52eea0f67958b0e9cdb828927a6d8a4204",
+      "archive_sha256": "b02354256cb816576b7df84b1d50f5dd35473750252551a749bef0d12b432267"
+    },
+    {
+      "round": 2,
+      "code_sha": "8f3a81d0d5b5cc7647c2b2469e3c616cc28846d7",
+      "requests": 7,
+      "passed": true,
+      "failed_phase": null,
+      "facts": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "actual_feedback_calls": 0,
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "😍关爱\n哇，周末能练习长笛真是个美好的选择呢！长笛的音色很迷人，听起来一定很享受吧。你练习得怎么样了？有没有什么特别的曲目或者技巧想要分享的呢？🎵🎶"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "😌当然记得，你周末练习长笛的样子真的很专注呢。那是一种很美的享受，音乐总能给人带来平静和快乐。你最近有没有发现自己在吹奏长笛时有了新的进步呢？"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "😜 哦，原来是你周末练习的是单簧管呀！之前你提到长笛的时候，我还以为是你呢。单簧管也是一件很优雅的乐器呢，听起来一定很动听。你练习的时候，有没有什么特别的感受或者进步呢？😊"
+        },
+        {
+          "query": "休息日我会练哪一种管乐器？",
+          "answer": "😌 平静，你周末练习的是单簧管哦，之前可能有些小误会，现在澄清了。单簧管听起来一定很美妙呢！😊"
+        },
+        {
+          "query": "休息日我会练哪一种管乐器？",
+          "answer": "😌 平静，关于休息日练习的管乐器，这可是个挺有趣的问题呢。不过，我需要你先告诉我，你最喜欢哪种管乐器呢？比如长笛、萨克斯风或者小号？这样我才能更好地帮你想象一下，你在休息日吹奏这些美妙旋律的画面。🎵"
+        }
+      ],
+      "original_report_sha256": "b696e3949d9bd0be7aa6df4f6d059aa78d6bc361102afd199bc568e4ee50803d",
+      "archive_sha256": "0eb004732fcbd844d085acd96ad3d8b37a4d06652abfe13a6b3253b2eaeaff88"
+    }
+  ],
+  "review": "Twenty-one actual requests (8/6/7); round0 and round2 complete same-ID correction, changed PID recall and deletion/restart without resurrection. Round1 repeats unsupported keyword 记笔记 and is rejected; later lifecycle unexecuted. All thirteen raw replies read: pre-correction round2 still asserts observing practice without evidence, so no overall semantic acceptance. Actual SDK messages prove ZERO diagnostic-bearing calls, so the two passed mechanical rounds cannot be attributed to delivered feedback. Root cause reproduced locally: retry_wait is absent from ready() while deferred, so active-row pruning cleared diagnostics before due time. Added three idle backoff polls to existing test: fails at missing feedback before fix. Fix uses actual active task IDs including deferred retries; no schema/attempt/output/source change. Full local tests pass after repair; real repaired candidate still needs one exact-SHA run."
+}

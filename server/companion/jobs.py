@@ -96,6 +96,12 @@ class JobStore:
             row = self.store.db.execute('SELECT * FROM mia_jobs WHERE id=?', (job['id'],)).fetchone()
             return dict(row)
 
+    def active_ids(self):
+        # Includes deferred retries; ready() is only the scheduling subset.
+        with self.store.lock:
+            return {row[0] for row in self.store.db.execute(
+                "SELECT id FROM mia_jobs WHERE state IN ('pending','extracting','validated','retry_wait')")}
+
     def eligible(self, job):
         with self.store.lock:
             current = self.current(job)
@@ -184,7 +190,9 @@ class MemoryWorker:
         rows = await asyncio.to_thread(self.jobs.ready)
         active = {row['id'] for row in rows}
         self.results = {key: value for key, value in self.results.items() if key in active}
-        self.validation_feedback = {key: value for key, value in self.validation_feedback.items() if key in active}
+        if self.validation_feedback:
+            pending = await asyncio.to_thread(self.jobs.active_ids)
+            self.validation_feedback = {key: value for key, value in self.validation_feedback.items() if key in pending}
         if self.foreground or not self.lane.done.is_set():
             return False
         owners = {row['owner'] for row in rows}
