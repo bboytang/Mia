@@ -28,6 +28,9 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 最新发布代码候选2a3baf73f24fc86f5a364a649b3e0dc312691ba7（Git数据API逐对象同SHA核对、非强制快进）。四项各单次创建并确认在途：自然纠错[38963414931](https://github.com/bboytang/Mia/actions/runs/38963414931)、成长[38963428063](https://github.com/bboytang/Mia/actions/runs/38963428063)、v1检索[38963440053](https://github.com/bboytang/Mia/actions/runs/38963440053)、辅助十项[38963455271](https://github.com/bboytang/Mia/actions/runs/38963455271)。基础服务38963357454和提取语法38963357628已success，manager38963357455/BGE38963357469/身份38963357450在途。下次只跟踪同handle，读取原文/实际SDK/SQL，不重发。
+- 78b8965b四项均已失败终态并归档；以下旧“在途”仅历史。下一独立实现项是全服务共同关闭期限：先补实际生命周期验证，再按证据修复；不把Worker单项或模拟时钟当P23全服务验收。P22/P23/P24仍未完成，独立v2未消耗。
+
 - 78b8965b四项已全终态failure，不重发：自然纠错38962029349/15请求，第一/三组更正输出inferred/旧内容/非共享anchor及关联，第二组首事实就造空目标更正；成长38962044977/15请求，三组第二事实均造更正/非法关系，未到第四源；检索38962060012/18请求，第一组第二源非法关联，第三组首源空目标更正，第二组第四源先真实0.9但非法关联、再漏重要性被新guard拒绝。20条实际前台原回答已读，长笛目击仍在；natural/growth/retrieval-function-contract-*完整原文/SDK/SQL/哈希保存，v2未消耗。
 - 辅助38962075573只有2请求/2实际样本，首样本保存，医疗样本实际函数流只含空content/无tool事件且complete=true，Worker在retry_wait/invalid_output，入口按原有unfinished门槛失败；余8项未执行。metadata-function-contract-*保留，不能报十项整体9/10或SDK超时。
 - 新候选依实际无目标更正输出，收窄提供给模型的schema：只有真实自然纠错任务声明reconciliation，且kind只允许explicit；旧完整分号协议仍先由原preflight处理。无可能字面共同锚或自然纠错任务不展示relations项目模板；字段缺省沿用原parser空关系，绝不删除/修补实际模型输出，若仍输出不支持字段原validator继续拒绝。原模型/Scope/事实库/Worker/两次上限不变。96本地相关项通过（18.868秒），真实待新SHA。
