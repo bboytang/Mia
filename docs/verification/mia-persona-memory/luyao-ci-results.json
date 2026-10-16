@@ -126,6 +126,20 @@
       "sha": "af216d5397b4e8b1b91267f733836a30f5abee4a",
       "scope": "48 actual requests; explicit no-match evidence, two active followups; verifier missed 记忆",
       "status": "failure"
+    },
+    {
+      "id": 38851252452,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38851252452",
+      "sha": "3cf034f72187c9d24f14b4bedd2361f7e326476b",
+      "scope": "Python main/helper compile and both frozen JSON parses only; live job skipped",
+      "status": "success"
+    },
+    {
+      "id": 38851330956,
+      "url": "https://github.com/bboytang/Mia/actions/runs/38851330956",
+      "sha": "3cf034f72187c9d24f14b4bedd2361f7e326476b",
+      "scope": "v1.1 true third active followup and missing-memory synonym; max60 actual requests",
+      "status": "in_progress"
     }
   ],
   "deployment": false,
@@ -133,5 +147,6 @@
   "composed_review": "behavior-luyao-review.json",
   "candidate_scope": "Explicit memory_evidence state/description for matched, healthy no-match and unavailable; no new response-style gate",
   "latest_composed_review": "behavior-evidence-review.json",
-  "shared_history_policy": "User clarification pending; no added response gate"
+  "shared_history_policy": "User clarification pending; no added response gate",
+  "prepared_verifier_sha": "3cf034f72187c9d24f14b4bedd2361f7e326476b"
 }
