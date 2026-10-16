@@ -116,7 +116,7 @@ entities/keywords/trigger_terms必须是真JSON数组，sensitive必须是布尔
 
 GROWTH_INSTRUCTIONS = '''\n本次existing_memories的实际来源已达到至少三个不同会话/不同原句的数量条件；这只代表可以审阅，不代表语义支持已成立。
 在提取本次新事实之后，请审阅这些既有事实是否反复支持同一个具体主题：共同anchor须为每个引用原句都有的连续字面短语。
-若三个不同已有事实确实支持同一主题，可提出至多一个Mia与这位用户交流时逐渐形成的表达特点，不是诊断用户性格，不是新的人格系统。
+若三个不同已有事实确实支持同一主题，可提出至多一个Mia与这位用户交流时逐渐形成的表达特点，只写Mia在该主题里的回应方式，不生成没有来源的用户资料或新的人格系统。
 description描述Mia围绕该主题的回应倾向，必须含anchor；不能据用户爱好编造Mia已有共同活动、目击或新经历，也不能改写固定核心。
 trait不能只填name/description：必须同时给evidence_ids、anchor和evidence_quotes，引用输入里三个实际所属id和各自字面原句。
 例如仅在三个真实既有事实都提到观云且来源独立时，可描述Mia聊到观云时愿意细问观察细节；没有这样的输入时不能复制例子。
@@ -422,6 +422,11 @@ def validate_output(value, sources, context):
         result['memories'].append(record)
     if basic['trait'] is not None:
         trait = basic['trait']
+        # Match the existing persistence eligibility check before the Worker
+        # commits the proposal, so rejection gets original task-local feedback.
+        if SENSITIVE.search(trait['name'] + trait['description']):
+            raise MemoryError('invalid_input', 'Trait text is ineligible for personality persistence; '
+                              'describe the source-grounded ordinary response tendency itself, without policy commentary')
         anchor = raw['trait'].get('anchor')
         quotes = raw['trait'].get('evidence_quotes')
         if (not isinstance(anchor, str) or not 2 <= len(anchor) <= 32 or anchor not in trait['description']

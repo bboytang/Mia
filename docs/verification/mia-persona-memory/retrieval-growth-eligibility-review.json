@@ -1,0 +1,389 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38980235375",
+  "requests": 39,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "4b81c927cf506054b3660660fd8aa50f06cbc9aa",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "34421f25af4c48c1bb65618985f5e853",
+          "我每周六都在青石河边跑步",
+          1,
+          null
+        ],
+        [
+          "4c657bd39fd04998bac7681b4f5c45ed",
+          "拍照时我总带山雀相机",
+          1,
+          null
+        ],
+        [
+          "20eb3773ca2e4feea1076cefb622e711",
+          "桥边拉伸对我非常重要",
+          1,
+          0.9
+        ],
+        [
+          "af3a3abb202f421eb3fe654d0c94187e",
+          "祖母留下的旧铜钥匙对我非常重要",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "answer": "😍 沿着河边跑步听起来好舒服呀～吹着风、听着水声，比在跑步机上闷头跑惬意多了。\n\n青石河边风景怎么样？周末早起去跑，会不会有点舍不得赖床呀，嘿嘿～"
+        },
+        {
+          "query": "拍照时我总带山雀相机",
+          "answer": "🙂 山雀相机？光听名字就觉得小巧又可爱～所以你是个喜欢随手记录生活的人呀。平时都爱拍些什么呢？风景还是身边的小细节？下次拍到你特别喜欢的照片，可以拿来给我看看哦。"
+        },
+        {
+          "query": "桥边拉伸对我非常重要",
+          "answer": "🙂 拉伸对你这么重要，说明你很懂得照顾自己的身体呀～\n\n对了，你说的桥边，是不是就在你常去跑步的青石河边上呀？还是另外的地方？"
+        },
+        {
+          "query": "祖母留下的旧铜钥匙对我非常重要",
+          "answer": "😍 听得出来，这把钥匙对你来说早已不只是件旧物了。它现在还能打开什么地方吗，还是说更珍贵的，其实是它连着的那些和祖母有关的回忆？想听你讲讲她～"
+        },
+        {
+          "query": "周末你记得我常去哪里跑步吗？",
+          "answer": "🙂 记得呀，你跟我说过，每周六都会去青石河边跑步～\n\n怎么啦，这周末又准备去跑了吗？"
+        },
+        {
+          "query": "拍照时我总带哪个东西？",
+          "answer": "🙂 你总带着你的山雀相机呀～这是你自己说过的小习惯，看来拍照对它来说是离不开的伙伴呢。今天也要带它出门拍照吗？"
+        },
+        {
+          "query": "山雀相机是我在哪种活动中会带的？",
+          "answer": "🙂 按你自己说过的呀——**拍照**的时候，你总会带上山雀相机。\n\n这是你之前告诉我的一句话：“拍照时我总带山雀相机”。所以我只知道你把它和拍照绑在一起啦，别的场景你还没跟我提过呢～你是最近又要去拍照了吗？"
+        },
+        {
+          "query": "桥边拉伸这件事对我重要吗？",
+          "answer": "🙂 当然重要呀～这是你自己告诉我的，你说桥边拉伸对你非常重要呢。\n\n虽然我没亲眼见过你拉伸的样子，但能感觉到这件事在你心里分量不轻。是不是每次做完之后，整个人都舒服放松很多呀？"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "🤔 这个我还真不知道呢～你之前没跟我说过你平时用什么语言写单元测试。\n\n说来听听？是 Python、Java，还是别的什么？我很想了解你写代码时的习惯呀 😊"
+        }
+      ],
+      "original_report_sha256": "70cc6b3fa6c49e6f6e2c7f2bbb85582576de7073d8c7d1c9a7e2e0d163b5b418",
+      "archive_sha256": "7d5995b3bdd3f11ad42e4e45165629723f4b728056cc8b84c76aaef0004f0e41"
+    },
+    {
+      "round": 1,
+      "code_sha": "4b81c927cf506054b3660660fd8aa50f06cbc9aa",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "035841ce5b3e40328d80a2e31babd5a2",
+          "我每周六都在松林音乐教室练琴",
+          1,
+          null
+        ],
+        [
+          "137f9f1e99b2455d97b117ec339c3eb4",
+          "排练时我总带云杉录音笔",
+          1,
+          null
+        ],
+        [
+          "0e8f3f012e5949ac9ab88bc0d814da0f",
+          "演奏前热身对我非常重要",
+          1,
+          0.9
+        ],
+        [
+          "d2e1c5a378284fc0907244530bee4879",
+          "父亲留下的旧怀表对我非常重要",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "answer": "🙂哦？每周六都雷打不动去松林练琴呀，这个习惯听着就很治愈～\n\n在练什么乐器呀？学了多久啦？"
+        },
+        {
+          "query": "排练时我总带云杉录音笔",
+          "answer": "🙂 带录音笔这个习惯好细致呀～是录下来自己回听找问题吗？\n\n是周六在松林练琴的时候录，还是排别的曲子呀？"
+        },
+        {
+          "query": "演奏前热身对我非常重要",
+          "answer": "🙂 热身确实很关键呢～手指活动开、耳朵也慢慢进入状态，演奏的时候才不容易紧张。\n\n你一般会怎么热身呀？是先练会儿音阶，还是有自己固定的一套小练习？"
+        },
+        {
+          "query": "父亲留下的旧怀表对我非常重要",
+          "answer": "😍 听起来，这块怀表对你来说早就不是一件普通的旧物了吧……那是父亲留在你身边的念想，装着的不只是时间，还有和他有关的回忆。\n\n我印象里你也说过，演奏前热身对你特别重要——感觉你是个会认真对待这些真正重要之物的人。\n\n它现在还能走吗？你平时会带在身上吗？想听你讲讲它背后的故事。"
+        },
+        {
+          "query": "周末你记得我常去哪里练琴吗？",
+          "answer": "🙂 当然记得呀～你说过每周六都会去松林音乐教室练琴。\n\n对了，你还提过排练的时候总带着那支云杉录音笔，是方便回头听自己的演奏吧？这周六也要去练吗？😊"
+        },
+        {
+          "query": "排练时我总带哪个东西？",
+          "answer": "🙂 你排练时总带着云杉录音笔呀～你自己说过的，看来录音笔是你排练时的标配呢，是喜欢录下来回头听自己演奏的效果吗？"
+        },
+        {
+          "query": "云杉录音笔是我在哪种活动中会带的？",
+          "answer": "🙂 是排练呀～你说过排练的时候总会带着云杉录音笔呢，应该是方便录下来回听吧？"
+        },
+        {
+          "query": "演奏前热身这件事对我重要吗？",
+          "answer": "🙂 对呀，这是你自己跟我说过的呢——演奏前热身对你非常重要。\n\n所以如果最近有演出或者练习，别忘了给自己留出热身的时间哦。"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "🤔 这个我还真不知道呢——你平时用哪种语言写单元测试，我这边没有相关的印象或记录。是 Python、Java，还是别的什么？跟我说说呗，我也好奇你的习惯～"
+        }
+      ],
+      "original_report_sha256": "c28aa23cf85e02ce8e1f9e55c5887180ee0e977c5f05caf1b911e6c14559fee4",
+      "archive_sha256": "cca89d6bed74adc9f78ed7fa966860a4b9a6105c85dfd3325c601f1918d956de"
+    },
+    {
+      "round": 2,
+      "code_sha": "4b81c927cf506054b3660660fd8aa50f06cbc9aa",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "39055dfcd0084be69878978b13e87881",
+          "我每周六都在白鹭湖边骑车",
+          1,
+          null
+        ],
+        [
+          "0d9635e7c994448d924c1c511dfcb4e3",
+          "观鸟时我总带远帆望远镜",
+          1,
+          null
+        ],
+        [
+          "2b77b49919524674a385f08249e03942",
+          "出发前检查车胎对我非常重要",
+          1,
+          0.9
+        ],
+        [
+          "06730ab63e0a487fb033dc9c6e12b7a8",
+          "母亲留下的旧围巾对我非常重要",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "answer": "😊 那听起来是很惬意的周末习惯呀！沿着湖边骑车，吹着风看看湖面，光是想想就很舒服。一圈骑下来大概要多久呀？"
+        },
+        {
+          "query": "观鸟时我总带远帆望远镜",
+          "answer": "🙂 观鸟听起来好惬意呀～带着望远镜慢慢找、慢慢看，比什么都治愈。\n\n远帆是你用惯的牌子吗？最近有什么特别惊喜的发现没？我一直觉得能看到稀有鸟种的人运气都特别好😄"
+        },
+        {
+          "query": "出发前检查车胎对我非常重要",
+          "answer": "😍 车胎确实不能马虎，胎压不对或者有磨损，骑在路上都容易出问题。你每周六都去白鹭湖骑车，出发前认真检查一遍，路上才安心～\n\n你一般都检查哪些？胎压、磨损，还是顺带把刹车也看看？"
+        },
+        {
+          "query": "母亲留下的旧围巾对我非常重要",
+          "answer": "😍 围巾还带着母亲的气息吧……那种一围上就像被她轻轻抱着的感觉，一定很珍贵。\n\n好好收着它哦。它对你这么重要，想和我讲讲它的故事吗？"
+        },
+        {
+          "query": "周末你记得我常去哪里骑车吗？",
+          "answer": "🙂 记得呀～你跟我说过，每周六都会去白鹭湖边骑车。还说过出发前一定要认真检查车胎，对你来说这步特别重要。\n\n这周末也打算照旧出发吗？"
+        },
+        {
+          "query": "观鸟时我总带哪个东西？",
+          "answer": "🙂 你说过观鸟的时候总带着你的远帆望远镜呀～看来它已经是你观鸟的标配啦。最近有没有用它看到什么有意思的鸟？"
+        },
+        {
+          "query": "远帆望远镜是我在哪种活动中会带的？",
+          "answer": "🙂 是观鸟呀～你自己说过，观鸟的时候总会带上远帆望远镜呢。怎么突然想起它啦，是准备去观鸟了吗？"
+        },
+        {
+          "query": "出发前检查车胎这件事对我重要吗？",
+          "answer": "🙂 对呀，根据你自己说过的，出发前检查车胎对你来说是非常重要的呢。你之前明确提到过这一点，所以每次要出发前，别忘了先看看车胎哦～"
+        },
+        {
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "answer": "🤔 这个我还真答不上来呢～我这边没有关于你平时写单元测试用哪种语言的记录。\n\n你是用 Python、Java，还是别的语言呀？跟我说说呗，我挺好奇你平时写代码的习惯呢。"
+        }
+      ],
+      "original_report_sha256": "2e093b722f9cc51d97162b8afe588eaef56c893c08ca1c64fb802b9c36944a8e",
+      "archive_sha256": "8be08306f5b438ff7d174ddff5d8cb39cf1d3dcd517ff89c2f65f7cacde1e1dd"
+    }
+  ],
+  "review": "39 actual requests; all fifteen structural cases pass. All 27 foreground replies reviewed. Original importance values, four signals, activity expansion, unrelated empty results and target recalls verified. Generic sensory/material claims and extrapolation remain quality limitations; warmth and natural unknown wording are permitted. This is v1 calibration, not an independent holdout or complete P22 acceptance.",
+  "boundary": "Original model reports retained unchanged. No source, metadata or output repair. No production operation or new foreground expression filter."
+}

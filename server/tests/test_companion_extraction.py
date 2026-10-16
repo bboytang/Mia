@@ -413,6 +413,10 @@ class ExtractionValidationTests(unittest.TestCase):
             'evidence_ids': [row['id'] for row in context],
             'evidence_quotes': [{'id': row['id'], 'quote': row['content']} for row in context]}
         self.assertEqual(len(validate_output({'memories': [], 'trait': trait}, ['我在检查'], context)['trait']['evidence_quotes']), 3)
+        for text in ('检查测试结果并不做用户性格诊断', '检查测试结果时记录用户的收入',
+                     '检查测试结果时提供医疗回应'):
+            with self.subTest(description=text), self.assertRaises(MemoryError):
+                validate_output({'memories': [], 'trait': dict(trait, description=text)}, ['我在检查'], context)
         with self.assertRaises(MemoryError):
             validate_output({'memories': [], 'trait': dict(trait, evidence_ids=['foreign'])}, ['我在检查'], context)
         for row in context:
@@ -458,6 +462,51 @@ class ExtractionPipelineTests(unittest.IsolatedAsyncioTestCase):
     async def admit(self, marker='one'):
         event = TurnCompleted(self.scope, 's', marker, marker, self.source, self.store.snapshot(self.scope.owner)['revision'])
         return await self.worker.submit(event)
+
+    async def test_ineligible_trait_receives_worker_feedback_before_any_commit(self):
+        ids = []
+        texts = ['我喜欢周一观云', '我喜欢周二观云', '我喜欢周三观云']
+        for i, text in enumerate(texts):
+            result = self.store.apply_extraction(self.scope.owner, f'prior-{i}', 0, [text],
+                {'memories': [proposal(text)]}, f'prior-{i}')
+            ids.append(result['memories'][0])
+        self.source = '我喜欢观云时画图'
+        first = {'memories': [proposal(self.source)], 'trait': {
+            'name': '观云回应', 'description': 'Mia围绕观云话题不提供诊断', 'anchor': '观云',
+            'evidence_ids': ids, 'evidence_quotes': [{'id': identifier, 'quote': text}
+                for identifier, text in zip(ids, texts)]}}
+        before = json.dumps(first)
+        self.output = first
+        feedback = []
+        original_resolve = self.worker.resolve
+        async def resolve(scope):
+            extract = await original_resolve(scope)
+            def observed(sources, context):
+                feedback.append(getattr(context, 'validation_feedback', None))
+                return extract(sources, context)
+            return observed
+        self.worker.resolve = resolve
+        admitted = await self.admit('trait-retry')
+        await self.worker.run_once()
+        current = self.jobs.current(admitted)
+        self.assertEqual((current['state'], current['attempts']), ('retry_wait', 1))
+        self.assertEqual(self.store.personality(self.scope.owner)['traits'], [])
+        self.assertEqual(len(self.store.list_memories(self.scope.owner)), 3)
+        self.assertEqual(json.dumps(first), before)
+        second = json.loads(before)
+        second['trait']['description'] = 'Mia围绕观云话题询问云层变化与草图细节'
+        self.output = second  # A separate controlled provider result, no repair of first.
+        with self.store.db:
+            self.store.db.execute('UPDATE mia_jobs SET next_attempt_at=0 WHERE id=?', (admitted['id'],))
+        await self.worker.run_once()
+        current = self.jobs.current(admitted)
+        self.assertEqual((current['state'], current['attempts']), ('committed', 2))
+        self.assertEqual(len(self.store.list_memories(self.scope.owner)), 4)
+        self.assertEqual(len(self.store.personality(self.scope.owner)['traits']), 1)
+        self.assertIsNone(feedback[0])
+        self.assertTrue(feedback[1])
+        self.assertEqual(self.calls, 2)
+        self.assertEqual(json.dumps(first), before)
 
     async def test_fact_metadata_true_vector_and_source_identity_commit_together(self):
         accepted = await self.admit()
