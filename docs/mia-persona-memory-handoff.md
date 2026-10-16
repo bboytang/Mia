@@ -28,6 +28,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 最新已推送候选b0aa35013f385a4a407237ca6157bf8bae774311。五项各单次创建：自然纠错[38959608746](https://github.com/bboytang/Mia/actions/runs/38959608746)、成长[38959619823](https://github.com/bboytang/Mia/actions/runs/38959619823)、v1检索[38959633592](https://github.com/bboytang/Mia/actions/runs/38959633592)、faults[38959647587](https://github.com/bboytang/Mia/actions/runs/38959647587)、十项提取[38959662648](https://github.com/bboytang/Mia/actions/runs/38959662648)。基础服务38959575280/BGE38959575255/身份38959575350/manager38959575190最后在运行；两语法38959575258/38959575220已success。下一次只跟踪同handle，不重发。Git manager凭据助手HTTPS两次中断，改用已登录gh标准git-credential后正常推送，不读取/复制密钥或更改模型。
+
 - c993c2df四项已全部终态：自然纠错38954791650 success/21请求，三组同ID替换、换PID召回、删除重启无复活；faults38954807774 success/27请求，真实非空坏JSON、SDK超时、重复提交、两次失败、后续正常保存与重启召回通过。关闭只是空闲关闭，不是完整在途关闭。natural-function-*、faults-complete-*保存原文和SQL。
 - 成长38954797360 failure/27请求：第0/1组第四源原importance=1无依据被拒绝；第2组第四源第二次保存成功，到了真实trait存在断言但null。检索38954802420 failure/21请求：三组第三源原模型关联词不在新原句被拒绝，15查询未执行。growth-function-*、retrieval-function-*保存全部原文、输入、哈希和SQL。48条前台原回答已读，仍有把口误说成实际变化、无来源目击及独立活动组合；机械成功不等于完整语义通过，独立v2未消耗。
 - 下一候选：具备既有函数接口的提取都使用同一次原Provider函数提案；可选字段改为基本类型，未表达重要性/不具备成长资格则schema不声明字段，不替模型填值。实际明确第一人称肯定重要性才要求相应字段；关系目标只排除不可能满足原两字字面共同锚的记录，原校验仍决定接纳。官方文档未明确承诺nullable/anyOf，不认定其不支持或是已证明根因。原SDK/模型/两次上限/Scope/Worker不变。
