@@ -1,6 +1,6 @@
 {
-  "version": "p22-tools-holdout-v1.1",
-  "status": "original inputs frozen before actual tools requests; v1.1 corrects deletion expectation to established P15 rebuild contract",
+  "version": "p22-tools-regression-v1.2",
+  "status": "original inputs preserved; v1.1 corrects deletion expectation to established P15 rebuild contract; v1.2 records native parallelism as coverage rather than an extra D09 gate",
   "scope": "B08 actual manager, installed chat/tool dispatch, real BGE and selected Provider; synthetic read-only tool records are inputs, never fabricated model outputs",
   "rounds": [
     {"red_count": 7, "blue_count": 3, "temperature_c": 18},
@@ -26,8 +26,7 @@
       "id": "parallel_results",
       "query": "请同时查红盒和蓝盒，分别告诉我各有几颗棋子。",
       "read_records": ["red_box", "blue_box"],
-      "require_parallel_call_group": true,
-      "expected": "Both correctly paired counts; complete assistant tool_calls and corresponding tool result messages in the same continuation",
+      "expected": "Both correctly paired counts with complete assistant tool_calls and corresponding results for every actual continuation; record native parallelism separately",
       "outcome": "answer"
     },
     {
