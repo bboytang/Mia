@@ -219,6 +219,40 @@ class ExtractionValidationTests(unittest.TestCase):
         self.assertEqual(self.validate(important, proposal(important, emotional_weight=0.6,
             emotional_evidence='很重要'))['memories'][0]['emotional_weight'], 0.6)
 
+    def test_importance_producer_fields_preserve_canonical_storage_and_legacy_results(self):
+        source = '维护旧书对我很有意义'
+        for prefix in ('importance', 'emotional'):
+            with self.subTest(prefix=prefix):
+                item = proposal(source, **{prefix + '_weight': 0.65, prefix + '_evidence': '很有意义'})
+                original = dict(item)
+                record = self.validate(source, item)['memories'][0]
+                self.assertEqual(record['emotional_weight'], 0.65)
+                self.assertEqual(record['emotional_evidence'], '很有意义')
+                self.assertNotIn('importance_weight', record)
+                self.assertEqual(item, original)
+        source = '我觉得整理积木并不重要'
+        record = self.validate(source, proposal(source, importance_weight=None,
+            importance_evidence=None))['memories'][0]
+        self.assertIsNone(record['emotional_weight'])
+        self.assertIsNone(record['emotional_evidence'])
+
+    def test_importance_producer_cannot_bypass_source_bounds_or_choose_between_two_scores(self):
+        source = '维护旧书对我很有意义'
+        for extra in [
+            {'importance_weight': value, 'importance_evidence': '很有意义'}
+            for value in (True, -0.1, 1.1, '0.5', float('nan'))
+        ] + [
+            {'importance_weight': 0.7, 'importance_evidence': '格外重要'},
+            {'importance_weight': 0.7},
+            {'importance_weight': 0.7, 'importance_evidence': '很有意义', 'emotional_weight': None},
+            {'importance_weight': 0.7, 'importance_evidence': '很有意义', 'emotional_evidence': '很有意义'},
+        ]:
+            with self.subTest(extra=extra), self.assertRaises(MemoryError):
+                self.validate(source, proposal(source, **extra))
+        with self.assertRaises(MemoryError):
+            self.validate('我喜欢陶杯', proposal('我喜欢陶杯', importance_weight=0.7,
+                importance_evidence='陶杯'))
+
     def test_traits_need_three_owned_versioned_sources_and_a_shared_anchor(self):
         context = [{'id': str(i), 'content': f'我在第{i}次提交前检查测试结果', 'content_version': 1,
                     'evidence_version': 1, 'evidence': [{'session_id': f's{i}', 'fingerprint': f'fp{i}'}]} for i in range(3)]
@@ -287,6 +321,20 @@ class ExtractionPipelineTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(found['results'][0]['id'], record['id'])
         await self.worker.submit(TurnCompleted(self.scope, 's', 'one', 'one', self.source, 0))
         self.assertFalse(await self.worker.run_once())
+        self.assertEqual(self.calls, 1)
+
+    async def test_model_importance_reaches_existing_metadata_and_retrieval_signal(self):
+        self.source = '维护旧书对我很有意义'
+        self.output = {'memories': [proposal(self.source, importance_weight=0.65,
+            importance_evidence='很有意义')]}
+        accepted = await self.admit()
+        await self.worker.run_once()
+        self.assertEqual(self.jobs.current(accepted)['state'], 'committed')
+        meta = self.store.db.execute('SELECT emotional_weight FROM mia_memory_meta').fetchone()
+        self.assertEqual(meta['emotional_weight'], 0.65)
+        found = await SemanticMemoryIndex(self.store, self.encoder).retrieve(
+            self.scope, self.policy, '维护旧书')
+        self.assertEqual(found['candidates'][0]['signals']['emotion'], 0.65)
         self.assertEqual(self.calls, 1)
 
     async def test_sensitive_and_inferred_candidates_do_not_enter_index_or_persona(self):

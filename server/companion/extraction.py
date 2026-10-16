@@ -26,7 +26,7 @@ Return JSON only: {"memories":[{"category":"fact",
 "kind":"explicit", "subject":"user", "value":"durable",
 "sensitive":false}], "trait":null}.
 Each proposal also includes entities, keywords, trigger_terms (arrays of source phrases),
-emotional_weight (number or null), emotional_evidence (source phrase or null), and relations (array).
+importance_weight (number or null), importance_evidence (source phrase or null), and relations (array).
 These are fields to extract, not fixed empty defaults. Populate them from this source.
 At most 16 proposals, 512 characters each. Explicit content MUST equal source_quote;
 preserve the speaker and negation, never rewrite 'I' to refer to Mia or another person.
@@ -44,16 +44,16 @@ All entities/keywords/trigger_terms must occur literally in source_quote, at mos
 32 characters each. No invented synonyms.
 从本次原句提取有字面出处的少量实体、关键词、活动或场景触发短语，分别填入entities、keywords、trigger_terms；没有才留空，不从旧记忆补词。
 trigger_terms应包含原句里的活动／场景短语，让只提到活动、尚不知道物品名的问题也能找到该物品，不只重复实体名。
-emotional_weight表示用户对该事实明确表达的重视程度，不是当下心情。明确肯定重要、珍惜、在意或意义时给出大于0且不超过1的权重，并在emotional_evidence引用原文的肯定重视短语；否定或未表达重视时保持null，不推断重要性。
+importance_weight表示用户对该事实明确表达的重视程度，不是当下心情。明确肯定重要、珍惜、在意或意义时给出大于0且不超过1的权重，并在importance_evidence引用原文的肯定重视短语；否定或未表达重视时保持null，不推断重要性。
 原句明确肯定“重要”或“有意义”就应填写重视权重，不要求用户同时表达喜怒哀乐；“不重要”是否定，不能给肯定重视权重。
 低重要性不妨碍保存其他有用的长期事实；情绪观察仍须单独授权。
 以下仅为格式示例，不是当前用户的事实，不得在输出中复用示例内容：
 示例原句：我每次写生都会带帆布画袋
-示例输出：{"memories":[{"category":"fact","content":"我每次写生都会带帆布画袋","source_index":0,"source_quote":"我每次写生都会带帆布画袋","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["帆布画袋"],"keywords":["写生","帆布画袋"],"trigger_terms":["写生"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
+示例输出：{"memories":[{"category":"fact","content":"我每次写生都会带帆布画袋","source_index":0,"source_quote":"我每次写生都会带帆布画袋","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["帆布画袋"],"keywords":["写生","帆布画袋"],"trigger_terms":["写生"],"importance_weight":null,"importance_evidence":null,"relations":[]}],"trait":null}
 示例原句：整理好旧相册对我很有意义
-示例输出：{"memories":[{"category":"experience","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"emotional_weight":0.8,"emotional_evidence":"很有意义","relations":[]}],"trait":null}
+示例输出：{"memories":[{"category":"experience","content":"整理好旧相册对我很有意义","source_index":0,"source_quote":"整理好旧相册对我很有意义","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["旧相册"],"keywords":["整理","旧相册"],"trigger_terms":["整理"],"importance_weight":0.8,"importance_evidence":"很有意义","relations":[]}],"trait":null}
 示例原句：我一直觉得收集瓶盖并不重要
-示例输出：{"memories":[{"category":"preference","content":"我一直觉得收集瓶盖并不重要","source_index":0,"source_quote":"我一直觉得收集瓶盖并不重要","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["瓶盖"],"keywords":["收集瓶盖"],"trigger_terms":["瓶盖"],"emotional_weight":null,"emotional_evidence":null,"relations":[]}],"trait":null}
+示例输出：{"memories":[{"category":"preference","content":"我一直觉得收集瓶盖并不重要","source_index":0,"source_quote":"我一直觉得收集瓶盖并不重要","kind":"explicit","subject":"user","value":"durable","sensitive":false,"entities":["瓶盖"],"keywords":["收集瓶盖"],"trigger_terms":["瓶盖"],"importance_weight":null,"importance_evidence":null,"relations":[]}],"trait":null}
 Relations are optional: at most 4 {"target_id":"an supplied existing fact id",
 "relation":"shared_term", "anchor":"literal term shared with both source_quote and target content",
 "evidence":"same source_quote"}. Never invent target IDs or causal relationships.
@@ -218,14 +218,18 @@ def validate_output(value, sources, context):
             if any(term not in quote for term in terms):
                 raise MemoryError('invalid_input', 'Clue lacks source evidence')
             record[key] = terms
-        weight = proposed.get('emotional_weight')
+        importance = 'importance_weight' in proposed or 'importance_evidence' in proposed
+        if importance and ('emotional_weight' in proposed or 'emotional_evidence' in proposed):
+            raise MemoryError('invalid_input', 'Ambiguous importance fields')
+        prefix = 'importance' if importance else 'emotional'
+        weight = proposed.get(prefix + '_weight')
+        evidence = proposed.get(prefix + '_evidence')
         if weight is not None:
-            evidence = proposed.get('emotional_evidence')
             if (type(weight) not in (int, float) or not 0 <= weight <= 1 or not isinstance(evidence, str)
                     or not evidence or evidence not in quote or not IMPORTANCE.search(evidence)):
                 raise MemoryError('invalid_input', 'Unsupported emotional importance')
         record['emotional_weight'] = weight
-        record['emotional_evidence'] = proposed.get('emotional_evidence') if weight is not None else None
+        record['emotional_evidence'] = evidence if weight is not None else None
         if kind == 'inferred':
             record['anchor'] = anchor
         relations = proposed.get('relations', [])

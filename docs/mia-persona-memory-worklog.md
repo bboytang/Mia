@@ -745,3 +745,5 @@
 - 5319646十项辅助38898964409已failure，7请求／10项／9通过，活动器材实际entities／keywords及trigger_terms中的配音练习均保存；肯定意义仍emotional_weight=null，否定原句与null正常，整体仍失败。原报告／hash存metadata-signal-*，不再反复同源码调辅助取绿。下一次完整v1实际检索回归已单次启动，用三组真实上下文观察四信号，独立冻结v2暂不消耗。
 
 - 5319646四回归终态全success：服务38898906830、实际BGE38898906791、身份38898906739、manager38898906676；新v2入口语法38898831820成功。完整v1检索38899281656已确认composed in_progress，继续同handle，不重新启动。交接“下一步”已整合当前状态及原始证据链接，历史工作记录／失败制品未删除。P22仍未整体验收，P23／P24未完成，无部署／自动日采／本地自动测试。
+
+- 新接续先复核干净工作树及38899281656，当前真实检索composed仍in_progress，继续同handle。重要性字段候选：仅把模型生产字段命名改为importance_weight／importance_evidence，校验后将原值存入既有emotional字段；保留旧字段兼容，双套同时出现拒绝，不后填数值、无schema／检索参数更改。新增新旧字段一致、数值与来源／歧义拒绝、原对象不变，以及Worker→SQLite→检索信号回归。真实效果待GitHub，模型／Secrets不变。
