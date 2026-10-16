@@ -2,13 +2,17 @@
 
 此入口尚未通过真实CI；测试代码或本地受控测试不能代替实测。
 
-当前实际句柄：e0ec157a/[38974837753](https://github.com/bboytang/Mia/actions/runs/38974837753)，单次in_progress，准备已通过、进入真实manager/BGE/Provider三轮，尚无关闭结论。此前d106a686/38973027072与bb230a00/38973884791均在导出准备失败，完整保留shutdown-first-preparation-*与shutdown-export-install-*；这两轮模型及实际生命周期阶段未执行。
+首次实际场景：e0ec157a/[38974837753](https://github.com/bboytang/Mia/actions/runs/38974837753)终态failure，20真实请求；第0/2组通过，第1组在关闭后断言提取仍剩尝试次数处失败，未进入第三PID。真实app/WS/HTTP/GC与Worker已运行，完整原证据见shutdown-first-real-*；不能称三组通过。此前d106a686/38973027072与bb230a00/38973884791均在导出准备失败，完整保留shutdown-first-preparation-*与shutdown-export-install-*；这两轮模型及实际生命周期阶段未执行。
 
 `shutdown`套件复用既有真实manager测试用户、授权、Provider、BGE与SQLite，直接导入安装后的完整ConnectionHandler和app模块。执行原app.main、WebSocketServer、SimpleHttpServer、GC及同一持久Worker；实际Unix SIGTERM触发原关闭接线。另设TLS/WSS文本驱动，省略连接音频初始化及音频消费者，因此不证明音频/真机关闭或P23资源指标。
 
 配置仅从CI环境中的测试manager地址和凭据进入原配置缓存；不用生产配置文件，也不以fake config.logger/util模块替代完整导入。日志使用真实logger，关闭携带异常局部变量的输出；原Provider请求/响应元数据仍按既有脱敏报告观察。stdin使用实际管道和原aioconsole监控。通过监听探测确认实际WS/HTTP已启动，进程退出后确认原端口关闭。
 
 三个冻结合成用户分别执行：真实回复完成事件入队；原模型提案通过原validator后在原NativeLane受控保持；SIGTERM后1秒释放，原Worker在原预算内提交；新PID召回。第二个真实提案校验后保持至45秒（不制造输出/事实/任务），在关闭预算内退出且任务仍持久未提交；第三个PID由原Worker恢复，原尝试总数不超过2，唯一两事实/两向量及SQLite完整性核对。原任务120秒期限、30秒模型调用、两次提取上限、总进程关闭20秒都不放宽。
+
+上述为保存不变的shutdown v1。首次真实结果暴露两点：原提案可能已在第二次尝试才通过；测试保持器提前抛出无效提案的校验错误，使原Worker缺少自己的反馈路径。新shutdown v2保留v1全部原语料、原生提取保持与20秒期限，将无效原值原样交回原Worker，不修补、不代填。未持久的原结果按原最多两次走到committed或明确failed；失败单列，绝不称保存，也不允许第三次实际模型调用。
+
+v2额外新增每用户第三个真实来源及第四PID：原Worker实际完成校验并已将validated_result写入SQLite后，在其NativeLane中保持实际BGE生成向量。关闭后保留原持久结果；第四PID必须提交并正确召回，实际模型调用数与提取attempts均不得增加，即使该来源已用完两次提取。事实/向量数严格等于真实成功来源数，无重复；原结果未返回而耗尽尝试的失败不会凭空产生事实。本扩展覆盖原D10对“已校验结果重试复用”和“无结果尝试耗尽显式失败”的两条不同契约，旧v1失败不改写，新v2仍待实际CI。检索留出v2与本文件无关，保持未使用；音频/P23范围不扩称完成。
 
 ## 安装范围与依赖
 

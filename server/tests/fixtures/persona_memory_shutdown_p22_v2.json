@@ -1,0 +1,9 @@
+{
+  "version": "p22-actual-app-shutdown-v2",
+  "rounds": [
+    {"drain_source": "我常用松纹刻刀做木雕", "drain_query": "我做木雕常用哪款刻刀？", "drain_term": "松纹刻刀", "blocked_source": "我常用软木垫装订小册", "blocked_query": "我装订小册常用什么垫？", "blocked_term": "软木垫", "durable_source": "我常用帆布袋装木雕工具", "durable_query": "我装木雕工具常用什么袋？", "durable_term": "帆布袋"},
+    {"drain_source": "我常用黄铜尺画图", "drain_query": "我画图常用哪种尺？", "drain_term": "黄铜尺", "blocked_source": "我常用细网袋收纳画笔", "blocked_query": "我收纳画笔常用什么袋？", "blocked_term": "细网袋", "durable_source": "我常用硬壳筒收纳画纸", "durable_query": "我收纳画纸常用什么筒？", "durable_term": "硬壳筒"},
+    {"drain_source": "我常用素色纸做折纸", "drain_query": "我做折纸常用什么纸？", "drain_term": "素色纸", "blocked_source": "我常用棉绳编织杯垫", "blocked_query": "我编织杯垫常用什么绳？", "blocked_term": "棉绳", "durable_source": "我常用竹篮收纳毛线", "durable_query": "我收纳毛线常用什么篮？", "durable_term": "竹篮"}
+  ],
+  "scope": "Extends shutdown v1, which remains preserved. Actual app/WS/HTTP/GC/Worker/SIGTERM, three users and four PIDs per group. Raw-result native hold must exit within 20s and restore a truthful terminal state without a third extraction; an exhausted/unreturned raw result may fail explicitly. Additional genuinely persisted validated-result/vector native hold must recover and commit without another model call or attempt, even when extraction used both attempts. Audio omitted; unrelated retrieval v2 holdout remains untouched."
+}

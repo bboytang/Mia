@@ -34,7 +34,8 @@ class RuntimeHoldTests(unittest.IsolatedAsyncioTestCase):
         db.row_factory = sqlite3.Row
         db.execute('CREATE TABLE mia_jobs (id TEXT, source_payload TEXT, owner TEXT, state TEXT)')
         db.execute('INSERT INTO mia_jobs VALUES (?,?,?,?)', ('synthetic-unit-job', json.dumps({'text': source}), 'synthetic-owner', 'extracting'))
-        worker = SimpleNamespace(resolve=resolve, jobs=SimpleNamespace(store=SimpleNamespace(db=db, lock=threading.RLock())))
+        worker = SimpleNamespace(resolve=resolve, jobs=SimpleNamespace(store=SimpleNamespace(db=db, lock=threading.RLock())),
+                                 index=SimpleNamespace(encoder=object()))
         with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {'mia_companion.extraction': extraction}):
             root = Path(directory)
             (root / 'shutdown-release.json').write_text('{}')
@@ -49,16 +50,51 @@ class RuntimeHoldTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(report['shutdown_held_outputs'][0]['job_id'], 'synthetic-unit-job')
 
     async def test_invalid_output_never_gets_held_or_repaired(self):
+        value = {'memories': [{'content': 'invented'}]}
         async def resolve(scope):
-            return lambda sources, context: {'memories': [{'content': 'invented'}]}
+            return lambda sources, context: value
 
-        worker = SimpleNamespace(resolve=resolve)
+        worker = SimpleNamespace(resolve=resolve, index=SimpleNamespace(encoder=object()))
         with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {'mia_companion.extraction': extraction}):
             root = Path(directory)
             report = {}
             observe_hold(worker, {'source': '我喜欢蓝色'}, root, report, threading.Lock(), lambda result: None)
             extract = await worker.resolve(None)
+            returned = await asyncio.to_thread(extract, ['我喜欢蓝色'], [])
+            self.assertIs(returned, value)
             with self.assertRaises(MemoryError):
-                await asyncio.to_thread(extract, ['我喜欢蓝色'], [])
+                extraction.validate_output(returned, ['我喜欢蓝色'], [])
             self.assertFalse((root / 'shutdown-held.json').exists())
             self.assertEqual(report, {})
+
+    async def test_vector_hold_requires_original_persisted_result_and_keeps_attempts(self):
+        import numpy as np
+        source = '我常用帆布袋装木雕工具'
+        vector = np.zeros(768, dtype=np.float32)
+        vector[0] = 1
+        encoder_calls = []
+        def encode(text, query=False):
+            encoder_calls.append((text, query))
+            return vector
+        db = sqlite3.connect(':memory:', check_same_thread=False)
+        self.addCleanup(db.close)
+        db.row_factory = sqlite3.Row
+        db.execute('CREATE TABLE mia_jobs (id TEXT,source_payload TEXT,owner TEXT,state TEXT,validated_result TEXT,attempts INTEGER)')
+        db.execute('INSERT INTO mia_jobs VALUES (?,?,?,?,?,?)', ('synthetic-durable-job', json.dumps({'text': source}),
+            'synthetic-owner', 'validated', json.dumps({'_schema': 1, 'memories': [
+                {'content': source, 'kind': 'explicit', 'sensitive': False}]}), 2))
+        async def resolve(scope):
+            self.fail('Durable vector resume must not resolve a model')
+        worker = SimpleNamespace(resolve=resolve, index=SimpleNamespace(encoder=SimpleNamespace(encode=encode)),
+            jobs=SimpleNamespace(store=SimpleNamespace(db=db, lock=threading.RLock())))
+        with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {'mia_companion.extraction': extraction}):
+            root = Path(directory)
+            (root / 'shutdown-release.json').write_text('{}')
+            report = {}
+            observe_hold(worker, {'source': source, 'owner': 'synthetic-owner', 'stage': 'validated_vector'},
+                         root, report, threading.Lock(), lambda result: None)
+            returned = await asyncio.to_thread(worker.index.encoder.encode, source)
+            self.assertIs(returned, vector)
+            self.assertEqual(encoder_calls, [(source, False)])
+            self.assertEqual(report['shutdown_held_outputs'][0]['persisted_attempts'], 2)
+            self.assertEqual(db.execute('SELECT attempts FROM mia_jobs').fetchone()[0], 2)

@@ -13,6 +13,7 @@ on:
       - 'scripts/ci/mia_behavior_faults.py'
       - 'scripts/ci/mia_behavior_runtime.py'
       - 'server/tests/fixtures/persona_memory_shutdown_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_shutdown_p22_v2.json'
       - 'server/tests/fixtures/persona_memory_faults_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_scope_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
@@ -38,6 +39,7 @@ on:
       - 'scripts/ci/mia_behavior_faults.py'
       - 'scripts/ci/mia_behavior_runtime.py'
       - 'server/tests/fixtures/persona_memory_shutdown_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_shutdown_p22_v2.json'
       - 'server/tests/fixtures/persona_memory_faults_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_scope_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
@@ -83,6 +85,7 @@ jobs:
       - run: python -m py_compile scripts/ci/mia_behavior_faults.py
       - run: python -m py_compile scripts/ci/mia_behavior_runtime.py
       - run: python -m json.tool server/tests/fixtures/persona_memory_shutdown_p22_v1.json > /dev/null
+      - run: python -m json.tool server/tests/fixtures/persona_memory_shutdown_p22_v2.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_faults_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_scope_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_growth_p22_v1.json > /dev/null

@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+当前覆盖：shutdown38974837753已failure/20请求，三组第0/2链通过，第1组原提案首个单字关系无效、第二次有效保持导致attempts=2；关闭约19.5秒且GC/服务/Worker任务都done，驱动的一次尝试前提失败，未进入第三PID。shutdown-first-real-*保留原报告/SQL/依赖/哈希。当前shutdown v2候选让无效原值交回Worker保留反馈，原Native提取阻塞仍测20秒/最多两次明确终态；额外持久validated结果的实际BGE NativeLane保持与第四PID复用提交，必须无额外模型调用/attempt。旧v1和失败不改写，检索v2不动；29本地相关项及最后3保持器复验通过，待新精确SHA CI。P22/P23/P24未完成。
+
 最新状态：e0ec157a/faults38974841980已success/27请求，实际glm-4-flash，六非空坏JSON/六真实SDK超时、原两attempts/重复幂等/后续正常提取/换PID召回通过；12原回答已读，faults-current-configured-*保存完整原证据。不能用它冒称FlashX坏JSON门槛通过。shutdown38974837753仍in_progress，已通过准备进入真实manager/BGE/Provider三轮；只跟踪该句柄，保存完整app/SIGTERM/退出/第三PID恢复实际证据。P22余项/独立v2及P23/P24仍未完成。
 
 当前第一项：跟踪精确e0ec157a的shutdown/FlashX38974837753及faults/configured38974841980（各一次、headSha已核对，创建时queued）；语法38974725259 success。配置模型故障回归与FlashX结果按型号分开，不能把组合历史证据称单型号全通过。旧bb230a00关闭任务已准备失败并归档，无模型/app结果。新候选只补导出venv的pip25.3/typing_extensions4.16.0；服务模型、torch2.2.2和原固定资产hash不改。之后继续实际app关闭/恢复与P22余项，满足后P23→P24；不重发这些在途任务。

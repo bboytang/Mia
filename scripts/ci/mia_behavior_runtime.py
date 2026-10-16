@@ -118,7 +118,7 @@ async def launch(config, root, report, lock, save):
 
 
 def observe_hold(worker, control, root, report, lock, save):
-    from mia_companion.extraction import normalize, validate_output
+    from mia_companion.extraction import normalize, validate_output, MemoryError
     original = worker.resolve
 
     async def resolve(scope):
@@ -126,18 +126,24 @@ def observe_hold(worker, control, root, report, lock, save):
 
         def extract(sources, context):
             value = extractor(sources, context)
-            if sources != [control.get('source')]:
+            if control.get('stage', 'raw') != 'raw' or sources != [control.get('source')]:
                 return value
-            result = validate_output(value, sources, context)
-            assert any(row['content'] == normalize(sources[0]) and row['kind'] == 'explicit'
-                       and not row['sensitive'] for row in result['memories'])
+            try:
+                result = validate_output(value, sources, context)
+            except MemoryError:
+                # The production Worker must see the original invalid proposal
+                # and produce its own validation feedback, not an extractor error.
+                return value
+            if not any(row['content'] == normalize(sources[0]) and row['kind'] == 'explicit'
+                       and not row['sensitive'] for row in result['memories']):
+                return value
             with worker.jobs.store.lock:
                 rows = worker.jobs.store.db.execute(
                     "SELECT id,source_payload FROM mia_jobs WHERE owner=? AND state='extracting'", (scope.owner,)).fetchall()
             job_ids = [row['id'] for row in rows if json.loads(row['source_payload'])['text'] == normalize(sources[0])]
             assert len(job_ids) == 1, 'Held proposal is not bound to one actual active job'
             evidence = {'source_sha256': hashlib.sha256(sources[0].encode()).hexdigest(),
-                        'validated_actual_output': True, 'pid': os.getpid(), 'job_id': job_ids[0]}
+                        'validated_actual_output': True, 'pid': os.getpid(), 'job_id': job_ids[0], 'stage': 'raw'}
             temporary = root / 'shutdown-held.tmp'
             temporary.write_text(json.dumps(evidence))
             temporary.replace(root / 'shutdown-held.json')
@@ -154,19 +160,60 @@ def observe_hold(worker, control, root, report, lock, save):
         return extract
 
     worker.resolve = resolve
+    original_encoder = worker.index.encoder
+
+    class HeldEncoder:
+        def __getattr__(self, name):
+            return getattr(original_encoder, name)
+
+        def encode(self, text, query=False):
+            vector = original_encoder.encode(text, query)
+            if control.get('stage') != 'validated_vector' or query or text != normalize(control.get('source', '')):
+                return vector
+            with worker.jobs.store.lock:
+                rows = worker.jobs.store.db.execute(
+                    "SELECT id,source_payload,validated_result,attempts FROM mia_jobs WHERE owner=? AND state='validated'",
+                    (control['owner'],)).fetchall()
+            rows = [row for row in rows if json.loads(row['source_payload'])['text'] == text]
+            assert len(rows) == 1
+            persisted = json.loads(rows[0]['validated_result'])
+            assert persisted['_schema'] == 1 and any(row['content'] == text and row['kind'] == 'explicit'
+                and not row['sensitive'] for row in persisted['memories'])
+            evidence = {'source_sha256': hashlib.sha256(control['source'].encode()).hexdigest(),
+                        'validated_actual_output': True, 'pid': os.getpid(), 'job_id': rows[0]['id'],
+                        'stage': 'validated_vector', 'actual_vector_sha256': hashlib.sha256(vector.tobytes()).hexdigest(),
+                        'persisted_attempts': rows[0]['attempts']}
+            temporary = root / 'shutdown-held.tmp'
+            temporary.write_text(json.dumps(evidence))
+            temporary.replace(root / 'shutdown-held.json')
+            with lock:
+                report.setdefault('shutdown_held_outputs', []).append(evidence)
+                save(report)
+            deadline = time.monotonic() + 45
+            while not (root / 'shutdown-release.json').exists():
+                if time.monotonic() >= deadline:
+                    raise TimeoutError('Controlled CI validated-vector hold expired')
+                time.sleep(.02)
+            return vector
+
+    worker.index.encoder = HeldEncoder()
 
 
 async def drive_shutdown(sample, endpoint_state, tls, headers, root, ask, start, stop, first_pid):
     from websockets.asyncio.client import connect
     import sqlite3
 
-    async def held(source, release):
+    def source_calls(report, source):
+        return sum(json.loads(row['messages'][-1]['content'])['user_excerpts'] == [source]
+                   for row in report.get('extraction_sdk_requests', []))
+
+    async def held(source, release, stage='raw'):
         for name in ('shutdown-held.json', 'shutdown-release.json'):
             (root / name).unlink(missing_ok=True)
         async with connect(endpoint_state(), ssl=tls, additional_headers=headers, open_timeout=10) as socket:
             hello = json.loads(await socket.recv())
             assert hello['type'] == 'hello'
-            await socket.send(json.dumps({'type': 'test_chat', 'query': source, 'shutdown_hold': True}))
+            await socket.send(json.dumps({'type': 'test_chat', 'query': source, 'shutdown_hold': True, 'shutdown_stage': stage}))
             answer = None
             deadline = time.monotonic() + 65
             while answer is None or not (root / 'shutdown-held.json').exists():
@@ -180,6 +227,7 @@ async def drive_shutdown(sample, endpoint_state, tls, headers, root, ask, start,
                     await asyncio.sleep(.05)
             evidence = json.loads((root / 'shutdown-held.json').read_text())
             assert evidence['source_sha256'] == hashlib.sha256(source.encode()).hexdigest()
+            assert evidence['stage'] == stage
             job_id = answer['admission_status']['id']
             assert evidence['job_id'] == job_id and evidence['pid'] == hello['pid']
 
@@ -197,16 +245,17 @@ async def drive_shutdown(sample, endpoint_state, tls, headers, root, ask, start,
             duration = time.monotonic() - started
             assert duration <= 20, 'Actual entire process exceeded twenty-second shutdown'
         with sqlite3.connect('file:' + (root / 'state.sqlite3').as_posix() + '?mode=ro', uri=True) as db:
-            state, attempts = db.execute('SELECT state,attempts FROM mia_jobs WHERE id=?', (job_id,)).fetchone()
+            state, attempts, validated = db.execute('SELECT state,attempts,validated_result FROM mia_jobs WHERE id=?', (job_id,)).fetchone()
         assert 1 <= attempts <= 2
         if release:
             assert state == 'committed'
         else:
-            assert attempts == 1, 'No native extraction attempt remains for genuine restart recovery'
             assert state in {'extracting', 'pending', 'retry_wait', 'validated'}
+            if stage == 'validated_vector':
+                assert validated is not None, 'Genuine persisted proposal lost during shutdown'
         return {'job_id': job_id, 'pid': evidence['pid'], 'release_during_shutdown': release,
                 'shutdown_seconds': duration, 'state_after_exit': state, 'attempts_after_exit': attempts,
-                'answer': answer['tts_text']}
+                'has_persisted_result': validated is not None, 'stage': stage, 'answer': answer['tts_text']}
 
     drained = await held(sample['drain_source'], True)
     second_pid = await start()
@@ -220,18 +269,47 @@ async def drive_shutdown(sample, endpoint_state, tls, headers, root, ask, start,
     while True:
         with sqlite3.connect('file:' + (root / 'state.sqlite3').as_posix() + '?mode=ro', uri=True) as db:
             state = db.execute('SELECT state FROM mia_jobs WHERE id=?', (blocked['job_id'],)).fetchone()[0]
+        if state in {'committed', 'failed'}:
+            break
+        assert state != 'cancelled' and time.monotonic() < deadline, 'Original raw-result task did not reach a terminal state'
+        await asyncio.sleep(.1)
+    raw_state = state
+    recalled, saved = await ask(sample['blocked_query'])
+    if raw_state == 'committed':
+        assert sample['blocked_term'] in recalled['tts_text'] and len(saved['memories']) == 2
+    else:
+        assert len(saved['memories']) == 1 and all(row['content'] != sample['blocked_source'] for row in saved['memories'])
+    with sqlite3.connect('file:' + (root / 'state.sqlite3').as_posix() + '?mode=ro', uri=True) as db:
+        raw_attempts = db.execute('SELECT attempts FROM mia_jobs WHERE id=?', (blocked['job_id'],)).fetchone()[0]
+    assert blocked['attempts_after_exit'] <= raw_attempts <= 2
+    raw_calls = source_calls(json.loads((root / 'results.json').read_text()), sample['blocked_source'])
+    assert raw_calls == raw_attempts and raw_calls <= 2, 'Raw restart performed an uncounted or third model call'
+    durable = await held(sample['durable_source'], False, 'validated_vector')
+    before = json.loads((root / 'results.json').read_text())
+    calls_before = source_calls(before, sample['durable_source'])
+    assert calls_before == durable['attempts_after_exit']
+    fourth_pid = await start()
+    assert len({first_pid, second_pid, third_pid, fourth_pid}) == 4
+    deadline = time.monotonic() + 55
+    while True:
+        with sqlite3.connect('file:' + (root / 'state.sqlite3').as_posix() + '?mode=ro', uri=True) as db:
+            state, attempts = db.execute('SELECT state,attempts FROM mia_jobs WHERE id=?', (durable['job_id'],)).fetchone()
         if state == 'committed':
             break
-        assert state not in {'failed', 'cancelled'} and time.monotonic() < deadline, 'Original recovered task did not commit'
+        assert state not in {'failed', 'cancelled'} and time.monotonic() < deadline, 'Original persisted-result task did not commit'
         await asyncio.sleep(.1)
-    recalled, saved = await ask(sample['blocked_query'])
-    assert sample['blocked_term'] in recalled['tts_text'] and len(saved['memories']) == 2
+    assert attempts == durable['attempts_after_exit'] and source_calls(
+        json.loads((root / 'results.json').read_text()), sample['durable_source']) == calls_before
+    recalled, saved = await ask(sample['durable_query'])
+    assert sample['durable_term'] in recalled['tts_text']
+    expected = 3 if raw_state == 'committed' else 2
     with sqlite3.connect('file:' + (root / 'state.sqlite3').as_posix() + '?mode=ro', uri=True) as db:
-        state, attempts = db.execute('SELECT state,attempts FROM mia_jobs WHERE id=?', (blocked['job_id'],)).fetchone()
-        assert state == 'committed' and 1 <= attempts <= 2
-        assert db.execute('SELECT COUNT(*) FROM memories').fetchone()[0] == 2
-        assert db.execute('SELECT COUNT(*) FROM mia_vectors').fetchone()[0] == 2
+        assert db.execute('SELECT COUNT(*) FROM memories').fetchone()[0] == expected
+        assert db.execute('SELECT COUNT(*) FROM mia_vectors').fetchone()[0] == expected
         assert db.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
-    return {'drained': drained, 'blocked': blocked, 'recovered_job_state': state,
-            'recovered_attempts': attempts, 'server_pids': [first_pid, second_pid, third_pid],
+    return {'drained': drained, 'blocked': blocked, 'raw_recovered_job_state': raw_state,
+            'raw_recovered_attempts': raw_attempts, 'durable': durable, 'recovered_job_state': state,
+            'raw_model_calls': raw_calls, 'durable_model_calls': calls_before,
+            'recovered_attempts': attempts, 'durable_recovery_repeated_model_calls': False,
+            'server_pids': [first_pid, second_pid, third_pid, fourth_pid],
             'scope': 'Actual installed app/service lifecycle with real manager, model, BGE and SQLite; controlled native hold; no audio consumers or P23 resource claim'}

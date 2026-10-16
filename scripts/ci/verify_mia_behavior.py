@@ -411,11 +411,14 @@ async def serve():
                 if request.get('shutdown_hold'):
                     assert FULL_APP and 'source' not in shutdown_control
                     fixture = json.loads((Path(__file__).resolve().parents[2] /
-                        'server/tests/fixtures/persona_memory_shutdown_p22_v1.json').read_text())
+                        'server/tests/fixtures/persona_memory_shutdown_p22_v2.json').read_text())
                     sample = fixture['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])]
-                    assert request['query'] in {sample['drain_source'], sample['blocked_source']}
+                    stage = request.get('shutdown_stage', 'raw')
+                    assert stage in {'raw', 'validated_vector'}
+                    assert request['query'] in ({sample['durable_source']} if stage == 'validated_vector'
+                                               else {sample['drain_source'], sample['blocked_source']})
                     await authorization.require_connection(conn, 'memory:write')
-                    shutdown_control['source'] = request['query']
+                    shutdown_control.update(source=request['query'], stage=stage, owner=scope.owner)
                 if SUITE == 'faults':
                     fault = request.get('fault_kind')
                     assert fault in {None, 'truncated_json', 'read_timeout'}
@@ -621,7 +624,7 @@ async def serve():
 async def drive():
     from mia_model_comparison import output_tokens
     from websockets.asyncio.client import connect
-    fixture_name = {'shutdown': 'persona_memory_shutdown_p22_v1.json', 'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
+    fixture_name = {'shutdown': 'persona_memory_shutdown_p22_v2.json', 'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
