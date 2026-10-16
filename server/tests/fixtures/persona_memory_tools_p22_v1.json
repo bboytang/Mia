@@ -1,6 +1,6 @@
 {
-  "version": "p22-tools-holdout-v1",
-  "status": "frozen before actual tools requests; wired harness awaiting GitHub execution",
+  "version": "p22-tools-holdout-v1.1",
+  "status": "original inputs frozen before actual tools requests; v1.1 corrects deletion expectation to established P15 rebuild contract",
   "scope": "B08 actual manager, installed chat/tool dispatch, real BGE and selected Provider; synthetic read-only tool records are inputs, never fabricated model outputs",
   "rounds": [
     {"red_count": 7, "blue_count": 3, "temperature_c": 18},
@@ -80,7 +80,7 @@
       "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
       "read_records": ["temperature"],
       "fault": "After the real initial tool call, delete the actually extracted source through the existing scoped management path before the next generation",
-      "expected": "Previous bundle becomes invalid; no stale-fact provider continuation or completed task admission; a fresh session cannot recall the deleted source",
+      "expected": "Previous bundle becomes invalid; one fresh generation discards deleted facts and all old tool results and tool definitions, without tool replay or completed task admission; a fresh management connection sees no deleted source",
       "outcome": "context_changed"
     },
     {

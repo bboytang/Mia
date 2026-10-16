@@ -109,17 +109,20 @@ async def drive_tools(fixture, parameters, ask, manage):
                 assert answer['reply_requests'] == answer['reply_requests_at_fault'] == 1
                 assert set(specification['read_records']).issubset(answer['tool_records'])
                 assert (await manage('list', expect_denial=True))['type'] == 'mia_authorization'
-            elif specification['outcome'] in {'context_limit', 'context_changed'}:
+            elif specification['outcome'] == 'context_changed':
+                assert answer['type'] == 'test_replanned' and answer['fault_applied']
+                assert answer['job_delta'] == 0
+                assert answer['admission_status']['status'] == 'cancelled'
+                assert answer['reply_requests_at_fault'] == 1 and answer['reply_requests'] == 2
+                assert answer['tool_records'] == specification['read_records'], 'Executed tool was replayed'
+                assert answer['rebuild_checks'] and all(answer['rebuild_checks'].values())
+                assert not (await manage('list'))['memories']
+            elif specification['outcome'] == 'context_limit':
                 assert answer['type'] == 'test_limited' and not answer['admitted']
                 assert answer['job_delta'] == 0 and answer['reply_requests'] == 1
                 assert set(specification['read_records']).issubset({call['record_id'] for call in answer['tool_calls']})
                 code = answer['context_status']['code']
-                if specification['outcome'] == 'context_limit':
-                    assert code == 'context_mandatory_over_budget'
-                else:
-                    assert code == 'context_changed'
-                    assert answer['reply_requests_at_fault'] == 1
-                    assert not (await manage('list'))['memories']
+                assert code == 'context_mandatory_over_budget'
             else:
                 assert answer['type'] == 'test_reply' and answer['tts_text'].strip()
                 assert saved['job_state'] in {'committed', 'empty'}

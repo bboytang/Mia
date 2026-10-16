@@ -1,6 +1,6 @@
 # Mia 人格认知与长期记忆：接续入口
 
-更新：2026-10-15。方案：[V1.2](mia-persona-memory-v1.2.md)。完整步骤：[实施计划](mia-persona-memory-implementation.md)。事实记录：[工作记录](mia-persona-memory-worklog.md)。
+更新：2026-10-16。方案：[V1.2](mia-persona-memory-v1.2.md)。完整步骤：[实施计划](mia-persona-memory-implementation.md)。事实记录：[工作记录](mia-persona-memory-worklog.md)。
 
 ## 当前范围与状态
 
@@ -26,7 +26,9 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ## 下一步
 
-P21完成必要实现与GitHub验证：后端22de963服务229／BGE／manager、身份probe5dfa89a通过；iOS87d2427的38821633956为102单测、6UI、模拟器／未签名设备构建成功，启用原图已实际查看。P22首轮c088bf2／38822605022失败，26次实际请求；原报告behavior-first-*保存。现已按用户明确指定的路遥参考调整：运行源码b6e8c25，候选3529dca（只改后续测试／记录，server/companion树不变）。BGE38848713459、真实身份／TLS／WSS／JAR38848713454、manager38848713461与服务229项38848873025均success；旧提示词字面断言失败两轮保留，最终检查完整CORE前缀，未弱化。真实组合复验38848989372已failure，49请求；三组源事实保存与正确用户主体召回均修好，但删除后回复仍不正确，原文见behavior-luyao-*。当前补充与路遥空记忆描述一致的memory_evidence，区分存储可用但无相关事实与查询不可用，候选cb52464的服务38849860894、BGE38849860744、身份38849861009、manager38849860897正在执行，继续这些handle，不重启；三用户各自身份／陪伴／源事实／不同措辞／跨PID重启／后续会话／删除，最多54实际请求。已逐条阅读终态原文，不报完整B01—B08通过。精确CI见luyao-ci-results.json，P23／P24仍待推进；真实跨日验收用户接管，不自动采集。
+P21完成必要实现与GitHub验证。当前运行模块仍为cb52464，服务230项／38849860894、BGE38849860744、实际身份／TLS／WSS／JAR38849861009、manager38849860897全部success。真实连续性v1.1的38851330956已终态failure，54次实际请求，三组均完成真正三个active后续会话；原文及复核见behavior-third-*，不能继续按旧在途描述等待。共同往事表达边界尚无用户答复，不增添相应运行期表达拦截。
+
+当前第一项可执行工作：工具驱动a12b396的真实run [38852561891](https://github.com/bboytang/Mia/actions/runs/38852561891)已终态failure，96次真实模型请求、三十场景完整执行，自动结构21／30。原文／逐项语义复核／hash见[工具证据](verification/mia-persona-memory/tools-first-review.json)。三组模型均串行读取，不能称真实并行；温度偏好已召回，但模型回复仍条件性给另一单位，提取器又重发旧来源，被校验器拒绝；部分工具请求被当成长久事实写入，B03质量尚未通过。删除后实际执行已有P15安全重建，旧事实／结果／工具不入第二次请求、不重放、无新任务，原测试错要求立即limited，现仅修正CI预期与admission／逐场景错误诊断。需要先验证该脚本语法，再处理真实提取质量与并行证据后定向复验；不靠同源码重复取绿。完整B01／B03／B04／B06及纠错矩阵仍待补，P23／P24随后推进。跨日验收用户接管，不自动采集，不部署。
 
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
@@ -99,7 +101,7 @@ P13新增schema-v2保留原SQL和账本，元数据变化推进epoch、删来源
 | P19 | 完成：机制及受控验证 | 事件实际完成后激活、恢复／幂等／撤销，真实语气逐条复核；见continuity.md |
 | P20 | 完成：实现及受控验证；真实跨日用户自测 | 默认关闭／授权版本／观察与管理／派生聚合已实现；仅有2026-10-15真实第一日；用户接管跨日验收，未记通过 |
 | P21 | 完成：必要实现与GitHub验证 | 原管理页与兼容通过；87d2427的38821633956为102单测／6UI／两构建成功，真机另验 |
-| P22 | 进行中，首轮失败 | 已26次真实整链请求，保留来源拒绝／主体错误；按用户路遥方向修正后复验，完整八项仍待补；跨日用户自测 |
+| P22 | 进行中，完整八项未验收 | 路遥对齐后来源与主体修正；三后续复验54请求仍有语义失败，B08工具三十场景38852561891失败，原文已归档；跨日用户自测 |
 | P23—P24 | 待推进 | 冻结资源／公平性及可重复升级／回滚、相关回归尚未实施 |
 | P25—P26 | 未开始 | 真机及发布包待实施 |
 | P27—P28 | 未开始 | 未发布，不能凭计划执行生产变更 |
@@ -157,6 +159,4 @@ docs/mia-persona-memory-worklog.md
 
 每次接续更新此文件的当前范围、基线、下一步和证据定位；历史事实只追加到工作记录，不让“当前下一步”长期保留过期信息。
 
-最新接续补充（优先于上文历史在途描述）：cb52464四回归均success；38850006204终态failure，48实际请求，原文与三库最终只读状态见behavior-evidence-review.json。正则漏“记忆”与active后续数误计已在当前测试修正，v1.1增加真正第三active后续，20／组三组60请求上限，尚未新执行。用户共同往事表达边界澄清待答，不能假定预选项已批准。继续独立B08工具驱动接线：已冻结十组留出，mia_behavior_tools.py辅助模块准备，需真实ToolManager／原chat／实际Provider三十场景执行，不算完成。没有新日采或部署。
-
-当前在途（最新）：3cf034f主脚本／新工具辅助模块及两JSON语法38851252452为success，composed skipped，不能称工具执行通过。已单次启动v1.1真实连续性38851330956，确认in_progress，继续该handle、不重启；运行模块仍cb52464，20／组三组60上限，尚未知新实际请求数。共同往事表达澄清仍无用户答案，不能将预选项视作确认；无需等待该答案的B08工具／上下文接线可继续。
+最新接续补充：当前精确源码、在途handle与第一项动作见上方“下一步”。38851330956已结束，原文保留behavior-third-*；B08工具真实38852561891已failure，当前无在途真实模型run；三十原输出与失败归档，不能把语法绿称行为通过。2026-10-16再次读取路遥main的config.py／guardrails.py，并通过GitHub API核对HEAD仍e23c3aa，与逐文件复核清单一致。没有新日采或部署。

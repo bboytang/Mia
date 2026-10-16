@@ -1,0 +1,10 @@
+{
+  "runtime_code_sha": "cb52464371d8e1ddf834c4ec03905b2dab242a8b",
+  "validation_code_sha": "a12b39621273af6c84b8f920a329055be2489f65",
+  "run": "https://github.com/bboytang/Mia/actions/runs/38852561891",
+  "conclusion": "failure",
+  "requests": 96,
+  "B08_accepted": false,
+  "evidence": "tools-first-review.json",
+  "next": "Correct harness deletion expectation and admission/error traces; GitHub syntax check; then address actual B03 extraction quality and selected-provider parallel evidence before another real tools run"
+}

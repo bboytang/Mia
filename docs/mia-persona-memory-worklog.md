@@ -678,3 +678,7 @@
 
 - 三后续v1.1复验38851330956终态failure，共54实际请求；三组都真实执行三个active后续会话，0组自动通过，1组是澄清，2组删除后仍叙述纸质书往事。三原报告gzip与复核存behavior-third-*，不继续同源码取绿。共同往事要求仍等用户澄清，没有增添运行期表达拦截。
 - 独立完成B08驱动接线：workflow手选continuity／tools；Java同真实授权链三用户，原安装ToolManager＋ToolHandler＋chat＋真实Provider函数续答，十个冻结场景。数据记录合成、模型输出不伪造；记录实际SDK输入、工具结构／预算／省略／任务增量，删除走mia_memory、撤权走实际manager；异常帧按实际状态分流，未授权peer不收旧私有诊断。tools48／组总144上限，输出768／HTTP30秒／SDK0重试／Worker两尝试／每组300秒不变。当前代码待GitHub，未发实际工具模型请求，不能记B08完成。
+
+- 接续复核（2026-10-16）：工作树干净、分支feature/mia-persona-memory-v1.2、源码a12b396。再次实际读取用户指定路遥main的config.py／guardrails.py，GitHub API确认HEAD仍e23c3aa；人设亲近表达及空记忆说明与既有逐项复核一致，无新增措辞拦截。a12b396语法38852443336、服务38852443320、manager38852443531成功；单次真实工具run38852561891于04:55 UTC仍in_progress，继续同handle。已更新交接中的过期下一步与38851330956状态，未重发模型任务或部署。
+
+- B08真实工具首轮38852561891终态failure，三组各32共96实际请求、三十场景均执行；结构21／30，逐条阅读实际SDK输入／原文／派发／提取，证据tools-first-*与tools-ci-results.json。三组parallel均串行，温度召回正确但答复仍条件性加入另一单位且提取重发旧事实（source_index为1或2），被拒绝。另有工具查询原句被当成长久事实，B03质量仍未通过。删除场景实际符合P15现存重建机制及原回归：清旧事实／工具结果／声明、不重放、无新任务；原harness误要求limited并对无id的cancelled状态调用current。仅改CI删除预期与真实输入检查、记录admission及逐场景错误，原语义／并行／提取门槛保留，运行模块未改。不重复同源码取绿，先GitHub语法验证，再处理真实质量与并行证据。

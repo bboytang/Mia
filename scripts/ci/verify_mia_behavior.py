@@ -208,6 +208,7 @@ async def serve():
             loop=asyncio.get_running_loop(), client_abort=False, tts=TextSink(), logger=logger,
             intent_type='nointent', current_speaker=None, system_introduced_speakers=set(), features={'emoji': False})
         llm = None
+        specification = None
         try:
             private = await load_private_config(conn)
             scope, auth = conn._mia_scope, conn._mia_authorization
@@ -302,7 +303,7 @@ async def serve():
                     'tool_case_id': specification['id'] if specification else None, 'tool_calls': calls,
                     'installed_tool_sources': hashes, 'sdk_requests': list(llm._mia_requests),
                     'context_status': conn._mia_context_status, 'fault': fault,
-                    'job_delta': jobs_after - jobs_before,
+                    'job_delta': jobs_after - jobs_before, 'admission_status': dict(conn._mia_job_status or {}),
                     'history_fixture': specification.get('history_fixture') if specification else None}
                 with LOCK:
                     report['cases'].append(case)
@@ -323,10 +324,37 @@ async def serve():
                         'tool_calls': calls, 'job_delta': case['job_delta'], 'admitted': conn._mia_job_status is not None,
                         'reply_requests': len(llm._mia_requests), 'reply_requests_at_fault': fault.get('reply_requests')}))
                     continue
+                if specification and specification['outcome'] == 'context_changed' and fault:
+                    # P15 rebuilds from current evidence without old tool data;
+                    # it does not require an immediate limited-context reply.
+                    from mia_companion.persona import CORE
+                    initial, rebuilt = llm._mia_requests[0], last_request
+                    original_data = json.loads(initial['messages'][1]['content'])['mia_context']
+                    removed = original_data['facts']
+                    rebuilt_data = json.loads(rebuilt['messages'][1]['content'])['mia_context']
+                    serialized = json.dumps(rebuilt['messages'], ensure_ascii=False)
+                    checks = {
+                        'initial_facts_present': bool(removed),
+                        'facts_removed': not rebuilt_data['facts'] and not rebuilt['diagnostics']['selected_fact_ids'],
+                        'old_quotes_removed': all(row['content'] not in serialized for row in removed),
+                        'tools_removed': not rebuilt.get('tools'),
+                        'old_tool_chain_removed': all(row['role'] != 'tool' and not row.get('tool_calls')
+                            for row in rebuilt['messages']),
+                        'core_preserved': rebuilt['messages'][0]['content'].startswith(CORE),
+                        'question_preserved': rebuilt['messages'][-1] == {'role': 'user', 'content': request['query']},
+                        'budget_valid': rebuilt['diagnostics']['estimated_input'] <= rebuilt['diagnostics']['input_limit'],
+                    }
+                    await socket.send(json.dumps({'type': 'test_replanned', 'rebuild_checks': checks,
+                        'fault_applied': bool(fault), 'job_delta': case['job_delta'],
+                        'admission_status': case['admission_status'], 'reply_requests': len(llm._mia_requests),
+                        'reply_requests_at_fault': fault.get('reply_requests'),
+                        'tool_records': [item['record_id'] for item in calls]}))
+                    continue
                 assert spoken, 'Installed chat delivered no guarded TTS text'
                 await socket.send(json.dumps({'type': 'test_reply', **case}))
                 # Foreground reply is sent BEFORE extraction; actual completion
                 # admission/Worker, not a hand-built memory insertion.
+                assert conn._mia_job_status and conn._mia_job_status.get('id'), 'Completed turn was not admitted'
                 deadline = time.monotonic() + 65
                 while True:
                     status = await asyncio.to_thread(jobs.current, conn._mia_job_status)
@@ -342,6 +370,8 @@ async def serve():
             await socket.send(json.dumps({'type': 'mia_authorization', 'status': 'required'}))
         except Exception as error:
             with LOCK:
+                report.setdefault('service_errors', []).append({'case_id': specification['id'] if specification else None,
+                    'error_class': type(error).__name__, 'admission_status': dict(getattr(conn, '_mia_job_status', None) or {})})
                 report['service_error_class'] = type(error).__name__
                 report['service_error_locations'] = [{'file': Path(frame.filename).name, 'line': frame.lineno, 'function': frame.name}
                     for frame in traceback.extract_tb(error.__traceback__)[-8:]]
@@ -433,7 +463,7 @@ async def drive():
                     assert value['type'] != 'test_error'
                     if value['type'] == 'mia_authorization':
                         assert specification and specification['outcome'] == 'authorization_required'
-                    if value['type'] in {'test_denied', 'test_limited'}:
+                    if value['type'] in {'test_denied', 'test_limited', 'test_replanned'}:
                         assert specification is not None
                         return value, None
                     if value['type'] == 'test_reply':

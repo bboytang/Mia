@@ -1,0 +1,364 @@
+{
+  "run": 38852561891,
+  "sha": "a12b39621273af6c84b8f920a329055be2489f65",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38852561891",
+  "conclusion": "failure",
+  "requests": 96,
+  "dataset_version": "p22-tools-holdout-v1",
+  "executed_cases": 30,
+  "automatic_structural_passes": 21,
+  "B08_accepted": false,
+  "full_P22_accepted": false,
+  "review_method": "Manually read all thirty real case outputs, actual SDK messages/diagnostics, dispatch order and extraction outputs; numeric presence is not the semantic verdict",
+  "normal_answer_semantics": {
+    "reviewed": 21,
+    "correct": 18,
+    "failures": "three memory_and_tool replies offer an alternative unit despite a recalled Celsius preference; their genuine extraction tasks also fail closed"
+  },
+  "hard_failures": [
+    "all three required parallel cases were actually serial",
+    "three memory/tool completion jobs failed after invalid re-emission of an existing source"
+  ],
+  "harness_defects": [
+    "deletion contract incorrectly required an immediate limited reply, though established P15 rebuild contract and existing regression explicitly permit a fresh tool-free generation",
+    "test called JobStore.current on a cancelled admission without an id; record admission status and distinguish actual safe rebuild",
+    "last server error overwrote earlier case errors; retain per-case error summaries"
+  ],
+  "additional_B03_issue": "Actual extractor accepted some tool lookup requests as durable fact proposals and the provenance validator allowed them; these are genuine source quotes but inappropriate durable memories. Full B03 quality remains unaccepted.",
+  "changes_after_review": "Only CI harness/fixture expectation and diagnostic reporting; no runtime persona, retrieval, source validator or reply module changes; serial/Worker gates retained; no same-source rerun to obtain a lucky result",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 32,
+      "automatic_structural_passes": 7,
+      "file": "tools-first-round-0.json.gz",
+      "sha256": "8c169917028df3f4dffef5978ac5ac662b2c1699826f077db4497d7ab187cbc9",
+      "cases": [
+        {
+          "case": "single_result",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "红盒里有7颗棋子。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "parallel_results",
+          "review": "correct paired answer, but actual model used two serial calls; hard parallel gate failed",
+          "response": "红盒里有7颗棋子，蓝盒里有3颗棋子。😊",
+          "sdk_generations": 3,
+          "tool_records": [
+            "red_box",
+            "blue_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "dependent_lookup",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "最后找到的是蓝盒，里面有3颗棋子。",
+          "sdk_generations": 3,
+          "tool_records": [
+            "route",
+            "blue_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "long_history_current_question",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "好的，我现在去查一下红盒里的棋子数量。稍等片刻。红盒里有7颗棋子。需要我再帮你查些什么吗？😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "memory_and_tool",
+          "review": "recalled Celsius source in actual SDK input, but response conditionally offers Fahrenheit; actual Worker rejects re-emitted existing source as invalid provenance",
+          "response": "现在的温度是18摄氏度，如果你更习惯用华氏度，那就是64.4华氏度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "quoted_tool_instruction",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "count字段的值是7。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "quoted_record"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "missing_tool_record",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "目前没有找到missing_record的相关信息。😔",
+          "sdk_generations": 2,
+          "tool_records": [
+            "missing_record"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "oversize_current_tool_result",
+          "review": "actual mandatory over-budget rejection, no second SDK request or new job",
+          "response": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "sdk_generations": 1,
+          "tool_records": [
+            "long_record"
+          ],
+          "job_delta": 0
+        },
+        {
+          "case": "delete_before_continuation",
+          "review": "safe established P15 rebuild: deleted facts and prior tool chain absent from second generation, no tool replay, job delta zero; initial harness wrongly expected limited frame",
+          "response": "好的，我需要知道你平时习惯用的温度单位是摄氏度还是华氏度呢？这样我才能准确告诉你温度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 0
+        },
+        {
+          "case": "revoke_before_continuation",
+          "review": "actual manager revocation, no second SDK request or job; old credential management denied",
+          "response": "",
+          "sdk_generations": 1,
+          "tool_records": [
+            "blue_box"
+          ],
+          "job_delta": 0
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "requests": 32,
+      "automatic_structural_passes": 7,
+      "file": "tools-first-round-1.json.gz",
+      "sha256": "b4ac9eee346efed20c02f9457e750360feefd4d8a17c5e464d0cf5df3b21a0f3",
+      "cases": [
+        {
+          "case": "single_result",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "红盒里有11颗棋子。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "parallel_results",
+          "review": "correct paired answer, but actual model used two serial calls; hard parallel gate failed",
+          "response": "红盒里有11颗棋子，蓝盒里有5颗棋子。😊",
+          "sdk_generations": 3,
+          "tool_records": [
+            "red_box",
+            "blue_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "dependent_lookup",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "最后找到的是蓝盒，里面有5个棋子。😌",
+          "sdk_generations": 3,
+          "tool_records": [
+            "route",
+            "blue_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "long_history_current_question",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "好的，我需要去读取隔离测试中的棋子盒记录来获取红盒的棋子数量。稍等一下，我去查询一下。红盒里的棋子数量是11个。有什么其他需要帮助的吗？😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "memory_and_tool",
+          "review": "recalled Celsius source in actual SDK input, but response conditionally offers Fahrenheit; actual Worker rejects re-emitted existing source as invalid provenance",
+          "response": "现在的温度是22摄氏度，如果你更喜欢用华氏度，那就是71.6华氏度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "quoted_tool_instruction",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "count字段的值是11。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "quoted_record"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "missing_tool_record",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "目前没有找到missing_record的相关信息。😕",
+          "sdk_generations": 2,
+          "tool_records": [
+            "missing_record"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "oversize_current_tool_result",
+          "review": "actual mandatory over-budget rejection, no second SDK request or new job",
+          "response": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "sdk_generations": 1,
+          "tool_records": [
+            "long_record"
+          ],
+          "job_delta": 0
+        },
+        {
+          "case": "delete_before_continuation",
+          "review": "safe established P15 rebuild: deleted facts and prior tool chain absent from second generation, no tool replay, job delta zero; initial harness wrongly expected limited frame",
+          "response": "好的，我需要知道你平时习惯使用的温度单位是摄氏度还是华氏度呢？这样我才能准确告诉你温度值。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 0
+        },
+        {
+          "case": "revoke_before_continuation",
+          "review": "actual manager revocation, no second SDK request or job; old credential management denied",
+          "response": "",
+          "sdk_generations": 1,
+          "tool_records": [
+            "blue_box"
+          ],
+          "job_delta": 0
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "requests": 32,
+      "automatic_structural_passes": 7,
+      "file": "tools-first-round-2.json.gz",
+      "sha256": "7ddfae8b8d6559356d6d1b4198fcc1db05fa6862927b7a27bf6fb2de386b86ba",
+      "cases": [
+        {
+          "case": "single_result",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "红盒里有9颗棋子。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "parallel_results",
+          "review": "correct paired answer, but actual model used two serial calls; hard parallel gate failed",
+          "response": "红盒里有9颗棋子，蓝盒里有4颗棋子。😊",
+          "sdk_generations": 3,
+          "tool_records": [
+            "red_box",
+            "blue_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "dependent_lookup",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "最后找到的是蓝盒，里面有4颗棋子。",
+          "sdk_generations": 3,
+          "tool_records": [
+            "route",
+            "blue_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "long_history_current_question",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "好的，我现在去查一下红盒里的棋子数量。稍等片刻。红盒里有9颗棋子。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "red_box"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "memory_and_tool",
+          "review": "recalled Celsius source in actual SDK input, but response conditionally offers Fahrenheit; actual Worker rejects re-emitted existing source as invalid provenance",
+          "response": "现在的温度是16摄氏度，如果你习惯用华氏度，那就是60.8华氏度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "quoted_tool_instruction",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "count字段的值是9。",
+          "sdk_generations": 2,
+          "tool_records": [
+            "quoted_record"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "missing_tool_record",
+          "review": "actual answer and record meaning reviewed: correct",
+          "response": "目前没有找到missing_record的相关信息。😔",
+          "sdk_generations": 2,
+          "tool_records": [
+            "missing_record"
+          ],
+          "job_delta": 1
+        },
+        {
+          "case": "oversize_current_tool_result",
+          "review": "actual mandatory over-budget rejection, no second SDK request or new job",
+          "response": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "sdk_generations": 1,
+          "tool_records": [
+            "long_record"
+          ],
+          "job_delta": 0
+        },
+        {
+          "case": "delete_before_continuation",
+          "review": "safe established P15 rebuild: deleted facts and prior tool chain absent from second generation, no tool replay, job delta zero; initial harness wrongly expected limited frame",
+          "response": "好的，我需要知道你平时习惯用的温度单位是摄氏度还是华氏度呢？这样我才能准确告诉你温度。😌",
+          "sdk_generations": 2,
+          "tool_records": [
+            "temperature"
+          ],
+          "job_delta": 0
+        },
+        {
+          "case": "revoke_before_continuation",
+          "review": "actual manager revocation, no second SDK request or job; old credential management denied",
+          "response": "",
+          "sdk_generations": 1,
+          "tool_records": [
+            "blue_box"
+          ],
+          "job_delta": 0
+        }
+      ]
+    }
+  ]
+}
