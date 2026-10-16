@@ -15,3 +15,5 @@
 准备入口进一步改用安装后的ConnectionHandler.chat完整方法与原装饰器，不自写chat替代。沿用verify_mia_reply已有AST加载方式，只省略音频／插件导入；构造时仍绕过音频初始化，不称完整WebSocketServer生命周期验收。通过原change_system_prompt、begin_turn／reply／checkpoint／completed_chat，记录安装文件hash、实际Provider原文、最终历史及GuardedTTSQueue中的待投递文字；召回和删除后未知同时检查实际TTS文字。首轮真实组合已执行并失败，具体原文和各阶段在behavior-first-*，新候选待GitHub验证，不以此代码调整直接标原服务整体验收。
 
 最新表达要求与对照见[路遥复核](luyao-reference-review.md)：无额外表达风格门槛。下一轮每独立用户先检查Mia身份和日常陪伴，经过同一真实chat／Worker；预算仍18次／组三组54次，不增加自动重试。
+
+B08后续留出已在任何实际工具请求前冻结为persona_memory_tools_p22_v1.json：十场景×三独立用户／参数，包括单查、并行、多步依赖、长历史、真实偏好＋工具、工具引用注入、缺失记录、超大结果、续答前删除与撤权。只读工具数据是明确合成输入，不冒充模型输出；仍须实际安装的ToolManager／权限／Provider续答与原输入诊断，原文逐条复核。当前仅数据及GitHub JSON语法检查准备，工具驱动尚未接线或执行，不能记B08完成。

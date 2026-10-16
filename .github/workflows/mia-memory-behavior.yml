@@ -5,12 +5,14 @@ on:
       - 'scripts/ci/verify_mia_behavior.py'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - '.github/workflows/mia-memory-behavior.yml'
   pull_request:
     paths:
       - 'scripts/ci/verify_mia_behavior.py'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
+      - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - '.github/workflows/mia-memory-behavior.yml'
   workflow_dispatch:
 permissions:
@@ -25,6 +27,7 @@ jobs:
           python-version: '3.10'
       - run: python -m py_compile scripts/ci/verify_mia_behavior.py
       - run: python -m json.tool server/tests/fixtures/persona_memory_behavior_p22_v1.json > /dev/null
+      - run: python -m json.tool server/tests/fixtures/persona_memory_tools_p22_v1.json > /dev/null
   composed:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
