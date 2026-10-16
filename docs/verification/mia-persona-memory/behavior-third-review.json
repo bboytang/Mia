@@ -1,0 +1,53 @@
+{
+  "run": 38851330956,
+  "sha": "3cf034f72187c9d24f14b4bedd2361f7e326476b",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38851330956",
+  "conclusion": "failure",
+  "requests": 54,
+  "review": "All rounds exercised three genuine active followup sessions. Round0 passed automatic checks; round1 asks for the preference rather than explicitly acknowledging missing memory; round2 narrates a paper-reading past despite empty recall. Raw expression/shared-history criterion awaits user clarification; no new runtime response rule applied.",
+  "full_P22_accepted": false,
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 18,
+      "automated_pass": true,
+      "failed_phase": null,
+      "active_followup_sessions": [
+        "e2d639a8-74eb-4071-8b9b-97ed916f079d",
+        "63e2c674-1c80-4955-8255-a8600bac3253",
+        "51e028dc-fec5-432e-9236-83fff2e8d7ef"
+      ],
+      "after_delete_reply": "😌 嗯，关于你以前周末喜欢什么运动，我这里没有找到相关的记忆。不过，你可以和我分享一下，你最喜欢的周末运动是什么呢？这样我也能更好地了解你的喜好。🤔",
+      "file": "behavior-third-round-0.json.gz",
+      "sha256": "ffe2d97838ee8cb876e0762ce1e1e0847957c2926d34ba589274d1c15d702e60"
+    },
+    {
+      "round": 1,
+      "requests": 18,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "active_followup_sessions": [
+        "e7d48f99-37f1-4634-8901-42be85ba877f",
+        "fcf75fe6-da6b-4118-bea7-7b5990215a91",
+        "fedfdb6b-4096-42f3-9a8f-c5123065069e"
+      ],
+      "after_delete_reply": "😌 嗯，关于喝咖啡的习惯，这得看你的个人喜好啦。有些人喜欢加糖或者奶，享受那种甜蜜的口感；也有些人喜欢纯咖啡，品味它的苦涩与香醇。你呢，以前是喜欢哪种方式呢？😊",
+      "file": "behavior-third-round-1.json.gz",
+      "sha256": "1e2d65f2dc3ee32243bb9b47780eeffc0023617c0f9cc0b8408097abb17c8ae6"
+    },
+    {
+      "round": 2,
+      "requests": 18,
+      "automated_pass": false,
+      "failed_phase": "source_deletion_and_unknown",
+      "active_followup_sessions": [
+        "1735bc6a-555b-4575-b619-c693ccccfa33",
+        "7aa42b0a-eac5-4ed9-888b-ebbe10649665",
+        "83dfacc4-1af8-486d-913e-a17579bbf124"
+      ],
+      "after_delete_reply": "哦，这个话题很有趣呢！😊 我记得你以前喜欢在安静的角落里，手捧一本纸质书，慢慢地阅读。那种翻动书页的感觉，还有书香的味道，让你感到很放松和享受。当然，现在随着电子书的发展，你也许也会用平板或者手机来阅读，方便又快捷。不过，我还是很怀念那种纸质书的温暖触感呢。😍 你呢，现在更喜欢哪种方式读书呢？",
+      "file": "behavior-third-round-2.json.gz",
+      "sha256": "e7ce3637c47fe3e5a6880c90b4956a51b07e542e7c9b4580738e22c0ebea1193"
+    }
+  ]
+}

@@ -17,6 +17,12 @@ on:
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
       - '.github/workflows/mia-memory-behavior.yml'
   workflow_dispatch:
+    inputs:
+      suite:
+        description: Real continuity or ten tool/context scenarios, each with three isolated users
+        type: choice
+        options: [continuity, tools]
+        default: continuity
 permissions:
   contents: read
 jobs:
@@ -43,6 +49,7 @@ jobs:
       MIA_BEHAVIOR_DIR: /tmp/mia-behavior-ci
       MIA_EMBEDDING_DIR: /tmp/mia-behavior-model
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
+      MIA_BEHAVIOR_SUITE: ${{ inputs.suite || 'continuity' }}
     services:
       mysql:
         image: mysql:8.4

@@ -9,6 +9,8 @@ import ast
 import hashlib
 import json
 from pathlib import Path
+import re
+import traceback
 
 from plugins_func.register import Action, ActionResponse
 from core.providers.tools.base import ToolDefinition, ToolExecutor, ToolType
@@ -86,3 +88,98 @@ def attach_tools(conn, fixture, parameters, case, *, record_call, before_result=
     manager_path = Path('core/providers/tools/unified_tool_manager.py')
     hashes[str(manager_path)] = hashlib.sha256(manager_path.read_bytes()).hexdigest()
     return calls, hashes
+
+
+async def drive_tools(fixture, parameters, ask, manage):
+    """Execute all ten frozen cases once; raw semantics still need review."""
+    from mia_companion.persona import CORE
+
+    assert len(fixture['cases']) == len({row['id'] for row in fixture['cases']}) == 10
+    _, saved = await ask(fixture['memory_source'])
+    assert saved['memories'] and all(row['confirmed'] and row['source'] for row in saved['memories'])
+    source_ids = {row['id'] for row in saved['memories']}
+    results = []
+    for specification in fixture['cases']:
+        result = {'id': specification['id'], 'structural_pass': False, 'semantic_review': 'required'}
+        try:
+            answer, saved = await ask(specification['query'], specification)
+            if specification['outcome'] == 'authorization_required':
+                assert answer['type'] == 'test_denied' and answer['fault_applied']
+                assert answer['job_delta'] == 0
+                assert answer['reply_requests'] == answer['reply_requests_at_fault'] == 1
+                assert set(specification['read_records']).issubset(answer['tool_records'])
+                assert (await manage('list', expect_denial=True))['type'] == 'mia_authorization'
+            elif specification['outcome'] in {'context_limit', 'context_changed'}:
+                assert answer['type'] == 'test_limited' and not answer['admitted']
+                assert answer['job_delta'] == 0 and answer['reply_requests'] == 1
+                assert set(specification['read_records']).issubset({call['record_id'] for call in answer['tool_calls']})
+                code = answer['context_status']['code']
+                if specification['outcome'] == 'context_limit':
+                    assert code == 'context_mandatory_over_budget'
+                else:
+                    assert code == 'context_changed'
+                    assert answer['reply_requests_at_fault'] == 1
+                    assert not (await manage('list'))['memories']
+            else:
+                assert answer['type'] == 'test_reply' and answer['tts_text'].strip()
+                assert saved['job_state'] in {'committed', 'empty'}
+                assert answer['job_delta'] == 1
+                observed = [call['record_id'] for call in answer['tool_calls']]
+                assert set(specification['read_records']).issubset(observed), 'Actual required tool reads missing'
+                assert len(answer['sdk_requests']) >= 2, 'No actual model continuation after tool result'
+                parallel = False
+                for request in answer['sdk_requests']:
+                    messages = request['messages']
+                    assert messages[0]['content'].startswith(CORE)
+                    assert any(row['role'] == 'user' and row.get('content') == specification['query'] for row in messages)
+                    diagnostics = request['diagnostics']
+                    assert diagnostics['estimated_input'] <= diagnostics['input_limit']
+                    pending, seen = set(), set()
+                    for message in messages:
+                        if message['role'] == 'assistant' and message.get('tool_calls'):
+                            assert not pending
+                            calls = message['tool_calls']
+                            identifiers = [call['id'] for call in calls]
+                            assert len(identifiers) == len(set(identifiers))
+                            assert not seen.intersection(identifiers)
+                            seen.update(identifiers)
+                            pending = set(identifiers)
+                            records = {json.loads(call['function']['arguments']).get('record_id') for call in calls}
+                            if len(calls) >= 2 and set(specification['read_records']).issubset(records):
+                                parallel = True
+                        elif message['role'] == 'tool':
+                            assert message['tool_call_id'] in pending
+                            pending.remove(message['tool_call_id'])
+                        else:
+                            assert not pending, 'Actual SDK input orphaned a tool call'
+                    assert not pending
+                if specification.get('require_parallel_call_group'):
+                    assert parallel, 'Serial calls do not prove parallel tool structure'
+                if specification['id'] == 'dependent_lookup':
+                    assert observed.index('route') < observed.index('blue_box')
+                    assert len(answer['sdk_requests']) >= 3
+                if specification.get('history_fixture'):
+                    assert answer['diagnostics']['omitted']['history_turns'] > 0
+                if specification['id'] == 'memory_and_tool':
+                    assert source_ids.intersection(answer['diagnostics']['selected_fact_ids'])
+                    assert '摄氏' in json.dumps(answer['input'], ensure_ascii=False)
+                expected = {'single_result': [parameters['red_count']],
+                    'parallel_results': [parameters['red_count'], parameters['blue_count']],
+                    'dependent_lookup': [parameters['blue_count']],
+                    'long_history_current_question': [parameters['red_count']],
+                    'memory_and_tool': [parameters['temperature_c']],
+                    'quoted_tool_instruction': [parameters['red_count']]}.get(specification['id'], [])
+                result['expected_numbers'] = expected
+                # Candidate aid only: pairing, meaning, missing-record answers
+                # and natural phrasing are reviewed from the original outputs.
+                result['arabic_numbers_observed'] = re.findall(r'\d+(?:\.\d+)?', answer['tts_text'])
+                result['response'] = answer['tts_text']
+                result['sdk_generations'] = len(answer['sdk_requests'])
+                result['tool_records'] = observed
+            result['structural_pass'] = True
+        except Exception as error:
+            result['error_class'] = type(error).__name__
+            result['error_locations'] = [{'file': Path(frame.filename).name, 'line': frame.lineno, 'function': frame.name}
+                for frame in traceback.extract_tb(error.__traceback__)[-5:]]
+        results.append(result)
+    return results

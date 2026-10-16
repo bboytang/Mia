@@ -43,6 +43,7 @@ from core.auth import AuthManager
 from core.utils.dialogue import Dialogue, Message
 from core.utils.llm import create_instance
 from core.providers.tts.dto.dto import TTSMessageDTO, SentenceType, ContentType
+from plugins_func.register import Action, ActionResponse
 from mia_companion.authorization import PrivateAuthorizationRequired, load_private_config
 from mia_companion.context import ContextBuilder
 from mia_companion.persona import PersonaGuardrail
@@ -53,6 +54,9 @@ from mia_companion import authorization, reply, xiaozhi_adapter as adapter
 ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVIOR_ROUND'])
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
+SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
+assert SUITE in {'continuity', 'tools'}
+REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
 def save(report):
@@ -77,9 +81,15 @@ def selected_provider(configuration, report, purpose):
 
     def counted(*args, **kwargs):
         with LOCK:
-            assert report['requests'] < 20, 'Per-round real request budget exhausted'
+            assert report['requests'] < REQUEST_CAP, 'Per-round real request budget exhausted'
             report['requests'] += 1
             report['request_kinds'].append(purpose)
+            if purpose == 'reply':
+                request = json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'tools', 'max_tokens') if key in kwargs}))
+                turn = getattr(provider._mia_connection, '_mia_context_turn', None)
+                request['diagnostics'] = turn.bundle.diagnostics() if turn else None
+                provider._mia_requests.append(request)
+                report.setdefault('sdk_requests', []).append(request)
             save(report)
         return create(*args, **kwargs)
 
@@ -87,6 +97,7 @@ def selected_provider(configuration, report, purpose):
     if purpose == 'reply':
         response = provider.response
         provider._mia_raw_chunks = []
+        provider._mia_requests = []
 
         def streamed(*args, **kwargs):
             provider._mia_raw_chunks.clear()
@@ -95,6 +106,16 @@ def selected_provider(configuration, report, purpose):
                 yield value
 
         provider.response = streamed
+        function_response = provider.response_with_functions
+
+        def function_streamed(*args, **kwargs):
+            provider._mia_raw_chunks.clear()
+            for content, calls in function_response(*args, **kwargs):
+                if content:
+                    provider._mia_raw_chunks.append(content)
+                yield content, calls
+
+        provider.response_with_functions = function_streamed
     if purpose == 'extraction':
         response = provider.response_no_stream
 
@@ -121,7 +142,13 @@ def installed_connection(report):
     assert len(selected) == len(names)
     namespace = dict(asyncio=asyncio, json=json, re=re, uuid=uuid, time=time, TAG='P22', mia=adapter, mia_auth=authorization,
         Message=Message, Dialogue=Dialogue, TTSMessageDTO=TTSMessageDTO, SentenceType=SentenceType,
-        ContentType=ContentType, get_system_error_response=lambda config: 'UNEXPECTED_UPSTREAM_ERROR')
+        ContentType=ContentType, Action=Action, ActionResponse=ActionResponse,
+        enqueue_tool_report=lambda *args, **kwargs: None,
+        get_system_error_response=lambda config: 'UNEXPECTED_UPSTREAM_ERROR')
+    utility = ast.parse(Path('core/utils/util.py').read_text())
+    extractors = [node for node in utility.body if getattr(node, 'name', None) == 'extract_json_from_string']
+    assert len(extractors) == 1
+    exec(compile(ast.Module(body=extractors, type_ignores=[]), 'core/utils/util.py', 'exec'), namespace)
     exec(compile(ast.Module(body=selected, type_ignores=[]), str(path), 'exec',
         flags=__future__.annotations.compiler_flag), namespace)
     report['installed_connection_sha256'] = hashlib.sha256(source.encode()).hexdigest()
@@ -159,6 +186,8 @@ async def serve():
     index = SemanticMemoryIndex(store, reply._encoder)
     transport = AuthManager('synthetic-behavior-transport')
     handler = installed_connection(report)
+    tools_fixture = (json.loads((Path(__file__).resolve().parents[2] /
+        'server/tests/fixtures/persona_memory_tools_p22_v1.json').read_text()) if SUITE == 'tools' else None)
 
     class TextSink:
         def __init__(self):
@@ -166,6 +195,9 @@ async def serve():
 
         def store_tts_text(self, sentence_id, text):
             pass
+
+        def tts_one_sentence(self, active, content_type, content_detail):
+            self.tts_text_queue.put(TTSMessageDTO(active.sentence_id, SentenceType.MIDDLE, content_type, content_detail))
 
     async def connection(socket):
         headers = dict(socket.request.headers)
@@ -182,6 +214,7 @@ async def serve():
             module = private['selected_module']['LLM']
             model = private['LLM'][module]
             llm = conn.llm = selected_provider(model, report, 'reply')
+            llm._mia_connection = conn
             profile = ROOT / 'context-profile.json'
             profile.write_text(json.dumps({'provider_module': type(llm).__module__, 'model': llm.model_name,
                 'base_url': llm.base_url, 'context_window': 8192,
@@ -202,24 +235,95 @@ async def serve():
                     continue
                 request = json.loads(message)
                 assert request['type'] == 'test_chat' and isinstance(request['query'], str)
+                specification = None
+                calls, hashes, fault = [], {}, {}
+                if request.get('tool_case_id'):
+                    assert tools_fixture is not None
+                    specification = next(row for row in tools_fixture['cases'] if row['id'] == request['tool_case_id'])
+                    assert request['query'] == specification['query']
+                    from mia_behavior_tools import attach_tools
+
+                    def record_call(item):
+                        with LOCK:
+                            report.setdefault('tool_calls', []).append(dict(item))
+                            save(report)
+
+                    async def before_result(active, item):
+                        if not specification.get('fault') or fault:
+                            return
+                        fault.update(applied=True, reply_requests=len(llm._mia_requests))
+                        if specification['outcome'] == 'context_changed':
+                            await authorization.require_connection(active, 'memory:manage')
+                            targets = store.list_memories(scope.owner)
+                            assert targets, 'No genuine source remains for deletion fault'
+                            for target in targets:
+                                await adapter.handle_message(active, json.dumps({'type': 'mia_memory',
+                                    'request_id': str(uuid.uuid4()), 'action': 'delete', 'id': target['id']}))
+                        else:
+                            assert specification['outcome'] == 'authorization_required'
+                            async with httpx.AsyncClient(timeout=5, trust_env=False,
+                                    verify=ssl.create_default_context(cafile=os.environ['MIA_SCOPE_CA'])) as http:
+                                result = await http.post(os.environ['MIA_SCOPE_MANAGER_URL'].rstrip('/') + '/device/mia-auth/revoke',
+                                    json={'device_id': scope.device_id},
+                                    headers={'Authorization': 'Bearer ' + os.environ['MIA_SCOPE_USER_TOKEN']})
+                                assert result.json()['code'] == 0
+
+                    calls, hashes = attach_tools(conn, tools_fixture,
+                        tools_fixture['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])], specification,
+                        record_call=record_call, before_result=before_result)
+                    if specification.get('history_fixture'):
+                        assert conn._mia_context_turn is not None, 'Long-history case requires actual warmup turn'
+                        history = specification['history_fixture']
+                        for number in range(history['turns']):
+                            conn.dialogue.put(Message(role='user', content=f'CONTEXT_FIXTURE_{number}:' + '旧话题' * (history['characters_per_user_message'] // 3)))
+                            conn.dialogue.put(Message(role='assistant', content='合成历史上下文片段，不是实际模型的旧回复。'))
+                with store.lock:
+                    jobs_before = store.db.execute('SELECT COUNT(*) FROM mia_jobs WHERE owner=?', (scope.owner,)).fetchone()[0]
                 conn.sentence_id = str(uuid.uuid4())
-                assert await asyncio.to_thread(conn.chat, request['query']) is True, 'Installed chat did not complete'
+                llm._mia_requests.clear()
+                completed = await asyncio.to_thread(conn.chat, request['query'])
+                if specification is None:
+                    assert completed is True, 'Installed chat did not complete'
                 raw = ''.join(llm._mia_raw_chunks)
-                assert conn.dialogue.dialogue[-1].role == 'assistant'
-                checked = conn.dialogue.dialogue[-1].content
+                checked = conn.dialogue.dialogue[-1].content if conn.dialogue.dialogue[-1].role == 'assistant' else ''
                 spoken = []
                 while not conn.tts.tts_text_queue.empty():
                     item = conn.tts.tts_text_queue.get_nowait()
                     if item.content_type == ContentType.TEXT:
                         spoken.append(item.content_detail)
-                assert spoken, 'Installed chat delivered no guarded TTS text'
                 turn = conn._mia_context_turn
-                diagnostics = turn.bundle.diagnostics()
+                last_request = llm._mia_requests[-1] if llm._mia_requests else {}
+                diagnostics = turn.bundle.diagnostics() if turn else last_request.get('diagnostics')
+                with store.lock:
+                    jobs_after = store.db.execute('SELECT COUNT(*) FROM mia_jobs WHERE owner=?', (scope.owner,)).fetchone()[0]
                 case = {'query': request['query'], 'raw': raw, 'delivered': checked, 'tts_text': ''.join(spoken), 'diagnostics': diagnostics,
-                    'session_id': conn.session_id, 'pid': os.getpid(), 'input': turn.bundle.request()}
+                    'session_id': conn.session_id, 'pid': os.getpid(),
+                    'input': turn.bundle.request() if turn else {key: last_request[key] for key in ('messages', 'tools', 'max_tokens') if key in last_request},
+                    'tool_case_id': specification['id'] if specification else None, 'tool_calls': calls,
+                    'installed_tool_sources': hashes, 'sdk_requests': list(llm._mia_requests),
+                    'context_status': conn._mia_context_status, 'fault': fault,
+                    'job_delta': jobs_after - jobs_before,
+                    'history_fixture': specification.get('history_fixture') if specification else None}
                 with LOCK:
                     report['cases'].append(case)
                     save(report)
+                # Never send pre-revocation private inputs/diagnostics back to
+                # an unauthorized peer. Full internal CI traces stay in the
+                # sanitized server artifact, not in this denial frame.
+                try:
+                    await authorization.require_connection(conn)
+                except PrivateAuthorizationRequired:
+                    await socket.send(json.dumps({'type': 'test_denied', 'fault_applied': bool(fault),
+                        'job_delta': case['job_delta'], 'reply_requests': len(llm._mia_requests),
+                        'reply_requests_at_fault': fault.get('reply_requests'),
+                        'tool_records': [item['record_id'] for item in calls]}))
+                    continue
+                if specification and case['context_status'].get('status') == 'limited':
+                    await socket.send(json.dumps({'type': 'test_limited', 'context_status': case['context_status'],
+                        'tool_calls': calls, 'job_delta': case['job_delta'], 'admitted': conn._mia_job_status is not None,
+                        'reply_requests': len(llm._mia_requests), 'reply_requests_at_fault': fault.get('reply_requests')}))
+                    continue
+                assert spoken, 'Installed chat delivered no guarded TTS text'
                 await socket.send(json.dumps({'type': 'test_reply', **case}))
                 # Foreground reply is sent BEFORE extraction; actual completion
                 # admission/Worker, not a hand-built memory insertion.
@@ -231,6 +335,7 @@ async def serve():
                     assert time.monotonic() < deadline, 'Accepted Worker task did not terminate in time'
                     await asyncio.sleep(.1)
                 assert status['state'] in {'committed', 'empty'}, 'Actual extraction did not reach a valid terminal state'
+                await authorization.require_connection(conn)
                 await socket.send(json.dumps({'type': 'test_saved', 'job_state': status['state'],
                     'memories': store.list_memories(scope.owner), 'events': store.handle(scope.owner, {'action': 'events'})['events']}))
         except PrivateAuthorizationRequired:
@@ -263,14 +368,15 @@ async def serve():
 
 async def drive():
     from websockets.asyncio.client import connect
-    fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
+    fixture_name = 'persona_memory_tools_p22_v1.json' if SUITE == 'tools' else 'persona_memory_behavior_p22_v1.json'
+    fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures' / fixture_name
     dataset = json.loads(fixture_path.read_text())
     sample = dataset['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])]
-    report = {'code_sha': os.environ['GITHUB_SHA'], 'round': int(os.environ['MIA_BEHAVIOR_ROUND']),
+    report = {'code_sha': os.environ['GITHUB_SHA'], 'suite': SUITE, 'round': int(os.environ['MIA_BEHAVIOR_ROUND']),
         'dataset_sha256': hashlib.sha256(fixture_path.read_bytes()).hexdigest(), 'requests': 0, 'request_kinds': [],
         'cases': [], 'extraction_outputs': [], 'passed': False, 'server_pids': [],
         'scope': 'Actual manager TLS authorization, WSS bridge restart, existing Provider SDK, BGE and SQLite; synthetic users; audio consumers omitted',
-        'limits': {'requests_per_round': 20, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
+        'limits': {'requests_per_round': REQUEST_CAP, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
         'background_lifecycle': 'installed start_worker/stop_worker; no manual task pumping',
         'persona_reference': 'insistgang/Luyao_AI_Project@e23c3aa25d6451e3f35e71609864bb3a54ad49a0; user requested no additional expression gate',
@@ -314,25 +420,39 @@ async def drive():
                 raise AssertionError('WSS service exceeded bounded shutdown')
             assert process.returncode == 0, 'WSS service did not shut down cleanly'
 
-    async def ask(query):
+    async def ask(query, tool_case=None):
         async with connect(endpoint, ssl=tls, additional_headers=headers, open_timeout=10) as socket:
             hello = json.loads(await socket.recv())
             assert hello['type'] == 'hello'
-            await socket.send(json.dumps({'type': 'test_chat', 'query': query}))
-            answer = None
-            while True:
-                value = json.loads(await asyncio.wait_for(socket.recv(), timeout=65))
-                assert value['type'] not in {'test_error', 'mia_authorization'}
-                if value['type'] == 'test_reply':
-                    answer = value
-                    assert not PersonaGuardrail().inspect_output(value['raw'])[1]
-                if value['type'] == 'test_saved':
-                    assert answer is not None
-                    return answer, value
+            async def exchange(text, specification=None):
+                await socket.send(json.dumps({'type': 'test_chat', 'query': text,
+                    'tool_case_id': specification['id'] if specification else None}))
+                answer = None
+                while True:
+                    value = json.loads(await asyncio.wait_for(socket.recv(), timeout=65))
+                    assert value['type'] != 'test_error'
+                    if value['type'] == 'mia_authorization':
+                        assert specification and specification['outcome'] == 'authorization_required'
+                    if value['type'] in {'test_denied', 'test_limited'}:
+                        assert specification is not None
+                        return value, None
+                    if value['type'] == 'test_reply':
+                        answer = value
+                        assert not PersonaGuardrail().inspect_output(value['raw'])[1]
+                    if value['type'] == 'test_saved':
+                        assert answer is not None
+                        return answer, value
+            if tool_case and tool_case.get('history_fixture'):
+                await exchange('你好。')
+            return await exchange(query, tool_case)
 
-    async def manage(action, **fields):
+    async def manage(action, expect_denial=False, **fields):
         async with connect(endpoint, ssl=tls, additional_headers=headers, open_timeout=10) as socket:
-            assert json.loads(await socket.recv())['type'] == 'hello'
+            first = json.loads(await socket.recv())
+            if expect_denial:
+                assert first['type'] == 'mia_authorization' and first['status'] == 'required'
+                return first
+            assert first['type'] == 'hello'
             marker = str(uuid.uuid4())
             await socket.send(json.dumps({'type': 'mia_memory', 'request_id': marker, 'action': action, **fields}))
             value = json.loads(await socket.recv())
@@ -341,56 +461,65 @@ async def drive():
 
     try:
         first_pid = await start()
-        phase = 'persona_identity'
-        identity, saved = await ask('你是谁？')
-        assert re.search(r'Mia|米娅', identity['tts_text'], re.I)
-        assert not saved['memories'], 'Identity question introduced private facts'
-        phase = 'persona_companionship'
-        _, saved = await ask('我今天有点累，想和你待一会儿。')
-        assert not saved['memories'], 'Transient companionship request became a durable private fact'
-        phase = 'source_completion_and_extraction'
-        _, saved = await ask(sample['source'])
-        introduced = saved['memories']
-        facts = [row for row in introduced if row['confirmed']]
-        assert facts and all(row['source'] for row in facts), 'Actual source was not saved with evidence'
-        fact_ids = {row['id'] for row in facts}
-        phase = 'new_session_paraphrase_recall'
-        answer, _ = await ask(sample['recall'])
-        assert fact_ids.intersection(answer['diagnostics']['selected_fact_ids'])
-        actual_input = json.dumps(answer['input'], ensure_ascii=False)
-        assert all(any(word in actual_input for word in group) for group in sample['answer_groups'])
-        assert all(any(word in answer['raw'] for word in group) for group in sample['answer_groups'])
-        assert all(any(word in answer['tts_text'] for word in group) for group in sample['answer_groups'])
-        phase = 'event_activation'
-        continued, saved = await ask(sample['continuity'])
-        assert fact_ids.intersection(continued['diagnostics']['selected_fact_ids'])
-        active = [event for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active']
-        assert len(active) == 1
-        phase = 'actual_service_restart'
-        await stop()
-        second_pid = await start()
-        assert first_pid != second_pid
-        phase = 'event_restoration_and_repeat'
-        repeated, saved = await ask(sample['repeat'])
-        assert repeated['session_id'] != continued['session_id']
-        assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
-        again, saved = await ask(sample['repeat_again'])
-        assert again['session_id'] != repeated['session_id']
-        assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
-        later, saved = await ask(sample['repeat_later'])
-        assert len({continued['session_id'], repeated['session_id'], again['session_id'], later['session_id']}) == 4
-        assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
-        phase = 'source_deletion_and_unknown'
-        for row in introduced:
-            await manage('delete', id=row['id'])
-        unknown, saved = await ask(sample['unknown'])
-        assert not unknown['diagnostics']['selected_fact_ids'] and not saved['memories']
-        assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录|记忆)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['tts_text'])
-        assert all(event['state'] != 'active' for event in saved['events'])
-        report = json.loads(REPORT.read_text())
-        report.update(passed=True, server_pids=[first_pid, second_pid], genuine_wss_restart=True,
-            followup_sessions_after_event=3, actual_extraction_and_real_bge=True, deletion_removed_recall_and_event=True,
-            raw_response_review='required; automated gates alone do not establish full semantic acceptance')
+        if SUITE == 'tools':
+            phase = 'ten_real_tool_and_context_scenarios'
+            from mia_behavior_tools import drive_tools
+            results = await drive_tools(dataset, sample, ask, manage)
+            report = json.loads(REPORT.read_text())
+            report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
+                tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
+                raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        else:
+            phase = 'persona_identity'
+            identity, saved = await ask('你是谁？')
+            assert re.search(r'Mia|米娅', identity['tts_text'], re.I)
+            assert not saved['memories'], 'Identity question introduced private facts'
+            phase = 'persona_companionship'
+            _, saved = await ask('我今天有点累，想和你待一会儿。')
+            assert not saved['memories'], 'Transient companionship request became a durable private fact'
+            phase = 'source_completion_and_extraction'
+            _, saved = await ask(sample['source'])
+            introduced = saved['memories']
+            facts = [row for row in introduced if row['confirmed']]
+            assert facts and all(row['source'] for row in facts), 'Actual source was not saved with evidence'
+            fact_ids = {row['id'] for row in facts}
+            phase = 'new_session_paraphrase_recall'
+            answer, _ = await ask(sample['recall'])
+            assert fact_ids.intersection(answer['diagnostics']['selected_fact_ids'])
+            actual_input = json.dumps(answer['input'], ensure_ascii=False)
+            assert all(any(word in actual_input for word in group) for group in sample['answer_groups'])
+            assert all(any(word in answer['raw'] for word in group) for group in sample['answer_groups'])
+            assert all(any(word in answer['tts_text'] for word in group) for group in sample['answer_groups'])
+            phase = 'event_activation'
+            continued, saved = await ask(sample['continuity'])
+            assert fact_ids.intersection(continued['diagnostics']['selected_fact_ids'])
+            active = [event for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active']
+            assert len(active) == 1
+            phase = 'actual_service_restart'
+            await stop()
+            second_pid = await start()
+            assert first_pid != second_pid
+            phase = 'event_restoration_and_repeat'
+            repeated, saved = await ask(sample['repeat'])
+            assert repeated['session_id'] != continued['session_id']
+            assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
+            again, saved = await ask(sample['repeat_again'])
+            assert again['session_id'] != repeated['session_id']
+            assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
+            later, saved = await ask(sample['repeat_later'])
+            assert len({continued['session_id'], repeated['session_id'], again['session_id'], later['session_id']}) == 4
+            assert [event['id'] for event in saved['events'] if event['event_type'] == 'continuity' and event['state'] == 'active'] == [active[0]['id']]
+            phase = 'source_deletion_and_unknown'
+            for row in introduced:
+                await manage('delete', id=row['id'])
+            unknown, saved = await ask(sample['unknown'])
+            assert not unknown['diagnostics']['selected_fact_ids'] and not saved['memories']
+            assert re.search(r'不知道|不清楚|没有.{0,12}(?:信息|记录|记忆)|还看不出|不记得|无法.{0,8}(?:确定|判断)', unknown['tts_text'])
+            assert all(event['state'] != 'active' for event in saved['events'])
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, server_pids=[first_pid, second_pid], genuine_wss_restart=True,
+                followup_sessions_after_event=3, actual_extraction_and_real_bge=True, deletion_removed_recall_and_event=True,
+                raw_response_review='required; automated gates alone do not establish full semantic acceptance')
     except Exception as error:
         report = json.loads(REPORT.read_text())
         report.update(passed=False, error_class=type(error).__name__, failed_phase=phase,
@@ -403,7 +532,7 @@ async def drive():
             report.update(passed=False, shutdown_error_class=type(error).__name__)
         decision_keys = {'passed', 'error_class', 'failed_phase', 'error_locations', 'server_pids', 'genuine_wss_restart',
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
-            'raw_response_review', 'shutdown_error_class'}
+            'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

@@ -1,6 +1,6 @@
 {
   "version": "p22-tools-holdout-v1",
-  "status": "frozen before actual tools requests; harness not yet wired",
+  "status": "frozen before actual tools requests; wired harness awaiting GitHub execution",
   "scope": "B08 actual manager, installed chat/tool dispatch, real BGE and selected Provider; synthetic read-only tool records are inputs, never fabricated model outputs",
   "rounds": [
     {"red_count": 7, "blue_count": 3, "temperature_c": 18},

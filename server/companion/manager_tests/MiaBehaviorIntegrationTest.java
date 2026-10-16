@@ -50,6 +50,8 @@ class MiaBehaviorIntegrationTest {
         String key = System.getenv("MIA_TEST_LLM_API_KEY");
         String endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
         String model = System.getenv("MIA_TEST_LLM_MODEL");
+        String suite = System.getenv().getOrDefault("MIA_BEHAVIOR_SUITE", "continuity");
+        assertTrue(suite.equals("continuity") || suite.equals("tools"));
         assertNotNull(key, "Dedicated test provider not configured");
         assertNotNull(endpoint, "Dedicated test endpoint not configured");
         assertNotNull(model, "Dedicated test model not configured");
@@ -86,6 +88,7 @@ class MiaBehaviorIntegrationTest {
             env.put("MIA_SCOPE_CREDENTIAL", grant.path("data").path("private_credential").asText());
             env.put("MIA_SCOPE_USER_TOKEN", token);
             env.put("MIA_BEHAVIOR_ROUND", Integer.toString(round));
+            env.put("MIA_BEHAVIOR_SUITE", suite);
             Process running = process.start();
             if (!running.waitFor(300, TimeUnit.SECONDS)) {
                 running.destroyForcibly();
