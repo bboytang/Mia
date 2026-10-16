@@ -2,6 +2,7 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- bb230a00/shutdown38973884791已failure，仍是准备阶段：导出venv的默认pip拒绝CPU索引typing_extensions的元数据名称，尝试sdist后缺flit_core；未运行BGE导出/Java模型/app。shutdown-export-install-*原失败日志及初始实际依赖哈希保存。新候选仅导出venv从PyPI固定pip25.3、预装typing_extensions4.16.0后安装原CPU torch2.6.0；服务torch2.2.2及固定BGE资产不变，尚待验证。当前P22表格按最新有限证据更新，已完成的成长/自然纠错/工具/Scope不再误列为“正在验”，剩余原门槛不削减。
 - 工具链隔离候选bb230a004daab63a3a0a18b36072f04549b4d45d已精确发布，语法38973818397 success；新shutdown[38973884791](https://github.com/bboytang/Mia/actions/runs/38973884791)单次创建、精确headSha为bb230a00，已确认queued。接续只跟踪此句柄，不重发d106a686的准备失败；尚无实际app关闭结果。全服务→P22剩余门槛/独立v2→P23→P24顺序保持，不部署或改生产模型。
 - shutdown38973027072已终态failure，被测d106a686；固定上游完整依赖安装成功，BGE制备在torch.onnx.export的dynamo参数报TypeError，尚未进入manager/模型/app场景。shutdown-first-preparation-*保存原失败步骤日志与两份实际依赖/系统版本及哈希；不能称任何真实关闭通过。下一候选只在临时runner为既有BGE导出器建立CPU torch2.6.0独立venv，服务Python保留上游torch/torchaudio2.2.2；导出脚本、模型资产校验值、Worker和所有期限不改，另存导出环境freeze。YAML和导出步骤Bash -n通过，无本机安装；需新候选单次实际验证。
 - 实际关闭候选d106a6868694f8f96d902635844ef0a96550c3a7已精确发布，工作树干净。shutdown整链[38973027072](https://github.com/bboytang/Mia/actions/runs/38973027072)仅单次创建，最新确认in_progress，正在临时runner安装固定上游完整导入依赖；没有完整app实测结果。相同SHA服务38972988087、真实manager38972988065、行为语法38972988164均已success。下一次只跟踪38973027072，保留真实依赖/导入/生命周期任何失败；独立v2仍未执行，P22/P23/P24未完成。

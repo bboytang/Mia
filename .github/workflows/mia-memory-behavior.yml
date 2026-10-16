@@ -193,6 +193,7 @@ jobs:
           if [ "${{ inputs.suite }}" = shutdown ]; then
             python -m venv "$RUNNER_TEMP/mia-bge-export"
             mia_export_python="$RUNNER_TEMP/mia-bge-export/bin/python"
+            "$mia_export_python" -m pip install pip==25.3 typing_extensions==4.16.0
             "$mia_export_python" -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
             "$mia_export_python" -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
             "$mia_export_python" -m pip freeze > /tmp/mia-export-dependencies.txt

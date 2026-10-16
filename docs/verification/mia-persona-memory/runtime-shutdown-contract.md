@@ -59,4 +59,6 @@ vosk==0.3.45
 
 首轮38973027072在BGE制备失败：torch2.2.2的onnx.export不接受既有脚本的dynamo参数。后续仅在临时runner另建导出venv，安装原导出器CPU torch2.6.0及上列固定BGE制备依赖；完整服务所在Python仍为torch/torchaudio2.2.2。两份pip freeze分别保存，既有导出脚本、模型版本、ONNX哈希要求不改，不用较旧导出器的不同资产绕过校验。本机和生产均不安装或更新。
 
+第二轮38973884791仍在准备阶段失败：导出venv的pip处理CPU索引中的typing_extensions元数据命名失败，转向源码构建后找不到flit_core。下一候选仅在导出venv从PyPI固定pip25.3与typing_extensions4.16.0，再安装原CPU torch2.6.0；其余模型、服务运行版本及期限保持。尚未执行真实模型或生命周期场景，失败及实际初始运行环境仍保留。
+
 失败时保留原报告、代码SHA、SDK片段、SQL与实际依赖；没有实际import/监听/信号/退出/恢复证据便不报告完整生命周期通过。

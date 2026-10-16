@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+最新覆盖：bb230a00/shutdown38973884791已failure并归档shutdown-export-install-*，停在临时导出venv的typing_extensions元数据/CPU索引构建依赖错误；完整模型/app未执行。新候选只在该venv固定pip25.3和预装typing_extensions4.16.0，运行torch2.2.2/导出torch2.6.0/既有资产校验不改，待新精确提交单次CI。P22矩阵主表已按现有有限真实证据同步；全服务在途关闭、独立v2及最终组合仍待验证，P23/P24未完成。
+
 当前唯一待跟踪关闭句柄：bb230a004daab63a3a0a18b36072f04549b4d45d/shutdown38973884791（单次、已核对queued），该SHA行为语法38973818397 success；仅隔离原BGE导出器torch2.6.0与上游运行Python torch2.2.2，原固定资产校验不变。旧38973027072已失败并归档，不再等待或同代码重发。首项仍是该run真实依赖/固定资产/完整导入/监听/SIGTERM/进程退出/第三PID恢复取证，之后补P22其余门槛与独立v2，满足后进P23/P24；无生产采用/部署。
 
 最新：shutdown38973027072已failure（d106a686），停在BGE制备的torch2.2.2不支持dynamo参数，模型/app场景未执行，shutdown-first-preparation-*原失败日志/实际依赖哈希保留。当前仅工作流隔离导出修复候选：临时venv使用原CPU torch2.6.0导出器，服务仍为上游torch2.2.2，固定资产hash不放宽；YAML/Bash语法通过，待新精确SHA单次CI。不要重复旧代码失败任务；P22/P23/P24仍未完成。

@@ -1,0 +1,28 @@
+{
+  "code_sha": "bb230a004daab63a3a0a18b36072f04549b4d45d",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38973884791",
+  "conclusion": "failure",
+  "failed_step": "Prepare fixed public BGE assets without private data",
+  "error": "typing_extensions metadata name mismatch; flit_core build dependency unavailable from CPU index",
+  "cause": "Export venv pip rejected underscore metadata name and tried sdist build from a CPU-only index.",
+  "model_phase": "unexecuted",
+  "actual_app_lifecycle": "unexecuted",
+  "review": "Original full runtime dependency installation completed. Export venv torch installation failed on typing_extensions packaging; no BGE export, manager/model/app scenario executed. Next candidate pins pip25.3 and preinstalls typing_extensions4.16.0 from PyPI inside the temporary export venv, retaining runtime torch2.2.2 and exporter torch2.6.0. Original log and initial dependency files retained; no lifecycle result claimed.",
+  "files": [
+    {
+      "archive": "shutdown-export-install-shutdown-38973884791-failed.log.gz",
+      "original_sha256": "221a6e4c5911e42c5d551afafced1ba1a34732587179386eb78c40d0406c0c0c",
+      "archive_sha256": "835719471a1e9a2735c88bde00e2c51167932457601cccee141fbb20402f2275"
+    },
+    {
+      "archive": "shutdown-export-install-mia-runtime-dependencies.txt.gz",
+      "original_sha256": "77e8444055fdbcace5570c3aa6b83215060087b5bb2f2ac077fecc8f2ee98cea",
+      "archive_sha256": "d09b1947c3a8aa535a312ea5966cb41bbeb9cf2dd2380e3b083d8b0ab85cb42b"
+    },
+    {
+      "archive": "shutdown-export-install-mia-runtime-system.txt.gz",
+      "original_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "archive_sha256": "7ae3bca336395b367f8bb93d58b3f5822a44c2f600896e7d12adeb7ef470c75a"
+    }
+  ]
+}
