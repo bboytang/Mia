@@ -1,0 +1,221 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38963414931",
+  "requests": 18,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 763,
+          "function": "drive"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "ba7ff732a29e4a0c8e758b1d5e0df4f7",
+          "我平时通勤骑蓝色自行车",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "😜俏皮，你的蓝色自行车听起来很特别呢！每次通勤骑它，是不是感觉心情都好很多呀？🚴‍♀️🎨"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "😌当然记得，你平时通勤确实喜欢骑那辆蓝色自行车呢。骑自行车是一种很健康的生活方式，希望你的通勤路上总是顺风顺水。🚴‍♀️🌈"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😜 哦，原来是这样！那下次你通勤的时候，就可以骑着你的银色自行车，享受不一样的风景啦。记得安全第一哦，路上小心！🚴‍♂️🌟"
+        }
+      ],
+      "original_report_sha256": "6467f0c27f29aaeb6a84db3c2a3e54f6067d2fd288a192edbd4423835bc69978",
+      "archive_sha256": "f5fabb375e3d9bc19d22bd27d5bd59e980cee2402b83b666744b75aa90e570db"
+    },
+    {
+      "round": 1,
+      "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 763,
+          "function": "drive"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "c15f4abde0e94cd7864bfbc4ba31093f",
+          "我常用软皮本记读书笔记",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "😌 平静的，听起来你挺喜欢用软皮本记录读书笔记的。这样的习惯很棒，既环保又能方便随时查阅。你通常会在软皮本上记些什么内容呢？😊"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "😌当然记得，你经常用软皮本记读书笔记，这真是个好习惯呢！喜欢这样记录下你的阅读感悟。📖📝"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "😜 哦，原来是这样！口误是很常见的，没关系呢。你用硬皮本记读书笔记，也是个很好的习惯。以后我们可以一起分享你的阅读心得哦！📚📝"
+        }
+      ],
+      "original_report_sha256": "1c82cff6d8e4b0b3c293c3318e62588c457e174bad3957d73664776f5f63b3eb",
+      "archive_sha256": "15e7ccc18965e477a2aa0126e5186190b3d5a7536633fb9ed9026cc7dc5983f3"
+    },
+    {
+      "round": 2,
+      "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 763,
+          "function": "drive"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "309df368d3d3435bab5fcd050efb55bc",
+          "我周末练习长笛",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "😍关爱\n听起来你周末过得挺充实的呢！练习长笛真是一项美好的爱好，不仅能陶冶情操，还能让生活更加丰富多彩。你喜欢长笛的哪个部分呢？是吹奏的感觉，还是长笛音色的独特魅力？😊"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "😌当然记得，你周末练习长笛的样子真的很专注呢。那是一种很美的享受吧？"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "😜 哦，原来是你练习单簧管呢！看来我们的小音乐家周末又有了新的进步。下次可以给我听听你的演奏，一定很动听吧！🎵🎶"
+        }
+      ],
+      "original_report_sha256": "bd1309703c81d9779d1f6c09e13f9da0f740eee649ed8a4c53581ddf40a296bf",
+      "archive_sha256": "8d2071bf10c2fc969df60042cbdff085cb134b6887cb049527a6050e560eb50c"
+    }
+  ],
+  "review": "18 actual requests. All three groups fail correction after two native attempts: round0 copies old explicit content/nonshared anchor, round1 repeats nonliteral trigger term, round2 uses new instrument as shared anchor absent from old fact. No correction lifecycle reached. Nine actual foreground replies read; round2 recalls unsupported observation of flute practice, mistake-as-change remains. No original output repaired.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

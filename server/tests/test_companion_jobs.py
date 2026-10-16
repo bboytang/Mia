@@ -337,6 +337,116 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.row(result)['state'], 'committed')
         self.assertEqual(len(self.calls), 1)
 
+    async def test_service_shutdown_shares_budget_and_retains_inflight_job_for_recovery(self):
+        from server.companion.xiaozhi_adapter import stop_service
+        started, release = threading.Event(), threading.Event()
+        async def resolve(scope):
+            def blocked(sources, context):
+                started.set()
+                release.wait(2)
+                return self.output
+            return blocked
+        self.worker = MemoryWorker(self.jobs, self.policy, resolve, encoder=self.encoder)
+        result = await self.worker.submit(self.event())
+        await self.worker.start()
+        observed = []
+        async def serving():
+            try:
+                await asyncio.Future()
+            finally:
+                observed.append(self.worker.closing)
+                await asyncio.sleep(.3)
+        services = [asyncio.create_task(serving()) for _ in range(3)]
+        async def slow_gc():
+            await asyncio.sleep(.3)
+        gc = SimpleNamespace(stop=slow_gc)
+        try:
+            self.assertTrue(await asyncio.to_thread(started.wait, 1))
+            before = time.monotonic()
+            self.assertFalse(await stop_service(SimpleNamespace(_mia_worker=self.worker), gc, services, timeout=.12))
+            self.assertLess(time.monotonic() - before, .22)  # Scheduler tolerance, not a P23 measurement.
+            self.assertEqual(observed, [True] * 3)
+            self.assertTrue(all(task.done() for task in services))
+            self.assertTrue(self.worker.task.done(), [(frame.f_code.co_name, frame.f_lineno)
+                for frame in self.worker.task.get_stack()])
+            self.assertEqual(self.row(result)['state'], 'extracting')
+            self.assertEqual((await self.worker.submit(self.event('late')))['status'], 'closing')
+            self.assertEqual(self.store.list_memories(self.scope.owner), [])
+        finally:
+            release.set()
+            await asyncio.sleep(.03)
+        self.jobs.recover()
+        await MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder).run_once()
+        self.assertEqual(self.row(result)['state'], 'committed')
+        self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
+
+    async def test_service_shutdown_drains_existing_job_and_gc_concurrently(self):
+        from server.companion.xiaozhi_adapter import stop_service
+        started, release = threading.Event(), threading.Event()
+        async def resolve(scope):
+            def model(sources, context):
+                started.set()
+                release.wait(2)
+                return self.output
+            return model
+        self.worker = MemoryWorker(self.jobs, self.policy, resolve, encoder=self.encoder)
+        result = await self.worker.submit(self.event())
+        await self.worker.start()
+        self.assertTrue(await asyncio.to_thread(started.wait, 1))
+        async def stop_gc():
+            await asyncio.sleep(.02)
+            release.set()
+        service = asyncio.create_task(asyncio.sleep(10))
+        try:
+            self.assertTrue(await stop_service(SimpleNamespace(_mia_worker=self.worker),
+                SimpleNamespace(stop=stop_gc), [service, None], timeout=1))
+            self.assertTrue(service.cancelled())
+            self.assertTrue(self.worker.task.done())
+            self.assertEqual(self.row(result)['state'], 'committed')
+            self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
+        finally:
+            release.set()
+
+    async def test_service_shutdown_gc_error_does_not_skip_worker_or_transport_cleanup(self):
+        from server.companion.xiaozhi_adapter import stop_service
+        await self.worker.start()
+        async def fail_gc():
+            raise OSError('synthetic GC cleanup failure')
+        service = asyncio.create_task(asyncio.sleep(10))
+        with self.assertLogs('server.companion.xiaozhi_adapter', level='WARNING'):
+            self.assertFalse(await stop_service(SimpleNamespace(_mia_worker=self.worker),
+                SimpleNamespace(stop=fail_gc), [service], timeout=.3))
+        self.assertTrue(self.worker.task.done())
+        self.assertTrue(service.cancelled())
+
+    async def test_cancelling_service_shutdown_still_cancels_worker_and_services(self):
+        from server.companion.xiaozhi_adapter import stop_service
+        started, release = threading.Event(), threading.Event()
+        async def resolve(scope):
+            def blocked(sources, context):
+                started.set()
+                release.wait(2)
+                return self.output
+            return blocked
+        self.worker = MemoryWorker(self.jobs, self.policy, resolve, encoder=self.encoder)
+        result = await self.worker.submit(self.event())
+        await self.worker.start()
+        self.assertTrue(await asyncio.to_thread(started.wait, 1))
+        service = asyncio.create_task(asyncio.sleep(10))
+        closing = asyncio.create_task(stop_service(SimpleNamespace(_mia_worker=self.worker),
+            SimpleNamespace(stop=AsyncMock(side_effect=asyncio.CancelledError)), [service], timeout=1))
+        try:
+            await asyncio.sleep(.01)
+            closing.cancel()
+            with self.assertRaises(asyncio.CancelledError):
+                await closing
+            self.assertTrue(self.worker.task.done())
+            self.assertTrue(service.cancelled())
+            self.assertEqual(self.row(result)['state'], 'extracting')
+        finally:
+            release.set()
+            await asyncio.sleep(.03)
+
     async def test_inflight_revocation_and_deletion_stop_late_result_before_commit(self):
         for operation in ('revoke', 'delete'):
             self.policy.active = True

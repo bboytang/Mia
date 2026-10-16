@@ -212,8 +212,24 @@ def patch_app(text):
                         'from core.websocket_server import WebSocketServer\nfrom mia_companion import xiaozhi_adapter as mia\n')
     text = replace_once(text, '    ws_server = WebSocketServer(config)\n',
                         '    ws_server = WebSocketServer(config)\n    await mia.start_worker(ws_server)\n')
-    return replace_once(text, '        # 停止全局GC管理器\n',
-                        '        await mia.stop_worker(ws_server)\n        # 停止全局GC管理器\n')
+    cleanup = '''        # 停止全局GC管理器
+        await gc_manager.stop()
+
+        # 取消所有任务（关键修复点）
+        stdin_task.cancel()
+        ws_task.cancel()
+        if ota_task:
+            ota_task.cancel()
+
+        # 等待任务终止（必须加超时）
+        await asyncio.wait(
+            [stdin_task, ws_task, ota_task] if ota_task else [stdin_task, ws_task],
+            timeout=3.0,
+            return_when=asyncio.ALL_COMPLETED,
+        )
+'''
+    return replace_once(text, cleanup,
+        '        await mia.stop_service(ws_server, gc_manager, [stdin_task, ws_task, ota_task], timeout=20)\n')
 
 
 PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager,

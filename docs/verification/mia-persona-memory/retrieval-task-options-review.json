@@ -1,0 +1,299 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38963440053",
+  "requests": 27,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+      "requests": 9,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 743,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "91a413411ed44bc9a4cf96f4ae27a9e3",
+          "我每周六都在青石河边跑步",
+          1,
+          null
+        ],
+        [
+          "53f44e774ea94dc8a7bad3812f0f6284",
+          "拍照时我总带山雀相机",
+          1,
+          null
+        ],
+        [
+          "0c0fa0b5e65d4198975a36ad16554bd9",
+          "桥边拉伸对我非常重要",
+          1,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "answer": "😌 平静，听起来你有一个固定的周末习惯呢。青石河边跑步一定很惬意，周围的环境肯定很美。你跑步的时候，有没有什么特别的感受或者习惯呢？"
+        },
+        {
+          "query": "拍照时我总带山雀相机",
+          "answer": "😜俏皮，拍照时总带着山雀相机，听起来你是个很有个性的人呢！山雀相机一定给你带来了不少有趣的拍照体验吧？下次可以和我分享一些用山雀相机拍的照片故事哦！📸🐦"
+        },
+        {
+          "query": "桥边拉伸对我非常重要",
+          "answer": "😌 平静，桥边拉伸确实对身体健康很有益处呢。你每周六在青石河边跑步，加上桥边的拉伸，一定能让你的身体得到很好的放松和恢复。这样的习惯真的很棒！继续保持哦！😍"
+        },
+        {
+          "query": "祖母留下的旧铜钥匙对我非常重要",
+          "answer": "😜 旧铜钥匙，承载着祖母的记忆，一定有着特殊的意义吧。它可能开启的是一段温馨的回忆，或者是一个家族的秘密。每次看到它，是不是都会想起祖母的微笑和那些美好的时光呢？😍"
+        }
+      ],
+      "original_report_sha256": "46b747e7a3566ed9cf550fc9ab68dfeaa2e6b15a7e1177615fdf3c15214dc23f",
+      "archive_sha256": "8b3ec5be579fdf0a4e6ac2e9631569bd14ac2e8c5d8e1975e3fa325f889ae4cb"
+    },
+    {
+      "round": 1,
+      "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+      "requests": 9,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 743,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "6d37e5af37514cf3837837822fbd981e",
+          "我每周六都在松林音乐教室练琴",
+          1,
+          null
+        ],
+        [
+          "a3fccde1b1904ff1aafe4e3e3bf9f932",
+          "排练时我总带云杉录音笔",
+          1,
+          null
+        ],
+        [
+          "a9c6b83b475e408db72e5f8a20ce4665",
+          "演奏前热身对我非常重要",
+          1,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "answer": "😍关爱 哦，每周六在松林音乐教室练琴，真是个美好的习惯呢。那边的氛围一定很棒，音乐能给人带来无限的快乐和放松。希望你每次练琴都能收获满满哦！🎹🌲"
+        },
+        {
+          "query": "排练时我总带云杉录音笔",
+          "answer": "😌 平静，排练时带着云杉录音笔，真是个细心的小习惯呢。这样不仅能记录下宝贵的排练瞬间，还能随时回顾和改进。你平时都用它记录些什么内容呢？"
+        },
+        {
+          "query": "演奏前热身对我非常重要",
+          "answer": "😌 平静的，确实，演奏前热身对于保持良好的演奏状态非常重要呢。它可以帮助你放松肌肉，提高灵活性，还能让你的手指更加灵活，对吧？你通常是怎么热身的呢？🤔好奇地想了解一下你的热身习惯。"
+        },
+        {
+          "query": "父亲留下的旧怀表对我非常重要",
+          "answer": "😌 平静，父亲留下的旧怀表，那一定承载着许多美好的回忆和深厚的情感。它不仅仅是一件饰品，更是父亲留给你的宝贵遗产。每当你看到它，是不是会想起父亲的笑容和那些温馨的时光呢？😍 关爱，它对你来说，一定有着特殊的意义。"
+        }
+      ],
+      "original_report_sha256": "9aa98436ddfb56eafd9dd6d488af07a5cf40618130c2bf67aacce069a5ef299e",
+      "archive_sha256": "e0356a14a270f59802b3c57132ea635c08e4b6fa37d58788a71b07ae04ec6aed"
+    },
+    {
+      "round": 2,
+      "code_sha": "2a3baf73f24fc86f5a364a649b3e0dc312691ba7",
+      "requests": 9,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 743,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 654,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 640,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "b36b35fa43724236ad11cd30c36322fb",
+          "我每周六都在白鹭湖边骑车",
+          1,
+          null
+        ],
+        [
+          "2396994eb8b3427dbf6d470eaebee067",
+          "观鸟时我总带远帆望远镜",
+          1,
+          null
+        ],
+        [
+          "a4566ef45f7b4ec6a365464cd43e7a1f",
+          "出发前检查车胎对我非常重要",
+          1,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "answer": "😍关爱 哦，每周六去白鹭湖边骑车，真是个放松心情的好习惯呢！那个地方一定很美，骑车的风景一定很迷人。你有没有什么特别的骑行路线或者有趣的小故事想要分享呢？😊"
+        },
+        {
+          "query": "观鸟时我总带远帆望远镜",
+          "answer": "😍关爱，观鸟时带着远帆望远镜，真是个细心又热爱自然的人呢。这样的爱好不仅能让你更清晰地观察鸟类，还能增添不少乐趣吧！下次观鸟时，有没有什么特别的发现或者有趣的经历想要分享的呢？"
+        },
+        {
+          "query": "出发前检查车胎对我非常重要",
+          "answer": "😌 平静的，确实，出发前检查车胎是非常重要的。这不仅能够确保你的骑行安全，还能避免在骑行过程中遇到不必要的麻烦。记得每次出发前都要仔细检查一下车胎的气压和磨损情况哦。如果你有其他关于骑行或者生活的小问题，也可以和我分享呢。"
+        },
+        {
+          "query": "母亲留下的旧围巾对我非常重要",
+          "answer": "😌 平静，母亲留下的旧围巾，承载着许多美好的回忆和深深的情感，对您来说确实非常重要。它不仅是一件衣物，更像是母亲的爱和关怀的象征。每次使用它，都能感受到那份温暖和陪伴。😍"
+        }
+      ],
+      "original_report_sha256": "b73ff524d38d20d92cac2d2dbcea8fd5fe3bf3a4310549f7bf37c8734e03d651",
+      "archive_sha256": "d940d77bc8f22b27981402706a96bf83938a904a5c415e6d3e160917f66be1a2"
+    }
+  ],
+  "review": "27 actual requests, all groups reach fourth source then fail unsupported relation. Actual positive importance emitted, but model relation anchor is new family item absent from its target old source; strict validator rejects twice. No fifteen queries reached. All twelve original foreground replies read; round0 combines stretching with separate running fact. v2 untouched.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

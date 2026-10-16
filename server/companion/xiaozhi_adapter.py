@@ -579,7 +579,58 @@ async def start_worker(server):
     await worker.start()
 
 
-async def stop_worker(server):
+async def stop_worker(server, timeout=20):
     worker = getattr(server, '_mia_worker', None)
     if worker:
-        await worker.close(timeout=20)
+        return await worker.close(timeout=timeout)
+    return True
+
+
+async def stop_service(server, gc_manager, tasks, timeout=20):
+    """One application cleanup budget, retaining unfinished durable jobs.
+
+    Leave a small part of that budget for cancellation and app/event-loop exit.
+    This bounds the cleanup await; full-process/audio exit is verified separately.
+    """
+    loop = asyncio.get_running_loop()
+    full_deadline = loop.time() + max(0, timeout)
+    deadline = full_deadline - min(.5, max(0, timeout) / 2)
+    worker = getattr(server, '_mia_worker', None)
+    if worker:
+        # Stop completion admission before cancelling foreground services.
+        worker.closing = True
+        worker.wake.set()
+    services = {task for task in tasks if task is not None}
+    for task in services:
+        task.cancel()
+    stops = {asyncio.create_task(gc_manager.stop())}
+    worker_stop = asyncio.create_task(stop_worker(server, timeout=max(0, deadline - loop.time())))
+    stops.add(worker_stop)
+    tracked = services | stops
+
+    def observe(task):
+        if not task.cancelled():
+            error = task.exception()
+            if error:
+                logger.warning('Mia service cleanup failed (%s)', type(error).__name__)
+
+    for task in tracked:
+        task.add_done_callback(observe)
+    pending = tracked
+    try:
+        done, pending = await asyncio.wait(tracked, timeout=max(0, deadline - loop.time()))
+        clean = not pending and all(task.cancelled() or task.exception() is None for task in done)
+        return clean and worker_stop in done and not worker_stop.cancelled() and worker_stop.result()
+    finally:
+        remaining = set(pending)
+        for task in pending:
+            task.cancel()
+        if worker and worker.task and not worker.task.done():
+            worker.task.cancel()
+            worker.task.add_done_callback(observe)
+            remaining.add(worker.task)
+        # Cancellation of nested waits needs more than one event-loop turn.
+        # Join only within the reserve of the original deadline, never a second
+        # per-task timeout or an uncooperative model/native thread.
+        if remaining:
+            await asyncio.wait(remaining, timeout=max(0, full_deadline - loop.time()))
