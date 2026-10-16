@@ -1,0 +1,28 @@
+{
+  "code_sha": "d106a6868694f8f96d902635844ef0a96550c3a7",
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38973027072",
+  "conclusion": "failure",
+  "failed_step": "Prepare fixed public BGE assets without private data",
+  "error": "TypeError: export() got an unexpected keyword argument 'dynamo'",
+  "cause": "Fixed upstream runtime torch2.2.2 does not accept the existing torch2.6 export argument.",
+  "model_phase": "unexecuted",
+  "actual_app_lifecycle": "unexecuted",
+  "review": "Full upstream dependency installation completed, followed by a BGE export preparation failure. No manager/model/app shutdown scenario executed. Original failed-step log and actual initial runtime package/system versions retained. Next candidate isolates the original exporter torch2.6 in a temporary runner venv while preserving runtime torch2.2.2 and exact BGE hash requirements; no successful lifecycle result claimed.",
+  "files": [
+    {
+      "archive": "shutdown-first-preparation-shutdown-38973027072-failed.log.gz",
+      "original_sha256": "ec7477a1e66f576bb2cd3b0f19d8b9f562b13400fc4bb8d33d5d3e72ae73a356",
+      "archive_sha256": "4aae5fd04e27474cad59ada17690f393e0976d7890f20932426bb2b4d7896200"
+    },
+    {
+      "archive": "shutdown-first-preparation-mia-runtime-dependencies.txt.gz",
+      "original_sha256": "77e8444055fdbcace5570c3aa6b83215060087b5bb2f2ac077fecc8f2ee98cea",
+      "archive_sha256": "d09b1947c3a8aa535a312ea5966cb41bbeb9cf2dd2380e3b083d8b0ab85cb42b"
+    },
+    {
+      "archive": "shutdown-first-preparation-mia-runtime-system.txt.gz",
+      "original_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "archive_sha256": "7ae3bca336395b367f8bb93d58b3f5822a44c2f600896e7d12adeb7ef470c75a"
+    }
+  ]
+}

@@ -189,7 +189,15 @@ jobs:
             python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
           fi
           python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
-          python scripts/ci/prepare_mia_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$MIA_EMBEDDING_DIR"
+          mia_export_python=python
+          if [ "${{ inputs.suite }}" = shutdown ]; then
+            python -m venv "$RUNNER_TEMP/mia-bge-export"
+            mia_export_python="$RUNNER_TEMP/mia-bge-export/bin/python"
+            "$mia_export_python" -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+            "$mia_export_python" -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
+            "$mia_export_python" -m pip freeze > /tmp/mia-export-dependencies.txt
+          fi
+          "$mia_export_python" scripts/ci/prepare_mia_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$MIA_EMBEDDING_DIR"
           python - <<'PY'
           import hashlib, json, os
           from pathlib import Path
@@ -227,5 +235,6 @@ jobs:
             /tmp/mia-behavior-ci
             /tmp/mia-runtime-dependencies.txt
             /tmp/mia-runtime-system.txt
+            /tmp/mia-export-dependencies.txt
             upstream/main/manager-api/target/surefire-reports
           if-no-files-found: warn

@@ -53,6 +53,8 @@ Jinja2==3.1.6
 vosk==0.3.45
 ```
 
-沿用既有BGE制备依赖transformers4.51.3、onnx1.17.0、onnxruntime1.23.2、tokenizers0.21.1、safetensors0.5.3及固定BGE资产；本套件保留torch2.2.2，不安装其他套件使用的torch2.6.0。powermem及传递依赖尚非完整锁定，`pip freeze`保留实际解析版本；这是全导入验证的依赖记录，不能宣称P24可重现安装已完成。没有启用第二套记忆或人格服务，选用模块为空以省略音频初始化；Mia仍只用原Worker和事实库。
+沿用既有BGE制备依赖transformers4.51.3、onnx1.17.0、onnxruntime1.23.2、tokenizers0.21.1、safetensors0.5.3及固定BGE资产；本套件的服务运行Python保留torch2.2.2，导出器版本见后述隔离修复。powermem及传递依赖尚非完整锁定，`pip freeze`保留实际解析版本；这是全导入验证的依赖记录，不能宣称P24可重现安装已完成。没有启用第二套记忆或人格服务，选用模块为空以省略音频初始化；Mia仍只用原Worker和事实库。
+
+首轮38973027072在BGE制备失败：torch2.2.2的onnx.export不接受既有脚本的dynamo参数。后续仅在临时runner另建导出venv，安装原导出器CPU torch2.6.0及上列固定BGE制备依赖；完整服务所在Python仍为torch/torchaudio2.2.2。两份pip freeze分别保存，既有导出脚本、模型版本、ONNX哈希要求不改，不用较旧导出器的不同资产绕过校验。本机和生产均不安装或更新。
 
 失败时保留原报告、代码SHA、SDK片段、SQL与实际依赖；没有实际import/监听/信号/退出/恢复证据便不报告完整生命周期通过。

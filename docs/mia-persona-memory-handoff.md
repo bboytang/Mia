@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+最新：shutdown38973027072已failure（d106a686），停在BGE制备的torch2.2.2不支持dynamo参数，模型/app场景未执行，shutdown-first-preparation-*原失败日志/实际依赖哈希保留。当前仅工作流隔离导出修复候选：临时venv使用原CPU torch2.6.0导出器，服务仍为上游torch2.2.2，固定资产hash不放宽；YAML/Bash语法通过，待新精确SHA单次CI。不要重复旧代码失败任务；P22/P23/P24仍未完成。
+
 当前首项：跟踪精确d106a686的shutdown38973027072（已确认in_progress、临时runner完整依赖安装中），不要重复启动。该SHA服务38972988087、manager38972988065、行为语法38972988164已success；这些不替代实际app/进程关闭。终态后读取实际导入、监听、SIGTERM、全部退出时间、原SQLite任务与第三PID恢复结果，保存失败和原回答。独立v2/P23/P24前置未满足，完整目标继续，生产模型未改。
 
 最新接续覆盖下方旧记录：faults38971357457已failure/27请求，非空坏JSON未证；独立正常恢复/换PID召回/空闲关闭实际完成，原完整证据在faults-independent-glm53-flashx-*。当前shutdown候选使用实际app.main/完整类导入/真实WS/HTTP/GC/同Worker/SIGTERM，三组受控真实已校验结果保持与跨PID恢复；32本地相关项及最后保持器2项复验通过，真实完整导入/Java/Linux待精确SHA CI。具体安装版本与边界见verification/mia-persona-memory/runtime-shutdown-contract.md；仅临时runner安装。本候选不改生产模型/Secrets/事实库/两attempts，音频消费者省略，P22/P23/P24未完成，v2未消耗。
