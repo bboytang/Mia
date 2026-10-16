@@ -212,12 +212,15 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(calls), 3)
         self.assertNotIn('previous attempt for THIS task failed', calls[0].args[0])
         for owner, call in zip(resolved_owners[1:], calls[1:]):
+            payload = json.loads(call.args[1])
             if owner == self.scope.owner:
                 self.assertIn('keywords clue must occur as a contiguous literal substring', call.args[0])
+                self.assertEqual(payload['validation_feedback']['rejected_clues'], {'keywords': ['not in actual source']})
             else:
                 self.assertEqual(owner, self.peer.owner)
                 self.assertNotIn('previous attempt for THIS task failed', call.args[0])
-            self.assertEqual(json.loads(call.args[1])['user_excerpts'], ['我喜欢蓝色'])
+                self.assertNotIn('validation_feedback', payload)
+            self.assertEqual(payload['user_excerpts'], ['我喜欢蓝色'])
         self.assertEqual(json.dumps(bad), original)
         self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
         self.assertEqual(len(self.store.list_memories(self.peer.owner)), 1)

@@ -232,7 +232,8 @@ class MemoryWorker:
                     if error.code == 'invalid_input' and job['attempts'] + 1 < 2:
                         # Server validation messages only; never provider errors,
                         # raw model text, extra sources or output repair.
-                        self.validation_feedback[job['id']] = str(error)[:512]
+                        self.validation_feedback[job['id']] = {'message': str(error)[:512],
+                            'rejected_clues': getattr(error, 'rejected_clues', {})}
                     raise
                 self.validation_feedback.pop(job['id'], None)
                 result = json.dumps(validated, ensure_ascii=False)

@@ -223,13 +223,31 @@ class ExtractionValidationTests(unittest.TestCase):
         extractor = LLMMemoryExtractor(lambda: provider)
         self.assertIs(extractor(['我喜欢观云'], context), raw)
         self.assertIn('可以审阅，不代表语义支持已成立', provider.response_no_stream.call_args.args[0])
-        self.assertEqual(json.loads(provider.response_no_stream.call_args.args[1])['existing_memories'], context)
+        self.assertEqual(json.loads(provider.response_no_stream.call_args.args[1])['existing_memories'],
+            [{key: fact[key] for key in ('id', 'category', 'content', 'evidence')} for fact in context])
         self.assertEqual(json.dumps(context), before)
         self.assertEqual(provider.response_no_stream.call_count, 1)
         for fact in context:
             fact['evidence'][0]['fingerprint'] = 'one-source'
         self.assertIs(extractor(['我喜欢观云'], context), raw)
         self.assertNotIn('可以审阅，不代表语义支持已成立', provider.response_no_stream.call_args.args[0])
+
+    def test_focused_importance_keeps_source_and_original_positive_or_negative_value(self):
+        for source, weight, evidence in [('修复老书柜对我格外重要', 0.73, '格外重要'),
+                                        ('我认为收藏玩偶并不重要', None, None)]:
+            with self.subTest(source=source):
+                raw = {'memories': [proposal(source, category='fact', importance_weight=weight,
+                    importance_evidence=evidence)], 'trait': None}
+                before = json.dumps(raw)
+                provider = Mock()
+                provider.response_no_stream.return_value = raw
+                result = LLMMemoryExtractor(lambda: provider)([source], [])
+                self.assertIs(result, raw)
+                self.assertEqual(provider.response_no_stream.call_count, 1)
+                self.assertIn('首要任务是区分用户本人明确肯定', provider.response_no_stream.call_args.args[0])
+                self.assertEqual(json.loads(provider.response_no_stream.call_args.args[1])['user_excerpts'], [source])
+                self.assertEqual(validate_output(result, [source], [])['memories'][0]['emotional_weight'], weight)
+                self.assertEqual(json.dumps(raw), before)
 
     def test_cannot_drop_negation_or_change_subject_with_a_substring(self):
         for quote in ['喜欢蓝色', '我朋友喜欢蓝色']:

@@ -21,6 +21,8 @@ Use only relevant enabled trends; insufficient_observations means no long-term c
 Keep self_report and inferred evidence distinct.
 用户在本轮更正自己的说法时，旧召回只是先前记录；不要把被更正的旧说法当成用户真实过去的经历。
 用户自述的习惯不证明Mia曾亲眼见过或共同参与；实际互动仍按事件来源判断。
+多条召回事实并列不建立同一次活动、时间顺序或因果关系；只有各自实际引文支持的内容才是已知。
+facts是用户自述，events中的双方实际引文是已发生互动的来源；两者不能互换。
 '''
 COUNTING = 'utf8_json_bytes_plus_structure_conservative_estimate_not_tokenizer'
 
@@ -231,7 +233,7 @@ class ContextBuilder:
         omitted = {'role': False, 'fact_ids': [], 'traits': [], 'history_turns': inputs['older_turns_removed'], 'scene': False}
         def request():
             if data['facts']:
-                evidence = {'status': 'matched', 'meaning': '以下是本轮召回的用户事实，保留了用户原话。'}
+                evidence = {'status': 'matched', 'meaning': '以下是本轮召回的用户自述原话；不证明Mia目击，也不因并列建立事实间的时间或活动关系。'}
             elif inputs['memory_status'] == 'unavailable':
                 evidence = {'status': 'unavailable', 'meaning': '本轮用户长期记忆查询不可用。'}
             else:
