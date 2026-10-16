@@ -2,6 +2,7 @@
 
 ## 2026-10-17 结构提案真实结果与下一修复
 
+- 关闭v2候选9b0085611a0be1c6c523fa74780d24926ed82427已精确发布；语法38976901739 success，服务38976901717 in_progress。shutdown/FlashX[38976945496](https://github.com/bboytang/Mia/actions/runs/38976945496)仅单次创建，已核对精确headSha、当前queued。下一次只跟踪这些句柄，读取原生提取关闭的实际committed/failed与两尝试、真实持久结果/向量保持后的无模型重放提交及四PID原回答，不同状态不可混作保存。旧20请求failure完整保留；检索v2未用，P22/P23/P24未完成。
 - e0ec157a/shutdown38974837753已failure/20真实请求、11原前台回答已读。第0/2组三PID/真实app/WS/HTTP/GC/原Worker关闭及两事实/向量恢复通过；释放关闭1.3151/1.2871秒，阻塞关闭16.6879/19.6945秒。第1组阻塞源首次模型关系anchor为单字“画”无效，第二次实际提案有效才被保持；app cleanup19.5008秒、GC/服务/Worker任务均done，但原v1驱动要求关闭后仍只有一次尝试，因实际attempts=2而提前失败，第三PID未运行。原Native线程没有被冒称已取消。shutdown-first-real-*保留三原报告、SQL、真实运行/导出/系统版本及哈希。
 - 新shutdown v2保留旧v1与失败，修复保持器：无效原输出原样返回原Worker，让原validator/反馈路径工作。原Native提取阻塞仍测总进程<=20秒；恢复按原最多两次到实际committed/failed，失败单列，不算保存。另增加第三来源：原validated_result真实持久后，在原NativeLane保持实际BGE向量；第四PID必须复用该结果提交/召回，原模型调用数和attempts不得增加。此为补齐D10两种状态，不删除原关闭测试、不放宽任何运行时期限/上限，不动生产或模型。29本地Worker/CI相关项通过（8.068秒），持久结果绑定后保持器3项复验通过；完整v2待真实CI，独立检索v2未消耗，P22/P23/P24未完成。
 - e0ec157a/faults38974841980终态success/27真实请求，实际configured型号glm-4-flash。三组共六非空原始坏JSON与六SDK APITimeoutError→ReadTimeout、原两attempts、12重复同ID/失败无事实、正常首次提交和真正换PID正确乐器召回通过；空闲关闭0.1092/0.1440/0.1131秒。12原回答已读，一般器具描述保留其推测局限，不冒充产品事实；faults-current-configured-*原报告/SQL/哈希与proof保存。此为该型号当前候选故障链，不替代FlashX非空坏JSON或完整服务关闭。

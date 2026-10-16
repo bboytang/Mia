@@ -4,6 +4,8 @@
 
 ## 当前范围与状态
 
+当前第一项：跟踪精确9b008561的shutdown/FlashX38976945496（单次queued），服务38976901717在途，行为语法38976901739已success。这是关闭v2：保留原Native提取20秒退出/原两次明确终态，额外实际持久validated结果+真实BGE向量Native保持与第四PID无模型重放提交。既有默认glm-4-flash故障38974841980已通过、原20请求关闭38974837753仍failure不改写。只有真实终态/SQL/SDK调用数/原回答复核后才能宣告关闭v2通过；独立检索v2和P22/P23/P24尚未完成。
+
 当前覆盖：shutdown38974837753已failure/20请求，三组第0/2链通过，第1组原提案首个单字关系无效、第二次有效保持导致attempts=2；关闭约19.5秒且GC/服务/Worker任务都done，驱动的一次尝试前提失败，未进入第三PID。shutdown-first-real-*保留原报告/SQL/依赖/哈希。当前shutdown v2候选让无效原值交回Worker保留反馈，原Native提取阻塞仍测20秒/最多两次明确终态；额外持久validated结果的实际BGE NativeLane保持与第四PID复用提交，必须无额外模型调用/attempt。旧v1和失败不改写，检索v2不动；29本地相关项及最后3保持器复验通过，待新精确SHA CI。P22/P23/P24未完成。
 
 最新状态：e0ec157a/faults38974841980已success/27请求，实际glm-4-flash，六非空坏JSON/六真实SDK超时、原两attempts/重复幂等/后续正常提取/换PID召回通过；12原回答已读，faults-current-configured-*保存完整原证据。不能用它冒称FlashX坏JSON门槛通过。shutdown38974837753仍in_progress，已通过准备进入真实manager/BGE/Provider三轮；只跟踪该句柄，保存完整app/SIGTERM/退出/第三PID恢复实际证据。P22余项/独立v2及P23/P24仍未完成。

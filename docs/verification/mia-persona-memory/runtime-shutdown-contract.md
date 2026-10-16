@@ -2,6 +2,8 @@
 
 此入口尚未通过真实CI；测试代码或本地受控测试不能代替实测。
 
+当前关闭v2唯一句柄：9b008561/[38976945496](https://github.com/bboytang/Mia/actions/runs/38976945496)，单次queued，待实际结果；同提交行为语法38976901739已success，服务回归38976901717在途。
+
 首次实际场景：e0ec157a/[38974837753](https://github.com/bboytang/Mia/actions/runs/38974837753)终态failure，20真实请求；第0/2组通过，第1组在关闭后断言提取仍剩尝试次数处失败，未进入第三PID。真实app/WS/HTTP/GC与Worker已运行，完整原证据见shutdown-first-real-*；不能称三组通过。此前d106a686/38973027072与bb230a00/38973884791均在导出准备失败，完整保留shutdown-first-preparation-*与shutdown-export-install-*；这两轮模型及实际生命周期阶段未执行。
 
 `shutdown`套件复用既有真实manager测试用户、授权、Provider、BGE与SQLite，直接导入安装后的完整ConnectionHandler和app模块。执行原app.main、WebSocketServer、SimpleHttpServer、GC及同一持久Worker；实际Unix SIGTERM触发原关闭接线。另设TLS/WSS文本驱动，省略连接音频初始化及音频消费者，因此不证明音频/真机关闭或P23资源指标。
