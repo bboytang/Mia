@@ -56,7 +56,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'growth', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -415,7 +415,8 @@ async def serve():
                 assert status['state'] in {'committed', 'empty'}, 'Actual extraction did not reach a valid terminal state'
                 await authorization.require_connection(conn)
                 await socket.send(json.dumps({'type': 'test_saved', 'job_state': status['state'],
-                    'memories': store.list_memories(scope.owner), 'events': store.handle(scope.owner, {'action': 'events'})['events']}))
+                    'memories': store.list_memories(scope.owner), 'personality': store.personality(scope.owner),
+                    'events': store.handle(scope.owner, {'action': 'events'})['events']}))
         except PrivateAuthorizationRequired:
             await socket.send(json.dumps({'type': 'mia_authorization', 'status': 'required'}))
         except Exception as error:
@@ -448,7 +449,7 @@ async def serve():
 
 async def drive():
     from websockets.asyncio.client import connect
-    fixture_name = {'tools': 'persona_memory_tools_p22_v1.json',
+    fixture_name = {'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
@@ -556,6 +557,13 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        elif SUITE == 'growth':
+            phase = 'real_three_session_growth_and_invalidation'
+            from mia_behavior_growth import drive_growth
+            proof = await drive_growth(sample, ask, manage, start, stop, first_pid)
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, growth_proof=proof, server_pids=proof['server_pids'],
+                raw_response_review='required; this covers supported traits and associated event lifecycle, not full B01/B05')
         elif SUITE == 'recovery':
             phase = 'real_database_failure_and_crash'
             from mia_behavior_recovery import fail_commit_and_crash
@@ -723,7 +731,7 @@ async def drive():
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis', 'inflight_proof', 'recovery_proof'}
+            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

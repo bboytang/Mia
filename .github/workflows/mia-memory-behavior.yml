@@ -7,6 +7,8 @@ on:
       - 'scripts/ci/mia_behavior_retrieval.py'
       - 'scripts/ci/mia_behavior_inflight.py'
       - 'scripts/ci/mia_behavior_recovery.py'
+      - 'scripts/ci/mia_behavior_growth.py'
+      - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
@@ -23,6 +25,8 @@ on:
       - 'scripts/ci/mia_behavior_retrieval.py'
       - 'scripts/ci/mia_behavior_inflight.py'
       - 'scripts/ci/mia_behavior_recovery.py'
+      - 'scripts/ci/mia_behavior_growth.py'
+      - 'server/tests/fixtures/persona_memory_growth_p22_v1.json'
       - 'server/companion/manager_tests/MiaBehaviorIntegrationTest.java'
       - 'server/tests/fixtures/persona_memory_behavior_p22_v1.json'
       - 'server/tests/fixtures/persona_memory_tools_p22_v1.json'
@@ -37,7 +41,7 @@ on:
       suite:
         description: Real continuity, correction, retrieval or tool/context scenarios with three isolated users
         type: choice
-        options: [continuity, tools, correction, natural_correction, retrieval, retrieval_holdout, inflight, recovery]
+        options: [continuity, growth, tools, correction, natural_correction, retrieval, retrieval_holdout, inflight, recovery]
         default: continuity
 permissions:
   contents: read
@@ -54,6 +58,8 @@ jobs:
       - run: python -m py_compile scripts/ci/mia_behavior_retrieval.py
       - run: python -m py_compile scripts/ci/mia_behavior_inflight.py
       - run: python -m py_compile scripts/ci/mia_behavior_recovery.py
+      - run: python -m py_compile scripts/ci/mia_behavior_growth.py
+      - run: python -m json.tool server/tests/fixtures/persona_memory_growth_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_behavior_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_tools_p22_v1.json > /dev/null
       - run: python -m json.tool server/tests/fixtures/persona_memory_correction_p22_v1.json > /dev/null

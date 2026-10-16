@@ -28,6 +28,8 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- `a4dfd5b9c5c2ff9a40ffe1155a10b15fe37b9c91` 聚焦纠错候选已推送。真实自然纠错[38944900792](https://github.com/bboytang/Mia/actions/runs/38944900792)与v1检索[38944905941](https://github.com/bboytang/Mia/actions/runs/38944905941)均已单次启动，最后确认in_progress；跟踪同handle，不重复发起。服务38944864392、身份38944864510、manager38944864650及两语法38944864445/38944865916 success，BGE38944864314仍in_progress。
+- 新冻结成长v1：三用户各四个实际原句/独立会话，前三会话不能提前出现特点，第四次原模型根据已有三个来源提案；不预置特点/证据。新增growth入口复用原manager/Provider/BGE/Worker，并检查三个后续新会话、实际重启、删除全部支持来源后再次重启及特点/关联事件失效。只新增验收入口，不修改运行时成长策略；AST与语料一致性检查通过，真实结果待验证，不能称B01/B05完成。
 - `334fab62` 的真实提取[38942549414](https://github.com/bboytang/Mia/actions/runs/38942549414)十项/七请求全部通过；模型原文肯定权重0.8和证据“特别的意义”实际入库，否定原句与null正常。[原始输入/输出及限定复核](verification/mia-persona-memory/metadata-grounded-review.json)。不能归因于某一提示句，也不是完整四维或独立留出通过。
 - 同SHA自然纠错[38942543137](https://github.com/bboytang/Mia/actions/runs/38942543137)17请求仍三组失败：模型拆句/遗漏协调证明，第一组还造了非法category/relation/拼接证据；原校验器拒绝。第一/三组各两次是原Worker生产尝试，不是重新评估取绿；后半段重启/删除未完成。[原文与SQL状态](verification/mia-persona-memory/natural-proof-review.json)保留。
 - 新聚焦候选仍在同一LLMMemoryExtractor内、一次原Provider调用；仅对真实已知上下文的自然更正选择更正任务，要求原模型完整输出证明，不后处理拼造事实。普通事实/重要性/趋势路径保持；原输入、原输出、两次总尝试及版本/唯一目标/不确定拒绝不变。验证报告记录实际extraction SDK messages。60项提取/维护/Worker本地回归通过，真实效果待精确SHA的自然纠错及v1四维整链。
