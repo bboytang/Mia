@@ -31,8 +31,9 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 - 从干净的 `62d576d350ac9cd2e0522e1979890f2b9dc7e77b` 接续，GitHub CLI 已验证访问。用户最新要求本地能完成的自动检查优先本地，Linux/macOS整链仍在Actions；覆盖下文历史“只在GitHub测试”的安排。未读取或复制密钥。
 - `139bc0f` 服务38899855195、BGE38899855056、身份38899855771、manager38899855014均success。真实提取38899986696已failure，十项/七请求/九通过；肯定意义原输出及SQLite重要性仍null。[原文与复核](verification/mia-persona-memory/metadata-importance-review.json)已无损归档。字段改名未修复真实质量。
 - `62d576d` 行为38932388755仅syntax成功，composed skipped；后续单次运行的[恢复38937376427](https://github.com/bboytang/Mia/actions/runs/38937376427)已success。三用户共9真实请求：真实写锁失败、validated结果存活、原子进程被kill、不同PID恢复，提取/resolver不重复、各1事实/1向量/1committed+1empty、三库完整性通过。六条回答已读，三条新会话召回均回答本人事实；[原文/SQL摘要及限定复核](verification/mia-persona-memory/recovery-first-review.json)。只验收B03这个故障路径，不代表完整P22/P23。
-- 新候选只统一提取提示的完整字段契约与逐来源重要性核对，保留原校验器、存储、模型和检索参数；实际效果待精确SHA的单次限定模型验证。本地45项提取/Worker回归在修改前后均通过，不能替代真实效果。
-- 下一项：保存候选并执行一次真实提取对照；满足条件后v1检索回归、独立v2，其余B01—B08按原计划补齐。P22未整体验收，P23/P24未完成。无生产部署、自动日采或新表达限制。
+- 当前运行候选 `6fe7e356c55e8db34404875b18f8d2d125e4c159` 已推送：只统一提取提示完整字段契约与逐来源重要性核对，原校验器、存储、模型和检索参数不变。本地45项提取/Worker修改前后通过；服务38938427388、BGE38938427379、身份38938427390、manager38938427261及语法38938427292均success。
+- 单次真实提取[38938475733](https://github.com/bboytang/Mia/actions/runs/38938475733)已failure，十项/七请求/九通过；肯定意义仍由模型原样输出null。[完整失败证据及基础回归](verification/mia-persona-memory/metadata-contract-review.json)已归档，不把提示结构修订称真实质量修好。固定上游基类确实将system/user传给既有response生成器，源码检查未发现系统提示丢失；不能据此断言模型选择null的具体原因。
+- 下一项：P22的重要性语义质量仍未解决，不重跑同候选取绿、不手填数值；独立v2尚未消耗。继续原计划自然纠错、完整身份/成长及其他故障矩阵；P22未整体验收，P23/P24未完成。上述run均已终态，无在途任务。无生产部署、自动日采或新表达限制。
 
 ### 先前候选与证据（历史，不作为当前在途状态）
 

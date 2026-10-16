@@ -1,0 +1,98 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38938475733",
+  "code_sha": "6fe7e356c55e8db34404875b18f8d2d125e4c159",
+  "passed": false,
+  "requests": 7,
+  "case_count": 10,
+  "passing_cases": 9,
+  "provider_host": "open.bigmodel.cn",
+  "configured_model": "glm-4-flash",
+  "original_report_sha256": "05878027bc854a015d7562a915a47c51451e510fddfce2d9c18f0f0f8e41de48",
+  "archive_sha256": "8010a666162545e06afffb300ce0543e4d845b05322c807bec61f1d5a63275b8",
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "medical_confirmation",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "quoted_fiction",
+      "state": "empty",
+      "pipeline_semantic_pass": true,
+      "model_requests": 0
+    },
+    {
+      "name": "ongoing_goal",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "temperature_preference",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "lookup_not_existing_fact",
+      "state": "empty",
+      "pipeline_semantic_pass": true,
+      "model_requests": 0
+    },
+    {
+      "name": "parallel_lookup_not_fact",
+      "state": "empty",
+      "pipeline_semantic_pass": true,
+      "model_requests": 0
+    },
+    {
+      "name": "independent_activity_clues",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    },
+    {
+      "name": "independent_positive_importance",
+      "state": "committed",
+      "pipeline_semantic_pass": false,
+      "model_requests": 1
+    },
+    {
+      "name": "independent_negative_importance",
+      "state": "committed",
+      "pipeline_semantic_pass": true,
+      "model_requests": 1
+    }
+  ],
+  "review": "Complete-key prompt candidate still fails positive significance. All ten cases execute, seven real requests, nine pass; actual model importance_weight and importance_evidence remain null, and SQLite preserves null. Activity and negative controls pass. No same-code rerun, no metadata backfill, no threshold/model changes. Upstream fixed LLMProviderBase.response_no_stream passes system/user messages into the existing response generator, so no dropped system instruction was found in source inspection. This does not establish why the model chose null.",
+  "base_regressions": {
+    "server": {
+      "run": 38938427388,
+      "conclusion": "success"
+    },
+    "vectors": {
+      "run": 38938427379,
+      "conclusion": "success"
+    },
+    "identity": {
+      "run": 38938427390,
+      "conclusion": "success"
+    },
+    "manager": {
+      "run": 38938427261,
+      "conclusion": "success"
+    },
+    "syntax": {
+      "run": 38938427292,
+      "conclusion": "success"
+    }
+  },
+  "remaining": "B04 E-signal quality is unresolved. Frozen retrieval v2 remains unexecuted. Recovery success is scoped to the prior SHA62d576d real SQLite contention/crash path. Full P22, P23 resources and P24 upgrade/rollback remain incomplete."
+}
