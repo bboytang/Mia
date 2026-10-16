@@ -28,6 +28,7 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 最新运行候选`176d332f27fdd3bce94640ff66db70ed81bf4dd9`已推送，退避缓存修复自然纠错[38950019670](https://github.com/bboytang/Mia/actions/runs/38950019670)已单次发起，待终态/实际SDK反馈送达与原回答复核。上方旧38948366421/38948865306/38948211936均已终态；不重复启动。下一项跟踪38950019670，继续重要性剩余一条/成长真实生成/完整后台故障及最终回归；P22未完成，P23/P24依原前置推进。
 - Scope矩阵38948211936已success：三轮36真实请求/27独立WSS会话，三用户/Agent事实范围及同范围多设备共享、旧凭据三处拒绝与重绑新Scope召回通过；27原回答逐条已读，18召回只含本人事实。各库三个owner各一事实、完整性ok；[完整原文/SQL](verification/mia-persona-memory/scope-first-review.json)。仅验收所列B06矩阵，最终相关回归和App真机范围分别记录。
 - 自然纠错38948366421已failure/21请求，两组机械生命周期通过、一组非字面关键词拒绝；实际SDK证明0次诊断送达，不能将改善归因于反馈。[原文及根因](verification/mia-persona-memory/natural-feedback-review.json)。已复现ready()不包含退避未到期任务、导致缓存过早清理；候选改按实际活动任务保留。加入三次退避轮询前失败，修复后62项本地通过；中间测试还错误假设两个任务先后，改按真实Scope核对反馈归属，不变更调度机制或门槛。
 - 成长3dd11dcf/38948865306已failure/24请求：四原句均保存，已越过规范化比较，确实停在trait存在断言；实际输入证明成长说明与三个独立已存来源已送达，原模型仍null。后续未执行，[growth-review原文](verification/mia-persona-memory/growth-review-review.json)保留。下一步仍需改进同一提取任务的真实特点生成，不能预置或把null变成特点。
