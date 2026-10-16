@@ -1,0 +1,9 @@
+{
+  "version": "p22-real-faults-v1",
+  "purpose": "Real selected-provider truncation and transport timeout, exact duplicate events, recovery; no substituted responses",
+  "rounds": [
+    {"truncated_source": "我常用松纹刻刀做木雕", "timeout_source": "我常用软木垫装订小册", "source": "我周末练习竹笛", "query": "休息日我通常练什么乐器？", "answer_term": "竹笛"},
+    {"truncated_source": "我常用黄铜尺画图", "timeout_source": "我常用细网袋收纳画笔", "source": "我周末练习扬琴", "query": "休息日我通常练什么乐器？", "answer_term": "扬琴"},
+    {"truncated_source": "我常用素色纸做折纸", "timeout_source": "我常用棉绳编织杯垫", "source": "我周末练习中阮", "query": "休息日我通常练什么乐器？", "answer_term": "中阮"}
+  ]
+}

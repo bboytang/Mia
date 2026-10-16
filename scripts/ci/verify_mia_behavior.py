@@ -56,7 +56,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'growth', 'scope', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
+assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'inflight', 'recovery'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -76,9 +76,19 @@ def selected_provider(configuration, report, purpose):
     assert configuration['api_key'] == os.environ['MIA_TEST_LLM_API_KEY']
     assert configuration['model_name'] == os.environ['MIA_TEST_LLM_MODEL']
     assert configuration['base_url'] == os.environ['MIA_TEST_LLM_BASE_URL']
-    provider = create_instance(configuration['type'], configuration)
+    fault_mode = report.get('fault_mode') if SUITE == 'faults' and purpose == 'extraction' else None
+    effective = dict(configuration, max_tokens=1) if fault_mode == 'truncated_json' else configuration
+    provider = create_instance(effective['type'], effective)
     original = provider.client
-    provider.client = original.with_options(max_retries=0, http_client=httpx.Client(timeout=30, follow_redirects=False))
+    timeout = httpx.Timeout(connect=3, write=3, pool=3, read=.001) if fault_mode == 'read_timeout' else 30
+    provider.client = original.with_options(max_retries=0, timeout=timeout,
+        http_client=httpx.Client(timeout=timeout, follow_redirects=False))
+    if fault_mode:
+        with LOCK:
+            report.setdefault('fault_envelopes', []).append({'mode': fault_mode,
+                'model': provider.model_name, 'max_tokens': provider.max_tokens,
+                'read_timeout_seconds': provider.client.timeout.read if fault_mode == 'read_timeout' else 30})
+            save(report)
     original.close()
     create = provider.client.chat.completions.create
 
@@ -133,9 +143,23 @@ def selected_provider(configuration, report, purpose):
         response = provider.response_no_stream
 
         def captured(*args, **kwargs):
-            value = response(*args, **kwargs)
+            try:
+                value = response(*args, **kwargs)
+            except Exception as error:
+                if fault_mode:
+                    chain, current = [], error
+                    while current is not None and len(chain) < 8:
+                        chain.append(type(current).__name__)
+                        current = current.__cause__
+                    with LOCK:
+                        report.setdefault('fault_errors', []).append({'mode': fault_mode, 'error_chain': chain})
+                        save(report)
+                raise
             with LOCK:
                 report['extraction_outputs'].append(value)
+                if fault_mode:
+                    report.setdefault('fault_outputs', []).append({'mode': fault_mode, 'output': value,
+                        'max_tokens': effective['max_tokens']})
                 save(report)
             return value
 
@@ -196,6 +220,18 @@ async def serve():
     await adapter.start_worker(runtime)
     worker = runtime._mia_worker
     store = worker.jobs.store
+    if SUITE == 'faults':
+        submit = worker.submit
+        async def observed_submit(event):
+            admitted = await submit(event)
+            if admitted['status'] == 'accepted':
+                duplicate = await submit(event)  # Same actual completion object; no invented event.
+                with LOCK:
+                    report.setdefault('duplicate_submissions', []).append({'status': duplicate['status'],
+                        'same_id': duplicate.get('id') == admitted.get('id')})
+                    save(report)
+            return admitted
+        worker.submit = observed_submit
     recovery_control = {}
     if SUITE == 'recovery':
         from mia_behavior_recovery import observe_commit
@@ -271,6 +307,11 @@ async def serve():
                     continue
                 request = json.loads(message)
                 assert request['type'] == 'test_chat' and isinstance(request['query'], str)
+                if SUITE == 'faults':
+                    fault = request.get('fault_kind')
+                    assert fault in {None, 'truncated_json', 'read_timeout'}
+                    report['fault_mode'] = fault
+                    save(report)
                 if request.get('hold_commit'):
                     assert SUITE == 'recovery' and not recovery_control
                     fixture = json.loads((Path(__file__).resolve().parents[2] /
@@ -353,6 +394,9 @@ async def serve():
                     'context_status': conn._mia_context_status, 'fault': fault,
                     'job_delta': jobs_after - jobs_before, 'admission_status': dict(conn._mia_job_status or {}),
                     'history_fixture': specification.get('history_fixture') if specification else None}
+                if SUITE == 'faults' and request.get('fault_kind'):
+                    case['fault_kind'] = request['fault_kind']
+                    case['job_state_at_reply'] = (await asyncio.to_thread(jobs.current, conn._mia_job_status))['state']
                 with LOCK:
                     report['cases'].append(case)
                     save(report)
@@ -414,6 +458,12 @@ async def serve():
                     await authorization.require_connection(conn)
                     await socket.send(json.dumps({'type': 'test_cancelled', 'job_id': status['id'], 'state': status['state']}))
                     continue
+                if SUITE == 'faults' and request.get('fault_kind'):
+                    await authorization.require_connection(conn)
+                    await socket.send(json.dumps({'type': 'test_failed', 'state': status['state'],
+                        'job_id': status['id'], 'attempts': status['attempts'], 'error_category': status['error_category'],
+                        'memories': store.list_memories(scope.owner)}))
+                    continue
                 assert status['state'] in {'committed', 'empty'}, 'Actual extraction did not reach a valid terminal state'
                 await authorization.require_connection(conn)
                 await socket.send(json.dumps({'type': 'test_saved', 'job_state': status['state'],
@@ -451,7 +501,7 @@ async def serve():
 
 async def drive():
     from websockets.asyncio.client import connect
-    fixture_name = {'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
+    fixture_name = {'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
@@ -566,6 +616,13 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        elif SUITE == 'faults':
+            phase = 'real_provider_failure_duplicate_and_recovery'
+            from mia_behavior_faults import drive_faults
+            proof = await drive_faults(endpoint, tls, headers, ROOT, sample, ask, manage, start, stop, first_pid)
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, faults_proof=proof, server_pids=proof['server_pids'],
+                raw_response_review='required; controlled real failures and normal recovery, not full P23 lifecycle')
         elif SUITE == 'scope':
             phase = 'real_multi_user_agent_device_matrix'
             from mia_behavior_scope import drive_scope
@@ -747,7 +804,7 @@ async def drive():
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
             'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
             'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events',
-            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof'}
+            'retrieval_analysis', 'inflight_proof', 'recovery_proof', 'growth_proof', 'scope_proof', 'faults_proof'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.

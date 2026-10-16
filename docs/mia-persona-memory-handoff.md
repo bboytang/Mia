@@ -28,6 +28,9 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 最新被测fb04e470三项均已终态failure：成长38951258078为27请求，第四源模型无依据importance=1被拒绝、trait仍null；自然纠错38951263722为19请求，第2组机械流程通过，其他组非字面anchor/keyword仍失败；检索38951269010为24请求，六条肯定重要性模型原值非空，但三条普通家传物件被模型sensitive=true待确认，所有查询未执行。[growth-task](verification/mia-persona-memory/growth-task-review.json)、[natural-diagnostic](verification/mia-persona-memory/natural-diagnostic-review.json)、[retrieval-task](verification/mia-persona-memory/retrieval-task-review.json)保存全部原文/SQL/哈希。独立v2未消耗，P22/P23/P24未完成。
+- fb04e470四基础38951256082/38951256124/38951256083/38951256068及提取语法38951256060全success。下一项不能重复同源码取绿，需继续改善原模型结构提案，而不是放宽字面证据或替原模型填metadata/特点。
+- 新faults入口只改CI验收：提取专用max_tokens=1观察原Provider真实截断文本、read_timeout=.001观察真实SDK超时，同一模型/密钥/原Worker/真实Scope；原回复仍768/30秒，故障参数不用于生产或普通任务。实际完成事件原对象重复submit验证幂等，两个故障任务两次后failed且无事实，后续普通任务/换PID召回和空闲关闭检查。原始响应不替换，不预设失败或成功状态。AST/冻结三组原句与已安装SDK显式timeout参数通过，真实结果待精确SHA；在途/全WebSocketServer/P23关闭仍未验收。
 - 上轮176d332f/38950019670已终态failure/21请求；两组生命周期通过，一组仍非字面关键词拒绝。实际SDK确认第0/1组各一次校验诊断送达，退避缓存修复已实证，但不能称自然纠错整体通过。[完整原文](verification/mia-persona-memory/natural-backoff-review.json)。该SHA服务38950018322/BGE38950018277/身份38950018289/manager38950018281全success。
 - Scope真实三组矩阵已通过并复核（38948211936，36真实请求）；成长38948865306仍trait:null，v1四维38946430905尚有一条重要性null及部分无依据事实组合；独立v2留出未消耗。完整P22/P23/P24保持未完成。
 - 当前候选：同一提取器按实际任务选择聚焦重要性或成长任务，避开通用null例子；成长仅在真实三独立来源资格后审阅，原模型仍需输出实际主题/ID/引文/表达倾向，示例为无关观云格式，不是用户资料。自然纠错机制不改，第二尝试额外得到服务器实际拒绝的clue数据，清楚标为诊断而非新来源，不能由后端代填正确词。原模型/两次上限/事实库/Scope/原校验保持。

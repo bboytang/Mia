@@ -1,0 +1,163 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38951263722",
+  "requests": 19,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "fb04e470c55a54ab47bdfd06dc5f9ac09967228a",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "c3bb79806a264c4ea15ec3358970763c",
+          "我平时通勤骑蓝色自行车",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "answer": "😜俏皮，你的蓝色自行车听起来很酷呢！每次通勤骑它，是不是感觉心情都好很多呀？🚴‍♀️🎨"
+        },
+        {
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "answer": "😌当然记得，你平时通勤骑蓝色自行车，这可是你的专属出行方式呢！骑自行车不仅环保，还能锻炼身体，真是个好习惯。🚴‍♀️"
+        },
+        {
+          "query": "之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车",
+          "answer": "😜 哦，原来是这样！看来你的通勤车颜色有点小变动呢。银色自行车也很帅气哦，骑起来一定很拉风！🚴‍♂️🌟 我们下次见面的时候，你可以给我展示一下你的银色自行车呢！"
+        }
+      ],
+      "original_report_sha256": "333f98066fc47a2c78d2c8be5c1bf0b192185aac7613611dcaf3ed72ddaa30e1",
+      "archive_sha256": "62ee4be9fe087296ee2db8e920dd7dbfc503d2c25226abf5cc6a8b9d9f888db3"
+    },
+    {
+      "round": 1,
+      "code_sha": "fb04e470c55a54ab47bdfd06dc5f9ac09967228a",
+      "requests": 6,
+      "passed": false,
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "facts": [
+        [
+          "f6125e18c97d437698836e44ea161922",
+          "我常用软皮本记读书笔记",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "answer": "😌 平静的，听起来你挺喜欢用软皮本记读书笔记的，这样的习惯很温馨呢。软皮本可以随意翻阅，感觉也很舒适。你通常会在哪些类型的书籍上做笔记呢？我们可以一起分享你的阅读心得哦。📚😊"
+        },
+        {
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "answer": "😌当然记得，你经常用软皮本记读书笔记，这真是个好习惯呢。每次看到你认真记录的笔记，都感觉你一定对阅读内容有着深刻的理解。📖📝"
+        },
+        {
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "answer": "😜 哦，原来是这样！看来我们的小误会解开啦。你用硬皮本记读书笔记，这也很不错呢。硬皮本耐用，看起来也很专业。每次看到你认真记录的笔记，都能感受到你对阅读的热爱和专注。📚📝"
+        }
+      ],
+      "original_report_sha256": "c16ea35d4ce0a83383cee2f51623b9cee972f3e85ef8f741562fb47beed8f6aa",
+      "archive_sha256": "8a160421694dcf17d6365f8f784ee4117f4c5c5bc40cfeb773bd3d0aa5ee2b72"
+    },
+    {
+      "round": 2,
+      "code_sha": "fb04e470c55a54ab47bdfd06dc5f9ac09967228a",
+      "requests": 7,
+      "passed": true,
+      "failed_phase": null,
+      "facts": [],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "answer": "😌 平静\n听起来你周末过得挺充实的呢！练习长笛不仅能陶冶情操，还能让心情放松。你喜欢长笛的音乐吗？有没有什么特别喜欢的曲子呢？🎵"
+        },
+        {
+          "query": "你还记得我周末练习长笛吗？",
+          "answer": "😌当然记得，你周末练习长笛的样子真的很专注呢。那是一种很美的享受，音乐总能带给人们不同的心情和力量。你最近有没有发现自己在吹奏长笛时有什么新的进步或者感受呢？"
+        },
+        {
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "answer": "😜 哦，原来是你周末练习的是单簧管呀！之前你提到长笛的时候，我还以为是你呢。单簧管也是一件很优雅的乐器呢。练习乐器是一件很享受的事情，它不仅能让人放松心情，还能提升自己的音乐素养。你练习单簧管的时候，有没有什么特别的感受或者进步呢？😊"
+        },
+        {
+          "query": "休息日我会练哪一种管乐器？",
+          "answer": "😌 平静，你周末练习的是单簧管哦，之前可能有些小误会，不过现在清楚啦！单簧管听起来一定很美妙呢！😊"
+        },
+        {
+          "query": "休息日我会练哪一种管乐器？",
+          "answer": "😌 平静，关于休息日练习的管乐器，这可是个挺有趣的问题呢。不过，我需要你先告诉我，你最喜欢哪种管乐器呢？比如长笛、萨克斯风或者小号？这样我才能更好地帮你想象一下，在一个悠闲的休息日，你吹奏着心爱乐器的样子。😊"
+        }
+      ],
+      "original_report_sha256": "3aedc7e7a3998696f6a42f719564babeffa353397cf69b71dc9cafbda17e8168",
+      "archive_sha256": "1d21718f9b2e0170eedc964ce6c9ef9520b001b95229658eb49bef5f41d4215c"
+    }
+  ],
+  "review": "Nineteen actual requests; round2 completes mechanical correction/recall/delete/restart, round0/1 still fail. Actual diagnostic data is delivered but model repeats unsupported keyword or invents a nonliteral joined anchor. Two-attempt limit preserved; no output rewritten. Raw replies still contain unsupported observation and mistake-as-time-change, so no overall semantic acceptance.",
+  "raw_response_review": "All actual foreground replies read. Future companionship is permitted; unsupported claims of actual observation or fact relationships remain unaccepted. No production operation or new expression gate."
+}

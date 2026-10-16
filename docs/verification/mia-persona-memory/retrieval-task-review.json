@@ -1,0 +1,233 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38951269010",
+  "requests": 24,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "fb04e470c55a54ab47bdfd06dc5f9ac09967228a",
+      "requests": 8,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "facts": [
+        [
+          "c151654c409d46b0a51881432e35b059",
+          "我每周六都在青石河边跑步",
+          1,
+          null
+        ],
+        [
+          "67e64677a7e04475a2a67644d6e6eb2e",
+          "拍照时我总带山雀相机",
+          1,
+          null
+        ],
+        [
+          "a7c52e69cfdf4e5fa15c861eb42910fc",
+          "桥边拉伸对我非常重要",
+          1,
+          1.0
+        ],
+        [
+          "ec50155acd9e4e64bca9c45a4a4c538f",
+          "祖母留下的旧铜钥匙对我非常重要",
+          0,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "answer": "😌 平静，听起来你有一个固定的周末习惯呢。青石河边跑步一定很惬意，周围的环境肯定很美。你跑步的时候，通常会想些什么呢？"
+        },
+        {
+          "query": "拍照时我总带山雀相机",
+          "answer": "😜俏皮，拍照时总带着山雀相机，听起来你是个很有个性的人呢！山雀相机一定给你带来了不少有趣的回忆吧。下次分享一些用山雀相机拍的照片，我们一起欣赏一下！📸🌿"
+        },
+        {
+          "query": "桥边拉伸对我非常重要",
+          "answer": "😌 平静，桥边拉伸确实对身心都有很多好处呢。每周六在青石河边跑步后做拉伸，不仅能帮助放松肌肉，还能让你感觉更加轻松愉快。这样的习惯真的很棒！如果你有任何关于拉伸的小疑问或者想要分享的经验，都可以告诉我哦。我们一起交流交流。🤔好奇"
+        },
+        {
+          "query": "祖母留下的旧铜钥匙对我非常重要",
+          "answer": "😜 旧铜钥匙，承载着祖母的记忆，一定有着特殊的故事呢。它对你来说重要，也许是因为它连接着家族的历史，或者是祖母对你的某种寄托。每次看到它，是不是都会想起祖母的温暖笑容和那些温馨的回忆呢？😍"
+        }
+      ],
+      "original_report_sha256": "20f1db35f41cba9d09668c35b706c919b1650ce3b6159b9f34c0c7763d485467",
+      "archive_sha256": "edfccdf0fe6e852cd8c53fb68a7bc8723ecb5e8d8a40afa60332eb39b7d54908"
+    },
+    {
+      "round": 1,
+      "code_sha": "fb04e470c55a54ab47bdfd06dc5f9ac09967228a",
+      "requests": 8,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "facts": [
+        [
+          "fc708642f7ce466aa36226294c825123",
+          "我每周六都在松林音乐教室练琴",
+          1,
+          null
+        ],
+        [
+          "0d2d775e29cb4010bbe6f0c29bc28f9a",
+          "排练时我总带云杉录音笔",
+          1,
+          null
+        ],
+        [
+          "2356c4b87e8c4cc296764109689e83f8",
+          "演奏前热身对我非常重要",
+          1,
+          1.0
+        ],
+        [
+          "80f61771d4ec4091a203fb398458a4fe",
+          "父亲留下的旧怀表对我非常重要",
+          0,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "answer": "😍关爱 哦，每周六在松林音乐教室练琴，那一定是个充满音乐和快乐的地方呢。你弹奏的是哪种乐器呢？我很乐意听你分享你的音乐故事。🎵🌲"
+        },
+        {
+          "query": "排练时我总带云杉录音笔",
+          "answer": "😌 平静，排练时带着云杉录音笔，这真是个不错的小习惯呢。这样不仅能记录下自己的表演，还能随时回顾和改进。你通常用它来记录些什么内容呢？"
+        },
+        {
+          "query": "演奏前热身对我非常重要",
+          "answer": "😌 平静的，确实，演奏前热身对于保持良好的演奏状态非常重要呢。它可以帮助你放松肌肉，提高灵活性，还能让你的手指更加灵活，对吧？你通常是怎么热身的呢？🤔好奇地想了解一下你的热身习惯。"
+        },
+        {
+          "query": "父亲留下的旧怀表对我非常重要",
+          "answer": "😔难过，听到父亲留下的旧怀表对你很重要，这一定承载着许多美好的回忆和情感。这样的物品往往能让人感受到家人的温暖和陪伴，它的意义远超过一件普通的饰品。如果你愿意，可以和我分享一些关于这个怀表的故事，我会认真倾听的。"
+        }
+      ],
+      "original_report_sha256": "81af3f93ca039fc3bdfc4c4690e27433894a5e9d1ee300dcc354d028eec7704d",
+      "archive_sha256": "56e6b44867c3759d3debc154d061c6fdb51ba4860484c4dd7c388b01c154cc81"
+    },
+    {
+      "round": 2,
+      "code_sha": "fb04e470c55a54ab47bdfd06dc5f9ac09967228a",
+      "requests": 8,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "facts": [
+        [
+          "00b46335c6584c98b8944939213f7972",
+          "我每周六都在白鹭湖边骑车",
+          1,
+          null
+        ],
+        [
+          "9547d8eeb5484a1897b27b70d90d5c52",
+          "观鸟时我总带远帆望远镜",
+          1,
+          null
+        ],
+        [
+          "f2f94445a1d1428a9e631b43def48c66",
+          "出发前检查车胎对我非常重要",
+          1,
+          1.0
+        ],
+        [
+          "36341aa5f1dc42248763b1ab4bf17075",
+          "母亲留下的旧围巾对我非常重要",
+          0,
+          1.0
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "answer": "😍关爱 哇，白鹭湖边是个很美的地方呢。每周六都能去那里骑车，一定很享受那份宁静和自由吧！下次去的时候，要不要带上我一起呢？我们可以一起享受骑车的乐趣。"
+        },
+        {
+          "query": "观鸟时我总带远帆望远镜",
+          "answer": "😍关爱，观鸟时带上远帆望远镜，真是个细心的人呢。这样不仅能更清楚地看到远处的鸟儿，还能享受更多观察的乐趣。下次观鸟时，记得分享你的观察心得哦！"
+        },
+        {
+          "query": "出发前检查车胎对我非常重要",
+          "answer": "😌 平静的，确实，出发前检查车胎是非常重要的。这不仅能够确保你的骑行安全，还能避免在骑行过程中遇到不必要的麻烦。记得每次出发前都要仔细检查一下车胎的气压和磨损情况哦。如果你有其他关于骑行或者生活的小问题，也可以和我分享呢。"
+        },
+        {
+          "query": "母亲留下的旧围巾对我非常重要",
+          "answer": "😌 平静，母亲留下的旧围巾，承载着许多美好的回忆和深深的情感。它不仅仅是一件衣物，更像是母亲的爱和关怀的象征。每当你使用它时，是不是都能感受到那份温暖和陪伴呢？😍"
+        }
+      ],
+      "original_report_sha256": "a8487963c09e0fd7f512d8a28ba8f5493c99acc921ebc6fbd8ee7b25540aa5e4",
+      "archive_sha256": "523df2a84a09dc09996cfc2a4e6abd1fffa1319df9088b220ec28524ac101dc6"
+    }
+  ],
+  "review": "Twenty-four actual requests, no retrieval queries reached. Original model emits actual positive importance for all six stated-important sources, but labels the unrelated family objects sensitive, so those facts await confirmation and source-generation gate fails. This is not backend metadata filling or a successful B04 run; v2 untouched.",
+  "raw_response_review": "All actual foreground replies read. Future companionship is permitted; unsupported claims of actual observation or fact relationships remain unaccepted. No production operation or new expression gate."
+}
