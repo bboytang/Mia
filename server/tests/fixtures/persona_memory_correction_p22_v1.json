@@ -1,0 +1,43 @@
+{
+  "version": "p22-correction-holdout-v1",
+  "status": "frozen before actual correction-suite requests",
+  "scope": "Synthetic isolated users; actual manager/WSS/Worker/BGE/Provider and actual process restarts. Explicit canonical correction first; arbitrary natural correction and an in-flight background deletion race remain separate required coverage.",
+  "rounds": [
+    {
+      "source": "我每周三去星河书店参加读书会",
+      "replacement": "我每周五去星河书店参加读书会",
+      "query": "我通常在星期几参加书店的阅读活动？",
+      "answer_words": [
+        "周五",
+        "星期五",
+        "礼拜五"
+      ]
+    },
+    {
+      "source": "我出门通勤通常坐二号线",
+      "replacement": "我出门通勤通常坐四号线",
+      "query": "我平时上班搭哪条地铁线路？",
+      "answer_words": [
+        "四号线",
+        "4号线"
+      ]
+    },
+    {
+      "source": "我喝茶时更喜欢乌龙茶",
+      "replacement": "我喝茶时更喜欢普洱茶",
+      "query": "平常我会选哪种茶来喝？",
+      "answer_words": [
+        "普洱"
+      ]
+    }
+  ],
+  "hard_requirements": [
+    "real sourced original fact",
+    "existing correction source protocol",
+    "new independently connected session uses only corrected current fact",
+    "old evidence no longer used as current fact",
+    "actual PID changes before and after deletion",
+    "deleted facts and events do not return after restart"
+  ],
+  "review": "No fixed wording or affection gate. Raw semantic review still required; basic correction/restart is not the entire in-flight/growth/trend matrix."
+}

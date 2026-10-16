@@ -55,7 +55,7 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'tools'}
+assert SUITE in {'continuity', 'tools', 'correction'}
 REQUEST_CAP = 48 if SUITE == 'tools' else 20
 
 
@@ -405,7 +405,9 @@ async def serve():
 
 async def drive():
     from websockets.asyncio.client import connect
-    fixture_name = 'persona_memory_tools_p22_v1.json' if SUITE == 'tools' else 'persona_memory_behavior_p22_v1.json'
+    fixture_name = {'tools': 'persona_memory_tools_p22_v1.json',
+        'correction': 'persona_memory_correction_p22_v1.json',
+        'continuity': 'persona_memory_behavior_p22_v1.json'}[SUITE]
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures' / fixture_name
     dataset = json.loads(fixture_path.read_text())
     sample = dataset['rounds'][int(os.environ['MIA_BEHAVIOR_ROUND'])]
@@ -506,6 +508,48 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in results), server_pids=[first_pid],
                 tool_results=results, B08_semantic_acceptance='pending raw-response review of all thirty cases',
                 raw_response_review='required; structural checks alone do not establish >=90% semantic accuracy')
+        elif SUITE == 'correction':
+            phase = 'correction_original_source'
+            original, saved = await ask(sample['source'])
+            facts = [row for row in saved['memories'] if row['confirmed'] and row['content'] == sample['source']]
+            assert len(facts) == 1 and facts[0]['source']
+            target = facts[0]['id']
+            phase = 'correction_original_interaction'
+            previous, saved = await ask('你还记得' + sample['source'] + '吗？')
+            assert target in previous['diagnostics']['selected_fact_ids']
+            old_events = {row['id'] for row in saved['events'] if row['state'] == 'active'}
+            assert old_events, 'Original interaction did not create a genuine active event'
+            phase = 'correction_actual_worker_reconciliation'
+            corrected, saved = await ask('更正：' + sample['source'] + '；' + sample['replacement'])
+            current = [row for row in saved['memories'] if row['id'] == target]
+            assert len(current) == 1 and current[0]['confirmed'] and current[0]['content'] == sample['replacement']
+            assert not old_events.intersection(row['id'] for row in saved['events'] if row['state'] == 'active')
+            phase = 'correction_restart_and_third_wording'
+            await stop()
+            second_pid = await start()
+            assert first_pid != second_pid
+            recalled, saved = await ask(sample['query'])
+            assert target in recalled['diagnostics']['selected_fact_ids']
+            facts = json.loads(recalled['input']['messages'][1]['content'])['mia_context']['facts']
+            assert any(row['id'] == target and row['content'] == sample['replacement'] for row in facts)
+            assert all(row['content'] != sample['source'] for row in facts)
+            assert any(word in recalled['tts_text'] for word in sample['answer_words'])
+            assert len({original['session_id'], previous['session_id'], corrected['session_id'], recalled['session_id']}) == 4
+            phase = 'correction_delete_and_restart'
+            for row in saved['memories']:
+                await manage('delete', id=row['id'])
+            assert not (await manage('list'))['memories']
+            await stop()
+            third_pid = await start()
+            assert len({first_pid, second_pid, third_pid}) == 3
+            after_delete, saved = await ask(sample['query'])
+            assert not after_delete['diagnostics']['selected_fact_ids'] and not saved['memories']
+            assert all(row['state'] != 'active' for row in saved['events'])
+            report = json.loads(REPORT.read_text())
+            report.update(passed=True, server_pids=[first_pid, second_pid, third_pid], genuine_wss_restart=True,
+                correction_original_id=target, correction_current_fact=sample['replacement'],
+                correction_deleted_after_restart=True, correction_old_events=sorted(old_events),
+                raw_response_review='required; canonical correction/restart only, not the full in-flight/growth/trend matrix')
         else:
             phase = 'persona_identity'
             identity, saved = await ask('你是谁？')
@@ -569,7 +613,8 @@ async def drive():
             report.update(passed=False, shutdown_error_class=type(error).__name__)
         decision_keys = {'passed', 'error_class', 'failed_phase', 'error_locations', 'server_pids', 'genuine_wss_restart',
             'followup_sessions_after_event', 'actual_extraction_and_real_bge', 'deletion_removed_recall_and_event',
-            'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance'}
+            'raw_response_review', 'shutdown_error_class', 'tool_results', 'B08_semantic_acceptance',
+            'correction_original_id', 'correction_current_fact', 'correction_deleted_after_restart', 'correction_old_events'}
         decision = {key: report[key] for key in decision_keys if key in report}
         # Shutdown may finish an in-flight real request. Keep its final output
         # and count rather than overwriting it with a pre-shutdown snapshot.
