@@ -72,7 +72,7 @@ def context(store, owner, query, facts, *, session_id=None, turn_id=None):
         return active
     supporting = [fact for fact in facts if _relevant(query, fact)]
     kind = None
-    if re.search(r'^(?:(?:米娅|Mia)[,， ]*)?(?:请|以后请|我希望你|我不希望你).{0,64}(?:不要|别|不再|尊重|称呼|叫我)', query):
+    if re.search(r'^(?:(?:米娅|Mia)[,， ]*)?(?:请|以后请|我希望你|我不希望你).{0,64}(?:不要|(?<!分)别|不再|尊重|称呼|叫我)', query):
         kind = 'boundary'
     elif supporting and re.search(r'还记得|记得我|上次|之前.{0,8}说', query):
         kind = 'continuity'

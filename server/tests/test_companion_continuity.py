@@ -98,6 +98,15 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(fixture.PrivateAuthorizationRequired):
             await self.bundle(turn='revoked')
 
+    async def test_separate_tool_results_request_is_not_a_relationship_boundary(self):
+        await self.seed()
+        query = '请同时查红盒和蓝盒，分别告诉我各有几颗棋子。'
+        bundle = await self.bundle(query)
+        self.assertEqual(bundle.diagnostics()['events'], [])
+        self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_events').fetchone()[0], 0)
+        self.assertEqual((await self.bundle('请别叫我宝贝', turn='real-boundary'))
+                         .diagnostics()['events'][0]['state'], 'pending')
+
     async def test_boundary_and_reflection_need_two_sided_evidence_and_preserve_core(self):
         await self.seed()
         boundary = await self.bundle('请不要叫我宝贝', turn='boundary')
