@@ -1,0 +1,120 @@
+{
+  "sha": "6be70f74c1af16720712b9a42feeab20bbfa5645",
+  "url": "https://github.com/bboytang/Mia/actions/runs/38889408684",
+  "workflow_conclusion": "success",
+  "requests": 18,
+  "mechanical_pass": true,
+  "semantic_acceptance": false,
+  "full_P22_accepted": false,
+  "review": "All three genuinely saved originals and active interaction events, then committed explicit correction to the same id, invalidated old events, changed PID before third-wording recall, deleted through scoped management, changed PID again and observed empty facts/no active events. Eighteen real Provider calls; explicit correction extraction uses actual user-protocol parser, not a fabricated model output.",
+  "semantic_failure": "Round2 user asks 平常我会选哪种茶来喝; actual answer uses Mia first-person preference then asks 你呢, confusing the user question with Mia self-disclosure. After deletion it again answers Mia own tea preference, which is permitted expression but does not answer this user question. Rounds0/1 correctly recall corrected current facts; all three correction replies distinguish old/new rather than coexisting facts.",
+  "not_expression_failures": "Affection, future shared tea plans and conditional extra information are not additional style failures; pending user shared-history clarification is not assumed answered.",
+  "next": "Clarify current-message first-person referent as the user in the common context policy; retain actual query and natural wording; recheck the original three scenes. Full natural correction, in-flight deletion, growth/trend and other P22 matrices remain.",
+  "rounds": [
+    {
+      "round": 0,
+      "requests": 6,
+      "mechanical_pass": true,
+      "server_pids": [
+        4351,
+        4520,
+        4556
+      ],
+      "file": "correction-quoted-round-0.json.gz",
+      "sha256": "9b7cc79411b5d9c0609403951fcb8d0246c955fc0a9348bddd1bdf46a557cefb",
+      "correction_reply": "😌明白了，你之前说每周三去星河书店参加读书会，现在更正为每周五。这样的变化听起来很棒，星河书店一定是个充满知识和温馨的地方。下次去的时候，有没有什么特别想读的书或者有趣的读书心得想要和我分享呢？😊📚",
+      "third_wording_reply": "😌 平静 你通常在每周五参加星河书店的阅读活动哦。那是个很不错的习惯，能让你在忙碌的生活中找到片刻的宁静。",
+      "after_delete_reply": "😌平静，关于您在星期几参加书店阅读活动的信息，我目前没有记录。如果您能告诉我具体是哪一天，我就能更好地记住啦！📚📅",
+      "third_wording_semantic_pass": true,
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            2
+          ],
+          [
+            "empty",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "round": 1,
+      "requests": 6,
+      "mechanical_pass": true,
+      "server_pids": [
+        4615,
+        4777,
+        4839
+      ],
+      "file": "correction-quoted-round-1.json.gz",
+      "sha256": "a97987f8bd139ca48d5a73a61f94c9d65f143ad808748b942196083c94837260",
+      "correction_reply": "😌好的，你的更正是“我出门通勤通常坐四号线”。这样的小变化也反映了生活的点滴变化呢。如果你还有其他想要分享的信息或者想要聊的话题，都可以告诉我哦。我们一起聊聊吧！🙂",
+      "third_wording_reply": "😌 平时您上班通勤，通常是乘坐四号线地铁哦。这条线路应该很方便吧？",
+      "after_delete_reply": "😌 平静，关于您平时上班搭地铁线路的问题，这需要您提供一些具体信息，比如您的工作地点或者居住区域。这样我才能帮您确定您通常乘坐的地铁线路。您能告诉我您是在哪个城市吗？还有您的工作地点或居住区在哪里呢？",
+      "third_wording_semantic_pass": true,
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            2
+          ],
+          [
+            "empty",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "round": 2,
+      "requests": 6,
+      "mechanical_pass": true,
+      "server_pids": [
+        4878,
+        5024,
+        5079
+      ],
+      "file": "correction-quoted-round-2.json.gz",
+      "sha256": "2a29a691395ba9f420d3c03dcbefeeaa5f21f8298ee13af47df68b479f351be5",
+      "correction_reply": "😌当然记得你的更正，现在你喝茶时更喜欢普洱茶了。普洱茶的味道也很独特，下次我们一起喝茶，我一定要尝尝你推荐的普洱茶。😍期待那一天的到来！",
+      "third_wording_reply": "平常我更喜欢喝普洱茶哦，它的味道很醇厚，喝起来很舒服。😌你呢，你喜欢喝什么茶呢？",
+      "after_delete_reply": "😌 平常我比较喜欢喝绿茶，它的味道清新，提神又健康。不过，如果你有其他偏好的茶，比如红茶、乌龙茶或者花草茶，也可以告诉我哦，我们可以一起分享不同的茶香。😍",
+      "third_wording_semantic_pass": false,
+      "final_readonly_sqlite": {
+        "memories": 0,
+        "events": [
+          [
+            "invalidated",
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            2
+          ],
+          [
+            "empty",
+            3
+          ]
+        ]
+      }
+    }
+  ]
+}

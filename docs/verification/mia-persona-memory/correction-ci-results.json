@@ -25,11 +25,21 @@
     "review": "Old test requires one SDK call for explicit canonical reconciliation. New producer used zero calls; the failure text DB retry called the model again was an inaccurate generic assertion label. Actual rollback reached retry_wait and committed corrected fact; subsequent old-call-count assertion stopped the remaining controlled phases."
   },
   "bge_test_change": "Require zero SDK for explicit full-quotation producer; prohibit resolving extractor on DB retry and require persisted _schema validation. Keep original ordinary extraction SDK/retry check and real BGE lifecycle assertions.",
-  "bge_recheck": "awaiting push of corrected test",
+  "bge_recheck": {
+    "sha": "b198aba973d5db751a835fd57ca53602917c79d0",
+    "url": "https://github.com/bboytang/Mia/actions/runs/38889729308",
+    "conclusion": "success",
+    "runtime_unchanged_from": "6be70f74c1af16720712b9a42feeab20bbfa5645"
+  },
   "correction_live": {
     "url": "https://github.com/bboytang/Mia/actions/runs/38889408684",
     "sha": "6be70f74c1af16720712b9a42feeab20bbfa5645",
-    "status": "in_progress"
+    "status": "completed",
+    "conclusion": "success",
+    "mechanical_pass": true,
+    "semantic_acceptance": false,
+    "requests": 18,
+    "evidence": "correction-quoted-review.json"
   },
   "full_P22_accepted": false,
   "arbitrary_natural_correction": "not_accepted"

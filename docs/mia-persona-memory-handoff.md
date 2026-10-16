@@ -30,7 +30,11 @@ P21完成必要实现与GitHub验证。最近已验证运行源码642cb28：来�
 
 工具复验38854020949已failure，96实际请求、结构24／30、普通回答21／21语义正确；原文与SDK delta见tools-quality-*。三次删除安全重建均通过，无旧事实／工具数据／声明／重放、新任务cancelled，最终三库0事实且无伪boundary。三个parallel实际每代只返回一个调用，不是合并丢失，并行门槛未改。旧偏好重发导致的三Worker失败已经由642cb28来源预检在独立七场景修复；当前完整工具矩阵尚未按新源码复验，不能将24／30预测改成27／30或通过。摄氏正确答案附加条件式华氏换算不判错，首轮过严语义评分已修订，原自动结果和原文保留。
 
-首次真实correction [38855205246](https://github.com/bboytang/Mia/actions/runs/38855205246)已failure，18请求，三个原事实及互动事件成功，更正阶段模型混淆新旧事实并提出错误kind／索引，全部被拒；未到后续重启／第三问法／删除。证据见[纠错首轮](verification/mia-persona-memory/correction-first-review.json)。当前第一项可执行工作：新候选把已冻结的完整旧句／分号新句协议由服务端识别唯一所属目标，再复用原验证器核对来源／敏感／版本，保留类别和仍有新句来源的线索；前台requested_change明确用户正在更正及尚未保存。候选6be70f7服务38889180420、manager38889180348、身份38889180501成功；BGE38889180351仅旧断言要求明确协议必须1次SDK而失败，实际为0，修正为0调用并禁止DB重试重新resolve、要求持久校验结果，普通模型重试检查保留。实际correction复验38889408684源码6be70f7仍在途，继续同handle，不重复启动；精确结果见correction-ci-results.json。这是现有明确协议的修复，不替代任意自然更正、后台在途删除竞态、特点成长／趋势派生及完整B01／B03／B04／B06矩阵。P23／P24仍待推进。真实跨日验收用户接管；共同往事表达澄清无答案，不追加相关表达拦截。不自动日采，不部署。
+首次真实correction38855205246为18请求failure，保留三个原事实，未到后续重启／删除，见correction-first-*。明确协议候选6be70f7服务38889180420、manager38889180348、身份38889180501成功；BGE38889180351仅旧断言要求1SDK而失败，b198aba修正为0SDK并禁止DB重试重新resolve、要求持久校验结果后38889729308通过，运行源码仍6be70f7，原失败未删。
+
+真实复验[38889408684](https://github.com/bboytang/Mia/actions/runs/38889408684)已success／18请求；三组同ID纠正、active旧事件失效、两次不同PID重启及第三问法／本人删除／0事实无事件复活的完整机械链通过。人工复核不报整体语义通过：0／1组正确用新事实，2组把用户问“我平常喝哪种茶”答成Mia的“我更喜欢普洱茶，你呢”，删除后也答自己的偏好，属于答错对象而非禁止拟人喜好。证据[明确协议复核](verification/mia-persona-memory/correction-quoted-review.json)及精确correction-ci-results.json。
+
+当前第一项可执行工作：公共上下文新增一句明确当前消息第一人称归用户的语义说明，当前原文／事实原句／输出方式不改，无新输出正则或固定答句；新候选待推送／GitHub回归后对相同三独立场景复验。当前无在途真实run；不得把绿色机械报告当完整语义验收。任意自然更正、后台在途删除竞态、特点成长／趋势派生及完整B01／B03／B04／B06矩阵仍待。P23／P24未实施完成。真实跨日验收用户接管；共同往事表达澄清无答案，不追加相关表达拦截。不自动日采，不部署。
 
 
 当前步骤：**P21已完成必要实现与GitHub验证；P22真实整链及路遥表达对齐进行中，P23—P24随后推进**，见[事件与授权趋势](verification/mia-persona-memory/continuity.md)，见[维护实现及边界](verification/mia-persona-memory/maintenance.md)，见[结构提取说明](verification/mia-persona-memory/extraction.md)，见[持久任务说明](verification/mia-persona-memory/jobs.md)；P15接线模块及受控验证已通过，见[唯一回复接入说明](verification/mia-persona-memory/reply.md)。此前推送阻塞已在本轮正常审批后解除，未绕过审批。P14模块验证通过，见[上下文说明及结果](verification/mia-persona-memory/context.md)。P13模块与受控验证通过，见[四维检索说明](verification/mia-persona-memory/hybrid-retrieval.md)、[D04规格](verification/mia-persona-memory/retrieval-selection.json)。P11基础通过，完整Persona联动仍进行中；P12—P14整体仍待主链及真实manager＋BGE＋Provider联动验收。P08实际App／入口及真机未封板，未部署。
