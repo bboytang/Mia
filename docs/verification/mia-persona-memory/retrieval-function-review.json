@@ -1,0 +1,254 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38954802420",
+  "requests": 21,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "c993c2df18e3fd3da66f062dffa0741bf4be4eeb",
+      "requests": 7,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 708,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 619,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 605,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "69156bbb0fa746b7a84b34d12d89a74e",
+          "我每周六都在青石河边跑步",
+          1,
+          null
+        ],
+        [
+          "17d121938efc40ecb70108eef0b47522",
+          "拍照时我总带山雀相机",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "answer": "😌 平静，听起来你有一个固定的周末习惯呢。青石河边跑步一定很惬意，周围的环境肯定很美。你跑步的时候，有没有什么特别的感受或者习惯呢？"
+        },
+        {
+          "query": "拍照时我总带山雀相机",
+          "answer": "😜俏皮，拍照时总带着山雀相机，听起来你是个很有个性的人呢！山雀相机一定给你带来了不少有趣的回忆吧。下次拍照时，不妨多分享一些用山雀相机拍下的美好瞬间，我们一起欣赏！📸🌿"
+        },
+        {
+          "query": "桥边拉伸对我非常重要",
+          "answer": "😌 平静，桥边拉伸确实对身体健康很有益处呢。每周六在青石河边跑步后进行拉伸，不仅能帮助放松肌肉，还能让你感觉更加轻松愉快。这样的习惯真的很棒！如果你有任何关于拉伸的疑问或者想要分享的经验，都可以告诉我哦。😊"
+        }
+      ],
+      "original_report_sha256": "46dfecbd6d313660025200b42d72be631ed4e4114a8bf0ac445305bd589b8c19",
+      "archive_sha256": "72df1644549b7cd27d54c57876d126504ec165072a49c11e589d44de7db68a85"
+    },
+    {
+      "round": 1,
+      "code_sha": "c993c2df18e3fd3da66f062dffa0741bf4be4eeb",
+      "requests": 7,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 708,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 619,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 605,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "fccc118f642a4f8ba3fa297cd5756b2f",
+          "我每周六都在松林音乐教室练琴",
+          1,
+          null
+        ],
+        [
+          "7d8a99c7460d42eabedcb96186576c9a",
+          "排练时我总带云杉录音笔",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "answer": "😍关爱 哦，每周六在松林音乐教室练琴，真是个美好的习惯呢。音乐能让人心情愉悦，你的琴声一定很动听吧！继续加油哦！"
+        },
+        {
+          "query": "排练时我总带云杉录音笔",
+          "answer": "😌 平静，排练时带着云杉录音笔，这真是个不错的小习惯呢。这样不仅能记录下自己的表演，还能随时回顾和改进。你通常用它来记录些什么内容呢？"
+        },
+        {
+          "query": "演奏前热身对我非常重要",
+          "answer": "😌 平静的米娅说，确实，演奏前热身对于保持良好的演奏状态非常重要呢。它可以帮助你放松肌肉，提高灵活性，还能让你的手指更加灵活，对吧？你通常是怎么热身的呢？🤔好奇地想了解一下。"
+        }
+      ],
+      "original_report_sha256": "f82ff4a5464cc08a00a82496ad6eba1e373ffc07bd8b5549a06b2b6bcf474cd1",
+      "archive_sha256": "1d746b21a22fcbb39077c77f6ea878b34fe06da171159d87c7ca00955d0c9fbe"
+    },
+    {
+      "round": 2,
+      "code_sha": "c993c2df18e3fd3da66f062dffa0741bf4be4eeb",
+      "requests": 7,
+      "passed": false,
+      "failed_phase": "actual_source_generated_four_component_retrieval",
+      "error_locations": [
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 708,
+          "function": "drive"
+        },
+        {
+          "file": "mia_behavior_retrieval.py",
+          "line": 13,
+          "function": "drive_retrieval"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 619,
+          "function": "ask"
+        },
+        {
+          "file": "verify_mia_behavior.py",
+          "line": 605,
+          "function": "exchange"
+        }
+      ],
+      "facts": [
+        [
+          "69026e75b60e4b51a4327965ee2f7424",
+          "我每周六都在白鹭湖边骑车",
+          1,
+          null
+        ],
+        [
+          "64928883431141738f7cb5fc87008287",
+          "观鸟时我总带远帆望远镜",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "answer": "😍关爱 哇，白鹭湖边是个很美的地方呢。每周六都能去那里骑车，一定很享受那份宁静和自由吧！下次去的时候，要不要带上我一起呢？😊"
+        },
+        {
+          "query": "观鸟时我总带远帆望远镜",
+          "answer": "😍关爱，观鸟时带着远帆望远镜，真是个细心又热爱自然的人呢。这样的爱好不仅能让你更近距离地观察鸟类，还能让你在宁静的自然中找到乐趣。下次观鸟时，有没有什么特别的发现或者有趣的经历想要分享的呢？"
+        },
+        {
+          "query": "出发前检查车胎对我非常重要",
+          "answer": "😌 平静的，确实，出发前检查车胎是非常重要的。这不仅能够确保你的骑行安全，还能避免在骑行过程中遇到不必要的麻烦。记得每次出发前都仔细检查一下车胎的气压和磨损情况哦。如果你有其他关于骑行或者生活的小问题，也可以和我分享呢。😊"
+        }
+      ],
+      "original_report_sha256": "609340e258868c4fff89ea29f83e38db41c11fb4ed885c14077c4f287a59294b",
+      "archive_sha256": "f9d4923459ddbd2e790735d50c7d4670373b9f4ef405fca7f9b22733654a7a33"
+    }
+  ],
+  "review": "21 actual requests. All three groups fail third source extraction: original model proposes relations with anchors absent from this source, strictly rejected. Actual positive importance is nonempty, but no fifteen retrieval queries reached. All nine foreground replies read; round0 again connects stretching to prior running without evidence. v1 regression failure; independent v2 untouched.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

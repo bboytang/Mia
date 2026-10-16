@@ -1,15 +1,23 @@
 """One proposal function on the existing Provider; no tool execution or fact writes."""
 
+import unicodedata
+
 from .memory import CATEGORIES, MemoryError
 
 
 NAME = 'mia_memory_proposal'
 
 
-def tool_definition(context, *, sources, natural, growth, significance, tracking, feedback=None):
+def tool_definition(context, *, sources, natural, growth, significance, tracking, feedback=None, whole_source=False,
+                    require_importance=False):
     string = {'type': 'string'}
     ids = [row['id'] for row in context]
     identifier = dict(string, **({'enum': ids} if ids else {}))
+    normalized = [unicodedata.normalize('NFKC', source) for source in sources]
+    pairs = {source[i:i + 2] for source in normalized for i in range(len(source) - 1)}
+    related = [row['id'] for row in context if pairs.intersection(
+        row['content'][i:i + 2] for i in range(len(row['content']) - 1))]
+    related_identifier = dict(string, **({'enum': related} if related else {}))
     rejected = (feedback or {}).get('rejected_clues', {})
     def literal(field):
         item = dict(string, description='本次完整source_quote中的连续字面短语；不能压缩、拼接或改写。', maxLength=32)
@@ -27,9 +35,9 @@ def tool_definition(context, *, sources, natural, growth, significance, tracking
         'subject': {'type': 'string', 'enum': ['user']},
         'value': {'type': 'string', 'enum': ['durable']},
         'sensitive': {'type': 'boolean', 'description': '医疗/财务/身体亲密/准确住址等敏感内容为true；普通爱好/日用品本身不需确认，不因表达重视自动true。'},
-        'importance_weight': {'type': ['number', 'null'], 'minimum': 0, 'maximum': 1,
-            'description': '仅据本次明确肯定重视由模型评估数值；未表达或否定时null，与category/情绪开关无关。'},
-        'importance_evidence': {'type': ['string', 'null'], 'description': '本次原句的肯定重要性短语；未表达或否定时null。'},
+        'importance_weight': {'type': 'number', 'minimum': 0, 'maximum': 1,
+            'description': '可选；本次明确肯定重视时由模型评估数值。未表达或否定时不提供此字段。'},
+        'importance_evidence': {'type': 'string', 'description': '可选；本次原句的肯定重要性短语。未表达或否定时不提供此字段。'},
         'anchor': literal('anchor'),
         'reconciliation': {'type': 'object', 'properties': {
             'form': {'type': 'string', 'enum': ['natural']},
@@ -38,18 +46,25 @@ def tool_definition(context, *, sources, natural, growth, significance, tracking
             'old_value': literal('reconciliation.old_value'), 'new_value': literal('reconciliation.new_value'),
             'anchor': literal('reconciliation.anchor')},
             'required': ['kind', 'target_id', 'old_quote', 'evidence']},
-        'relations': {'type': 'array', 'maxItems': 4, 'items': {'type': 'object', 'properties': {
-            'target_id': identifier, 'relation': {'type': 'string', 'enum': ['shared_term']},
+        'relations': {'type': 'array', 'maxItems': 4 if related else 0,
+            'description': '仅共有连续字面主题才能关联；无可能的字面共享时必须空数组，不能凭语义猜关系。',
+            'items': {'type': 'object', 'properties': {
+            'target_id': related_identifier, 'relation': {'type': 'string', 'enum': ['shared_term']},
             'anchor': string, 'evidence': string}, 'required': ['target_id', 'relation', 'anchor', 'evidence']}}}
     for field in ('entities', 'keywords', 'trigger_terms'):
         properties[field] = {'type': 'array', 'maxItems': 8, 'items': literal(field)}
+    properties['trigger_terms']['description'] = '本次原句实际活动/场景的连续字面短语，不能只填物品名；无活动场景才可空。'
     if not significance:
         # No source has even the literal evidence required by the unchanged
         # validator. This restricts the schema, never fills a numeric value.
-        properties['importance_weight'] = {'type': 'null'}
-        properties['importance_evidence'] = {'type': 'null'}
+        properties.pop('importance_weight')
+        properties.pop('importance_evidence')
     required = ['category', 'content', 'source_index', 'source_quote', 'kind', 'subject', 'value', 'sensitive',
-                'entities', 'keywords', 'trigger_terms', 'importance_weight', 'importance_evidence', 'relations']
+                'entities', 'keywords', 'trigger_terms', 'relations']
+    if significance and require_importance:
+        required += ['importance_weight', 'importance_evidence']
+    if whole_source:
+        properties['source_quote']['enum'] = sources
     if natural:
         for field in ('content', 'source_quote'):
             properties[field]['enum'] = sources
@@ -57,17 +72,20 @@ def tool_definition(context, *, sources, natural, growth, significance, tracking
         proof['properties']['kind']['enum'] = ['correction']
         proof['required'] += ['form', 'old_value', 'new_value', 'anchor']
         required.append('reconciliation')
-    trait = {'type': 'null'}
+    trait = None
     if growth:
-        trait = {'anyOf': [{'type': 'null'}, {'type': 'object', 'properties': {
-            'name': dict(string, maxLength=32), 'description': dict(string, maxLength=256), 'anchor': string,
+        trait = {'type': 'object', 'description': '可选；仅由三个独立真实来源支持的Mia有限表达成长。无充分语义支持时省略，不生成空对象。', 'properties': {
+            'name': dict(string, maxLength=32, description='Mia在这位用户对话中的有限回应特点名称。'),
+            'description': dict(string, maxLength=256, description='Mia围绕anchor的回应倾向，含实际主题；不是用户性格诊断或虚构共同活动。'), 'anchor': string,
             'evidence_ids': {'type': 'array', 'minItems': 3, 'maxItems': 16, 'uniqueItems': True, 'items': identifier},
             'evidence_quotes': {'type': 'array', 'minItems': 3, 'maxItems': 16, 'items': {'type': 'object',
                 'properties': {'id': identifier, 'quote': string}, 'required': ['id', 'quote']}}},
-            'required': ['name', 'description', 'anchor', 'evidence_ids', 'evidence_quotes']}]}
+            'required': ['name', 'description', 'anchor', 'evidence_ids', 'evidence_quotes']}
     parameters = {'type': 'object', 'properties': {
-        'memories': {'type': 'array', 'maxItems': 16, 'items': {'type': 'object', 'properties': properties, 'required': required}},
-        'trait': trait}, 'required': ['memories', 'trait']}
+        'memories': {'type': 'array', 'maxItems': 16, 'items': {'type': 'object', 'properties': properties,
+            'required': required, 'additionalProperties': False}}}, 'required': ['memories'], 'additionalProperties': False}
+    if trait:
+        parameters['properties']['trait'] = trait
     if tracking:
         parameters['properties']['observations'] = {'type': 'array', 'maxItems': 1, 'items': {'type': 'object',
             'properties': {'source_index': properties['source_index'], 'source_quote': string,

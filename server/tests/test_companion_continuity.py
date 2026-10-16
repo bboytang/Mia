@@ -52,6 +52,27 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(await self.builder.complete(pending, self.policy, '😌我不知道你喜欢什么颜色。'), [])
         self.assertEqual(self.store.db.execute('SELECT state FROM mia_events').fetchone()[0], 'pending')
 
+    async def test_pending_event_does_not_influence_as_a_past_interaction(self):
+        await self.seed()
+        pending = await self.bundle()
+        shown = json.loads(pending.request()['messages'][1]['content'])['mia_context']['events'][0]
+        self.assertEqual(shown['state'], 'pending')
+        self.assertNotIn('influence', shown)
+        self.assertNotIn('assistant_evidence', shown)
+        self.assertNotIn('user_evidence', shown)
+        internal = json.loads(pending.inputs_json)['events'][0]
+        self.assertIn('influence', internal)
+        self.assertEqual(pending.diagnostics()['events'], [{'id': shown['id'], 'state': 'pending'}])
+        actual = '😌记得，你喜欢蓝色。'
+        self.assertEqual(await self.builder.complete(pending, self.policy, actual), [shown['id']])
+        next_turn = await self.bundle(turn='later', session='other-session')
+        active = json.loads(next_turn.request()['messages'][1]['content'])['mia_context']['events'][0]
+        self.assertEqual(active['id'], shown['id'])
+        self.assertEqual(active['state'], 'active')
+        self.assertEqual(active['user_evidence'], '你还记得我喜欢蓝色吗')
+        self.assertEqual(active['assistant_evidence'], actual)
+        self.assertEqual(active['evidence_kind'], 'completed_dialogue_quotes_only')
+
     async def test_restart_and_new_session_restore_one_active_event_without_reenactment(self):
         await self.seed()
         first = await self.bundle()

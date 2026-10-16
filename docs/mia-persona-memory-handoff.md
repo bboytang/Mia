@@ -28,6 +28,12 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- c993c2df四项已全部终态：自然纠错38954791650 success/21请求，三组同ID替换、换PID召回、删除重启无复活；faults38954807774 success/27请求，真实非空坏JSON、SDK超时、重复提交、两次失败、后续正常保存与重启召回通过。关闭只是空闲关闭，不是完整在途关闭。natural-function-*、faults-complete-*保存原文和SQL。
+- 成长38954797360 failure/27请求：第0/1组第四源原importance=1无依据被拒绝；第2组第四源第二次保存成功，到了真实trait存在断言但null。检索38954802420 failure/21请求：三组第三源原模型关联词不在新原句被拒绝，15查询未执行。growth-function-*、retrieval-function-*保存全部原文、输入、哈希和SQL。48条前台原回答已读，仍有把口误说成实际变化、无来源目击及独立活动组合；机械成功不等于完整语义通过，独立v2未消耗。
+- 下一候选：具备既有函数接口的提取都使用同一次原Provider函数提案；可选字段改为基本类型，未表达重要性/不具备成长资格则schema不声明字段，不替模型填值。实际明确第一人称肯定重要性才要求相应字段；关系目标只排除不可能满足原两字字面共同锚的记录，原校验仍决定接纳。官方文档未明确承诺nullable/anyOf，不认定其不支持或是已证明根因。原SDK/模型/两次上限/Scope/Worker不变。
+- 已复现并修复否定重要性证据裁剪漏洞（两种字段名共六负例先失败），补原提示已支持却漏掉的“重视”；双重否定/同句后续肯定仍可由原模型给证据。真实输入发现pending事件带已互动影响描述但assistant_evidence为空，改为仅状态投影；完成后同ID事件恢复实际引文，激活/失效不变。95项提取/Worker/安装接线通过（15.512秒），50项上下文/连续事件/回复通过（23.726秒）；真实候选尚待验证。CI新增实际finish_reason/usage观测及函数路径原始故障/输出记录，无输出改写。
+- 下一项提交候选，单次对应SHA运行自然纠错/成长/v1检索/faults及辅助十项，跟踪自动基础回归。P22仍缺成长及失效、完整四维/v2、语义、全服务在途关闭及最终回归；P23/P24未完成。
+
 - 最新已推送候选`c993c2df18e3fd3da66f062dffa0741bf4be4eeb`，四项各单次已确认in_progress：自然纠错[38954791650](https://github.com/bboytang/Mia/actions/runs/38954791650)、成长[38954797360](https://github.com/bboytang/Mia/actions/runs/38954797360)、v1检索[38954802420](https://github.com/bboytang/Mia/actions/runs/38954802420)、真实故障[38954807774](https://github.com/bboytang/Mia/actions/runs/38954807774)。继续同handle，不重发。先核对实际SDK是否提交schema/输出tool deltas及原参数、最终仍过原校验；任何实际效果未验证前不称修好。v2尚未执行，P22/P23/P24未完成。
 - 当前新增候选复用原Provider.response_with_functions传递一项mia_memory_proposal结构提案（不是执行工具），仅自然纠错/重要性/有来源成长任务启用；原Worker、两次总尝试、来源/Scope/版本校验及事实库不变。参数从模型原始SDK delta拼接，无字段回填；歧义/混合/超长函数提案拒绝。schema约束合法类别/类型/已有ID及服务器实际拒绝值；无重要性字面来源时只允许null，符合原校验，不填数值。其他来源原提取及不支持函数的Provider仍单次原文本路径。CI保存实际tools输入、原始tool deltas与参数；安装包纳入proposal.py。91项相关本地回归通过，真实效果待精确SHA，不能提前称问题解决。
 - 0c187fa2故障38952671390已failure/18请求：六次实际SDK超时（APITimeoutError→ReadTimeout），每用户两故障任务两尝试后failed、0事实、原事件重复submit同ID、前台在pending已送达。但max_tokens=1得到空Provider文本，未达到非空坏JSON门槛；正常恢复/重启/空闲关闭后半未执行。[原文/SQL](verification/mia-persona-memory/faults-first-review.json)。候选只将CI截断预算改为8，不制造错误响应、不降低非空坏JSON条件；实际模型/生产参数不变。

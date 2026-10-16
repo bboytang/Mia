@@ -96,6 +96,7 @@ def selected_provider(configuration, report, purpose):
         with LOCK:
             assert report['requests'] < REQUEST_CAP, 'Per-round real request budget exhausted'
             report['requests'] += 1
+            request_number = report['requests']
             report['request_kinds'].append(purpose)
             if purpose == 'reply':
                 request = json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'tools', 'max_tokens') if key in kwargs}))
@@ -107,7 +108,25 @@ def selected_provider(configuration, report, purpose):
                 report.setdefault('extraction_sdk_requests', []).append(
                     json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'tools', 'max_tokens') if key in kwargs})))
             save(report)
-        return create(*args, **kwargs)
+        response = create(*args, **kwargs)
+        if not kwargs.get('stream'):
+            return response
+        class ObservedStream:
+            def __iter__(self):
+                for chunk in response:
+                    finished = [{'index': choice.index, 'finish_reason': choice.finish_reason}
+                                for choice in (getattr(chunk, 'choices', None) or []) if choice.finish_reason]
+                    usage = getattr(chunk, 'usage', None)
+                    if finished or usage:
+                        with LOCK:
+                            report.setdefault('sdk_response_metadata', []).append({'request': request_number,
+                                'purpose': purpose, 'finished': finished,
+                                'usage': usage.model_dump(exclude_none=True) if usage else None})
+                            save(report)
+                    yield chunk
+            def close(self):
+                response.close()
+        return ObservedStream()
 
     provider.client.chat.completions.create = counted
     if purpose == 'reply':
@@ -179,13 +198,29 @@ def selected_provider(configuration, report, purpose):
                             arguments[call.index] = arguments.get(call.index, '') + (call.function.arguments or '')
                     yield content, calls
                 complete = True
+            except Exception as error:
+                if fault_mode:
+                    chain, current = [], error
+                    while current is not None and len(chain) < 8:
+                        chain.append(type(current).__name__)
+                        current = current.__cause__
+                    with LOCK:
+                        report.setdefault('fault_errors', []).append({'mode': fault_mode, 'error_chain': chain})
+                        save(report)
+                raise
             finally:
                 with LOCK:
                     report.setdefault('extraction_tool_outputs', []).append({'complete': complete, 'events': events})
+                    output = None
                     if len(arguments) == 1:
-                        report['extraction_outputs'].append(next(iter(arguments.values())))
-                    elif not arguments:
-                        report['extraction_outputs'].append(text)
+                        output = next(iter(arguments.values()))
+                    elif not arguments and (complete or events):
+                        output = text
+                    if output is not None:
+                        report['extraction_outputs'].append(output)
+                        if fault_mode:
+                            report.setdefault('fault_outputs', []).append({'mode': fault_mode, 'output': output,
+                                'max_tokens': effective['max_tokens']})
                     save(report)
 
         provider.response_with_functions = captured_function

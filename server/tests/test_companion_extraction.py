@@ -355,6 +355,25 @@ class ExtractionValidationTests(unittest.TestCase):
             self.validate('我喜欢陶杯', proposal('我喜欢陶杯', importance_weight=0.7,
                 importance_evidence='陶杯'))
 
+    def test_negated_importance_cannot_be_relabelled_by_quoting_only_the_positive_word(self):
+        for source, evidence in [('我觉得整理积木并不重要', '重要'),
+                                 ('我觉得反复换封皮没有意义', '意义'),
+                                 ('我并不在意包装纸的颜色', '在意')]:
+            for prefix in ('importance', 'emotional'):
+                with self.subTest(source=source, prefix=prefix):
+                    raw = proposal(source, **{prefix + '_weight': 0.8, prefix + '_evidence': evidence})
+                    before = json.dumps(raw)
+                    with self.assertRaises(MemoryError):
+                        self.validate(source, raw)
+                    self.assertEqual(json.dumps(raw), before)
+
+    def test_importance_negation_does_not_discard_other_actual_affirmative_evidence(self):
+        for source, evidence in [('我不在意封皮颜色，但每天阅读对我很重要', '很重要'),
+                                 ('我一直觉得这并不是不重要', '重要'),
+                                 ('我很重视修补旧书', '重视')]:
+            raw = proposal(source, importance_weight=0.63, importance_evidence=evidence)
+            self.assertEqual(self.validate(source, raw)['memories'][0]['emotional_weight'], 0.63)
+
     def test_traits_need_three_owned_versioned_sources_and_a_shared_anchor(self):
         context = [{'id': str(i), 'content': f'我在第{i}次提交前检查测试结果', 'content_version': 1,
                     'evidence_version': 1, 'evidence': [{'session_id': f's{i}', 'fingerprint': f'fp{i}'}]} for i in range(3)]

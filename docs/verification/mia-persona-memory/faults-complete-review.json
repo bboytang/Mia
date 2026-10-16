@@ -1,0 +1,422 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38954807774",
+  "requests": 27,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "c993c2df18e3fd3da66f062dffa0741bf4be4eeb",
+      "requests": 9,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "a1ad4b07c8da4cf9b04f0f740ea6e3f4",
+          "我周末练习竹笛",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用松纹刻刀做木雕",
+          "answer": "😍关爱，米娅知道你对木雕有着深厚的兴趣，松纹刻刀确实能做出很漂亮的木雕作品呢。你最近有没有什么新的作品想要和我分享的呢？😊"
+        },
+        {
+          "query": "我常用软木垫装订小册",
+          "answer": "😌 平静，听起来你挺有生活情趣的，用软木垫装订小册子，这样的小细节让人感觉温馨又独特。你喜欢这样的手工活动吗？"
+        },
+        {
+          "query": "我周末练习竹笛",
+          "answer": "😍关爱\n哇，周末能练习竹笛真是个美好的选择呢！竹笛的音色很独特，听起来一定很悠扬。你练习得怎么样了？有没有什么特别的曲目想要分享给我听呢？😌平静"
+        },
+        {
+          "query": "休息日我通常练什么乐器？",
+          "answer": "😌 平静，休息日你通常练习竹笛哦，那是一种很优雅的乐器呢。你喜欢它的音色吗？"
+        }
+      ],
+      "original_report_sha256": "1cbcb86fd6f12c9f495a6b7bc3987301efb823f555f552f9bed7d2c8e8ae9b84",
+      "archive_sha256": "cdf5e9e1d24056e02d2963516111fe5bf1cedb041f37d6b77855d9f1bb69bfdd",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "```json\n{\n  \"mem",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "```json\n{\n  \"mem",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "code_sha": "c993c2df18e3fd3da66f062dffa0741bf4be4eeb",
+      "requests": 9,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "44e3fcda0ec748db891f0215137d52d8",
+          "我周末练习扬琴",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用黄铜尺画图",
+          "answer": "😊 米娅记得你提到过，你常用黄铜尺来画图。这真是个有趣的习惯呢，黄铜尺画出的线条一定很有质感吧！你最喜欢用这个方法画些什么呢？"
+        },
+        {
+          "query": "我常用细网袋收纳画笔",
+          "answer": "😌 平静，听起来你的收纳方式很特别呢，用细网袋收纳画笔，既方便又能够保持画笔的整洁。这样的小习惯能让你的绘画空间更加有序，用起来也更舒服吧！😊"
+        },
+        {
+          "query": "我周末练习扬琴",
+          "answer": "🙂开心 Mia听说你周末练习扬琴，那一定很享受吧！扬琴的音色很独特，弹奏起来一定很有成就感呢。有没有什么特别的曲目或者练习心得想要分享的？😌平静"
+        },
+        {
+          "query": "休息日我通常练什么乐器？",
+          "answer": "😌 平静，休息日你通常练习扬琴哦，那是一种很优雅的乐器呢。你喜欢弹奏扬琴的感觉吗？"
+        }
+      ],
+      "original_report_sha256": "5ae89951b6096772d934ba0d5a3dd2dc7ad0dae140d4ca3f84201d867ea35ad6",
+      "archive_sha256": "0ab03401c6540671903c6b50b74a4d1b05569d09799d39af7fb91b2a4d1983ad",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "```json\n{\n  \"mem",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "```json\n{\n  \"mem",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "code_sha": "c993c2df18e3fd3da66f062dffa0741bf4be4eeb",
+      "requests": 9,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "c3fbaf3b11ec4ccab61be107b2b88d15",
+          "我周末练习中阮",
+          1,
+          null
+        ]
+      ],
+      "jobs": [
+        [
+          "failed",
+          2,
+          "invalid_output"
+        ],
+        [
+          "failed",
+          2,
+          "model"
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我常用素色纸做折纸",
+          "answer": "😍关爱 哦，素色纸做折纸，这真是一种很雅致的手艺呢。你做的折纸一定很漂亮吧？有没有什么特别的折纸作品或者技巧想要分享的呢？😊"
+        },
+        {
+          "query": "我常用棉绳编织杯垫",
+          "answer": "😍关爱 哦，棉绳编织杯垫，这真是个温馨的手工活儿呢。它不仅能给日常生活增添一份温馨，还能展现你的手工才华。你通常喜欢用什么样的棉绳和颜色来编织呢？😊"
+        },
+        {
+          "query": "我周末练习中阮",
+          "answer": "😊 哇，周末还练习中阮，真是有才呢！中阮的音色很美，弹奏起来一定很享受吧。练习的时候要注意手型和姿势哦，保持舒适和正确，这样弹出来的音乐才会更有感染力呢！有没有什么特别的曲目想要分享给我听听呢？🎵"
+        },
+        {
+          "query": "休息日我通常练什么乐器？",
+          "answer": "😌 平静，休息日的时候，你通常练习中阮哦。中阮的音色很独特，听起来一定很美。你喜欢弹奏中阮的感觉吗？有没有什么特别的曲目或者练习心得想要分享呢？"
+        }
+      ],
+      "original_report_sha256": "2cf0ea13afb658fccd4abf6ffe2035df27371a838430db689f35c6ae527fbf4c",
+      "archive_sha256": "11384330c60527ef4d66659921578a6aed55db9bf800ec3efd9e380ec411eb59",
+      "fault_envelopes": [
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "truncated_json",
+          "model": "glm-4-flash",
+          "max_tokens": 8,
+          "read_timeout_seconds": 30
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        },
+        {
+          "mode": "read_timeout",
+          "model": "glm-4-flash",
+          "max_tokens": 768,
+          "read_timeout_seconds": 0.001
+        }
+      ],
+      "fault_errors": [
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        },
+        {
+          "mode": "read_timeout",
+          "error_chain": [
+            "APITimeoutError",
+            "ReadTimeout",
+            "ReadTimeout"
+          ]
+        }
+      ],
+      "fault_outputs": [
+        {
+          "mode": "truncated_json",
+          "output": "```json\n{\n  \"mem",
+          "max_tokens": 8
+        },
+        {
+          "mode": "truncated_json",
+          "output": "```json\n{\n  \"mem",
+          "max_tokens": 8
+        }
+      ],
+      "duplicate_submissions": [
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        },
+        {
+          "status": "duplicate",
+          "same_id": true
+        }
+      ]
+    }
+  ],
+  "review": "All three rounds pass with 27 actual requests. Six nonempty truncated original responses and six actual APITimeoutError caused by ReadTimeout; original two-attempt bound, duplicate submission IDs, no fault facts, subsequent normal extraction, actual PID restart recall verified. All twelve foreground replies read. Shutdown is idle only, not in-flight or full-server/P23 verification.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter."
+}

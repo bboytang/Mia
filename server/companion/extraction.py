@@ -161,7 +161,13 @@ TASK_REQUEST = re.compile(r'(?:^|[，,:：])\s*(?:(?:现在)?(?:请|帮我|麻�
 LOW_VALUE = re.compile(r'^(?:你好|谢谢(?:你|您)?|非常感谢|多谢|再见|嗯+|好的?|哈哈+|早上好|晚安|hello|thanks)[。！!\s]*$|'
     r'^(?:我)?(?:今天|现在|此刻|刚刚|这会儿)(?:感觉|有点|很)?(?:开心|难过|生气|累|饿|困)', re.I)
 EXTRA_SENSITIVE = re.compile(r'过敏|年薪|月薪|薪资|账户余额|债务|高血压|确诊|用药|住院|心理治疗|生理期|\ballerg|\bincome\b', re.I)
-IMPORTANCE = re.compile(r'重要|珍惜|关键|难忘|意义|在意|铭记|\bimportant\b', re.I)
+IMPORTANCE = re.compile(r'重要|重视|珍惜|关键|难忘|意义|在意|铭记|\bimportant\b', re.I)
+NEGATED_IMPORTANCE_PREFIX = re.compile(r'(?:不(?:是|算|太|很|特别|那么|怎么|够)?|'
+    r'不(?:觉得|认为|感觉)[^，,。；;！？!?]{0,6}|没(?:有)?(?:什么|那么|太|很)?|毫无|无甚|谈不上|'
+    r'\bnot(?:\s+(?:very|really|particularly))?)\s*$', re.I)
+DOUBLE_IMPORTANCE_NEGATION = re.compile(r'(?:(?:不是|并非|没有)(?:不(?:太|很|特别|那么)?|没有|毫无)|不无)\s*$')
+SELF_IMPORTANCE = re.compile(r'对我[^，,。；;！？!?]{0,12}(?:重要|意义|在意|关键)|'
+    r'我[^，,。；;！？!?]{0,6}(?:重视|珍惜|在意|铭记)')
 CORRECTION_MARKER = re.compile(r'更正|记错|说错|口误')
 NATURAL_CORRECTION_REQUEST = re.compile(
     r'(?:之前|前面|刚才).{0,32}(?:记错|说错|口误)|更正')
@@ -169,6 +175,19 @@ NATURAL_CORRECTION_REQUEST = re.compile(
 
 def normalize(value):
     return unicodedata.normalize('NFKC', value).strip()
+
+
+def affirmative_importance_evidence(quote, evidence):
+    """Do not turn a literal negation into support by trimming its prefix."""
+    start = quote.find(evidence)
+    while start >= 0:
+        for term in IMPORTANCE.finditer(evidence):
+            position = start + term.start()
+            prefix = quote[max(0, position - 16):position]
+            if not NEGATED_IMPORTANCE_PREFIX.search(prefix) or DOUBLE_IMPORTANCE_NEGATION.search(prefix):
+                return True
+        start = quote.find(evidence, start + 1)
+    return False
 
 
 def source_supported(source, quote, *, allow_transient=False):
@@ -353,7 +372,7 @@ def validate_output(value, sources, context):
         evidence = proposed.get(prefix + '_evidence')
         if weight is not None:
             if (type(weight) not in (int, float) or not 0 <= weight <= 1 or not isinstance(evidence, str)
-                    or not evidence or evidence not in quote or not IMPORTANCE.search(evidence)):
+                    or not evidence or evidence not in quote or not affirmative_importance_evidence(quote, evidence)):
                 raise MemoryError('invalid_input', 'Unsupported emotional importance')
         record['emotional_weight'] = weight
         record['emotional_evidence'] = evidence if weight is not None else None
@@ -498,12 +517,21 @@ class LLMMemoryExtractor:
                        'existing_memories': model_context, 'emotion_tracking_enabled': bool(tracking['enabled'])}
             if feedback:
                 payload['validation_feedback'] = feedback
-            if (natural or growth or significance) and callable(getattr(type(provider), 'response_with_functions', None)):
+            if callable(getattr(type(provider), 'response_with_functions', None)):
                 from .proposal import NAME, read_stream, tool_definition
+                whole = len(sources) == 1 and source_supported(sources[0], payload['user_excerpts'][0])
+                required_importance = whole and any(affirmative_importance_evidence(payload['user_excerpts'][0], match[0])
+                    for match in SELF_IMPORTANCE.finditer(payload['user_excerpts'][0]))
                 tool = tool_definition(context, sources=payload['user_excerpts'], natural=natural, growth=growth,
-                    significance=bool(has_importance), tracking=bool(tracking['enabled']), feedback=feedback)
+                    significance=bool(has_importance), tracking=bool(tracking['enabled']), feedback=feedback,
+                    whole_source=whole, require_importance=bool(required_importance))
                 instruction += ('\nUse the ' + NAME + ' function to return this proposal. '
-                    'It only submits model-generated arguments for server validation; no action is executed and nothing is yet saved.')
+                    'It only submits model-generated arguments for server validation; no action is executed and nothing is yet saved. '
+                    'For this function schema, optional importance fields are supplied only for source-supported affirmative importance; '
+                    'otherwise omit those fields rather than inventing a number. Supply the optional trait OBJECT only if actual prior '
+                    'evidence supports it, otherwise omit it; do not invent empty traits. This optional-field form replaces null placeholders, '
+                    'not the original evidence or permission rules. Relations must be [] when the schema has maxItems:0; there is no possible '
+                    'literal shared anchor in the actual inputs then.')
                 return read_stream(provider.response_with_functions('',
                     [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
                     functions=[tool]))

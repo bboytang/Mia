@@ -52,6 +52,29 @@ class ProposalTests(unittest.TestCase):
         self.assertEqual(read_stream(iter([('{"memories":', None), ('[],"trait":null}', None)])),
                          '{"memories":[],"trait":null}')
 
+    def test_ordinary_fact_uses_same_provider_function_once_without_invented_optional_fields(self):
+        source = '我常用青瓷杯喝茶'
+        raw = json.dumps({'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
+            'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable', 'sensitive': False,
+            'entities': ['青瓷杯'], 'keywords': ['喝茶'], 'trigger_terms': ['喝茶'], 'relations': []}]}, ensure_ascii=False)
+        class Provider:
+            calls = 0
+            def response_with_functions(self, session, dialogue, functions):
+                self.calls += 1
+                self.schema = functions[0]['function']['parameters']
+                yield None, [delta(raw, NAME)]
+            def response_no_stream(self, *args):
+                raise AssertionError('No second provider request')
+        provider = Provider()
+        result = LLMMemoryExtractor(lambda: provider)([source], [])
+        self.assertEqual(result, raw)
+        self.assertEqual(provider.calls, 1)
+        memory = validate_output(result, [source], [])['memories'][0]
+        self.assertEqual(memory['content'], source)
+        self.assertIsNone(memory['emotional_weight'])
+        self.assertNotIn('trait', provider.schema['required'])
+        self.assertNotIn('importance_weight', provider.schema['properties']['memories']['items']['properties'])
+
     def test_ambiguous_wrong_mixed_or_unbounded_proposals_are_rejected_and_closed(self):
         examples = [[(None, [delta('{}', NAME, index=1)])],
                     [(None, [delta('{}', 'unrelated_action')])],
@@ -79,11 +102,23 @@ class ProposalTests(unittest.TestCase):
         properties = schema['properties']['memories']['items']['properties']
         self.assertEqual(properties['keywords']['items']['not']['enum'], ['bad value'])
         self.assertNotIn('default', properties['keywords'])
-        self.assertEqual(properties['importance_weight'], {'type': 'null'})
+        self.assertNotIn('importance_weight', properties)
+        self.assertNotIn('importance_evidence', properties)
         self.assertIn('sensitive', schema['properties']['memories']['items']['required'])
-        self.assertEqual(schema['properties']['trait']['anyOf'][1]['properties']['evidence_ids']['items']['enum'], ['owned'])
+        self.assertEqual(schema['properties']['trait']['properties']['evidence_ids']['items']['enum'], ['owned'])
         self.assertNotIn('observations', schema['properties'])
         self.assertEqual(feedback['rejected_clues'], {'keywords': ['bad value']})
+
+    def test_relation_schema_excludes_only_targets_with_no_possible_literal_anchor(self):
+        context = [{'id': 'shared', 'content': '我喜欢做陶器'}, {'id': 'unrelated', 'content': '周末湖边跑步'}]
+        props = tool_definition(context, sources=['我经常做陶器'], natural=False, growth=False,
+            significance=False, tracking=False)['function']['parameters']['properties']['memories']['items']['properties']
+        self.assertEqual(props['relations']['maxItems'], 4)
+        self.assertEqual(props['relations']['items']['properties']['target_id']['enum'], ['shared'])
+        no_match = tool_definition([context[1]], sources=['我经常做陶器'], natural=False, growth=False,
+            significance=False, tracking=False)['function']['parameters']['properties']['memories']['items']['properties']
+        self.assertEqual(no_match['relations']['maxItems'], 0)
+        self.assertEqual(context[0]['content'], '我喜欢做陶器')
 
 
 if __name__ == '__main__':

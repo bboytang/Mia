@@ -23,6 +23,7 @@ Keep self_report and inferred evidence distinct.
 用户自述的习惯不证明Mia曾亲眼见过或共同参与；实际互动仍按事件来源判断。
 多条召回事实并列不建立同一次活动、时间顺序或因果关系；只有各自实际引文支持的内容才是已知。
 facts是用户自述，events中的双方实际引文是已发生互动的来源；两者不能互换。
+互动引文证明双方说过这些话，不自动证明话中描述的外部活动或目击确实发生。
 '''
 COUNTING = 'utf8_json_bytes_plus_structure_conservative_estimate_not_tokenizer'
 
@@ -274,7 +275,12 @@ class ContextBuilder:
                 omitted['fact_ids'].append(fact['id'])
         data['events'] = []
         for event in inputs.get('events', []):
-            data['events'].append(event)
+            if event['state'] == 'pending':
+                shown = {key: event[key] for key in ('id', 'type', 'state', 'version', 'evidence_ids')}
+                shown['meaning'] = '本轮回复尚待完成，不是已经发生的双方互动，也不是过去共同活动的证据。'
+            else:
+                shown = dict(event, evidence_kind='completed_dialogue_quotes_only')
+            data['events'].append(shown)
             if not fits():
                 data['events'].pop()
         data['emotion_trend'] = inputs.get('emotion_trend', {'status': 'unavailable'})

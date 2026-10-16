@@ -88,6 +88,32 @@ async def evaluate(report, secret):
             outputs.append(output.replace(secret, '[REDACTED]') if isinstance(output, str) else 'non_text_output')
             return output
         provider.response_no_stream = capture
+        function_response = provider.response_with_functions
+        def capture_function(session, dialogue, functions=None, **kwargs):
+            system, user = dialogue[0]['content'], dialogue[1]['content']
+            report.setdefault('extraction_inputs', []).append({'system': system.replace(secret, '[REDACTED]'),
+                'user': user.replace(secret, '[REDACTED]'), 'tools': functions,
+                'system_sha256': hashlib.sha256(system.encode()).hexdigest(),
+                'user_sha256': hashlib.sha256(user.encode()).hexdigest()})
+            events, text, arguments = [], '', {}
+            complete = False
+            try:
+                for content, calls in function_response(session, dialogue, functions=functions, **kwargs):
+                    events.append({'content': content,
+                        'tool_calls': [call.model_dump(exclude_none=True) for call in calls or []]})
+                    text += content or ''
+                    for call in calls or []:
+                        if call.function:
+                            arguments[call.index] = arguments.get(call.index, '') + (call.function.arguments or '')
+                    yield content, calls
+                complete = True
+            finally:
+                report.setdefault('extraction_tool_outputs', []).append({'complete': complete, 'events': events})
+                if len(arguments) == 1:
+                    outputs.append(next(iter(arguments.values())).replace(secret, '[REDACTED]'))
+                elif not arguments and (complete or events):
+                    outputs.append(text.replace(secret, '[REDACTED]'))
+        provider.response_with_functions = capture_function
         return provider
     policy = Policy()
     policy.scope = AuthenticatedScope('user:1:agent:p17-live-fixture', 1, 1, 'p17-live-fixture', 'mia', 'device', 'client', 0, 1,
