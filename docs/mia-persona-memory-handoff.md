@@ -28,6 +28,11 @@ P00—P06已完成准备及模型初选：固定BGE base中文U8U8 ONNX／768维
 
 ### 2026-10-17 Windows 接续（当前）
 
+- 当前已发布候选61eaa416c9cfe0ba5f323ca63e243cb41c11250b，含共享关闭628ad9df及显式比较入口；服务38967452279、BGE38967452451、身份38967452410、manager38967452530及两语法均success。全服务Linux关闭/音频实测仍未执行，不能用这些基础回归代替。
+- 指定两型号各单次辅助已终态：Flash38967571902 failure/3真实请求/4项执行，前三通过，持续计划在原Worker30秒截止timeout（30033.23ms），无第三次提案/结束元数据；余6未执行，不称SDK HTTP超时。FlashX38967588609 success/7真实请求/10项全部通过，实际请求和响应型号匹配，原模型重要性0.8/肯定引文真实保存、否定null及医疗待确认正确。metadata-glm53-flash/flashx-*完整参数/usage/原文/哈希保留；两版提取/提案producer git blob确实未变。
+- FlashX真实manager/BGE三整链各单次已确认in_progress：成长[38968076242](https://github.com/bboytang/Mia/actions/runs/38968076242)、自然纠错[38968090570](https://github.com/bboytang/Mia/actions/runs/38968090570)、v1检索[38968105383](https://github.com/bboytang/Mia/actions/runs/38968105383)，均SHA61eaa416，test_model=glm-5.3-flashx。后续仅跟踪同句柄并读原回答/模型字段/SQL，不重发。辅助unit向量/policy不冒充整链或P22；生产默认/Secrets不改，用户授权仅隔离比较，v2保留。
+- 下一独立工作仍是全服务实际生命周期关闭/恢复测试：原app main、WebSocket/HTTP、GC及同一Worker共同20秒预算必须有Linux真实证据。现有受控测试不是全服务验收，不进入P23/P24完成声明。P22仍未完成。
+
 - 比较入口最终104项相关本地检查通过（20.757秒），两个workflow YAML和脚本AST通过。SDK观测补实际response_model/finish_reason/usage，缺失保持缺失，yield原chunk不变、不采推理正文。下一步发布关闭628ad9df与比较入口提交，再对两新型号各单次辅助，逐一记录精确SHA句柄；尚无新型号结果。
 
 - 用户已授权仅隔离CI比较，并明确指定glm-5.3-flash/glm-5.3-flashx。新入口用test_model显式选择，默认configured仍原测试模型；生产/Secrets不改，无自动fallback。官方仅支持开启思考，因此CI专用同Provider参数适配thinking=enabled、函数tool_stream=true，比较预算4096输出/16384保守上下文，原30秒HTTP/0 SDK retry/2 Worker attempts/语料与上限保持。实际请求参数和安全错误包络均记录；[授权与比较边界](verification/mia-persona-memory/model-comparison-authorization.md)。真实效果待执行，不等于生产采用授权。

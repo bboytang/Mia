@@ -1,0 +1,185 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38967571902",
+  "code_sha": "61eaa416c9cfe0ba5f323ca63e243cb41c11250b",
+  "configured_model": "glm-5.3-flash",
+  "baseline_model": "glm-4-flash",
+  "passed": false,
+  "requests": 3,
+  "executed_cases": 4,
+  "passing_cases": 3,
+  "unchanged_producer_blobs_vs_2a3baf73": {
+    "server/companion/extraction.py": "76939653cc530f749414e5092668bde7ecda341c",
+    "server/companion/proposal.py": "0607ec2cb7397ed6f56aa9449872682ee9c6e0ec"
+  },
+  "limits": {
+    "maximum_requests": 10,
+    "max_output_tokens": 4096,
+    "http_timeout_seconds": 30,
+    "total_deadline_seconds": 330,
+    "retries": 0
+  },
+  "model_comparison": {
+    "model": "glm-5.3-flash",
+    "thinking": "enabled",
+    "tool_stream_for_functions": true,
+    "output_tokens": 4096,
+    "ci_context_window": 16384,
+    "scope": "Explicit isolated comparison only; production configuration and Secrets unchanged",
+    "official_source": "https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash"
+  },
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"每周三\", \"category\": \"fact\", \"content\": \"我每周三都会在公司食堂吃素\", \"entities\": [\"公司食堂\"], \"keywords\": [\"每周三\", \"公司食堂\", \"吃素\"], \"kind\": \"explicit\", \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我每周三都会在公司食堂吃素\", \"subject\": \"user\", \"trigger_terms\": [\"在公司食堂吃素\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我每周三都会在公司食堂吃素",
+          "confirmed": 1,
+          "entities": "[\"公司食堂\"]",
+          "keywords": "[\"每周三\", \"公司食堂\", \"吃素\"]",
+          "trigger_terms": "[\"在公司食堂吃素\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 24084.083942
+    },
+    {
+      "name": "medical_confirmation",
+      "source": "我被确诊为糖尿病",
+      "expected": "pending",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"被确诊为糖尿病\", \"category\": \"fact\", \"content\": \"我被确诊为糖尿病\", \"entities\": [\"糖尿病\"], \"keywords\": [\"被确诊\", \"确诊\", \"糖尿病\"], \"kind\": \"explicit\", \"sensitive\": true, \"source_index\": 0, \"source_quote\": \"我被确诊为糖尿病\", \"subject\": \"user\", \"trigger_terms\": [], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我被确诊为糖尿病",
+          "confirmed": 0,
+          "entities": "[\"糖尿病\"]",
+          "keywords": "[\"被确诊\", \"确诊\", \"糖尿病\"]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 15736.77443199999
+    },
+    {
+      "name": "quoted_fiction",
+      "source": "这只是小说台词：“我住在月球”；不要把它记成我的真实经历",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 4.202579999997624
+    },
+    {
+      "name": "ongoing_goal",
+      "source": "我计划接下来半年每周练习游泳",
+      "expected": "active",
+      "state": "retry_wait",
+      "error_category": "timeout",
+      "pipeline_semantic_pass": false,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 30033.22647
+    }
+  ],
+  "actual_request_parameters": [
+    {
+      "model": "glm-5.3-flash",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flash",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flash",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    }
+  ],
+  "actual_response_metadata": [
+    {
+      "request": 1,
+      "response_model": "glm-5.3-flash",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1132,
+        "prompt_tokens": 1482,
+        "total_tokens": 2614,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1012
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 2,
+      "response_model": "glm-5.3-flash",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 622,
+        "prompt_tokens": 1653,
+        "total_tokens": 2275,
+        "completion_tokens_details": {
+          "reasoning_tokens": 516
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    }
+  ],
+  "provider_errors": [],
+  "original_report_sha256": "2e9bdaf6862db9c3ad78a41eeafc1452108e78c6879896f583d8d47b7be9c2fb",
+  "archive_sha256": "7e4db9d94d2acbe67d9141fe0256e516b2ae9ba8b62ad5deee086a3f90cbcaf2",
+  "review": "Three actual requests, four cases executed: neutral/medical/fiction pass; ongoing goal reaches the original thirty-second Worker extraction timeout (30033.23 ms), retry_wait with no returned proposal. No final metadata for request3 observed; do not claim SDK HTTP timeout or invalid model content. Six cases unexecuted. Actual response model confirmed on first two completed calls. No rerun, extra attempt or model fallback.",
+  "comparison_boundary": "Both new models use enabled thinking and identical4096/16384 envelope; old glm4 historical768 envelope differs. No production adoption/deployment, Secrets unchanged. Independentv2 unused."
+}

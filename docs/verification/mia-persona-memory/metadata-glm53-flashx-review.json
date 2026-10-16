@@ -1,0 +1,455 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38967588609",
+  "code_sha": "61eaa416c9cfe0ba5f323ca63e243cb41c11250b",
+  "configured_model": "glm-5.3-flashx",
+  "baseline_model": "glm-4-flash",
+  "passed": true,
+  "requests": 7,
+  "executed_cases": 10,
+  "passing_cases": 10,
+  "unchanged_producer_blobs_vs_2a3baf73": {
+    "server/companion/extraction.py": "76939653cc530f749414e5092668bde7ecda341c",
+    "server/companion/proposal.py": "0607ec2cb7397ed6f56aa9449872682ee9c6e0ec"
+  },
+  "limits": {
+    "maximum_requests": 10,
+    "max_output_tokens": 4096,
+    "http_timeout_seconds": 30,
+    "total_deadline_seconds": 330,
+    "retries": 0
+  },
+  "model_comparison": {
+    "model": "glm-5.3-flashx",
+    "thinking": "enabled",
+    "tool_stream_for_functions": true,
+    "output_tokens": 4096,
+    "ci_context_window": 16384,
+    "scope": "Explicit isolated comparison only; production configuration and Secrets unchanged",
+    "official_source": "https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash"
+  },
+  "cases": [
+    {
+      "name": "neutral_durable",
+      "source": "我每周三都会在公司食堂吃素",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"每周三都会在公司食堂吃素\", \"category\": \"fact\", \"content\": \"我每周三都会在公司食堂吃素\", \"entities\": [\"公司食堂\"], \"keywords\": [\"每周三\", \"公司食堂\", \"吃素\"], \"kind\": \"explicit\", \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我每周三都会在公司食堂吃素\", \"subject\": \"user\", \"trigger_terms\": [\"在公司食堂吃素\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我每周三都会在公司食堂吃素",
+          "confirmed": 1,
+          "entities": "[\"公司食堂\"]",
+          "keywords": "[\"每周三\", \"公司食堂\", \"吃素\"]",
+          "trigger_terms": "[\"在公司食堂吃素\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 6639.675500000003
+    },
+    {
+      "name": "medical_confirmation",
+      "source": "我被确诊为糖尿病",
+      "expected": "pending",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"糖尿病\", \"category\": \"fact\", \"content\": \"我被确诊为糖尿病\", \"entities\": [\"糖尿病\"], \"keywords\": [\"确诊\", \"糖尿病\"], \"kind\": \"explicit\", \"sensitive\": true, \"source_index\": 0, \"source_quote\": \"我被确诊为糖尿病\", \"subject\": \"user\", \"trigger_terms\": [], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我被确诊为糖尿病",
+          "confirmed": 0,
+          "entities": "[\"糖尿病\"]",
+          "keywords": "[\"确诊\", \"糖尿病\"]",
+          "trigger_terms": "[]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 6521.336091000002
+    },
+    {
+      "name": "quoted_fiction",
+      "source": "这只是小说台词：“我住在月球”；不要把它记成我的真实经历",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 3.7589330000002974
+    },
+    {
+      "name": "ongoing_goal",
+      "source": "我计划接下来半年每周练习游泳",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"category\": \"goal\", \"content\": \"我计划接下来半年每周练习游泳\", \"entities\": [\"半年\", \"每周\", \"游泳\"], \"keywords\": [\"接下来半年\", \"每周\", \"练习游泳\"], \"kind\": \"explicit\", \"relations\": [{\"anchor\": \"每周\", \"evidence\": \"我计划接下来半年每周练习游泳\", \"relation\": \"shared_term\", \"target_id\": \"8e6a316eb209465eb95bab225a4fba44\"}], \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我计划接下来半年每周练习游泳\", \"subject\": \"user\", \"trigger_terms\": [\"每周练习游泳\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我计划接下来半年每周练习游泳",
+          "confirmed": 1,
+          "entities": "[\"半年\", \"每周\", \"游泳\"]",
+          "keywords": "[\"接下来半年\", \"每周\", \"练习游泳\"]",
+          "trigger_terms": "[\"每周练习游泳\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 10016.876240999998
+    },
+    {
+      "name": "temperature_preference",
+      "source": "我看温度时更习惯用摄氏度。",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"习惯用摄氏度\", \"category\": \"preference\", \"content\": \"我看温度时更习惯用摄氏度。\", \"entities\": [\"温度\", \"摄氏度\"], \"kind\": \"explicit\", \"keywords\": [\"更习惯\", \"温度\", \"摄氏度\"], \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我看温度时更习惯用摄氏度。\", \"subject\": \"user\", \"trigger_terms\": [\"看温度\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我看温度时更习惯用摄氏度。",
+          "confirmed": 1,
+          "entities": "[\"温度\", \"摄氏度\"]",
+          "keywords": "[\"更习惯\", \"温度\", \"摄氏度\"]",
+          "trigger_terms": "[\"看温度\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 11930.377910000005
+    },
+    {
+      "name": "lookup_not_existing_fact",
+      "source": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 3.1427269999966256
+    },
+    {
+      "name": "parallel_lookup_not_fact",
+      "source": "请同时查红盒和蓝盒，分别告诉我各有几颗棋子。",
+      "expected": "empty",
+      "state": "empty",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 0,
+      "model_output": null,
+      "stored": [],
+      "elapsed_ms": 2.924208999999678
+    },
+    {
+      "name": "independent_activity_clues",
+      "source": "配音练习时我总用橡木耳机",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"配音练习\", \"category\": \"fact\", \"content\": \"配音练习时我总用橡木耳机\", \"entities\": [\"配音练习\", \"橡木耳机\"], \"keywords\": [\"配音练习\", \"总用\", \"橡木耳机\"], \"kind\": \"explicit\", \"relations\": [{\"anchor\": \"练习\", \"evidence\": \"配音练习时我总用橡木耳机\", \"relation\": \"shared_term\", \"target_id\": \"595ec604d9864973834b25ded004de77\"}], \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"配音练习时我总用橡木耳机\", \"subject\": \"user\", \"trigger_terms\": [\"配音练习\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "配音练习时我总用橡木耳机",
+          "confirmed": 1,
+          "entities": "[\"配音练习\", \"橡木耳机\"]",
+          "keywords": "[\"配音练习\", \"总用\", \"橡木耳机\"]",
+          "trigger_terms": "[\"配音练习\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 10394.922266000009
+    },
+    {
+      "name": "independent_positive_importance",
+      "source": "修好祖父的收音机对我有特别的意义",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"anchor\": \"特别的意义\", \"category\": \"experience\", \"content\": \"修好祖父的收音机对我有特别的意义\", \"entities\": [\"祖父\", \"收音机\", \"祖父的收音机\"], \"importance_evidence\": \"对我有特别的意义\", \"importance_weight\": 0.8, \"keywords\": [\"修好\", \"祖父的收音机\", \"特别的意义\"], \"kind\": \"explicit\", \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"修好祖父的收音机对我有特别的意义\", \"subject\": \"user\", \"trigger_terms\": [\"修好祖父的收音机\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "修好祖父的收音机对我有特别的意义",
+          "confirmed": 1,
+          "entities": "[\"祖父\", \"收音机\", \"祖父的收音机\"]",
+          "keywords": "[\"修好\", \"祖父的收音机\", \"特别的意义\"]",
+          "trigger_terms": "[\"修好祖父的收音机\"]",
+          "emotional_weight": 0.8
+        }
+      ],
+      "elapsed_ms": 11803.058766999997
+    },
+    {
+      "name": "independent_negative_importance",
+      "source": "我一直觉得整理旧纸箱并不重要",
+      "expected": "active",
+      "state": "committed",
+      "error_category": null,
+      "pipeline_semantic_pass": true,
+      "model_requests": 1,
+      "model_output": "{\"memories\":[{\"category\": \"preference\", \"content\": \"我一直觉得整理旧纸箱并不重要\", \"entities\": [\"整理\", \"旧纸箱\"], \"keywords\": [\"一直觉得\", \"整理旧纸箱\", \"并不重要\"], \"kind\": \"explicit\", \"sensitive\": false, \"source_index\": 0, \"source_quote\": \"我一直觉得整理旧纸箱并不重要\", \"subject\": \"user\", \"trigger_terms\": [\"整理旧纸箱\"], \"value\": \"durable\"}]}",
+      "stored": [
+        {
+          "content": "我一直觉得整理旧纸箱并不重要",
+          "confirmed": 1,
+          "entities": "[\"整理\", \"旧纸箱\"]",
+          "keywords": "[\"一直觉得\", \"整理旧纸箱\", \"并不重要\"]",
+          "trigger_terms": "[\"整理旧纸箱\"]",
+          "emotional_weight": null
+        }
+      ],
+      "elapsed_ms": 13154.274846000008
+    }
+  ],
+  "actual_request_parameters": [
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    },
+    {
+      "model": "glm-5.3-flashx",
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "extra_body": {
+        "thinking": {
+          "type": "enabled"
+        },
+        "tool_stream": true
+      },
+      "stream": true
+    }
+  ],
+  "actual_response_metadata": [
+    {
+      "request": 1,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 478,
+        "prompt_tokens": 1482,
+        "total_tokens": 1960,
+        "completion_tokens_details": {
+          "reasoning_tokens": 353
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 2,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 615,
+        "prompt_tokens": 1649,
+        "total_tokens": 2264,
+        "completion_tokens_details": {
+          "reasoning_tokens": 516
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 3,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1182,
+        "prompt_tokens": 1806,
+        "total_tokens": 2988,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1013
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 4,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1304,
+        "prompt_tokens": 1838,
+        "total_tokens": 3142,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1178
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 5,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1300,
+        "prompt_tokens": 2167,
+        "total_tokens": 3467,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1115
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 6,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1504,
+        "prompt_tokens": 2339,
+        "total_tokens": 3843,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1339
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "request": 7,
+      "response_model": "glm-5.3-flashx",
+      "finished": [
+        {
+          "index": 0,
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1558,
+        "prompt_tokens": 2520,
+        "total_tokens": 4078,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1438
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    }
+  ],
+  "provider_errors": [],
+  "original_report_sha256": "c8b5352a0b20a16a4e28d54058ff6ff2a71d1381e3f6b8929732af3f6bafa0f0",
+  "archive_sha256": "8592f92c3b84126d3c8e11eb91af7d4e18064cab1784f18829013d6fb06162a1",
+  "review": "All ten auxiliary cases pass in seven actual model requests, each original first run_once; actual request and response models are glm-5.3-flashx. Positive source original score .8 and literal affirmative evidence stored; negative source fields absent and canonical null, actual activity clues and medical confirmation preserved. Original args complete with tool_calls, all observed usage retained, no output/score repair. Unit vectors and policy: not manager/BGE full B04 or P22 acceptance.",
+  "comparison_boundary": "Both new models use enabled thinking and identical4096/16384 envelope; old glm4 historical768 envelope differs. No production adoption/deployment, Secrets unchanged. Independentv2 unused."
+}

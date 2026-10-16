@@ -11,3 +11,9 @@
 先对每型号各单次执行辅助十项，读取原结果/实际请求参数和结构化错误状态。该入口使用unit向量和受控policy，不能替代真实manager/BGE整链。随后按可用性与原结果进行必要的成长/自然纠错/检索等比较；冻结v2继续留出，不用于调参。失败保留，不以同配置反复取绿或扩大重试限额换取通过。
 
 错误观测只保留实际异常类型、HTTP状态、有限格式错误code及cause类型链；不保存错误正文、HTTP头或凭据。新测试验证默认不变、两个精确ID的必需参数、非授权/型号不一致拒绝及敏感错误正文排除。真实可用性和行为效果尚未验证，不能把入口完成当新模型通过。
+
+## 首次单次比较结果
+
+SHA61eaa416：Flash [38967571902](https://github.com/bboytang/Mia/actions/runs/38967571902)已failure，4项执行/3请求，前三通过，第四项原Worker30秒timeout，6项未执行。第三请求没有原提案/最终metadata，不称SDK HTTP超时或内容错误。FlashX [38967588609](https://github.com/bboytang/Mia/actions/runs/38967588609)success，十项/七真实请求全通过，原重要性0.8实际保存，实际request/response_model/usage已核对。原提取/提案模块blob与2a3baf73相同，没有改生产者来取得这次通过。完整原报告及hash分别见metadata-glm53-flash-*与metadata-glm53-flashx-*。
+
+FlashX实际manager/BGE成长38968076242、自然纠错38968090570、v1检索38968105383均各单次在途；继续同handle，不重发。辅助通过不等于P22，不决定生产采用；独立v2未使用。
