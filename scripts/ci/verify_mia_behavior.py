@@ -73,12 +73,14 @@ def save(report):
 
 
 def selected_provider(configuration, report, purpose):
+    from mia_model_comparison import configure_provider, safe_provider_error
     assert configuration['api_key'] == os.environ['MIA_TEST_LLM_API_KEY']
     assert configuration['model_name'] == os.environ['MIA_TEST_LLM_MODEL']
     assert configuration['base_url'] == os.environ['MIA_TEST_LLM_BASE_URL']
     fault_mode = report.get('fault_mode') if SUITE == 'faults' and purpose == 'extraction' else None
     effective = dict(configuration, max_tokens=8) if fault_mode == 'truncated_json' else configuration
     provider = create_instance(effective['type'], effective)
+    report['model_comparison'] = configure_provider(provider)
     original = provider.client
     timeout = httpx.Timeout(connect=3, write=3, pool=3, read=.001) if fault_mode == 'read_timeout' else 30
     provider.client = original.with_options(max_retries=0, timeout=timeout,
@@ -99,16 +101,23 @@ def selected_provider(configuration, report, purpose):
             request_number = report['requests']
             report['request_kinds'].append(purpose)
             if purpose == 'reply':
-                request = json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'tools', 'max_tokens') if key in kwargs}))
+                request = json.loads(json.dumps({key: kwargs[key] for key in ('model', 'messages', 'tools', 'max_tokens', 'temperature', 'top_p', 'extra_body') if key in kwargs}))
                 turn = getattr(provider._mia_connection, '_mia_context_turn', None)
                 request['diagnostics'] = turn.bundle.diagnostics() if turn else None
                 provider._mia_requests.append(request)
                 report.setdefault('sdk_requests', []).append(request)
             else:
                 report.setdefault('extraction_sdk_requests', []).append(
-                    json.loads(json.dumps({key: kwargs[key] for key in ('messages', 'tools', 'max_tokens') if key in kwargs})))
+                    json.loads(json.dumps({key: kwargs[key] for key in ('model', 'messages', 'tools', 'max_tokens', 'temperature', 'top_p', 'extra_body') if key in kwargs})))
             save(report)
-        response = create(*args, **kwargs)
+        try:
+            response = create(*args, **kwargs)
+        except Exception as error:
+            with LOCK:
+                report.setdefault('provider_errors', []).append(dict(safe_provider_error(error),
+                    stage='sdk_request', request=request_number, purpose=purpose))
+                save(report)
+            raise
         if not kwargs.get('stream'):
             return response
         class ObservedStream:
@@ -120,6 +129,7 @@ def selected_provider(configuration, report, purpose):
                     if finished or usage:
                         with LOCK:
                             report.setdefault('sdk_response_metadata', []).append({'request': request_number,
+                                'response_model': getattr(chunk, 'model', None),
                                 'purpose': purpose, 'finished': finished,
                                 'usage': usage.model_dump(exclude_none=True) if usage else None})
                             save(report)
@@ -165,6 +175,9 @@ def selected_provider(configuration, report, purpose):
             try:
                 value = response(*args, **kwargs)
             except Exception as error:
+                with LOCK:
+                    report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), stage='text_stream'))
+                    save(report)
                 if fault_mode:
                     chain, current = [], error
                     while current is not None and len(chain) < 8:
@@ -199,6 +212,9 @@ def selected_provider(configuration, report, purpose):
                     yield content, calls
                 complete = True
             except Exception as error:
+                with LOCK:
+                    report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), stage='function_stream'))
+                    save(report)
                 if fault_mode:
                     chain, current = [], error
                     while current is not None and len(chain) < 8:
@@ -348,8 +364,9 @@ async def serve():
             llm = conn.llm = selected_provider(model, report, 'reply')
             llm._mia_connection = conn
             profile = ROOT / 'context-profile.json'
+            from mia_model_comparison import context_window
             profile.write_text(json.dumps({'provider_module': type(llm).__module__, 'model': llm.model_name,
-                'base_url': llm.base_url, 'context_window': 8192,
+                'base_url': llm.base_url, 'context_window': context_window(),
                 'capacity_source': 'Isolated short-request CI envelope; not verified production capacity'}))
             os.environ['MIA_CONTEXT_PROFILE_FILE'] = str(profile)
             conn._mia_context_builder = ContextBuilder(index)
@@ -560,6 +577,7 @@ async def serve():
 
 
 async def drive():
+    from mia_model_comparison import output_tokens
     from websockets.asyncio.client import connect
     fixture_name = {'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
@@ -576,12 +594,13 @@ async def drive():
         'dataset_sha256': hashlib.sha256(fixture_path.read_bytes()).hexdigest(), 'requests': 0, 'request_kinds': [],
         'cases': [], 'extraction_outputs': [], 'passed': False, 'server_pids': [],
         'scope': 'Actual manager TLS authorization, WSS bridge restart, existing Provider SDK, BGE and SQLite; synthetic users; audio consumers omitted',
-        'limits': {'requests_per_round': REQUEST_CAP, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': 768},
+        'limits': {'requests_per_round': REQUEST_CAP, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': output_tokens()},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
         'background_lifecycle': 'installed start_worker/stop_worker; no manual task pumping',
         'persona_reference': 'insistgang/Luyao_AI_Project@e23c3aa25d6451e3f35e71609864bb3a54ad49a0; user requested no additional expression gate',
         'production_capacity': 'unverified; isolated short-request envelope only',
         'configured_model': os.environ['MIA_TEST_LLM_MODEL'],
+        'baseline_model': os.environ.get('MIA_TEST_LLM_BASELINE_MODEL', os.environ['MIA_TEST_LLM_MODEL']),
         'embedding': {'model_id': reply._encoder.model_id, 'revision': reply._encoder.revision, 'dimension': reply._encoder.dimension}}
     save(report)
     transport = AuthManager('synthetic-behavior-transport')

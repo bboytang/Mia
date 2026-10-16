@@ -59,23 +59,55 @@ def deadline(*unused):
 
 
 async def evaluate(report, secret):
+    from mia_model_comparison import selected_model, output_tokens, configure_provider, safe_provider_error
     base, model = os.environ['MIA_TEST_LLM_BASE_URL'], os.environ['MIA_TEST_LLM_MODEL']
+    baseline = model
+    model = selected_model(baseline)
     url = urlsplit(base)
     if (not secret or url.scheme != 'https' or not url.hostname or url.username or url.password
             or url.query or url.fragment):
         raise ValueError('Dedicated HTTPS test configuration is missing or invalid')
-    report.update(provider_host=url.hostname, configured_model=model)
+    report.update(provider_host=url.hostname, configured_model=model, baseline_model=baseline)
+    report['limits']['max_output_tokens'] = output_tokens()
     outputs = []
     def factory():
         if report['requests'] >= 10:
             raise ValueError('P17 request budget exhausted')
         report['requests'] += 1
-        provider = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': 768,
+        provider = LLMProvider({'api_key': secret, 'base_url': base, 'model_name': model, 'max_tokens': output_tokens(),
                                 'temperature': 0.1, 'timeout': 30})
+        report['model_comparison'] = configure_provider(provider)
         original = provider.client
         provider.client = original.with_options(max_retries=0,
             http_client=httpx.Client(timeout=30, follow_redirects=False))
         original.close()
+        create = provider.client.chat.completions.create
+        def observe_request(*args, **kwargs):
+            report.setdefault('sdk_request_parameters', []).append({key: kwargs[key] for key in
+                ('model', 'max_tokens', 'temperature', 'top_p', 'extra_body', 'stream') if key in kwargs})
+            request_number = len(report['sdk_request_parameters'])
+            try:
+                response = create(*args, **kwargs)
+            except Exception as error:
+                report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), stage='sdk_request'))
+                raise
+            if not kwargs.get('stream'):
+                return response
+            class ObservedStream:
+                def __iter__(self):
+                    for chunk in response:
+                        finished = [{'index': choice.index, 'finish_reason': choice.finish_reason}
+                                    for choice in (getattr(chunk, 'choices', None) or []) if choice.finish_reason]
+                        usage = getattr(chunk, 'usage', None)
+                        if finished or usage:
+                            report.setdefault('sdk_response_metadata', []).append({'request': request_number,
+                                'response_model': getattr(chunk, 'model', None), 'finished': finished,
+                                'usage': usage.model_dump(exclude_none=True) if usage else None})
+                        yield chunk
+                def close(self):
+                    response.close()
+            return ObservedStream()
+        provider.client.chat.completions.create = observe_request
         original_response = provider.response_no_stream
         def capture(system, user):
             report.setdefault('extraction_inputs', []).append({
@@ -107,6 +139,9 @@ async def evaluate(report, secret):
                             arguments[call.index] = arguments.get(call.index, '') + (call.function.arguments or '')
                     yield content, calls
                 complete = True
+            except Exception as error:
+                report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), stage='function_stream'))
+                raise
             finally:
                 report.setdefault('extraction_tool_outputs', []).append({'complete': complete, 'events': events})
                 if len(arguments) == 1:

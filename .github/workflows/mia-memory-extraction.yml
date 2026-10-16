@@ -4,13 +4,21 @@ on:
     paths:
       - 'server/companion/extraction.py'
       - 'scripts/ci/verify_mia_extraction_provider.py'
+      - 'scripts/ci/mia_model_comparison.py'
       - '.github/workflows/mia-memory-extraction.yml'
   pull_request:
     paths:
       - 'server/companion/extraction.py'
       - 'scripts/ci/verify_mia_extraction_provider.py'
+      - 'scripts/ci/mia_model_comparison.py'
       - '.github/workflows/mia-memory-extraction.yml'
   workflow_dispatch:
+    inputs:
+      test_model:
+        description: Explicit isolated comparison only; configured preserves existing test model
+        type: choice
+        options: [configured, glm-5.3-flash, glm-5.3-flashx]
+        default: configured
 permissions:
   contents: read
 jobs:
@@ -22,6 +30,7 @@ jobs:
         with:
           python-version: '3.10'
       - run: python -m py_compile scripts/ci/verify_mia_extraction_provider.py server/companion/extraction.py
+      - run: python -m py_compile scripts/ci/mia_model_comparison.py
   live:
     if: github.event_name == 'workflow_dispatch'
     needs: syntax
@@ -46,6 +55,7 @@ jobs:
           MIA_TEST_LLM_API_KEY: ${{ secrets.MIA_TEST_LLM_API_KEY }}
           MIA_TEST_LLM_BASE_URL: ${{ secrets.MIA_TEST_LLM_BASE_URL }}
           MIA_TEST_LLM_MODEL: ${{ secrets.MIA_TEST_LLM_MODEL }}
+          MIA_TEST_MODEL_OVERRIDE: ${{ inputs.test_model != 'configured' && inputs.test_model || '' }}
         run: python scripts/ci/verify_mia_extraction_provider.py
       - uses: actions/upload-artifact@v4
         if: always()

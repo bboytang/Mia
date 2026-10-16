@@ -63,6 +63,13 @@ class MiaBehaviorIntegrationTest {
         String key = System.getenv("MIA_TEST_LLM_API_KEY");
         String endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
         String model = System.getenv("MIA_TEST_LLM_MODEL");
+        String baselineModel = model;
+        String comparisonModel = System.getenv().getOrDefault("MIA_TEST_MODEL_OVERRIDE", "");
+        if (!comparisonModel.isBlank()) {
+            assertTrue(comparisonModel.equals("glm-5.3-flash") || comparisonModel.equals("glm-5.3-flashx"),
+                "Unapproved isolated comparison model");
+            model = comparisonModel;
+        }
         String suite = System.getenv().getOrDefault("MIA_BEHAVIOR_SUITE", "continuity");
         assertTrue(suite.equals("continuity") || suite.equals("growth") || suite.equals("scope") || suite.equals("faults") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("inflight") || suite.equals("recovery"));
         assertNotNull(key, "Dedicated test provider not configured");
@@ -73,7 +80,8 @@ class MiaBehaviorIntegrationTest {
             && uri.getQuery() == null && uri.getFragment() == null, "Invalid dedicated HTTPS test endpoint");
         String selected = "LLM_MiaBehavior";
         String configuration = mapper.writeValueAsString(Map.of("type", "openai", "api_key", key,
-            "base_url", endpoint, "model_name", model, "max_tokens", 768, "temperature", 0.1, "timeout", 30));
+            "base_url", endpoint, "model_name", model, "max_tokens", comparisonModel.isBlank() ? 768 : 4096,
+            "temperature", 0.1, "timeout", 30));
         db.update("DELETE FROM ai_model_config WHERE id=?", selected);
         db.update("INSERT INTO ai_model_config(id,model_type,model_code,model_name,is_default,is_enabled,config_json,sort) VALUES (?,'LLM','openai','Mia isolated behavior',0,1,?,999)", selected, configuration);
         boolean passed = true;
@@ -94,6 +102,8 @@ class MiaBehaviorIntegrationTest {
             assertEquals(0, grant.path("code").asInt());
             ProcessBuilder process = new ProcessBuilder("python", System.getenv("MIA_BEHAVIOR_SCRIPT")).redirectErrorStream(true);
             var env = process.environment();
+            env.put("MIA_TEST_LLM_MODEL", model);
+            env.put("MIA_TEST_LLM_BASELINE_MODEL", baselineModel);
             env.put("MIA_SCOPE_MANAGER_URL", base() + "/");
             env.put("MIA_SCOPE_SERVER_SECRET", params.getValue("server.secret", false));
             env.put("MIA_SCOPE_DEVICE", device);

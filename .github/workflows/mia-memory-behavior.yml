@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'scripts/ci/verify_mia_behavior.py'
+      - 'scripts/ci/mia_model_comparison.py'
       - 'scripts/ci/mia_behavior_tools.py'
       - 'scripts/ci/mia_behavior_retrieval.py'
       - 'scripts/ci/mia_behavior_inflight.py'
@@ -25,6 +26,7 @@ on:
   pull_request:
     paths:
       - 'scripts/ci/verify_mia_behavior.py'
+      - 'scripts/ci/mia_model_comparison.py'
       - 'scripts/ci/mia_behavior_tools.py'
       - 'scripts/ci/mia_behavior_retrieval.py'
       - 'scripts/ci/mia_behavior_inflight.py'
@@ -51,6 +53,11 @@ on:
         type: choice
         options: [continuity, growth, scope, faults, tools, correction, natural_correction, retrieval, retrieval_holdout, inflight, recovery]
         default: continuity
+      test_model:
+        description: Explicit isolated comparison only; configured preserves existing test model
+        type: choice
+        options: [configured, glm-5.3-flash, glm-5.3-flashx]
+        default: configured
 permissions:
   contents: read
 jobs:
@@ -62,6 +69,7 @@ jobs:
         with:
           python-version: '3.10'
       - run: python -m py_compile scripts/ci/verify_mia_behavior.py
+      - run: python -m py_compile scripts/ci/mia_model_comparison.py
       - run: python -m py_compile scripts/ci/mia_behavior_tools.py
       - run: python -m py_compile scripts/ci/mia_behavior_retrieval.py
       - run: python -m py_compile scripts/ci/mia_behavior_inflight.py
@@ -92,6 +100,7 @@ jobs:
       MIA_EMBEDDING_DIR: /tmp/mia-behavior-model
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
       MIA_BEHAVIOR_SUITE: ${{ inputs.suite || 'continuity' }}
+      MIA_TEST_MODEL_OVERRIDE: ${{ inputs.test_model != 'configured' && inputs.test_model || '' }}
     services:
       mysql:
         image: mysql:8.4
