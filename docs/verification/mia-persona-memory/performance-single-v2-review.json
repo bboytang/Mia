@@ -1,0 +1,31 @@
+{
+  "run_id": 39075439137,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39075439137",
+  "rules_sha": "55e232d6d46c06b5f906cc969a393959eeedbb32",
+  "runtime_sha": "cf464efc52c35cc3431711de99dcc1d44bd497f6",
+  "conclusion": "success",
+  "scope": "Acceptance reassessment and unchanged optimization goals, no new inference",
+  "artifact_file": "performance-single-v2-reassessment.json.gz",
+  "raw_sha256": "01f552bdba908f82e0b276dfefd8061048675dd3eb946f2e8ff693a8e52a3e95",
+  "sha256": "b70bcffd142f6b1dd75456a0933510ebad65d827a2ee9467051e18033a062261",
+  "acceptance_revision": "D08-v2-20261017",
+  "limits": {
+    "encode_hybrid_p95_ms": 500,
+    "sqlite_10k_p95_ms": 250,
+    "first_sentence_delta_p95_ms": 600,
+    "python_peak_rss_mib": 512
+  },
+  "optimization_targets": {
+    "encode_hybrid_p95_ms": 400,
+    "sqlite_10k_p95_ms": 150,
+    "first_sentence_delta_p95_ms": 500,
+    "python_peak_rss_mib": 512
+  },
+  "module_acceptance_passed": true,
+  "module_optimization_targets_met": false,
+  "shared_acceptance_passed": false,
+  "shared_optimization_targets_met": false,
+  "p23_complete": false,
+  "source_hashes_verified": true,
+  "original_target_verdicts_preserved": true
+}
