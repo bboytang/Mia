@@ -1,0 +1,65 @@
+{
+  "artifact_file": "performance-stream-local-results.json.gz",
+  "raw_sha256": "88406e00c9f69f45971c9d66a27591d71fba76bb87344a659fe4e2aa901e047f",
+  "sha256": "321546cf4bc9d9957e5d4fb19046b4fa8f885bd22464eab5d4912124058de59c",
+  "local_only": true,
+  "p23_complete": false,
+  "candidate_retrieval_sha256": "5f0a555832c09744ddd602f2789951d31236fd7886fae4de80eb34ba4683cb5b",
+  "results": [
+    {
+      "profile": "capacity-dense",
+      "old_p50_ms": 2.631493,
+      "stream_p50_ms": 2.221666,
+      "ratio": 0.8442606535529451,
+      "peak_python_allocated_bytes": {
+        "old": 1411855,
+        "stream": 1411815
+      },
+      "exact_equal": true
+    },
+    {
+      "profile": "unique-unicode",
+      "old_p50_ms": 3.176393,
+      "stream_p50_ms": 2.808715,
+      "ratio": 0.8842466911367705,
+      "peak_python_allocated_bytes": {
+        "old": 2293155,
+        "stream": 2293115
+      },
+      "exact_equal": true
+    },
+    {
+      "profile": "mixed-repeat",
+      "old_p50_ms": 2.31276,
+      "stream_p50_ms": 2.102093,
+      "ratio": 0.9089109981148066,
+      "peak_python_allocated_bytes": {
+        "old": 1464655,
+        "stream": 1464615
+      },
+      "exact_equal": true
+    },
+    {
+      "profile": "empty",
+      "old_p50_ms": 0.99764,
+      "stream_p50_ms": 1.009477,
+      "ratio": 1.0118650014033117,
+      "peak_python_allocated_bytes": {
+        "old": 1309480,
+        "stream": 1309440
+      },
+      "exact_equal": true
+    },
+    {
+      "profile": "long-query",
+      "old_p50_ms": 9.312427,
+      "stream_p50_ms": 8.933401,
+      "ratio": 0.9592989024236109,
+      "peak_python_allocated_bytes": {
+        "old": 1411863,
+        "stream": 1411823
+      },
+      "exact_equal": true
+    }
+  ]
+}

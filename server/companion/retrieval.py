@@ -3,8 +3,10 @@
 from array import array
 from bisect import bisect_left
 from collections import OrderedDict
+from itertools import chain
 import json
 import math
+from operator import itemgetter
 import re
 import sys
 import threading
@@ -163,14 +165,17 @@ def batch_signals(query, rows, prepared, query_codes):
         shared = np.zeros(len(rows), dtype=np.intp)
     overlap = shared / np.maximum(1, len(codes) + lengths - shared)
 
-    words = [term for item in prepared for term in item[0]]
+    groups = list(map(itemgetter(0), prepared))
     # Python containment preserves all Unicode/NUL input directly and avoids
     # allocating fixed-width copies of the query and every candidate term.
-    matched = np.fromiter((term in query for term in words), dtype=bool, count=len(words))
-    hit_counts, offsets = totals(matched, [len(item[0]) for item in prepared])
-    trigger_positions = [int(offsets[i]) + position for i, item in enumerate(prepared) for position in item[4]]
-    trigger_matched = matched[np.asarray(trigger_positions, dtype=np.intp)]
-    association_counts, _ = totals(trigger_matched, [len(item[1]) for item in prepared])
+    lengths = list(map(len, groups))
+    matched = np.fromiter(map(query.__contains__, chain.from_iterable(groups)), dtype=bool, count=sum(lengths))
+    hit_counts, offsets = totals(matched, lengths)
+    trigger_lengths = [len(item[1]) for item in prepared]
+    local_positions = np.fromiter(chain.from_iterable(map(itemgetter(4), prepared)),
+                                  dtype=np.intp, count=sum(trigger_lengths))
+    trigger_positions = np.repeat(offsets, trigger_lengths) + local_positions
+    association_counts, _ = totals(matched[trigger_positions], trigger_lengths)
     emotions = []
     for row in rows:
         value = row['emotional_weight']

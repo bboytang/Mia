@@ -10,6 +10,24 @@ from server.tests.test_companion_retrieval_features import reference
 
 
 class BatchSignalTests(unittest.TestCase):
+    def test_trigger_subsets_and_unequal_groups_preserve_hits_and_order(self):
+        rows = []
+        for i in range(256):
+            words = ['词组' + str(j) for j in range(i % 17)]
+            triggers = list(reversed(words[::3])) + (['尾\x00', '🙂𠮷', '一'] if i % 2 else [])
+            rows.append(dict(content='词组尾\x00🙂𠮷', entities=json.dumps(words),
+                keywords=json.dumps(words[::-2]), trigger_terms=json.dumps(triggers),
+                emotional_weight=0.7, original_cosine=0.4, expanded_cosine=0.5))
+        query = '词组1词组5尾\x00🙂𠮷'
+        prepared = [prepare_signals(row) for row in rows]
+        values, matched, starts = batch_signals(query, rows, prepared, pair_codes(bigrams(query)))
+        for i, row in enumerate(rows):
+            expected, hits, associations = reference(query, row, 0.5)
+            self.assertEqual(dict(zip(WEIGHTS, values[i])), expected)
+            self.assertEqual([term for j, term in enumerate(prepared[i][0]) if matched[starts[i] + j]], hits)
+            self.assertEqual([term for j, term in enumerate(prepared[i][1])
+                if matched[starts[i] + prepared[i][4][j]]], associations)
+
     def test_literal_words_without_nul_and_empty_middle_groups(self):
         rows = []
         for terms in (['散步', '蓝色水壶'], [], ['İ🙂', '\ud800薄荷'], [], ['散步']):
