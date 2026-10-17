@@ -1007,3 +1007,7 @@ d2bfd7b15d2ff99b158fdb43e87506451257e131 / 容量 https://github.com/bboytang/Mi
 同SHA服务280项 https://github.com/bboytang/Mia/actions/runs/38995547679 、BGE五报告38995547680、身份173项38995547688、manager154项38995547691全success；新增并发删除/WAL清理完成与旧结果拒绝的原断言未放宽，原候选/分数/隔离/失效回归通过。原文/hash/Java各类计数保留performance-wal-ci-results.json及gzip。此前e83缓存抖动退化、9af并发删除error及9af数值失败全部独立保存。
 
 全部任务收完，P23仍未验收/P24未开始；未部署/切生产模型/真实Provider调用或真机验证。当前下一项：对d2bfd7b热缓存10k长事实补缓存锁等待、动态评分/候选堆与编码CPU竞争profile，依据证据评估批处理/前台调度，保留数学/Scope/权限语义。全服务共同2CPU/2GiB、同Provider首句增量、真实Worker公平/故障/任务期限及在途关闭仍未执行。主交接/本地接续/性能进度均同步最新终态与下一项动作。
+
+## 2026-10-17 P23第五步开始：热缓存诊断
+
+第四步记录/原文已a601ee0推送。继续对d2bfd7b运行代码做同10k长事实热缓存诊断，仅在观察器补独立缓存锁及query/document原生编码时序，区分当前动态评分/堆与后台编码竞争。不修改生产运行算法/语料/门槛，不将诊断success当数值通过；句柄随后记录。

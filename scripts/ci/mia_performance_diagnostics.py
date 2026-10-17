@@ -54,7 +54,11 @@ async def diagnose(index, current, auth, queries, summary, competing):
     def sync_observer(name, original):
         @functools.wraps(original)
         def measured(*args, **kwargs):
-            with timings.stage(name):
+            stage = name
+            if name == 'native_encode':
+                query = args[1] if len(args) > 1 else kwargs.get('query', False)
+                stage += '.query' if query else '.document'
+            with timings.stage(stage):
                 profiler = cProfile.Profile() if profiling and name == '_scan' else None
                 started = time.perf_counter()
                 if profiler:
@@ -65,7 +69,7 @@ async def diagnose(index, current, auth, queries, summary, competing):
                     if profiler:
                         profiler.disable()
                         profiles.append(profiler)
-                    timings.add(name, time.perf_counter() - started)
+                    timings.add(stage, time.perf_counter() - started)
         return measured
 
     def async_observer(name, original):
@@ -79,9 +83,11 @@ async def diagnose(index, current, auth, queries, summary, competing):
         return measured
 
     store_lock, encoder_lock, encode = index.store.lock, index.encoder._lock, index.encoder.encode
+    features_lock = index._features.lock
     try:
         index.store.lock = ObservedLock(store_lock, timings, 'store_lock_wait')
         index.encoder._lock = ObservedLock(encoder_lock, timings, 'encoder_lock_wait')
+        index._features.lock = ObservedLock(features_lock, timings, 'features_lock_wait')
         index.encoder.encode = sync_observer('native_encode', encode)
         for name in ('_snapshot', '_clues', '_scan', '_snapshot_check'):
             originals[name] = getattr(index, name)
@@ -122,3 +128,4 @@ async def diagnose(index, current, auth, queries, summary, competing):
         for name, original in originals.items():
             setattr(index, name, original)
         index.store.lock, index.encoder._lock, index.encoder.encode = store_lock, encoder_lock, encode
+        index._features.lock = features_lock
