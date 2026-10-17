@@ -1,0 +1,434 @@
+{
+  "run_id": 38998096508,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38998096508",
+  "observer_sha": "07d43df28230f7f51b1012780847f49d4428962c",
+  "runtime_code_sha": "24d06b033e4137ba45a396498b614bcba91021db",
+  "conclusion": "success",
+  "meaning": "Diagnostic collection only, not D08 acceptance",
+  "p23_complete": false,
+  "artifact_file": "performance-batch-diagnostic-results.json.gz",
+  "raw_sha256": "32a7fa4ad572918661e869d29f37fdaabda133d51aef74f53ee6da918a648ed1",
+  "sha256": "370fe1e9f400a8ef5da92d099d5296458fdc88a64961872249e8d013fa6adb5c",
+  "all_stage_counts_match_raw_samples": true,
+  "separate_scan_profile": [
+    {
+      "file": "semantic.py",
+      "line": 157,
+      "function": "_scan",
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_ms": 38.988213,
+      "cumulative_ms": 477.88690800000006
+    },
+    {
+      "file": "semantic.py",
+      "line": 225,
+      "function": "batches",
+      "primitive_calls": 10001,
+      "calls": 10001,
+      "self_ms": 5.967745,
+      "cumulative_ms": 299.612861
+    },
+    {
+      "file": "retrieval.py",
+      "line": 131,
+      "function": "batch_signals",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 13.472034,
+      "cumulative_ms": 239.70513300000002
+    },
+    {
+      "file": "defchararray.py",
+      "line": 742,
+      "function": "find",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 0.081082,
+      "cumulative_ms": 102.12773700000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.core._multiarray_umath._vec_string>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 102.02222400000001,
+      "cumulative_ms": 102.02222400000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'fetchmany' of 'sqlite3.Cursor' objects>",
+      "primitive_calls": 41,
+      "calls": 41,
+      "self_ms": 74.056626,
+      "cumulative_ms": 74.056626
+    },
+    {
+      "file": "semantic.py",
+      "line": 235,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.505062,
+      "cumulative_ms": 50.982293000000006
+    },
+    {
+      "file": "retrieval.py",
+      "line": 76,
+      "function": "prepare",
+      "primitive_calls": 10000,
+      "calls": 10000,
+      "self_ms": 12.976577,
+      "cumulative_ms": 48.477231
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.any>",
+      "primitive_calls": 80,
+      "calls": 80,
+      "self_ms": 17.498436,
+      "cumulative_ms": 40.023811
+    },
+    {
+      "file": "mia_performance_diagnostics.py",
+      "line": 36,
+      "function": "__enter__",
+      "primitive_calls": 10001,
+      "calls": 10001,
+      "self_ms": 10.498379,
+      "cumulative_ms": 25.591092000000003
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.asarray>",
+      "primitive_calls": 404,
+      "calls": 404,
+      "self_ms": 22.3033,
+      "cumulative_ms": 22.3033
+    },
+    {
+      "file": "retrieval.py",
+      "line": 158,
+      "function": "<genexpr>",
+      "primitive_calls": 213374,
+      "calls": 213374,
+      "self_ms": 20.584126,
+      "cumulative_ms": 20.584126
+    },
+    {
+      "file": "retrieval.py",
+      "line": 155,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 15.540897000000001,
+      "cumulative_ms": 15.540897000000001
+    },
+    {
+      "file": "retrieval.py",
+      "line": 163,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 13.897245000000002,
+      "cumulative_ms": 13.897245000000002
+    },
+    {
+      "file": "semantic.py",
+      "line": 208,
+      "function": "<dictcomp>",
+      "primitive_calls": 10000,
+      "calls": 10000,
+      "self_ms": 12.08341,
+      "cumulative_ms": 12.08341
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "primitive_calls": 4,
+      "calls": 4,
+      "self_ms": 12.010008000000001,
+      "cumulative_ms": 12.010008000000001
+    },
+    {
+      "file": "fromnumeric.py",
+      "line": 53,
+      "function": "_wrapfunc",
+      "primitive_calls": 280,
+      "calls": 280,
+      "self_ms": 0.322034,
+      "cumulative_ms": 11.941676
+    },
+    {
+      "file": "mia_performance_diagnostics.py",
+      "line": 18,
+      "function": "add",
+      "primitive_calls": 10001,
+      "calls": 10001,
+      "self_ms": 7.550403000000001,
+      "cumulative_ms": 10.53292
+    },
+    {
+      "file": "fromnumeric.py",
+      "line": 1332,
+      "function": "searchsorted",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 0.04592500000000001,
+      "cumulative_ms": 10.036601000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'searchsorted' of 'numpy.ndarray' objects>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 9.924302,
+      "cumulative_ms": 9.924302
+    },
+    {
+      "file": "shape_base.py",
+      "line": 372,
+      "function": "stack",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 4.286322999999999,
+      "cumulative_ms": 8.109904
+    },
+    {
+      "file": "semantic.py",
+      "line": 194,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.896897,
+      "cumulative_ms": 7.800656
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of 'bytes' objects>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.285872,
+      "cumulative_ms": 7.288220000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'pop' of 'collections.OrderedDict' objects>",
+      "primitive_calls": 10000,
+      "calls": 10000,
+      "self_ms": 6.554048000000001,
+      "cumulative_ms": 6.554048000000001
+    },
+    {
+      "file": "retrieval.py",
+      "line": 63,
+      "function": "begin",
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_ms": 5.2330760000000005,
+      "cumulative_ms": 5.252061
+    },
+    {
+      "file": "retrieval.py",
+      "line": 145,
+      "function": "<genexpr>",
+      "primitive_calls": 10040,
+      "calls": 10040,
+      "self_ms": 2.200145,
+      "cumulative_ms": 5.0023480000000005
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.frombuffer>",
+      "primitive_calls": 10040,
+      "calls": 10040,
+      "self_ms": 4.988733000000001,
+      "cumulative_ms": 4.988733000000001
+    },
+    {
+      "file": "retrieval.py",
+      "line": 135,
+      "function": "totals",
+      "primitive_calls": 120,
+      "calls": 120,
+      "self_ms": 1.213665,
+      "cumulative_ms": 4.247815
+    },
+    {
+      "file": "linalg.py",
+      "line": 2383,
+      "function": "norm",
+      "primitive_calls": 42,
+      "calls": 42,
+      "self_ms": 1.564208,
+      "cumulative_ms": 3.6620880000000002
+    },
+    {
+      "file": "einsumfunc.py",
+      "line": 1009,
+      "function": "einsum",
+      "primitive_calls": 80,
+      "calls": 80,
+      "self_ms": 0.057512,
+      "cumulative_ms": 3.438355
+    }
+  ],
+  "sequential_stages": {
+    "_require": {
+      "count": 30,
+      "p50_ms": 0.0035065000076883734,
+      "p95_ms": 0.005347499998009653
+    },
+    "store_lock_wait._snapshot": {
+      "count": 15,
+      "p50_ms": 0.0010219999921901035,
+      "p95_ms": 0.001492000004077454
+    },
+    "_snapshot": {
+      "count": 15,
+      "p50_ms": 0.022723000000723914,
+      "p95_ms": 0.0697915000046122
+    },
+    "store_lock_wait._clues": {
+      "count": 15,
+      "p50_ms": 0.0009820000030913434,
+      "p95_ms": 0.0012513000001490577
+    },
+    "features_lock_wait._clues": {
+      "count": 45,
+      "p50_ms": 0.000962000001436536,
+      "p95_ms": 0.005224199995268458
+    },
+    "_clues": {
+      "count": 15,
+      "p50_ms": 20.97578299999725,
+      "p95_ms": 21.522228700001733
+    },
+    "encoder_lock_wait.native_encode.query": {
+      "count": 30,
+      "p50_ms": 0.0018029999964142007,
+      "p95_ms": 0.0023374499953376917
+    },
+    "native_encode.query": {
+      "count": 30,
+      "p50_ms": 42.60894499999779,
+      "p95_ms": 57.0657180000012
+    },
+    "_encode": {
+      "count": 30,
+      "p50_ms": 43.01914800000617,
+      "p95_ms": 57.47854810000135
+    },
+    "features_lock_wait._scan": {
+      "count": 150015,
+      "p50_ms": 0.00036000000136482413,
+      "p95_ms": 0.0004009999940990383
+    },
+    "_scan": {
+      "count": 15,
+      "p50_ms": 378.94186600000523,
+      "p95_ms": 386.29969489999354
+    },
+    "store_lock_wait._snapshot_check": {
+      "count": 15,
+      "p50_ms": 0.0015629999978727938,
+      "p95_ms": 0.0021540000034292457
+    },
+    "_snapshot_check": {
+      "count": 15,
+      "p50_ms": 0.08781600000418166,
+      "p95_ms": 0.12450520000015786
+    }
+  },
+  "concurrent_stages": {
+    "store_lock_wait.other": {
+      "count": 99,
+      "p50_ms": 0.002545000000964137,
+      "p95_ms": 0.004451000006611138
+    },
+    "_require": {
+      "count": 158,
+      "p50_ms": 0.0031760000069880334,
+      "p95_ms": 0.00574600000220471
+    },
+    "store_lock_wait._snapshot": {
+      "count": 30,
+      "p50_ms": 0.0016235000117603704,
+      "p95_ms": 0.14476439999526675
+    },
+    "_snapshot": {
+      "count": 30,
+      "p50_ms": 0.055765000013252575,
+      "p95_ms": 0.34244484999987784
+    },
+    "store_lock_wait._clues": {
+      "count": 30,
+      "p50_ms": 0.0016525000035017001,
+      "p95_ms": 0.16168335000088435
+    },
+    "features_lock_wait._clues": {
+      "count": 90,
+      "p50_ms": 0.0016130000091152397,
+      "p95_ms": 0.005099549993303753
+    },
+    "_clues": {
+      "count": 30,
+      "p50_ms": 22.20814450001285,
+      "p95_ms": 27.31294704998959
+    },
+    "encoder_lock_wait.native_encode.query": {
+      "count": 60,
+      "p50_ms": 0.0021340000131431225,
+      "p95_ms": 0.2931874000040415
+    },
+    "native_encode.query": {
+      "count": 60,
+      "p50_ms": 78.48321149998583,
+      "p95_ms": 148.67159355000436
+    },
+    "_encode": {
+      "count": 92,
+      "p50_ms": 104.75208599999064,
+      "p95_ms": 178.89191790000467
+    },
+    "features_lock_wait._scan": {
+      "count": 300030,
+      "p50_ms": 0.0003510000112783018,
+      "p95_ms": 0.00041100000203186937
+    },
+    "_scan": {
+      "count": 30,
+      "p50_ms": 757.8929139999957,
+      "p95_ms": 817.7485588999986
+    },
+    "store_lock_wait._snapshot_check": {
+      "count": 30,
+      "p50_ms": 0.002143999992654244,
+      "p95_ms": 0.0028564499999106374
+    },
+    "_snapshot_check": {
+      "count": 30,
+      "p50_ms": 0.09748799999442781,
+      "p95_ms": 0.1237548499844365
+    },
+    "encoder_lock_wait.native_encode.document": {
+      "count": 32,
+      "p50_ms": 0.0018884999803958635,
+      "p95_ms": 0.002350999987754676
+    },
+    "native_encode.document": {
+      "count": 32,
+      "p50_ms": 176.4648534999793,
+      "p95_ms": 180.10837770000165
+    }
+  }
+}

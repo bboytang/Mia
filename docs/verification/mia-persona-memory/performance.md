@@ -143,3 +143,10 @@
 门槛/夹具/每查询预热及5次测量不变，真实2CPU/2GiB；五库完整性ok，后台各32条重建完成，无OOM。1k短/长全部达标，10k单路编码+混合、SQLite、必测RSS均达标；10k双前台竞争仍超400ms，P23不通过。50k仍仅探索，延迟不达标且不承诺支持。跨run主机不同，不把耗时差直接写作算法提速倍数。模块前台优先不等于真实Worker公平性或全服务验收。
 
 第七步已启动唯一diagnostic38998096508，被测提交07d43df28230f7f51b1012780847f49d4428962c（仅文档后继，运行代码仍24d06b0）。使用校正后的同一观察器，检查批量评分后的10k长热缓存/并发剩余CPU成本，不重复dispatch同源码容量取绿。保留已有原文；收完profile后再确定下一处最小修改。全服务包络/Provider首句/真实Worker公平故障期限和在途关闭仍待验证。P24未开始，未部署。
+
+
+## 第七步完成：批量路径热点诊断
+
+07d43df / diagnostic38998096508 success，运行仍24d06b0；原文/hash保留performance-batch-diagnostic-*，所有计数组等于原样本数。单路_scan p95 386.3ms、_clues21.5ms，竞争_scan817.8ms、_clues27.3ms；查询编码148.7ms，后台文档180.1ms，缓存锁仍接近0。单独profile477.9ms扫描内batch_signals239.7ms，其中np.char.find/_vec_string102.0ms，字符串转数组约22.3ms（全profile的asarray合计）、fetchmany74.1ms。profile有观察器开销，不能直接作容量结论或相加百分位。
+
+第七步已完成。第八步最小修改：词项字面包含判断回到Python原生term in query，由np.fromiter收集布尔值；去除NumPy宽字符串构造及NUL分支，所有Unicode/NUL/代理项原语义直接一致，bigram批处理/四维/候选/调度不变。沿用已覆盖该边界的原集合oracle和完整回归，再运行一次改变后固定容量；不重复同源码取绿。P23仍未验收/P24未开始。

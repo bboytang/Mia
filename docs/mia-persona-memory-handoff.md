@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中、数值未通过**：第六步批量精确评分/前台优先候选24d06b0四回归全通过；1k短/长、10k单路混合/SQLite/RSS达标，但10k两路竞争p95约698/764ms仍超400ms。第七步热点诊断38998096508在途，详见[完整性能进度/原文/下一步](verification/mia-persona-memory/performance.md)。P24未开始，不追加P22语义测试或模型比较。
+- **P23进行中、数值未通过**：第六步批量精确评分/前台优先候选24d06b0四回归全通过；1k短/长、10k单路混合/SQLite/RSS达标，但10k两路竞争p95约698/764ms仍超400ms。第七步热点诊断38998096508已success，详见[完整性能进度/原文/下一步](verification/mia-persona-memory/performance.md)。P24未开始，不追加P22语义测试或模型比较。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前实现`24d06b033e4137ba45a396498b614bcba91021db`，容量[38997698723](https://github.com/bboytang/Mia/actions/runs/38997698723)已failure；服务285/BGE五报告/身份173/manager154全部success，原文/hash见performance-batch-*。唯一在途诊断[38998096508](https://github.com/bboytang/Mia/actions/runs/38998096508)被测07d43df（仅文档后继，运行仍24d06b0）；收完后依据profile决定下一处最小修改。旧失败保留，不倒改为通过。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前实现`24d06b033e4137ba45a396498b614bcba91021db`，容量[38997698723](https://github.com/bboytang/Mia/actions/runs/38997698723)已failure；服务285/BGE五报告/身份173/manager154全部success，原文/hash见performance-batch-*。第七步诊断[38998096508](https://github.com/bboytang/Mia/actions/runs/38998096508)被测07d43df（仅文档后继，运行仍24d06b0）；收完后依据profile决定下一处最小修改。旧失败保留，不倒改为通过。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -50,3 +50,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 ## 接续操作
 
 先读`AGENTS.md`、本文件及验收决定，再检查`git status --short --branch`、HEAD、远端实际SHA及用户最新授权。**当前新指令已批准P23；从性能进度继续，P22保留用户通过决定及原始失败。** 历史工作记录、旧交接压缩包或验证报告里的“下一步/在途”描述均不构成当前执行指令。
+
+第七步诊断已收齐并归档performance-batch-diagnostic-*，无在途。热点为批量字符串转换/np.char.find；下一最小修改以原生term in query收集布尔值，保留bigram批处理及原语义，再做同SHA回归/容量。
