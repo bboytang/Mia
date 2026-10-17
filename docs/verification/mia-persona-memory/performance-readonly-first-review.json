@@ -1,0 +1,15 @@
+{
+  "code_sha": "9af668841118352cc84729e97fe19ed66e6522bf",
+  "run_id": 38995300706,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38995300706",
+  "conclusion": "failure",
+  "tests": 280,
+  "errors": 1,
+  "failures": 0,
+  "failed_test": "test_read_snapshot_does_not_block_deletion_and_old_result_is_rejected",
+  "reason": "Deletion waits at existing wal_checkpoint(TRUNCATE) while the readonly transaction remains open during scoring",
+  "artifact_file": "performance-readonly-first-service.log.gz",
+  "sha256": "7a0265d26858aa427e396e8760b16753cc2cf670ed7fffabe3d6a999fcd79130",
+  "raw_sha256": "96b4304eebf2127913bf5ab16bab6ac6657086b99a582cc6d083fb98a8f61fec",
+  "fix_candidate": "Close the read snapshot after batch vector validation/scalar cosine materialization; score metadata after transaction closes; preserve delete purge and epoch rejection"
+}

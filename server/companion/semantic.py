@@ -120,6 +120,7 @@ class SemanticMemoryIndex:
         expanded = query if expanded is None else self._vector(expanded)
         query_terms = bigrams(query_text) if query_text is not None else None
         query_codes = pair_codes(query_terms) if query_terms is not None else None
+        records = []
         # A private read-only WAL snapshot cannot hold the application's write
         # connection lock while scoring. retrieve/candidates still recheck the
         # current epoch and authorization before releasing these results.
@@ -165,33 +166,45 @@ class SemanticMemoryIndex:
                         continue
                     record = {key: row[key] for key in row.keys() if key != 'normalized_vector'}
                     record['cosine'] = score
-                    values = {'original': score}
                     if query_text is not None:
                         record['original_cosine'], record['expanded_cosine'] = score, float(expanded_score)
-                        record['signals'], record['lexical_hits'], record['association_hits'] = signals(
-                            query_text, record, max(score, float(expanded_score)), query_terms,
-                            prepared=self._features.prepare(scope, expected, record) if use_cache else None,
-                            query_codes=query_codes)
-                        values.update(expanded=float(expanded_score), lexical=record['signals']['lexical'],
-                                      association=record['signals']['association'])
-                    for name, value in values.items():
-                        if name in ('lexical', 'association') and value <= 0:
-                            continue
-                        heap = heaps[name]
-                        entry = (value, row['id'], record)
-                        if len(heap) < limit:
-                            heapq.heappush(heap, entry)
-                        elif entry[:2] > heap[0][:2]:
-                            heapq.heapreplace(heap, entry)
-            if query_text is None:
-                return [item[2] for item in sorted(heaps['original'], reverse=True)]
-            selected = {}
-            for name, heap in heaps.items():
-                for _, memory_id, row in heap:
-                    if memory_id not in selected:
-                        selected[memory_id] = dict(row, candidate_sources=[])
-                    selected[memory_id]['candidate_sources'].append(name)
-            return sorted(selected.values(), key=lambda row: (row['original_cosine'], row['id']), reverse=True)
+                        records.append(record)
+                        continue
+                    heap = heaps['original']
+                    entry = (score, row['id'], record)
+                    if len(heap) < limit:
+                        heapq.heappush(heap, entry)
+                    elif entry[:2] > heap[0][:2]:
+                        heapq.heapreplace(heap, entry)
+        if query_text is None:
+            return [item[2] for item in sorted(heaps['original'], reverse=True)]
+        # Close the read transaction before CPU scoring: forgetting must be able
+        # to finish its WAL purge while scoring is in progress. Retain metadata
+        # and scalar cosines only, never the Scope's full vector matrix.
+        for record in records:
+            score, expanded_score = record['original_cosine'], record['expanded_cosine']
+            record['signals'], record['lexical_hits'], record['association_hits'] = signals(
+                query_text, record, max(score, expanded_score), query_terms,
+                prepared=self._features.prepare(scope, expected, record) if use_cache else None,
+                query_codes=query_codes)
+            values = {'original': score, 'expanded': expanded_score,
+                      'lexical': record['signals']['lexical'], 'association': record['signals']['association']}
+            for name, value in values.items():
+                if name in ('lexical', 'association') and value <= 0:
+                    continue
+                heap = heaps[name]
+                entry = (value, record['id'], record)
+                if len(heap) < limit:
+                    heapq.heappush(heap, entry)
+                elif entry[:2] > heap[0][:2]:
+                    heapq.heapreplace(heap, entry)
+        selected = {}
+        for name, heap in heaps.items():
+            for _, memory_id, row in heap:
+                if memory_id not in selected:
+                    selected[memory_id] = dict(row, candidate_sources=[])
+                selected[memory_id]['candidate_sources'].append(name)
+        return sorted(selected.values(), key=lambda row: (row['original_cosine'], row['id']), reverse=True)
 
     def _clues(self, scope, expected, query):
         from .retrieval import terms

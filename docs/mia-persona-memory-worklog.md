@@ -991,3 +991,5 @@ P23第二步完成：83823ab / https://github.com/bboytang/Mia/actions/runs/3899
 SemanticMemoryIndex在同一文件的mode=ro连接中开启WAL一致读快照，逐批读取真实向量并验证，结束必关闭；只把原共享写连接锁从整个评分过程中移除，不去掉最终epoch/授权复核。缓存独立短临界区锁，仍128MiB/32768条。纯向量扫描不再为计数重复LEFT JOIN全遍历，逐批缺向量仍显式index_not_ready；混合扫描仅按active数量决定缓存准入，超条数容量用原集合评分，避免50k编译/驱逐抖动。未全库载入RAM/改schema/门槛/候选/评分。
 
 新增扫描中删除并发测试（读快照停在评分时，写入必须完成、旧结果必须被epoch拒绝、下次为空）及回退/缓存全候选等价/不插缓存回归。本地三项纯Python回归/语法通过；因缺numpy实际SQLite/vector用例仍在GitHub验证。当前候选尚无性能通过结论，下一步同门槛容量和完整相关回归。
+
+第四步9af6688服务38995300706终态failure：280项279通过，仅新增并发删除用例timeout。实际路径定位到原MemoryStore._purge的wal_checkpoint(TRUNCATE)等待读者，读事务虽无共享写锁仍不能延伸到慢评分期。原日志及hash保留performance-readonly-first-*。不放宽删除完成断言/不取消WAL清理；改为在读事务内逐批验证向量并生成当前Scope元数据/标量分数，关闭事务后再文本评分，最终epoch继续拒绝删除后的旧结果。额外元数据暂存内存由同512MiB门槛实测，未保留全Scope向量。9af其他在途run继续收取，不当作新修正验证。
