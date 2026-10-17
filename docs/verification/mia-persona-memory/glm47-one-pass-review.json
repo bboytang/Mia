@@ -1,0 +1,970 @@
+{
+  "requests": 23,
+  "sdk_request_error_codes": {
+    "1302": 9,
+    "1305": 7
+  },
+  "cases": 18,
+  "nonempty_completed_replies": 3,
+  "empty_completed_replies": 1,
+  "rounds": [
+    {
+      "suite": "natural",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987550601",
+      "round": 0,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我平时通勤骑蓝色自行车",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "7b5a56a017b27ce7283bdc5967d708a2c5da953b1571bc39cc4d362e41e5a7e1",
+      "archive_sha256": "4d7ccc9e22083e218ab989a1769fefb0fe221b65e7f357a9e97e7c178e21c3b6"
+    },
+    {
+      "suite": "natural",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987550601",
+      "round": 1,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我常用软皮本记读书笔记",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "429c7cd86a6621382812fb28008f3b6b458b9458c9308336da659ddbf7d3bab9",
+      "archive_sha256": "b5ba87ad3bcfd7bc8aa5d29371c209fa00dac10863c18a00ec6e985cf512cd6e"
+    },
+    {
+      "suite": "natural",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987550601",
+      "round": 2,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我周末练习长笛",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "118e02407565ca5810822682085c99f236437a6315f25ae59a8faade6e0cf233",
+      "archive_sha256": "0257666be66bead95e39c7013cba8ed7eed871e9a2a1457447fc2c9a9fa773d6"
+    },
+    {
+      "suite": "growth",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987553661",
+      "round": 0,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我周末常做手工木作",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "e801d6fe46e7b4a9aa6a2455423ea4055b7b394ab19c56b704abef8d6a48deb7",
+      "archive_sha256": "54ff663c0857a5f0b0275d72d4da7098413d1482ea787ef3852a86612bf03a07"
+    },
+    {
+      "suite": "growth",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987553661",
+      "round": 1,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我休息时喜欢做植物拓印",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "e15d3bb830e5d6d80c8d9c8aeb9fea0c242975f2d41c76e99b61bcfff1a06946",
+      "archive_sha256": "d45fe285d064202a3da0da181a1eca5b322c74c82dcc6e906f272446a60c9173"
+    },
+    {
+      "suite": "growth",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987553661",
+      "round": 2,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我喜欢用手帐拼贴记录生活",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "16f9a1e898b511351112947b8bf3bb35d74e08783525cc5c3ed48ab271bba964",
+      "archive_sha256": "b79cb5c5111ea582b5fcd3b1c92b4f1f618417478f7e010471b55f2d8854f758"
+    },
+    {
+      "suite": "retrieval",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987556579",
+      "round": 0,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在青石河边跑步",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "343e2b7fa7f2e6a533f81b64103405228449b1ffeb01380d37a6b4135849f112",
+      "archive_sha256": "45af21d729d0c1bb2f6fb22ece1b5f35fcc41bafd38148289fd42b1535b04e04"
+    },
+    {
+      "suite": "retrieval",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987556579",
+      "round": 1,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在松林音乐教室练琴",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "c403d1f24a055c09a92711970cd090ab5d07d917df03ae88daa53dde7b16e665",
+      "archive_sha256": "f1351da1738c043a18dbed738ba190f9108af3255d4a4cee52adcf0c01d5f84e"
+    },
+    {
+      "suite": "retrieval",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987556579",
+      "round": 2,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我每周六都在白鹭湖边骑车",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "1d08ed5a32b5851b7a5b1b8fa1dd3e7741b8a1d9de025f863a9d5b6a8f37bb1f",
+      "archive_sha256": "3286dab768438e975e693cd20475ae33f19660358ef92274dc44994e482bcb03"
+    },
+    {
+      "suite": "tools",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987559344",
+      "round": 0,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我看温度时更习惯用摄氏度。",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "836f612970c9a1125c363dda70859affecbdace191846f76063e3f7503817c33",
+      "archive_sha256": "f6e9899269777901c56a2443d79bb0f162ab5398488bf99bb4513a3cd3ed4c7c"
+    },
+    {
+      "suite": "tools",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987559344",
+      "round": 1,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我看温度时更习惯用摄氏度。",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "43aa35781903157c45699d50ebce6c7551499a317881a5a784934974f0bc7c88",
+      "archive_sha256": "30b09ec04877778263bc2bbbe86ba83a86404533b2fb3ba7291486331242dedb"
+    },
+    {
+      "suite": "tools",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987559344",
+      "round": 2,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1302",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "我看温度时更习惯用摄氏度。",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "cf9c56b7beeb680a9c93717262918967bd78f65d96cad82b44d2bfe22a1a30f8",
+      "archive_sha256": "7a0ee013da946bd7859ae56416a3263e1c23e55e16930da40d9bdd546320f497"
+    },
+    {
+      "suite": "emotions",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987562079",
+      "round": 0,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 1,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 1,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "今天我心情很快乐",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": []
+      },
+      "original_report_sha256": "1c2e9fe9511837164426ee2cab8cdf191b9e0030058fd1fa6af89fa755249b34",
+      "archive_sha256": "9bbad5f09b708dd0bf9ede2669c1b7c36e4c73d656d8966dd2c0bf06a9aa850a"
+    },
+    {
+      "suite": "emotions",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987562079",
+      "round": 1,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 4,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 4,
+          "purpose": "extraction"
+        },
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "function_stream"
+        }
+      ],
+      "answers": [
+        {
+          "query": "今天我心情很安心",
+          "raw": "😌🙂 听到这个我也觉得很安心呢。这种踏实的感觉真好。\n\n是不是今天发生了什么让你觉得特别顺心的事情？还是单纯享受了难得的宁静时光？",
+          "tts_text": "😌🙂 听到这个我也觉得很安心呢。这种踏实的感觉真好。\n\n是不是今天发生了什么让你觉得特别顺心的事情？还是单纯享受了难得的宁静时光？",
+          "chat_completed": true,
+          "output_replacement": null
+        },
+        {
+          "query": "今天我心情很满足",
+          "raw": "",
+          "tts_text": "",
+          "chat_completed": true,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4.7-flash",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 781,
+            "prompt_tokens": 488,
+            "total_tokens": 1269,
+            "completion_tokens_details": {
+              "reasoning_tokens": 740
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 2
+            }
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4.7-flash",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 452,
+            "prompt_tokens": 1482,
+            "total_tokens": 1934,
+            "completion_tokens_details": {
+              "reasoning_tokens": 437
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 42
+            }
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4.7-flash",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 498,
+            "prompt_tokens": 511,
+            "total_tokens": 1009,
+            "completion_tokens_details": {
+              "reasoning_tokens": 496
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 476
+            }
+          }
+        }
+      ],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            0
+          ]
+        ],
+        "jobs": [
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "retry_wait",
+            1,
+            "model"
+          ]
+        ]
+      },
+      "original_report_sha256": "f987a800be702c30bfe511ab5c1daf116b488c89b2d34621732a76124003965c",
+      "archive_sha256": "31f12f28cee6e7905eb67db363a501cc17f4ffb31561c5adcac4788f69aa4f8f"
+    },
+    {
+      "suite": "emotions",
+      "run_url": "https://github.com/bboytang/Mia/actions/runs/38987562079",
+      "round": 2,
+      "code_sha": "bd6d0853d040ede598168a1db52bd0d9b53fd300",
+      "requests": 6,
+      "passed": false,
+      "provider_errors": [
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 2,
+          "purpose": "extraction"
+        },
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "function_stream"
+        },
+        {
+          "error_class": "RateLimitError",
+          "status_code": 429,
+          "code": "1305",
+          "causes": [],
+          "stage": "sdk_request",
+          "request": 6,
+          "purpose": "reply"
+        }
+      ],
+      "answers": [
+        {
+          "query": "今天我心情很轻松",
+          "raw": "😌 听到你这么说，我也觉得很放松呢。今天过得怎么样？是有什么特别开心的事，还是单纯想享受一下闲暇时光呀？",
+          "tts_text": "😌 听到你这么说，我也觉得很放松呢。今天过得怎么样？是有什么特别开心的事，还是单纯想享受一下闲暇时光呀？",
+          "chat_completed": true,
+          "output_replacement": null
+        },
+        {
+          "query": "今天我心情很快乐",
+          "raw": "🙂🙂🙂 听到你这么开心，我也觉得暖暖的。今天发生了什么特别开心的事情吗？快跟我说说呀！",
+          "tts_text": "🙂🙂🙂 听到你这么开心，我也觉得暖暖的。今天发生了什么特别开心的事情吗？快跟我说说呀！",
+          "chat_completed": true,
+          "output_replacement": null
+        },
+        {
+          "query": "今天我心情很安心",
+          "raw": "",
+          "tts_text": "UNEXPECTED_UPSTREAM_ERROR",
+          "chat_completed": false,
+          "output_replacement": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4.7-flash",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 664,
+            "prompt_tokens": 488,
+            "total_tokens": 1152,
+            "completion_tokens_details": {
+              "reasoning_tokens": 630
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 484
+            }
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4.7-flash",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 275,
+            "prompt_tokens": 1482,
+            "total_tokens": 1757,
+            "completion_tokens_details": {
+              "reasoning_tokens": 260
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 229
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4.7-flash",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 629,
+            "prompt_tokens": 511,
+            "total_tokens": 1140,
+            "completion_tokens_details": {
+              "reasoning_tokens": 598
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 507
+            }
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4.7-flash",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 373,
+            "prompt_tokens": 1705,
+            "total_tokens": 2078,
+            "completion_tokens_details": {
+              "reasoning_tokens": 307
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 229
+            }
+          }
+        }
+      ],
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            0
+          ]
+        ],
+        "observations": [
+          [
+            1
+          ]
+        ],
+        "jobs": [
+          [
+            "empty",
+            2,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ]
+        ]
+      },
+      "original_report_sha256": "e22c4c7ef4c0a3ab1962bb8a7b263a1f1d1f8322981820fbfe658834e13371cc",
+      "archive_sha256": "3a8587cd32a2fbbb3748368d95e6484e4069c38cc99766ede5530cfbf6f9eef7"
+    }
+  ],
+  "review": "One actual evaluation batch; all five suites failed. Concurrent workflow dispatch confounds normal-user availability and model quality. 429 account-rate/model-load errors, one observed empty completed reply, auxiliary standalone first request timeout; no automatic rerun. Three nonempty completed replies read and accepted as natural warmth. Most lifecycle coverage unexecuted. Historical failures retained; user decides P22 disposition, not automatically passed."
+}
