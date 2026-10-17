@@ -1152,3 +1152,19 @@ P23第五步完成：883a76f / 38996970741 success，所有计时组count等于�
 自动审批曾因额度耗尽未完成manager补跑与状态读取（不是安全否决，未绕过）；用户继续后原审批通道已恢复，收取原句柄。ecaf083同SHA服务39031081087 success；e783ef1服务39030962856/manager39030962901 success。补充manager dispatch在额度失败时未执行，不写成已跑。修正后新SHA/唯一共同预检句柄待推送后记录。
 
 第十一步修正候选f2784d75716b361e26975d072e46a7ba86a0428f已推送：共同预检39070920385、同SHA服务39070920411、manager39070920170在途；push语法39070912579 success。原解析/就绪错误已归档performance-shared-first-*，运行实现仍1913680模块候选，未改门槛或增加Provider请求。继续这些唯一句柄，暂不更改实现。
+
+
+## 第十一步有效结果：共同包络证明通过，数值预检失败
+
+f2784d75716b361e26975d072e46a7ba86a0428f / [39070920385](https://github.com/bboytang/Mia/actions/runs/39070920385)已failure，已实际完成两规模。四类PID全部在miap23.slice内，cpu.max=200000/100000、memory.max=2147483648、swap.max=0，组峰值约1590MiB，无OOM；真实Java/TLS/授权/MySQL/Redis/Python/BGE均参与。原文/hash见performance-shared-ready-results.json.gz与review，服务39070920411为287项、manager39070920170为154项全部success，计数/hash见performance-shared-ready-ci-results.json。无在途。Provider请求0，P23整体未通过。
+
+| 每前台Scope长文本容量 | SQLite最差查询p95 ms | 编码+混合最差查询p95 ms | 跨用户两路+重建最差p95 ms | Python RSS MiB |
+| --- | ---: | ---: | ---: | ---: |
+| 1k | 24.7 | 271.1 | 454.5 | 447.9 |
+| 10k | 107.3 | 371.5 | 2644.7 | 455.6 |
+
+两库完整性ok、后台各32条实际重建完成；单路/SQLite/RSS满足门槛，跨用户竞争均超400ms。10k末缓存14775项、计账134208852字节接近原128MiB，不能同时容纳两Scope共20000项；根据热快照必须完整才复用的当前实现，竞争会回到完整元数据/特征准备路径。1k缓存2000项完全容纳仍超标，不能把全部成本归因缓存。原同Scope模块通过不被改写为全服务成功，历史失败保持原文。
+
+原dev logback显式DEBUG子logger绕过root=ERROR设置，manager.log出现数据库参数日志；该原文仅留原CI artifact链接与SHA，不复制日志内容入仓库，数值原报告不含凭据。第十二步拟：保留原实际权限检查、不缓存授权；在原生固定512MiB RSS与共同2GiB门槛下，将有界静态缓存预算128→192MiB以容纳两Scope约173MiB计账；测试执行前将全部已存在logger置ERROR，落实预检声明的日志级别并避免测试授权参数日志；补实际授权请求端点/耗时观察，不记录请求体/凭据。新候选必须重新跑模块与共同包络及相关回归，不能把预算增大当默认通过或把这轮失败覆写。
+
+本步未覆盖Provider首句/唯一回复app链、实际提取Worker公平/故障/120秒终态和在途总关闭20秒；P24未开始，未部署或改变生产配置。

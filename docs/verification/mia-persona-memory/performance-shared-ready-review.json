@@ -1,0 +1,192 @@
+{
+  "run_id": 39070920385,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39070920385",
+  "code_sha": "f2784d75716b361e26975d072e46a7ba86a0428f",
+  "conclusion": "failure",
+  "shared_envelope_preflight_passed": false,
+  "p23_complete": false,
+  "provider_requests": 0,
+  "artifact_file": "performance-shared-ready-results.json.gz",
+  "raw_sha256": "3019d0116af9dba838c6bc27c0f70322c80cf5f7800fbbc702d8cc1913cee734",
+  "sha256": "fae153164f114abe54fdf5b46cf10f6a73041f6be14cbe8e15b773dd7acf72b6",
+  "capacity": [
+    {
+      "size_per_frontend_scope": 1000,
+      "sqlite_worst_query_p95_ms": 24.666930999984512,
+      "hybrid_worst_query_p95_ms": 271.1166071999912,
+      "competition_max_p95_ms": 454.5360623999926,
+      "rss_peak_mib": 447.890625,
+      "static_features": {
+        "entries": 2000,
+        "accounted_bytes": 18165868
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false,
+      "members_after": {
+        "mysql": {
+          "pid": 3072,
+          "cgroup": "/miap23.slice/docker-a55e1174454bfaab609bb1194c5334da09acf1f91aecb51e0935a03c742fc5ae.scope",
+          "VmHWM": "495560 kB",
+          "VmRSS": "495560 kB"
+        },
+        "redis": {
+          "pid": 3138,
+          "cgroup": "/miap23.slice/docker-557ece7e35f099ab51f676b4a411efe27bfa95ea6c25a77da268bad8320c8308.scope",
+          "VmHWM": "31244 kB",
+          "VmRSS": "31008 kB"
+        },
+        "manager": {
+          "pid": 3671,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "481896 kB",
+          "VmRSS": "478120 kB"
+        },
+        "python": {
+          "pid": 3837,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "343304 kB",
+          "VmRSS": "319488 kB"
+        }
+      }
+    },
+    {
+      "size_per_frontend_scope": 10000,
+      "sqlite_worst_query_p95_ms": 107.27740359998847,
+      "hybrid_worst_query_p95_ms": 371.5320393999946,
+      "competition_max_p95_ms": 2644.6762188000093,
+      "rss_peak_mib": 455.58203125,
+      "static_features": {
+        "entries": 14775,
+        "accounted_bytes": 134208852
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false,
+      "members_after": {
+        "mysql": {
+          "pid": 3072,
+          "cgroup": "/miap23.slice/docker-a55e1174454bfaab609bb1194c5334da09acf1f91aecb51e0935a03c742fc5ae.scope",
+          "VmHWM": "496648 kB",
+          "VmRSS": "496648 kB"
+        },
+        "redis": {
+          "pid": 3138,
+          "cgroup": "/miap23.slice/docker-557ece7e35f099ab51f676b4a411efe27bfa95ea6c25a77da268bad8320c8308.scope",
+          "VmHWM": "31244 kB",
+          "VmRSS": "31008 kB"
+        },
+        "manager": {
+          "pid": 3671,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "485628 kB",
+          "VmRSS": "481268 kB"
+        },
+        "python": {
+          "pid": 3837,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "466516 kB",
+          "VmRSS": "458580 kB"
+        }
+      }
+    }
+  ],
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "cpu.stat": "usage_usec 164170799\nuser_usec 156222763\nsystem_usec 7948035\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 1069\nnr_throttled 489\nthrottled_usec 24632087\nnr_bursts 0\nburst_usec 0",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0",
+    "memory.current": "1354412032",
+    "memory.peak": "1667096576",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+  },
+  "original_artifact_files": [
+    {
+      "file": "cgroup-final-cpu.max.txt",
+      "sha256": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69"
+    },
+    {
+      "file": "cgroup-final-cpu.stat.txt",
+      "sha256": "d66e428022a8c3dcc45308432ebb934fccc01f4886d528c41174af9601c83adf"
+    },
+    {
+      "file": "cgroup-final-memory.current.txt",
+      "sha256": "08d6fca4c8388750a966dce2862a62f71523b755bfd1235b50c7acbfea3c0e56"
+    },
+    {
+      "file": "cgroup-final-memory.events.txt",
+      "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2"
+    },
+    {
+      "file": "cgroup-final-memory.max.txt",
+      "sha256": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e"
+    },
+    {
+      "file": "cgroup-final-memory.peak.txt",
+      "sha256": "da86af50b4ac1845b3e15e077394478aa908eb1bc554ba4d6ad7711e203b1853"
+    },
+    {
+      "file": "cgroup-final-memory.swap.max.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "container-final.txt",
+      "sha256": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b"
+    },
+    {
+      "file": "database-image-digests.txt",
+      "sha256": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a"
+    },
+    {
+      "file": "docker-cgroup-driver.txt",
+      "sha256": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820"
+    },
+    {
+      "file": "java-version.txt",
+      "sha256": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0"
+    },
+    {
+      "file": "junit/TEST-junit-jupiter.xml",
+      "sha256": "fcbf45b732d3b6b1ea1a360759a50eabe5dae55915e365f279d2d59492dc98de"
+    },
+    {
+      "file": "junit/TEST-junit-platform-suite.xml",
+      "sha256": "408749ca8a3694a8ce5ac6bd28c85deb3b4c90c995d7a658534dc6a80d2f4d72"
+    },
+    {
+      "file": "junit/TEST-junit-vintage.xml",
+      "sha256": "6063b0534a51e9bdc4c53a6d6c0edaa90ed8034811c4f2e404b755ec3222f4f9"
+    },
+    {
+      "file": "manager.log",
+      "sha256": "adbe530c73b884729f2573267ded9ecf9471420332118acebf9f24413c4dabff"
+    },
+    {
+      "file": "mysql.log",
+      "sha256": "1a5906e8d3ed17c849cc500699e2490edd09cc60d38cfbda7790978cfa8cc684"
+    },
+    {
+      "file": "preparation-dependencies.txt",
+      "sha256": "6fcde0cdabd26daf69275d7056d184a69f1416b2250d054d9691ae4289333e69"
+    },
+    {
+      "file": "python.log",
+      "sha256": "f1cfdf644b85a6a88781c0b0600e388f4f213bcbaea727bc500972c99501f5c5"
+    },
+    {
+      "file": "redis.log",
+      "sha256": "acf00371a9ba0d7a6493a0398517c03029bcbb39c9e793a96253c7ca1a561792"
+    },
+    {
+      "file": "shared-results.json",
+      "sha256": "3019d0116af9dba838c6bc27c0f70322c80cf5f7800fbbc702d8cc1913cee734"
+    }
+  ],
+  "manager_log_policy": "Original dev DEBUG log stays in original CI artifact with hash only; do not copy synthetic authorization parameters into repository"
+}
