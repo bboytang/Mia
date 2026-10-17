@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中、尚未验收**：第十步1913680（预算内静态元数据快照）本地19项通过，正式容量/四回归在途。已收完基线15288f4的1k、10k单路/SQLite/RSS达标，但10k双前台482/579ms超400ms。详见[性能进度/原文](verification/mia-persona-memory/performance.md)。P24未开始，P22保持用户通过决定。
+- **P23模块容量门槛通过，整体仍未验收**：第十步1913680，1k/10k短/长必测全部达标；10k长单路205ms/双前台352ms/SQLite65ms，必测RSS419MiB。四回归全通过，所有任务收齐，无在途。50k探索仍超标。下一步全服务共同资源包络、Provider首句增量及真实Worker公平/任务/关闭，详见[性能进度与证据](verification/mia-persona-memory/performance.md)。P24未开始，P22保持用户通过决定。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前候选`191368002f31cb6c135b03b9f9a0aea6af7f5091`；唯一容量[39029006315](https://github.com/bboytang/Mia/actions/runs/39029006315)，服务39028975035/BGE39028975021/身份39028975051/manager39028975020在途。已验证基线15288f4四回归全通过、容量39028419134失败，原文/hash见performance-topk-*。收完当前组句柄后再修改，不重跑同源码取绿。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前实现`191368002f31cb6c135b03b9f9a0aea6af7f5091`；容量[39029006315](https://github.com/bboytang/Mia/actions/runs/39029006315) success（仅模块数值），服务39028975035（287项）/BGE39028975021（五报告）/身份39028975051（173项）/manager39028975020（154项）全部success。精确计数/原文/hash见performance-metadata-*；无在途。旧失败保留，跨设备核对实际HEAD及远端，不把文档后继误当未验证代码。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
