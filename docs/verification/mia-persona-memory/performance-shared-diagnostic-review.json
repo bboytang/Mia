@@ -1,0 +1,665 @@
+{
+  "run_id": 39072039097,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39072039097",
+  "observer_sha": "4ef79c49889052489d2ffe74e79084484ca53c6b",
+  "runtime_sha": "ddf182ccc94025016e89705bcc8b0b4aaa5a68a3",
+  "conclusion": "success",
+  "mode": "diagnostic",
+  "diagnostic_complete": true,
+  "shared_envelope_preflight_passed": false,
+  "p23_complete": false,
+  "provider_requests": 0,
+  "artifact_file": "performance-shared-diagnostic-results.json.gz",
+  "raw_sha256": "22ccaf4869a8da76d367c818ad382a35f8627a20ae666a7e1def6fb6e9ad8775",
+  "sha256": "42248a2e910ff82509fed5ffa793b2fa7adbb951fcef4cb18a6912843f0c6f95",
+  "sample_count_validation": [
+    {
+      "path": "diagnostics.sequential_pipeline",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages._require",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.sequential_stages.store_lock_wait._snapshot",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages._snapshot",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages.store_lock_wait._clues",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages.features_lock_wait._clues",
+      "count": 45
+    },
+    {
+      "path": "diagnostics.sequential_stages._clues",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages.encoder_lock_wait.native_encode.query",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.sequential_stages.native_encode.query",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.sequential_stages._encode",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.sequential_stages.features_lock_wait._scan",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.sequential_stages._scan",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages.store_lock_wait._snapshot_check",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.sequential_stages._snapshot_check",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.competition.foreground.0",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.competition.foreground.1",
+      "count": 15
+    },
+    {
+      "path": "diagnostics.concurrent_stages.store_lock_wait.other",
+      "count": 99
+    },
+    {
+      "path": "diagnostics.concurrent_stages._require",
+      "count": 158
+    },
+    {
+      "path": "diagnostics.concurrent_stages.store_lock_wait._snapshot",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages._snapshot",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages.store_lock_wait._clues",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages.features_lock_wait._clues",
+      "count": 90
+    },
+    {
+      "path": "diagnostics.concurrent_stages._clues",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages.encoder_lock_wait.native_encode.query",
+      "count": 60
+    },
+    {
+      "path": "diagnostics.concurrent_stages.native_encode.query",
+      "count": 60
+    },
+    {
+      "path": "diagnostics.concurrent_stages._encode",
+      "count": 92
+    },
+    {
+      "path": "diagnostics.concurrent_stages.features_lock_wait._scan",
+      "count": 60
+    },
+    {
+      "path": "diagnostics.concurrent_stages._scan",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages.store_lock_wait._snapshot_check",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages._snapshot_check",
+      "count": 30
+    },
+    {
+      "path": "diagnostics.concurrent_stages.encoder_lock_wait.native_encode.document",
+      "count": 32
+    },
+    {
+      "path": "diagnostics.concurrent_stages.native_encode.document",
+      "count": 32
+    }
+  ],
+  "sequential_pipeline": {
+    "count": 15,
+    "p50_ms": 394.7536409999657,
+    "p95_ms": 476.70964199998593
+  },
+  "competition_foreground": [
+    {
+      "scope_owner": "user:941040001:agent:mia-p23-0",
+      "count": 15,
+      "p50_ms": 712.7187090000007,
+      "p95_ms": 858.4747907999656
+    },
+    {
+      "scope_owner": "user:941040002:agent:mia-p23-1",
+      "count": 15,
+      "p50_ms": 731.7657579999945,
+      "p95_ms": 926.8309379999889
+    }
+  ],
+  "stage_summaries": {
+    "sequential_stages": {
+      "_require": {
+        "count": 30,
+        "p50_ms": 18.516345999984196,
+        "p95_ms": 20.453582849984286
+      },
+      "store_lock_wait._snapshot": {
+        "count": 15,
+        "p50_ms": 0.0026449999950273195,
+        "p95_ms": 0.003316300006872552
+      },
+      "_snapshot": {
+        "count": 15,
+        "p50_ms": 0.0741980000498188,
+        "p95_ms": 0.11012050001113492
+      },
+      "store_lock_wait._clues": {
+        "count": 15,
+        "p50_ms": 0.0015429999962179863,
+        "p95_ms": 0.0018397000189906974
+      },
+      "features_lock_wait._clues": {
+        "count": 45,
+        "p50_ms": 0.0021339999989322678,
+        "p95_ms": 0.009728000009090465
+      },
+      "_clues": {
+        "count": 15,
+        "p50_ms": 26.62850299998354,
+        "p95_ms": 31.9625088000123
+      },
+      "encoder_lock_wait.native_encode.query": {
+        "count": 30,
+        "p50_ms": 0.0020089999850370077,
+        "p95_ms": 0.0028060000232699154
+      },
+      "native_encode.query": {
+        "count": 30,
+        "p50_ms": 54.542131000005156,
+        "p95_ms": 94.00810395
+      },
+      "_encode": {
+        "count": 30,
+        "p50_ms": 55.00775650000378,
+        "p95_ms": 94.52500884999317
+      },
+      "features_lock_wait._scan": {
+        "count": 30,
+        "p50_ms": 0.005510499988758966,
+        "p95_ms": 0.009862049978437424
+      },
+      "_scan": {
+        "count": 15,
+        "p50_ms": 214.20450799996615,
+        "p95_ms": 249.89361630002804
+      },
+      "store_lock_wait._snapshot_check": {
+        "count": 15,
+        "p50_ms": 0.002945000005638576,
+        "p95_ms": 0.0035659999866766157
+      },
+      "_snapshot_check": {
+        "count": 15,
+        "p50_ms": 0.08928599999080689,
+        "p95_ms": 0.10299450000843535
+      }
+    },
+    "concurrent_stages": {
+      "store_lock_wait.other": {
+        "count": 99,
+        "p50_ms": 0.004369000009774027,
+        "p95_ms": 0.005506100029606386
+      },
+      "_require": {
+        "count": 158,
+        "p50_ms": 17.270043999985774,
+        "p95_ms": 34.17834384998462
+      },
+      "store_lock_wait._snapshot": {
+        "count": 30,
+        "p50_ms": 0.0022140000055514975,
+        "p95_ms": 0.002998549999233545
+      },
+      "_snapshot": {
+        "count": 30,
+        "p50_ms": 0.06832300002201919,
+        "p95_ms": 0.17898019997346623
+      },
+      "store_lock_wait._clues": {
+        "count": 30,
+        "p50_ms": 0.001443000002154804,
+        "p95_ms": 0.0022160000071380637
+      },
+      "features_lock_wait._clues": {
+        "count": 90,
+        "p50_ms": 0.0026295000168374827,
+        "p95_ms": 0.009137550011928397
+      },
+      "_clues": {
+        "count": 30,
+        "p50_ms": 27.982147999978224,
+        "p95_ms": 48.53028419996121
+      },
+      "encoder_lock_wait.native_encode.query": {
+        "count": 60,
+        "p50_ms": 0.001993999973137761,
+        "p95_ms": 0.003167499997402956
+      },
+      "native_encode.query": {
+        "count": 60,
+        "p50_ms": 98.96368450003479,
+        "p95_ms": 141.91738875002216
+      },
+      "_encode": {
+        "count": 92,
+        "p50_ms": 111.57430049999562,
+        "p95_ms": 263.7358689999673
+      },
+      "features_lock_wait._scan": {
+        "count": 60,
+        "p50_ms": 0.006963000004134301,
+        "p95_ms": 0.008597549987143793
+      },
+      "_scan": {
+        "count": 30,
+        "p50_ms": 482.49435450000533,
+        "p95_ms": 614.1068093999904
+      },
+      "store_lock_wait._snapshot_check": {
+        "count": 30,
+        "p50_ms": 0.0025049999976545223,
+        "p95_ms": 0.003327449977064134
+      },
+      "_snapshot_check": {
+        "count": 30,
+        "p50_ms": 0.08598600001619161,
+        "p95_ms": 0.4308941999994423
+      },
+      "encoder_lock_wait.native_encode.document": {
+        "count": 32,
+        "p50_ms": 0.0018229999909635808,
+        "p95_ms": 0.0024679500057800396
+      },
+      "native_encode.document": {
+        "count": 32,
+        "p50_ms": 200.24021050002716,
+        "p95_ms": 356.23956945002533
+      }
+    }
+  },
+  "separate_scan_profile": [
+    {
+      "file": "semantic.py",
+      "line": 157,
+      "function": "_scan",
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_ms": 23.459114000000003,
+      "cumulative_ms": 280.45918600000005
+    },
+    {
+      "file": "semantic.py",
+      "line": 239,
+      "function": "batches",
+      "primitive_calls": 631,
+      "calls": 631,
+      "self_ms": 2.604477,
+      "cumulative_ms": 147.712004
+    },
+    {
+      "file": "retrieval.py",
+      "line": 142,
+      "function": "batch_signals",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 14.260295000000001,
+      "cumulative_ms": 132.730776
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.fromiter>",
+      "primitive_calls": 120,
+      "calls": 120,
+      "self_ms": 24.036304,
+      "cumulative_ms": 51.244925
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'fetchmany' of 'sqlite3.Cursor' objects>",
+      "primitive_calls": 41,
+      "calls": 41,
+      "self_ms": 42.492108,
+      "cumulative_ms": 42.492108
+    },
+    {
+      "file": "retrieval.py",
+      "line": 169,
+      "function": "<genexpr>",
+      "primitive_calls": 213374,
+      "calls": 213374,
+      "self_ms": 25.139811,
+      "cumulative_ms": 25.139811
+    },
+    {
+      "file": "retrieval.py",
+      "line": 166,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 16.564994,
+      "cumulative_ms": 16.564994
+    },
+    {
+      "file": "retrieval.py",
+      "line": 171,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 14.523732,
+      "cumulative_ms": 14.523732
+    },
+    {
+      "file": "fromnumeric.py",
+      "line": 53,
+      "function": "_wrapfunc",
+      "primitive_calls": 440,
+      "calls": 440,
+      "self_ms": 0.47322000000000003,
+      "cumulative_ms": 13.487746
+    },
+    {
+      "file": "retrieval.py",
+      "line": 78,
+      "function": "snapshot",
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_ms": 0.016101,
+      "cumulative_ms": 11.313295
+    },
+    {
+      "file": "retrieval.py",
+      "line": 81,
+      "function": "<dictcomp>",
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_ms": 11.258313000000001,
+      "cumulative_ms": 11.271176
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "primitive_calls": 4,
+      "calls": 4,
+      "self_ms": 10.937155,
+      "cumulative_ms": 10.937155
+    },
+    {
+      "file": "fromnumeric.py",
+      "line": 1332,
+      "function": "searchsorted",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 0.069176,
+      "cumulative_ms": 10.190757
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'searchsorted' of 'numpy.ndarray' objects>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 10.054215,
+      "cumulative_ms": 10.054215
+    },
+    {
+      "file": "retrieval.py",
+      "line": 65,
+      "function": "begin",
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_ms": 9.380795,
+      "cumulative_ms": 9.402455
+    },
+    {
+      "file": "shape_base.py",
+      "line": 372,
+      "function": "stack",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 4.364533000000001,
+      "cumulative_ms": 8.449669
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of 'bytes' objects>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.4742970000000004,
+      "cumulative_ms": 8.083609000000001
+    },
+    {
+      "file": "semantic.py",
+      "line": 201,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.569223,
+      "cumulative_ms": 7.6441740000000005
+    },
+    {
+      "file": "retrieval.py",
+      "line": 156,
+      "function": "<genexpr>",
+      "primitive_calls": 10040,
+      "calls": 10040,
+      "self_ms": 2.435109,
+      "cumulative_ms": 5.609312
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.frombuffer>",
+      "primitive_calls": 10040,
+      "calls": 10040,
+      "self_ms": 5.177086,
+      "cumulative_ms": 5.177086
+    },
+    {
+      "file": "retrieval.py",
+      "line": 146,
+      "function": "totals",
+      "primitive_calls": 120,
+      "calls": 120,
+      "self_ms": 1.36133,
+      "cumulative_ms": 4.786875
+    },
+    {
+      "file": "retrieval.py",
+      "line": 182,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.9622260000000002,
+      "cumulative_ms": 4.471593
+    },
+    {
+      "file": "linalg.py",
+      "line": 2383,
+      "function": "norm",
+      "primitive_calls": 42,
+      "calls": 42,
+      "self_ms": 2.002348,
+      "cumulative_ms": 4.156709
+    },
+    {
+      "file": "semantic.py",
+      "line": 249,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 4.118175,
+      "cumulative_ms": 4.118175
+    },
+    {
+      "file": "einsumfunc.py",
+      "line": 1009,
+      "function": "einsum",
+      "primitive_calls": 80,
+      "calls": 80,
+      "self_ms": 0.07023000000000001,
+      "cumulative_ms": 3.622107
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.asarray>",
+      "primitive_calls": 324,
+      "calls": 324,
+      "self_ms": 3.5589280000000003,
+      "cumulative_ms": 3.5589280000000003
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method numpy.core._multiarray_umath.c_einsum>",
+      "primitive_calls": 80,
+      "calls": 80,
+      "self_ms": 3.551877,
+      "cumulative_ms": 3.551877
+    },
+    {
+      "file": "numeric.py",
+      "line": 2170,
+      "function": "allclose",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 0.10258,
+      "cumulative_ms": 3.244256
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'tobytes' of 'array.array' objects>",
+      "primitive_calls": 10000,
+      "calls": 10000,
+      "self_ms": 3.174203,
+      "cumulative_ms": 3.174203
+    },
+    {
+      "file": "retrieval.py",
+      "line": 155,
+      "function": "<listcomp>",
+      "primitive_calls": 40,
+      "calls": 40,
+      "self_ms": 2.3423010000000004,
+      "cumulative_ms": 2.973431
+    }
+  ],
+  "rss_peak_mib": 450.171875,
+  "static_features": {
+    "entries": 20000,
+    "accounted_bytes": 181670812,
+    "entries_by_owner": {
+      "user:941040002:agent:mia-p23-1": 10000,
+      "user:941040001:agent:mia-p23-0": 10000
+    }
+  },
+  "integrity": "ok",
+  "rebuilt": {
+    "indexed": 32,
+    "has_more": false
+  },
+  "members_after": {
+    "mysql": {
+      "pid": 3085,
+      "cgroup": "/miap23.slice/docker-0ff04c2b60a998e978a78d330ba4bf861b655dd4482dbbbcd3b27e60f776fcf2.scope",
+      "VmHWM": "495568 kB",
+      "VmRSS": "495568 kB"
+    },
+    "redis": {
+      "pid": 3152,
+      "cgroup": "/miap23.slice/docker-eae85f9fb2a821a0c2534c41708aa9d01141df858e4df3579c1607ec7c36288d.scope",
+      "VmHWM": "29324 kB",
+      "VmRSS": "29232 kB"
+    },
+    "manager": {
+      "pid": 3690,
+      "cgroup": "/miap23.slice/miap23-measure.service",
+      "VmHWM": "428232 kB",
+      "VmRSS": "428232 kB"
+    },
+    "python": {
+      "pid": 3856,
+      "cgroup": "/miap23.slice/miap23-measure.service",
+      "VmHWM": "460976 kB",
+      "VmRSS": "435940 kB"
+    }
+  },
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "cpu.stat": "usage_usec 95897147\nuser_usec 89693417\nsystem_usec 6203730\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 607\nnr_throttled 309\nthrottled_usec 16343199\nnr_bursts 0\nburst_usec 0",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0",
+    "memory.current": "1323433984",
+    "memory.peak": "1604988928",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+  },
+  "remaining": [
+    "same-Provider paired first-sentence delta",
+    "actual reply/app path under shared resources",
+    "real persistent Worker task fairness/faults/120-second terminal latency",
+    "inflight total service shutdown within 20 seconds"
+  ],
+  "source_artifact_hashes": {
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "99b5c1f1e3d5accc0a83edc6a0aa78cedf9e17c007e43057c10df2ff101f5ca6",
+    "cgroup-final-cpu.stat.txt": "2b1af33fcad5e5915950ba390aef38c85cdcb77d6a88accca18fd713e281994e",
+    "cgroup-final-memory.current.txt": "7ac49506dd1dd8ff8de2a11bbe2a7278090ac45359e94b564aff43cc38bfb9e0",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "512275312805b6b51fbbd9d853f820699abb9bc939aad90daf7704b2e866bc62",
+    "redis.log": "a22eca3ddfeb66c5443ea195ba62739dbcca2ddeeb6d88e931a661d64b967ed2",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "ccfa6094bd6d6bfd4b39150144888ca66c0352d4967b048eb2a56ad7845172ce",
+    "shared-results.json": "22ccaf4869a8da76d367c818ad382a35f8627a20ae666a7e1def6fb6e9ad8775",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "4aa446b79121533368aeec1396be11266339d68fdccbe0e98fc133132fc66a0d",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "preparation-dependencies.txt": "6fcde0cdabd26daf69275d7056d184a69f1416b2250d054d9691ae4289333e69",
+    "TEST-junit-jupiter.xml": "7f0e02e583cc33956fd04fcf343029274e91fcc0d1b2fdb0092a40713f3bae64",
+    "TEST-junit-vintage.xml": "8f52e2bc986b765d26992060929ebb77a55fcec95e89772c2f2206a3c06a1c97",
+    "TEST-junit-platform-suite.xml": "cb8951c998b635293025bf8a0fcbee0fe0e6a92e4f950db5d2355011e358ef10"
+  },
+  "interpretation": "Observer-only measurements are not D08 acceptance. Scan and native encoding slow under contention; lock waits are small. Separate cProfile identifies batch_signals as largest measured scan component, not whole-service latency attribution. No change to runtime or thresholds."
+}

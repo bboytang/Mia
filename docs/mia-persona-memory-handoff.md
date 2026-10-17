@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：当前运行ddf182c四回归全通过，192MiB预算能保留两Scope各10k，RSS/共同2GiB符合限制；但模块10k竞争695ms、共同跨用户竞争791ms仍超400ms，两数值均failure。第十三步共同热点诊断39072039097在途，算法不变。旧1913680模块通过仅为历史，详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
+- **P23进行中，整体未验收**：当前运行ddf182c四回归全通过，192MiB预算能保留两Scope各10k，RSS/共同2GiB符合限制；但模块10k竞争695ms、共同跨用户竞争791ms仍超400ms，两数值均failure。第十三步共同热点诊断39072039097已收齐，仅采集success：动态扫描/原生编码在竞争时变慢，各锁等待p95<0.01ms。当前无在途任务，下一步针对动态批评分做精确语义原型后再验证。旧1913680模块通过仅为历史，详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23运行实现`ddf182ccc94025016e89705bcc8b0b4aaa5a68a3`：共同39071484822/模块39071484402均failure；服务39071469985（287项）/BGE39071470050（五报告）/身份39071470133（173项）/manager39071470079（154项）全部success，原文/hash见performance-two-scope-*。当前观察器4ef79c4，唯一[共同诊断39072039097](https://github.com/bboytang/Mia/actions/runs/39072039097)在途，语法39072025926 success；先收同一句柄再修改。此前失败保持原文。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23运行实现`ddf182ccc94025016e89705bcc8b0b4aaa5a68a3`：共同39071484822/模块39071484402均failure；服务39071469985（287项）/BGE39071470050（五报告）/身份39071470133（173项）/manager39071470079（154项）全部success，原文/hash见performance-two-scope-*。当前观察器4ef79c4，唯一[共同诊断39072039097](https://github.com/bboytang/Mia/actions/runs/39072039097)已success（仅诊断完成），语法39072025926 success；原文/hash见performance-shared-diagnostic-*，运行实现和正式容量failure不变。此前失败保持原文。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -50,3 +50,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 ## 接续操作
 
 先读`AGENTS.md`、本文件及验收决定，再检查`git status --short --branch`、HEAD、远端实际SHA及用户最新授权。**当前新指令已批准P23；从性能进度继续，P22保留用户通过决定及原始失败。** 历史工作记录、旧交接压缩包或验证报告里的“下一步/在途”描述均不构成当前执行指令。
+
+第十三步接续：完整32组计数已核对；独立扫描profile中batch_signals累计132.73/280.46ms，缓存两owner各10k完整、Python450.17MiB、共同峰值1530.6MiB且无OOM。先对批评分词匹配/触发位置构建做局部等价原型，验证CPU/临时内存后再决定最小修改，不能靠继续加预算或重跑取绿；详见性能进度末尾。实际reply/app、首句、持久提取Worker及在途关闭仍待验证。
