@@ -85,7 +85,11 @@ class MiaBehaviorIntegrationTest {
         db.update("DELETE FROM ai_model_config WHERE id=?", selected);
         db.update("INSERT INTO ai_model_config(id,model_type,model_code,model_name,is_default,is_enabled,config_json,sort) VALUES (?,'LLM','openai','Mia isolated behavior',0,1,?,999)", selected, configuration);
         boolean passed = true;
+        String selectedRound = System.getenv().getOrDefault("MIA_EMOTION_DIAGNOSTIC_ROUND", "all");
+        assertTrue(selectedRound.equals("all") || (suite.equals("emotions")
+            && List.of("0", "1", "2").contains(selectedRound)), "Single-round selection is emotion diagnostics only");
         for (int round = 0; round < 3; round++) {
+            if (!selectedRound.equals("all") && !selectedRound.equals(Integer.toString(round))) continue;
             long user = 941010001L + round;
             String agent = "mia-behavior-" + round;
             String device = "02:00:00:00:07:0" + round, client = "mia-behavior-client-" + round;

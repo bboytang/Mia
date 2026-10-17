@@ -70,6 +70,11 @@ on:
         type: choice
         options: [configured, glm-5.3-flash, glm-5.3-flashx]
         default: configured
+      emotion_round:
+        description: Only for a targeted emotion diagnostic; all preserves the original three rounds
+        type: choice
+        options: [all, '0', '1', '2']
+        default: all
 permissions:
   contents: read
 jobs:
@@ -118,6 +123,7 @@ jobs:
       MIA_EMBEDDING_DIR: /tmp/mia-behavior-model
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
       MIA_BEHAVIOR_SUITE: ${{ inputs.suite || 'continuity' }}
+      MIA_EMOTION_DIAGNOSTIC_ROUND: ${{ inputs.emotion_round || 'all' }}
       MIA_TEST_MODEL_OVERRIDE: ${{ inputs.test_model != 'configured' && inputs.test_model || '' }}
     services:
       mysql:

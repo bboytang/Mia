@@ -483,8 +483,6 @@ async def serve():
                 llm._mia_requests.clear()
                 retrieval_start = len(report.get('retrievals', []))
                 completed = await asyncio.to_thread(conn.chat, request['query'])
-                if specification is None:
-                    assert completed is True, 'Installed chat did not complete'
                 raw = ''.join(llm._mia_raw_chunks)
                 checked = conn.dialogue.dialogue[-1].content if conn.dialogue.dialogue[-1].role == 'assistant' else ''
                 spoken = []
@@ -498,6 +496,8 @@ async def serve():
                 with store.lock:
                     jobs_after = store.db.execute('SELECT COUNT(*) FROM mia_jobs WHERE owner=?', (scope.owner,)).fetchone()[0]
                 case = {'query': request['query'], 'raw': raw, 'delivered': checked, 'tts_text': ''.join(spoken), 'diagnostics': diagnostics,
+                    'chat_completed': completed is True,
+                    'output_replacement': getattr(conn, '_mia_output_replacement', None),
                     'session_id': conn.session_id, 'pid': os.getpid(),
                     'input': turn.bundle.request() if turn else {key: last_request[key] for key in ('messages', 'tools', 'max_tokens') if key in last_request},
                     'tool_case_id': specification['id'] if specification else None, 'tool_calls': calls,
@@ -512,6 +512,8 @@ async def serve():
                 with LOCK:
                     report['cases'].append(case)
                     save(report)
+                if specification is None:
+                    assert completed is True, 'Installed chat did not complete'
                 # Never send pre-revocation private inputs/diagnostics back to
                 # an unauthorized peer. Full internal CI traces stay in the
                 # sanitized server artifact, not in this denial frame.
@@ -641,7 +643,10 @@ async def drive():
         'dataset_sha256': hashlib.sha256(fixture_path.read_bytes()).hexdigest(), 'requests': 0, 'request_kinds': [],
         'cases': [], 'extraction_outputs': [], 'passed': False, 'server_pids': [],
         'scope': 'Actual manager TLS authorization, WSS bridge restart, existing Provider SDK, BGE and SQLite; synthetic users; audio consumers omitted',
-        'limits': {'requests_per_round': REQUEST_CAP, 'rounds': 3, 'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': output_tokens()},
+        'limits': {'requests_per_round': REQUEST_CAP,
+            'rounds': 3 if os.environ.get('MIA_EMOTION_DIAGNOSTIC_ROUND', 'all') == 'all' else 1,
+            'selected_round': os.environ.get('MIA_EMOTION_DIAGNOSTIC_ROUND', 'all'),
+            'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': output_tokens()},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
         'background_lifecycle': 'installed start_worker/stop_worker; no manual task pumping',
         'persona_reference': 'insistgang/Luyao_AI_Project@e23c3aa25d6451e3f35e71609864bb3a54ad49a0; user requested no additional expression gate',
