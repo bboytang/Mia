@@ -4,6 +4,7 @@ on:
     paths:
       - 'scripts/ci/verify_mia_shared_envelope.py'
       - 'scripts/ci/mia_thread_diagnostics.py'
+      - 'scripts/ci/mia_performance_budgets.py'
       - 'scripts/ci/run_mia_shared_envelope.sh'
       - 'server/companion/manager_tests/MiaPerformanceIntegrationTest.java'
       - '.github/workflows/mia-memory-shared-performance.yml'

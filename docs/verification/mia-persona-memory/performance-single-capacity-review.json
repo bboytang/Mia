@@ -1,0 +1,186 @@
+{
+  "run_id": 39074536811,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39074536811",
+  "code_sha": "cf464efc52c35cc3431711de99dcc1d44bd497f6",
+  "encoder_session_options": {
+    "intra_op_num_threads": 1,
+    "inter_op_num_threads": 1,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-single-capacity-results.json.gz",
+  "raw_sha256": "a4240a637dce1a23ec9ed113ef8ff06e6b9ee83cb682e2fe86c0077730634b1a",
+  "sha256": "d3ad4d7e1f9013e0ad1092f24dff44944192df9a7c8b68c597b55c93cde889cb",
+  "sample_group_counts": [
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15
+  ],
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 11.482287199987695,
+      "hybrid_worst_query_p95_ms": 182.70883500001105,
+      "competition_max_p95_ms": 335.3517986000156,
+      "rss_peak_mib": 285.05078125,
+      "within_numeric_budgets": true,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 16728664,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 7342346
+      }
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 12.54187240000988,
+      "hybrid_worst_query_p95_ms": 182.99135120001324,
+      "competition_max_p95_ms": 335.9067635000031,
+      "rss_peak_mib": 336.47265625,
+      "within_numeric_budgets": true,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 22958536,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 9064934
+      }
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 96.79768660000718,
+      "hybrid_worst_query_p95_ms": 356.0656023999968,
+      "competition_max_p95_ms": 452.61906939999204,
+      "rss_peak_mib": 366.83203125,
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 162231808,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 73428818
+      }
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 108.78636439999809,
+      "hybrid_worst_query_p95_ms": 383.27041339999823,
+      "competition_max_p95_ms": 479.98329440001135,
+      "rss_peak_mib": 393.4765625,
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 224148760,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 90655406
+      }
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 529.6786057999839,
+      "hybrid_worst_query_p95_ms": 4174.546341399991,
+      "competition_max_p95_ms": 8145.639010099978,
+      "rss_peak_mib": 526.76953125,
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 1119645384,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      }
+    }
+  ],
+  "cgroup_before": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "24272896",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 293605\nuser_usec 159785\nsystem_usec 133820\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 2\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0"
+  },
+  "cgroup_after": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "1673510912",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 340952877\nuser_usec 312226544\nsystem_usec 28726333\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 3174\nnr_throttled 9\nthrottled_usec 5582\nnr_bursts 0\nburst_usec 0"
+  }
+}

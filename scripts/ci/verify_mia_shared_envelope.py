@@ -21,6 +21,7 @@ from mia_companion.memory import MemoryStore
 from mia_companion.retrieval import FEATURE_CACHE_BYTES
 from mia_companion.semantic import SemanticMemoryIndex
 from verify_mia_performance import populate, measure, summary
+from mia_performance_budgets import LIMITS, REVISION as ACCEPTANCE_REVISION, within_budgets
 
 
 ROOT = Path(os.environ['MIA_P23_REPORT_DIR'])
@@ -165,13 +166,7 @@ async def evaluate(report):
                     'entries_by_owner': dict(Counter(key[0] for key in index._features.entries))}
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
                 if report['mode'] == 'capacity':
-                    row['within_numeric_budgets'] = (all(case['encode_hybrid']['p95_ms'] <= 400
-                        and (size != 10000 or case['sqlite_exact']['p95_ms'] <= 150)
-                        for owner in row['sequential'] for case in owner['queries'])
-                        and all('error_class' not in value and value['p95_ms'] <= 400
-                            for value in row['competition']['foreground'])
-                        and row['rss_peak_mib'] <= 512 and row['integrity'] == 'ok'
-                        and row['competition']['rebuild'].get('indexed') == 32)
+                    row['within_numeric_budgets'] = within_budgets(row, shared=True)
                 row['wall_seconds'] = time.monotonic() - started
                 row['python_cpu_seconds'] = time.process_time() - cpu_started
                 row['cgroup_after'] = group_state()
@@ -191,6 +186,7 @@ def main():
     mode = os.environ.get('MIA_P23_MODE', 'capacity')
     assert mode in ('capacity', 'diagnostic', 'threads', 'thread-arm')
     report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': mode,
+        'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS,
         'shared_envelope_preflight_passed': False, 'diagnostic_complete': False,
         'p23_complete': False, 'provider_requests': 0,
         'runtime_profile': {'java_max_heap_mib': 512, 'java_max_metaspace_mib': 256,

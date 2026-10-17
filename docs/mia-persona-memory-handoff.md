@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第十四步运行83e837a四回归全通过（服务288/实际BGE五报告/身份173/manager154）、本地20专项通过；模块10k竞争435ms、共同10k竞争779ms仍超400ms，两容量均failure。两Scope各10k缓存完整，必测RSS与共同2GiB达标；50k探索延迟/RSS不通过。第十五步ABBA诊断39073672324已收齐，1线程降低竞争但p95仍665–680ms，本夹具向量/结果精确一致；当前无在途任务，下一步最小线程候选须以新SHA正式验证；详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
+- **P23进行中，整体未验收**：当前单线程候选cf464ef四回归全通过（服务288/实际BGE五报告/身份173/manager154）、本地32专项通过。用户已明确D08 v2三项延迟上限500/250/600ms；原v1两容量failure保留，v2复判模块1k/10k通过，共同10k竞争最差573ms仍超500ms。必测RSS及共同2GiB达标，50k探索延迟/RSS失败。GitHub只读复判待规则提交验证；详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前运行候选`83e837a1eae2ce7b304561d204ac5255d57dbb4e`：服务39072828991（288项）、实际BGE39072828959（五报告）、身份39072828973（173项）、manager39072828956（154项）全部success；[模块39072833943](https://github.com/bboytang/Mia/actions/runs/39072833943)和[共同39072835426](https://github.com/bboytang/Mia/actions/runs/39072835426)均failure，原文/hash见performance-stream-*。第十三步诊断39072039097仅采集success。此前失败保持原文，旧1913680模块通过不作为当前结论。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。当前P23运行候选`cf464efc52c35cc3431711de99dcc1d44bd497f6`：服务39074530883（288项）、实际BGE39074530849（五报告）、身份39074530868（173项）、manager39074530861（154项）全success；[模块39074536811](https://github.com/bboytang/Mia/actions/runs/39074536811)/[共同39074538532](https://github.com/bboytang/Mia/actions/runs/39074538532)在v1下failure。v2另存复判，不改原报告，原文/hash见performance-single-*。规则SHA/只读复判run随后记录；此前失败保持。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -43,7 +43,7 @@
 
 ## 当前P23与后续P24范围
 
-P23已获用户批准开始：约2核/2GiB，1k/10k必测、50k探索，冷启动与预热后至少5次p50/p95；实际编码+检索p95≤400ms、10k SQLite≤150ms、编码器RSS≤512MiB；同Provider无记忆基线首句增量p95≤500ms；2前台+1后台公平性、故障、重索引、任务p95≤120秒和含在途关闭≤20秒。
+P23已获用户批准开始。2026-10-17用户明确三项毫秒门槛各增加100ms，当前[D08-v2-20261017](verification/mia-persona-memory/acceptance.md)：实际编码＋检索含竞争p95≤500ms、10k SQLite≤250ms、同Provider无记忆首句增量p95≤600ms。约2核/2GiB，1k/10k必测、50k探索，预热至少5次p50/p95、编码器RSS≤512MiB；2前台+1真实后台公平故障、任务p95≤120秒、含在途总关闭≤20秒等条件保持。旧400/150/500ms报告及失败留作v1历史。
 
 P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安装、保留定制升级、迁移中断恢复、重复执行、重索引、回滚后事实和绑定保留。现有installer的定制升级路径仍需后续实现和验证。完整要求继续以实施计划为准。
 
@@ -68,3 +68,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 第十六步已实现单线程最小候选（ORT intra_op 2→1，其余精确语义/槽/预算/门槛不变），本地32专项通过，实际session配置纳入两容量报告；新SHA/唯一六运行句柄随后记录。当前尚无新正式容量结论，原83e837a两容量失败及第十五步单路变慢代价保留。
 
 第十六步候选`cf464efc52c35cc3431711de99dcc1d44bd497f6`已推送：唯一模块容量39074536811、共同容量39074538532；服务39074530883、实际BGE39074530849、身份39074530868、manager39074530861四回归在途。自动语法39074530909/39074530891均success。继续同一组句柄，暂不改运行算法；本地32专项通过不是新容量结论，P23未验收/P24未开始。
+
+第十六步与用户容差：六原运行已收齐，当前cf464ef单线程；D08 v2明确500/250/600ms（不改资源/任务/关闭），原v1失败不改写。本地旧样本只读复判module=true/shared=false，GitHub规则验证句柄随后记录；下一候选尚未实现。后续先验证编码器锁范围与跨Index/Worker的最多两次原生调用、真实向量/排序、取消和RSS，详见性能进度末尾；当前共享竞争仍需优化与实测。

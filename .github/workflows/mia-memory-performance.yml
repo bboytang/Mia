@@ -4,6 +4,10 @@ on:
     paths:
       - 'scripts/ci/verify_mia_performance.py'
       - 'scripts/ci/mia_performance_diagnostics.py'
+      - 'scripts/ci/mia_performance_budgets.py'
+      - 'scripts/ci/review_mia_performance_budgets.py'
+      - 'docs/verification/mia-persona-memory/performance-single-capacity-results.json.gz'
+      - 'docs/verification/mia-persona-memory/performance-single-shared-results.json.gz'
       - 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
       - '.github/workflows/mia-memory-performance.yml'
   workflow_dispatch:
@@ -26,7 +30,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: python -m py_compile scripts/ci/verify_mia_performance.py scripts/ci/mia_performance_diagnostics.py
+      - run: python -m py_compile scripts/ci/verify_mia_performance.py scripts/ci/mia_performance_diagnostics.py scripts/ci/mia_performance_budgets.py scripts/ci/review_mia_performance_budgets.py
+      - name: Reassess immutable single-thread measurements with user-approved D08 v2
+        run: |
+          python scripts/ci/review_mia_performance_budgets.py \
+            --module docs/verification/mia-persona-memory/performance-single-capacity-results.json.gz \
+            --shared docs/verification/mia-persona-memory/performance-single-shared-results.json.gz \
+            --output "$RUNNER_TEMP/mia-p23-budget-reassessment.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Mia-P23-budget-reassessment-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/mia-p23-budget-reassessment.json
+          if-no-files-found: error
   numerical:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

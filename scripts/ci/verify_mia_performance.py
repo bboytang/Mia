@@ -14,6 +14,7 @@ import time
 import traceback
 
 import numpy as np
+from mia_performance_budgets import LIMITS, REVISION as ACCEPTANCE_REVISION, within_budgets
 
 from mia_companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from mia_companion.embedding import SemanticEncoder, MODEL_KEY, REVISION, DIMENSION
@@ -175,12 +176,7 @@ async def evaluate(args, report):
                     row['static_features'] = {'entries': len(index._features.entries),
                                               'accounted_bytes': index._features.bytes}
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
-                row['within_numeric_budgets'] = (all(case['encode_hybrid']['p95_ms'] <= 400
-                    and (size != 10000 or case['sqlite_exact']['p95_ms'] <= 150) for case in row['queries'])
-                    and row['rss_peak_mib'] <= 512 and row['integrity'] == 'ok'
-                    and all(value.get('p95_ms', float('inf')) <= 400
-                            for value in row['competition']['foreground'])
-                    and row['competition']['rebuild'].get('indexed') == 32)
+                row['within_numeric_budgets'] = within_budgets(row)
             except Exception as error:
                 row.update(within_numeric_budgets=False, error_class=type(error).__name__, reason=str(error))
             finally:
@@ -201,6 +197,7 @@ def main():
     parser.add_argument('--mode', choices=('capacity', 'diagnostic'), default='capacity')
     args = parser.parse_args()
     report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': args.mode, 'numeric_gate_passed': False,
+        'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS,
         'p23_complete': False, 'scope': 'P23 numerical module capacity, not full-service acceptance',
         'fixture_kind': 'Synthetic records and explicit synthetic metadata; replicated real BGE seed vectors; IO/CPU only, no semantic-quality claim',
         'remaining': ['shared full-service resource envelope', 'same-Provider paired first-sentence delta',
