@@ -1,0 +1,163 @@
+{
+  "run_id": 38996970741,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38996970741",
+  "observer_sha": "883a76fd4168061238e6bea8e325d4e808d0313e",
+  "runtime_code_sha": "d2bfd7b15d2ff99b158fdb43e87506451257e131",
+  "conclusion": "success",
+  "meaning": "Corrected diagnostic collection, not D08 acceptance",
+  "p23_complete": false,
+  "artifact_file": "performance-hot-results.json.gz",
+  "raw_sha256": "17b0a9c9d2a33d63a605c57612867a43b261d7d34f1a1d5a71df6d9ab4d2529b",
+  "sha256": "6b5dc505864140c70c35dc0824076eef7730fbb0de11e8084c3634f8f17a4ccb",
+  "all_stage_counts_match_raw_samples": true,
+  "sequential_stages": {
+    "_require": {
+      "count": 30,
+      "p50_ms": 0.003666999987217423,
+      "p95_ms": 0.005151549967763458
+    },
+    "store_lock_wait._snapshot": {
+      "count": 15,
+      "p50_ms": 0.0009220000265486306,
+      "p95_ms": 0.0012039999830903976
+    },
+    "_snapshot": {
+      "count": 15,
+      "p50_ms": 0.022792000038407423,
+      "p95_ms": 0.028156999974271457
+    },
+    "store_lock_wait._clues": {
+      "count": 15,
+      "p50_ms": 0.0009210000371240312,
+      "p95_ms": 0.0009772999646884273
+    },
+    "features_lock_wait._clues": {
+      "count": 150015,
+      "p50_ms": 0.0004309999894758221,
+      "p95_ms": 0.0004610000132743153
+    },
+    "_clues": {
+      "count": 15,
+      "p50_ms": 85.32680399997616,
+      "p95_ms": 86.9219864999991
+    },
+    "encoder_lock_wait.native_encode.query": {
+      "count": 30,
+      "p50_ms": 0.0014674999988528725,
+      "p95_ms": 0.00185955000802096
+    },
+    "native_encode.query": {
+      "count": 30,
+      "p50_ms": 43.81001450002486,
+      "p95_ms": 58.18949439999699
+    },
+    "_encode": {
+      "count": 30,
+      "p50_ms": 44.32125949998067,
+      "p95_ms": 58.68042799999955
+    },
+    "features_lock_wait._scan": {
+      "count": 150015,
+      "p50_ms": 0.00043100004631924094,
+      "p95_ms": 0.0004909999802293896
+    },
+    "_scan": {
+      "count": 15,
+      "p50_ms": 315.9758030000148,
+      "p95_ms": 331.8394989999888
+    },
+    "store_lock_wait._snapshot_check": {
+      "count": 15,
+      "p50_ms": 0.0013520000265998533,
+      "p95_ms": 0.00157660002173543
+    },
+    "_snapshot_check": {
+      "count": 15,
+      "p50_ms": 0.08875599996827077,
+      "p95_ms": 0.11411840000050685
+    }
+  },
+  "concurrent_stages": {
+    "store_lock_wait.other": {
+      "count": 99,
+      "p50_ms": 0.0029050000307506707,
+      "p95_ms": 44.033947999980604
+    },
+    "_require": {
+      "count": 158,
+      "p50_ms": 0.00410250001436907,
+      "p95_ms": 0.00631250003095829
+    },
+    "store_lock_wait._snapshot": {
+      "count": 30,
+      "p50_ms": 0.0014824999823304097,
+      "p95_ms": 0.22564579999766377
+    },
+    "_snapshot": {
+      "count": 30,
+      "p50_ms": 0.057086999987632225,
+      "p95_ms": 2.642478700002461
+    },
+    "store_lock_wait._clues": {
+      "count": 30,
+      "p50_ms": 0.0014379999981883884,
+      "p95_ms": 0.16087845000072248
+    },
+    "encoder_lock_wait.native_encode.document": {
+      "count": 32,
+      "p50_ms": 36.77560849999395,
+      "p95_ms": 105.09051119996398
+    },
+    "features_lock_wait._clues": {
+      "count": 300030,
+      "p50_ms": 0.000650999993467849,
+      "p95_ms": 0.0013330000001587905
+    },
+    "_clues": {
+      "count": 30,
+      "p50_ms": 206.9948214999897,
+      "p95_ms": 493.20417330000333
+    },
+    "native_encode.document": {
+      "count": 32,
+      "p50_ms": 413.0566510000051,
+      "p95_ms": 580.2092785999747
+    },
+    "_encode": {
+      "count": 92,
+      "p50_ms": 384.4340115000193,
+      "p95_ms": 582.9447712999894
+    },
+    "encoder_lock_wait.native_encode.query": {
+      "count": 60,
+      "p50_ms": 0.0026699999864376878,
+      "p95_ms": 473.0122402500029
+    },
+    "native_encode.query": {
+      "count": 60,
+      "p50_ms": 116.62879300001805,
+      "p95_ms": 532.3173912000441
+    },
+    "features_lock_wait._scan": {
+      "count": 300030,
+      "p50_ms": 0.0004510000053414842,
+      "p95_ms": 0.0008320000119965698
+    },
+    "_scan": {
+      "count": 30,
+      "p50_ms": 700.0213995000308,
+      "p95_ms": 1091.3229244999966
+    },
+    "store_lock_wait._snapshot_check": {
+      "count": 30,
+      "p50_ms": 0.0021239999909994367,
+      "p95_ms": 0.46888770000918895
+    },
+    "_snapshot_check": {
+      "count": 30,
+      "p50_ms": 0.11086249998015774,
+      "p95_ms": 1.0666700499626809
+    }
+  },
+  "scope": "Observer and profiler overhead present; separate profiled retrieve excluded from all timed arrays; percentiles not additive; different runner cannot establish speedup factor"
+}

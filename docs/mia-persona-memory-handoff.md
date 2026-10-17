@@ -13,7 +13,7 @@
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前代码`d2bfd7b15d2ff99b158fdb43e87506451257e131`，容量[38995549068](https://github.com/bboytang/Mia/actions/runs/38995549068)已failure；同SHA服务280/BGE五报告/身份173/manager154全部success，精确run、原文及hash见performance-wal-*。上述回归/容量全部收完；第五步观察器a749a82 / 诊断38996682107已在途（运行实现仍d2bfd7b），push语法38996680547成功。继续该句柄，区分热缓存动态评分/候选堆、FeatureCache.lock及查询/文档编码竞争，再决定最小批处理/调度修正。早期缓存退化和并发删除失败保留，不倒改为通过。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前代码`d2bfd7b15d2ff99b158fdb43e87506451257e131`，容量[38995549068](https://github.com/bboytang/Mia/actions/runs/38995549068)已failure；同SHA服务280/BGE五报告/身份173/manager154全部success，精确run、原文及hash见performance-wal-*。第五步校正观察器883a76f / 38996970741已success、所有原样本计数一致；热缓存动态评分和查询/后台编码竞争确认为剩余成本，缓存锁等待近0。原文/hash见performance-hot-*，当前无在途任务。下一步小批量精确评分与同Store前台检索优先，保留原任务/原生超时及数学/权限语义。早期缓存退化和并发删除失败保留，不倒改为通过。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。

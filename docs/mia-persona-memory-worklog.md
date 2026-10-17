@@ -1015,3 +1015,5 @@ d2bfd7b15d2ff99b158fdb43e87506451257e131 / 容量 https://github.com/bboytang/Mi
 第五步观察器a749a82已推送，单次diagnostic38996682107在途；push语法38996680547成功。运行代码仍d2bfd7b，不将更换主机的时间差当算法改善。主交接/本地入口同步新在途handle。
 
 第五步首轮a749a82 / 38996682107 success但原数组计数审计发现观察器bug：profile阶段向共享的concurrent原始样本数组追加，count和p50/p95仍为追加前统计；按前count条重算p95与原值全部一致。原报告/尾部额外数量/hash保留performance-hot-first-*，不改原文件；独立capacity无观察器因此不受影响。最小修正profile之前清空收集器并强校验count=len(samples)，以修正观察器重跑诊断。原计时_scan279.6ms/竞争799.9ms、缓存锁近0、查询编码249.9ms含锁等待174.4ms、后台文档226.1ms；profile评分208.9ms为主要动态成本，仍待校正采样确认。
+
+P23第五步完成：883a76f / 38996970741 success，所有计时组count等于样本数，profile完全隔离；原文/hash保存performance-hot-*。实现仍d2bfd7b，单路_scan331.8ms/_clues86.9ms；竞争_scan1091.3ms/_clues493.2ms，查询编码532.3ms含锁等待473.0ms、后台文档编码580.2ms，缓存锁近0。单独profile512.1ms扫描内signals223.8ms/数据读取72.1ms，prepare88.1ms包含observer成本。下一项是小批量精确评分/减少候选构造及同Store前台检索优先调度；不改数学/Scope/权重/期限，不先宣称新候选达标。
