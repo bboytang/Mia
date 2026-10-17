@@ -1,0 +1,134 @@
+{
+  "run_id": 38995549068,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38995549068",
+  "code_sha": "d2bfd7b15d2ff99b158fdb43e87506451257e131",
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-wal-capacity-results.json.gz",
+  "raw_sha256": "76ebf6ea517551b99a769b2618ea4134aaabefe06622841605655ca6aebdf744",
+  "sha256": "dd49ee81fea458560d24635bd3ffbc203424d5e0e8d0647aaaa47057a888b330",
+  "dataset_sha256": "4ccd01211153a3724727e3d653066e1437fa4220fb159a284bbf97fa98422319",
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 11.22404319998509,
+      "hybrid_worst_query_p95_ms": 121.07369439999047,
+      "competition_max_p95_ms": 349.61171570000715,
+      "rss_peak_mib": 284.19140625,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 5468336
+      },
+      "database_bytes": 16728664,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": true
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 12.208251199996312,
+      "hybrid_worst_query_p95_ms": 128.135210399995,
+      "competition_max_p95_ms": 665.1335275999827,
+      "rss_peak_mib": 306.48046875,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 6793600
+      },
+      "database_bytes": 22958536,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 97.25294199999439,
+      "hybrid_worst_query_p95_ms": 436.07941340000025,
+      "competition_max_p95_ms": 1192.509132899994,
+      "rss_peak_mib": 341.41015625,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 54688808
+      },
+      "database_bytes": 162231808,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 106.14655419999508,
+      "hybrid_worst_query_p95_ms": 473.8702345999968,
+      "competition_max_p95_ms": 1868.3315511000071,
+      "rss_peak_mib": 412.3671875,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 67942072
+      },
+      "database_bytes": 224148760,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 523.2639431999928,
+      "hybrid_worst_query_p95_ms": 4762.6916460000075,
+      "competition_max_p95_ms": 13343.771093599995,
+      "rss_peak_mib": 579.546875,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      },
+      "database_bytes": 1119645384,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    }
+  ],
+  "resource": {
+    "cgroup": {
+      "cpu.max": "200000 100000",
+      "memory.max": "2147483648",
+      "memory.peak": "1737506816",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.stat": "usage_usec 458607823\nuser_usec 423860219\nsystem_usec 34747603\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 3611\nnr_throttled 608\nthrottled_usec 45535578\nnr_bursts 0\nburst_usec 0"
+    },
+    "required_peak_rss_mib": 412.3671875,
+    "exploratory_peak_rss_mib": 579.546875
+  },
+  "acceptance": [
+    "1k short meets this numerical gate",
+    "10k exact scans and required RSS meet their limits",
+    "1k dense competition and both 10k hybrid/competition exceed 400ms",
+    "50k is unsupported exploratory workload; no cache churn but 579.55 MiB RSS exceeds 512",
+    "All five integrity checks and 32-row rebuilds passed; no cgroup OOM",
+    "Related service/BGE/identity/manager all pass for same SHA; not full P23 acceptance"
+  ],
+  "next": "Profile current hot cached scoring and query/rebuild encoder CPU competition after removal of the write-lock/WAL hold; assess batching, not relaxed thresholds, and rerun same gate. Full-service Provider/Worker/fairness/shutdown still unexecuted."
+}

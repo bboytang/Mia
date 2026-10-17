@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中**：2026-10-17用户批准开始P23并要求每步记录/交接。第一步固定D08入口及有效容量测量完成，但数值门槛未通过，详见[性能进度和下一项动作](verification/mia-persona-memory/performance.md)。10k长文本混合检索p95约1057ms、竞争约2664ms，需定位瓶颈；全服务/Provider首句/真实Worker公平性仍未测。P24未开始，不重新追加P22语义测试或模型比较。
+- **P23进行中、数值未通过**：已完成热点诊断、有界静态特征缓存、只读快照及删除/WAL并发修正。当前d2bfd7b四项相关回归全通过，但10k长文本混合检索p95约474ms、两路+重索引竞争约1868ms，超过400ms；纯SQLite约106ms和必测RSS约412MiB达标，50k探索RSS约580MiB超标。详见[完整性能进度/原文/下一步](verification/mia-persona-memory/performance.md)。P24未开始，不追加P22语义测试或模型比较。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23数值被测代码为`a8dcaa7e1542069251886ab303e6c9156ec122cf`，性能run38992838190终态failure；同SHA服务274项通过（38992838211），原始结果及hash已归档。第二步原路径诊断`83823ab` / [38993671685](https://github.com/bboytang/Mia/actions/runs/38993671685)已success（仅诊断收集成功，非D08通过）：混合_scan p95 410.9ms、native编码13.4ms，竞争_scan锁等待398.6ms。profile确认逐条文本二元组与元数据解析为主要热点。静态特征候选e83d700已推送，容量38994055267已failure（10k长508.1ms/竞争1547.9ms，一项SQLite150.85ms仍超标；50k缓存抖动退化已保留）；服务38994053597（278项）、BGE38994053595（五报告）、身份38994053626（173项）、manager38994053602（154项）均success；push语法38994053583成功。全部句柄已收完。下一步独立只读WAL快照降低共享锁持有、移除重复COUNT扫描、超容量走原无缓存评分；P23仍未通过。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前代码`d2bfd7b15d2ff99b158fdb43e87506451257e131`，容量[38995549068](https://github.com/bboytang/Mia/actions/runs/38995549068)已failure；同SHA服务280/BGE五报告/身份173/manager154全部success，精确run、原文及hash见performance-wal-*。全部任务已收完，无在途句柄。下一步对当前热缓存动态评分/候选堆、FeatureCache.lock及编码CPU竞争做分段profile，再决定最小批处理/调度修正。早期缓存退化和并发删除失败保留，不倒改为通过。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。

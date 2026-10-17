@@ -1,0 +1,78 @@
+{
+  "run_id": 38995309802,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38995309802",
+  "code_sha": "9af668841118352cc84729e97fe19ed66e6522bf",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-readonly-first-capacity-results.json.gz",
+  "raw_sha256": "be19e6f2625e002c14a4c618fafacc5fe23c938ef617e41dc990fa6dad16f395",
+  "sha256": "db5af9561a1ef5827b3115950231bfb867f1c83d90adc700230c7fac9859171d",
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "sqlite_p95_ms": 11.098019199997111,
+      "hybrid_p95_ms": 126.14831220000156,
+      "competition_p95_ms": 366.6823978999943,
+      "rss_peak_mib": 283.79296875,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 5468336
+      },
+      "passed": true
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "sqlite_p95_ms": 13.264836999991303,
+      "hybrid_p95_ms": 129.57752999999457,
+      "competition_p95_ms": 672.1462602999964,
+      "rss_peak_mib": 312.0,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 6793600
+      },
+      "passed": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "sqlite_p95_ms": 95.76815500000748,
+      "hybrid_p95_ms": 410.8586520000017,
+      "competition_p95_ms": 1340.5066987999958,
+      "rss_peak_mib": 318.6328125,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 54688808
+      },
+      "passed": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "sqlite_p95_ms": 105.41371120000917,
+      "hybrid_p95_ms": 451.35603660000356,
+      "competition_p95_ms": 1961.2541524000103,
+      "rss_peak_mib": 367.20703125,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 67942072
+      },
+      "passed": false
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "sqlite_p95_ms": 527.1814532000008,
+      "hybrid_p95_ms": 4903.618674999996,
+      "competition_p95_ms": 13286.046989299988,
+      "rss_peak_mib": 367.20703125,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      },
+      "passed": false
+    }
+  ],
+  "acceptance": "Intermediate candidate has failed concurrent deletion test 38995300706; these numbers cannot accept the later d2bfd7b fix"
+}
