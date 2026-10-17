@@ -267,6 +267,7 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
             with patch('server.companion.retrieval.FEATURE_CACHE_ENTRIES', 1):
                 scalar = await self.index.retrieve(self.scope, self.auth, query)
             self.assertEqual(cached, scalar)
+
         vector = self.encoder.encode('散步', query=True)
         state = self.index._snapshot(self.scope)
         for limit in (1, 24):
@@ -274,6 +275,28 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
             with patch('server.companion.retrieval.FEATURE_CACHE_ENTRIES', 1):
                 scalar = self.index._scan(self.scope, state, vector, limit, None, '散步')
             self.assertEqual(cached, scalar)
+
+    async def test_warm_metadata_still_reads_live_vectors_and_evidence_versions(self):
+        own = self.fact('散步带水壶', triggers=['散步'], keywords=['水壶'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        before = await self.index.retrieve(self.scope, self.auth, '散步')
+        state = self.index._snapshot(self.scope)
+        snapshot = self.index._features.snapshot(self.scope, state)
+        self.assertEqual(set(snapshot), {own})
+        with self.store.db:
+            self.store.db.execute('UPDATE mia_memory_meta SET evidence_version=evidence_version+1 WHERE memory_id=?', (own,))
+        after = await self.index.retrieve(self.scope, self.auth, '散步')
+        self.assertEqual(after['results'][0]['evidence_version'], before['results'][0]['evidence_version'] + 1)
+        with self.store.db:
+            self.store.db.execute('DELETE FROM mia_vectors WHERE memory_id=?', (own,))
+        with self.assertRaisesRegex(EmbeddingUnavailable, 'index_not_ready'):
+            await self.index.retrieve(self.scope, self.auth, '散步')
+        await self.index.rebuild_batch(self.scope, self.auth)
+        with self.store.db:
+            self.store.db.execute('UPDATE mia_vectors SET normalized_vector=? WHERE memory_id=?',
+                (np.zeros(DIMENSION, dtype='<f4').tobytes(), own))
+        with self.assertRaisesRegex(EmbeddingUnavailable, 'index_invalid'):
+            await self.index.retrieve(self.scope, self.auth, '散步')
 
     async def test_eight_clue_limit_keeps_order_and_does_not_hide_invalid_tail(self):
         for i in range(10):

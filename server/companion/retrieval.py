@@ -17,6 +17,8 @@ CANDIDATES = 12
 RESULTS = 4
 FEATURE_CACHE_BYTES = 128 * 1024 * 1024
 FEATURE_CACHE_ENTRIES = 32768
+RECORD_FIELDS = ('id', 'content', 'category', 'content_version', 'evidence_version',
+                 'entities', 'keywords', 'trigger_terms', 'emotional_weight')
 
 
 def terms(value):
@@ -73,6 +75,12 @@ class FeatureCache:
             item = self.entries.get((scope.owner, scope.persona_id, state, memory_id))
             return item[0] if item is not None else None
 
+    def snapshot(self, scope, state):
+        with self.lock:
+            prefix = (scope.owner, scope.persona_id, state)
+            return {key[3]: (item[0], item[2]) for key, item in self.entries.items()
+                    if key[:3] == prefix}
+
     def prepare(self, scope, state, row):
         with self.lock:
             key = (scope.owner, scope.persona_id, state, row['id'])
@@ -84,17 +92,20 @@ class FeatureCache:
 
     def _prepare(self, key, row):
         prepared = prepare_signals(row)
+        record = {name: row[name] for name in RECORD_FIELDS}
         # Conservatively include key/node overhead and repeated references to
         # strings, as well as the packed array's allocated buffer.
         size = (512 + sum(sys.getsizeof(part) for part in key) + sys.getsizeof(prepared)
                 + sum(sys.getsizeof(part) for part in prepared)
                 + sum(sys.getsizeof(term) for i in (0, 1, 3) for term in prepared[i]))
+        size += sys.getsizeof(record) + sum(sys.getsizeof(name) + sys.getsizeof(value)
+                                           for name, value in record.items())
         if size > FEATURE_CACHE_BYTES:
             return prepared
         while self.entries and (self.bytes + size > FEATURE_CACHE_BYTES
                                 or len(self.entries) >= FEATURE_CACHE_ENTRIES):
             self.bytes -= self.entries.popitem(last=False)[1][1]
-        self.entries[key] = (prepared, size)
+        self.entries[key] = (prepared, size, record)
         self.bytes += size
         return prepared
 

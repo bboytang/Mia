@@ -32,6 +32,7 @@ def reference(query, row, cosine):
 class RetrievalFeatureTests(unittest.TestCase):
     def row(self, marker='one'):
         return {'id': marker, 'content': '散步时带蓝色水壶。', 'entities': '["蓝色水壶"]',
+                'category': 'fact', 'content_version': 1, 'evidence_version': 1,
                 'keywords': '["散步","蓝色水壶"]', 'trigger_terms': '["散步"]', 'emotional_weight': 0.7}
 
     def test_packed_scores_match_original_sets_for_unicode_whitespace_and_order(self):
@@ -57,6 +58,8 @@ class RetrievalFeatureTests(unittest.TestCase):
         self.assertIsNone(cache.peek(replace(current, persona_id='other'), (0, 1), 'one'))
         cache.begin(current, (0, 2))
         self.assertIsNone(cache.peek(current, (0, 1), 'one'))
+        self.assertEqual(cache.snapshot(current, (0, 1)), {})
+        self.assertEqual(cache.snapshot(foreign, (0, 1))['one'][1], self.row())
         self.assertIsNotNone(cache.peek(foreign, (0, 1), 'one'))
         changed = dict(self.row(), keywords='["新线索"]')
         self.assertNotEqual(cache.prepare(current, (0, 2), changed), old)

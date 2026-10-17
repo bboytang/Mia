@@ -170,19 +170,26 @@ class SemanticMemoryIndex:
             db.execute('BEGIN')
             self._check(scope, expected, db)
             use_cache = False
+            cached = {}
             if query_text is not None:
                 self._features.begin(scope, expected)
                 count = db.execute('SELECT COUNT(*) FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
                     "WHERE m.owner=? AND x.persona_id=? AND m.confirmed=1 AND x.state='active'",
                     (scope.owner, scope.persona_id)).fetchone()[0]
                 use_cache = count <= FEATURE_CACHE_ENTRIES
+                if use_cache:
+                    cached = self._features.snapshot(scope, expected)
+                    if len(cached) != count:
+                        cached = {}
             base = (' FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
                     'LEFT JOIN mia_vectors v ON v.memory_id=m.id AND v.model_id=? AND v.model_revision=? '
                     'AND v.dimension=? AND v.content_version=x.content_version '
                     "WHERE m.owner=? AND x.persona_id=? AND m.confirmed=1 AND x.state='active'")
             params = (MODEL_KEY, REVISION, DIMENSION, scope.owner, scope.persona_id)
-            cursor = db.execute('SELECT m.id,m.content,m.category,x.content_version,x.evidence_version,'
-                'x.entities,x.keywords,x.trigger_terms,x.emotional_weight,v.normalized_vector' + base, params)
+            columns = ('m.id,x.content_version,x.evidence_version,v.normalized_vector' if cached else
+                'm.id,m.content,m.category,x.content_version,x.evidence_version,'
+                'x.entities,x.keywords,x.trigger_terms,x.emotional_weight,v.normalized_vector')
+            cursor = db.execute('SELECT ' + columns + base, params)
             heaps = {name: [] for name in (('original',) if query_text is None else ('original', 'expanded', 'lexical', 'association'))}
             while True:
                 rows = cursor.fetchmany(256)
@@ -205,7 +212,14 @@ class SemanticMemoryIndex:
                         continue
                     if query_text is None and len(heaps['original']) == limit and (score, row['id']) <= heaps['original'][0][:2]:
                         continue
-                    record = {key: row[key] for key in row.keys() if key != 'normalized_vector'}
+                    if cached:
+                        item = cached.get(row['id'])
+                        if item is None:
+                            raise EmbeddingUnavailable('memory_changed')
+                        record = dict(item[1])
+                        record['content_version'], record['evidence_version'] = row['content_version'], row['evidence_version']
+                    else:
+                        record = {key: row[key] for key in row.keys() if key != 'normalized_vector'}
                     record['cosine'] = score
                     if query_text is not None:
                         record['original_cosine'], record['expanded_cosine'] = score, float(expanded_score)
@@ -232,7 +246,8 @@ class SemanticMemoryIndex:
                     for row in batch:
                         yield row, None
                     continue
-                prepared = [self._features.prepare(scope, expected, row) for row in batch]
+                prepared = ([cached[row['id']][0] for row in batch] if cached else
+                            [self._features.prepare(scope, expected, row) for row in batch])
                 values, matched, starts = batch_signals(query_text, batch, prepared, query_codes)
                 # A source's global top-k must be in its batch top-k. Rows are
                 # already ID-descending, so stable score ordering preserves ties.
