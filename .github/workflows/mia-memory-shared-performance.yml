@@ -7,6 +7,12 @@ on:
       - 'server/companion/manager_tests/MiaPerformanceIntegrationTest.java'
       - '.github/workflows/mia-memory-shared-performance.yml'
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Capacity gate or separate shared-resource hot-path diagnosis
+        type: choice
+        options: [capacity, diagnostic]
+        default: capacity
 permissions:
   contents: read
 concurrency:
@@ -31,6 +37,7 @@ jobs:
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
       MIA_P23_REPORT_DIR: /tmp/mia-p23-shared-results
       MIA_EMBEDDING_DIR: /tmp/mia-p23-shared-model
+      MIA_P23_MODE: ${{ inputs.mode || 'capacity' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4

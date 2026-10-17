@@ -116,7 +116,7 @@ async def evaluate(report):
         for i, seed in enumerate(fixture['records']) for profile in ('short', 'dense')}
     report['capacity'] = []
     save(report)
-    for size in (1000, 10000):
+    for size in ((10000,) if report['mode'] == 'diagnostic' else (1000, 10000)):
         started, cpu_started = time.monotonic(), time.process_time()
         row = {'size_per_frontend_scope': size, 'profile': 'dense', 'cgroup_before': group_state()}
         auth.timings = []
@@ -128,23 +128,34 @@ async def evaluate(report):
                 for scope, count in zip(scopes, (size, size, 32)):
                     populate(store, scope, count, 'dense', fixture, vectors)
                 index = SemanticMemoryIndex(store, encoder)
-                row['sequential'] = []
-                for scope in scopes[:2]:
-                    row['sequential'].append(await measure(index, scope, auth, fixture['queries']))
-                    save(report)
-                # Each Scope/query was warmed above; competition uses distinct owners.
-                row['competition'] = await compete(index, scopes, auth, fixture['queries'])
+                if report['mode'] == 'diagnostic':
+                    from mia_performance_diagnostics import diagnose
+                    # diagnose warms the first owner itself. Warm the other owner
+                    # too, retaining both real Scopes in the same bounded cache.
+                    for query in fixture['queries']:
+                        await index.retrieve(scopes[1], auth, query)
+                    row['diagnostics'] = await diagnose(index, scopes[0], auth, fixture['queries'], summary,
+                        lambda: compete(index, scopes, auth, fixture['queries']))
+                    row['authorization_requests_scope'] = 'Whole diagnostic including separate profile; not timed acceptance'
+                else:
+                    row['sequential'] = []
+                    for scope in scopes[:2]:
+                        row['sequential'].append(await measure(index, scope, auth, fixture['queries']))
+                        save(report)
+                    # Each Scope/query was warmed above; competition uses distinct owners.
+                    row['competition'] = await compete(index, scopes, auth, fixture['queries'])
                 row['rss_peak_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
                 row['static_features'] = {'entries': len(index._features.entries), 'accounted_bytes': index._features.bytes,
                     'entries_by_owner': dict(Counter(key[0] for key in index._features.entries))}
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
-                row['within_numeric_budgets'] = (all(case['encode_hybrid']['p95_ms'] <= 400
-                    and (size != 10000 or case['sqlite_exact']['p95_ms'] <= 150)
-                    for owner in row['sequential'] for case in owner['queries'])
-                    and all('error_class' not in value and value['p95_ms'] <= 400
-                        for value in row['competition']['foreground'])
-                    and row['rss_peak_mib'] <= 512 and row['integrity'] == 'ok'
-                    and row['competition']['rebuild'].get('indexed') == 32)
+                if report['mode'] == 'capacity':
+                    row['within_numeric_budgets'] = (all(case['encode_hybrid']['p95_ms'] <= 400
+                        and (size != 10000 or case['sqlite_exact']['p95_ms'] <= 150)
+                        for owner in row['sequential'] for case in owner['queries'])
+                        and all('error_class' not in value and value['p95_ms'] <= 400
+                            for value in row['competition']['foreground'])
+                        and row['rss_peak_mib'] <= 512 and row['integrity'] == 'ok'
+                        and row['competition']['rebuild'].get('indexed') == 32)
                 row['wall_seconds'] = time.monotonic() - started
                 row['python_cpu_seconds'] = time.process_time() - cpu_started
                 row['cgroup_after'] = group_state()
@@ -154,11 +165,17 @@ async def evaluate(report):
                 store.close()
     events = dict(line.split() for line in group_state()['memory.events'].splitlines())
     assert int(events['oom']) == int(events['oom_kill']) == 0, 'Shared envelope had OOM events'
-    report['shared_envelope_preflight_passed'] = all(row['within_numeric_budgets'] for row in report['capacity'])
+    if report['mode'] == 'capacity':
+        report['shared_envelope_preflight_passed'] = all(row['within_numeric_budgets'] for row in report['capacity'])
+    else:
+        report['diagnostic_complete'] = True
 
 
 def main():
-    report = {'code_sha': os.environ['GITHUB_SHA'], 'shared_envelope_preflight_passed': False,
+    mode = os.environ.get('MIA_P23_MODE', 'capacity')
+    assert mode in ('capacity', 'diagnostic')
+    report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': mode,
+        'shared_envelope_preflight_passed': False, 'diagnostic_complete': False,
         'p23_complete': False, 'provider_requests': 0,
         'runtime_profile': {'java_max_heap_mib': 512, 'java_max_metaspace_mib': 256,
             'java_active_processor_count': 2, 'java_thread_stack_kib': 512,
@@ -178,8 +195,8 @@ def main():
     finally:
         report['cgroup_final'] = group_state()
         save(report)
-    print(json.dumps({name: report[name] for name in ('shared_envelope_preflight_passed', 'p23_complete', 'provider_requests')}))
-    if not report['shared_envelope_preflight_passed']:
+    print(json.dumps({name: report[name] for name in ('mode', 'shared_envelope_preflight_passed', 'diagnostic_complete', 'p23_complete', 'provider_requests')}))
+    if not report['diagnostic_complete' if mode == 'diagnostic' else 'shared_envelope_preflight_passed']:
         raise SystemExit(1)
 
 

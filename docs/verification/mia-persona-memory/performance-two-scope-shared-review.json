@@ -1,0 +1,208 @@
+{
+  "run_id": 39071484822,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39071484822",
+  "code_sha": "ddf182ccc94025016e89705bcc8b0b4aaa5a68a3",
+  "conclusion": "failure",
+  "shared_envelope_preflight_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-two-scope-shared-results.json.gz",
+  "raw_sha256": "5f5d728355a6df28b1d2e8a96d81a13ffbd03c1f4d8426a5105be8f43ec3c751",
+  "sha256": "63b44db096480b98ebe83fcead5a5f8c901922822324a79d98696e28636cdfb0",
+  "capacity": [
+    {
+      "size_per_frontend_scope": 1000,
+      "sqlite_worst_query_p95_ms": 24.93503579999583,
+      "hybrid_worst_query_p95_ms": 256.9787826000038,
+      "competition_max_p95_ms": 414.5579645999902,
+      "rss_peak_mib": 389.55078125,
+      "static_features": {
+        "entries": 2000,
+        "accounted_bytes": 18165868,
+        "entries_by_owner": {
+          "user:941040001:agent:mia-p23-0": 1000,
+          "user:941040002:agent:mia-p23-1": 1000
+        }
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false,
+      "authorization_requests": {
+        "count": 230,
+        "p50_ms": 17.56949699999666,
+        "p95_ms": 57.10067095000674
+      },
+      "members_after": {
+        "mysql": {
+          "pid": 3088,
+          "cgroup": "/miap23.slice/docker-71105eb2f6f310aa5d15aa148bad9dba92dd32210459d41ccceb31f1c1eac1f2.scope",
+          "VmHWM": "495448 kB",
+          "VmRSS": "495448 kB"
+        },
+        "redis": {
+          "pid": 3154,
+          "cgroup": "/miap23.slice/docker-23dedad2fc263ea05452a90832804742d13bca94ecf88dbbd59d61a1a8f02ecd.scope",
+          "VmHWM": "29560 kB",
+          "VmRSS": "29276 kB"
+        },
+        "manager": {
+          "pid": 3660,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "428944 kB",
+          "VmRSS": "417528 kB"
+        },
+        "python": {
+          "pid": 3827,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "339024 kB",
+          "VmRSS": "323016 kB"
+        }
+      }
+    },
+    {
+      "size_per_frontend_scope": 10000,
+      "sqlite_worst_query_p95_ms": 115.75229979999904,
+      "hybrid_worst_query_p95_ms": 386.2336538000079,
+      "competition_max_p95_ms": 790.7625334999749,
+      "rss_peak_mib": 459.52734375,
+      "static_features": {
+        "entries": 20000,
+        "accounted_bytes": 181670812,
+        "entries_by_owner": {
+          "user:941040001:agent:mia-p23-0": 10000,
+          "user:941040002:agent:mia-p23-1": 10000
+        }
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false,
+      "authorization_requests": {
+        "count": 230,
+        "p50_ms": 12.968128499977638,
+        "p95_ms": 26.649814150010776
+      },
+      "members_after": {
+        "mysql": {
+          "pid": 3088,
+          "cgroup": "/miap23.slice/docker-71105eb2f6f310aa5d15aa148bad9dba92dd32210459d41ccceb31f1c1eac1f2.scope",
+          "VmHWM": "495852 kB",
+          "VmRSS": "495852 kB"
+        },
+        "redis": {
+          "pid": 3154,
+          "cgroup": "/miap23.slice/docker-23dedad2fc263ea05452a90832804742d13bca94ecf88dbbd59d61a1a8f02ecd.scope",
+          "VmHWM": "29560 kB",
+          "VmRSS": "29280 kB"
+        },
+        "manager": {
+          "pid": 3660,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "428944 kB",
+          "VmRSS": "421084 kB"
+        },
+        "python": {
+          "pid": 3827,
+          "cgroup": "/miap23.slice/miap23-measure.service",
+          "VmHWM": "470556 kB",
+          "VmRSS": "416856 kB"
+        }
+      }
+    }
+  ],
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "cpu.stat": "usage_usec 143111019\nuser_usec 135367235\nsystem_usec 7743783\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 861\nnr_throttled 496\nthrottled_usec 24154463\nnr_bursts 0\nburst_usec 0",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0",
+    "memory.current": "1222336512",
+    "memory.peak": "1603178496",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+  },
+  "original_artifact_files": [
+    {
+      "file": "cgroup-final-cpu.max.txt",
+      "sha256": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69"
+    },
+    {
+      "file": "cgroup-final-cpu.stat.txt",
+      "sha256": "94ed9773678cdc29f7e81f7baff8a994b0b78204f533adc99614364beb470b95"
+    },
+    {
+      "file": "cgroup-final-memory.current.txt",
+      "sha256": "c63155589481669824da94ed06ced85214206b2a9a39db7e5829d61475075618"
+    },
+    {
+      "file": "cgroup-final-memory.events.txt",
+      "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2"
+    },
+    {
+      "file": "cgroup-final-memory.max.txt",
+      "sha256": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e"
+    },
+    {
+      "file": "cgroup-final-memory.peak.txt",
+      "sha256": "6207b757902c7348a9fd7f0185638f4d71053ec37e01742ef96f1c0f7b1dd2b0"
+    },
+    {
+      "file": "cgroup-final-memory.swap.max.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "container-final.txt",
+      "sha256": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b"
+    },
+    {
+      "file": "database-image-digests.txt",
+      "sha256": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a"
+    },
+    {
+      "file": "docker-cgroup-driver.txt",
+      "sha256": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820"
+    },
+    {
+      "file": "java-version.txt",
+      "sha256": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0"
+    },
+    {
+      "file": "junit/TEST-junit-jupiter.xml",
+      "sha256": "c5afdd77916ac2d30cdff5649416d630e8159822ef8ea50d95adcd1b992471d7"
+    },
+    {
+      "file": "junit/TEST-junit-platform-suite.xml",
+      "sha256": "792dbc690379faef94e8164f8f68c6cdb820dad32d84af1eff14138ad7691b2c"
+    },
+    {
+      "file": "junit/TEST-junit-vintage.xml",
+      "sha256": "fa446e5067c98a5fc4e62cc920ce74ab8381d6b49ec316637ac58d501d441a96"
+    },
+    {
+      "file": "manager.log",
+      "sha256": "945f04497b40e65ee788ac84692e67d351cc35e38e0886aaa25cf27d45f9662a"
+    },
+    {
+      "file": "mysql.log",
+      "sha256": "c3d075cfda9e730656ab1ffcb0ac463bfd9c7f72b99b739fbeac0c52b1fa34b2"
+    },
+    {
+      "file": "preparation-dependencies.txt",
+      "sha256": "6fcde0cdabd26daf69275d7056d184a69f1416b2250d054d9691ae4289333e69"
+    },
+    {
+      "file": "python.log",
+      "sha256": "f1cfdf644b85a6a88781c0b0600e388f4f213bcbaea727bc500972c99501f5c5"
+    },
+    {
+      "file": "redis.log",
+      "sha256": "3182cdd501b77e0dfa66b5278fb1572db7719692c38ccd079c5115ae8686b062"
+    },
+    {
+      "file": "shared-results.json",
+      "sha256": "5f5d728355a6df28b1d2e8a96d81a13ffbd03c1f4d8426a5105be8f43ec3c751"
+    }
+  ]
+}

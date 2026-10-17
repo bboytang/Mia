@@ -80,6 +80,7 @@ sudo systemd-run --unit=miap23-measure --slice=miap23.slice --wait --pipe --coll
     --setenv="MIA_P23_REPORT_DIR=$mia_results" \
     --setenv="MIA_P23_SCRIPT=$GITHUB_WORKSPACE/scripts/ci/verify_mia_shared_envelope.py" \
     --setenv="MIA_P23_PYTHON=$mia_python" \
+    --setenv="MIA_P23_MODE=${MIA_P23_MODE:-capacity}" \
     --setenv="MIA_P23_DATABASE_PIDS=$mia_database_pids" \
     --setenv="SPRING_DATASOURCE_DRUID_URL=jdbc:mysql://127.0.0.1:3306/xiaozhi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false" \
     --setenv=SPRING_DATASOURCE_DRUID_PASSWORD=mia-ci-only \
