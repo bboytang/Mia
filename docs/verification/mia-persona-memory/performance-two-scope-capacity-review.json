@@ -1,0 +1,115 @@
+{
+  "run_id": 39071484402,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39071484402",
+  "code_sha": "ddf182ccc94025016e89705bcc8b0b4aaa5a68a3",
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-two-scope-capacity-results.json.gz",
+  "raw_sha256": "6259b95a23baf4fa2e988fcf7ff74665998ac5074f61f094f1c36c0809491a21",
+  "sha256": "87abfbcbf81794818e4dee980e7a69c6f9b09ab899a8c7651ba15ff10eec4737",
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 15.748488000008365,
+      "hybrid_worst_query_p95_ms": 112.19071239999892,
+      "competition_max_p95_ms": 240.35630579999747,
+      "rss_peak_mib": 283.765625,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 7342346
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": true
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 14.93437800000379,
+      "hybrid_worst_query_p95_ms": 116.85749260000762,
+      "competition_max_p95_ms": 265.6859846000117,
+      "rss_peak_mib": 345.01953125,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 9064934
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": true
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 97.46521079999866,
+      "hybrid_worst_query_p95_ms": 299.8136835999901,
+      "competition_max_p95_ms": 626.2430383000151,
+      "rss_peak_mib": 352.86328125,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 73428818
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 105.23632639998368,
+      "hybrid_worst_query_p95_ms": 326.403816800007,
+      "competition_max_p95_ms": 695.4608448999862,
+      "rss_peak_mib": 418.359375,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 90655406
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 525.1238865999767,
+      "hybrid_worst_query_p95_ms": 4086.092172000008,
+      "competition_max_p95_ms": 8419.11270239999,
+      "rss_peak_mib": 539.20703125,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "error_class": "EmbeddingUnavailable",
+        "reason": "embedding_busy"
+      },
+      "within_numeric_budgets": false
+    }
+  ],
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "1696129024",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 356928377\nuser_usec 327879449\nsystem_usec 29048927\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 2942\nnr_throttled 323\nthrottled_usec 17935700\nnr_bursts 0\nburst_usec 0"
+  }
+}
