@@ -150,3 +150,5 @@
 07d43df / diagnostic38998096508 success，运行仍24d06b0；原文/hash保留performance-batch-diagnostic-*，所有计数组等于原样本数。单路_scan p95 386.3ms、_clues21.5ms，竞争_scan817.8ms、_clues27.3ms；查询编码148.7ms，后台文档180.1ms，缓存锁仍接近0。单独profile477.9ms扫描内batch_signals239.7ms，其中np.char.find/_vec_string102.0ms，字符串转数组约22.3ms（全profile的asarray合计）、fetchmany74.1ms。profile有观察器开销，不能直接作容量结论或相加百分位。
 
 第七步已完成。第八步最小修改：词项字面包含判断回到Python原生term in query，由np.fromiter收集布尔值；去除NumPy宽字符串构造及NUL分支，所有Unicode/NUL/代理项原语义直接一致，bigram批处理/四维/候选/调度不变。沿用已覆盖该边界的原集合oracle和完整回归，再运行一次改变后固定容量；不重复同源码取绿。P23仍未验收/P24未开始。
+
+第八步实现仅替换批量词项匹配为np.fromiter(term in query)，其余运行实现不变；本地标准库3项/语法/diff检查通过。GitHub完整等价/并发回归与新固定容量待提交后执行，不提前宣称改善或达标。

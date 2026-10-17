@@ -153,12 +153,9 @@ def batch_signals(query, rows, prepared, query_codes):
     overlap = shared / np.maximum(1, len(codes) + lengths - shared)
 
     words = [term for item in prepared for term in item[0]]
-    # Fixed-width NumPy Unicode drops trailing NUL padding. Preserve Python's
-    # literal substring semantics for that allowed input via the scalar path.
-    if not words or '\x00' in query or any('\x00' in term for term in words):
-        matched = np.fromiter((term in query for term in words), dtype=bool, count=len(words))
-    else:
-        matched = np.char.find(np.full(len(words), query), np.asarray(words, dtype=np.str_)) >= 0
+    # Python containment preserves all Unicode/NUL input directly and avoids
+    # allocating fixed-width copies of the query and every candidate term.
+    matched = np.fromiter((term in query for term in words), dtype=bool, count=len(words))
     hit_counts, offsets = totals(matched, [len(item[0]) for item in prepared])
     trigger_positions = [int(offsets[i]) + position for i, item in enumerate(prepared) for position in item[4]]
     trigger_matched = matched[np.asarray(trigger_positions, dtype=np.intp)]

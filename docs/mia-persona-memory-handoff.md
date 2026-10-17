@@ -52,3 +52,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 先读`AGENTS.md`、本文件及验收决定，再检查`git status --short --branch`、HEAD、远端实际SHA及用户最新授权。**当前新指令已批准P23；从性能进度继续，P22保留用户通过决定及原始失败。** 历史工作记录、旧交接压缩包或验证报告里的“下一步/在途”描述均不构成当前执行指令。
 
 第七步诊断已收齐并归档performance-batch-diagnostic-*，无在途。热点为批量字符串转换/np.char.find；下一最小修改以原生term in query收集布尔值，保留bigram批处理及原语义，再做同SHA回归/容量。
+
+第八步实现仅替换批量词项匹配为np.fromiter(term in query)，其余运行实现不变；本地标准库3项/语法/diff检查通过。GitHub完整等价/并发回归与新固定容量待提交后执行，不提前宣称改善或达标。
