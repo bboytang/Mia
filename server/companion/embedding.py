@@ -69,6 +69,7 @@ class SemanticEncoder:
                                                  providers=['CPUExecutionProvider'])
             self._inputs = {item.name for item in self._session.get_inputs()}
             self._lock = threading.Lock()
+            self._native_slots = threading.BoundedSemaphore(2)
         except Exception:
             raise EmbeddingUnavailable('embedding_runtime_unavailable') from None
 
@@ -76,16 +77,22 @@ class SemanticEncoder:
         if not isinstance(text, str) or not text.strip() or len(text) > 4096 or type(query) is not bool:
             raise ValueError('Invalid embedding input')
         np = self._np
-        with self._lock:
-            try:
+        if not self._native_slots.acquire(timeout=0.4):
+            raise EmbeddingUnavailable('embedding_busy')
+        try:
+            # Tokenizer state stays serialized; each native Run owns its inputs
+            # and outputs. The encoder-wide bound also covers direct Worker calls.
+            with self._lock:
                 tokens = self._tokenizer.encode((QUERY_PREFIX if query else '') + text)
                 values = {'input_ids': np.array([tokens.ids], dtype=np.int64),
                           'attention_mask': np.array([tokens.attention_mask], dtype=np.int64),
                           'token_type_ids': np.array([tokens.type_ids], dtype=np.int64)}
-                vector = self._session.run(None, {key: values[key] for key in self._inputs})[0][0, 0].astype(np.float32)
-                length = float(np.linalg.norm(vector))
-                if vector.shape != (DIMENSION,) or not np.isfinite(vector).all() or not 0 < length < float('inf'):
-                    raise ValueError()
-                return vector / length
-            except Exception:
-                raise EmbeddingUnavailable('embedding_inference_failed') from None
+            vector = self._session.run(None, {key: values[key] for key in self._inputs})[0][0, 0].astype(np.float32)
+            length = float(np.linalg.norm(vector))
+            if vector.shape != (DIMENSION,) or not np.isfinite(vector).all() or not 0 < length < float('inf'):
+                raise ValueError()
+            return vector / length
+        except Exception:
+            raise EmbeddingUnavailable('embedding_inference_failed') from None
+        finally:
+            self._native_slots.release()

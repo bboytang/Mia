@@ -2,12 +2,16 @@
 
 import argparse
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
 import resource
 import tempfile
+import threading
 import time
 
 import numpy as np
@@ -37,8 +41,73 @@ def remember(store, owner, text, marker, sensitive=False):
         {'memories': [{'category': 'fact', 'content': text, 'source_index': 0, 'sensitive': sensitive}]}, marker)['memories'][0]
 
 
+def concurrent_encoding(encoder, cases, workers):
+    expected = [encoder.encode(text, query) for text, query in cases]
+    original = encoder._session
+    guard, pair = threading.Lock(), threading.Barrier(2, timeout=3)
+    active, peak, calls = 0, 0, 0
+    intervals = []
+
+    class ObservedSession:
+        def run(self, *args, **kwargs):
+            nonlocal active, peak, calls
+            with guard:
+                ticket = calls
+                calls += 1
+                active += 1
+                peak = max(peak, active)
+            try:
+                if ticket < 2:
+                    pair.wait()
+                started = time.perf_counter()
+                try:
+                    return original.run(*args, **kwargs)
+                finally:
+                    with guard:
+                        intervals.append([started, time.perf_counter()])
+            finally:
+                with guard:
+                    active -= 1
+
+    encoder._session = ObservedSession()
+    try:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = [pool.submit(encoder.encode, *case) for case in cases * 2]
+            actual = []
+            for future in futures:
+                try:
+                    actual.append(future.result())
+                except Exception as error:
+                    actual.append(error)
+    finally:
+        encoder._session = original
+    checks = []
+    for number, value in enumerate(actual):
+        if isinstance(value, Exception):
+            checks.append({'case': number % len(cases), 'bitwise_equal': False,
+                'error_class': type(value).__name__, 'reason': str(value)})
+            continue
+        reference = expected[number % len(cases)]
+        equal = value.tobytes() == reference.tobytes()
+        checks.append({'case': number % len(cases), 'bitwise_equal': equal,
+            'sha256': hashlib.sha256(value.tobytes()).hexdigest(),
+            'reference_sha256': hashlib.sha256(reference.tobytes()).hexdigest(),
+            'max_abs_difference': float(np.max(np.abs(value - reference)))})
+    overlap = any(max(a[0], b[0]) < min(a[1], b[1])
+        for i, a in enumerate(intervals) for b in intervals[i + 1:])
+    result = {'cases': len(cases), 'calls': calls, 'workers': workers, 'native_peak_inflight': peak,
+        'actual_run_windows_overlap': overlap, 'checks': checks,
+        'native_call_windows_seconds': intervals,
+        'all_bitwise_equal': all(check['bitwise_equal'] for check in checks),
+        'rss_peak_mib': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024}
+    return result
+
+
 async def evaluate(directory, report):
     encoder = SemanticEncoder(directory)
+    options = encoder._session.get_session_options()
+    report['encoder_session_options'] = {'intra_op_num_threads': options.intra_op_num_threads,
+        'inter_op_num_threads': options.inter_op_num_threads, 'providers': encoder._session.get_providers()}
     metadata = json.loads((directory / 'metadata.json').read_text())
     report['asset_sha256'] = metadata['models']['model-uint8.onnx']['sha256']
     report['tokenizer_sha256'] = metadata['tokenizer_sha256']
@@ -54,10 +123,21 @@ async def evaluate(directory, report):
         store = MemoryStore(Path(folder) / 'real-vectors.sqlite3')
         try:
             ids = [remember(store, current.owner, text, 'fact-' + str(i)) for i, text in enumerate(texts)]
-            remember(store, 'user:2:agent:other', texts[0], 'foreign')
+            foreign_id = remember(store, 'user:2:agent:other', texts[0], 'foreign')
             remember(store, current.owner, '这段个人私密经历尚未确认', 'pending', sensitive=True)
             index = SemanticMemoryIndex(store, encoder)
             assert (await index.rebuild_batch(current, auth)) == {'indexed': 4, 'has_more': False}
+            foreign = replace(current, owner='user:2:agent:other', user_id=2, agent_id='other')
+            assert (await index.rebuild_batch(foreign, auth)) == {'indexed': 1, 'has_more': False}
+            inputs = [(current, query) for query in queries] + [(foreign, queries[0])]
+            serial = [await index.candidates(owner, auth, query, limit=4, minimum=0.35)
+                for owner, query in inputs]
+            concurrent = await asyncio.gather(*(index.candidates(owner, auth, query, limit=4, minimum=0.35)
+                for owner, query in inputs))
+            report['concurrent_scope_retrieval'] = {'exact_equal': serial == concurrent,
+                'serial': serial, 'concurrent': concurrent}
+            assert serial == concurrent and serial[-1]['candidates'][0]['id'] == foreign_id
+            assert all(row['id'] in ids for value in concurrent[:-1] for row in value['candidates'])
             # Prove that actual recall still runs when the legacy FTS is absent.
             fts_rows = [tuple(row) for row in store.db.execute('SELECT memory_id,terms FROM memory_search')]
             with store.db:
@@ -137,6 +217,14 @@ async def evaluate(directory, report):
         'model_max_tokens': 512, 'elapsed_ms': (time.perf_counter() - started) * 1000,
         'normalized': bool(abs(np.linalg.norm(long_vector) - 1) < 1e-4),
         'rss_peak_mib': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024}
+    report['concurrent_encoding'] = {
+        'short': concurrent_encoding(encoder, [(text, False) for text in texts]
+            + [(query, True) for query in queries] + [('薄荷🙂𠮷、ASCII、尾\x00', True)], 4),
+        'long': concurrent_encoding(encoder, [('这是关于长输入容量的独立合成观察。' * 100, True),
+            ('湖边散步与阳台植物是不同的合成观察。' * 100, False)], 2)}
+    assert all(value['native_peak_inflight'] == 2 and value['actual_run_windows_overlap']
+        and value['calls'] == value['cases'] * 2 and value['all_bitwise_equal']
+        and value['rss_peak_mib'] <= 512 for value in report['concurrent_encoding'].values())
     report['passed'] = (report['sqlite_capacity']['10000']['sqlite_p95_ms'] <= 150
                         and report['sqlite_capacity']['10000']['encode_plus_query_p95_ms'] <= 400
                         and report['long_input_diagnostic']['rss_peak_mib'] <= 512)
