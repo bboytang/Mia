@@ -66,7 +66,7 @@ class MiaBehaviorIntegrationTest {
         String baselineModel = model;
         String comparisonModel = System.getenv().getOrDefault("MIA_TEST_MODEL_OVERRIDE", "");
         if (!comparisonModel.isBlank()) {
-            assertTrue(comparisonModel.equals("glm-5.3-flash") || comparisonModel.equals("glm-5.3-flashx"),
+            assertTrue(comparisonModel.equals("glm-5.3-flash") || comparisonModel.equals("glm-5.3-flashx") || comparisonModel.equals("glm-4.7-flash"),
                 "Unapproved isolated comparison model");
             model = comparisonModel;
         }
