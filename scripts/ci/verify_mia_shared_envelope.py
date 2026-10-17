@@ -114,6 +114,9 @@ async def evaluate(report):
     else:
         encoder = SemanticEncoder(Path(os.environ['MIA_EMBEDDING_DIR']))
     report['encoder_cold_load_ms'] = (time.perf_counter() - started) * 1000
+    options = encoder._session.get_session_options()
+    report['encoder_session_options'] = {'intra_op_num_threads': options.intra_op_num_threads,
+        'inter_op_num_threads': options.inter_op_num_threads, 'providers': encoder._session.get_providers()}
     dataset = Path(__file__).resolve().parents[2] / 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
     fixture = json.loads(dataset.read_text())
     report['dataset_sha256'] = hashlib.sha256(dataset.read_bytes()).hexdigest()

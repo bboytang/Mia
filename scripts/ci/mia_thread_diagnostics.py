@@ -15,7 +15,7 @@ def encoder_for_arm(directory, threads, encoder_class, report):
     original = ort.InferenceSession
 
     def session(path, options, **kwargs):
-        assert options.intra_op_num_threads == 2
+        assert options.intra_op_num_threads == 1
         options.intra_op_num_threads = threads
         value = original(path, options, **kwargs)
         actual = value.get_session_options()

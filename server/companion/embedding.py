@@ -59,7 +59,8 @@ class SemanticEncoder:
             self._tokenizer.enable_truncation(max_length=512)
             self._tokenizer.enable_padding()
             options = ort.SessionOptions()
-            options.intra_op_num_threads = 2
+            # Leave CPU capacity for foreground scans and the other services.
+            options.intra_op_num_threads = 1
             options.inter_op_num_threads = 1
             options.enable_cpu_mem_arena = False
             options.enable_mem_pattern = False

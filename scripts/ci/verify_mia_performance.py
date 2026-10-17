@@ -129,6 +129,9 @@ async def evaluate(args, report):
     started = time.perf_counter()
     encoder = SemanticEncoder(args.model_dir)
     report['encoder_cold_load_ms'] = (time.perf_counter() - started) * 1000
+    options = encoder._session.get_session_options()
+    report['encoder_session_options'] = {'intra_op_num_threads': options.intra_op_num_threads,
+        'inter_op_num_threads': options.inter_op_num_threads, 'providers': encoder._session.get_providers()}
     fixture = json.loads(args.dataset.read_text())
     report['dataset_sha256'] = hashlib.sha256(args.dataset.read_bytes()).hexdigest()
     report['embedding'] = {'model_id': MODEL_KEY, 'revision': REVISION, 'dimension': DIMENSION,
