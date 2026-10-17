@@ -51,7 +51,7 @@ docker run -d --name miap23-redis --cgroup-parent="$mia_parent" --network host \
 
 for mia_attempt in $(seq 1 90); do
     if docker exec miap23-mysql mysqladmin ping -h 127.0.0.1 -pmia-ci-only --silent >/dev/null 2>&1 \
-        && docker exec miap23-redis redis-cli ping | rg -q '^PONG$'; then
+        && [ "$(docker exec miap23-redis redis-cli ping)" = PONG ]; then
         break
     fi
     test "$mia_attempt" -lt 90

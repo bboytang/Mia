@@ -1,0 +1,103 @@
+{
+  "workflow_parse": {
+    "run_id": 39030962169,
+    "head_sha": "e783ef1401d3491a7df71ca285052687e6fda135",
+    "conclusion": "failure",
+    "phase": "GitHub workflow expression parsing",
+    "measured": false,
+    "report": {
+      "file": "performance-shared-workflow-first.json.gz",
+      "raw_sha256": "dce9b1f57e5178c730a4006f63694c13f8c5dc39be1a7cdb7304c499d0f851c4",
+      "sha256": "93d5709a0039cc7f8210cbbf5c18f1d75a934fedf7967aa95085a2497c8378ec"
+    }
+  },
+  "first_runtime": {
+    "run_id": 39031041525,
+    "head_sha": "ecaf0835770411c46882a3f968f0572fe2dde732",
+    "conclusion": "failure",
+    "phase": "database readiness shell check",
+    "manager_started": false,
+    "python_started": false,
+    "performance_measured": false,
+    "reason": "rg not installed on GitHub runner; Redis PONG check failed despite actual readiness",
+    "cgroup_cpu_max": "200000 100000",
+    "cgroup_memory_max": "2147483648",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "report": {
+      "file": "performance-shared-first-runtime.tar.gz",
+      "raw_sha256": "24453c56e01860988d5a7e8ea15cc6c8474b2a036ed4ddcaa918740ae4b6ecf0",
+      "sha256": "dbfab593be103eab25e46352985c7576c14522889da7036444cc0d4f710cf410"
+    },
+    "files": [
+      {
+        "file": "cgroup-final-cpu.max.txt",
+        "sha256": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69"
+      },
+      {
+        "file": "cgroup-final-cpu.stat.txt",
+        "sha256": "dfc3667f7103a57de352582a7b0b151da2acc195c841a8d853defd66c95bc3c8"
+      },
+      {
+        "file": "cgroup-final-memory.current.txt",
+        "sha256": "eaec7904dc282351264fe89b0c92f69f0eb2e09ff6be5516929c1a28f6efc5bb"
+      },
+      {
+        "file": "cgroup-final-memory.events.txt",
+        "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2"
+      },
+      {
+        "file": "cgroup-final-memory.max.txt",
+        "sha256": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e"
+      },
+      {
+        "file": "cgroup-final-memory.peak.txt",
+        "sha256": "ab512678cfd5ba165adf3a2cad449b6d03dcc988f6479dd2177dbd72476c0e27"
+      },
+      {
+        "file": "cgroup-final-memory.swap.max.txt",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "file": "container-final.txt",
+        "sha256": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b"
+      },
+      {
+        "file": "database-image-digests.txt",
+        "sha256": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a"
+      },
+      {
+        "file": "docker-cgroup-driver.txt",
+        "sha256": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820"
+      },
+      {
+        "file": "java-version.txt",
+        "sha256": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0"
+      },
+      {
+        "file": "mysql.log",
+        "sha256": "f6dcbcad330569546e3419e3e7aef866f70446ffcadfd1f6834bbc03c22704b4"
+      },
+      {
+        "file": "preparation-dependencies.txt",
+        "sha256": "6fcde0cdabd26daf69275d7056d184a69f1416b2250d054d9691ae4289333e69"
+      },
+      {
+        "file": "redis.log",
+        "sha256": "97112dedb4b4e32bc9a96ae6639555a41bfe323894ecf9b68ec167f402c1f800"
+      },
+      {
+        "file": "github-job.log",
+        "sha256": "196b23caa871c9313769e8dd5135b422a196e816898e126829ddaf366c8207d1"
+      }
+    ]
+  },
+  "approval_interruption": {
+    "actions_not_executed": [
+      "supplementary manager workflow dispatch",
+      "CI status read"
+    ],
+    "reason": "Automatic approval review service quota exhausted, not an unsafe determination",
+    "recovered_on_user_continue": true
+  },
+  "p23_complete": false
+}

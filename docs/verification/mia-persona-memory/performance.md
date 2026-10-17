@@ -243,3 +243,8 @@
 机制参考（只作实现依据，不是测试结果）：[Docker共同cgroup父组](https://docs.docker.com/reference/cli/dockerd/#default-cgroup-parent)、[Linux cgroup v2 CPU/内存控制](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html)。
 
 第十一步首轮e783ef1的workflow push39030962169在GitHub解析阶段failure；dispatch返回422：job级env中的runner.temp不在允许的context内，未启动容器/manager/BGE，不能当性能失败。PyYAML只证明语法解析，没有验证GitHub表达式上下文。最小修正为既有测试使用的固定/tmp路径；systemd服务同时显式保留setup-python的PATH/LD_LIBRARY_PATH运行库路径。原push服务39030962856/manager39030962901仍收取，下一修正SHA通过同样真实CI入口验证。
+
+
+第十一步ecaf083 / 39031041525已failure，但不是数值超标：依赖/固定BGE导出/实际Java test-compile全部success；共同父组cpu.max=200000/100000、memory.max=2147483648、OOM计数0，两数据库均running。就绪循环使用GitHub runner未安装的rg，原作业日志逐次command not found；Java及Python尚未启动，无检索样本。最小修正将Redis PONG判定改为Shell直接字符串比较，不增加依赖或更改资源/门槛。原workflow解析失败/此运行的完整产物与作业日志、各文件hash保留performance-shared-first-*。
+
+自动审批曾因额度耗尽未完成manager补跑与状态读取（不是安全否决，未绕过）；用户继续后原审批通道已恢复，收取原句柄。ecaf083同SHA服务39031081087 success；e783ef1服务39030962856/manager39030962901 success。补充manager dispatch在额度失败时未执行，不写成已跑。修正后新SHA/唯一共同预检句柄待推送后记录。
