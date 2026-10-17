@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -52,6 +55,10 @@ class MiaPerformanceIntegrationTest {
 
     @Test
     void actualManagerAndPythonShareTheDatabaseResourceEnvelope() throws Exception {
+        // Dev config has explicit DEBUG children; root=ERROR alone does not
+        // suppress database parameters containing synthetic authorization tokens.
+        LoggerContext logging = (LoggerContext) LoggerFactory.getILoggerFactory();
+        for (var logger : logging.getLoggerList()) logger.setLevel(Level.ERROR);
         List<Map<String, Object>> peers = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             long user = 941040001L + i;

@@ -15,7 +15,7 @@ THRESHOLD = 0.20
 SEMANTIC_FLOOR = 0.35
 CANDIDATES = 12
 RESULTS = 4
-FEATURE_CACHE_BYTES = 128 * 1024 * 1024
+FEATURE_CACHE_BYTES = 192 * 1024 * 1024
 FEATURE_CACHE_ENTRIES = 32768
 RECORD_FIELDS = ('id', 'content', 'category', 'content_version', 'evidence_version',
                  'entities', 'keywords', 'trigger_terms', 'emotional_weight')

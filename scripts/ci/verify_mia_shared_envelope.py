@@ -1,6 +1,7 @@
 """Real manager/MySQL/Redis/Python-BGE preflight, not full reply/Worker acceptance."""
 
 import asyncio
+from collections import Counter
 import hashlib
 import json
 import os
@@ -17,12 +18,27 @@ from config.manage_api_client import ManageApiClient
 from mia_companion.authorization import PrivateAuthorization
 from mia_companion.embedding import SemanticEncoder
 from mia_companion.memory import MemoryStore
+from mia_companion.retrieval import FEATURE_CACHE_BYTES
 from mia_companion.semantic import SemanticMemoryIndex
 from verify_mia_performance import populate, measure, summary
 
 
 ROOT = Path(os.environ['MIA_P23_REPORT_DIR'])
 CGROUP = Path('/sys/fs/cgroup/miap23.slice')
+
+
+class TimedAuthorization(PrivateAuthorization):
+    def __init__(self, config):
+        super().__init__(config)
+        self.timings = []
+
+    async def _request(self, endpoint, body, timeout=3):
+        started = time.perf_counter()
+        try:
+            return await super()._request(endpoint, body, timeout=timeout)
+        finally:
+            self.timings.append({'endpoint': endpoint,
+                'elapsed_ms': (time.perf_counter() - started) * 1000})
 
 
 def group_state():
@@ -83,9 +99,10 @@ async def evaluate(report):
     config = {'manager-api': {'url': os.environ['MIA_SCOPE_MANAGER_URL'],
         'secret': os.environ['MIA_SCOPE_SERVER_SECRET']}}
     ManageApiClient(config)
-    auth = PrivateAuthorization(config)
+    auth = TimedAuthorization(config)
     peers = json.loads(os.environ['MIA_P23_PEERS'])
     scopes = [await auth.verify(peer['device_id'], peer['client_id'], peer['private_credential']) for peer in peers]
+    report['authorization_bootstrap_requests'] = auth.timings
     assert len({scope.owner for scope in scopes}) == 3
     report['authorized_owners'] = [scope.owner for scope in scopes]
     started = time.perf_counter()
@@ -102,6 +119,8 @@ async def evaluate(report):
     for size in (1000, 10000):
         started, cpu_started = time.monotonic(), time.process_time()
         row = {'size_per_frontend_scope': size, 'profile': 'dense', 'cgroup_before': group_state()}
+        auth.timings = []
+        row['authorization_requests'] = auth.timings
         report['capacity'].append(row)
         with tempfile.TemporaryDirectory() as directory:
             store = MemoryStore(Path(directory) / 'memory.sqlite3')
@@ -116,7 +135,8 @@ async def evaluate(report):
                 # Each Scope/query was warmed above; competition uses distinct owners.
                 row['competition'] = await compete(index, scopes, auth, fixture['queries'])
                 row['rss_peak_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
-                row['static_features'] = {'entries': len(index._features.entries), 'accounted_bytes': index._features.bytes}
+                row['static_features'] = {'entries': len(index._features.entries), 'accounted_bytes': index._features.bytes,
+                    'entries_by_owner': dict(Counter(key[0] for key in index._features.entries))}
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
                 row['within_numeric_budgets'] = (all(case['encode_hybrid']['p95_ms'] <= 400
                     and (size != 10000 or case['sqlite_exact']['p95_ms'] <= 150)
@@ -142,6 +162,8 @@ def main():
         'p23_complete': False, 'provider_requests': 0,
         'runtime_profile': {'java_max_heap_mib': 512, 'java_max_metaspace_mib': 256,
             'java_active_processor_count': 2, 'java_thread_stack_kib': 512,
+            'java_logging': 'ERROR on all existing loggers before synthetic authorization setup',
+            'static_cache_budget_bytes': FEATURE_CACHE_BYTES,
             'mysql': 'mysql:8.4 default server with loopback bind', 'redis': 'redis:8 loopback bind',
             'upstream_sha': '87c6df77b0220ddbd8fc804f984f83f69f3225e5'},
         'scope': 'Actual manager/TLS/authorization, MySQL, Redis and Python/BGE share one 2CPU/2GiB parent; bridge/audio/app lifecycle not exercised',
