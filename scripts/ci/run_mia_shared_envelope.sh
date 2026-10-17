@@ -72,6 +72,7 @@ mia_python=$(command -v python)
 sudo systemd-run --unit=miap23-measure --slice=miap23.slice --wait --pipe --collect \
     --uid="$(id -u)" --gid="$(id -g)" \
     --property="WorkingDirectory=$MIA_SCOPE_UPSTREAM/main/manager-api" \
+    --setenv="PATH=$PATH" --setenv="LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-}" \
     --setenv="GITHUB_SHA=$GITHUB_SHA" \
     --setenv="MIA_SCOPE_UPSTREAM=$MIA_SCOPE_UPSTREAM" \
     --setenv="MIA_SCOPE_KEYSTORE=$MIA_SCOPE_KEYSTORE" \

@@ -241,3 +241,5 @@
 本地Python编译、bash -n、YAML解析及diff检查通过；实际Java构建、父组/容器/真实授权与BGE测量交GitHub同SHA运行。本步无Provider调用/SDK密钥，尚不覆盖唯一回复/app路径、同Provider首句增量、真实提取Worker公平/故障/120秒终态及全服务在途20秒关闭。预检success也不等于P23整体通过。任务SHA/run后续记入交接，P24未开始。
 
 机制参考（只作实现依据，不是测试结果）：[Docker共同cgroup父组](https://docs.docker.com/reference/cli/dockerd/#default-cgroup-parent)、[Linux cgroup v2 CPU/内存控制](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html)。
+
+第十一步首轮e783ef1的workflow push39030962169在GitHub解析阶段failure；dispatch返回422：job级env中的runner.temp不在允许的context内，未启动容器/manager/BGE，不能当性能失败。PyYAML只证明语法解析，没有验证GitHub表达式上下文。最小修正为既有测试使用的固定/tmp路径；systemd服务同时显式保留setup-python的PATH/LD_LIBRARY_PATH运行库路径。原push服务39030962856/manager39030962901仍收取，下一修正SHA通过同样真实CI入口验证。

@@ -29,8 +29,8 @@ jobs:
     timeout-minutes: 30
     env:
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
-      MIA_P23_REPORT_DIR: ${{ runner.temp }}/mia-p23-shared-results
-      MIA_EMBEDDING_DIR: ${{ runner.temp }}/mia-p23-shared-model
+      MIA_P23_REPORT_DIR: /tmp/mia-p23-shared-results
+      MIA_EMBEDDING_DIR: /tmp/mia-p23-shared-model
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -116,5 +116,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Mia-P23-shared-${{ github.sha }}-${{ github.run_id }}
-          path: ${{ runner.temp }}/mia-p23-shared-results
+          path: /tmp/mia-p23-shared-results
           if-no-files-found: error
