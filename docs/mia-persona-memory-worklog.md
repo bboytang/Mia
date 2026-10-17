@@ -1130,3 +1130,16 @@ P23第五步完成：883a76f / 38996970741 success，所有计时组count等于�
 当前代码与相关回归已验证、所有句柄终态，无在途；未部署/切生产模型，未追加真实Provider请求或真机验证。P23整体尚未通过，P24未开始。模块并发为同Scope两路检索+其他Scope重建，不等同不同用户/真实Worker公平性。
 
 接续下一步：以当前候选建立独立P23全服务测量，实际manager/Java、MySQL、Redis、Python/BGE共同受约2CPU/2GiB包络限制，构建/模型导出在测量外；不能给每个服务各2GiB后宣称共同达标。复用真实授权与唯一回复/事实库/持久Worker，用新的P23机械样本而不重复P22冻结留出。先建立同Provider无记忆首句基线，再测集成首句增量p95≤500ms；2前台+1实际后台的前台优先、跨Scope公平、任务终态p95≤120秒、故障/重索引及含在途全服务总关闭≤20秒。保留所有任务ID/原时序/进程与cgroup统计及故障恢复证据；尚未实现或执行这些全服务验收，不把本轮独立回归当它们的替代。
+
+
+## 第十一步开始：共同服务资源包络与跨用户检索预检
+
+用户继续P23。先核对AGENTS、主/本地交接、D08、1913680通过原文及固定上游实际manager/授权客户端/既有TLS测试；工作树起点fab23dd干净，远端一致。保持模块容量通过与P23整体未验收的边界，不重跑P22留出/模型比较。
+
+新增独立workflow与预检：GitHub宿主systemd单一miap23.slice设置CPUQuota=200%（100ms周期）、MemoryMax=2147483648、MemorySwapMax=0；MySQL8.4、Redis8容器挂同父cgroup，实际Java manager/JUnit单进程及其Python/BGE子进程也在该组。验证四类实际PID的/proc/cgroup归属、各进程RSS/HWM、父组CPU/内存/峰值/OOM，任何服务逃逸限额不通过。Maven编译、依赖准备与BGE导出在测量外，运行时不带额外Maven JVM；JVM测试参数512MiB堆/256MiB元空间/2处理器/512KiB线程栈明确记录，不修改生产配置。
+
+真实HTTPS manager、Shiro/MySQL/Redis合成用户授权码交换，Python沿实际PrivateAuthorization/ManageApiClient验证三个独立Scope；无伪造授权/HTTP响应。复用同冻结P23容量夹具及真实固定BGE种子向量，1k/10k长文本各两名用户，预热及每查询5次、独立Scope两前台+第三Scope实际32条重索引；原400ms/150ms/512MiB门槛保持。新增跨用户竞争不沿用旧同Scope成功结论，结果包括失败和部分进度完整保存。仍为数值夹具，非语义质量证据。
+
+本地Python编译、bash -n、YAML解析及diff检查通过；实际Java构建、父组/容器/真实授权与BGE测量交GitHub同SHA运行。本步无Provider调用/SDK密钥，尚不覆盖唯一回复/app路径、同Provider首句增量、真实提取Worker公平/故障/120秒终态及全服务在途20秒关闭。预检success也不等于P23整体通过。任务SHA/run后续记入交接，P24未开始。
+
+机制参考（只作实现依据，不是测试结果）：[Docker共同cgroup父组](https://docs.docker.com/reference/cli/dockerd/#default-cgroup-parent)、[Linux cgroup v2 CPU/内存控制](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html)。
