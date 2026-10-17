@@ -109,6 +109,7 @@ async def diagnose(index, current, auth, queries, summary, competing):
         timings.values.clear()
         competition = await competing()
         concurrent = {name: summary(values) for name, values in timings.values.items()}
+        timings.values.clear()
 
         # Profile an original retrieve after timed sampling; never mix its
         # substantial profiler overhead into performance thresholds.
@@ -120,6 +121,8 @@ async def diagnose(index, current, auth, queries, summary, competing):
                       'self_ms': value[2] * 1000, 'cumulative_ms': value[3] * 1000}
                      for key, value in stats.items()]
         functions.sort(key=lambda item: item['cumulative_ms'], reverse=True)
+        assert all(value['count'] == len(value['samples_ms'])
+                   for group in (sequential, concurrent) for value in group.values())
         return {'scope': 'Instrumented original methods; no runtime or ranking modification; not D08 acceptance',
                 'sequential_pipeline': summary(pipeline), 'sequential_stages': sequential,
                 'competition': competition, 'concurrent_stages': concurrent,

@@ -1,0 +1,219 @@
+{
+  "run_id": 38996682107,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38996682107",
+  "observer_sha": "a749a828cede61669dc93f06809c091adbf4bac1",
+  "runtime_code_sha": "d2bfd7b15d2ff99b158fdb43e87506451257e131",
+  "conclusion": "success",
+  "p23_complete": false,
+  "artifact_file": "performance-hot-first-results.json.gz",
+  "raw_sha256": "90d7a65a97a61268573d932ee4741cd383546d6c360626191f2632a0ae3f5e39",
+  "sha256": "1628d77d09d0056cf7ab6e34f7c64f26ff117a7263cea229719f8533dfde14fa",
+  "recording_issue": "Stage summary shares raw sample arrays; later separately profiled retrieve appends tail samples after counts and percentiles computed. Original raw file preserved, measured first count samples reproduced all stored p95s; no D08 capacity run is affected. Fix clears collector before profiling and asserts raw counts match summaries. Rerun observer, not runtime.",
+  "sequential_stages": {
+    "_require": {
+      "timed_count": 30,
+      "raw_count": 30,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.002804000004630325,
+      "p95_ms": 0.0048435499991228426
+    },
+    "store_lock_wait._snapshot": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.000650999993467849,
+      "p95_ms": 0.0007499999867377483
+    },
+    "_snapshot": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.018937999982426845,
+      "p95_ms": 0.020773900016024523
+    },
+    "store_lock_wait._clues": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.0006109999901582341,
+      "p95_ms": 0.0006973000012067131
+    },
+    "features_lock_wait._clues": {
+      "timed_count": 150015,
+      "raw_count": 150015,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.0003200000264769187,
+      "p95_ms": 0.0003610000192111329
+    },
+    "_clues": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 69.55882500000143,
+      "p95_ms": 76.95835490000603
+    },
+    "encoder_lock_wait.native_encode.query": {
+      "timed_count": 30,
+      "raw_count": 30,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.001611999991268931,
+      "p95_ms": 0.0018764999992981752
+    },
+    "native_encode.query": {
+      "timed_count": 30,
+      "raw_count": 30,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 25.15876849999188,
+      "p95_ms": 27.48655389998191
+    },
+    "_encode": {
+      "timed_count": 30,
+      "raw_count": 30,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 25.550889000001575,
+      "p95_ms": 27.87034014999676
+    },
+    "features_lock_wait._scan": {
+      "timed_count": 150015,
+      "raw_count": 150015,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.0003209999874798086,
+      "p95_ms": 0.00036000000136482413
+    },
+    "_scan": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 260.9207529999935,
+      "p95_ms": 279.58320050000225
+    },
+    "store_lock_wait._snapshot_check": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.001121999986253286,
+      "p95_ms": 0.0014119999974582238
+    },
+    "_snapshot_check": {
+      "timed_count": 15,
+      "raw_count": 15,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.09384099999465434,
+      "p95_ms": 0.10581820000936658
+    }
+  },
+  "concurrent_stages": {
+    "store_lock_wait.other": {
+      "timed_count": 99,
+      "raw_count": 99,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 0.0027339999917330715,
+      "p95_ms": 108.87310409999314
+    },
+    "_require": {
+      "timed_count": 158,
+      "raw_count": 160,
+      "post_timed_profile_extra": 2,
+      "p50_ms": 0.0038109999991320365,
+      "p95_ms": 0.0055094999879656825
+    },
+    "store_lock_wait._snapshot": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 0.0009360000063907137,
+      "p95_ms": 0.34061369999136537
+    },
+    "_snapshot": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 0.0456134999922142,
+      "p95_ms": 3.066224750007496
+    },
+    "store_lock_wait._clues": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 0.00082099998621743,
+      "p95_ms": 0.07149959998855557
+    },
+    "encoder_lock_wait.native_encode.document": {
+      "timed_count": 32,
+      "raw_count": 32,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 15.212542999989864,
+      "p95_ms": 40.30473174999969
+    },
+    "features_lock_wait._clues": {
+      "timed_count": 300030,
+      "raw_count": 310031,
+      "post_timed_profile_extra": 10001,
+      "p50_ms": 0.00034100000334547076,
+      "p95_ms": 0.0006809999888446328
+    },
+    "native_encode.document": {
+      "timed_count": 32,
+      "raw_count": 32,
+      "post_timed_profile_extra": 0,
+      "p50_ms": 171.96104700001058,
+      "p95_ms": 226.0763410499862
+    },
+    "_encode": {
+      "timed_count": 92,
+      "raw_count": 94,
+      "post_timed_profile_extra": 2,
+      "p50_ms": 94.77626049999799,
+      "p95_ms": 250.99531570000556
+    },
+    "_clues": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 168.4852814999971,
+      "p95_ms": 308.2568758499874
+    },
+    "encoder_lock_wait.native_encode.query": {
+      "timed_count": 60,
+      "raw_count": 62,
+      "post_timed_profile_extra": 2,
+      "p50_ms": 0.0019579999843699625,
+      "p95_ms": 174.37215549998933
+    },
+    "native_encode.query": {
+      "timed_count": 60,
+      "raw_count": 62,
+      "post_timed_profile_extra": 2,
+      "p50_ms": 28.836225000006266,
+      "p95_ms": 249.87703565000453
+    },
+    "features_lock_wait._scan": {
+      "timed_count": 300030,
+      "raw_count": 310031,
+      "post_timed_profile_extra": 10001,
+      "p50_ms": 0.0003209999874798086,
+      "p95_ms": 0.0005610000073374977
+    },
+    "_scan": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 620.1914530000039,
+      "p95_ms": 799.8477093000018
+    },
+    "store_lock_wait._snapshot_check": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 0.001542000006793387,
+      "p95_ms": 0.35212615000403913
+    },
+    "_snapshot_check": {
+      "timed_count": 30,
+      "raw_count": 31,
+      "post_timed_profile_extra": 1,
+      "p50_ms": 0.09172849999572463,
+      "p95_ms": 0.6524605000009841
+    }
+  }
+}
