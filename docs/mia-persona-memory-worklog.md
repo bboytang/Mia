@@ -969,3 +969,7 @@ a8dcaa7e1542069251886ab303e6c9156ec122cf / https://github.com/bboytang/Mia/actio
 ## 2026-10-17 P23第二步开始：分段诊断
 
 用户要求继续。先读交接及原结果、核对ab3c02a与远端一致/干净；新增diagnostic模式包装原方法及原锁记录等待，在同一10k长文本夹具测15次原retrieve与实际模块竞争，最后单独profile一次_scan，profiler开销不进入D08。生产运行算法/排序/阈值和夹具不变。GitHub push仅语法检查，实际capacity/diagnostic明确dispatch，不重复同源码取绿。当前尚无新诊断结论；每步结果继续入交接。
+
+诊断候选83823ab95472ecb4a3ac8d8badb58799d7b3038c已推送，单次派发diagnostic 38993671685，确认in_progress；push语法38993670013成功。主交接记录在途handle，源码算法/夹具未变。
+
+P23第二步完成：83823ab / https://github.com/bboytang/Mia/actions/runs/38993671685 success仅表示诊断收集完成。10k长文本单路_scan p95 410.9ms、_clues 64.1ms、native_encode每次13.4ms；竞争_scan等锁398.6ms、快照复核等锁439.1ms。另一次profile 658.2ms扫描内signals516.3ms，含bigrams219.2ms、terms192.4ms，不能重复相加。完整原文及hash归档performance-diagnostic-*，无生产算法变更。与上一run主机不同，不宣称代码导致时间减少。下一项实现有界/版本失效的静态特征缓存并验证等价，再复验原门槛；P23仍未通过。

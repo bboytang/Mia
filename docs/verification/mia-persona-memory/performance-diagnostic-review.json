@@ -1,0 +1,141 @@
+{
+  "code_sha": "83823ab95472ecb4a3ac8d8badb58799d7b3038c",
+  "run_id": 38993671685,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38993671685",
+  "conclusion": "success",
+  "meaning": "Diagnostic collection completed; not D08 acceptance",
+  "p23_complete": false,
+  "raw_sha256": "7f8ba74c82c472560be1f19959223605118c5924be4d6ada4273cd03f8ab0b6c",
+  "artifact_file": "performance-diagnostic-results.json.gz",
+  "artifact_sha256": "df7d4a22a2376b06473c584033d172b34702c71e96a2b229808ec858f11d1cd6",
+  "sequential_stages": {
+    "_require": {
+      "count": 30,
+      "p50_ms": 0.00243900001350994,
+      "p95_ms": 0.004430449999404118
+    },
+    "store_lock_wait._snapshot": {
+      "count": 15,
+      "p50_ms": 0.0005509999994046666,
+      "p95_ms": 0.000609999989364951
+    },
+    "_snapshot": {
+      "count": 15,
+      "p50_ms": 0.010586000001922002,
+      "p95_ms": 0.01139499999283089
+    },
+    "store_lock_wait._clues": {
+      "count": 15,
+      "p50_ms": 0.0004709999927854369,
+      "p95_ms": 0.0005119999798353091
+    },
+    "_clues": {
+      "count": 15,
+      "p50_ms": 63.014233000018294,
+      "p95_ms": 64.1112611000068
+    },
+    "encoder_lock_wait.native_encode": {
+      "count": 30,
+      "p50_ms": 0.0012170000047717622,
+      "p95_ms": 0.001502999988645115
+    },
+    "native_encode": {
+      "count": 30,
+      "p50_ms": 10.758441999996649,
+      "p95_ms": 13.38714179999414
+    },
+    "_encode": {
+      "count": 30,
+      "p50_ms": 11.070058999990806,
+      "p95_ms": 13.715525100006687
+    },
+    "store_lock_wait._scan": {
+      "count": 15,
+      "p50_ms": 0.0016219999849909073,
+      "p95_ms": 0.0018989999972518488
+    },
+    "_scan": {
+      "count": 15,
+      "p50_ms": 408.3176139999978,
+      "p95_ms": 410.9209291000042
+    },
+    "store_lock_wait._snapshot_check": {
+      "count": 15,
+      "p50_ms": 0.0013519999981781439,
+      "p95_ms": 0.0015510000054064221
+    },
+    "_snapshot_check": {
+      "count": 15,
+      "p50_ms": 0.035543999985065966,
+      "p95_ms": 0.037103899998669476
+    }
+  },
+  "concurrent_stages": {
+    "store_lock_wait.other": {
+      "count": 99,
+      "p50_ms": 0.18400800001927564,
+      "p95_ms": 424.8019700999805
+    },
+    "_require": {
+      "count": 158,
+      "p50_ms": 0.0017075000044997068,
+      "p95_ms": 0.0047799999890685285
+    },
+    "store_lock_wait._snapshot": {
+      "count": 30,
+      "p50_ms": 0.20020749998650444,
+      "p95_ms": 0.5588198500007023
+    },
+    "_snapshot": {
+      "count": 30,
+      "p50_ms": 0.49702500000137206,
+      "p95_ms": 0.7424397500187752
+    },
+    "store_lock_wait._clues": {
+      "count": 30,
+      "p50_ms": 31.5276984999997,
+      "p95_ms": 85.97809094999604
+    },
+    "encoder_lock_wait.native_encode": {
+      "count": 92,
+      "p50_ms": 0.0011820000054285629,
+      "p95_ms": 1.372018100008177
+    },
+    "_clues": {
+      "count": 30,
+      "p50_ms": 117.28323500001636,
+      "p95_ms": 172.16726790000223
+    },
+    "native_encode": {
+      "count": 92,
+      "p50_ms": 21.263901000011742,
+      "p95_ms": 68.74748995000745
+    },
+    "_encode": {
+      "count": 92,
+      "p50_ms": 21.751093500000707,
+      "p95_ms": 69.19158020000113
+    },
+    "store_lock_wait._scan": {
+      "count": 30,
+      "p50_ms": 218.62820399999805,
+      "p95_ms": 398.6083369500122
+    },
+    "_scan": {
+      "count": 30,
+      "p50_ms": 667.4206470000001,
+      "p95_ms": 833.9216528000136
+    },
+    "store_lock_wait._snapshot_check": {
+      "count": 30,
+      "p50_ms": 207.79337149998867,
+      "p95_ms": 439.07662315000806
+    },
+    "_snapshot_check": {
+      "count": 30,
+      "p50_ms": 207.96795000001111,
+      "p95_ms": 439.23006145000016
+    }
+  },
+  "profile_note": "Separate profiled scan excludes profiling overhead from timed samples; signals 516.3ms cumulative, bigrams 219.2ms, terms 192.4ms within profiled scan 658.2ms. Percentiles are not additive. Different runner from prior capacity gate, so do not attribute elapsed differences to code changes."
+}

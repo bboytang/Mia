@@ -40,8 +40,14 @@
 
 真实两前台会话与单后台提取还须验证Scope公平、前台优先、正常接受任务到达保存/有效空结果的p95≤120秒、故障、重索引及含在途进程总关闭≤20秒。旧P22关闭证据和本步骤模块竞争均不能代替这些实测。真机音频另验。本文件不会因一个独立数值job成功而标P23完成。
 
-## 第二步：原路径分段诊断（进行中）
+## 第二步：原路径分段诊断（已完成）
 
 用户要求继续。仓库/远端同为ab3c02a、工作树干净，无在途任务。新增独立diagnostic模式，在同一10k长事实/同容量外人Scope上包装原index方法，只记录调用耗时和实际锁等待；每查询预热一次/测五次，再测原两路检索+32条重建。最后单独对一次原混合扫描做cProfile，profile开销不混入D08样本，不凭诊断任务success宣称性能通过。没有生产算法/门槛/语料变更，没有Provider调用。
 
-性能workflow改为push检查语法、显式dispatch选择capacity或diagnostic，避免每次诊断入口变更都重复整轮50k。实际模型及2CPU/2GiB约束不变；任务句柄和结果随后补记。
+性能workflow改为push检查语法、显式dispatch选择capacity或diagnostic，避免每次诊断入口变更都重复整轮50k。实际模型及2CPU/2GiB约束不变。
+
+诊断候选83823ab / [38993671685](https://github.com/bboytang/Mia/actions/runs/38993671685)已单次派发，当前在途；push语法38993670013成功。继续同一run，不将诊断success当D08通过。
+
+诊断38993671685终态success：每查询预热/五次，共15次单路，_clues p95 64.1ms、native_encode每次13.4ms、_scan 410.9ms；竞争_scan锁等待p95 398.6ms、最终快照检查等锁439.1ms。另一次profile扫描658.2ms，其中signals累计516.3ms、bigrams 219.2ms、terms 192.4ms，后两者是包含在signals内的成本，不能相加重复计数。百分位不直接相加。完整[诊断原报告](performance-diagnostic-results.json.gz)与[摘要/hash](performance-diagnostic-review.json)已保存。与第一步runner不同，不把时间差归因于代码优化；此步没有生产优化。
+
+下一步最小候选：共享、内存有上限的静态检索特征缓存，Scope/快照变化失效，查询编码/向量扫描/四维评分/授权仍逐次执行。先证明任意Unicode词组、分数、候选来源、失效及跨连接语义一致，再在原容量/资源门槛下实测；不缓存整条查询或模型回答，不更改排序/权重。
