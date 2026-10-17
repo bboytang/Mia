@@ -7,6 +7,7 @@ import json
 import math
 import re
 import sys
+import threading
 
 
 WEIGHTS = {'semantic': 0.58, 'lexical': 0.28, 'association': 0.08, 'emotion': 0.06}
@@ -54,24 +55,31 @@ class FeatureCache:
     def __init__(self):
         self.entries = OrderedDict()
         self.bytes = 0
+        self.lock = threading.RLock()
 
     def begin(self, scope, state):
-        # Called under the store lock, including when another connection has
+        # Called after checking the snapshot, including when another connection has
         # changed/deleted facts. No query, score, vector or reply is cached.
-        for key in list(self.entries):
-            if key[:2] == (scope.owner, scope.persona_id) and key[2] != state:
-                self.bytes -= self.entries.pop(key)[1]
+        with self.lock:
+            for key in list(self.entries):
+                if key[:2] == (scope.owner, scope.persona_id) and key[2] != state:
+                    self.bytes -= self.entries.pop(key)[1]
 
     def peek(self, scope, state, memory_id):
-        item = self.entries.get((scope.owner, scope.persona_id, state, memory_id))
-        return item[0] if item is not None else None
+        with self.lock:
+            item = self.entries.get((scope.owner, scope.persona_id, state, memory_id))
+            return item[0] if item is not None else None
 
     def prepare(self, scope, state, row):
-        key = (scope.owner, scope.persona_id, state, row['id'])
-        item = self.entries.pop(key, None)
-        if item is not None:
-            self.entries[key] = item
-            return item[0]
+        with self.lock:
+            key = (scope.owner, scope.persona_id, state, row['id'])
+            item = self.entries.pop(key, None)
+            if item is not None:
+                self.entries[key] = item
+                return item[0]
+            return self._prepare(key, row)
+
+    def _prepare(self, key, row):
         prepared = prepare_signals(row)
         # Conservatively include key/node overhead and repeated references to
         # strings, as well as the packed array's allocated buffer.
@@ -89,15 +97,24 @@ class FeatureCache:
 
 
 def signals(query, row, cosine, query_terms=None, *, prepared=None, query_codes=None):
-    all_terms, triggers, right, _ = prepare_signals(row) if prepared is None else prepared
+    if prepared is None:
+        # Oversized working sets keep the original no-cache set path rather
+        # than continuously allocating and evicting packed features.
+        entities, keywords, triggers = [terms(row[name]) for name in ('entities', 'keywords', 'trigger_terms')]
+        all_terms = dict.fromkeys(entities + keywords + triggers)
+        left = bigrams(query) if query_terms is None else query_terms
+        right = bigrams(row['content'] + ''.join(entities + keywords))
+        overlap = len(left & right) / max(1, len(left | right))
+    else:
+        all_terms, triggers, right, _ = prepared
+        left = pair_codes(bigrams(query) if query_terms is None else query_terms) if query_codes is None else query_codes
+        shared = 0
+        for value in left:
+            position = bisect_left(right, value)
+            shared += position < len(right) and right[position] == value
+        overlap = shared / max(1, len(left) + len(right) - shared)
     hits = [term for term in all_terms if len(term) >= 2 and term in query]
     associations = [term for term in triggers if len(term) >= 2 and term in query]
-    left = pair_codes(bigrams(query) if query_terms is None else query_terms) if query_codes is None else query_codes
-    shared = 0
-    for value in left:
-        position = bisect_left(right, value)
-        shared += position < len(right) and right[position] == value
-    overlap = shared / max(1, len(left) + len(right) - shared)
     emotion = row['emotional_weight']
     if emotion is not None and (not isinstance(emotion, (float, int)) or not math.isfinite(emotion) or not 0 <= emotion <= 1):
         from .embedding import EmbeddingUnavailable

@@ -1,7 +1,10 @@
 """Scope-first exact vectors and hybrid retrieval in the existing fact DB."""
 
 import asyncio
+from contextlib import closing
 import heapq
+from pathlib import Path
+import sqlite3
 import time
 
 from .authorization import AuthenticatedScope, PrivateAuthorizationRequired
@@ -17,6 +20,7 @@ class SemanticMemoryIndex:
         self._slots = asyncio.Semaphore(2)
         from .retrieval import FeatureCache
         with store.lock:
+            self._database_uri = Path(store.db.execute('PRAGMA database_list').fetchone()['file']).as_uri() + '?mode=ro'
             if not hasattr(store, '_mia_retrieval_features'):
                 store._mia_retrieval_features = FeatureCache()
             self._features = store._mia_retrieval_features
@@ -26,8 +30,8 @@ class SemanticMemoryIndex:
             raise PrivateAuthorizationRequired()
         await authorization.require(scope, permission)
 
-    def _state(self, scope):
-        row = self.store.db.execute('SELECT o.revision,s.content_epoch FROM owners o '
+    def _state(self, scope, db=None):
+        row = (db if db is not None else self.store.db).execute('SELECT o.revision,s.content_epoch FROM owners o '
                                     'JOIN mia_scope_versions s ON s.owner=o.owner WHERE o.owner=?', (scope.owner,)).fetchone()
         return tuple(row) if row else (0, 0)
 
@@ -35,8 +39,8 @@ class SemanticMemoryIndex:
         with self.store.lock:
             return self._state(scope)
 
-    def _check(self, scope, expected):
-        if self._state(scope) != expected:
+    def _check(self, scope, expected, db=None):
+        if self._state(scope, db) != expected:
             raise EmbeddingUnavailable('memory_changed')
 
     async def _encode(self, text, query=False):
@@ -111,31 +115,39 @@ class SemanticMemoryIndex:
 
     def _scan(self, scope, expected, query, limit, minimum, query_text=None, expanded=None):
         import numpy as np
-        from .retrieval import bigrams, pair_codes, signals
+        from .retrieval import FEATURE_CACHE_ENTRIES, bigrams, pair_codes, signals
         query = self._vector(query)
         expanded = query if expanded is None else self._vector(expanded)
         query_terms = bigrams(query_text) if query_text is not None else None
         query_codes = pair_codes(query_terms) if query_terms is not None else None
-        with self.store.lock, self.store.db:
-            self.store.db.execute('BEGIN')
-            self._check(scope, expected)
+        # A private read-only WAL snapshot cannot hold the application's write
+        # connection lock while scoring. retrieve/candidates still recheck the
+        # current epoch and authorization before releasing these results.
+        with closing(sqlite3.connect(self._database_uri, uri=True)) as db, db:
+            db.row_factory = sqlite3.Row
+            db.execute('BEGIN')
+            self._check(scope, expected, db)
+            use_cache = False
             if query_text is not None:
                 self._features.begin(scope, expected)
+                count = db.execute('SELECT COUNT(*) FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
+                    "WHERE m.owner=? AND x.persona_id=? AND m.confirmed=1 AND x.state='active'",
+                    (scope.owner, scope.persona_id)).fetchone()[0]
+                use_cache = count <= FEATURE_CACHE_ENTRIES
             base = (' FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
                     'LEFT JOIN mia_vectors v ON v.memory_id=m.id AND v.model_id=? AND v.model_revision=? '
                     'AND v.dimension=? AND v.content_version=x.content_version '
                     "WHERE m.owner=? AND x.persona_id=? AND m.confirmed=1 AND x.state='active'")
             params = (MODEL_KEY, REVISION, DIMENSION, scope.owner, scope.persona_id)
-            counts = self.store.db.execute('SELECT COUNT(*),COUNT(v.memory_id)' + base, params).fetchone()
-            if counts[0] != counts[1]:
-                raise EmbeddingUnavailable('embedding_index_not_ready')
-            cursor = self.store.db.execute('SELECT m.id,m.content,m.category,x.content_version,x.evidence_version,'
+            cursor = db.execute('SELECT m.id,m.content,m.category,x.content_version,x.evidence_version,'
                 'x.entities,x.keywords,x.trigger_terms,x.emotional_weight,v.normalized_vector' + base, params)
             heaps = {name: [] for name in (('original',) if query_text is None else ('original', 'expanded', 'lexical', 'association'))}
             while True:
                 rows = cursor.fetchmany(256)
                 if not rows:
                     break
+                if any(row['normalized_vector'] is None for row in rows):
+                    raise EmbeddingUnavailable('embedding_index_not_ready')
                 try:
                     matrix = np.stack([np.frombuffer(row['normalized_vector'], dtype='<f4') for row in rows])
                 except (ValueError, TypeError):
@@ -158,7 +170,8 @@ class SemanticMemoryIndex:
                         record['original_cosine'], record['expanded_cosine'] = score, float(expanded_score)
                         record['signals'], record['lexical_hits'], record['association_hits'] = signals(
                             query_text, record, max(score, float(expanded_score)), query_terms,
-                            prepared=self._features.prepare(scope, expected, record), query_codes=query_codes)
+                            prepared=self._features.prepare(scope, expected, record) if use_cache else None,
+                            query_codes=query_codes)
                         values.update(expanded=float(expanded_score), lexical=record['signals']['lexical'],
                                       association=record['signals']['association'])
                     for name, value in values.items():

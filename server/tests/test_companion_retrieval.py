@@ -1,10 +1,12 @@
 """Controlled S/L/A/E, candidate omissions and lifecycle; vectors are synthetic."""
 
+import asyncio
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -171,6 +173,43 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(deleted['expansion'], [])
         finally:
             second.close()
+
+    async def test_read_snapshot_does_not_block_deletion_and_old_result_is_rejected(self):
+        own = self.fact('散步带水壶', triggers=['散步'], keywords=['水壶'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        scanning, release = threading.Event(), threading.Event()
+        prepare = self.index._features.prepare
+
+        def held(*args):
+            scanning.set()
+            if not release.wait(3):
+                raise AssertionError('Concurrent deletion did not release held scan')
+            return prepare(*args)
+
+        self.index._features.prepare = held
+        task = asyncio.create_task(self.index.retrieve(self.scope, self.auth, '散步'))
+        try:
+            self.assertTrue(await asyncio.to_thread(scanning.wait, 3))
+            # The scan is still open. Deletion through the original write
+            # connection must finish before the reader is allowed to continue.
+            await asyncio.wait_for(asyncio.to_thread(self.store.delete_memory, self.scope.owner, own), 1)
+        finally:
+            release.set()
+            self.index._features.prepare = prepare
+        with self.assertRaisesRegex(EmbeddingUnavailable, 'memory_changed'):
+            await task
+        self.assertEqual((await self.index.retrieve(self.scope, self.auth, '散步'))['results'], [])
+
+    async def test_large_scope_fallback_matches_cached_results(self):
+        self.fact('散步带水壶', triggers=['散步'], keywords=['水壶'])
+        self.fact('练琴带节拍器', triggers=['练琴'], keywords=['节拍器'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        expected = await self.index.retrieve(self.scope, self.auth, '散步')
+        self.index._features = FeatureCache()
+        with patch('server.companion.retrieval.FEATURE_CACHE_ENTRIES', 1):
+            actual = await self.index.retrieve(self.scope, self.auth, '散步')
+        self.assertEqual(actual, expected)
+        self.assertEqual(len(self.index._features.entries), 0)
 
     def test_each_signal_can_change_ranking_and_emotion_cannot_override_original_floor(self):
         for dimension in WEIGHTS:
