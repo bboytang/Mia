@@ -1,0 +1,95 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38985290313",
+  "code_sha": "6ec836d8a0a285728b668207c23589a71afa77fd",
+  "round": 1,
+  "requests": 18,
+  "passed": true,
+  "server_pids": [
+    4479,
+    4980,
+    5056
+  ],
+  "sql": {
+    "integrity": [
+      [
+        "ok"
+      ]
+    ],
+    "facts": [
+      [
+        0
+      ]
+    ],
+    "observations": [
+      [
+        0
+      ]
+    ],
+    "consent": [
+      [
+        1,
+        3
+      ]
+    ],
+    "jobs": [
+      [
+        "empty",
+        1,
+        null
+      ],
+      [
+        "committed",
+        1,
+        null
+      ],
+      [
+        "committed",
+        1,
+        null
+      ],
+      [
+        "committed",
+        1,
+        null
+      ],
+      [
+        "committed",
+        1,
+        null
+      ],
+      [
+        "committed",
+        1,
+        null
+      ],
+      [
+        "empty",
+        1,
+        null
+      ],
+      [
+        "empty",
+        1,
+        null
+      ],
+      [
+        "empty",
+        1,
+        null
+      ],
+      [
+        "empty",
+        1,
+        null
+      ],
+      [
+        "empty",
+        1,
+        null
+      ]
+    ]
+  },
+  "original_report_sha256": "4464b0e2404231c30ea570ed7ec8823c85dbc379926a46d1927811579672b0bc",
+  "archive_sha256": "cdc0085e47ce96e8089ba3ff3ea3b9d5fc78c430d311cad8c4ed79976183be1b",
+  "review": "All eleven actual replies read. Default-off, five sourced observations, third-party exclusion, insufficient actual calendar span, management correction, disable/restart, reenable/delete/clear/restart complete. Warmth, feelings, tentative impressions and natural unknown statements accepted. Original incomplete reply did not reproduce; root cause remains unknown, not a demonstrated runtime repair. Original failed run retained. No further replay. P22 still fails frozen v3 factual sourcing; P23/P24 not started."
+}
