@@ -366,3 +366,5 @@ P23整体未验收，P24未开始。实际reply/app共享资源、同Provider无
 每轮均为两真实owner各10k及32条原生重建，真实授权逐次执行。原编码9向量（6文档/3查询）保留逐位float32数据/hash，六个owner/query检索完整结果独立于计时保存；四轮核对向量、候选ID/来源/顺序、最终ID/顺序及完整响应的一致性。使用既有校正阶段观察器，单路15次、双前台各15次，单独profile不混计时；保留每轮CPU/RSS/父组/实际PID和完整原始数组。完整采集成功只标diagnostic_complete，始终不标容量/P23通过，结果不一致也如实保留而不晋升候选。
 
 Python3.10 AST/Python语法、Shell、YAML和diff检查通过；实际ORT/服务验证只在GitHub运行，不使用本地Docker、不调用Provider、不重采P22留出。新观察器SHA和唯一运行句柄随后记录，先收同一组证据再决定下一候选。P23未验收/P24未开始。
+
+第十五步观察器`3d348e340326a6dfa3c006a9dca250c6a67dfee0`已推送，唯一threads诊断[39073672324](https://github.com/bboytang/Mia/actions/runs/39073672324)在途；push语法39073666959已完成。运行实现仍83e837a、正式两容量仍failure。先收同一诊断句柄，暂不修改运行代码。
