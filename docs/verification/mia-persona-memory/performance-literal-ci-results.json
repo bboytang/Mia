@@ -1,0 +1,497 @@
+{
+  "code_sha": "df652890d41beb2f8a3d93c9eeb4be852fc5d0cd",
+  "service": {
+    "run_id": 39027795017,
+    "conclusion": "success",
+    "tests_passed": 285
+  },
+  "bge": {
+    "run_id": 39027795008,
+    "conclusion": "success",
+    "reports": [
+      {
+        "file": "performance-literal-bge-vector-results.json.gz",
+        "raw_sha256": "a0b84453b19d355fd652a46f91fc240f2eb99b649300e8f04c2edd52ceba8590",
+        "sha256": "2d674a7fa2c90b5e1c6a50ae4f767014e3787638246bd8661dfc823f0a967ce4",
+        "passed": true
+      },
+      {
+        "file": "performance-literal-bge-reply-results.json.gz",
+        "raw_sha256": "bc9961830cab08aae22a0786d52abb96a038f168f3348ab236890558254dab06",
+        "sha256": "1fbf8e5fd9a95eff2fa891ccf4bc90c2860f03ab46f8b151b2bd0b762b7a7637",
+        "passed": true
+      },
+      {
+        "file": "performance-literal-bge-extraction-results.json.gz",
+        "raw_sha256": "3e9bbea51a94ced0fd6c03cbab9fb1519398e9c2fcae056b9a2ef469122b1e54",
+        "sha256": "e554c3dd973c4133d0dc8b9a0375e4dd344b20b382efbc483221e6d90cef2462",
+        "passed": true
+      },
+      {
+        "file": "performance-literal-bge-context-results.json.gz",
+        "raw_sha256": "11b5e502a8415be04e8b705f8cde951bfb25da2158f9cec29a7c875822cd5d06",
+        "sha256": "68a72308883712356b0af43db4cf3e9b3a32fc537961df5377573ff045541a2e",
+        "passed": true
+      },
+      {
+        "file": "performance-literal-bge-retrieval-results.json.gz",
+        "raw_sha256": "fea3bd10930dd8b6ebd7c73982756417d2df5acbea877b01139891d3b2541735",
+        "sha256": "6075be73e5714e219c5cee5205feffafc8016b8d4b5e414fa09db4e24c604c09",
+        "passed": true
+      }
+    ]
+  },
+  "local_retrieval_tests": {
+    "passed": 17,
+    "numpy": "1.26.4",
+    "restriction": "Async checks needed sandbox escalation; sandboxed to_thread stalled, same tests unrestricted passed",
+    "performance_claim": false
+  },
+  "identity": {
+    "run_id": 39027795020,
+    "conclusion": "success",
+    "suites": [
+      {
+        "suite": "xiaozhi.common.redis.RedisSerializationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b6fb44b74962eb4454622f9bac29d5c407429482381dcd6b2b2126c663b03a96"
+      },
+      {
+        "suite": "xiaozhi.common.service.impl.BaseServiceImplTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "36d640b6777f343f5a021cf1602df1e5eb7dadbb13f250d8833c022a83857c3c"
+      },
+      {
+        "suite": "xiaozhi.common.utils.AESUtilsTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2846b3786ce9d1f4d5497cefcfa9bd0cf25e80733968c5a384fe4ab7b925d3e3"
+      },
+      {
+        "suite": "xiaozhi.common.utils.JsonUtilsTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c173cddcc17f154f62bfe3e32db7c1303b4e75539337d50c2debfe2aea059532"
+      },
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b81bab8dc51430b85e5ae4858f56f94ccd06ff196b10897de3527ec0c6d64672"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.dto.AgentUpdateDTOTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c463c49ffb1258341b0aec7c65d65f0bbcd4677f32b2cbca544729639136054f"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "bea9aa2800345f8ef296df6c874d243e297c2b31d9b04254df0a176b0211cdaf"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest",
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f42a43dc3466b39c76812fc7ac73049bf9747c7ef78b66b81bf3fe04fe6b59ad"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "31a852d25b129ee353db18fb00c83137f8a2d41782d76414d6d68aa7b5cd8522"
+      },
+      {
+        "suite": "xiaozhi.modules.config.service.impl.ConfigServiceImplTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "afa0d68e47eb6b1990b1b45294203e69f001545c091829d3f0d19ece0476e941"
+      },
+      {
+        "suite": "xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "25cfcd3a3165debc3e49d3e2713557112304eacdb33d020ce3d246bc8129394d"
+      },
+      {
+        "suite": "xiaozhi.modules.device.DeviceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "85db97be54f5d5876ca4be8f6ddeab6f5042e7d7dd2b81d254613dd0449d245e"
+      },
+      {
+        "suite": "xiaozhi.modules.device.MiaBindingAuthorizationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e6c4830a4c24c7d28ffd8114fe29f08b214d8f1edeb5d6ef29776da3b5f1b45f"
+      },
+      {
+        "suite": "xiaozhi.modules.device.MiaPrivateAuthorizationTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7b6c67aefe13b86b7c91cd85cda708db5655d00e11e31d0d8fb9945fea97fe41"
+      },
+      {
+        "suite": "xiaozhi.modules.device.MiaPrivateChatTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b594ef97466413758e57b40307a1a4807fa8e2cdf22dfe966b6bc7282d387821"
+      },
+      {
+        "suite": "xiaozhi.modules.device.MiaPrivateTlsTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e095307b493d65e791fd26edc716b8debd2d22f6c2b48629ad0d06a474a83e6a"
+      },
+      {
+        "suite": "xiaozhi.modules.device.MiaPrivateTransportTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f0a0ddbf7935d9c33ae7a91b830233a7f8d54f31445af09b98a103a8ffd8a205"
+      },
+      {
+        "suite": "xiaozhi.modules.device.controller.DeviceControllerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "85d350933d3c5229e6eb337d1bb1ff07d63877f2d64f251bc885cf261cc5e046"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "54734e1d91df62ed077a26f1bb375169b4451d3fb8f1cfe9ca148f16f90f4809"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7dd16be6eca589506bc8b29d756222f7d2a7b72f39e2796d083cdc3b4434a07e"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "a79626879f16011585050bb23e36d3503048bfd995365a6aad25b31a3771021b"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3fe47a43fda9de9c86f146cb9345ef050a773322fcbeeb501a4f7e2e8c4be866"
+      },
+      {
+        "suite": "xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b43e3b909330655678df954a6774ee05d03143f94094eaa0f71f37df75fb592d"
+      },
+      {
+        "suite": "xiaozhi.modules.security.config.ShiroConfigTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c2c89a83c53357aa03da0df3478876991eafb323afec83554f42f83b2b19f417"
+      },
+      {
+        "suite": "xiaozhi.modules.sys.loginControllerTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4be5a65ce24472da5e6fc1615ec369b24963646b8a493f7e467b2a37f4a81255"
+      },
+      {
+        "suite": "xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b3f6e6611aa374feec44fd52df3e17d9f0a4a33074555d9df1b73b145de5a07c"
+      },
+      {
+        "suite": "xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "06d36f616b8ab4dc9d4ca07addf3780f1fa7e373ed01c062429c791c1102a8f0"
+      },
+      {
+        "suite": "xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "450bef920ed6813ac88a54159641f35d0115b41fa68faeff13debfa01d20afff"
+      }
+    ],
+    "totals": {
+      "tests": 173,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reports": [
+      {
+        "file": "performance-literal-identity-binding-results.json.gz",
+        "raw_sha256": "d0d364d85c415b543497a11a2e7af5ce3a3ce29f7c2bdb34919b34197c6c8650",
+        "sha256": "29da7ed3c212528fb026af51d24f85dcda633079b7f597ec97330e089ec88639"
+      }
+    ]
+  },
+  "manager": {
+    "run_id": 39027795011,
+    "conclusion": "success",
+    "suites": [
+      {
+        "suite": "xiaozhi.common.redis.RedisSerializationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0cb649b31cf3bc05f48f1259dbe1c9a5ce1aab7cd1257f699ea1c8ffb96b598e"
+      },
+      {
+        "suite": "xiaozhi.common.service.impl.BaseServiceImplTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3b58ef35b1b9a86957abd60abdb62d7c57af4594c6b70cbc48c269ad41aa70ee"
+      },
+      {
+        "suite": "xiaozhi.common.utils.AESUtilsTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "12a1ae077f5fb611a83a8abe9e7059415a22461f89a7834631a71823ddb7e52c"
+      },
+      {
+        "suite": "xiaozhi.common.utils.JsonUtilsTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2c799b765d532e97a7406826aecce6befa221fd96c6693d7b327ab2bc57673d2"
+      },
+      {
+        "suite": "xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "98ab466bbb2b7308beb1ba9ebfbcbe1b8ef6e74e963b62f1e5986505bc10a9c7"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.dto.AgentUpdateDTOTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "72603860696f3c6eec8d236ce69349bb5a08ec3a23c81e1fcea3df1b882a0cb0"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f593fedc96658c4b18febe041ff8070526209c83b274f4e9bdaab3256cb487a4"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest",
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d27637610e7f3f5c16e86d11591e428a1f62f987575cfe224c2196e949e62791"
+      },
+      {
+        "suite": "xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "baf6a55f760fd0c4732201473788d13cbe56455a6cccc4ce4cff9b28e1b84925"
+      },
+      {
+        "suite": "xiaozhi.modules.config.service.impl.ConfigServiceImplTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7e59b643763453ca95fedcad9e86257ae712f4aa235f7b903079324e940b03ae"
+      },
+      {
+        "suite": "xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "88a4c67642fdd52f7fe40cb4423a3d86663040c933a1814d9585faad40e9e71c"
+      },
+      {
+        "suite": "xiaozhi.modules.device.DeviceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1f43149bd6d7c16f6e49985a7d6d999f7995c175a32f5891f2b746fb252bf820"
+      },
+      {
+        "suite": "xiaozhi.modules.device.MiaIdentityBaselineTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2b0a218ed81f201c4d08854f7e4eb670ebfe052dfc932f00a3db3893fe74a36b"
+      },
+      {
+        "suite": "xiaozhi.modules.device.controller.DeviceControllerTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d0846d993e7dff8a6838bfd7b3bfb7f841fc1b907da1154c709fdc1ab7399595"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "748dcde086cde3c414af22f21df55cec979f4f2f6526baa624045e23d5297972"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7148a90633d8735e544c0b87f725f29291f789138717ad0309289c0018ca4172"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9ad9ffee1e4132ed6895ac50524887edb328b7f065735f8272dbfcd12a95a606"
+      },
+      {
+        "suite": "xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "bae48c80fcc3e86a19b9c7f2cde2d7863fba18c02512abb8d3a02791f115dcf9"
+      },
+      {
+        "suite": "xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "8c95791a0da4ab5c036686d6a3403000e531e41b9f4338d5cb252fde75661d1d"
+      },
+      {
+        "suite": "xiaozhi.modules.security.config.ShiroConfigTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e49405bc8a414d88ab5cdbd038c511c0985b03df43504273cdc0f64b90f3170e"
+      },
+      {
+        "suite": "xiaozhi.modules.sys.loginControllerTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "29005dc81866c3e807c3dbdaaf507ce45b6926e6c330bafb466f8ae424b9ab52"
+      },
+      {
+        "suite": "xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d51620073da8a614ba093faed254fb9643231c9d78ba7c0dc260457f499894e6"
+      },
+      {
+        "suite": "xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "fc65f85a95ec3f0d6267573cef5e92dc8b4a86b97ac5e3cf05874163dcbe38c1"
+      },
+      {
+        "suite": "xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "19c558593e71104d9dfcad9d75772667f4b8621bd8b8fed36865766051c27805"
+      }
+    ],
+    "totals": {
+      "tests": 154,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}
