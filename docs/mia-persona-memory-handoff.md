@@ -54,3 +54,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 第七步诊断已收齐并归档performance-batch-diagnostic-*，无在途。热点为批量字符串转换/np.char.find；下一最小修改以原生term in query收集布尔值，保留bigram批处理及原语义，再做同SHA回归/容量。
 
 第八步实现仅替换批量词项匹配为np.fromiter(term in query)，其余运行实现不变；本地标准库3项/语法/diff检查通过。GitHub完整等价/并发回归与新固定容量待提交后执行，不提前宣称改善或达标。
+
+第八步候选df652890d41beb2f8a3d93c9eeb4be852fc5d0cd：容量39027799458、服务39027795017、BGE39027795008、身份39027795020、manager39027795011在途，均为同SHA；等待原句柄，不重复dispatch。
