@@ -1,5 +1,7 @@
 # Mia 升级交接
 
+> 本文保留此前客户端/部署/回滚历史，未在本次重新核实生产或真机状态。当前开发进度与执行授权以[人格与记忆交接](mia-persona-memory-handoff.md)为准：2026-10-17用户已确认模型和P22通过，等待下一阶段批准。本文旧“最新/下一步”不触发新的部署或开发。
+
 更新：2026-10-14。主入口：[批准方案](mia-companion-plan.md)、[分步计划](mia-companion-implementation.md)、[工作记录](mia-companion-worklog.md)。
 
 ## 用户已确定
