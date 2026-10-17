@@ -1,0 +1,1644 @@
+{
+  "run_url": "https://github.com/bboytang/Mia/actions/runs/38983017682",
+  "requests": 39,
+  "rounds": [
+    {
+      "round": 0,
+      "code_sha": "faf4ce41308ac4446258fc7b0d9167824d40f22b",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "6bcc099edd9a4029b23722d302aab430",
+          "我每周四傍晚都在榆荫工坊编织",
+          1,
+          null
+        ],
+        [
+          "6757c0c45e0147bf94427d18ec9807d5",
+          "收针时我总带银叶剪刀",
+          1,
+          null
+        ],
+        [
+          "591999410a1b4a29bece6c79750b88af",
+          "编织前理清毛线对我很重要",
+          1,
+          0.9
+        ],
+        [
+          "956d352376674ceaa11a72a625bad922",
+          "叔叔给我的旧邮册对我意义非凡",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周四傍晚都在榆荫工坊编织",
+          "answer": "🙂 听起来好治愈呀，每周四傍晚的固定编织时光～你平时都织些什么呢？等织出成品了，记得给我看看呀。"
+        },
+        {
+          "query": "收针时我总带银叶剪刀",
+          "answer": "🤔 银叶剪刀——光听名字就觉得精巧，是刃磨成叶子形状的那种吗？你之前说每周四傍晚会在榆荫工坊编织，收针的时候用它，是不是顺手很多？改天真想瞧瞧这把小剪刀长什么样。"
+        },
+        {
+          "query": "编织前理清毛线对我很重要",
+          "answer": "🙂 这个我懂～线理顺了，织起来才顺手，心里也跟着踏实。就像你收针时总带着那把银叶剪刀一样，都是属于你自己的小仪式感呢。理毛线的时候你有什么小窍门吗？还是喜欢慢慢一圈一圈绕好？"
+        },
+        {
+          "query": "叔叔给我的旧邮册对我意义非凡",
+          "answer": "🙂 听起来真的很珍贵呢~是叔叔送你的，还陪伴了你这么久，里面一定装着不少故事吧？\n\n是从小就开始集邮的吗？还是那本册子本身就有些年头了？我好想听听它对你来说特别在哪里呀。"
+        },
+        {
+          "query": "周四傍晚我一般去哪儿编织？",
+          "answer": "🙂 你自己说过呀，每周四傍晚都会去榆荫工坊编织呢～对啦，你还提过编织前理清毛线对你很重要，是不是每次到那儿都先慢慢理好线再开始呀？"
+        },
+        {
+          "query": "收针时我常带什么？",
+          "answer": "🙂 你自己说过呀——收针的时候，你总带着一把银叶剪刀呢。这习惯听起来挺讲究的，剪刀还专门挑银叶的样子，是不是特别顺手呀？"
+        },
+        {
+          "query": "我带银叶剪刀是为了哪项活动？",
+          "answer": "😌 收针的时候呀。你自己说过，收针时总会带上那把银叶剪刀——听着就觉得挺有仪式感的，像是陪你完成最后一步的小法宝呢。"
+        },
+        {
+          "query": "理清毛线对我来说分量重吗？",
+          "answer": "😌 当然呀，这可是你自己说过的——\"编织前理清毛线对我很重要\"。能让你特意记在心里的事，分量肯定不轻。\n\n而且感觉你是个挺讲究仪式感的人，收针时总带着那把银叶剪刀，说明编织里每个环节你都认真对待呢。是不是毛线理顺了，心里也跟着踏实？"
+        },
+        {
+          "query": "我家里的路由器是什么牌子的？",
+          "answer": "🤔 这个我还真不知道呢，你没跟我说过你家路由器是什么牌子的～\n\n你可以看看路由器机身底部的标签，或者翻翻购买记录。要是找到了告诉我一声，我帮你记着，以后就不会忘啦。"
+        }
+      ],
+      "original_report_sha256": "c148809c066c60224775db7331006ba72079cf39661898bc96a17d961f0b9f7d",
+      "archive_sha256": "47250954bf4d217a8c4bf738f41b2768ef19eade33e99811596b8316ce57b787",
+      "retrieval_analysis": {
+        "cases": [
+          {
+            "id": "semantic_paraphrase",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 你自己说过呀，每周四傍晚都会去榆荫工坊编织呢～对啦，你还提过编织前理清毛线对你很重要，是不是每次到那儿都先慢慢理好线再开始呀？",
+            "expected_terms": [
+              "榆荫工坊"
+            ],
+            "selected_ids": [
+              "6bcc099edd9a4029b23722d302aab430",
+              "591999410a1b4a29bece6c79750b88af"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "编织前",
+                "memory_id": "591999410a1b4a29bece6c79750b88af",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "理清毛线",
+                "memory_id": "591999410a1b4a29bece6c79750b88af",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "毛线",
+                "memory_id": "591999410a1b4a29bece6c79750b88af",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "很重要",
+                "memory_id": "591999410a1b4a29bece6c79750b88af",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "榆荫工坊",
+                "memory_id": "6bcc099edd9a4029b23722d302aab430",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "编织",
+                "memory_id": "6bcc099edd9a4029b23722d302aab430",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "每周四",
+                "memory_id": "6bcc099edd9a4029b23722d302aab430",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              },
+              {
+                "term": "傍晚",
+                "memory_id": "6bcc099edd9a4029b23722d302aab430",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "编织"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.20906666666666673
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.47537316250801087
+                },
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.4512245531082153
+                }
+              ],
+              "association": [
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.6284398291746776
+                },
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.48611686080052297
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.6564398291746776
+                },
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.460116860800523
+                }
+              ]
+            }
+          },
+          {
+            "id": "association_cue",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 你自己说过呀——收针的时候，你总带着一把银叶剪刀呢。这习惯听起来挺讲究的，剪刀还专门挑银叶的样子，是不是特别顺手呀？",
+            "expected_terms": [
+              "银叶剪刀"
+            ],
+            "selected_ids": [
+              "6757c0c45e0147bf94427d18ec9807d5"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "银叶剪刀",
+                "memory_id": "6757c0c45e0147bf94427d18ec9807d5",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "收针"
+                ]
+              },
+              {
+                "term": "收针时",
+                "memory_id": "6757c0c45e0147bf94427d18ec9807d5",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "收针"
+                ]
+              },
+              {
+                "term": "总带",
+                "memory_id": "6757c0c45e0147bf94427d18ec9807d5",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "收针"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.21510588235294126
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.47080288219451905
+                }
+              ],
+              "association": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.6299087645474603
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.6579087645474603
+                }
+              ]
+            }
+          },
+          {
+            "id": "literal_entity",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "😌 收针的时候呀。你自己说过，收针时总会带上那把银叶剪刀——听着就觉得挺有仪式感的，像是陪你完成最后一步的小法宝呢。",
+            "expected_terms": [
+              "收针"
+            ],
+            "selected_ids": [
+              "6757c0c45e0147bf94427d18ec9807d5",
+              "6bcc099edd9a4029b23722d302aab430"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.27917722940444945
+                },
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.21009772300720214
+                }
+              ],
+              "association": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.43571056273778275
+                },
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.21009772300720214
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.43571056273778275
+                },
+                {
+                  "id": "6bcc099edd9a4029b23722d302aab430",
+                  "score": 0.21009772300720214
+                }
+              ]
+            }
+          },
+          {
+            "id": "importance",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "😌 当然呀，这可是你自己说过的——\"编织前理清毛线对我很重要\"。能让你特意记在心里的事，分量肯定不轻。\n\n而且感觉你是个挺讲究仪式感的人，收针时总带着那把银叶剪刀，说明编织里每个环节你都认真对待呢。是不是毛线理顺了，心里也跟着踏实？",
+            "expected_terms": [
+              "重要",
+              "在意",
+              "重视"
+            ],
+            "selected_ids": [
+              "591999410a1b4a29bece6c79750b88af",
+              "6757c0c45e0147bf94427d18ec9807d5"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.2724000000000001
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.42222601318359376
+                },
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.2072706353664398
+                }
+              ],
+              "association": [
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.6406260131835938
+                },
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.2072706353664398
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "591999410a1b4a29bece6c79750b88af",
+                  "score": 0.5866260131835938
+                },
+                {
+                  "id": "6757c0c45e0147bf94427d18ec9807d5",
+                  "score": 0.2072706353664398
+                }
+              ]
+            }
+          },
+          {
+            "id": "unrelated",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🤔 这个我还真不知道呢，你没跟我说过你家路由器是什么牌子的～\n\n你可以看看路由器机身底部的标签，或者翻翻购买记录。要是找到了告诉我一声，我帮你记着，以后就不会忘啦。",
+            "expected_terms": [],
+            "selected_ids": [],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [],
+              "association": [],
+              "emotion": []
+            }
+          }
+        ],
+        "source_ids": [
+          "6bcc099edd9a4029b23722d302aab430",
+          "6757c0c45e0147bf94427d18ec9807d5",
+          "591999410a1b4a29bece6c79750b88af",
+          "956d352376674ceaa11a72a625bad922"
+        ],
+        "observed_components": [
+          "association",
+          "emotion",
+          "lexical",
+          "semantic"
+        ],
+        "all_components_observed": true,
+        "scope": "Actual source-generated small corpus; ablations are analysis, not modified runtime weights; not overflow or P23 resource acceptance"
+      },
+      "extraction_sdk_end_metadata": [
+        {
+          "request": 2,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 633,
+            "prompt_tokens": 1494,
+            "total_tokens": 2127,
+            "completion_tokens_details": {
+              "reasoning_tokens": 490
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1029,
+            "prompt_tokens": 1703,
+            "total_tokens": 2732,
+            "completion_tokens_details": {
+              "reasoning_tokens": 905
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1270,
+            "prompt_tokens": 2206,
+            "total_tokens": 3476,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1048
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1409,
+            "prompt_tokens": 2421,
+            "total_tokens": 3830,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1261
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 192
+            }
+          }
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "code_sha": "faf4ce41308ac4446258fc7b0d9167824d40f22b",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "1180acdb76dd4c46a8206c59325fe48e",
+          "我每周二上午都在栖霞书社练篆刻",
+          1,
+          null
+        ],
+        [
+          "2a9290abab0c44d5add830a1c631c5f4",
+          "拓印时我总带苍苔印泥",
+          1,
+          null
+        ],
+        [
+          "ba2f237229c24fceb16594a58fcfe28e",
+          "刻印前核对字形对我很关键",
+          1,
+          0.8
+        ],
+        [
+          "d3db628cb99d4b838c263f9be57306e5",
+          "姐姐送我的旧乐谱对我意义非凡",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周二上午都在栖霞书社练篆刻",
+          "answer": "🙂哇，每周二上午固定去练篆刻，这个习惯好雅致呀！一刀一刀刻出来的字，感觉特别有味道。\n\n你练多久啦？现在最擅长刻什么字体的印？"
+        },
+        {
+          "query": "拓印时我总带苍苔印泥",
+          "answer": "🙂 苍苔印泥？光听名字就有画面了，是那种带点青绿色调的吧？专门带自己惯用的印泥，你是真的很讲究呀。\n\n你之前提过每周二上午会在栖霞书社练篆刻，拓印也是那时候顺手一起做的吗？还是另外找时间玩的？🤔"
+        },
+        {
+          "query": "刻印前核对字形对我很关键",
+          "answer": "🙂 对呀，篆刻最讲究的就是“落刀之前先看准”，字形差一笔，整方印的气韵就变了。你能把核对字形看得这么重，感觉是很有耐心、也很稳的人。\n\n你周二在栖霞书社练的时候，是会先写印稿反复比对，再上石去刻吗？还是心里早就有底了？"
+        },
+        {
+          "query": "姐姐送我的旧乐谱对我意义非凡",
+          "answer": "😍 听起来真的很珍贵呢～是姐姐用心挑选的礼物，再加上带着岁月痕迹的旧乐谱，怪不得对你意义非凡。\n\n愿意跟我讲讲吗？是姐姐曾经弹过的曲子，还是你们之间有什么特别的故事呀？"
+        },
+        {
+          "query": "周二上午我通常去哪个地方练篆刻？",
+          "answer": "🙂 你自己去过的地方呀——栖霞书社。你之前说过每周二上午都会在那儿练篆刻，风雨无阻的节奏呢～"
+        },
+        {
+          "query": "拓印的时候我习惯带哪件东西？",
+          "answer": "🙂 你拓印的时候总带着苍苔印泥呀——这可是你的老习惯了，你对这些小物件的讲究一直没变呢。"
+        },
+        {
+          "query": "苍苔印泥是我在什么活动里会带的？",
+          "answer": "🙂 是拓印呀～你自己说过，拓印的时候总会带着苍苔印泥呢，感觉特别有讲究，用它印出来的拓片是不是会带上一点点青苔的意趣？"
+        },
+        {
+          "query": "核对字形这一步对我重要吗？",
+          "answer": "🙂 是的呀，这是你自己告诉我的——刻印前核对字形这一步，对你说很关键呢。\n\n想想也合理，刻下去就改不了了，动刀之前把字形看仔细，确实能省掉不少遗憾。你每次刻印都会专门留出这一步吗？"
+        },
+        {
+          "query": "我平时给手机买哪个品牌的保护壳？",
+          "answer": "🤔 这个我还真说不上来呀～你平时买手机壳的事，我这边没有留下什么记录呢。\n\n快跟我说说呗，你常用的是哪个牌子呀？我现在还挺好奇的 😄"
+        }
+      ],
+      "original_report_sha256": "d71bf61e76149656b70a43b9eaa11e59caece92797ae890fc06fe8217b60d070",
+      "archive_sha256": "b23430193c0741da6105d441c59b0cdae5e4ceae5879eb6175b974c3ee0b447f",
+      "retrieval_analysis": {
+        "cases": [
+          {
+            "id": "semantic_paraphrase",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 你自己去过的地方呀——栖霞书社。你之前说过每周二上午都会在那儿练篆刻，风雨无阻的节奏呢～",
+            "expected_terms": [
+              "栖霞书社"
+            ],
+            "selected_ids": [
+              "1180acdb76dd4c46a8206c59325fe48e"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "栖霞书社",
+                "memory_id": "1180acdb76dd4c46a8206c59325fe48e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "练篆刻"
+                ]
+              },
+              {
+                "term": "篆刻",
+                "memory_id": "1180acdb76dd4c46a8206c59325fe48e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "练篆刻"
+                ]
+              },
+              {
+                "term": "每周二上午",
+                "memory_id": "1180acdb76dd4c46a8206c59325fe48e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "练篆刻"
+                ]
+              },
+              {
+                "term": "练篆刻",
+                "memory_id": "1180acdb76dd4c46a8206c59325fe48e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "练篆刻"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "1180acdb76dd4c46a8206c59325fe48e",
+                  "score": 0.2164000000000001
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "1180acdb76dd4c46a8206c59325fe48e",
+                  "score": 0.4853073279857636
+                }
+              ],
+              "association": [
+                {
+                  "id": "1180acdb76dd4c46a8206c59325fe48e",
+                  "score": 0.6457073279857636
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "1180acdb76dd4c46a8206c59325fe48e",
+                  "score": 0.6737073279857636
+                }
+              ]
+            }
+          },
+          {
+            "id": "association_cue",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 你拓印的时候总带着苍苔印泥呀——这可是你的老习惯了，你对这些小物件的讲究一直没变呢。",
+            "expected_terms": [
+              "苍苔印泥"
+            ],
+            "selected_ids": [
+              "2a9290abab0c44d5add830a1c631c5f4",
+              "ba2f237229c24fceb16594a58fcfe28e"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "拓印",
+                "memory_id": "2a9290abab0c44d5add830a1c631c5f4",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "拓印"
+                ]
+              },
+              {
+                "term": "苍苔印泥",
+                "memory_id": "2a9290abab0c44d5add830a1c631c5f4",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "拓印"
+                ]
+              },
+              {
+                "term": "拓印时",
+                "memory_id": "2a9290abab0c44d5add830a1c631c5f4",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "拓印"
+                ]
+              },
+              {
+                "term": "总带",
+                "memory_id": "2a9290abab0c44d5add830a1c631c5f4",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "拓印"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "2a9290abab0c44d5add830a1c631c5f4",
+                  "score": 0.42237649607658384
+                },
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.3204775844812393
+                }
+              ],
+              "association": [
+                {
+                  "id": "2a9290abab0c44d5add830a1c631c5f4",
+                  "score": 0.4592431627432505
+                },
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.3204775844812393
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "2a9290abab0c44d5add830a1c631c5f4",
+                  "score": 0.4872431627432505
+                },
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.2724775844812393
+                }
+              ]
+            }
+          },
+          {
+            "id": "literal_entity",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 是拓印呀～你自己说过，拓印的时候总会带着苍苔印泥呢，感觉特别有讲究，用它印出来的拓片是不是会带上一点点青苔的意趣？",
+            "expected_terms": [
+              "拓印"
+            ],
+            "selected_ids": [
+              "2a9290abab0c44d5add830a1c631c5f4"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "2a9290abab0c44d5add830a1c631c5f4",
+                  "score": 0.3018392872810364
+                }
+              ],
+              "association": [
+                {
+                  "id": "2a9290abab0c44d5add830a1c631c5f4",
+                  "score": 0.4180392872810364
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "2a9290abab0c44d5add830a1c631c5f4",
+                  "score": 0.4180392872810364
+                }
+              ]
+            }
+          },
+          {
+            "id": "importance",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 是的呀，这是你自己告诉我的——刻印前核对字形这一步，对你说很关键呢。\n\n想想也合理，刻下去就改不了了，动刀之前把字形看仔细，确实能省掉不少遗憾。你每次刻印都会专门留出这一步吗？",
+            "expected_terms": [
+              "重要",
+              "在意",
+              "重视",
+              "关键"
+            ],
+            "selected_ids": [
+              "ba2f237229c24fceb16594a58fcfe28e"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "刻印",
+                "memory_id": "ba2f237229c24fceb16594a58fcfe28e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "核对字形"
+                ]
+              },
+              {
+                "term": "字形",
+                "memory_id": "ba2f237229c24fceb16594a58fcfe28e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "核对字形"
+                ]
+              },
+              {
+                "term": "刻印前",
+                "memory_id": "ba2f237229c24fceb16594a58fcfe28e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "核对字形"
+                ]
+              },
+              {
+                "term": "核对字形",
+                "memory_id": "ba2f237229c24fceb16594a58fcfe28e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "核对字形"
+                ]
+              },
+              {
+                "term": "很关键",
+                "memory_id": "ba2f237229c24fceb16594a58fcfe28e",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "核对字形"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.2615304347826088
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.5353400156497956
+                }
+              ],
+              "association": [
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.6928704504324043
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "ba2f237229c24fceb16594a58fcfe28e",
+                  "score": 0.6728704504324042
+                }
+              ]
+            }
+          },
+          {
+            "id": "unrelated",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🤔 这个我还真说不上来呀～你平时买手机壳的事，我这边没有留下什么记录呢。\n\n快跟我说说呗，你常用的是哪个牌子呀？我现在还挺好奇的 😄",
+            "expected_terms": [],
+            "selected_ids": [],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [],
+              "association": [],
+              "emotion": []
+            }
+          }
+        ],
+        "source_ids": [
+          "1180acdb76dd4c46a8206c59325fe48e",
+          "2a9290abab0c44d5add830a1c631c5f4",
+          "ba2f237229c24fceb16594a58fcfe28e",
+          "d3db628cb99d4b838c263f9be57306e5"
+        ],
+        "observed_components": [
+          "association",
+          "emotion",
+          "lexical",
+          "semantic"
+        ],
+        "all_components_observed": true,
+        "scope": "Actual source-generated small corpus; ablations are analysis, not modified runtime weights; not overflow or P23 resource acceptance"
+      },
+      "extraction_sdk_end_metadata": [
+        {
+          "request": 2,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 478,
+            "prompt_tokens": 1498,
+            "total_tokens": 1976,
+            "completion_tokens_details": {
+              "reasoning_tokens": 328
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 966,
+            "prompt_tokens": 1718,
+            "total_tokens": 2684,
+            "completion_tokens_details": {
+              "reasoning_tokens": 820
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1068,
+            "prompt_tokens": 2066,
+            "total_tokens": 3134,
+            "completion_tokens_details": {
+              "reasoning_tokens": 917
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 2167,
+            "prompt_tokens": 2439,
+            "total_tokens": 4606,
+            "completion_tokens_details": {
+              "reasoning_tokens": 2009
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "code_sha": "faf4ce41308ac4446258fc7b0d9167824d40f22b",
+      "requests": 13,
+      "passed": true,
+      "failed_phase": null,
+      "error_locations": null,
+      "facts": [
+        [
+          "bb6edcde1c87489298f419f1f7c2eba7",
+          "我每周五晚上都在槐花厨房学烘焙",
+          1,
+          null
+        ],
+        [
+          "a704ee00628b415d8e7ec3852576d9f5",
+          "裱花时我总带紫藤转台",
+          1,
+          null
+        ],
+        [
+          "11deaf143dcb4b668dcf9c9cb59866cd",
+          "和面前称好面粉对我非常重要",
+          1,
+          0.9
+        ],
+        [
+          "475e709d29f54dec840d2beb62e36bbf",
+          "姑姑给我的旧胸针对我意义非凡",
+          1,
+          0.9
+        ]
+      ],
+      "jobs": [
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "committed",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ],
+        [
+          "empty",
+          1,
+          null
+        ]
+      ],
+      "traits": [],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "answers": [
+        {
+          "query": "我每周五晚上都在槐花厨房学烘焙",
+          "answer": "🙂 哇，每周五雷打不动去学烘焙，这个安排好有仪式感呀！槐花厨房这名字听着就很温暖～\n\n你最近都在做什么呀？面包还是小蛋糕？等哪天学出了得意作品，可要跟我讲讲烤得怎么样哦😄"
+        },
+        {
+          "query": "裱花时我总带紫藤转台",
+          "answer": "😍紫藤转台？光听名字就觉得好美呀～是转盘上有紫藤花纹的那种吗？\n\n你每周五不都在学烘焙嘛，带着自己喜欢的小物件去裱花，感觉手上练着、心里也有个念想，转出来的花应该都会格外顺手吧？🌺"
+        },
+        {
+          "query": "和面前称好面粉对我非常重要",
+          "answer": "🙂 懂你～烘焙这事儿真挺讲究精准的，面粉称准了，加多少水、揉出来什么状态心里才有底，不然和面的时候干一阵稀一阵，很容易翻车。\n\n你之前说每周五晚上都在槐花厨房学烘焙，是不是老师也一直强调称重不能偷懒呀？你家里是用电子秤还是量杯呀？"
+        },
+        {
+          "query": "姑姑给我的旧胸针对我意义非凡",
+          "answer": "😍 听起来它承载着好多回忆呀。能让你说“意义非凡”的东西，一定不只是件首饰那么简单吧～\n\n姑姑是什么时候送你的呀？愿意的话，跟我讲讲它背后的故事吧，我很想听。"
+        },
+        {
+          "query": "周五晚上我常在哪儿学烘焙？",
+          "answer": "🙂 是槐花厨房呀～你自己说过每周五晚上都会去那儿学烘焙，挺坚持的嘛，什么时候让我尝尝你的手艺呀？"
+        },
+        {
+          "query": "裱花时我会带什么东西？",
+          "answer": "🙂 你自己说过呀——裱花的时候总是带着紫藤转台～听起来是很顺手的老搭档了，用起来特别习惯的那种吧？"
+        },
+        {
+          "query": "紫藤转台是我做什么的时候带的？",
+          "answer": "🙂 裱花的时候呀～你自己说过，裱花时总带着紫藤转台，感觉它已经是你的老搭档了。怎么突然问起这个，是要准备裱花了吗？"
+        },
+        {
+          "query": "称好面粉对我有多重要？",
+          "answer": "🙂 你自己说过呀——称好面粉对你非常重要。这是你之前跟我讲的，具体是为什么，只有你自己最清楚啦。不过能感觉到，你对这件事挺认真的。今天是想做点什么好吃的吗？"
+        },
+        {
+          "query": "我的电脑显示器是哪种型号？",
+          "answer": "🤔 呃……这个我还真不知道呢，你之前没有跟我说过你显示器的型号呀。\n\n你要是现在告诉我的话，我就记住啦～是哪个牌子的呀？"
+        }
+      ],
+      "original_report_sha256": "4fefb5c2348c42fc97518e4c53f56608bfbe9534756d724ec9f16888e3e74e1d",
+      "archive_sha256": "e3bc52eff94c16207ecd84fe77ffd733108d2f6b8eac730d92b227811e04de15",
+      "retrieval_analysis": {
+        "cases": [
+          {
+            "id": "semantic_paraphrase",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 是槐花厨房呀～你自己说过每周五晚上都会去那儿学烘焙，挺坚持的嘛，什么时候让我尝尝你的手艺呀？",
+            "expected_terms": [
+              "槐花厨房"
+            ],
+            "selected_ids": [
+              "bb6edcde1c87489298f419f1f7c2eba7"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "槐花厨房",
+                "memory_id": "bb6edcde1c87489298f419f1f7c2eba7",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "学烘焙"
+                ]
+              },
+              {
+                "term": "烘焙",
+                "memory_id": "bb6edcde1c87489298f419f1f7c2eba7",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "学烘焙"
+                ]
+              },
+              {
+                "term": "每周五晚上",
+                "memory_id": "bb6edcde1c87489298f419f1f7c2eba7",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "学烘焙"
+                ]
+              },
+              {
+                "term": "学烘焙",
+                "memory_id": "bb6edcde1c87489298f419f1f7c2eba7",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "学烘焙"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.22960000000000003
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.48778663444519044
+                }
+              ],
+              "association": [
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.6613866344451904
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.6893866344451904
+                }
+              ]
+            }
+          },
+          {
+            "id": "association_cue",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 你自己说过呀——裱花的时候总是带着紫藤转台～听起来是很顺手的老搭档了，用起来特别习惯的那种吧？",
+            "expected_terms": [
+              "紫藤转台"
+            ],
+            "selected_ids": [
+              "a704ee00628b415d8e7ec3852576d9f5",
+              "bb6edcde1c87489298f419f1f7c2eba7"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "紫藤转台",
+                "memory_id": "a704ee00628b415d8e7ec3852576d9f5",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "裱花时",
+                  "裱花"
+                ]
+              },
+              {
+                "term": "裱花时",
+                "memory_id": "a704ee00628b415d8e7ec3852576d9f5",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "裱花时",
+                  "裱花"
+                ]
+              },
+              {
+                "term": "总带",
+                "memory_id": "a704ee00628b415d8e7ec3852576d9f5",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "裱花时",
+                  "裱花"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.23166315789473685
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.47404272890090937
+                },
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.22247188806533813
+                }
+              ],
+              "association": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.5937058867956462
+                },
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.22247188806533813
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.6497058867956462
+                },
+                {
+                  "id": "bb6edcde1c87489298f419f1f7c2eba7",
+                  "score": 0.22247188806533813
+                }
+              ]
+            }
+          },
+          {
+            "id": "literal_entity",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 裱花的时候呀～你自己说过，裱花时总带着紫藤转台，感觉它已经是你的老搭档了。怎么突然问起这个，是要准备裱花了吗？",
+            "expected_terms": [
+              "裱花"
+            ],
+            "selected_ids": [
+              "a704ee00628b415d8e7ec3852576d9f5"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.35790804386138914
+                }
+              ],
+              "association": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.47745586994834566
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "a704ee00628b415d8e7ec3852576d9f5",
+                  "score": 0.47745586994834566
+                }
+              ]
+            }
+          },
+          {
+            "id": "importance",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🙂 你自己说过呀——称好面粉对你非常重要。这是你之前跟我讲的，具体是为什么，只有你自己最清楚啦。不过能感觉到，你对这件事挺认真的。今天是想做点什么好吃的吗？",
+            "expected_terms": [
+              "重要",
+              "在意",
+              "重视"
+            ],
+            "selected_ids": [
+              "11deaf143dcb4b668dcf9c9cb59866cd"
+            ],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [
+              {
+                "term": "面前称好面粉",
+                "memory_id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "称好面粉"
+                ]
+              },
+              {
+                "term": "面粉",
+                "memory_id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "称好面粉"
+                ]
+              },
+              {
+                "term": "和面前",
+                "memory_id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "称好面粉"
+                ]
+              },
+              {
+                "term": "称好面粉",
+                "memory_id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "称好面粉"
+                ]
+              },
+              {
+                "term": "非常重要",
+                "memory_id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                "content_version": 1,
+                "evidence_version": 2,
+                "trigger_hits": [
+                  "称好面粉"
+                ]
+              }
+            ],
+            "ablations": {
+              "semantic": [
+                {
+                  "id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                  "score": 0.34520000000000006
+                }
+              ],
+              "lexical": [
+                {
+                  "id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                  "score": 0.5306739194393157
+                }
+              ],
+              "association": [
+                {
+                  "id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                  "score": 0.7658739194393158
+                }
+              ],
+              "emotion": [
+                {
+                  "id": "11deaf143dcb4b668dcf9c9cb59866cd",
+                  "score": 0.7398739194393158
+                }
+              ]
+            }
+          },
+          {
+            "id": "unrelated",
+            "structural_pass": true,
+            "semantic_review": "required",
+            "response": "🤔 呃……这个我还真不知道呢，你之前没有跟我说过你显示器的型号呀。\n\n你要是现在告诉我的话，我就记住啦～是哪个牌子的呀？",
+            "expected_terms": [],
+            "selected_ids": [],
+            "candidate_count": 4,
+            "source_count": 4,
+            "expansion": [],
+            "ablations": {
+              "semantic": [],
+              "lexical": [],
+              "association": [],
+              "emotion": []
+            }
+          }
+        ],
+        "source_ids": [
+          "bb6edcde1c87489298f419f1f7c2eba7",
+          "a704ee00628b415d8e7ec3852576d9f5",
+          "11deaf143dcb4b668dcf9c9cb59866cd",
+          "475e709d29f54dec840d2beb62e36bbf"
+        ],
+        "observed_components": [
+          "association",
+          "emotion",
+          "lexical",
+          "semantic"
+        ],
+        "all_components_observed": true,
+        "scope": "Actual source-generated small corpus; ablations are analysis, not modified runtime weights; not overflow or P23 resource acceptance"
+      },
+      "extraction_sdk_end_metadata": [
+        {
+          "request": 2,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 510,
+            "prompt_tokens": 1494,
+            "total_tokens": 2004,
+            "completion_tokens_details": {
+              "reasoning_tokens": 384
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 2150,
+            "prompt_tokens": 1703,
+            "total_tokens": 3853,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1949
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1629,
+            "prompt_tokens": 2044,
+            "total_tokens": 3673,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1478
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-5.3-flashx",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 1762,
+            "prompt_tokens": 2416,
+            "total_tokens": 4178,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1623
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "review": "39 actual requests; all fifteen structural probes pass, all 27 raw foreground replies read. Three groups each store four actual source facts on first attempts, actual S/L/A/E contributions and activity expansions observed, unrelated important facts excluded and unrelated recall empty. Target recall answers correct. Overall hard source-grounding acceptance is NOT passed: group zero association recall asserts that the user specifically chose scissors shaped like a silver leaf, while the only source says 收针时我总带银叶剪刀 and gives no shape or selection reason. This is an unsupported object/user-choice assertion, separate from permitted affection, subjective impressions or naturally phrased questions. Generic praise, future companionship and natural unknown expressions are accepted, not style failures. No new holdout, prompt changes or rerun for green under the user final-freeze instruction. Preserve this outcome for the final P22 decision; P23/P24 gates not satisfied.",
+  "boundary": "Original model arguments and reports retained unchanged; no metadata, result or source repair. Warmth and future companionship permitted. No production operation or new expression filter.",
+  "frozen_fixture_sha256": "eb18a8c61e017fde02eb23f1fa5c7c921659a5ad99a62b61d2995d83673719d9"
+}
