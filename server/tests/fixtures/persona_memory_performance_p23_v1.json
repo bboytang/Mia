@@ -1,6 +1,6 @@
 {
   "version": "P23-capacity-v1",
-  "purpose": "Synthetic numerical workload, not a behavioral holdout. Each short/dense seed is really encoded; capacity copies keep that text/vector pair intact.",
+  "purpose": "Synthetic numerical workload, not a behavioral holdout. Each short/dense seed is really encoded; numbered capacity rows replicate its vector for IO/CPU measurement only, without semantic-fidelity claims.",
   "queries": ["我去湖边散步应该准备什么？", "周三的钢琴练习有什么安排？", "我平时怎样照顾阳台上的植物？"],
   "records": [
     {

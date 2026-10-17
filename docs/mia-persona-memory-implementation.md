@@ -2,7 +2,7 @@
 
 最新用户表达决定：以上游[路遥仓库](https://github.com/insistgang/Luyao_AI_Project)为参考，仔细核对并借鉴，不额外限制Mia回答。人格／表达以稳定沉浸式陪伴为方向；此前强制AI／无意识声明、拟人体验禁止及额外正则风格评分被此决定覆盖。记忆正确性、来源与权限门槛保留。逐项实码核对见[路遥复核](verification/mia-persona-memory/luyao-reference-review.md)。
 
-更新：2026-10-17。依据：[V1.2 最终方案](mia-persona-memory-v1.2.md)。本文件列出执行步骤；当前P22已由用户确认通过，P23/P24等待批准，具体执行状态与授权范围见交接文件。列出的未执行步骤不能视为已完成或已发布。
+更新：2026-10-17。依据：[V1.2 最终方案](mia-persona-memory-v1.2.md)。本文件列出执行步骤；当前P22已由用户确认通过，P23已获批准并进行中，P24未开始，具体执行状态与授权范围见交接文件。列出的未执行步骤不能视为已完成或已发布。
 
 唯一接续入口：[当前交接状态](mia-persona-memory-handoff.md)。每次工作结束追加[工作记录](mia-persona-memory-worklog.md)，同步交接状态。计划、决策、源码和证据使用仓库相对路径或稳定远程标识，不依赖某台设备的绝对路径、旧 Codex 对话或临时目录。
 
@@ -229,7 +229,7 @@ git log -5 --oneline
 
 **P22：执行八项真实行为验收。前置：P21、D09，真实测试权限可用。**
 
-当前阶段状态：2026-10-17用户确认采用`glm-4-flash-250414`并宣布P22验收通过，见[验收决定](verification/mia-persona-memory/p22-user-acceptance.md)。原始测试失败和遗留项继续保留。用户要求停在本阶段，P23/P24必须等待另行批准；下列原计划要求不构成当前执行授权。
+当前阶段状态：2026-10-17用户确认采用`glm-4-flash-250414`并宣布P22验收通过，见[验收决定](verification/mia-persona-memory/p22-user-acceptance.md)。原始测试失败和遗留项继续保留。用户随后明确批准开始P23并要求每步记录/交接，见[性能进度](verification/mia-persona-memory/performance.md)；P24未开始。
 
 - 工作：按下一节 B01—B08 使用真实 embedding、现有 LLM、真实 manager 链、独立测试用户和留出样本执行，记录机制诊断及实际回答。
 - 产物：每项通过／失败／未执行、完整被测 SHA、样本／模型版本、run 和脱敏证据。

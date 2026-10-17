@@ -1,0 +1,11 @@
+{
+  "run_id": 38992678354,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38992678354",
+  "code_sha": "caaa01e3675a6a50b28c5fb57512c8bad738518a",
+  "conclusion": "failure",
+  "raw_sha256": "922bfe1dbde7d3b84f4de3a6584d41fdb55001258c05d0358aa1b3c517774c31",
+  "artifact_file": "performance-first-results.json.gz",
+  "artifact_sha256": "568c91865c2d209eba6ff3c0e15e48b51541d934875310e13562b03e70d6628b",
+  "result": "Fixture duplicate facts rejected by actual unique constraint; no valid performance measurement",
+  "runtime_code_changed": false
+}

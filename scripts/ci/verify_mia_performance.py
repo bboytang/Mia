@@ -58,7 +58,9 @@ def populate(store, current, size, profile, fixture, vectors):
         for number in range(size):
             seed = fixture['records'][number % len(fixture['records'])]
             memory_id = f'{current.owner}-{number:05}'
-            content = seed['short'] if profile == 'short' else seed['dense']
+            # Production deduplicates identical facts. The sequence label makes
+            # synthetic capacity rows distinct; vectors remain real seed copies.
+            content = seed['short' if profile == 'short' else 'dense'] + f'（容量编号{number:05}）'
             store.db.execute('INSERT INTO memories(id,owner,category,content,confirmed,created_at,updated_at) '
                 'VALUES (?,?,?,?,1,1,1)', (memory_id, current.owner, 'fact', content))
             store.db.execute('INSERT INTO sources(memory_id,session_id,fingerprint,excerpt,created_at) '
