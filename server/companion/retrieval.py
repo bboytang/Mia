@@ -46,8 +46,11 @@ def pair_codes(pairs):
 def prepare_signals(row):
     entities, keywords, triggers = [terms(row[name]) for name in ('entities', 'keywords', 'trigger_terms')]
     right = array('Q', sorted(pair_codes(bigrams(row['content'] + ''.join(entities + keywords)))))
-    return (tuple(dict.fromkeys(entities + keywords + triggers)), tuple(triggers), right,
-            tuple(dict.fromkeys(entities + keywords)))
+    all_terms = tuple(term for term in dict.fromkeys(entities + keywords + triggers) if len(term) >= 2)
+    triggers = tuple(term for term in triggers if len(term) >= 2)
+    positions = {term: i for i, term in enumerate(all_terms)}
+    return (all_terms, triggers, right, tuple(dict.fromkeys(entities + keywords)),
+            tuple(positions[term] for term in triggers))
 
 
 class FeatureCache:
@@ -106,7 +109,7 @@ def signals(query, row, cosine, query_terms=None, *, prepared=None, query_codes=
         right = bigrams(row['content'] + ''.join(entities + keywords))
         overlap = len(left & right) / max(1, len(left | right))
     else:
-        all_terms, triggers, right, _ = prepared
+        all_terms, triggers, right = prepared[:3]
         left = pair_codes(bigrams(query) if query_terms is None else query_terms) if query_codes is None else query_codes
         shared = 0
         for value in left:
@@ -123,6 +126,55 @@ def signals(query, row, cosine, query_terms=None, *, prepared=None, query_codes=
             'lexical': min(1.0, overlap * 2.2 + min(0.7, len(hits) * 0.14)),
             'association': min(1.0, len(associations) * 0.35),
             'emotion': 0.0 if emotion is None else emotion}, hits, associations
+
+
+def batch_signals(query, rows, prepared, query_codes):
+    """Exact dynamic signals for at most one scan batch; no query-result cache."""
+    import numpy as np
+
+    def totals(matches, lengths):
+        lengths = np.asarray(lengths, dtype=np.intp)
+        offsets = np.cumsum(lengths) - lengths
+        result = np.zeros(len(lengths), dtype=np.intp)
+        nonempty = lengths > 0
+        if len(matches):
+            result[nonempty] = np.add.reduceat(matches, offsets[nonempty], dtype=np.intp)
+        return result, offsets
+
+    lengths = np.asarray([len(item[2]) for item in prepared], dtype=np.intp)
+    flat = np.frombuffer(b''.join(item[2].tobytes() for item in prepared), dtype=np.uint64)
+    codes = np.asarray(sorted(query_codes), dtype=np.uint64)
+    if len(codes) and len(flat):
+        positions = np.searchsorted(codes, flat)
+        np.minimum(positions, len(codes) - 1, out=positions)
+        shared, _ = totals(codes[positions] == flat, lengths)
+    else:
+        shared = np.zeros(len(rows), dtype=np.intp)
+    overlap = shared / np.maximum(1, len(codes) + lengths - shared)
+
+    words = [term for item in prepared for term in item[0]]
+    # Fixed-width NumPy Unicode drops trailing NUL padding. Preserve Python's
+    # literal substring semantics for that allowed input via the scalar path.
+    if not words or '\x00' in query or any('\x00' in term for term in words):
+        matched = np.fromiter((term in query for term in words), dtype=bool, count=len(words))
+    else:
+        matched = np.char.find(np.full(len(words), query), np.asarray(words, dtype=np.str_)) >= 0
+    hit_counts, offsets = totals(matched, [len(item[0]) for item in prepared])
+    trigger_positions = [int(offsets[i]) + position for i, item in enumerate(prepared) for position in item[4]]
+    trigger_matched = matched[np.asarray(trigger_positions, dtype=np.intp)]
+    association_counts, _ = totals(trigger_matched, [len(item[1]) for item in prepared])
+    emotions = []
+    for row in rows:
+        value = row['emotional_weight']
+        if value is not None and (not isinstance(value, (float, int)) or not math.isfinite(value) or not 0 <= value <= 1):
+            from .embedding import EmbeddingUnavailable
+            raise EmbeddingUnavailable('retrieval_metadata_invalid')
+        emotions.append(0.0 if value is None else value)
+    values = np.column_stack((
+        np.clip([max(row['original_cosine'], row['expanded_cosine']) for row in rows], 0, 1),
+        np.minimum(1, overlap * 2.2 + np.minimum(0.7, hit_counts * 0.14)),
+        np.minimum(1, association_counts * 0.35), emotions))
+    return values, matched, offsets
 
 
 def rank(rows):

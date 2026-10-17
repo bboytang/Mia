@@ -211,6 +211,65 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(actual, expected)
         self.assertEqual(len(self.index._features.entries), 0)
 
+    async def test_background_waits_for_shared_foreground_and_resumes_after_cancel(self):
+        self.fact('散步带水壶')
+        await self.index.rebuild_batch(self.scope, self.auth)
+        foreign = replace(self.scope, owner='user:2:agent:a')
+        own = self.fact('后台记录', owner=foreign.owner)
+        other = SemanticMemoryIndex(self.store, self.encoder)
+        entered, release, background = threading.Event(), threading.Event(), threading.Event()
+
+        def held(text, query):
+            if query:
+                entered.set()
+                if not release.wait(3):
+                    raise AssertionError('Foreground query was not released')
+            else:
+                background.set()
+
+        self.encoder.hook = held
+        foreground = asyncio.create_task(self.index.retrieve(self.scope, self.auth, '散步'))
+        pending = None
+        try:
+            self.assertTrue(await asyncio.to_thread(entered.wait, 2))
+            self.assertIs(other._activity, self.index._activity)
+            with self.assertRaises(asyncio.TimeoutError):
+                await other._background_ready(0.01)
+            pending = asyncio.create_task(other.index_memory(foreign, self.auth, own))
+            self.assertFalse(await asyncio.to_thread(background.wait, 0.05))
+            foreground.cancel()
+            with self.assertRaises(asyncio.CancelledError):
+                await foreground
+            self.assertEqual(self.index._activity['foreground'], 0)
+            await asyncio.wait_for(pending, 2)
+            self.assertTrue(background.is_set())
+            # Cancelling the caller does not free its still-running native slot.
+            self.assertEqual(self.index._slots._value, 1)
+        finally:
+            release.set()
+            await asyncio.gather(foreground, *([pending] if pending else []), return_exceptions=True)
+            self.encoder.hook = None
+        for _ in range(100):
+            if self.index._slots._value == 2:
+                break
+            await asyncio.sleep(0.01)
+        self.assertEqual(self.index._slots._value, 2)
+
+    async def test_eight_clue_limit_keeps_order_and_does_not_hide_invalid_tail(self):
+        for i in range(10):
+            self.fact('记录' + str(i), triggers=['散步'], keywords=['线索' + str(i)])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        with self.store.lock:
+            ids = [row['id'] for row in self.store.db.execute('SELECT id FROM memories ORDER BY id')]
+            expected = [self.store.db.execute('SELECT keywords FROM mia_memory_meta WHERE memory_id=?',
+                (memory_id,)).fetchone()[0] for memory_id in ids[:8]]
+        result = await self.index.retrieve(self.scope, self.auth, '散步')
+        self.assertEqual([item['term'] for item in result['expansion']], [json.loads(value)[0] for value in expected])
+        with self.store.db:
+            self.store.db.execute("UPDATE mia_memory_meta SET keywords='invalid' WHERE memory_id=?", (ids[-1],))
+        with self.assertRaisesRegex(EmbeddingUnavailable, 'metadata_invalid'):
+            await self.index.retrieve(self.scope, self.auth, '散步')
+
     def test_each_signal_can_change_ranking_and_emotion_cannot_override_original_floor(self):
         for dimension in WEIGHTS:
             with self.subTest(dimension=dimension):

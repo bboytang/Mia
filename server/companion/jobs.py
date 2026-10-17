@@ -251,7 +251,13 @@ class MemoryWorker:
                 if not record['sensitive'] and record['kind'] == 'explicit':
                     if self.index is None:
                         raise EmbeddingUnavailable('embedding_assets_unconfigured')
-                    vector = await self.lane.call(lambda: self.index.encoder.encode(record['content']), 3)
+                    try:
+                        await self.index._background_ready(max(0.001, job['deadline'] - self.jobs.store.clock()))
+                    except asyncio.TimeoutError:
+                        raise TimeoutError('embedding_wait_timeout') from None
+                    await self._scope(job)
+                    vector = await self.lane.call(lambda: self.index.encoder.encode(record['content']),
+                        min(3, max(0.001, job['deadline'] - self.jobs.store.clock())))
                     vectors[i] = self.index._vector(vector).tobytes()
             await self._scope(job)
             await asyncio.to_thread(self.jobs.commit, job, structured, vectors)

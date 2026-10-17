@@ -2,6 +2,7 @@
 
 import asyncio
 from contextlib import closing
+from functools import wraps
 import heapq
 from pathlib import Path
 import sqlite3
@@ -10,6 +11,21 @@ import time
 from .authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from .embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
 from .memory import MemoryError
+
+
+def _foreground_read(function):
+    @wraps(function)
+    async def read(self, *args, **kwargs):
+        activity = self._activity
+        activity['foreground'] += 1
+        activity['idle'].clear()
+        try:
+            return await function(self, *args, **kwargs)
+        finally:
+            activity['foreground'] -= 1
+            if activity['foreground'] == 0:
+                activity['idle'].set()
+    return read
 
 
 class SemanticMemoryIndex:
@@ -24,6 +40,10 @@ class SemanticMemoryIndex:
             if not hasattr(store, '_mia_retrieval_features'):
                 store._mia_retrieval_features = FeatureCache()
             self._features = store._mia_retrieval_features
+            if not hasattr(store, '_mia_retrieval_activity'):
+                store._mia_retrieval_activity = {'foreground': 0, 'idle': asyncio.Event()}
+                store._mia_retrieval_activity['idle'].set()
+            self._activity = store._mia_retrieval_activity
 
     async def _require(self, scope, authorization, permission):
         if not isinstance(scope, AuthenticatedScope) or scope.persona_id != 'mia':
@@ -44,10 +64,23 @@ class SemanticMemoryIndex:
             raise EmbeddingUnavailable('memory_changed')
 
     async def _encode(self, text, query=False):
-        try:
-            await asyncio.wait_for(self._slots.acquire(), timeout=0.4)
-        except asyncio.TimeoutError:
-            raise EmbeddingUnavailable('embedding_busy') from None
+        deadline = asyncio.get_running_loop().time() + 120
+        while True:
+            if not query:
+                remaining = deadline - asyncio.get_running_loop().time()
+                if remaining <= 0:
+                    raise EmbeddingUnavailable('embedding_busy')
+                try:
+                    await self._background_ready(remaining)
+                except asyncio.TimeoutError:
+                    raise EmbeddingUnavailable('embedding_busy') from None
+            try:
+                await asyncio.wait_for(self._slots.acquire(), timeout=0.4)
+            except asyncio.TimeoutError:
+                raise EmbeddingUnavailable('embedding_busy') from None
+            if query or self._activity['foreground'] == 0:
+                break
+            self._slots.release()
         # Cancelling the caller must not release a still-running native inference
         # slot or allow that result to reach the subsequent commit.
         future = asyncio.get_running_loop().run_in_executor(None, self.encoder.encode, text, query)
@@ -60,6 +93,14 @@ class SemanticMemoryIndex:
             return await asyncio.wait_for(asyncio.shield(future), timeout=3)
         except asyncio.TimeoutError:
             raise EmbeddingUnavailable('embedding_timeout') from None
+
+    async def _background_ready(self, timeout=120):
+        deadline = asyncio.get_running_loop().time() + timeout
+        while self._activity['foreground']:
+            remaining = deadline - asyncio.get_running_loop().time()
+            if remaining <= 0:
+                raise asyncio.TimeoutError()
+            await asyncio.wait_for(self._activity['idle'].wait(), remaining)
 
     def _record(self, scope, memory_id):
         with self.store.lock:
@@ -115,7 +156,7 @@ class SemanticMemoryIndex:
 
     def _scan(self, scope, expected, query, limit, minimum, query_text=None, expanded=None):
         import numpy as np
-        from .retrieval import FEATURE_CACHE_ENTRIES, bigrams, pair_codes, signals
+        from .retrieval import FEATURE_CACHE_ENTRIES, WEIGHTS, batch_signals, bigrams, pair_codes, signals
         query = self._vector(query)
         expanded = query if expanded is None else self._vector(expanded)
         query_terms = bigrams(query_text) if query_text is not None else None
@@ -181,22 +222,51 @@ class SemanticMemoryIndex:
         # Close the read transaction before CPU scoring: forgetting must be able
         # to finish its WAL purge while scoring is in progress. Retain metadata
         # and scalar cosines only, never the Scope's full vector matrix.
-        for record in records:
+        def batches():
+            # ID order only breaks score ties. Larger IDs first reduce heap
+            # churn without changing any source's exact top-k.
+            records.sort(key=lambda row: row['id'], reverse=True)
+            for offset in range(0, len(records), 256):
+                batch = records[offset:offset + 256]
+                if not use_cache:
+                    for row in batch:
+                        yield row, None
+                    continue
+                prepared = [self._features.prepare(scope, expected, row) for row in batch]
+                values, matched, starts = batch_signals(query_text, batch, prepared, query_codes)
+                for i, row in enumerate(batch):
+                    yield row, (values[i], matched, int(starts[i]), prepared[i])
+
+        for record, dynamic in batches():
             score, expanded_score = record['original_cosine'], record['expanded_cosine']
-            record['signals'], record['lexical_hits'], record['association_hits'] = signals(
-                query_text, record, max(score, expanded_score), query_terms,
-                prepared=self._features.prepare(scope, expected, record) if use_cache else None,
-                query_codes=query_codes)
+            if use_cache:
+                calculated, matched, start, prepared = dynamic
+                lexical, association = float(calculated[1]), float(calculated[2])
+            else:
+                calculated, hits, associations = signals(query_text, record, max(score, expanded_score), query_terms)
+                lexical, association = calculated['lexical'], calculated['association']
             values = {'original': score, 'expanded': expanded_score,
-                      'lexical': record['signals']['lexical'], 'association': record['signals']['association']}
+                      'lexical': lexical, 'association': association}
+            admitted = []
             for name, value in values.items():
                 if name in ('lexical', 'association') and value <= 0:
                     continue
                 heap = heaps[name]
+                if len(heap) < limit or (value, record['id']) > heap[0][:2]:
+                    admitted.append((heap, value))
+            if not admitted:
+                continue
+            if use_cache:
+                record['signals'] = {name: float(calculated[i]) for i, name in enumerate(WEIGHTS)}
+                record['lexical_hits'] = [term for i, term in enumerate(prepared[0]) if matched[start + i]]
+                record['association_hits'] = [term for i, term in enumerate(prepared[1]) if matched[start + prepared[4][i]]]
+            else:
+                record['signals'], record['lexical_hits'], record['association_hits'] = calculated, hits, associations
+            for heap, value in admitted:
                 entry = (value, record['id'], record)
                 if len(heap) < limit:
                     heapq.heappush(heap, entry)
-                elif entry[:2] > heap[0][:2]:
+                else:
                     heapq.heapreplace(heap, entry)
         selected = {}
         for name, heap in heaps.items():
@@ -227,8 +297,11 @@ class SemanticMemoryIndex:
                     if term not in clues and len(clues) < 8:
                         clues[term] = {'term': term, 'memory_id': row['id'], 'content_version': row['content_version'],
                                        'evidence_version': row['evidence_version'], 'trigger_hits': hits}
+                if len(clues) == 8:
+                    break
         return list(clues.values())
 
+    @_foreground_read
     async def retrieve(self, scope, authorization, query):
         from .retrieval import CANDIDATES, WEIGHTS, THRESHOLD, SEMANTIC_FLOOR, rank
         if not isinstance(query, str) or not query.strip() or len(query) > 4096:
@@ -252,6 +325,7 @@ class SemanticMemoryIndex:
                 'expansion': clues, 'weights': dict(WEIGHTS), 'threshold': THRESHOLD, 'semantic_floor': SEMANTIC_FLOOR,
                 'candidates': rows, 'results': results}
 
+    @_foreground_read
     async def candidates(self, scope, authorization, query, limit=12, minimum=None):
         if type(limit) is not int or not 1 <= limit <= 24 or (minimum is not None and not -1 <= minimum <= 1):
             raise ValueError('Invalid vector candidate limits')
