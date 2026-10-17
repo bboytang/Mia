@@ -255,6 +255,74 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
             await asyncio.sleep(0.01)
         self.assertEqual(self.index._slots._value, 2)
 
+    async def test_original_and_expanded_encodes_overlap_with_serial_output_equivalence(self):
+        self.fact('散步带蓝色水壶', triggers=['散步'], keywords=['蓝色水壶'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        encode = self.index._encode
+        serial = asyncio.Lock()
+
+        async def serial_encode(*args, **kwargs):
+            async with serial:
+                return await encode(*args, **kwargs)
+
+        with patch.object(self.index, '_encode', serial_encode):
+            expected = await self.index.retrieve(self.scope, self.auth, '散步')
+        pair = threading.Barrier(2, timeout=2)
+        self.encoder.hook = lambda text, query: pair.wait() if query else None
+        try:
+            actual = await self.index.retrieve(self.scope, self.auth, '散步')
+        finally:
+            pair.abort()
+            self.encoder.hook = None
+        self.assertEqual(actual, expected)
+
+    async def test_paired_encode_failure_drains_and_cancellation_retains_native_slots(self):
+        self.fact('散步带蓝色水壶', triggers=['散步'], keywords=['蓝色水壶'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        for mode in ('failure', 'cancel'):
+            with self.subTest(mode=mode):
+                entered, release = threading.Event(), threading.Event()
+                guard, calls = threading.Lock(), []
+
+                def held(text, query):
+                    with guard:
+                        calls.append(text)
+                        if len(calls) == 2:
+                            entered.set()
+                    if not entered.wait(2):
+                        raise AssertionError('Both query encodes did not enter')
+                    if mode == 'failure' and '关联线索' not in text:
+                        raise EmbeddingUnavailable('synthetic_pair_failed')
+                    if not release.wait(3):
+                        raise AssertionError('Paired encode hold was not released')
+
+                self.encoder.hook = held
+                task = asyncio.create_task(self.index.retrieve(self.scope, self.auth, '散步'))
+                try:
+                    self.assertTrue(await asyncio.to_thread(entered.wait, 2))
+                    if mode == 'cancel':
+                        task.cancel()
+                        with self.assertRaises(asyncio.CancelledError):
+                            await task
+                        self.assertEqual(self.index._slots._value, 0)
+                    else:
+                        await asyncio.sleep(0.01)
+                        self.assertFalse(task.done())
+                        self.assertEqual(self.index._activity['foreground'], 1)
+                        release.set()
+                        with self.assertRaisesRegex(EmbeddingUnavailable, 'synthetic_pair_failed'):
+                            await task
+                finally:
+                    release.set()
+                    await asyncio.gather(task, return_exceptions=True)
+                    self.encoder.hook = None
+                for _ in range(100):
+                    if self.index._slots._value == 2:
+                        break
+                    await asyncio.sleep(0.01)
+                self.assertEqual(self.index._slots._value, 2)
+                self.assertEqual(self.index._activity['foreground'], 0)
+
     async def test_batch_topk_matches_all_scalar_sources_across_boundaries_and_ties(self):
         for i in range(530):
             prefix = '干扰记录' if i % 7 == 0 else '散步练琴记录'

@@ -338,8 +338,17 @@ class SemanticMemoryIndex:
             if len(candidate) <= 4096:
                 clues.append(clue)
                 expanded_text = candidate
-        original = await self._encode(query, query=True)
-        expanded = await self._encode(expanded_text, query=True) if clues else original
+        if clues:
+            vectors = await asyncio.gather(self._encode(query, query=True),
+                self._encode(expanded_text, query=True), return_exceptions=True)
+            # Both calls finish before propagating a failure; cancellation still
+            # retains each running native slot through _encode's completion fence.
+            for value in vectors:
+                if isinstance(value, BaseException):
+                    raise value
+            original, expanded = vectors
+        else:
+            original = expanded = await self._encode(query, query=True)
         rows = await asyncio.to_thread(self._scan, scope, state, original, CANDIDATES, None, query, expanded)
         results = rank(rows)
         await self._require(scope, authorization, 'memory:read')
