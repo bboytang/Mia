@@ -1150,3 +1150,5 @@ P23第五步完成：883a76f / 38996970741 success，所有计时组count等于�
 第十一步ecaf083 / 39031041525已failure，但不是数值超标：依赖/固定BGE导出/实际Java test-compile全部success；共同父组cpu.max=200000/100000、memory.max=2147483648、OOM计数0，两数据库均running。就绪循环使用GitHub runner未安装的rg，原作业日志逐次command not found；Java及Python尚未启动，无检索样本。最小修正将Redis PONG判定改为Shell直接字符串比较，不增加依赖或更改资源/门槛。原workflow解析失败/此运行的完整产物与作业日志、各文件hash保留performance-shared-first-*。
 
 自动审批曾因额度耗尽未完成manager补跑与状态读取（不是安全否决，未绕过）；用户继续后原审批通道已恢复，收取原句柄。ecaf083同SHA服务39031081087 success；e783ef1服务39030962856/manager39030962901 success。补充manager dispatch在额度失败时未执行，不写成已跑。修正后新SHA/唯一共同预检句柄待推送后记录。
+
+第十一步修正候选f2784d75716b361e26975d072e46a7ba86a0428f已推送：共同预检39070920385、同SHA服务39070920411、manager39070920170在途；push语法39070912579 success。原解析/就绪错误已归档performance-shared-first-*，运行实现仍1913680模块候选，未改门槛或增加Provider请求。继续这些唯一句柄，暂不更改实现。

@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23模块容量门槛通过，整体仍未验收**：第十步1913680，1k/10k短/长必测全部达标；10k长单路205ms/双前台352ms/SQLite65ms，必测RSS419MiB。四回归全通过，所有任务收齐，无在途。50k探索仍超标。下一步全服务共同资源包络、Provider首句增量及真实Worker公平/任务/关闭，详见[性能进度与证据](verification/mia-persona-memory/performance.md)。P24未开始，P22保持用户通过决定。
+- **P23模块容量门槛通过，整体仍未验收**：1913680模块必测全通过。第十一步共同服务包络预检f2784d7在途（39070920385），同SHA服务39070920411/manager39070920170待收；前两次工作流解析/数据库就绪脚本错误均未进入完整测量，原文保留。下一步按实际共同资源/跨用户结果继续，随后首句与真实Worker/关闭，详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前实现`191368002f31cb6c135b03b9f9a0aea6af7f5091`；容量[39029006315](https://github.com/bboytang/Mia/actions/runs/39029006315) success（仅模块数值），服务39028975035（287项）/BGE39028975021（五报告）/身份39028975051（173项）/manager39028975020（154项）全部success。精确计数/原文/hash见performance-metadata-*；无在途。旧失败保留，跨设备核对实际HEAD及远端，不把文档后继误当未验证代码。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23运行实现`191368002f31cb6c135b03b9f9a0aea6af7f5091`模块容量39029006315及四回归全部success，原文/hash见performance-metadata-*。当前预检/CI候选`f2784d75716b361e26975d072e46a7ba86a0428f`，共同[39070920385](https://github.com/bboytang/Mia/actions/runs/39070920385)、服务39070920411、manager39070920170在途；push语法39070912579 success。首轮解析39030962169与就绪失败39031041525证据见performance-shared-first-*。先收当前组句柄，不重复dispatch。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -50,5 +50,3 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 ## 接续操作
 
 先读`AGENTS.md`、本文件及验收决定，再检查`git status --short --branch`、HEAD、远端实际SHA及用户最新授权。**当前新指令已批准P23；从性能进度继续，P22保留用户通过决定及原始失败。** 历史工作记录、旧交接压缩包或验证报告里的“下一步/在途”描述均不构成当前执行指令。
-
-第十一步共同服务包络/跨用户检索预检已实现待CI：实际manager/SQL/Redis/Python-BGE共同2CPU/2GiB，三独立真实Scope、1k/10k两前台及原重建；本地语法/脚本/YAML通过。当前无新性能结论，1913680模块通过不等于本预检或P23整体通过。无Provider调用/P24，精确SHA/run随后补记。
