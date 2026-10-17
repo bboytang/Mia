@@ -106,7 +106,13 @@ async def evaluate(report):
     assert len({scope.owner for scope in scopes}) == 3
     report['authorized_owners'] = [scope.owner for scope in scopes]
     started = time.perf_counter()
-    encoder = SemanticEncoder(Path(os.environ['MIA_EMBEDDING_DIR']))
+    if report['mode'] == 'thread-arm':
+        from mia_thread_diagnostics import encoder_for_arm
+        threads = int(os.environ['MIA_P23_THREADS'])
+        assert threads in (1, 2)
+        encoder = encoder_for_arm(Path(os.environ['MIA_EMBEDDING_DIR']), threads, SemanticEncoder, report)
+    else:
+        encoder = SemanticEncoder(Path(os.environ['MIA_EMBEDDING_DIR']))
     report['encoder_cold_load_ms'] = (time.perf_counter() - started) * 1000
     dataset = Path(__file__).resolve().parents[2] / 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
     fixture = json.loads(dataset.read_text())
@@ -114,9 +120,12 @@ async def evaluate(report):
     report['embedding'] = {'model_id': encoder.model_id, 'revision': encoder.revision, 'dimension': encoder.dimension}
     vectors = {(i, profile): encoder.encode(seed[profile]).astype('<f4')
         for i, seed in enumerate(fixture['records']) for profile in ('short', 'dense')}
+    if report['mode'] == 'thread-arm':
+        from mia_thread_diagnostics import check_vectors
+        report['encoder_check_vectors'] = check_vectors(encoder, fixture, vectors)
     report['capacity'] = []
     save(report)
-    for size in ((10000,) if report['mode'] == 'diagnostic' else (1000, 10000)):
+    for size in ((1000, 10000) if report['mode'] == 'capacity' else (10000,)):
         started, cpu_started = time.monotonic(), time.process_time()
         row = {'size_per_frontend_scope': size, 'profile': 'dense', 'cgroup_before': group_state()}
         auth.timings = []
@@ -128,7 +137,11 @@ async def evaluate(report):
                 for scope, count in zip(scopes, (size, size, 32)):
                     populate(store, scope, count, 'dense', fixture, vectors)
                 index = SemanticMemoryIndex(store, encoder)
-                if report['mode'] == 'diagnostic':
+                if report['mode'] == 'thread-arm':
+                    row['result_checks'] = [{'scope_owner': scope.owner, 'query': query,
+                        'retrieval': await index.retrieve(scope, auth, query)}
+                        for scope in scopes[:2] for query in fixture['queries']]
+                if report['mode'] in ('diagnostic', 'thread-arm'):
                     from mia_performance_diagnostics import diagnose
                     # diagnose warms the first owner itself. Warm the other owner
                     # too, retaining both real Scopes in the same bounded cache.
@@ -173,7 +186,7 @@ async def evaluate(report):
 
 def main():
     mode = os.environ.get('MIA_P23_MODE', 'capacity')
-    assert mode in ('capacity', 'diagnostic')
+    assert mode in ('capacity', 'diagnostic', 'threads', 'thread-arm')
     report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': mode,
         'shared_envelope_preflight_passed': False, 'diagnostic_complete': False,
         'p23_complete': False, 'provider_requests': 0,
@@ -189,14 +202,18 @@ def main():
             'real persistent Worker task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
     save(report)
     try:
-        asyncio.run(evaluate(report))
+        if mode == 'threads':
+            from mia_thread_diagnostics import run_pairs
+            asyncio.run(run_pairs(report, save, group_state, members))
+        else:
+            asyncio.run(evaluate(report))
     except Exception as error:
         report.update(error_class=type(error).__name__, reason=str(error), traceback=traceback.format_exc())
     finally:
         report['cgroup_final'] = group_state()
         save(report)
     print(json.dumps({name: report[name] for name in ('mode', 'shared_envelope_preflight_passed', 'diagnostic_complete', 'p23_complete', 'provider_requests')}))
-    if not report['diagnostic_complete' if mode == 'diagnostic' else 'shared_envelope_preflight_passed']:
+    if not report['shared_envelope_preflight_passed' if mode == 'capacity' else 'diagnostic_complete']:
         raise SystemExit(1)
 
 
