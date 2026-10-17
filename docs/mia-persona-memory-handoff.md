@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中、数值未通过**：第九步15288f4四回归全通过；1k全达标，10k单路241/275ms、SQLite80/89ms、必测RSS396MiB达标，但双前台482/579ms仍超400ms。所有任务已收齐，无在途。下一步评估现有缓存边界内的静态元数据复用，详见[性能进度/原文](verification/mia-persona-memory/performance.md)。P24未开始，P22保持用户通过决定。
+- **P23进行中、尚未验收**：第十步1913680（预算内静态元数据快照）本地19项通过，正式容量/四回归在途。已收完基线15288f4的1k、10k单路/SQLite/RSS达标，但10k双前台482/579ms超400ms。详见[性能进度/原文](verification/mia-persona-memory/performance.md)。P24未开始，P22保持用户通过决定。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前实现`15288f4110d8949877dc78b59d10056e039c815a`；容量[39028419134](https://github.com/bboytang/Mia/actions/runs/39028419134)已failure，服务39028388071（286项）/BGE39028388134（五报告）/身份39028388019（173项）/manager39028388074（154项）全部success。精确计数/原文/hash见performance-topk-*。当前无在途，旧失败保留，不重跑同源码取绿。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前候选`191368002f31cb6c135b03b9f9a0aea6af7f5091`；唯一容量[39029006315](https://github.com/bboytang/Mia/actions/runs/39029006315)，服务39028975035/BGE39028975021/身份39028975051/manager39028975020在途。已验证基线15288f4四回归全通过、容量39028419134失败，原文/hash见performance-topk-*。收完当前组句柄后再修改，不重跑同源码取绿。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -50,5 +50,3 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 ## 接续操作
 
 先读`AGENTS.md`、本文件及验收决定，再检查`git status --short --branch`、HEAD、远端实际SHA及用户最新授权。**当前新指令已批准P23；从性能进度继续，P22保留用户通过决定及原始失败。** 历史工作记录、旧交接压缩包或验证报告里的“下一步/在途”描述均不构成当前执行指令。
-
-第十步预算内静态元数据快照候选已实现，本地19项专项/语法/diff通过，待同SHA正式回归/容量；仍以15288f4为已收齐的失败数值基线。原缓存128MiB、实时向量/版本、Scope/epoch/授权及WAL删除语义保留，不预先宣称达标。
