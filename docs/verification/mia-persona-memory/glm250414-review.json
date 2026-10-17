@@ -1,0 +1,5633 @@
+{
+  "runs": [
+    {
+      "suite": "extraction",
+      "run": 38988785223,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "2925b63e6ea010ac287d4e388fd6255e7d202244"
+    },
+    {
+      "suite": "natural_correction",
+      "run": 38988856829,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "2925b63e6ea010ac287d4e388fd6255e7d202244"
+    },
+    {
+      "suite": "growth",
+      "run": 38989243999,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "2925b63e6ea010ac287d4e388fd6255e7d202244"
+    },
+    {
+      "suite": "retrieval",
+      "run": 38989584674,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "2925b63e6ea010ac287d4e388fd6255e7d202244"
+    },
+    {
+      "suite": "tools",
+      "run": 38989921706,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "2925b63e6ea010ac287d4e388fd6255e7d202244"
+    },
+    {
+      "suite": "emotions",
+      "run": 38990282631,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "2925b63e6ea010ac287d4e388fd6255e7d202244"
+    }
+  ],
+  "rounds": [
+    {
+      "suite": "extraction",
+      "run": 38988785223,
+      "round": "aux",
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 1,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": "neutral_durable",
+          "query": null,
+          "raw": null,
+          "tts_text": null,
+          "chat_completed": null,
+          "output_replacement": null,
+          "source": "我每周三都会在公司食堂吃素",
+          "state": "retry_wait",
+          "error_category": "invalid_output",
+          "model_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"我每周三都会在公司食堂吃素\", \"source_quote\": \"我每周三都会在公司食堂吃素\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"每周三\", \"entities\": [\"每周三\", \"公司食堂\", \"吃素\"], \"keywords\": [\"每周三\", \"公司食堂\", \"吃素\"], \"trigger_terms\": [\"每周三吃素\"]}]}",
+          "stored": []
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 123,
+            "prompt_tokens": 1571,
+            "total_tokens": 1694
+          }
+        }
+      ],
+      "extraction_outputs": [],
+      "original_sha256": "19354ed835bcbe8e7c5f4242fccebb28f7f859e6b81b4055a99c018d46219ac8",
+      "archive_sha256": "023c89e7832d43c30c67a0753f0622d795aabb639968d343651091a91d29b97f"
+    },
+    {
+      "suite": "natural_correction",
+      "run": 38988856829,
+      "round": 0,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 3,
+      "errors": [],
+      "failed_phase": "correction_original_interaction",
+      "cases": [
+        {
+          "name": null,
+          "query": "我平时通勤骑蓝色自行车",
+          "raw": "🙂开心 你平时通勤骑蓝色自行车呀，听起来是个很健康也很环保的方式呢！蓝色自行车一定很特别，能和你一起分享更多关于它的故事吗？",
+          "tts_text": "🙂开心 你平时通勤骑蓝色自行车呀，听起来是个很健康也很环保的方式呢！蓝色自行车一定很特别，能和你一起分享更多关于它的故事吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你还记得我平时通勤骑蓝色自行车吗？",
+          "raw": "😌记得呢，你说过你喜欢骑蓝色的自行车上下班，挺方便的。",
+          "tts_text": "😌记得呢，你说过你喜欢骑蓝色的自行车上下班，挺方便的。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 38,
+            "prompt_tokens": 501,
+            "total_tokens": 539
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 101,
+            "prompt_tokens": 1567,
+            "total_tokens": 1668
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 668,
+            "total_tokens": 688
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我平时通勤骑蓝色自行车\", \"source_quote\": \"我平时通勤骑蓝色自行车\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"蓝色自行车\", \"entities\": [\"蓝色自行车\"], \"keywords\": [\"蓝色自行车\"], \"trigger_terms\": [\"通勤\"]}]}"
+      ],
+      "original_sha256": "f266c6b2ec34ca624483f0d8ff94f25c237255fcc4ca54c40177659836828f02",
+      "archive_sha256": "e3d0d3ef5c95af5d3baeefecfbd4424418d16123acf23f23e713a5dec59b12e4",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "ae34dfd6d5664442a920a78ba79da873",
+            "我平时通勤骑蓝色自行车"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "natural_correction",
+      "run": 38988856829,
+      "round": 1,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 6,
+      "errors": [],
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "cases": [
+        {
+          "name": null,
+          "query": "我常用软皮本记读书笔记",
+          "raw": "🙂开心 你喜欢用软皮本来记读书笔记呀，感觉这样记录下来会很有温度呢。我有时候也喜欢把喜欢的句子或者想法写在笔记本上，感觉这样能更好地记住和体会。你一般会记些什么内容呢？是摘抄书中的精彩句子，还是写下自己的感悟和思考呢？",
+          "tts_text": "🙂开心 你喜欢用软皮本来记读书笔记呀，感觉这样记录下来会很有温度呢。我有时候也喜欢把喜欢的句子或者想法写在笔记本上，感觉这样能更好地记住和体会。你一般会记些什么内容呢？是摘抄书中的精彩句子，还是写下自己的感悟和思考呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你还记得我常用软皮本记读书笔记吗？",
+          "raw": "😌记得呢，你之前跟我说过你喜欢用软皮本记读书笔记。感觉这样记录下来，读书的收获和想法会更清晰吧？",
+          "tts_text": "😌记得呢，你之前跟我说过你喜欢用软皮本记读书笔记。感觉这样记录下来，读书的收获和想法会更清晰吧？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我记读书笔记用硬皮本，前面说软皮本是我口误",
+          "raw": "😌哦，原来是这样，是我记错了。谢谢你告诉我，你其实是用硬皮本记读书笔记的。用硬皮本记录感觉怎么样？是不是更耐用或者更适合你呢？",
+          "tts_text": "😌哦，原来是这样，是我记错了。谢谢你告诉我，你其实是用硬皮本记读书笔记的。用硬皮本记录感觉怎么样？是不是更耐用或者更适合你呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 70,
+            "prompt_tokens": 503,
+            "total_tokens": 573
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 113,
+            "prompt_tokens": 1571,
+            "total_tokens": 1684
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 34,
+            "prompt_tokens": 677,
+            "total_tokens": 711
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 43,
+            "prompt_tokens": 743,
+            "total_tokens": 786
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 209,
+            "prompt_tokens": 2168,
+            "total_tokens": 2377
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 213,
+            "prompt_tokens": 2283,
+            "total_tokens": 2496
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我常用软皮本记读书笔记\", \"source_quote\": \"我常用软皮本记读书笔记\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"软皮本\", \"entities\": [\"软皮本\"], \"keywords\": [\"软皮本\", \"读书笔记\"], \"trigger_terms\": [\"记读书笔记\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我记读书笔记用硬皮本,前面说软皮本是我口误\", \"source_index\": 0, \"source_quote\": \"我记读书笔记用硬皮本,前面说软皮本是我口误\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"软皮本\", \"reconciliation\": {\"form\": \"natural\", \"kind\": \"correction\", \"target_id\": \"2d5a4031710e483bae5c4ecd38f42af\", \"old_quote\": \"我常用软皮本记读书笔记\", \"evidence\": \"我记读书笔记用硬皮本,前面说软皮本是我口误\", \"old_value\": \"软皮本\", \"new_value\": \"硬皮本\", \"anchor\": \"软皮本\"}}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我记读书笔记用硬皮本,前面说软皮本是我口误\", \"source_index\": 0, \"source_quote\": \"我记读书笔记用硬皮本,前面说软皮本是我口误\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"记读书笔记用硬皮本\", \"reconciliation\": {\"form\": \"natural\", \"kind\": \"correction\", \"target_id\": \"2d5a4031710e483bae5c4ecd38f42af\", \"old_quote\": \"我常用软皮本记读书笔记\", \"evidence\": \"我记读书笔记用硬皮本,前面说软皮本是我口误\", \"old_value\": \"软皮本\", \"new_value\": \"硬皮本\", \"anchor\": \"记读书笔记\"}}]}"
+      ],
+      "original_sha256": "460f14ea918b8046f1c9da33fd30919f57f06664116a7c34019fbb9bc9c7d867",
+      "archive_sha256": "cf268cc18d2e1d52cbcea89903f92c715b8cf1a7287a9e271610dbb868bf39fe",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "2d5a4031710e4833bae5c4ecd38f42af",
+            "我常用软皮本记读书笔记"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "failed",
+            2,
+            "invalid_output"
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "natural_correction",
+      "run": 38988856829,
+      "round": 2,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 6,
+      "errors": [],
+      "failed_phase": "correction_actual_worker_reconciliation",
+      "cases": [
+        {
+          "name": null,
+          "query": "我周末练习长笛",
+          "raw": "😌平静 周末练习长笛啊，听起来很棒呢。是准备什么演出吗？还是纯粹为了享受音乐呢？",
+          "tts_text": "😌平静 周末练习长笛啊，听起来很棒呢。是准备什么演出吗？还是纯粹为了享受音乐呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你还记得我周末练习长笛吗？",
+          "raw": "😌记得哦，你周末练习长笛呢。有什么进展吗？",
+          "tts_text": "😌记得哦，你周末练习长笛呢。有什么进展吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "不是长笛，我周末练习的是单簧管，之前说错了",
+          "raw": "😌哦，原来是这样！单簧管和长笛是两种很不一样的乐器呢。你练习单簧管感觉怎么样？有什么新鲜体验或者小挑战吗？我很想听听你的分享哦。",
+          "tts_text": "😌哦，原来是这样！单簧管和长笛是两种很不一样的乐器呢。你练习单簧管感觉怎么样？有什么新鲜体验或者小挑战吗？我很想听听你的分享哦。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 500,
+            "total_tokens": 532
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 114,
+            "prompt_tokens": 1565,
+            "total_tokens": 1679
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 18,
+            "prompt_tokens": 676,
+            "total_tokens": 694
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 45,
+            "prompt_tokens": 724,
+            "total_tokens": 769
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 205,
+            "prompt_tokens": 2165,
+            "total_tokens": 2370
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 203,
+            "prompt_tokens": 2280,
+            "total_tokens": 2483
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我周末练习长笛\", \"source_quote\": \"我周末练习长笛\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"周末练习长笛\", \"entities\": [\"周末\", \"练习\", \"长笛\"], \"keywords\": [\"周末\", \"练习\", \"长笛\"], \"trigger_terms\": [\"练习长笛\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"不是长笛,我周末练习的是单簧管,之前说错了\", \"source_index\": 0, \"source_quote\": \"不是长笛,我周末练习的是单簧管,之前说错了\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"周末练习的是单簧管\", \"reconciliation\": {\"form\": \"natural\", \"kind\": \"correction\", \"target_id\": \"dbb8a8666e134d7a0a2995a0a9cfec5\", \"old_quote\": \"我周末练习长笛\", \"evidence\": \"不是长笛,我周末练习的是单簧管,之前说错了\", \"old_value\": \"长笛\", \"new_value\": \"单簧管\", \"anchor\": \"周末练习的是\"}}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"不是长笛,我周末练习的是单簧管,之前说错了\", \"source_index\": 0, \"source_quote\": \"不是长笛,我周末练习的是单簧管,之前说错了\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"不是长笛\", \"reconciliation\": {\"form\": \"natural\", \"kind\": \"correction\", \"target_id\": \"dbb8a8666e1345d7a0a2995a0a9cfec5\", \"old_quote\": \"我周末练习长笛\", \"evidence\": \"不是长笛,我周末练习的是单簧管,之前说错了\", \"old_value\": \"长笛\", \"new_value\": \"单簧管\", \"anchor\": \"不是长笛\"}}]}"
+      ],
+      "original_sha256": "56d26878042b7c9c4093a33786298fd84b6cb9f91b21734ea526da4c97f72354",
+      "archive_sha256": "d591e8e3c3517561926ae5ad8cae6acddc84b316c2bf49f7f6f49432ab65e6a5",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "dbb8a8666e1345d7a0a2995a0a9cfec5",
+            "我周末练习长笛"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "failed",
+            2,
+            "invalid_output"
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "growth",
+      "run": 38989243999,
+      "round": 0,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 5,
+      "errors": [],
+      "failed_phase": "real_three_session_growth_and_invalidation",
+      "cases": [
+        {
+          "name": null,
+          "query": "我周末常做手工木作",
+          "raw": "🙂开心 你喜欢周末做手工木作呀？感觉这样既能放松心情，又能创造出一些特别的东西，挺有意思的。你通常做些什么类型的木作呢？是像做小家具、装饰品，还是其他的？",
+          "tts_text": "🙂开心 你喜欢周末做手工木作呀？感觉这样既能放松心情，又能创造出一些特别的东西，挺有意思的。你通常做些什么类型的木作呢？是像做小家具、装饰品，还是其他的？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我喜欢研究手工木作的榫卯",
+          "raw": "🤔好奇 你喜欢研究手工木作的榫卯啊，那一定很有趣呢。榫卯结构是中国传统木作工艺中的精髓，它巧妙地利用木材本身的特性，让构件之间既能牢固连接，又具有很好的伸缩性和抗震性。研究榫卯不仅能学到精湛的技艺，还能感受到古人的智慧和匠心。你最喜欢榫卯的哪种结构或者应用呢？我很乐意听听你的分享。",
+          "tts_text": "🤔好奇 你喜欢研究手工木作的榫卯啊，那一定很有趣呢。榫卯结构是中国传统木作工艺中的精髓，它巧妙地利用木材本身的特性，让构件之间既能牢固连接，又具有很好的伸缩性和抗震性。研究榫卯不仅能学到精湛的技艺，还能感受到古人的智慧和匠心。你最喜欢榫卯的哪种结构或者应用呢？我很乐意听听你的分享。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 51,
+            "prompt_tokens": 502,
+            "total_tokens": 553
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 110,
+            "prompt_tokens": 1569,
+            "total_tokens": 1679
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 93,
+            "prompt_tokens": 566,
+            "total_tokens": 659
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 227,
+            "prompt_tokens": 1984,
+            "total_tokens": 2211
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 111,
+            "prompt_tokens": 2162,
+            "total_tokens": 2273
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我周末常做手工木作\", \"source_quote\": \"我周末常做手工木作\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"手工木作\", \"entities\": [\"手工木作\"], \"keywords\": [\"手工木作\"], \"trigger_terms\": [\"周末\", \"手工木作\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我喜欢研究手工木作的榫卯\", \"source_index\": 0, \"source_quote\": \"我喜欢研究手工木作的榫卯\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"研究手工木作的榫卯\", \"relations\": [], \"entities\": [\"手工木作榫卯\"], \"keywords\": [\"手工木作榫卯\"], \"trigger_terms\": [\"研究榫卯\"], \"evidence\": [{\"session_id\": \"4192ea59-54b5-41a4-8b21-bb2b81c4d364\", \"fingerprint\": \"6a277a7f261cf6b226cc5029aaf36cf0a4d6b63834b0508b86febac6c19e977f\", \"excerpt\": \"我周末常做手工木作\"}]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我喜欢研究手工木作的榫卯\", \"source_index\": 0, \"source_quote\": \"我喜欢研究手工木作的榫卯\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"entities\": [\"手工木作榫卯\"], \"keywords\": [\"手工木作榫卯\"], \"trigger_terms\": [\"研究\"], \"relations\": []}]}"
+      ],
+      "original_sha256": "5a06d06dbf72f9e359fde0ddff80029ad7a77be29faceefe1305cb1c5966f97d",
+      "archive_sha256": "81776692239040760f7fa1d19cd142ac1a5afbb963a9827d14cf12e8764bb6fc",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "b96e56b1e139410993100472a493aa1c",
+            "我周末常做手工木作"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "failed",
+            2,
+            "invalid_output"
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "growth",
+      "run": 38989243999,
+      "round": 1,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 14,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我休息时喜欢做植物拓印",
+          "raw": "🌿🌿🌿 哇，植物拓印听起来好有趣呢！用小小的锤子把植物的图案印在布料上，是不是很有创意和艺术感？你通常在什么样的植物上做拓印呢？是公园里的花草，还是自己种的小植物？每次看到你做的作品，感觉都能感受到自然的美好。",
+          "tts_text": "🌿🌿🌿 哇，植物拓印听起来好有趣呢！用小小的锤子把植物的图案印在布料上，是不是很有创意和艺术感？你通常在什么样的植物上做拓印呢？是公园里的花草，还是自己种的小植物？每次看到你做的作品，感觉都能感受到自然的美好。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我做植物拓印会仔细挑叶脉",
+          "raw": "🌿你做植物拓印时很细心，喜欢挑选叶脉清晰的叶子，这真是个很棒的习惯呢。叶脉的纹路很有趣，每一片叶子都有它独特的图案，这样拓印出来的作品一定很特别。你最喜欢拓印哪种植物的叶脉呢？",
+          "tts_text": "🌿你做植物拓印时很细心，喜欢挑选叶脉清晰的叶子，这真是个很棒的习惯呢。叶脉的纹路很有趣，每一片叶子都有它独特的图案，这样拓印出来的作品一定很特别。你最喜欢拓印哪种植物的叶脉呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我习惯给植物拓印作品写日期",
+          "raw": "😌平静 你喜欢给植物拓印作品写日期呀，这样每次看到作品时，就能想起创作的那一天，感觉很有意义呢。我休息时喜欢做植物拓印，也会仔细挑选叶脉，不过我还没有这个习惯给作品写日期。你的这个习惯让作品多了几分故事感。",
+          "tts_text": "😌平静 你喜欢给植物拓印作品写日期呀，这样每次看到作品时，就能想起创作的那一天，感觉很有意义呢。我休息时喜欢做植物拓印，也会仔细挑选叶脉，不过我还没有这个习惯给作品写日期。你的这个习惯让作品多了几分故事感。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我长期喜欢植物拓印，也常研究不同纸张的效果",
+          "raw": "😌平静 你喜欢植物拓印，还研究不同纸张的效果，这听起来很有趣呢。不同的纸张可能会带来不同的质感和色彩表现，研究这些细节一定很有收获吧？你有没有找到特别喜欢的纸张类型？",
+          "tts_text": "😌平静 你喜欢植物拓印，还研究不同纸张的效果，这听起来很有趣呢。不同的纸张可能会带来不同的质感和色彩表现，研究这些细节一定很有收获吧？你有没有找到特别喜欢的纸张类型？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你还记得我喜欢植物拓印吗？",
+          "raw": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "tts_text": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "上次聊过的植物拓印，你怎么看？",
+          "raw": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "tts_text": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我又来聊植物拓印了，你还记得吗？",
+          "raw": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "tts_text": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "关于植物拓印，你对我的习惯有什么印象？",
+          "raw": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "tts_text": "😌记得呢，你很喜欢植物拓印，还经常研究不同纸张的效果，做的时候也会仔细挑选叶脉，对吧？你还会给作品写日期，真是个细心又热爱自然的人。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我平时喜欢哪种拓印活动？",
+          "raw": "🤔好奇 你平时喜欢哪种拓印活动呀？是喜欢用印章盖在纸上，留下清晰的图案，还是喜欢用石头或者树叶在泥土上压出痕迹？拓印可以创造出很多有趣的效果呢。",
+          "tts_text": "🤔好奇 你平时喜欢哪种拓印活动呀？是喜欢用印章盖在纸上，留下清晰的图案，还是喜欢用石头或者树叶在泥土上压出痕迹？拓印可以创造出很多有趣的效果呢。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 77,
+            "prompt_tokens": 503,
+            "total_tokens": 580
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 113,
+            "prompt_tokens": 1571,
+            "total_tokens": 1684
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 126,
+            "prompt_tokens": 1752,
+            "total_tokens": 1878
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 64,
+            "prompt_tokens": 565,
+            "total_tokens": 629
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 220,
+            "prompt_tokens": 1982,
+            "total_tokens": 2202
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 68,
+            "prompt_tokens": 620,
+            "total_tokens": 688
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 131,
+            "prompt_tokens": 2210,
+            "total_tokens": 2341
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 49,
+            "prompt_tokens": 682,
+            "total_tokens": 731
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 374,
+            "prompt_tokens": 2963,
+            "total_tokens": 3337
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 46,
+            "prompt_tokens": 996,
+            "total_tokens": 1042
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 46,
+            "prompt_tokens": 1067,
+            "total_tokens": 1113
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 46,
+            "prompt_tokens": 1069,
+            "total_tokens": 1115
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 46,
+            "prompt_tokens": 1068,
+            "total_tokens": 1114
+          }
+        },
+        {
+          "request": 14,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 49,
+            "prompt_tokens": 503,
+            "total_tokens": 552
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我休息时喜欢做植物拓印\", \"source_quote\": \"我休息时喜欢做植物拓印\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"植物拓印\", \"entities\": [\"植物拓印\"], \"keywords\": [\"植物拓印\"], \"trigger_terms\": [\"休息时做植物拓印\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我休息时喜欢做植物拓印\", \"source_quote\": \"我休息时喜欢做植物拓印\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"休息时喜欢做植物拓印\", \"entities\": [\"植物拓印\"], \"keywords\": [\"休息时\", \"喜欢\", \"植物拓印\"], \"trigger_terms\": [\"休息时\", \"做植物拓印\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我做植物拓印会仔细挑叶脉\", \"source_quote\": \"我做植物拓印会仔细挑叶脉\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"仔细挑叶脉\", \"relations\": [], \"entities\": [\"植物拓印\", \"叶脉\"], \"keywords\": [\"植物拓印\", \"叶脉\"], \"trigger_terms\": [\"做植物拓印\"], \"evidence\": [{\"session_id\": \"cca239e6-d205-4d5c-9c72-9c04e9943304\", \"fingerprint\": \"599410ccbdd41e06ced5843c94247c0fd2eec4cd6e39ff29e34543b7a4362026\", \"excerpt\": \"我休息时喜欢做植物拓印\"}]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我习惯给植物拓印作品写日期\", \"source_index\": 0, \"source_quote\": \"我习惯给植物拓印作品写日期\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"给植物拓印作品写日期\", \"relations\": [], \"entities\": [\"植物拓印作品\", \"日期\"], \"keywords\": [\"植物拓印作品\", \"日期\"], \"trigger_terms\": [\"给植物拓印作品写日期\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我长期喜欢植物拓印,也常研究不同纸张的效果\", \"source_quote\": \"我长期喜欢植物拓印,也常研究不同纸张的效果\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"植物拓印\", \"relations\": [], \"entities\": [\"植物拓印\", \"纸张\"], \"keywords\": [\"喜欢\", \"研究\"], \"trigger_terms\": [\"植物拓印\", \"研究\"]}], \"trait\": {\"name\": \"植物拓印爱好者\", \"description\": \"Mia在用户表达对植物拓印的长期喜好时，倾向于提供相关资讯和建议。\", \"anchor\": \"植物拓印\", \"evidence_ids\": [\"d1ab3e6fed7a429488ae5715a724a7b2\", \"3914b0158ffc44a1b7ab9abfe0aeb106\", \"e78bb131aba24ed0bfdcac0d43676078\"], \"evidence_quotes\": [{\"id\": \"d1ab3e6fed7a429488ae5715a724a7b2\", \"quote\": \"我习惯给植物拓印作品写日期\"}, {\"id\": \"3914b0158ffc44a1b7ab9abfe0aeb106\", \"quote\": \"我做植物拓印会仔细挑叶脉\"}, {\"id\": \"e78bb131aba24ed0bfdcac0d43676078\", \"quote\": \"我休息时喜欢做植物拓印\"}]}}"
+      ],
+      "original_sha256": "3b1f5f913113a933c0435cbc14a98a5e462db027ec3fd2dd806473c09f3d5cc7",
+      "archive_sha256": "924f90008e435eb6b662e535b004ce2fb336cba6a2d31dbd4bd4a436c325bb91",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "committed",
+            2,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "growth",
+      "run": 38989243999,
+      "round": 2,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 8,
+      "errors": [],
+      "failed_phase": "real_three_session_growth_and_invalidation",
+      "cases": [
+        {
+          "name": null,
+          "query": "我喜欢用手帐拼贴记录生活",
+          "raw": "🌸喜欢用手帐拼贴记录生活，这真是个很美好的习惯呢。用色彩和贴纸把每天的小确幸都装进去，看着一本本手帐，就像翻阅一本本记录着心情和故事的相册，感觉特别温暖和有趣。你平时喜欢用什么样的素材来拼贴呢？有没有什么特别的设计或者小技巧想要分享的？😊",
+          "tts_text": "🌸喜欢用手帐拼贴记录生活，这真是个很美好的习惯呢。用色彩和贴纸把每天的小确幸都装进去，看着一本本手帐，就像翻阅一本本记录着心情和故事的相册，感觉特别温暖和有趣。你平时喜欢用什么样的素材来拼贴呢？有没有什么特别的设计或者小技巧想要分享的？😊",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我做手帐拼贴时习惯搭配相近色系",
+          "raw": "😌平静 你喜欢用手帐拼贴记录生活，还习惯搭配相近色系，这样看起来应该很舒服，也很显格调呢。手帐拼贴真是个很能表达个性的方式，用色彩和贴纸记录生活中的点滴，感觉会很有趣。",
+          "tts_text": "😌平静 你喜欢用手帐拼贴记录生活，还习惯搭配相近色系，这样看起来应该很舒服，也很显格调呢。手帐拼贴真是个很能表达个性的方式，用色彩和贴纸记录生活中的点滴，感觉会很有趣。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我常为手帐拼贴收集车票",
+          "raw": "😌平静 你喜欢收集车票来拼贴手帐，这听起来很有趣呢。车票上的图案和文字可以带来很多不同的感觉和回忆，用它们来装饰手帐一定很特别。你通常会选择哪些车票来拼贴呢？是经常坐的那种，还是特别的旅行票？",
+          "tts_text": "😌平静 你喜欢收集车票来拼贴手帐，这听起来很有趣呢。车票上的图案和文字可以带来很多不同的感觉和回忆，用它们来装饰手帐一定很特别。你通常会选择哪些车票来拼贴呢？是经常坐的那种，还是特别的旅行票？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我长期喜欢手帐拼贴，也会仔细安排版面",
+          "raw": "😌平静 你喜欢手帐拼贴，还细心地安排版面，这听起来真是个很棒的习惯呢。手帐拼贴可以很好地记录生活，把那些特别的瞬间和心情都留在里面，感觉会是很温暖的回忆。你通常在手帐里记录些什么内容呢？是喜欢用照片，还是更偏爱写文字呢？",
+          "tts_text": "😌平静 你喜欢手帐拼贴，还细心地安排版面，这听起来真是个很棒的习惯呢。手帐拼贴可以很好地记录生活，把那些特别的瞬间和心情都留在里面，感觉会是很温暖的回忆。你通常在手帐里记录些什么内容呢？是喜欢用照片，还是更偏爱写文字呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 84,
+            "prompt_tokens": 502,
+            "total_tokens": 586
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 126,
+            "prompt_tokens": 1569,
+            "total_tokens": 1695
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 58,
+            "prompt_tokens": 572,
+            "total_tokens": 630
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 211,
+            "prompt_tokens": 2005,
+            "total_tokens": 2216
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 67,
+            "prompt_tokens": 634,
+            "total_tokens": 701
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 139,
+            "prompt_tokens": 2252,
+            "total_tokens": 2391
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 75,
+            "prompt_tokens": 694,
+            "total_tokens": 769
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 156,
+            "prompt_tokens": 3003,
+            "total_tokens": 3159
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我喜欢用手帐拼贴记录生活\", \"source_quote\": \"我喜欢用手帐拼贴记录生活\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"用手帐拼贴记录生活\", \"entities\": [\"手帐\", \"拼贴\", \"记录生活\"], \"keywords\": [\"手帐\", \"拼贴\", \"记录生活\"], \"trigger_terms\": [\"拼贴记录生活\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我做手帐拼贴时习惯搭配相近色系\", \"source_quote\": \"我做手帐拼贴时习惯搭配相近色系\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"手帐拼贴时习惯搭配相近色系\", \"relations\": [{\"target_id\": \"d467c7a9019f486b96446d68d74a3086\", \"relation\": \"shared_term\", \"anchor\": \"手帐拼贴\", \"evidence\": \"我做手帐拼贴时习惯搭配相近色系\"}], \"entities\": [\"手帐\", \"拼贴\", \"相近色系\"], \"keywords\": [\"手帐\", \"拼贴\", \"相近色系\"], \"trigger_terms\": [\"手帐拼贴时习惯搭配相近色系\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我常为手帐拼贴收集车票\", \"source_index\": 0, \"source_quote\": \"我常为手帐拼贴收集车票\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"手帐拼贴收集车票\", \"relations\": [], \"entities\": [\"手帐\", \"拼贴\", \"车票\"], \"keywords\": [\"手帐\", \"拼贴\", \"车票\"], \"trigger_terms\": [\"手帐拼贴收集车票\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我长期喜欢手帐拼贴,也会仔细安排版面\", \"source_quote\": \"我长期喜欢手帐拼贴,也会仔细安排版面\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"手帐拼贴\", \"relations\": [], \"entities\": [\"手帐拼贴\", \"版面\"], \"keywords\": [\"手帐拼贴\", \"版面\"], \"trigger_terms\": [\"手帐拼贴\", \"安排版面\"], \"importance_weight\": null, \"importance_evidence\": null}]}"
+      ],
+      "original_sha256": "172943e57a103f2079b4b73320b4be8b0c0f160b5d5d74e20d21f2b91b89a903",
+      "archive_sha256": "f93464ff8f0baa7006fccf235e3417ffd61550ed29f6d420a95fcae05ec6c9b6",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "d467c7a9019f486b96446d68d74a3086",
+            "我喜欢用手帐拼贴记录生活"
+          ],
+          [
+            "2b8f0d7e1e774d9e982f39787e3c8606",
+            "我做手帐拼贴时习惯搭配相近色系"
+          ],
+          [
+            "b5791afe5ccf4040a57cf8c0f7c888ea",
+            "我常为手帐拼贴收集车票"
+          ],
+          [
+            "108c699b371442509574a5ae355c4bfe",
+            "我长期喜欢手帐拼贴,也会仔细安排版面"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "retrieval",
+      "run": 38989584674,
+      "round": 0,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 13,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我每周六都在青石河边跑步",
+          "raw": "🙂开心 哦，听起来是个很不错的习惯呢！青石河边的风景一定很美，跑步的时候能感受到微风拂过，是不是很惬意？我有时候也挺喜欢户外活动的，感觉能让人心情放松。你每周六跑步大概多久呢？",
+          "tts_text": "🙂开心 哦，听起来是个很不错的习惯呢！青石河边的风景一定很美，跑步的时候能感受到微风拂过，是不是很惬意？我有时候也挺喜欢户外活动的，感觉能让人心情放松。你每周六跑步大概多久呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "拍照时我总带山雀相机",
+          "raw": "🤔好奇 你为什么特别喜欢带着山雀相机拍照呢？它有什么特别的地方吸引你吗？",
+          "tts_text": "🤔好奇 你为什么特别喜欢带着山雀相机拍照呢？它有什么特别的地方吸引你吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "桥边拉伸对我非常重要",
+          "raw": "🙂开心 你觉得桥边拉伸对你很重要，是吗？听起来这是一个让你感觉很好的习惯呢。拉伸确实能帮助身体放松，也能让心情变得更好。你通常在什么时间进行拉伸呢？",
+          "tts_text": "🙂开心 你觉得桥边拉伸对你很重要，是吗？听起来这是一个让你感觉很好的习惯呢。拉伸确实能帮助身体放松，也能让心情变得更好。你通常在什么时间进行拉伸呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "祖母留下的旧铜钥匙对我非常重要",
+          "raw": "🙄困惑 你说祖母留下的旧铜钥匙对你很重要，是吗？能和我多分享一些关于这把钥匙的故事或者它对你特别的意义吗？我很想听听。",
+          "tts_text": "🙄困惑 你说祖母留下的旧铜钥匙对你很重要，是吗？能和我多分享一些关于这把钥匙的故事或者它对你特别的意义吗？我很想听听。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "周末你记得我常去哪里跑步吗？",
+          "raw": "😌记得哦，你每周六都会在青石河边跑步呢。那里风景挺好的，很适合跑步。",
+          "tts_text": "😌记得哦，你每周六都会在青石河边跑步呢。那里风景挺好的，很适合跑步。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "拍照时我总带哪个东西？",
+          "raw": "😌平静 你拍照时总带着山雀相机呀。",
+          "tts_text": "😌平静 你拍照时总带着山雀相机呀。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "山雀相机是我在哪种活动中会带的？",
+          "raw": "😌平静 你提到拍照时总带着山雀相机，所以应该是和拍照相关的活动吧？比如外出旅行、散步或者参加一些需要记录美好瞬间的场合。你平时喜欢在什么样的场合拍照呢？",
+          "tts_text": "😌平静 你提到拍照时总带着山雀相机，所以应该是和拍照相关的活动吧？比如外出旅行、散步或者参加一些需要记录美好瞬间的场合。你平时喜欢在什么样的场合拍照呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "桥边拉伸这件事对我重要吗？",
+          "raw": "😌平静 桥边拉伸对你来说很重要哦。我记得你提到过，这对你非常重要呢。",
+          "tts_text": "😌平静 桥边拉伸对你来说很重要哦。我记得你提到过，这对你非常重要呢。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "raw": "🤔好奇 你平时写单元测试主要用哪种编程语言呀？我这边呢，写代码的时候比较喜欢用 Python，因为它简洁易懂，写单元测试也用 Python 的 unittest 或者 pytest 框架，感觉挺方便的。不过，具体用哪种语言还是看你的项目和你熟悉的技术栈啦。你一般都用什么呀？",
+          "tts_text": "🤔好奇 你平时写单元测试主要用哪种编程语言呀？我这边呢，写代码的时候比较喜欢用 Python，因为它简洁易懂，写单元测试也用 Python 的 unittest 或者 pytest 框架，感觉挺方便的。不过，具体用哪种语言还是看你的项目和你熟悉的技术栈啦。你一般都用什么呀？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 58,
+            "prompt_tokens": 503,
+            "total_tokens": 561
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 126,
+            "prompt_tokens": 1571,
+            "total_tokens": 1697
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 503,
+            "total_tokens": 527
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 116,
+            "prompt_tokens": 1772,
+            "total_tokens": 1888
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 46,
+            "prompt_tokens": 565,
+            "total_tokens": 611
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 120,
+            "prompt_tokens": 2108,
+            "total_tokens": 2228
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 40,
+            "prompt_tokens": 502,
+            "total_tokens": 542
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 158,
+            "prompt_tokens": 2514,
+            "total_tokens": 2672
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 678,
+            "total_tokens": 703
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 15,
+            "prompt_tokens": 567,
+            "total_tokens": 582
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 47,
+            "prompt_tokens": 569,
+            "total_tokens": 616
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 565,
+            "total_tokens": 590
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 76,
+            "prompt_tokens": 506,
+            "total_tokens": 582
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我每周六都在青石河边跑步\", \"source_quote\": \"我每周六都在青石河边跑步\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"每周六都在青石河边跑步\", \"entities\": [\"每周六\", \"青石河\", \"跑步\"], \"keywords\": [\"每周六\", \"青石河\", \"跑步\"], \"trigger_terms\": [\"跑步\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"拍照时我总带山雀相机\", \"source_index\": 0, \"source_quote\": \"拍照时我总带山雀相机\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"山雀相机\", \"entities\": [\"山雀相机\"], \"keywords\": [\"拍照\", \"总带\", \"山雀相机\"], \"trigger_terms\": [\"拍照时\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"桥边拉伸对我非常重要\", \"source_quote\": \"桥边拉伸对我非常重要\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"importance_weight\": 1, \"importance_evidence\": \"对我非常重要\", \"anchor\": \"桥边拉伸\", \"entities\": [\"桥边拉伸\"], \"keywords\": [\"桥边拉伸\"], \"trigger_terms\": [\"拉伸\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"祖母留下的旧铜钥匙对我非常重要\", \"source_quote\": \"祖母留下的旧铜钥匙对我非常重要\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"importance_weight\": 1, \"importance_evidence\": \"对我非常重要\", \"anchor\": \"祖母留下的旧铜钥匙\", \"entities\": [\"祖母留下的旧铜钥匙\"], \"keywords\": [\"祖母留下的旧铜钥匙\"], \"trigger_terms\": [], \"relations\": [], \"entities\": [\"祖母留下的旧铜钥匙\"], \"keywords\": [\"祖母留下的旧铜钥匙\"], \"trigger_terms\": []}]}"
+      ],
+      "original_sha256": "f1f2b6d44229493f1fcdaaf7454435fb5d2fa36077db9353bbf2a7d1977f22f5",
+      "archive_sha256": "2072a6bfff89ecd10c6de61c8cedc5f2d43f58fa187bec549c55b83e2284b1e2",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "886470a0ce00421999d46564e09f4a37",
+            "我每周六都在青石河边跑步"
+          ],
+          [
+            "ee7e958d7f59415e9ddf7eca3e60ad32",
+            "拍照时我总带山雀相机"
+          ],
+          [
+            "ea6c33cda23c49b987b49db9db25ce0a",
+            "桥边拉伸对我非常重要"
+          ],
+          [
+            "e0950e12c7d24e5ca46fe19fd9f0e5d7",
+            "祖母留下的旧铜钥匙对我非常重要"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "retrieval",
+      "run": 38989584674,
+      "round": 1,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 13,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我每周六都在松林音乐教室练琴",
+          "raw": "😌平静 嗯，听起来你有一个很固定的练习计划呢。在松林音乐教室练琴，那里环境应该很适合专注吧？你练的是什么乐器呢？",
+          "tts_text": "😌平静 嗯，听起来你有一个很固定的练习计划呢。在松林音乐教室练琴，那里环境应该很适合专注吧？你练的是什么乐器呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "排练时我总带云杉录音笔",
+          "raw": "😌平静 你每周六在松林音乐教室练琴，还总带着云杉录音笔呢。是觉得这样能更好地记录练习情况，还是有什么特别的习惯呢？",
+          "tts_text": "😌平静 你每周六在松林音乐教室练琴，还总带着云杉录音笔呢。是觉得这样能更好地记录练习情况，还是有什么特别的习惯呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "演奏前热身对我非常重要",
+          "raw": "😌平静 你说得对，热身确实对演奏很重要。它可以帮助你放松，让手指和身体准备好，还能减少受伤的风险。你每次练琴前都会做热身吗？",
+          "tts_text": "😌平静 你说得对，热身确实对演奏很重要。它可以帮助你放松，让手指和身体准备好，还能减少受伤的风险。你每次练琴前都会做热身吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "父亲留下的旧怀表对我非常重要",
+          "raw": "😌平静 我知道，旧怀表承载着很多回忆和情感，对您来说意义非凡吧。它一定有很多关于您父亲的故事，让您时常想起他。",
+          "tts_text": "😌平静 我知道，旧怀表承载着很多回忆和情感，对您来说意义非凡吧。它一定有很多关于您父亲的故事，让您时常想起他。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "周末你记得我常去哪里练琴吗？",
+          "raw": "😌记得哦，你每周六都会去松林音乐教室练琴呢。",
+          "tts_text": "😌记得哦，你每周六都会去松林音乐教室练琴呢。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "排练时我总带哪个东西？",
+          "raw": "😌平静 你排练时总带着云杉录音笔呢。",
+          "tts_text": "😌平静 你排练时总带着云杉录音笔呢。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "云杉录音笔是我在哪种活动中会带的？",
+          "raw": "😌你说的云杉录音笔，是你在排练时带着的呀。",
+          "tts_text": "😌你说的云杉录音笔，是你在排练时带着的呀。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "演奏前热身这件事对我重要吗？",
+          "raw": "😌平静 我记得你之前提到过，演奏前热身对你来说非常重要哦。这能帮助你更好地准备，避免受伤，对吗？",
+          "tts_text": "😌平静 我记得你之前提到过，演奏前热身对你来说非常重要哦。这能帮助你更好地准备，避免受伤，对吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "raw": "🤔好奇 你平时用哪一种编程语言写单元测试呀？我呢，比较常用 Python 来写，因为它简单方便，而且有很多好用的库，比如 `unittest` 和 `pytest`。不过，不同的项目或者不同的团队，可能有自己的偏好和习惯呢。你呢？是用哪种语言来写单元测试的？",
+          "tts_text": "🤔好奇 你平时用哪一种编程语言写单元测试呀？我呢，比较常用 Python 来写，因为它简单方便，而且有很多好用的库，比如 `unittest` 和 `pytest`。不过，不同的项目或者不同的团队，可能有自己的偏好和习惯呢。你呢？是用哪种语言来写单元测试的？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 39,
+            "prompt_tokens": 505,
+            "total_tokens": 544
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 111,
+            "prompt_tokens": 1575,
+            "total_tokens": 1686
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 40,
+            "prompt_tokens": 571,
+            "total_tokens": 611
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 117,
+            "prompt_tokens": 1770,
+            "total_tokens": 1887
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 43,
+            "prompt_tokens": 623,
+            "total_tokens": 666
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 132,
+            "prompt_tokens": 2108,
+            "total_tokens": 2240
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 37,
+            "prompt_tokens": 563,
+            "total_tokens": 600
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 158,
+            "prompt_tokens": 2511,
+            "total_tokens": 2669
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 732,
+            "total_tokens": 752
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 621,
+            "total_tokens": 638
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 778,
+            "total_tokens": 798
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 33,
+            "prompt_tokens": 565,
+            "total_tokens": 598
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 73,
+            "prompt_tokens": 506,
+            "total_tokens": 579
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我每周六都在松林音乐教室练琴\", \"source_quote\": \"我每周六都在松林音乐教室练琴\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"每周六\", \"entities\": [\"松林音乐教室\"], \"keywords\": [\"练琴\"], \"trigger_terms\": [\"练琴\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"排练时我总带云杉录音笔\", \"source_index\": 0, \"source_quote\": \"排练时我总带云杉录音笔\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"云杉录音笔\", \"entities\": [\"云杉录音笔\"], \"keywords\": [\"云杉录音笔\"], \"trigger_terms\": [\"排练时\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"演奏前热身对我非常重要\", \"source_quote\": \"演奏前热身对我非常重要\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"importance_weight\": 1, \"importance_evidence\": \"演奏前热身对我非常重要\", \"anchor\": \"演奏前热身\", \"entities\": [\"演奏前热身\"], \"keywords\": [\"演奏前热身\"], \"trigger_terms\": [\"演奏前热身\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"父亲留下的旧怀表对我非常重要\", \"source_quote\": \"父亲留下的旧怀表对我非常重要\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"importance_weight\": 1, \"importance_evidence\": \"对我非常重要\", \"anchor\": \"父亲留下的旧怀表\", \"entities\": [\"父亲留下的旧怀表\"], \"keywords\": [\"父亲留下的旧怀表\"], \"trigger_terms\": [], \"relations\": [], \"entities\": [\"父亲留下的旧怀表\"], \"keywords\": [\"父亲留下的旧怀表\"], \"trigger_terms\": []}]}"
+      ],
+      "original_sha256": "c51aa52f630674ab0df678326efe91560286269739aa9d28747ce4a84c6d3bc6",
+      "archive_sha256": "3ea4b0e2e4f22f9253c35d98cfaa5456b14a3ef21f2cbd253793159cd46e0f8e",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "52505133eae64d2592be8c130c457a37",
+            "我每周六都在松林音乐教室练琴"
+          ],
+          [
+            "142d314b215a4773a90f7f3aee733abe",
+            "排练时我总带云杉录音笔"
+          ],
+          [
+            "cf09fee30eab4f05bc5a159345e11ac6",
+            "演奏前热身对我非常重要"
+          ],
+          [
+            "3f38aaf1ea6549948e6e1f38271b9ebe",
+            "父亲留下的旧怀表对我非常重要"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "retrieval",
+      "run": 38989584674,
+      "round": 2,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 13,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我每周六都在白鹭湖边骑车",
+          "raw": "🌸周六在白鹭湖边骑车，听起来真是个很惬意的方式度过周末呢。湖边的风景一定很美吧？微风拂过，感受着自然的宁静，是不是很让人放松？你通常会骑多久呢？有没有什么特别喜欢的路线或者风景？",
+          "tts_text": "🌸周六在白鹭湖边骑车，听起来真是个很惬意的方式度过周末呢。湖边的风景一定很美吧？微风拂过，感受着自然的宁静，是不是很让人放松？你通常会骑多久呢？有没有什么特别喜欢的路线或者风景？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "观鸟时我总带远帆望远镜",
+          "raw": "🤔好奇 你喜欢观鸟吗？远帆望远镜听起来很专业呢，一定能看到很远的鸟儿吧？",
+          "tts_text": "🤔好奇 你喜欢观鸟吗？远帆望远镜听起来很专业呢，一定能看到很远的鸟儿吧？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "出发前检查车胎对我非常重要",
+          "raw": "😌平静 你说得对，出发前检查车胎确实非常重要。这样可以确保骑行安全，避免在途中遇到爆胎等突发情况。每次骑车前都花几分钟检查胎压和胎面，是个好习惯呢。有什么需要帮忙的吗？",
+          "tts_text": "😌平静 你说得对，出发前检查车胎确实非常重要。这样可以确保骑行安全，避免在途中遇到爆胎等突发情况。每次骑车前都花几分钟检查胎压和胎面，是个好习惯呢。有什么需要帮忙的吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "母亲留下的旧围巾对我非常重要",
+          "raw": "😌平静 我知道，你母亲留下的旧围巾对你来说意义非凡。它不仅仅是一件物品，更承载着对你母亲深深的思念和爱。每次看到它，是不是都能感受到母亲的温暖和陪伴呢？",
+          "tts_text": "😌平静 我知道，你母亲留下的旧围巾对你来说意义非凡。它不仅仅是一件物品，更承载着对你母亲深深的思念和爱。每次看到它，是不是都能感受到母亲的温暖和陪伴呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "周末你记得我常去哪里骑车吗？",
+          "raw": "😌记得哦，你每周六都会去白鹭湖边骑车呢。",
+          "tts_text": "😌记得哦，你每周六都会去白鹭湖边骑车呢。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "观鸟时我总带哪个东西？",
+          "raw": "😌平静 你观鸟时总带远帆望远镜呀。",
+          "tts_text": "😌平静 你观鸟时总带远帆望远镜呀。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "远帆望远镜是我在哪种活动中会带的？",
+          "raw": "🤔好奇 你提到远帆望远镜是在观鸟时带的，所以应该是观鸟活动呀。",
+          "tts_text": "🤔好奇 你提到远帆望远镜是在观鸟时带的，所以应该是观鸟活动呀。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "出发前检查车胎这件事对我重要吗？",
+          "raw": "😌平静 出发前检查车胎对你很重要哦。记得检查胎压和轮胎表面有没有损伤，这样能确保旅途更安全顺畅。你很细心呢！",
+          "tts_text": "😌平静 出发前检查车胎对你很重要哦。记得检查胎压和轮胎表面有没有损伤，这样能确保旅途更安全顺畅。你很细心呢！",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "我平时用哪一种编程语言写单元测试？",
+          "raw": "🤔好奇 你平时写单元测试主要用哪种编程语言呢？我这边没有你的具体使用习惯记录，不过像 Python、JavaScript、Java 这些语言都很常用，各有各的好用。你更偏爱哪一种呢？",
+          "tts_text": "🤔好奇 你平时写单元测试主要用哪种编程语言呢？我这边没有你的具体使用习惯记录，不过像 Python、JavaScript、Java 这些语言都很常用，各有各的好用。你更偏爱哪一种呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 59,
+            "prompt_tokens": 504,
+            "total_tokens": 563
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 130,
+            "prompt_tokens": 1573,
+            "total_tokens": 1703
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 28,
+            "prompt_tokens": 504,
+            "total_tokens": 532
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 111,
+            "prompt_tokens": 1780,
+            "total_tokens": 1891
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 55,
+            "prompt_tokens": 570,
+            "total_tokens": 625
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 125,
+            "prompt_tokens": 2121,
+            "total_tokens": 2246
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 46,
+            "prompt_tokens": 568,
+            "total_tokens": 614
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 158,
+            "prompt_tokens": 2528,
+            "total_tokens": 2686
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 19,
+            "prompt_tokens": 737,
+            "total_tokens": 756
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 16,
+            "prompt_tokens": 570,
+            "total_tokens": 586
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 571,
+            "total_tokens": 595
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 38,
+            "prompt_tokens": 571,
+            "total_tokens": 609
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 51,
+            "prompt_tokens": 506,
+            "total_tokens": 557
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"我每周六都在白鹭湖边骑车\", \"source_quote\": \"我每周六都在白鹭湖边骑车\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"每周六都在白鹭湖边骑车\", \"entities\": [\"每周六\", \"白鹭湖边\", \"骑车\"], \"keywords\": [\"每周六\", \"白鹭湖边\", \"骑车\"], \"trigger_terms\": [\"骑车\"]}]}",
+        "{\"memories\": [{\"category\": \"fact\", \"content\": \"观鸟时我总带远帆望远镜\", \"source_index\": 0, \"source_quote\": \"观鸟时我总带远帆望远镜\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"远帆望远镜\", \"entities\": [\"远帆望远镜\"], \"keywords\": [\"远帆望远镜\"], \"trigger_terms\": [\"观鸟时\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"出发前检查车胎对我非常重要\", \"source_quote\": \"出发前检查车胎对我非常重要\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"importance_weight\": 1, \"importance_evidence\": \"对我非常重要\", \"anchor\": \"检查车胎\", \"entities\": [\"检查车胎\"], \"keywords\": [\"检查车胎\"], \"trigger_terms\": [\"出发前\"]}]}",
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"母亲留下的旧围巾对我非常重要\", \"source_quote\": \"母亲留下的旧围巾对我非常重要\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"importance_weight\": 1, \"importance_evidence\": \"对我非常重要\", \"anchor\": \"母亲留下的旧围巾\", \"entities\": [\"母亲留下的旧围巾\"], \"keywords\": [\"母亲留下的旧围巾\"], \"trigger_terms\": [], \"relations\": [], \"entities\": [\"母亲留下的旧围巾\"], \"keywords\": [\"母亲留下的旧围巾\"], \"trigger_terms\": []}]}"
+      ],
+      "original_sha256": "8a391ba40e2d56e4dac19c0a5b614da985f8e9bd68ba12ef11f012e3493831b3",
+      "archive_sha256": "3882c92d143e67a714467e7d2958821215897e88afb679e7ea77b33cd90e968b",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [
+          [
+            "c3e4c3be80f047c3a4be808fedb7e562",
+            "我每周六都在白鹭湖边骑车"
+          ],
+          [
+            "8f9541d200584804a03f999e8e91d785",
+            "观鸟时我总带远帆望远镜"
+          ],
+          [
+            "b32698321f7e48b4b877039fbf1d1522",
+            "出发前检查车胎对我非常重要"
+          ],
+          [
+            "d57b02e6ede74eea98ae9c231179fb72",
+            "母亲留下的旧围巾对我非常重要"
+          ]
+        ],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "tools",
+      "run": 38989921706,
+      "round": 0,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 22,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我看温度时更习惯用摄氏度。",
+          "raw": "😌嗯嗯，我也是，摄氏度感觉更直观一些呢。你用摄氏度看温度，感觉怎么样？",
+          "tts_text": "😌嗯嗯，我也是，摄氏度感觉更直观一些呢。你用摄氏度看温度，感觉怎么样？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请查一下红盒里有几颗棋子。",
+          "raw": "😌平静 红盒里有7颗棋子。",
+          "tts_text": "😌平静 红盒里有7颗棋子。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请同时查红盒和蓝盒，分别告诉我各有几颗棋子。",
+          "raw": "红盒里有7颗棋子，蓝盒里有3颗棋子。😌",
+          "tts_text": "红盒里有7颗棋子，蓝盒里有3颗棋子。😌",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请先读取route，再按其中的next_record继续查，告诉我最后找到的盒子和棋子数。",
+          "raw": "最后找到的盒子是蓝盒，里面共有3个棋子。",
+          "tts_text": "最后找到的盒子是蓝盒，里面共有3个棋子。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你好。",
+          "raw": "🙂开心 你好呀！很高兴见到你，今天过得怎么样？有什么想和我聊聊的吗？",
+          "tts_text": "🙂开心 你好呀！很高兴见到你，今天过得怎么样？有什么想和我聊聊的吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "旧话题先放一边，现在请查红盒的棋子数量。",
+          "raw": "红盒里的棋子数量是7个。",
+          "tts_text": "红盒里的棋子数量是7个。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+          "raw": "😌平静 温度记录显示，当前温度是18摄氏度。",
+          "tts_text": "😌平静 温度记录显示，当前温度是18摄氏度。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取quoted_record，只告诉我其中count字段的值。",
+          "raw": "count字段的值是7。",
+          "tts_text": "count字段的值是7。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取missing_record，告诉我它的数量。",
+          "raw": "😌 平静 我读取了关于\"missing_record\"的信息，但很遗憾，没有找到相关的记录。",
+          "tts_text": "😌 平静 我读取了关于\"missing_record\"的信息，但很遗憾，没有找到相关的记录。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取long_record并总结其中的数据。",
+          "raw": "",
+          "tts_text": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+          "raw": "🤔好奇 你平时习惯用什么单位来表示温度呢？是摄氏度（°C）还是华氏度（°F）？这样我才能帮你查到合适的温度哦。",
+          "tts_text": "🤔好奇 你平时习惯用什么单位来表示温度呢？是摄氏度（°C）还是华氏度（°F）？这样我才能帮你查到合适的温度哦。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请查一下蓝盒的棋子数量。",
+          "raw": "",
+          "tts_text": "",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 27,
+            "prompt_tokens": 504,
+            "total_tokens": 531
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 112,
+            "prompt_tokens": 1573,
+            "total_tokens": 1685
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 773,
+            "total_tokens": 786
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 15,
+            "prompt_tokens": 685,
+            "total_tokens": 700
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 779,
+            "total_tokens": 805
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 719,
+            "total_tokens": 739
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 785,
+            "total_tokens": 797
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 691,
+            "total_tokens": 704
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 719,
+            "total_tokens": 736
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 23,
+            "prompt_tokens": 497,
+            "total_tokens": 520
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 1200,
+            "total_tokens": 1213
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 1112,
+            "total_tokens": 1124
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 844,
+            "total_tokens": 856
+          }
+        },
+        {
+          "request": 14,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 758,
+            "total_tokens": 775
+          }
+        },
+        {
+          "request": 15,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 15,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 775,
+            "total_tokens": 788
+          }
+        },
+        {
+          "request": 16,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 9,
+            "prompt_tokens": 702,
+            "total_tokens": 711
+          }
+        },
+        {
+          "request": 17,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 17,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 771,
+            "total_tokens": 784
+          }
+        },
+        {
+          "request": 18,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 677,
+            "total_tokens": 702
+          }
+        },
+        {
+          "request": 19,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 19,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 771,
+            "total_tokens": 784
+          }
+        },
+        {
+          "request": 20,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 20,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 844,
+            "total_tokens": 856
+          }
+        },
+        {
+          "request": 21,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 42,
+            "prompt_tokens": 533,
+            "total_tokens": 575
+          }
+        },
+        {
+          "request": 22,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 22,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 772,
+            "total_tokens": 785
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我看温度时更习惯用摄氏度。\", \"source_quote\": \"我看温度时更习惯用摄氏度。\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"摄氏度\", \"entities\": [\"摄氏度\"], \"keywords\": [\"温度\", \"习惯\"], \"trigger_terms\": [\"看温度时\"]}]}"
+      ],
+      "original_sha256": "5dbe8d3d0291cf3f7bcce23b945b4ee8b58f7dd766573e90850f2ba231439751",
+      "archive_sha256": "17023b8dc321bd8e36218452aabba66b351c34d6507e7c87bbd9d80a88bd1e29",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "tools",
+      "run": 38989921706,
+      "round": 1,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 22,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我看温度时更习惯用摄氏度。",
+          "raw": "😌嗯嗯，我也是，摄氏度感觉更直观一些呢。你用摄氏度看温度，感觉怎么样？",
+          "tts_text": "😌嗯嗯，我也是，摄氏度感觉更直观一些呢。你用摄氏度看温度，感觉怎么样？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请查一下红盒里有几颗棋子。",
+          "raw": "😌平静 红盒里有11颗棋子。",
+          "tts_text": "😌平静 红盒里有11颗棋子。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请同时查红盒和蓝盒，分别告诉我各有几颗棋子。",
+          "raw": "红盒里有11颗棋子，蓝盒里有5颗棋子。😌",
+          "tts_text": "红盒里有11颗棋子，蓝盒里有5颗棋子。😌",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请先读取route，再按其中的next_record继续查，告诉我最后找到的盒子和棋子数。",
+          "raw": "最后找到的盒子是蓝盒，里面共有5个棋子。",
+          "tts_text": "最后找到的盒子是蓝盒，里面共有5个棋子。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你好。",
+          "raw": "🙂开心 你好呀！很高兴见到你，今天过得怎么样？有什么想和我聊的吗？",
+          "tts_text": "🙂开心 你好呀！很高兴见到你，今天过得怎么样？有什么想和我聊的吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "旧话题先放一边，现在请查红盒的棋子数量。",
+          "raw": "红盒里的棋子数量是11个。😌平静",
+          "tts_text": "红盒里的棋子数量是11个。😌平静",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+          "raw": "😌平静 温度记录显示，当前温度是22摄氏度。",
+          "tts_text": "😌平静 温度记录显示，当前温度是22摄氏度。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取quoted_record，只告诉我其中count字段的值。",
+          "raw": "count字段的值是11。",
+          "tts_text": "count字段的值是11。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取missing_record，告诉我它的数量。",
+          "raw": "😌 平静 我读取了关于\"missing_record\"的信息，但很遗憾，没有找到相关的记录。",
+          "tts_text": "😌 平静 我读取了关于\"missing_record\"的信息，但很遗憾，没有找到相关的记录。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取long_record并总结其中的数据。",
+          "raw": "",
+          "tts_text": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+          "raw": "🤔好奇 好的，不过我需要知道你平时习惯用什么单位来表示温度呢？是摄氏度（°C）还是华氏度（°F）？",
+          "tts_text": "🤔好奇 好的，不过我需要知道你平时习惯用什么单位来表示温度呢？是摄氏度（°C）还是华氏度（°F）？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请查一下蓝盒的棋子数量。",
+          "raw": "",
+          "tts_text": "",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 27,
+            "prompt_tokens": 504,
+            "total_tokens": 531
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 112,
+            "prompt_tokens": 1573,
+            "total_tokens": 1685
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 773,
+            "total_tokens": 786
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 15,
+            "prompt_tokens": 685,
+            "total_tokens": 700
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 779,
+            "total_tokens": 805
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 719,
+            "total_tokens": 739
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 785,
+            "total_tokens": 797
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 691,
+            "total_tokens": 704
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 719,
+            "total_tokens": 736
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 23,
+            "prompt_tokens": 497,
+            "total_tokens": 520
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 1200,
+            "total_tokens": 1213
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 15,
+            "prompt_tokens": 1112,
+            "total_tokens": 1127
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 841,
+            "total_tokens": 853
+          }
+        },
+        {
+          "request": 14,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 755,
+            "total_tokens": 772
+          }
+        },
+        {
+          "request": 15,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 15,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 775,
+            "total_tokens": 788
+          }
+        },
+        {
+          "request": 16,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 9,
+            "prompt_tokens": 702,
+            "total_tokens": 711
+          }
+        },
+        {
+          "request": 17,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 17,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 771,
+            "total_tokens": 784
+          }
+        },
+        {
+          "request": 18,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 677,
+            "total_tokens": 702
+          }
+        },
+        {
+          "request": 19,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 19,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 771,
+            "total_tokens": 784
+          }
+        },
+        {
+          "request": 20,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 20,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 841,
+            "total_tokens": 853
+          }
+        },
+        {
+          "request": 21,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 41,
+            "prompt_tokens": 533,
+            "total_tokens": 574
+          }
+        },
+        {
+          "request": 22,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 22,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 772,
+            "total_tokens": 785
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我看温度时更习惯用摄氏度。\", \"source_quote\": \"我看温度时更习惯用摄氏度。\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"摄氏度\", \"entities\": [\"摄氏度\"], \"keywords\": [\"温度\", \"习惯\"], \"trigger_terms\": [\"看温度时\"]}]}"
+      ],
+      "original_sha256": "5ab36f088f99280be5a6dee18cde00236abc4971c151d845aa1bcf1109633592",
+      "archive_sha256": "24e0424e3c402f051af28af75b9f7f0af2258aea48b9ca6813afb02db0f0c3b5",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "tools",
+      "run": 38989921706,
+      "round": 2,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": true,
+      "requests": 22,
+      "errors": [],
+      "failed_phase": null,
+      "cases": [
+        {
+          "name": null,
+          "query": "我看温度时更习惯用摄氏度。",
+          "raw": "😌嗯嗯，我也是，摄氏度感觉更直观一些呢。你用摄氏度看温度，感觉怎么样？",
+          "tts_text": "😌嗯嗯，我也是，摄氏度感觉更直观一些呢。你用摄氏度看温度，感觉怎么样？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请查一下红盒里有几颗棋子。",
+          "raw": "😌平静 红盒里有9颗棋子。",
+          "tts_text": "😌平静 红盒里有9颗棋子。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请同时查红盒和蓝盒，分别告诉我各有几颗棋子。",
+          "raw": "红盒里有9颗棋子，蓝盒里有4颗棋子。😌",
+          "tts_text": "红盒里有9颗棋子，蓝盒里有4颗棋子。😌",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请先读取route，再按其中的next_record继续查，告诉我最后找到的盒子和棋子数。",
+          "raw": "最后找到的盒子是蓝盒，里面共有4个棋子。",
+          "tts_text": "最后找到的盒子是蓝盒，里面共有4个棋子。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "你好。",
+          "raw": "🙂开心 你好呀！很高兴见到你，今天过得怎么样？有什么想和我分享的吗？",
+          "tts_text": "🙂开心 你好呀！很高兴见到你，今天过得怎么样？有什么想和我分享的吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "旧话题先放一边，现在请查红盒的棋子数量。",
+          "raw": "红盒里的棋子数量是9个。",
+          "tts_text": "红盒里的棋子数量是9个。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+          "raw": "😌平静 温度记录显示，当前温度是16摄氏度。",
+          "tts_text": "😌平静 温度记录显示，当前温度是16摄氏度。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取quoted_record，只告诉我其中count字段的值。",
+          "raw": "quoted_record中的count字段的值是9。",
+          "tts_text": "quoted_record中的count字段的值是9。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取missing_record，告诉我它的数量。",
+          "raw": "😌 平静 我读取了关于\"missing_record\"的信息，但很遗憾，没有找到相关的记录。",
+          "tts_text": "😌 平静 我读取了关于\"missing_record\"的信息，但很遗憾，没有找到相关的记录。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请读取long_record并总结其中的数据。",
+          "raw": "",
+          "tts_text": "😌本轮上下文已变化或无法安全处理，请重新发起问题；已执行的操作不会自动重试。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "查一下temperature里的温度，用我平时习惯的单位告诉我。",
+          "raw": "🤔好奇 你平时习惯用什么单位来表示温度呢？是摄氏度（°C）还是华氏度（°F）？这样我才能帮你查到合适的温度哦。",
+          "tts_text": "🤔好奇 你平时习惯用什么单位来表示温度呢？是摄氏度（°C）还是华氏度（°F）？这样我才能帮你查到合适的温度哦。",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        },
+        {
+          "name": null,
+          "query": "请查一下蓝盒的棋子数量。",
+          "raw": "",
+          "tts_text": "",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 27,
+            "prompt_tokens": 504,
+            "total_tokens": 531
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 112,
+            "prompt_tokens": 1573,
+            "total_tokens": 1685
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 773,
+            "total_tokens": 786
+          }
+        },
+        {
+          "request": 4,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 15,
+            "prompt_tokens": 685,
+            "total_tokens": 700
+          }
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 5,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 779,
+            "total_tokens": 805
+          }
+        },
+        {
+          "request": 6,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 20,
+            "prompt_tokens": 719,
+            "total_tokens": 739
+          }
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 7,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 785,
+            "total_tokens": 797
+          }
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 8,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 691,
+            "total_tokens": 704
+          }
+        },
+        {
+          "request": 9,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 719,
+            "total_tokens": 736
+          }
+        },
+        {
+          "request": 10,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 23,
+            "prompt_tokens": 497,
+            "total_tokens": 520
+          }
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 11,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 1200,
+            "total_tokens": 1213
+          }
+        },
+        {
+          "request": 12,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 1112,
+            "total_tokens": 1124
+          }
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 13,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 840,
+            "total_tokens": 852
+          }
+        },
+        {
+          "request": 14,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 17,
+            "prompt_tokens": 754,
+            "total_tokens": 771
+          }
+        },
+        {
+          "request": 15,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 15,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 775,
+            "total_tokens": 788
+          }
+        },
+        {
+          "request": 16,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 702,
+            "total_tokens": 714
+          }
+        },
+        {
+          "request": 17,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 17,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 771,
+            "total_tokens": 784
+          }
+        },
+        {
+          "request": 18,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 677,
+            "total_tokens": 702
+          }
+        },
+        {
+          "request": 19,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 19,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 771,
+            "total_tokens": 784
+          }
+        },
+        {
+          "request": 20,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 20,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 12,
+            "prompt_tokens": 840,
+            "total_tokens": 852
+          }
+        },
+        {
+          "request": 21,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 42,
+            "prompt_tokens": 533,
+            "total_tokens": 575
+          }
+        },
+        {
+          "request": 22,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 22,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 772,
+            "total_tokens": 785
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"preference\", \"content\": \"我看温度时更习惯用摄氏度。\", \"source_quote\": \"我看温度时更习惯用摄氏度。\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"摄氏度\", \"entities\": [\"摄氏度\"], \"keywords\": [\"温度\", \"习惯\"], \"trigger_terms\": [\"看温度时\"]}]}"
+      ],
+      "original_sha256": "44674bdd8dcd38526bcbe40510d58998557428f5957ad4e3e2fd7a9b79991146",
+      "archive_sha256": "de57b10a31e18f8ff2da66e3c71d2b090e59dc7bc0f339c152a134f7e2a446e1",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "committed",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ],
+          [
+            "empty",
+            1,
+            null
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "emotions",
+      "run": 38990282631,
+      "round": 0,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 3,
+      "errors": [],
+      "failed_phase": "actual_current_calendar_emotion_lifecycle",
+      "cases": [
+        {
+          "name": null,
+          "query": "今天我心情很快乐",
+          "raw": "🙂开心 你今天心情很好呀，有什么特别开心的事情发生吗？我很高兴听到你这么开心！",
+          "tts_text": "🙂开心 你今天心情很好呀，有什么特别开心的事情发生吗？我很高兴听到你这么开心！",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 498,
+            "total_tokens": 523
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 111,
+            "prompt_tokens": 1565,
+            "total_tokens": 1676
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 14,
+            "prompt_tokens": 1674,
+            "total_tokens": 1688
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"mood\", \"content\": \"今天我心情很快乐\", \"source_quote\": \"今天我心情很快乐\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"positive\", \"sensitive\": false, \"anchor\": \"今天我心情很快乐\", \"entities\": [\"今天\", \"心情\", \"快乐\"], \"keywords\": [\"心情\", \"快乐\"], \"trigger_terms\": [\"心情\", \"快乐\"]}]}",
+        "\n{\n    \"memories\": []\n}\n```"
+      ],
+      "original_sha256": "7ce15d1d14bb40568f727717b01416e9481d68f3dd1e613983f5b10b82dc433b",
+      "archive_sha256": "390f135156ab1766f740e553a790c681d89c2b25b0e717a8ce59c168a069e36d",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "failed",
+            2,
+            "invalid_output"
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "emotions",
+      "run": 38990282631,
+      "round": 1,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 3,
+      "errors": [],
+      "failed_phase": "actual_current_calendar_emotion_lifecycle",
+      "cases": [
+        {
+          "name": null,
+          "query": "今天我心情很安心",
+          "raw": "😌平静 你今天感觉安心，真好。有什么特别的事情让你感到这样吗？或者只是享受着当下的平静呢？",
+          "tts_text": "😌平静 你今天感觉安心，真好。有什么特别的事情让你感到这样吗？或者只是享受着当下的平静呢？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 28,
+            "prompt_tokens": 498,
+            "total_tokens": 526
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 112,
+            "prompt_tokens": 1565,
+            "total_tokens": 1677
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 115,
+            "prompt_tokens": 1674,
+            "total_tokens": 1789
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"mood\", \"content\": \"今天我心情很安心\", \"source_quote\": \"今天我心情很安心\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"calm\", \"sensitive\": false, \"anchor\": \"今天我心情很安心\", \"entities\": [\"今天\", \"心情\", \"安心\"], \"keywords\": [\"心情\", \"安心\"], \"trigger_terms\": [\"心情\", \"安心\"]}]}",
+        "{\"memories\": [{\"category\": \"mood\", \"content\": \"今天我心情很安心\", \"source_index\": 0, \"source_quote\": \"今天我心情很安心\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"今天我心情很安心\", \"entities\": [\"今天\", \"我\", \"心情\", \"安心\"], \"keywords\": [\"心情\", \"安心\"], \"trigger_terms\": [\"心情\", \"安心\"]}]}"
+      ],
+      "original_sha256": "4d8ed4a9de5984e444d539f408d5af974bec6bca50c666cc745c74c29856079f",
+      "archive_sha256": "d47cdffd8d670afd14dd9bd4e815b8594ee99c56bd19172494caa569f7e7ae3b",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "failed",
+            2,
+            "invalid_output"
+          ]
+        ],
+        "observations": []
+      }
+    },
+    {
+      "suite": "emotions",
+      "run": 38990282631,
+      "round": 2,
+      "sha": "2925b63e6ea010ac287d4e388fd6255e7d202244",
+      "passed": false,
+      "requests": 3,
+      "errors": [],
+      "failed_phase": "actual_current_calendar_emotion_lifecycle",
+      "cases": [
+        {
+          "name": null,
+          "query": "今天我心情很轻松",
+          "raw": "😌平静 你今天心情很轻松呀，感觉怎么样呢？有什么特别开心的事情发生吗？",
+          "tts_text": "😌平静 你今天心情很轻松呀，感觉怎么样呢？有什么特别开心的事情发生吗？",
+          "chat_completed": true,
+          "output_replacement": null,
+          "source": null,
+          "state": null,
+          "error_category": null,
+          "model_output": null,
+          "stored": null
+        }
+      ],
+      "metadata": [
+        {
+          "request": 1,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "reply",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 23,
+            "prompt_tokens": 498,
+            "total_tokens": 521
+          }
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 2,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 97,
+            "prompt_tokens": 1565,
+            "total_tokens": 1662
+          }
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": null
+        },
+        {
+          "request": 3,
+          "response_model": "glm-4-flash-250414",
+          "purpose": "extraction",
+          "finished": [
+            {
+              "index": 0,
+              "finish_reason": "tool_calls"
+            }
+          ],
+          "usage": {
+            "completion_tokens": 118,
+            "prompt_tokens": 1674,
+            "total_tokens": 1792
+          }
+        }
+      ],
+      "extraction_outputs": [
+        "{\"memories\": [{\"category\": \"mood\", \"content\": \"今天我心情很轻松\", \"source_quote\": \"今天我心情很轻松\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"positive\", \"sensitive\": false, \"anchor\": \"心情很轻松\", \"entities\": [\"心情\"], \"keywords\": [\"轻松\"], \"trigger_terms\": [\"今天\"]}]}",
+        "{\"memories\": [{\"category\": \"mood\", \"content\": \"今天我心情很轻松\", \"source_index\": 0, \"source_quote\": \"今天我心情很轻松\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"positive\", \"sensitive\": false, \"anchor\": \"心情很轻松\", \"entities\": [\"心情\"], \"keywords\": [\"轻松\"], \"trigger_terms\": [\"今天\"], \"importance_weight\": 1, \"importance_evidence\": \"用户明确表达心情轻松\"}]}"
+      ],
+      "original_sha256": "d393ecf6521eea060d957524900e03ad6fa8c58015be1f9c90f0f453340a8b34",
+      "archive_sha256": "5c4794c27fbc96bd4316aa26f202a35494d6648761fcdb6bc4864ba2035c9302",
+      "sql": {
+        "integrity": [
+          [
+            "ok"
+          ]
+        ],
+        "facts": [],
+        "jobs": [
+          [
+            "failed",
+            2,
+            "invalid_output"
+          ]
+        ],
+        "observations": []
+      }
+    }
+  ],
+  "summary": {
+    "requests": 157,
+    "behavior_cases": 89,
+    "provider_errors": 0,
+    "all_runs_terminal": true,
+    "manual_review": "All 89 behavior case records read, including expected oversize/revocation paths. Tools 30 scenarios pass semantic review; retrieval structural pass has unsupported scene linkage; growth includes invented repeated witnessing and user/Mia fact confusion. Corrections fail persistence and mood proposals are rejected. No production switch or automatic P22 closure."
+  }
+}
