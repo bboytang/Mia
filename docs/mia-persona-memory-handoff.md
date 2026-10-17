@@ -13,7 +13,7 @@
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23数值被测代码为`a8dcaa7e1542069251886ab303e6c9156ec122cf`，性能run38992838190终态failure；同SHA服务274项通过（38992838211），原始结果及hash已归档。第二步原路径诊断`83823ab` / [38993671685](https://github.com/bboytang/Mia/actions/runs/38993671685)已success（仅诊断收集成功，非D08通过）：混合_scan p95 410.9ms、native编码13.4ms，竞争_scan锁等待398.6ms。profile确认逐条文本二元组与元数据解析为主要热点。下一步在原Scope/版本校验下缓存有界静态特征，验证等价和原门槛；当前无在途任务。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23数值被测代码为`a8dcaa7e1542069251886ab303e6c9156ec122cf`，性能run38992838190终态failure；同SHA服务274项通过（38992838211），原始结果及hash已归档。第二步原路径诊断`83823ab` / [38993671685](https://github.com/bboytang/Mia/actions/runs/38993671685)已success（仅诊断收集成功，非D08通过）：混合_scan p95 410.9ms、native编码13.4ms，竞争_scan锁等待398.6ms。profile确认逐条文本二元组与元数据解析为主要热点。静态特征候选e83d700已推送，容量38994055267已failure（10k长508.1ms/竞争1547.9ms，一项SQLite150.85ms仍超标；50k缓存抖动退化已保留）；服务38994053597（278项）、BGE38994053595（五报告）、身份38994053626（173项）、manager38994053602（154项）均success；push语法38994053583成功。全部句柄已收完。下一步独立只读WAL快照降低共享锁持有、移除重复COUNT扫描、超容量走原无缓存评分；P23仍未通过。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。

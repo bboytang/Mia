@@ -1,0 +1,115 @@
+{
+  "run_id": 38994055267,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38994055267",
+  "code_sha": "e83d700ec0a458295321402c6760fbfcd7fce6f4",
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-features-capacity-results.json.gz",
+  "raw_sha256": "b56a6c8f344edcaf66a00f121ba7b271d098da48f46e4870c21285e3413ff1ce",
+  "sha256": "a26e978fe5062de8bf3c963eb920bd3dd643432f1e722627b4719dd71ef9c96f",
+  "dataset_sha256": "4ccd01211153a3724727e3d653066e1437fa4220fb159a284bbf97fa98422319",
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 14.72492760001387,
+      "hybrid_worst_query_p95_ms": 129.41825679999397,
+      "competition_max_p95_ms": 362.01127699999915,
+      "rss_peak_mib": 283.5078125,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 5468336
+      },
+      "within_numeric_budgets": true,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      }
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 14.795541199987383,
+      "hybrid_worst_query_p95_ms": 128.65741300000195,
+      "competition_max_p95_ms": 670.4153109000003,
+      "rss_peak_mib": 306.0546875,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 6793600
+      },
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      }
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 133.49474779999468,
+      "hybrid_worst_query_p95_ms": 459.2289056000027,
+      "competition_max_p95_ms": 985.8525268000108,
+      "rss_peak_mib": 306.0546875,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 54688808
+      },
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      }
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 150.85123919998296,
+      "hybrid_worst_query_p95_ms": 508.10801440001114,
+      "competition_max_p95_ms": 1547.919870700008,
+      "rss_peak_mib": 359.125,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 67942072
+      },
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      }
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 763.922015799983,
+      "hybrid_worst_query_p95_ms": 10789.252370199983,
+      "competition_max_p95_ms": 21969.66794380005,
+      "rss_peak_mib": 478.234375,
+      "static_features": {
+        "entries": 19754,
+        "accounted_bytes": 134212680
+      },
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      }
+    }
+  ],
+  "remaining": [
+    "10k hybrid and contention exceed 400ms",
+    "one 10k exact-scan query at 150.851ms exceeds 150ms",
+    "50k cache churn regresses; exploratory, must retain",
+    "full-service Provider/Worker/fairness/shutdown still not measured"
+  ]
+}
