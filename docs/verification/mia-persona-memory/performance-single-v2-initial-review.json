@@ -1,0 +1,10 @@
+{
+  "run_id": 39075285283,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39075285283",
+  "rules_sha": "2f59ca3dbcaa150855714d50172c2dfd718a3290",
+  "runtime_sha": "cf464efc52c35cc3431711de99dcc1d44bd497f6",
+  "scope": "Initial acceptance reassessment before explicit dual reporting; superseded by later report including unchanged optimization targets",
+  "raw_sha256": "ea1b7c9d83c150de79bff70a43aac22d3c1bf55033e2265e7ee13309ee6fcff6",
+  "sha256": "f9f299cefd096b7e9f1c740cdd8635cbb60b6d8c8a95ec6367b98611a67c3651",
+  "artifact_file": "performance-single-v2-initial-reassessment.json.gz"
+}

@@ -14,7 +14,7 @@ import time
 import traceback
 
 import numpy as np
-from mia_performance_budgets import LIMITS, REVISION as ACCEPTANCE_REVISION, within_budgets
+from mia_performance_budgets import LIMITS, OPTIMIZATION_TARGETS, REVISION as ACCEPTANCE_REVISION, within_budgets
 
 from mia_companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from mia_companion.embedding import SemanticEncoder, MODEL_KEY, REVISION, DIMENSION
@@ -177,6 +177,7 @@ async def evaluate(args, report):
                                               'accounted_bytes': index._features.bytes}
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
                 row['within_numeric_budgets'] = within_budgets(row)
+                row['optimization_targets_met'] = within_budgets(row, limits=OPTIMIZATION_TARGETS)
             except Exception as error:
                 row.update(within_numeric_budgets=False, error_class=type(error).__name__, reason=str(error))
             finally:
@@ -187,6 +188,8 @@ async def evaluate(args, report):
         report['diagnostic_complete'] = all(row.get('diagnostic_complete', False) for row in report['capacity'])
         return
     report['numeric_gate_passed'] = all(row['within_numeric_budgets'] for row in report['capacity'] if row['required'])
+    report['optimization_targets_met'] = all(row.get('optimization_targets_met', False)
+        for row in report['capacity'] if row['required'])
 
 
 def main():
@@ -197,7 +200,7 @@ def main():
     parser.add_argument('--mode', choices=('capacity', 'diagnostic'), default='capacity')
     args = parser.parse_args()
     report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': args.mode, 'numeric_gate_passed': False,
-        'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS,
+        'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS, 'optimization_targets': OPTIMIZATION_TARGETS,
         'p23_complete': False, 'scope': 'P23 numerical module capacity, not full-service acceptance',
         'fixture_kind': 'Synthetic records and explicit synthetic metadata; replicated real BGE seed vectors; IO/CPU only, no semantic-quality claim',
         'remaining': ['shared full-service resource envelope', 'same-Provider paired first-sentence delta',

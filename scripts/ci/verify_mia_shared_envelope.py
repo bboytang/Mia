@@ -21,7 +21,7 @@ from mia_companion.memory import MemoryStore
 from mia_companion.retrieval import FEATURE_CACHE_BYTES
 from mia_companion.semantic import SemanticMemoryIndex
 from verify_mia_performance import populate, measure, summary
-from mia_performance_budgets import LIMITS, REVISION as ACCEPTANCE_REVISION, within_budgets
+from mia_performance_budgets import LIMITS, OPTIMIZATION_TARGETS, REVISION as ACCEPTANCE_REVISION, within_budgets
 
 
 ROOT = Path(os.environ['MIA_P23_REPORT_DIR'])
@@ -167,6 +167,7 @@ async def evaluate(report):
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
                 if report['mode'] == 'capacity':
                     row['within_numeric_budgets'] = within_budgets(row, shared=True)
+                    row['optimization_targets_met'] = within_budgets(row, shared=True, limits=OPTIMIZATION_TARGETS)
                 row['wall_seconds'] = time.monotonic() - started
                 row['python_cpu_seconds'] = time.process_time() - cpu_started
                 row['cgroup_after'] = group_state()
@@ -178,6 +179,7 @@ async def evaluate(report):
     assert int(events['oom']) == int(events['oom_kill']) == 0, 'Shared envelope had OOM events'
     if report['mode'] == 'capacity':
         report['shared_envelope_preflight_passed'] = all(row['within_numeric_budgets'] for row in report['capacity'])
+        report['optimization_targets_met'] = all(row['optimization_targets_met'] for row in report['capacity'])
     else:
         report['diagnostic_complete'] = True
 
@@ -186,7 +188,7 @@ def main():
     mode = os.environ.get('MIA_P23_MODE', 'capacity')
     assert mode in ('capacity', 'diagnostic', 'threads', 'thread-arm')
     report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': mode,
-        'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS,
+        'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS, 'optimization_targets': OPTIMIZATION_TARGETS,
         'shared_envelope_preflight_passed': False, 'diagnostic_complete': False,
         'p23_complete': False, 'provider_requests': 0,
         'runtime_profile': {'java_max_heap_mib': 512, 'java_max_metaspace_mib': 256,

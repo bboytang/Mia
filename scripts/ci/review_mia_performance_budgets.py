@@ -7,7 +7,7 @@ import json
 import os
 from pathlib import Path
 
-from mia_performance_budgets import LIMITS, REVISION, within_budgets
+from mia_performance_budgets import LIMITS, OPTIMIZATION_TARGETS, REVISION, within_budgets
 
 
 def validate_samples(value):
@@ -35,11 +35,14 @@ def review(path, shared):
     rows = [{'size': row['size_per_frontend_scope' if shared else 'size_per_scope'],
         'profile': row['profile'], 'required': row.get('required', True),
         'original_within_numeric_budgets': row['within_numeric_budgets'],
-        'within_numeric_budgets_v2': within_budgets(row, shared=shared)} for row in report['capacity']]
+        'within_numeric_budgets_v2': within_budgets(row, shared=shared),
+        'optimization_targets_met': within_budgets(row, shared=shared, limits=OPTIMIZATION_TARGETS)}
+        for row in report['capacity']]
     return {'runtime_sha': report['code_sha'], 'source': str(path),
         'raw_sha256': hashlib.sha256(raw).hexdigest(), 'archive_sha256': hashlib.sha256(archive).hexdigest(),
         'original_gate_passed': report['shared_envelope_preflight_passed' if shared else 'numeric_gate_passed'],
         'numeric_gate_passed_v2': all(row['within_numeric_budgets_v2'] for row in rows if row['required']),
+        'optimization_targets_met': all(row['optimization_targets_met'] for row in rows if row['required']),
         'capacity': rows}
 
 
@@ -50,13 +53,15 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     report = {'acceptance_revision': REVISION, 'limits': LIMITS,
+        'optimization_targets': OPTIMIZATION_TARGETS,
         'rules_sha': os.environ.get('GITHUB_SHA'), 'p23_complete': False,
         'scope': 'Reassessment only; no new inference, Provider request or original report modification',
         'module': review(args.module, False), 'shared': review(args.shared, True)}
     assert report['module']['runtime_sha'] == report['shared']['runtime_sha']
     report['reassessment_complete'] = True
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
-    print(json.dumps({key: report[key]['numeric_gate_passed_v2'] for key in ('module', 'shared')}))
+    print(json.dumps({key: {'acceptance_passed': report[key]['numeric_gate_passed_v2'],
+        'optimization_targets_met': report[key]['optimization_targets_met']} for key in ('module', 'shared')}))
 
 
 if __name__ == '__main__':
