@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第十四步运行83e837a四回归全通过（服务288/实际BGE五报告/身份173/manager154）、本地20专项通过；模块10k竞争435ms、共同10k竞争779ms仍超400ms，两容量均failure。两Scope各10k缓存完整，必测RSS与共同2GiB达标；50k探索延迟/RSS不通过。当前无在途任务，下一步同环境配对诊断原生编码线程与扫描竞争；详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
+- **P23进行中，整体未验收**：第十四步运行83e837a四回归全通过（服务288/实际BGE五报告/身份173/manager154）、本地20专项通过；模块10k竞争435ms、共同10k竞争779ms仍超400ms，两容量均failure。两Scope各10k缓存完整，必测RSS与共同2GiB达标；50k探索延迟/RSS不通过。第十五步ABBA诊断39073672324已收齐，1线程降低竞争但p95仍665–680ms，本夹具向量/结果精确一致；当前无在途任务，下一步最小线程候选须以新SHA正式验证；详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
@@ -62,3 +62,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 第十五步已新增仅CI使用的threads诊断模式：同父组ABBA四独立进程（2/1/1/2线程），真实向量/完整检索结果与阶段耗时分开核对，运行实现仍83e837a。语法/AST/Shell/YAML/diff通过，唯一GitHub句柄随后记录；当前正式容量仍failure，不晋升候选。
 
 第十五步观察器`3d348e340326a6dfa3c006a9dca250c6a67dfee0`已推送，唯一threads诊断[39073672324](https://github.com/bboytang/Mia/actions/runs/39073672324)在途；push语法39073666959已完成。运行实现仍83e837a、正式两容量仍failure。先收同一诊断句柄，暂不修改运行代码。
+
+第十五步完成：观察器3d348e3 / [唯一诊断39073672324](https://github.com/bboytang/Mia/actions/runs/39073672324) success仅代表完整采集，原文/哈希见performance-thread-pairs-review.json及gzip。四轮2/1/1/2线程实际运行，本夹具9向量逐位相同、六检索响应完全一致；1线程减少竞争扫描/整轮CPU，却使单路编码变慢，并发仍超400ms。未改运行默认、未晋升候选，运行仍83e837a；当前无在途任务。下一步若实现2→1最小候选，须新SHA四回归与模块/共同容量正式衡量取舍，不能以本诊断称通过。先前在途/下一步段落仅历史。
