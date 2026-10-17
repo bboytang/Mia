@@ -17,7 +17,7 @@ on:
       test_model:
         description: Explicit isolated comparison only; configured preserves existing test model
         type: choice
-        options: [configured, glm-5.3-flash, glm-5.3-flashx]
+        options: [configured, glm-5.3-flash, glm-5.3-flashx, glm-4.7-flash]
         default: configured
 permissions:
   contents: read

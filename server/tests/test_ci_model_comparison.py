@@ -18,7 +18,7 @@ class ModelComparisonTests(unittest.TestCase):
             self.assertEqual(comparison.output_tokens(), 768)
             self.assertEqual(comparison.context_window(), 8192)
 
-    def test_each_authorized_model_uses_its_actual_required_request_policy(self):
+    def test_each_authorized_model_uses_frozen_comparison_request_policy(self):
         for model in comparison.APPROVED_MODELS:
             with self.subTest(model=model), patch.dict(os.environ, {'MIA_TEST_MODEL_OVERRIDE': model}):
                 provider = SimpleNamespace(model_name=model)

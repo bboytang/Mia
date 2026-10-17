@@ -4,7 +4,7 @@ import os
 import re
 
 
-APPROVED_MODELS = ('glm-5.3-flash', 'glm-5.3-flashx')
+APPROVED_MODELS = ('glm-5.3-flash', 'glm-5.3-flashx', 'glm-4.7-flash')
 
 
 def safe_provider_error(error):
@@ -50,8 +50,8 @@ def configure_provider(provider):
         raise ValueError('Actual provider differs from authorized comparison model')
 
     def enable_required_thinking(params):
-        # These model IDs only support enabled thinking. Preserve the original
-        # Provider/SDK and raw output; override this one CI request policy.
+        # Freeze enabled thinking for this isolated comparison, including 4.7.
+        # This does not claim all models require it. Preserve Provider/raw output.
         body = params.setdefault('extra_body', {})
         body['thinking'] = {'type': 'enabled'}
         if params.get('tools'):
@@ -60,4 +60,6 @@ def configure_provider(provider):
     return {'model': model, 'thinking': 'enabled', 'tool_stream_for_functions': True,
             'output_tokens': output_tokens(), 'ci_context_window': context_window(),
             'scope': 'Explicit isolated comparison only; production configuration and Secrets unchanged',
-            'official_source': 'https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash'}
+            'official_source': ('https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash'
+                                if model == 'glm-4.7-flash' else
+                                'https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash')}
