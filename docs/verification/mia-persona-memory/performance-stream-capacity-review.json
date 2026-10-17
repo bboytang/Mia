@@ -1,0 +1,179 @@
+{
+  "run_id": 39072833943,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39072833943",
+  "code_sha": "83e837a1eae2ce7b304561d204ac5255d57dbb4e",
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-stream-capacity-results.json.gz",
+  "raw_sha256": "875376f28f3f43163fdea1aedfd397e34f5ff2d760bd6a0b1c6a4ee01c57d59a",
+  "sha256": "589693b9738e8db87732917cf80e105ac811bb1face3375da9148b23bd70cb86",
+  "sample_group_counts": [
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15
+  ],
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 9.840580200000204,
+      "hybrid_worst_query_p95_ms": 61.39451500000064,
+      "competition_max_p95_ms": 143.23926079999723,
+      "rss_peak_mib": 283.55078125,
+      "within_numeric_budgets": true,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 16728664,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 7342346
+      }
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 11.032148399988273,
+      "hybrid_worst_query_p95_ms": 63.383222200002365,
+      "competition_max_p95_ms": 158.4832413999976,
+      "rss_peak_mib": 316.26953125,
+      "within_numeric_budgets": true,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 22958536,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 9064934
+      }
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 85.1907254000082,
+      "hybrid_worst_query_p95_ms": 232.0957068000098,
+      "competition_max_p95_ms": 425.10566780001113,
+      "rss_peak_mib": 341.890625,
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 162231808,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 73428818
+      }
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 88.47610100000338,
+      "hybrid_worst_query_p95_ms": 243.87857279999707,
+      "competition_max_p95_ms": 435.22117650000206,
+      "rss_peak_mib": 381.203125,
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 224148760,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 90655406
+      }
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 435.6956642,
+      "hybrid_worst_query_p95_ms": 3069.3692413999884,
+      "competition_max_p95_ms": 6247.888884699989,
+      "rss_peak_mib": 559.6171875,
+      "within_numeric_budgets": false,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "database_bytes": 1119645384,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      }
+    }
+  ],
+  "cgroup_before": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "24035328",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 222848\nuser_usec 107926\nsystem_usec 114922\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 1\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0"
+  },
+  "cgroup_after": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "1712050176",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 260294912\nuser_usec 224791133\nsystem_usec 35503778\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 2227\nnr_throttled 191\nthrottled_usec 7573702\nnr_bursts 0\nburst_usec 0"
+  }
+}

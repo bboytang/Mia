@@ -1,0 +1,131 @@
+{
+  "code_sha": "83e837a1eae2ce7b304561d204ac5255d57dbb4e",
+  "local_focused_tests": 20,
+  "runs": [
+    {
+      "id": 39072828991,
+      "url": "https://github.com/bboytang/Mia/actions/runs/39072828991",
+      "conclusion": "success",
+      "tests": 288,
+      "failures": 0,
+      "errors": 0,
+      "artifact_file": "performance-stream-service.log.gz",
+      "raw_sha256": "839e5eb95e942bdfe711c9e41f348b9d45828aecd765293bbfa7ac7dcf2648a6",
+      "sha256": "c1a22f6c63984e140e8b6b46a4d76dc9ce7a83ed0dcdf6c1898a1c265ecb907c"
+    },
+    {
+      "id": 39072828973,
+      "url": "https://github.com/bboytang/Mia/actions/runs/39072828973",
+      "conclusion": "success",
+      "tests": 173,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": {
+        "TEST-xiaozhi.modules.device.MiaPrivateTransportTest.xml": "c981f19d6f624d80cddda3cb586a69e074aae5c6c25975c6827a1d9fc558d062",
+        "TEST-xiaozhi.modules.security.config.ShiroConfigTest.xml": "16238a6de842fda7ce414ae8e5bbd19c10483ed171252b19f346098f14033002",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest.xml": "85a23f7bb515a4e31b0492a50de7f18bc08bcb0183a6755825b0b70c951574b5",
+        "TEST-xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest.xml": "f2fcce1a1603b6429f7817ef2f401a1a2a3cbf8420a143e6b92643742ebcdb09",
+        "TEST-xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest.xml": "074450a1a8f98b37209ac8afb3805fcc1c2ae6421f84aed0ceb274bbea5fc9a9",
+        "TEST-xiaozhi.modules.device.controller.DeviceControllerTest.xml": "64e2dc58a74227e9888b9b1c14280f9205e338bc80f221fcf2204d599f8ed5ba",
+        "TEST-xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest.xml": "3f475b9526cbf223e0f18c8f98ff7e4bf5c1d9294eacda724db6bee175368476",
+        "TEST-xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest.xml": "6bab1f60372a880f1f11145c48be68738ef5491acdb6de185dfdaef1e0d95214",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest.xml": "cae18eeff26abe3c65d0986085dc36d6dfc617d4da78254d6bc0ab2ad165515f",
+        "TEST-xiaozhi.common.utils.SensitiveDataUtilsTest.xml": "bb7065e92579c21be937b12cae716971ac0d04c6d79e48aac805acd8ee5303b5",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest.xml": "42b26e34e50dc57457aa13032e4134c3c0276635deb49c4382e056e6d797a503",
+        "TEST-xiaozhi.modules.device.MiaBindingAuthorizationTest.xml": "888714f2e206d0a3ad0cc095769cec50d252c06a4a65acb2d2225382c4f82259",
+        "TEST-xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest.xml": "e9bfd0d714a3b9acf9c2e6ee7f225ea493fd0b6f4765a3f8f9d6ef9d4c67ae98",
+        "TEST-xiaozhi.modules.agent.dto.AgentUpdateDTOTest.xml": "088c9475b9177c7fd8c46685a1d45cbe02d7d54edd43dad8496befc924e58486",
+        "TEST-xiaozhi.common.redis.RedisSerializationTest.xml": "d5f29a67857211d354a7a0a728a21add67498556877b4168087f715e09d237dc",
+        "TEST-xiaozhi.modules.device.MiaPrivateChatTest.xml": "9eb776be051fda7ccd283cd59c196cb206b876e43d8f07ea77cfd8b7f99647db",
+        "TEST-xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest.xml": "240bba98829f126040576bd041f24e0b9c8a0d66a121ec6002461ceff3f741e5",
+        "TEST-xiaozhi.modules.sys.loginControllerTest.xml": "882f040166740262c5b8d51e2215fd10508b6844f27926540a7eda079bb0d231",
+        "TEST-xiaozhi.modules.device.DeviceTest.xml": "ba6e597795a896f76912c67cf3ac05ff3bcef3e3502f69bd39c3863b60e8544d",
+        "TEST-xiaozhi.modules.device.MiaPrivateTlsTest.xml": "a23cabd4589551dba1546f294d1f5f4927d987928d29048c95e6f189e6f5892c",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest.xml": "8d032fad358eba1b0a6689c1f5ef34c49c9b54171662319547008d6990382b99",
+        "TEST-xiaozhi.common.utils.AESUtilsTest.xml": "1c10dc29e18f0b422f52eaffad722319b135b75fcdd0e4a7af768188d5170ce8",
+        "TEST-xiaozhi.common.service.impl.BaseServiceImplTest.xml": "b8a45077f0689b8bd50ee2e957c4f26dda98c76fd629fd7d4ffd15a12793731e",
+        "TEST-xiaozhi.modules.config.service.impl.ConfigServiceImplTest.xml": "28a5f228c69a0c574cee2df6af74b8a73fdf95ce17da4e2c0170976783086223",
+        "TEST-xiaozhi.common.utils.JsonUtilsTest.xml": "b33920053e2f4989e5dfba8f05e9ed7f4877b659b012a38e0037e3697a90aca1",
+        "TEST-xiaozhi.modules.device.MiaPrivateAuthorizationTest.xml": "ae25aa61bbb1cb0957b411e4a697b7c82fb8235080bc9217d544761bbd08ae49",
+        "TEST-xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest.xml": "5a63363cca47dfc5dde519402adb0b6cbd536e97490a9316e77b7fca47e11233",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest.xml": "8207868da04e1d2d6bda0a45e47534136ef517ca219cb8da05f47c32f2bc02e1"
+      },
+      "artifact_file": "performance-stream-identity-binding-results.json.gz",
+      "raw_sha256": "9be7f0cf3b5375db037c54c2acd9a10bd06e3c48dcac222beb6d462653bd0b09",
+      "sha256": "743ead62656c84c6d165bb14ea54d4b2dfd095e40b8c27492bc1ce9180e999ec"
+    },
+    {
+      "id": 39072828956,
+      "url": "https://github.com/bboytang/Mia/actions/runs/39072828956",
+      "conclusion": "success",
+      "tests": 154,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": {
+        "TEST-xiaozhi.modules.security.config.ShiroConfigTest.xml": "b990bee309ab0598b27c7b896986be6b4ef45cc434ccff26fdd45245903217b9",
+        "TEST-xiaozhi.modules.device.MiaIdentityBaselineTest.xml": "69835f0373ec49e5d6e58acc0cbcd354b5c2bba2ac274915f8e54bdd6199522c",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest.xml": "fc6294224bcf8758ff8a88d4856b66d951191882a584bce07966cb4dba4eed35",
+        "TEST-xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest.xml": "188e435c4c91e567f341aa7bb74c4775e0bae1d2ed3f2dae06bfdd21ba41c793",
+        "TEST-xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest.xml": "62126193363ea4798925535a6f4c9800620de32334b5dfec99b76b5959e562c9",
+        "TEST-xiaozhi.modules.device.controller.DeviceControllerTest.xml": "96211f74095fb538ea4d0ffc680be04c7569319fafacf2d2df747d42b0b20024",
+        "TEST-xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest.xml": "fb7e4963816c76a61264fcc64f8ea50bd004811444de8360c2deea69d078b236",
+        "TEST-xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest.xml": "49bcbb0fbb5fb9c4e5cdb9e814eaf23aabbc86b96f93d5ccc84100edf1dbef12",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest.xml": "ad95c7f0369f65728aae270e25340c4379955a0c44463436109ff4cfe1002fbf",
+        "TEST-xiaozhi.common.utils.SensitiveDataUtilsTest.xml": "fb620bacd04624b2d481b94f78b5d9d86ae84ff18656317142091bafa65a3191",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest.xml": "1e044ec1e695eb8fef82d2498f5a38d55cd350b9859cfdf078f00c3d0e47a2ff",
+        "TEST-xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest.xml": "b97a7c75edd4eaf401e69a2513a7ac73b49a0e01c456d4940c466178f045d621",
+        "TEST-xiaozhi.modules.agent.dto.AgentUpdateDTOTest.xml": "d866f0692a9f88da94229740b4c41c63224bca0f24b9e7cd42871e6f6c0263e3",
+        "TEST-xiaozhi.common.redis.RedisSerializationTest.xml": "9fa8ce22d2e4ae7ee2f997f4aadb56b255f8570d4ad621c2ece303838ec39ba2",
+        "TEST-xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest.xml": "f8e2a4bd4a29138a385efae5646f3b327d96f1d59c17001502340a2eb576fd85",
+        "TEST-xiaozhi.modules.sys.loginControllerTest.xml": "7a27fefd9735e7f2583162586eb0b80c09ba8e6542314c66485c3d9f2cea2f2b",
+        "TEST-xiaozhi.modules.device.DeviceTest.xml": "1baddc4a694878dc8651ca1add018763438ddc8f8ae0e587713426a260de5a40",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest.xml": "d661d34b90a536ddd425aa30e704712142de6d293bd85fb845f31be13281c08a",
+        "TEST-xiaozhi.common.utils.AESUtilsTest.xml": "26181102a30b156ebf64f6df6f5c1458c8117ac53cde041b53c641fc399aa990",
+        "TEST-xiaozhi.common.service.impl.BaseServiceImplTest.xml": "5129dbe4586e09bf0f489a7b728c1827c109012777f44000149248938f302388",
+        "TEST-xiaozhi.modules.config.service.impl.ConfigServiceImplTest.xml": "b23460f43570db8d0dca8bb137fa4347bdd06c57f905d7e4f661c5d44fed587b",
+        "TEST-xiaozhi.common.utils.JsonUtilsTest.xml": "a1b7f0c0f11e76d381f2d2e77fdccedba23bada3b74ccca7c28fca72d020e9c2",
+        "TEST-xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest.xml": "a7a197683ff0d7901375d3cdee90cd78808e37a17ab1ee76ddc45718ddefc1ea",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest.xml": "e26a6719a4b535a530dbfd86a27afc7e30363be3847db3c854d2f6f311d815b8"
+      }
+    },
+    {
+      "id": 39072828959,
+      "url": "https://github.com/bboytang/Mia/actions/runs/39072828959",
+      "conclusion": "success",
+      "reports": [
+        {
+          "artifact_file": "performance-stream-bge-vector-results.json.gz",
+          "passed": true,
+          "raw_sha256": "05680134a1febc03513bdda96c352adaef20e511dcc3a067c8c5bfd230c87d66",
+          "sha256": "105264c907c3f415495b8d5c4093bb7218ee0e27c0a405ebe200ee6c9c798d59"
+        },
+        {
+          "artifact_file": "performance-stream-bge-reply-results.json.gz",
+          "passed": true,
+          "raw_sha256": "43890fbaf63d7c51fbdd292fe0e8c4391f0f7492213587d03c627f7a7b045056",
+          "sha256": "bd71376483cb6abf79b7d55aaacc4bf8183275f07532c71d620ebd671e27367c"
+        },
+        {
+          "artifact_file": "performance-stream-bge-extraction-results.json.gz",
+          "passed": true,
+          "raw_sha256": "1fd7f8f57ad04f48f9ff47629b97c1e839741e832af3e7424e918b2ef40d8326",
+          "sha256": "2d82d41f01bd54867d24176d0cd4226b13320e78c465baa1b80452893d737748"
+        },
+        {
+          "artifact_file": "performance-stream-bge-context-results.json.gz",
+          "passed": true,
+          "raw_sha256": "6f1187c5d9737dfba823e3b877426d4ac173a7e140588f633a22ed6e8a4c1077",
+          "sha256": "a3ca913709ef5b866e16e26767b645c21f9cb6cd4424a16ed132c1185f5264ed"
+        },
+        {
+          "artifact_file": "performance-stream-bge-retrieval-results.json.gz",
+          "passed": true,
+          "raw_sha256": "932f7dc317cd51007bdc62ae26b93e90f1d342cbd9e1796a91cec5084dbb33cd",
+          "sha256": "420cd2eec646fae512d39a932fb0b44a864049f38c162995fb0151bd5e74bcbc"
+        }
+      ]
+    }
+  ]
+}
