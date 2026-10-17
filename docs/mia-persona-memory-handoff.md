@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中**：2026-10-17用户批准开始P23并要求每步记录/交接。当前先完成固定D08数值入口，详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始，不重新追加P22语义测试或模型比较。
+- **P23进行中**：2026-10-17用户批准开始P23并要求每步记录/交接。第一步固定D08入口及有效容量测量完成，但数值门槛未通过，详见[性能进度和下一项动作](verification/mia-persona-memory/performance.md)。10k长文本混合检索p95约1057ms、竞争约2664ms，需定位瓶颈；全服务/Provider首句/真实Worker公平性仍未测。P24未开始，不重新追加P22语义测试或模型比较。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- 最新实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23数值被测代码为`a8dcaa7e1542069251886ab303e6c9156ec122cf`，性能run38992838190终态failure；同SHA服务274项通过（38992838211），原始结果及hash已归档。当前没有在途测试任务。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。

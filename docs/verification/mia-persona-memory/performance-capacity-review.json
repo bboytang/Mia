@@ -1,0 +1,102 @@
+{
+  "run_id": 38992838190,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38992838190",
+  "code_sha": "a8dcaa7e1542069251886ab303e6c9156ec122cf",
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "raw_sha256": "bac8401cda7a4757813868374ea18a3c9ecdf943d05081327145962a88ac19ac",
+  "artifact_file": "performance-capacity-results.json.gz",
+  "artifact_sha256": "e41662526dee666823330d2cb2dba4e726f1ae6b87e1b6de51bef8df12c0c370",
+  "dataset_sha256": "4ccd01211153a3724727e3d653066e1437fa4220fb159a284bbf97fa98422319",
+  "samples": "Each query warmup once, then five measurements; three fixed queries; both concurrent streams have 15 raw samples",
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 12.585787400001891,
+      "hybrid_worst_query_p95_ms": 154.84707499999786,
+      "hybrid_p50_ms": 147.23786999999788,
+      "competing_max_p95_ms": 454.0112217000086,
+      "rss_peak_mib": 284.25,
+      "database_bytes": 16728664,
+      "integrity": "ok",
+      "rebuild_indexed": 32,
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 14.221376200003988,
+      "hybrid_worst_query_p95_ms": 197.2134533999963,
+      "hybrid_p50_ms": 181.86651500002426,
+      "competing_max_p95_ms": 1102.8852145999963,
+      "rss_peak_mib": 310.85546875,
+      "database_bytes": 22958536,
+      "integrity": "ok",
+      "rebuild_indexed": 32,
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 126.6335636000008,
+      "hybrid_worst_query_p95_ms": 709.3331435999914,
+      "hybrid_p50_ms": 704.2302849999942,
+      "competing_max_p95_ms": 1462.710077100013,
+      "rss_peak_mib": 310.85546875,
+      "database_bytes": 162231808,
+      "integrity": "ok",
+      "rebuild_indexed": 32,
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 136.55944499999464,
+      "hybrid_worst_query_p95_ms": 1057.4138676000018,
+      "hybrid_p50_ms": 1049.710847,
+      "competing_max_p95_ms": 2663.703531799999,
+      "rss_peak_mib": 310.85546875,
+      "database_bytes": 224148760,
+      "integrity": "ok",
+      "rebuild_indexed": 32,
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 738.5450300000002,
+      "hybrid_worst_query_p95_ms": 5038.19610820002,
+      "hybrid_p50_ms": 4941.6513099999975,
+      "competing_max_p95_ms": 10298.428073100007,
+      "rss_peak_mib": 333.85546875,
+      "database_bytes": 1119645384,
+      "integrity": "ok",
+      "rebuild_indexed": 32,
+      "within_numeric_budgets": false
+    }
+  ],
+  "observations": [
+    "10k pure SQLite exact scans meet 150ms for all three queries in both profiles",
+    "10k hybrid pipelines exceed 400ms in both profiles",
+    "All four required cases exceed 400ms under two module foregrounds plus rebuild",
+    "50k is exploratory and does not determine required gate pass/fail",
+    "All five rebuilds indexed 32 records; all five SQLite integrity checks ok; no cgroup OOM observed",
+    "Peak process RSS 333.855 MiB; cgroup peak 1489862656 bytes includes page cache and is not encoder RSS",
+    "Actual function-level root cause not profiled; scope-local metadata and hybrid scoring are candidates based on source inspection",
+    "No production runtime change, Provider request, real-manager capacity/fairness or full-service acceptance in this numerical gate"
+  ],
+  "service_regression": {
+    "run_id": 38992838211,
+    "url": "https://github.com/bboytang/Mia/actions/runs/38992838211",
+    "conclusion": "success",
+    "code_sha": "a8dcaa7e1542069251886ab303e6c9156ec122cf",
+    "tests_passed": 274
+  }
+}
