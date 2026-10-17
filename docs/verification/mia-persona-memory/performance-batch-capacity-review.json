@@ -1,0 +1,121 @@
+{
+  "run_id": 38997698723,
+  "url": "https://github.com/bboytang/Mia/actions/runs/38997698723",
+  "code_sha": "24d06b033e4137ba45a396498b614bcba91021db",
+  "conclusion": "failure",
+  "numeric_gate_passed": false,
+  "p23_complete": false,
+  "artifact_file": "performance-batch-capacity-results.json.gz",
+  "raw_sha256": "01060b6977b9ae5b3bcd734f8ea18d977a1357c5d4658845aab888c9df7001c1",
+  "sha256": "71da8f73a11e8cbe274b10b32bd24ac45680edc9d3f1a90535b143cb3909bb7c",
+  "dataset_sha256": "4ccd01211153a3724727e3d653066e1437fa4220fb159a284bbf97fa98422319",
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 10.138897200022257,
+      "hybrid_worst_query_p95_ms": 74.7349108000094,
+      "competition_max_p95_ms": 185.6582917999958,
+      "rss_peak_mib": 283.890625,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 5580336
+      },
+      "database_bytes": 16728664,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": true
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 11.697978000006515,
+      "hybrid_worst_query_p95_ms": 82.86796239999603,
+      "competition_max_p95_ms": 200.34362379997788,
+      "rss_peak_mib": 313.83984375,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 6905600
+      },
+      "database_bytes": 22958536,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": true
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 84.33949179999445,
+      "hybrid_worst_query_p95_ms": 341.30172100001346,
+      "competition_max_p95_ms": 698.0147776000307,
+      "rss_peak_mib": 330.80859375,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 55808808
+      },
+      "database_bytes": 162231808,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 94.5638527999904,
+      "hybrid_worst_query_p95_ms": 387.1885926000118,
+      "competition_max_p95_ms": 764.1003142000044,
+      "rss_peak_mib": 369.17578125,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 69062072
+      },
+      "database_bytes": 224148760,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 437.78014739998525,
+      "hybrid_worst_query_p95_ms": 3058.3636289999617,
+      "competition_max_p95_ms": 6319.083047999936,
+      "rss_peak_mib": 497.2734375,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      },
+      "database_bytes": 1119645384,
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "within_numeric_budgets": false
+    }
+  ],
+  "cgroup": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "1650925568",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 279484586\nuser_usec 242163680\nsystem_usec 37320906\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 2393\nnr_throttled 181\nthrottled_usec 8755122\nnr_bursts 0\nburst_usec 0"
+  }
+}

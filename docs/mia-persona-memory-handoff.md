@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中、数值未通过**：已完成热点诊断、有界静态特征缓存、只读快照及删除/WAL并发修正。当前d2bfd7b四项相关回归全通过，但10k长文本混合检索p95约474ms、两路+重索引竞争约1868ms，超过400ms；纯SQLite约106ms和必测RSS约412MiB达标，50k探索RSS约580MiB超标。详见[完整性能进度/原文/下一步](verification/mia-persona-memory/performance.md)。P24未开始，不追加P22语义测试或模型比较。
+- **P23进行中、数值未通过**：第六步批量精确评分/前台优先候选24d06b0四回归全通过；1k短/长、10k单路混合/SQLite/RSS达标，但10k两路竞争p95约698/764ms仍超400ms。第七步热点诊断38998096508在途，详见[完整性能进度/原文/下一步](verification/mia-persona-memory/performance.md)。P24未开始，不追加P22语义测试或模型比较。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前代码`d2bfd7b15d2ff99b158fdb43e87506451257e131`，容量[38995549068](https://github.com/bboytang/Mia/actions/runs/38995549068)已failure；同SHA服务280/BGE五报告/身份173/manager154全部success，精确run、原文及hash见performance-wal-*。第五步校正观察器883a76f / 38996970741已success、所有原样本计数一致；热缓存动态评分和查询/后台编码竞争确认为剩余成本，缓存锁等待近0。原文/hash见performance-hot-*，当前无在途任务。下一步小批量精确评分与同Store前台检索优先，保留原任务/原生超时及数学/权限语义。早期缓存退化和并发删除失败保留，不倒改为通过。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23当前实现`24d06b033e4137ba45a396498b614bcba91021db`，容量[38997698723](https://github.com/bboytang/Mia/actions/runs/38997698723)已failure；服务285/BGE五报告/身份173/manager154全部success，原文/hash见performance-batch-*。唯一在途诊断[38998096508](https://github.com/bboytang/Mia/actions/runs/38998096508)被测07d43df（仅文档后继，运行仍24d06b0）；收完后依据profile决定下一处最小修改。旧失败保留，不倒改为通过。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -50,7 +50,3 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 ## 接续操作
 
 先读`AGENTS.md`、本文件及验收决定，再检查`git status --short --branch`、HEAD、远端实际SHA及用户最新授权。**当前新指令已批准P23；从性能进度继续，P22保留用户通过决定及原始失败。** 历史工作记录、旧交接压缩包或验证报告里的“下一步/在途”描述均不构成当前执行指令。
-
-第六步批量精确评分/同Store前台优先候选已实现待CI；本地标准库3项/语法通过，新增批量oracle、取消恢复、尾部校验测试待GitHub。仍以d2bfd7b作为已收完的失败容量基线；新候选SHA/run随后补记，不提前宣称达标。
-
-第六步候选24d06b033e4137ba45a396498b614bcba91021db已推送；固定容量38997698723、服务38997691723、BGE38997691647、身份38997691675、manager38997691664均in_progress。同一数值组串行，无重复dispatch；等待这些精确SHA结果，暂不变更运行实现。
