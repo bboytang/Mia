@@ -255,6 +255,26 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
             await asyncio.sleep(0.01)
         self.assertEqual(self.index._slots._value, 2)
 
+    async def test_batch_topk_matches_all_scalar_sources_across_boundaries_and_ties(self):
+        for i in range(530):
+            prefix = '干扰记录' if i % 7 == 0 else '散步练琴记录'
+            self.fact(prefix + str(i), triggers=['散步' if i % 3 else '练琴'],
+                keywords=['线索' + str(i % 17)], emotion=(i % 5) / 4)
+        while (await self.index.rebuild_batch(self.scope, self.auth))['has_more']:
+            pass
+        for query in ('散步', '练琴', '完全无关'):
+            cached = await self.index.retrieve(self.scope, self.auth, query)
+            with patch('server.companion.retrieval.FEATURE_CACHE_ENTRIES', 1):
+                scalar = await self.index.retrieve(self.scope, self.auth, query)
+            self.assertEqual(cached, scalar)
+        vector = self.encoder.encode('散步', query=True)
+        state = self.index._snapshot(self.scope)
+        for limit in (1, 24):
+            cached = self.index._scan(self.scope, state, vector, limit, None, '散步')
+            with patch('server.companion.retrieval.FEATURE_CACHE_ENTRIES', 1):
+                scalar = self.index._scan(self.scope, state, vector, limit, None, '散步')
+            self.assertEqual(cached, scalar)
+
     async def test_eight_clue_limit_keeps_order_and_does_not_hide_invalid_tail(self):
         for i in range(10):
             self.fact('记录' + str(i), triggers=['散步'], keywords=['线索' + str(i)])

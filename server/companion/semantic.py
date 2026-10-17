@@ -234,8 +234,16 @@ class SemanticMemoryIndex:
                     continue
                 prepared = [self._features.prepare(scope, expected, row) for row in batch]
                 values, matched, starts = batch_signals(query_text, batch, prepared, query_codes)
-                for i, row in enumerate(batch):
-                    yield row, (values[i], matched, int(starts[i]), prepared[i])
+                # A source's global top-k must be in its batch top-k. Rows are
+                # already ID-descending, so stable score ordering preserves ties.
+                sources = (np.fromiter((row['original_cosine'] for row in batch), float, count=len(batch)),
+                           np.fromiter((row['expanded_cosine'] for row in batch), float, count=len(batch)),
+                           values[:, 1], values[:, 2])
+                positions = set()
+                for scores in sources:
+                    positions.update(np.argsort(-scores, kind='stable')[:limit].tolist())
+                for i in sorted(positions):
+                    yield batch[i], (values[i], matched, int(starts[i]), prepared[i])
 
         for record, dynamic in batches():
             score, expanded_score = record['original_cosine'], record['expanded_cosine']
