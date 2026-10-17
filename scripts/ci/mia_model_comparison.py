@@ -4,7 +4,7 @@ import os
 import re
 
 
-APPROVED_MODELS = ('glm-5.3-flash', 'glm-5.3-flashx', 'glm-4.7-flash')
+APPROVED_MODELS = ('glm-5.3-flash', 'glm-5.3-flashx', 'glm-4.7-flash', 'glm-4-flash-250414')
 
 
 def safe_provider_error(error):
@@ -48,6 +48,15 @@ def configure_provider(provider):
         return None
     if provider.model_name != model:
         raise ValueError('Actual provider differs from authorized comparison model')
+
+    if model == 'glm-4-flash-250414':
+        # Keep the installed Provider's original non-thinking request policy.
+        # Do not apply the newer models' thinking/tool-stream overrides.
+        return {'model': model, 'thinking': 'original_provider_policy',
+                'tool_stream_for_functions': False,
+                'output_tokens': output_tokens(), 'ci_context_window': context_window(),
+                'scope': 'Explicit isolated comparison only; production configuration and Secrets unchanged',
+                'official_source': 'https://docs.bigmodel.cn/cn/guide/models/free/glm-4-flash-250414'}
 
     def enable_required_thinking(params):
         # Freeze enabled thinking for this isolated comparison, including 4.7.

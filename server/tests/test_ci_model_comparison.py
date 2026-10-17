@@ -20,6 +20,8 @@ class ModelComparisonTests(unittest.TestCase):
 
     def test_each_authorized_model_uses_frozen_comparison_request_policy(self):
         for model in comparison.APPROVED_MODELS:
+            if model == 'glm-4-flash-250414':
+                continue
             with self.subTest(model=model), patch.dict(os.environ, {'MIA_TEST_MODEL_OVERRIDE': model}):
                 provider = SimpleNamespace(model_name=model)
                 envelope = comparison.configure_provider(provider)
@@ -37,6 +39,17 @@ class ModelComparisonTests(unittest.TestCase):
                 plain = {'model': model}
                 provider._apply_thinking_disabled(plain)
                 self.assertNotIn('tool_stream', plain['extra_body'])
+
+    def test_dated_flash_preserves_installed_provider_policy(self):
+        original = lambda params: params.update(original=True)
+        provider = SimpleNamespace(model_name='glm-4-flash-250414', _apply_thinking_disabled=original)
+        with patch.dict(os.environ, {'MIA_TEST_MODEL_OVERRIDE': 'glm-4-flash-250414'}):
+            envelope = comparison.configure_provider(provider)
+            self.assertIs(provider._apply_thinking_disabled, original)
+            self.assertEqual(comparison.selected_model('baseline'), 'glm-4-flash-250414')
+            self.assertEqual(envelope['thinking'], 'original_provider_policy')
+            self.assertEqual(comparison.output_tokens(), 4096)
+            self.assertEqual(comparison.context_window(), 16384)
 
     def test_unapproved_or_mismatched_model_fails_without_fallback(self):
         with patch.dict(os.environ, {'MIA_TEST_MODEL_OVERRIDE': 'unapproved-model'}):
