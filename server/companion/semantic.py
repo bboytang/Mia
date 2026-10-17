@@ -15,6 +15,11 @@ class SemanticMemoryIndex:
             raise EmbeddingUnavailable('embedding_model_mismatch')
         self.store, self.encoder = store, encoder
         self._slots = asyncio.Semaphore(2)
+        from .retrieval import FeatureCache
+        with store.lock:
+            if not hasattr(store, '_mia_retrieval_features'):
+                store._mia_retrieval_features = FeatureCache()
+            self._features = store._mia_retrieval_features
 
     async def _require(self, scope, authorization, permission):
         if not isinstance(scope, AuthenticatedScope) or scope.persona_id != 'mia':
@@ -106,13 +111,16 @@ class SemanticMemoryIndex:
 
     def _scan(self, scope, expected, query, limit, minimum, query_text=None, expanded=None):
         import numpy as np
-        from .retrieval import bigrams, signals
+        from .retrieval import bigrams, pair_codes, signals
         query = self._vector(query)
         expanded = query if expanded is None else self._vector(expanded)
         query_terms = bigrams(query_text) if query_text is not None else None
+        query_codes = pair_codes(query_terms) if query_terms is not None else None
         with self.store.lock, self.store.db:
             self.store.db.execute('BEGIN')
             self._check(scope, expected)
+            if query_text is not None:
+                self._features.begin(scope, expected)
             base = (' FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
                     'LEFT JOIN mia_vectors v ON v.memory_id=m.id AND v.model_id=? AND v.model_revision=? '
                     'AND v.dimension=? AND v.content_version=x.content_version '
@@ -149,7 +157,8 @@ class SemanticMemoryIndex:
                     if query_text is not None:
                         record['original_cosine'], record['expanded_cosine'] = score, float(expanded_score)
                         record['signals'], record['lexical_hits'], record['association_hits'] = signals(
-                            query_text, record, max(score, float(expanded_score)), query_terms)
+                            query_text, record, max(score, float(expanded_score)), query_terms,
+                            prepared=self._features.prepare(scope, expected, record), query_codes=query_codes)
                         values.update(expanded=float(expanded_score), lexical=record['signals']['lexical'],
                                       association=record['signals']['association'])
                     for name, value in values.items():
@@ -176,15 +185,19 @@ class SemanticMemoryIndex:
         clues = {}
         with self.store.lock:
             self._check(scope, expected)
+            self._features.begin(scope, expected)
             cursor = self.store.db.execute('SELECT m.id,x.content_version,x.evidence_version,x.entities,x.keywords,x.trigger_terms '
                 'FROM memories m JOIN mia_memory_meta x ON x.memory_id=m.id '
                 "WHERE m.owner=? AND x.persona_id=? AND m.confirmed=1 AND x.state='active' ORDER BY m.id",
                 (scope.owner, scope.persona_id))
             for row in cursor:
-                hits = [term for term in terms(row['trigger_terms']) if len(term) >= 2 and term in query]
+                prepared = self._features.peek(scope, expected, row['id'])
+                triggers = terms(row['trigger_terms']) if prepared is None else prepared[1]
+                hits = [term for term in triggers if len(term) >= 2 and term in query]
                 if not hits:
                     continue
-                for term in terms(row['entities']) + terms(row['keywords']):
+                expansion = terms(row['entities']) + terms(row['keywords']) if prepared is None else prepared[3]
+                for term in expansion:
                     if term not in clues and len(clues) < 8:
                         clues[term] = {'term': term, 'memory_id': row['id'], 'content_version': row['content_version'],
                                        'evidence_version': row['evidence_version'], 'trigger_hits': hits}

@@ -46,8 +46,16 @@
 
 性能workflow改为push检查语法、显式dispatch选择capacity或diagnostic，避免每次诊断入口变更都重复整轮50k。实际模型及2CPU/2GiB约束不变。
 
-诊断候选83823ab / [38993671685](https://github.com/bboytang/Mia/actions/runs/38993671685)已单次派发，当前在途；push语法38993670013成功。继续同一run，不将诊断success当D08通过。
+诊断候选83823ab / [38993671685](https://github.com/bboytang/Mia/actions/runs/38993671685)单次执行已结束；push语法38993670013成功。不将诊断success当D08通过。
 
 诊断38993671685终态success：每查询预热/五次，共15次单路，_clues p95 64.1ms、native_encode每次13.4ms、_scan 410.9ms；竞争_scan锁等待p95 398.6ms、最终快照检查等锁439.1ms。另一次profile扫描658.2ms，其中signals累计516.3ms、bigrams 219.2ms、terms 192.4ms，后两者是包含在signals内的成本，不能相加重复计数。百分位不直接相加。完整[诊断原报告](performance-diagnostic-results.json.gz)与[摘要/hash](performance-diagnostic-review.json)已保存。与第一步runner不同，不把时间差归因于代码优化；此步没有生产优化。
 
 下一步最小候选：共享、内存有上限的静态检索特征缓存，Scope/快照变化失效，查询编码/向量扫描/四维评分/授权仍逐次执行。先证明任意Unicode词组、分数、候选来源、失效及跨连接语义一致，再在原容量/资源门槛下实测；不缓存整条查询或模型回答，不更改排序/权重。
+
+## 第三步：有界静态特征候选（验证中）
+
+只在retrieval/semantic层复用校验后的静态元数据和文本二元组，不改schema/事实/模型/四维权重、候选数、语义下限或权限。每条二元组由两个Unicode码点一一编码成42位整数，用紧凑array保存、二分求交集；没有哈希碰撞或分词变化，交并集比例按同一集合恒等式计算。查询编码和向量相似度仍每次实际执行。
+
+缓存由同一MemoryStore上的index共享，Scope/Persona/快照/事实ID共同作key；下一次读取发现版本变化时清理该Scope旧条目，其他SQLite连接的修改/删除也由原epoch复核拒绝旧结果。上限128MiB保守计费和32768条LRU，超大单项只计算不缓存；不是无界内存索引。冷热条目都保留原元数据验证与评分语义，原向量完整性检查/事务/锁/授权复核不移除。
+
+本地三项无numpy单测通过，包含124组Unicode/空白/大小写与四种cosine的原集合公式精确对照、Scope/Persona/版本隔离、条数/字节驱逐及非法元数据拒绝；Python语法通过。新增实际SQLite共享缓存/禁用缓存全候选对照/第二连接修改删除回归，待GitHub连同全部相关服务/真实BGE/身份/manager执行。原容量夹具和门槛保持，新的容量报告另记录缓存计费/条数。候选尚不能称性能已修复。

@@ -6,13 +6,14 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
 from server.companion.memory import MemoryStore
-from server.companion.retrieval import WEIGHTS, rank, signals
+from server.companion.retrieval import FeatureCache, WEIGHTS, rank, signals
 from server.companion.semantic import SemanticMemoryIndex
 
 
@@ -144,6 +145,32 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
         result = await self.index.retrieve(self.scope, self.auth, '点菜')
         self.assertEqual(result['expansion'], [])
         self.assertEqual(result['results'], [])
+
+    async def test_shared_features_match_uncached_candidates_and_cross_connection_changes(self):
+        own = self.fact('散步带蓝色水壶', triggers=['散步'], keywords=['蓝色水壶'])
+        self.fact('练琴带节拍器', triggers=['练琴'], keywords=['节拍器'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        cached = await self.index.retrieve(self.scope, self.auth, '散步')
+        other = SemanticMemoryIndex(self.store, self.encoder)
+        self.assertIs(other._features, self.index._features)
+        other._features = FeatureCache()
+        with patch('server.companion.retrieval.FEATURE_CACHE_BYTES', 0):
+            uncached = await other.retrieve(self.scope, self.auth, '散步')
+        self.assertEqual(cached, uncached)
+        # Independent SQLite connection: warm cache must not keep old clues.
+        second = MemoryStore(Path(self.temp.name) / 'memory.sqlite3')
+        try:
+            with second.lock, second.db:
+                second.db.execute('UPDATE mia_memory_meta SET keywords=? WHERE memory_id=?',
+                                  ('["新水壶"]', own))
+            changed = await self.index.retrieve(self.scope, self.auth, '散步')
+            self.assertEqual([row['term'] for row in changed['expansion']], ['新水壶'])
+            second.delete_memory(self.scope.owner, own)
+            deleted = await self.index.retrieve(self.scope, self.auth, '散步')
+            self.assertNotIn(own, [row['id'] for row in deleted['candidates']])
+            self.assertEqual(deleted['expansion'], [])
+        finally:
+            second.close()
 
     def test_each_signal_can_change_ranking_and_emotion_cannot_override_original_floor(self):
         for dimension in WEIGHTS:

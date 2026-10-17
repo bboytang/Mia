@@ -973,3 +973,9 @@ a8dcaa7e1542069251886ab303e6c9156ec122cf / https://github.com/bboytang/Mia/actio
 诊断候选83823ab95472ecb4a3ac8d8badb58799d7b3038c已推送，单次派发diagnostic 38993671685，确认in_progress；push语法38993670013成功。主交接记录在途handle，源码算法/夹具未变。
 
 P23第二步完成：83823ab / https://github.com/bboytang/Mia/actions/runs/38993671685 success仅表示诊断收集完成。10k长文本单路_scan p95 410.9ms、_clues 64.1ms、native_encode每次13.4ms；竞争_scan等锁398.6ms、快照复核等锁439.1ms。另一次profile 658.2ms扫描内signals516.3ms，含bigrams219.2ms、terms192.4ms，不能重复相加。完整原文及hash归档performance-diagnostic-*，无生产算法变更。与上一run主机不同，不宣称代码导致时间减少。下一项实现有界/版本失效的静态特征缓存并验证等价，再复验原门槛；P23仍未通过。
+
+## 2026-10-17 P23第三步候选：静态特征复用
+
+根据实际profile，仅在retrieval/semantic层加入MemoryStore共享、Scope/Persona/快照/事实ID隔离的128MiB保守计费/32768项LRU静态特征缓存。文本二元组一一编码42位整数组成紧凑array，二分计算原交集/并集比；缓存元数据及词组，不缓存查询向量/分数/模型回复，不改schema/事实/权重/候选或权限。原事务/全部向量完整性/跨连接版本复查保持。旧版本缓存下次读该Scope时清理，无法用新epoch取旧特征。
+
+本地三个单测通过：Unicode/空白/大小写/代理码点/空字符/空集与原集合公式逐项精确一致、Scope/Persona/版本隔离及条数/字节/超大项边界、非法元数据不缓存。实际SQLite共享/禁用缓存全候选等价/第二连接修改删除用例加入原混合检索测试，因本地缺numpy留给GitHub。更新容量报告保存缓存使用量，固定原语料/门槛。当前只是候选，下一步精确提交相关回归和原容量实测，不提前报通过。

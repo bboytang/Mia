@@ -168,6 +168,9 @@ async def evaluate(args, report):
                 row['wall_seconds'] = time.perf_counter() - wall
                 row['database_bytes'] = sum(p.stat().st_size for p in Path(folder).glob('capacity.sqlite3*'))
                 row['rss_peak_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
+                if hasattr(index, '_features'):
+                    row['static_features'] = {'entries': len(index._features.entries),
+                                              'accounted_bytes': index._features.bytes}
                 row['integrity'] = store.db.execute('PRAGMA integrity_check').fetchone()[0]
                 row['within_numeric_budgets'] = (all(case['encode_hybrid']['p95_ms'] <= 400
                     and (size != 10000 or case['sqlite_exact']['p95_ms'] <= 150) for case in row['queries'])
