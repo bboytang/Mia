@@ -3,16 +3,32 @@ on:
   push:
     paths:
       - 'scripts/ci/verify_mia_performance.py'
+      - 'scripts/ci/mia_performance_diagnostics.py'
       - 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
       - '.github/workflows/mia-memory-performance.yml'
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Frozen capacity gate or separate original-path profiling
+        type: choice
+        options: [capacity, diagnostic]
+        default: capacity
 permissions:
   contents: read
 concurrency:
   group: mia-p23-numeric-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m py_compile scripts/ci/verify_mia_performance.py scripts/ci/mia_performance_diagnostics.py
   numerical:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -59,6 +75,7 @@ jobs:
             -v "$RUNNER_TEMP/mia-performance-results:/results" \
             mia-vector-verification /experiment/scripts/ci/verify_mia_performance.py --model-dir /model \
               --dataset /experiment/server/tests/fixtures/persona_memory_performance_p23_v1.json \
+              --mode "${{ inputs.mode }}" \
               --output /results/performance-results.json
       - uses: actions/upload-artifact@v4
         if: always()

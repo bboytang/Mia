@@ -965,3 +965,7 @@ a8dcaa7e1542069251886ab303e6c9156ec122cf / https://github.com/bboytang/Mia/actio
 同SHA服务回归 https://github.com/bboytang/Mia/actions/runs/38992838211 共274项通过。本地Python/YAML/JSON/夹具边界及实际SQLite编号扩容检查通过，完整本地性能入口因缺numpy未运行；本地机械扩容检查用单位向量，绝不冒充BGE或性能。完整数值仅取GitHub真实BGE。已检查差异，运行模块未改、无Provider请求/生产变更/真机验证。
 
 第一步为“入口及有效测量完成，结果失败”，P23未通过/P24未开始。当前全部run已收完；下一项在相同10k长事实分解_clues、原/扩展编码、混合_scan与锁等待，拿到函数级证据后决定最小优化，保留原排序/阈值/Scope及真实失败。全服务共同包络、同Provider首句增量、真实后台提取/公平/故障及含在途关闭仍未执行，不能用本次数值模块结果替代。主交接、本地接续和性能文档同步。
+
+## 2026-10-17 P23第二步开始：分段诊断
+
+用户要求继续。先读交接及原结果、核对ab3c02a与远端一致/干净；新增diagnostic模式包装原方法及原锁记录等待，在同一10k长文本夹具测15次原retrieve与实际模块竞争，最后单独profile一次_scan，profiler开销不进入D08。生产运行算法/排序/阈值和夹具不变。GitHub push仅语法检查，实际capacity/diagnostic明确dispatch，不重复同源码取绿。当前尚无新诊断结论；每步结果继续入交接。

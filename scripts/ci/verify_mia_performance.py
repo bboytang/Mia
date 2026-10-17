@@ -138,8 +138,9 @@ async def evaluate(args, report):
     report['seed_vectors_sha256'] = hashlib.sha256(b''.join(v.tobytes() for v in vectors.values())).hexdigest()
     report['capacity'] = []
     auth, current = FixtureAuthorization(), scope()
-    for size, profile in [(1000, 'short'), (1000, 'dense'), (10000, 'short'),
-                          (10000, 'dense'), (50000, 'dense')]:
+    cases = ([(10000, 'dense')] if args.mode == 'diagnostic' else
+             [(1000, 'short'), (1000, 'dense'), (10000, 'short'), (10000, 'dense'), (50000, 'dense')])
+    for size, profile in cases:
         row = {'size_per_scope': size, 'profile': profile, 'required': size != 50000}
         report['capacity'].append(row)
         with tempfile.TemporaryDirectory() as folder:
@@ -153,6 +154,12 @@ async def evaluate(args, report):
                 background = replace(current, owner='user:941030003:agent:p23')
                 populate(store, background, 32, profile, fixture, vectors)
                 index = SemanticMemoryIndex(store, encoder)
+                if args.mode == 'diagnostic':
+                    from mia_performance_diagnostics import diagnose
+                    row['diagnostics'] = await diagnose(index, current, auth, fixture['queries'], summary,
+                        lambda: competing(index, current, background, auth, fixture['queries']))
+                    row['diagnostic_complete'] = True
+                    continue
                 cpu = time.process_time()
                 wall = time.perf_counter()
                 row.update(await measure(index, current, auth, fixture['queries']))
@@ -174,6 +181,9 @@ async def evaluate(args, report):
                 store.close()
                 save(args.output, report)
     report['cgroup_after'] = cgroup()
+    if args.mode == 'diagnostic':
+        report['diagnostic_complete'] = all(row.get('diagnostic_complete', False) for row in report['capacity'])
+        return
     report['numeric_gate_passed'] = all(row['within_numeric_budgets'] for row in report['capacity'] if row['required'])
 
 
@@ -182,8 +192,9 @@ def main():
     parser.add_argument('--model-dir', type=Path, required=True)
     parser.add_argument('--dataset', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--mode', choices=('capacity', 'diagnostic'), default='capacity')
     args = parser.parse_args()
-    report = {'code_sha': os.environ['GITHUB_SHA'], 'numeric_gate_passed': False,
+    report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': args.mode, 'numeric_gate_passed': False,
         'p23_complete': False, 'scope': 'P23 numerical module capacity, not full-service acceptance',
         'fixture_kind': 'Synthetic records and explicit synthetic metadata; replicated real BGE seed vectors; IO/CPU only, no semantic-quality claim',
         'remaining': ['shared full-service resource envelope', 'same-Provider paired first-sentence delta',
@@ -195,7 +206,7 @@ def main():
     finally:
         save(args.output, report)
     print(json.dumps({'numeric_gate_passed': report['numeric_gate_passed'], 'p23_complete': False}))
-    if not report['numeric_gate_passed']:
+    if not report.get('diagnostic_complete' if args.mode == 'diagnostic' else 'numeric_gate_passed', False):
         raise SystemExit(1)
 
 
