@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第三十三步已收证：运行d187988、唯一首句[39174700155](https://github.com/bboytang/Mia/actions/runs/39174700155)终态failure，72真实回复/36有效empty、无Provider错误；六组首可播分段增量p95为579.51/115.04/337.09及912.84/277.38/361.61ms，10k查询0仍超600ms，1k查询0仅达验收未达500ms目标。同SHA服务/身份/manager/真实向量四回归全success，原始8制品hash及远端终态已核对，见performance-auth-once-latency-review.json。应用峰值451.94MiB、共同1512.56MiB、无OOM；本轮顺序empty不证明正常事实提取p95。P23未整体验收/P24未开始，未部署。
+- **P23进行中，整体未验收**：第三十四步观察器c47a3f30120236d9776caca20a5e3a9e3f687a09已推送到固定feature/mia-persona-memory-v1.2；同SHA push语法/25机制[39178738184](https://github.com/bboytang/Mia/actions/runs/39178738184) success，唯一完整正常Worker公平性[39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)在途。原运行实现仍d187988；36任务/最多72请求、原提案校验/两尝试/Scope/120秒不变。收同一句柄，不重复派发；第三十三步首句10k查询0 p95增量912.84ms仍失败，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
@@ -134,3 +134,6 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 接续并审查工作区原有四文件改动，仅修改CI观察器和测试：原jobs.validate_output先执行，仅在其拒绝时绑定唯一extracting任务/owner/source/attempt与原输出SHA，最多72条拒绝记录，每条原输出最多128KiB；原错误继续交给原Worker，不修补/截断提案或改变重试。正常模式不再因首个无效提案提前丢掉后续五轮；固定三Scope×短长×六轮、首轮预热、后30测量、最多72真实SDK均保持。任一无效任务仍使原正常契约失败，失败终态耗时单列；成功子集仅作探索，不能成为正常p95。
 
 新增反例验证全失败无正常p95，以及预热拒绝后完整六轮36任务仍采集且验收失败。本地25项CI机制、Python3.10 AST、Shell语法及diff检查通过；生产运行仍d187988，没有模型/样本/来源校验/两尝试/120秒/600ms验收变更。待新SHA GitHub语法与唯一worker-fairness完整实测，采集完成不等于通过；第三十三步10k首句912.84ms和旧预热3提交3拒绝保持。P23未整体验收/P24未开始。
+
+
+第三十四步观察器c47a3f30120236d9776caca20a5e3a9e3f687a09已推送到固定feature/mia-persona-memory-v1.2；同SHA push语法/25机制[39178738184](https://github.com/bboytang/Mia/actions/runs/39178738184) success，唯一完整正常Worker公平性[39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)在途。原运行实现仍d187988；36任务/最多72请求、原提案校验/两尝试/Scope/120秒不变。收同一句柄，不重复派发；第三十三步首句10k查询0 p95增量912.84ms仍失败，P23未整体验收/P24未开始。
