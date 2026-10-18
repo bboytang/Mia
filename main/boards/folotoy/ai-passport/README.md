@@ -308,5 +308,6 @@ under `third_party/opencc` with its Apache-2.0 license. Configure-time generatio
 writes constexpr tables into the build directory; Taiwan variant normalization
 then longest phrase/character matching preserves forms such as 著作 and 乾坤.
 This changes display text only, not server history, audio or other boards.
-Both Mia build variants select `CONFIG_LANGUAGE_ZH_CN=y` for built-in prompts.
+The existing CI/release build command selects `--language zh-CN` for built-in
+prompts; language remains a build parameter, following repository policy.
 The dictionaries are application code/data, not changes to the frozen assets.
