@@ -1082,9 +1082,6 @@ if(CONFIG_IDF_TARGET_ESP32S3)
 endif()
 
 set(MAIN_PRIV_REQUIRES_EXTRA "")
-if(CONFIG_MIA_PASSPORT_DEVELOPMENT)
-    list(APPEND MAIN_PRIV_REQUIRES_EXTRA esp_http_client)
-endif()
 if(CONFIG_XIAOZHI_NETWORK_ETHERNET AND CONFIG_XIAOZHI_ETH_PHY_IP101)
     list(APPEND MAIN_PRIV_REQUIRES_EXTRA espressif__ip101)
 endif()
@@ -1118,6 +1115,7 @@ idf_component_register(SRCS ${SOURCES}
                         esp_pm
                         esp_psram
                         esp_netif
+                        esp_http_client
                         esp_eth
                         esp_driver_gpio
                         esp_driver_uart
