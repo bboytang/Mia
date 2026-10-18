@@ -1,0 +1,620 @@
+{
+  "run_id": 39125539728,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39125539728",
+  "observer_sha": "fe088698396352c3782f2e80352435b5cba6e20a",
+  "runtime_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "success",
+  "p23_complete": false,
+  "scope": "Two frozen failed warm inputs diagnostic only; collection success is not D08/normal task/fairness acceptance",
+  "artifacts": [
+    {
+      "file": "performance-worker-diagnostic-first-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "55b241ef995fd41a79913fe396cd20970a9203f540b3a3164ff57d2378ab6e86",
+      "sha256": "9286bbcb4d82f40ea58858b35709c32a86cd43e5ecd9378f13545770e55f511c"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "4814e6a830db632bfd4cbd50750d6d6f6840911779c81fabfb4025691473215f",
+      "sha256": "4d1536e4a8e2afb42bcba73225874fa2c4ecd36ea67548e1ddd7cc2d495b3be4"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-ci-results.json.gz",
+      "source_path": "mia-p23-worker-diagnostic-run.json",
+      "raw_sha256": "109d4d51ffa7e0298695ca6725bb347a82a9871a93a2b1ca53dff81e578d4d79",
+      "sha256": "0ebd4bcb7a3f470568ee83f4757b2c54e6189022a199b17a55236bb824a2941e"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-service.log.gz",
+      "raw_sha256": "1b7d13bf5b324390557d2954ec7f116cd60fa852b3c1953ef9199b3fb4755ba2",
+      "sha256": "e9c0751fd7b43efb875846afea205fd86ec4e5822ff1a65b40fa71acb8232581"
+    },
+    {
+      "file": "performance-worker-diagnostic-first-syntax.log.gz",
+      "raw_sha256": "9a3dcff0984df67984a8f68e1d796ea29a538a5a6821f8a86f25e9697f41e051",
+      "sha256": "1235656125c76ff60cc4af98ef8e1c74176645fd9abd29580bed4caf6bbfb785"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "55b241ef995fd41a79913fe396cd20970a9203f540b3a3164ff57d2378ab6e86",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "3b15a3da18995ef27c2579dbefec2738185e6a8c011d7e692137e78f65bc5927",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "34c381e317a121b44fa24b447ad5d4ca59dc61392834ae524922282ea15a40d9",
+    "cgroup-final-memory.current.txt": "c779cbeed58f57699fa9ef9a6c693332a31a0464c475192d9a9b2d85e6096c3b",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "41e0476b04b481ead5fbbfcee0707d18d1d1b81e72679ea32fa94b0916e69b55",
+    "redis.log": "4950e8362bbbfb1f3efd0846419ccef521e0e1699ffc72dde5e8d807c4d46a08",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "933b0663c9c61c50ea6885d6d34b528bc3b7fd0ad61c2596016a058b7ec38462",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "71d4c2df91878f22aeec9c5dd1f1c3265513a196010aac2a42d01d8cd95510b0",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/ready.json": "56e52ff22346da29e7179667fc3439639c9ff6f77b763cd5b3d26bb104c9b2fc",
+    "app-child/app-results.json": "4814e6a830db632bfd4cbd50750d6d6f6840911779c81fabfb4025691473215f",
+    "app-child/memory.sqlite3": "e6232b973e56da9487b35f3c1c675a10374e7bde45bd4773f73f18af16c38015",
+    "junit/TEST-junit-jupiter.xml": "7db342d4ff4c0552a14cc7418f8d6f2e11fefc55e829f756d088a0b659f0dddc",
+    "junit/TEST-junit-vintage.xml": "78828140343e72eaa901c7391c008e6af37765c3a2926ef68b4334eacf4addbe",
+    "junit/TEST-junit-platform-suite.xml": "426a4790dedc1fa49f15bc57b505afd6d1c1a69e94908d593ece86fd7b38b3d4"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "worker_contract_passed": true,
+    "worker_diagnostic_complete": true,
+    "diagnostic_jobs": [
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040001:agent:mia-p23-0",
+        "profile": "short",
+        "source": "周六上午我通常在书桌边整理纸质邮票册",
+        "raw_source": "周六上午我通常在书桌边整理纸质邮票册",
+        "session_id": "p23-fair-0-short",
+        "submitted_at_ms": 172.93317200000047,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+          "state": "pending"
+        },
+        "admitted_at_ms": 195.00166900002114,
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "submit_to_observed_terminal_seconds": 11.604748372000016
+      },
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040003:agent:mia-p23-2",
+        "profile": "dense",
+        "source": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "raw_source": "整理纸质邮票册时，我先在书桌上铺一块浅色棉布，把准备归位的邮票按收集年份分成几叠，再逐张把卷起的边角轻轻理平，用干净的镊子夹住外缘放进透明护邮袋，接着对照册页右下角的铅笔编号确认位置，把新添的邮票登记在横线记录本里，登记内容包括拿到邮票的月份和图案名称，放好后我会轻轻合上册页，用软布擦掉封面浮灰，把邮票册直立放回书桌左侧的木架，最后把镊子收进蓝色笔盒，再将棉布叠好放进抽屉",
+        "session_id": "p23-fair-0-dense",
+        "submitted_at_ms": 11802.556967999975,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+          "state": "pending"
+        },
+        "admitted_at_ms": 11818.396722999978,
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "submit_to_observed_terminal_seconds": 27.734644108
+      }
+    ],
+    "fair_measurement_scope": "Diagnostic collection only: two original frozen warm inputs/Scopes, no normal-load or D08 verdict. Failed model/parse outcomes are retained.",
+    "provider_requests": 4,
+    "accepted_extraction_jobs": 2,
+    "app_process_shutdown_seconds": 0.255644234999977,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 2.00105695000002,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 25951573\nuser_usec 23449790\nsystem_usec 2501783\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 209\nnr_throttled 86\nthrottled_usec 4082115\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "923656192",
+      "memory.peak": "925831168",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 33947156\nuser_usec 29943862\nsystem_usec 4003294\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 657\nnr_throttled 90\nthrottled_usec 4253343\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1025249280",
+      "memory.peak": "1395298304",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "workload_error_class": null,
+    "workload_assertion": null,
+    "error_class": null,
+    "reason": null
+  },
+  "child": {
+    "ready": true,
+    "passed": true,
+    "worker_diagnostic_complete": true,
+    "worker_probe_scope": "Diagnostic only: original frozen warm short input at Scope 0 and dense input at Scope 2; no fairness/normal-task percentile verdict",
+    "fair_jobs": [
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040001:agent:mia-p23-0",
+        "profile": "short",
+        "source": "周六上午我通常在书桌边整理纸质邮票册",
+        "raw_source": "周六上午我通常在书桌边整理纸质邮票册",
+        "session_id": "p23-fair-0-short",
+        "submitted_at_ms": 172.93317200000047,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+          "state": "pending"
+        },
+        "admitted_at_ms": 195.00166900002114,
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "submit_to_observed_terminal_seconds": 11.604748372000016
+      },
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040003:agent:mia-p23-2",
+        "profile": "dense",
+        "source": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "raw_source": "整理纸质邮票册时，我先在书桌上铺一块浅色棉布，把准备归位的邮票按收集年份分成几叠，再逐张把卷起的边角轻轻理平，用干净的镊子夹住外缘放进透明护邮袋，接着对照册页右下角的铅笔编号确认位置，把新添的邮票登记在横线记录本里，登记内容包括拿到邮票的月份和图案名称，放好后我会轻轻合上册页，用软布擦掉封面浮灰，把邮票册直立放回书桌左侧的木架，最后把镊子收进蓝色笔盒，再将棉布叠好放进抽屉",
+        "session_id": "p23-fair-0-dense",
+        "submitted_at_ms": 11802.556967999975,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+          "state": "pending"
+        },
+        "admitted_at_ms": 11818.396722999978,
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "submit_to_observed_terminal_seconds": 27.734644108
+      }
+    ],
+    "fair_dataset_sha256": "96ee8721f7fdc0dd6deec5dcb617f326104063773b7dd4af34c6baa1890c7448",
+    "capacity_per_owner": {
+      "user:941040001:agent:mia-p23-0": 1000,
+      "user:941040002:agent:mia-p23-1": 10000,
+      "user:941040003:agent:mia-p23-2": 32
+    },
+    "provider_requests": 4,
+    "provider_request_purposes": [
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction"
+    ],
+    "accepted_extraction_jobs": 2,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "81ea152adb03c9012c210815d3b89b9d866adca54a56f4cfdfd27a5dbf6f2d70",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "native_extractions": [
+      {
+        "job_id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "attempt": 1,
+        "sources": [
+          "周六上午我通常在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "5bb055e54217d49ca75793e6e1e7894cd3234e1c0dfcfc0c7a171d58fc89f319",
+        "started_at_ms": 339.4653540000263,
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "finished_at_ms": 5346.138767000013
+      },
+      {
+        "job_id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "attempt": 2,
+        "sources": [
+          "周六上午我通常在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "5bb055e54217d49ca75793e6e1e7894cd3234e1c0dfcfc0c7a171d58fc89f319",
+        "started_at_ms": 6219.079958000009,
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "finished_at_ms": 11733.524650999982
+      },
+      {
+        "job_id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 1,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "started_at_ms": 11932.438418999993,
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "finished_at_ms": 24974.355059999994
+      },
+      {
+        "job_id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 2,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "started_at_ms": 26052.688923999995,
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "finished_at_ms": 39512.661208
+      }
+    ],
+    "extraction_requests": [
+      {
+        "job_id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "attempt": 1,
+        "sources": [
+          "周六上午我通常在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "5bb055e54217d49ca75793e6e1e7894cd3234e1c0dfcfc0c7a171d58fc89f319",
+        "at_ms": 777.3286749999784,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "a3010d29b6664a248442eb59fb36899b50ba138839fbe0e9455670c69fa3239a",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0010919999908765021,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 5302.7561389999955,
+        "create_return_at_ms": 5303.925470000024
+      },
+      {
+        "job_id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "attempt": 2,
+        "sources": [
+          "周六上午我通常在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "5bb055e54217d49ca75793e6e1e7894cd3234e1c0dfcfc0c7a171d58fc89f319",
+        "at_ms": 6251.342727999998,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "a3010d29b6664a248442eb59fb36899b50ba138839fbe0e9455670c69fa3239a",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0010519999591451779,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 11691.94782300002,
+        "create_return_at_ms": 11693.509534999976
+      },
+      {
+        "job_id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 1,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "at_ms": 11964.301295999974,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "3c37557502c540f714f58e9c5550cfdd942af052a044cb407602be35e7d86a23",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0013920000014877587,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 24927.04202499999,
+        "create_return_at_ms": 24929.06910800002
+      },
+      {
+        "job_id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 2,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "at_ms": 26085.437764999995,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "3c37557502c540f714f58e9c5550cfdd942af052a044cb407602be35e7d86a23",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.001311999994868529,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 39281.329008,
+        "create_return_at_ms": 39283.628309999986
+      }
+    ],
+    "python_peak_after_workload_mib": 351.9140625,
+    "app_shutdowns": [
+      {
+        "pid": 5370,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.000275144999989152,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "provider_errors": null,
+    "case_errors": null,
+    "error_class": null,
+    "reason": null
+  },
+  "provider_counts": {
+    "extraction": 4
+  },
+  "offline_replays": [
+    {
+      "owner": "user:941040001:agent:mia-p23-0",
+      "profile": "short",
+      "attempt": 1,
+      "job_id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+      "first_attempt_message_hash_matches_old": true,
+      "native_error": {
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "original_output_validation": null
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": false,
+        "code": "invalid_input",
+        "message": "Invalid extraction function proposal"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 333,
+      "distinct_call_ids": [
+        "call_20261018200520a844714a785d4478_0"
+      ],
+      "distinct_indexes": [
+        0
+      ],
+      "offline_argument_validation_only": {
+        "passed": true,
+        "memory_count": 1,
+        "clue_counts": [
+          {
+            "entities": 1,
+            "keywords": 2,
+            "trigger_terms": 3
+          }
+        ]
+      }
+    },
+    {
+      "owner": "user:941040001:agent:mia-p23-0",
+      "profile": "short",
+      "attempt": 2,
+      "job_id": "758d61470c81cdcd27e3f00b2b5caf4b38ad480781b9641f999d5b8d9c340a21",
+      "first_attempt_message_hash_matches_old": null,
+      "native_error": {
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "original_output_validation": null
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": false,
+        "code": "invalid_input",
+        "message": "Invalid extraction function proposal"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 331,
+      "distinct_call_ids": [
+        "call_2026101820052589da59ef6af64955_0"
+      ],
+      "distinct_indexes": [
+        0
+      ],
+      "offline_argument_validation_only": {
+        "passed": true,
+        "memory_count": 1,
+        "clue_counts": [
+          {
+            "entities": 1,
+            "keywords": 3,
+            "trigger_terms": 1
+          }
+        ]
+      }
+    },
+    {
+      "owner": "user:941040003:agent:mia-p23-2",
+      "profile": "dense",
+      "attempt": 1,
+      "job_id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+      "first_attempt_message_hash_matches_old": true,
+      "native_error": {
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "original_output_validation": null
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": false,
+        "code": "invalid_input",
+        "message": "Invalid extraction function proposal"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 944,
+      "distinct_call_ids": [
+        "call_2026101820053184564f6bce864f95_0"
+      ],
+      "distinct_indexes": [
+        0
+      ],
+      "offline_argument_validation_only": {
+        "passed": false,
+        "code": "invalid_input",
+        "message": "Invalid extraction clues",
+        "clue_counts": [
+          {
+            "entities": 16,
+            "keywords": 16,
+            "trigger_terms": 17
+          }
+        ]
+      }
+    },
+    {
+      "owner": "user:941040003:agent:mia-p23-2",
+      "profile": "dense",
+      "attempt": 2,
+      "job_id": "417c416890216cf16c45366a6ffc6410e55340592e33750e13e4bd120de2c0d4",
+      "first_attempt_message_hash_matches_old": null,
+      "native_error": {
+        "error_class": "MemoryError",
+        "error_code": "invalid_input",
+        "error_message": "Invalid extraction function proposal",
+        "original_output_validation": null
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": false,
+        "code": "invalid_input",
+        "message": "Invalid extraction function proposal"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 937,
+      "distinct_call_ids": [
+        "call_202610182005451cd9e43cb94843b8_0"
+      ],
+      "distinct_indexes": [
+        0
+      ],
+      "offline_argument_validation_only": {
+        "passed": false,
+        "code": "invalid_input",
+        "message": "Invalid extraction clues",
+        "clue_counts": [
+          {
+            "entities": 16,
+            "keywords": 15,
+            "trigger_terms": 15
+          }
+        ]
+      }
+    }
+  ],
+  "common_peak_mib": 1330.66015625,
+  "same_sha_checks": {
+    "sha": "fe088698396352c3782f2e80352435b5cba6e20a",
+    "service": {
+      "run_id": 39125400495,
+      "tests": 294,
+      "seconds": 35.442
+    },
+    "syntax": {
+      "run_id": 39125400493,
+      "tests": 16,
+      "seconds": 0.299
+    },
+    "manager": {
+      "run_id": 39125400474,
+      "tests": 154,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "root_cause_scope": "Four new captures only: bare Markdown fence rejects otherwise unique function; short arguments validate, dense arguments exceed existing 8-clue bounds. Old twelve responses were not captured and cannot all be assigned this cause."
+}
