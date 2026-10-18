@@ -7,6 +7,8 @@ import assert from 'node:assert/strict';
 const html = await readFile('dist/passport-inspect.html', 'utf8');
 assert.equal((html.match(/<script>/g) || []).length, 1);
 assert.ok(!html.includes('<script src='));
+assert.match(html, /工具 v3/);
+assert.match(html, /value="usb" selected/);
 const script = html.split('<script>')[1].split('</script>')[0];
 const elements = new Map();
 let click;
@@ -27,12 +29,13 @@ assert.equal(elements.get('#download').hidden, true);
 assert.equal(elements.get('#inspect').disabled, false);
 console.log('Actual standalone bundle loaded; insecure context denied before USB access.');
 
-async function checkPicker(navigator, expected) {
+async function checkPicker(navigator, expected, mode = 'usb') {
   let picker;
   const elements = new Map();
   const document = {querySelector(selector) {
     if (!elements.has(selector)) elements.set(selector, {
-      hidden: true, addEventListener(type, callback) {picker = callback;},
+      hidden: true, value: selector === '#connection' ? mode : undefined,
+      addEventListener(type, callback) {picker = callback;},
     });
     return elements.get(selector);
   }};
@@ -47,6 +50,7 @@ async function checkPicker(navigator, expected) {
 for (const platform of [
   {userAgent: 'Mozilla/5.0 (Linux; Android 14; Tablet)'},
   {userAgent: 'desktop mode', userAgentData: {platform: 'Android'}},
+  {userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', userAgentData: {platform: 'Linux'}},
 ]) {
   let usbCalls = 0;
   await checkPicker({...platform,
@@ -70,7 +74,8 @@ await checkPicker({userAgent: 'desktop',
     throw new Error('EXPECTED_DESKTOP_SERIAL_PICKER');
   }},
   usb: {requestDevice() {throw new Error('WRONG_DESKTOP_USB');}},
-}, 'EXPECTED_DESKTOP_SERIAL_PICKER');
+}, 'EXPECTED_DESKTOP_SERIAL_PICKER', 'serial');
 assert.equal(serialCalls, 1);
-await checkPicker({userAgent: 'unsupported'}, '当前浏览器不支持 USB');
-console.log('Actual bundle: Android user-agent/platform prefer USB; desktop retains native serial; unsupported API rejected.');
+await checkPicker({userAgent: 'unsupported', serial: {requestPort() {throw new Error('UNWANTED_SERIAL_FALLBACK');}}}, '未提供 USB 设备接口');
+await checkPicker({userAgent: 'unsupported'}, '未提供电脑串口接口', 'serial');
+console.log('Actual bundle: explicit USB default survives Android desktop mode; no serial fallback; desktop serial is opt-in; unsupported API rejected.');

@@ -5,6 +5,7 @@ import { inspect } from './probe.mjs';
 const button = document.querySelector('#inspect');
 const download = document.querySelector('#download');
 const status = document.querySelector('#status');
+const connection = document.querySelector('#connection');
 let reportUrl;
 button.addEventListener('click', async () => {
   button.disabled = true;
@@ -13,14 +14,14 @@ button.addEventListener('click', async () => {
   let transport;
   try {
     if (!window.isSecureContext) throw new Error('需要 HTTPS 安全页面；本地文件是否支持需由浏览器确认');
-    const android = /Android/i.test(navigator.userAgent || '') || navigator.userAgentData?.platform === 'Android';
-    const hasUsb = typeof navigator.usb?.requestDevice === 'function';
-    // Android may expose a serial API without enumerating the USB CDC device.
-    // Match the official Passport tool: prefer WebUSB on Android.
-    const serial = android && hasUsb ? usbSerial
-      : typeof navigator.serial?.requestPort === 'function' ? navigator.serial
-      : hasUsb ? usbSerial : null;
-    if (!serial) throw new Error('当前浏览器不支持 USB 连接，请使用安卓 Chrome');
+    // An Android browser's desktop mode can hide both Android platform signals.
+    // Select the API explicitly; the Android default never falls back to serial.
+    const usb = connection.value === 'usb';
+    const serial = usb ? (typeof navigator.usb?.requestDevice === 'function' ? usbSerial : null)
+      : connection.value === 'serial' && typeof navigator.serial?.requestPort === 'function' ? navigator.serial : null;
+    if (!serial) throw new Error(usb ? '当前浏览器未提供 USB 设备接口，请在安卓 Chrome 打开本页'
+      : '当前浏览器未提供电脑串口接口');
+    status.textContent = `工具 v3 / ${usb ? 'USB（安卓平板）' : '串口（电脑）'}：请选择 AI Passport 设备。`;
     const port = await serial.requestPort({filters: [{usbVendorId: 0x303a, usbProductId: 0x1001}]});
     const info = port.getInfo();
     if (info.usbVendorId !== 0x303a || info.usbProductId !== 0x1001) throw new Error('请选择 C3 USB JTAG/serial debug unit');
