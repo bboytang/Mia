@@ -91,7 +91,7 @@ NetworkResult<> Ota::CheckVersion() {
 
     std::string url = GetCheckVersionUrl();
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
-    if (!mia::passport::IsPinnedEndpoint(url, CONFIG_MIA_PASSPORT_OTA_URL, "https://")) {
+    if (!mia::passport::IsDiscoveryEndpoint(url, CONFIG_MIA_PASSPORT_OTA_URL)) {
         return std::unexpected(NetworkError::InvalidArgument());
     }
 #endif
@@ -141,8 +141,8 @@ NetworkResult<> Ota::CheckVersion() {
     auto activation_required = cJSON_IsObject(cJSON_GetObjectItem(root, "activation"));
     if ((!cJSON_IsString(voice_url) && !activation_required) ||
         (cJSON_IsString(voice_url) &&
-         !mia::passport::IsPinnedEndpoint(voice_url->valuestring, CONFIG_MIA_PASSPORT_WEBSOCKET_URL,
-                                          "wss://"))) {
+         !mia::passport::IsVoiceEndpoint(voice_url->valuestring,
+                                         CONFIG_MIA_PASSPORT_WEBSOCKET_URL))) {
         cJSON_Delete(root);
         return std::unexpected(NetworkError::ProtocolError());
     }

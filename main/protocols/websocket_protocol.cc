@@ -81,7 +81,7 @@ bool WebsocketProtocol::OpenAudioChannel() {
     Settings settings("websocket", false);
     std::string url = settings.GetString("url");
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
-    if (!mia::passport::IsPinnedEndpoint(url, CONFIG_MIA_PASSPORT_WEBSOCKET_URL, "wss://")) {
+    if (!mia::passport::IsVoiceEndpoint(url, CONFIG_MIA_PASSPORT_WEBSOCKET_URL)) {
         ESP_LOGE(TAG, "Mia voice endpoint is missing or does not match configuration");
         return false;
     }

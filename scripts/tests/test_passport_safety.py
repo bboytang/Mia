@@ -34,14 +34,35 @@ def candidate():
 
 
 class PassportSafetyTests(unittest.TestCase):
-    def test_endpoint_policy_compiles_and_rejects_redirect_and_cleartext(self):
+    def test_endpoint_policy_accepts_pinned_http_ws_and_rejects_endpoint_changes(self):
         source = r'''
 #include "passport/backend_policy.h"
 #include <cassert>
 int main() {
     using mia::passport::IsPinnedEndpoint;
+    using mia::passport::IsDiscoveryEndpoint;
+    using mia::passport::IsVoiceEndpoint;
+    constexpr auto discovery = "http://43.143.230.174:8002/xiaozhi/ota/";
+    constexpr auto voice = "ws://43.143.230.174:8000/xiaozhi/v1/";
+    assert(IsDiscoveryEndpoint(discovery, discovery));
+    assert(IsVoiceEndpoint(voice, voice));
+    assert(!IsDiscoveryEndpoint(discovery, "https://43.143.230.174:8002/xiaozhi/ota/"));
+    assert(!IsVoiceEndpoint(voice, "wss://43.143.230.174:8000/xiaozhi/v1/"));
+    for (auto url : {"http://xiaozhi.me/xiaozhi/ota/", "http://43.143.230.174:8003/xiaozhi/ota/",
+                     "http://43.143.230.174:8002/other/"}) {
+        assert(!IsDiscoveryEndpoint(url, discovery));
+    }
+    assert(!IsVoiceEndpoint("ws://other.example/xiaozhi/v1/", voice));
+    assert(!IsVoiceEndpoint("ws://43.143.230.174:8001/xiaozhi/v1/", voice));
+    assert(!IsVoiceEndpoint("ws://43.143.230.174:8000/other/", voice));
+    assert(!IsDiscoveryEndpoint(voice, voice));
+    assert(!IsVoiceEndpoint(discovery, discovery));
+    assert(!IsDiscoveryEndpoint("", ""));
+    assert(!IsVoiceEndpoint("", ""));
     constexpr auto pin = "https://mia.example:8002/xiaozhi/ota/";
     assert(IsPinnedEndpoint(pin, pin, "https://"));
+    assert(IsDiscoveryEndpoint(pin, pin));
+    assert(IsVoiceEndpoint("wss://mia.example/v1/", "wss://mia.example/v1/"));
     assert(IsPinnedEndpoint("wss://mia.example/v1/", "wss://mia.example/v1/", "wss://"));
     for (auto url : {"", "http://mia.example:8002/xiaozhi/ota/",
                      "https://xiaozhi.me/ota/", "https://mia.example:8002/other/"}) {
@@ -52,6 +73,14 @@ int main() {
         assert(!IsPinnedEndpoint(url, url, "https://"));
     }
     assert(!IsPinnedEndpoint("", "", "https://"));
+    for (auto url : {"http:///ota/", "http://user@mia.example/ota/", "http://mia.example/ota/?key=x",
+                     "http://mia.example/ota/#x", "http://mia.example/\\evil", "http://mia.example/\n"}) {
+        assert(!IsDiscoveryEndpoint(url, url));
+    }
+    for (auto url : {"ws:///v1/", "ws://user@mia.example/v1/", "ws://mia.example/v1/?key=x",
+                     "ws://mia.example/v1/#x", "ws://mia.example/\\evil", "ws://mia.example/\n"}) {
+        assert(!IsVoiceEndpoint(url, url));
+    }
 }
 '''
         with tempfile.TemporaryDirectory() as tmp:

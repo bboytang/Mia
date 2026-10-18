@@ -15,12 +15,12 @@ config MIA_PASSPORT_DEVELOPMENT
         failure, and disables legacy unsigned OTA. Requires flash audit before use.
 
 config MIA_PASSPORT_OTA_URL
-    string "Mia HTTPS discovery endpoint"
+    string "Mia discovery endpoint (HTTP or HTTPS)"
     depends on MIA_PASSPORT_DEVELOPMENT
     default ""
 
 config MIA_PASSPORT_WEBSOCKET_URL
-    string "Mia WSS voice endpoint"
+    string "Mia voice endpoint (WS or WSS)"
     depends on MIA_PASSPORT_DEVELOPMENT
     default ""
 

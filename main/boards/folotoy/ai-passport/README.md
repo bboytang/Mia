@@ -5,7 +5,7 @@
 `mia-ai-passport-dev` reuses this board's pins and drivers with a distinct release
 identity. It is for CI capacity evaluation only, not approved for flashing. See
 [Mia architecture, protected flash regions, staged implementation and OTA design](../../../../docs/firmware/mia-ai-passport.md).
-This variant requires explicit Mia HTTPS/WSS configuration, enables the existing
+This variant pins the current Mia HTTP/WS endpoints, enables the existing
 BluFi provisioning transport, and blocks legacy unsigned firmware/asset updates.
 
 Board definition that lets the XiaoZhi voice assistant run on the

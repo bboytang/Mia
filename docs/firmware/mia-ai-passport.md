@@ -41,14 +41,18 @@ CW2017、GPIO0 电阻梯按键。引脚与小智上游一致。复用现有协�
 - 发现/绑定：`http://43.143.230.174:8002/xiaozhi/ota/`
 - 语音：`ws://43.143.230.174:8000/xiaozhi/v1/`
 
-它们仍为明文。安全 OTA 发布前，需在**原服务**增加经审核的有效证书 HTTPS 入口；
-本开发配置也要求 WSS，避免设备凭据明文发送。尚未配置、访问或改动生产服务。
-不能假定旧文档的 `8kraw.cloud` 已转发到当前自建小智。
-TLS 地址由后续审核确认后填入 `CONFIG_MIA_PASSPORT_OTA_URL`、
-`CONFIG_MIA_PASSPORT_WEBSOCKET_URL`，只包含地址，不包含 token。
-默认均为空，缺少配置就拒绝连接，不落回公共服务。
+用户确认现阶段先用 HTTP/WS，专用开发 variant 已固定配置上述两个地址，
+发现、激活和语音联调不再等待 TLS。固件仅接受配置中完全一致的地址，包括协议、
+主机、端口和路径；HTTP/HTTPS、WS/WSS 均支持，但不会自动切换协议或回退公共服务。
+配置为 HTTPS/WSS 时，HTTP/WS 响应仍被拒绝。缺少配置仍拒绝连接。
+`CONFIG_MIA_PASSPORT_OTA_URL` 在此处是小智发现/激活接口，不代表允许 HTTP 下载固件。
 
-发现保持原 `Device-Id`/`Client-Id`/激活协议；有效发现响应的 WSS 地址必须匹配
+目前凭据和语音会经明文链路传输。安全 OTA 发布方案仍保留 HTTPS 和签名验证要求，
+现阶段应用与资源升级入口继续禁用，不会因为开放 HTTP 发现而开放未签名更新。
+未来 TLS 地址可以通过同一配置替换；只配置地址，不包含 token。
+尚未配置、访问或改动生产服务，不假定旧文档的 `8kraw.cloud` 已转发到当前自建小智。
+
+发现保持原 `Device-Id`/`Client-Id`/激活协议；有效发现响应的 WebSocket 地址必须匹配
 配置，写 NVS 前验证，不保存 MQTT 配置。语音握手继续使用服务下发的 Bearer，
 保留原 hello、Opus、listen、abort、字幕/情绪语义。不复制 iPhone 的客户端 UUID
 或 token 给新硬件，新设备需要由原 manager 授权绑定。

@@ -22,4 +22,12 @@ inline bool IsPinnedEndpoint(std::string_view url, std::string_view pin, std::st
     return true;
 }
 
+inline bool IsDiscoveryEndpoint(std::string_view url, std::string_view pin) {
+    return IsPinnedEndpoint(url, pin, "http://") || IsPinnedEndpoint(url, pin, "https://");
+}
+
+inline bool IsVoiceEndpoint(std::string_view url, std::string_view pin) {
+    return IsPinnedEndpoint(url, pin, "ws://") || IsPinnedEndpoint(url, pin, "wss://");
+}
+
 }  // namespace mia::passport
