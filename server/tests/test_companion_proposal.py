@@ -84,6 +84,34 @@ class ProposalTests(unittest.TestCase):
         self.assertEqual(read_stream(iter([('{"memories":', None), ('[],"trait":null}', None)])),
                          '{"memories":[],"trait":null}')
 
+    def test_lone_formatting_fence_keeps_original_tool_arguments(self):
+        source = '周六上午我通常在书桌边整理纸质邮票册'
+        raw = json.dumps({'memories': [{'category': 'fact', 'content': source,
+            'source_quote': source, 'source_index': 0, 'kind': 'explicit', 'subject': 'user',
+            'value': 'durable', 'sensitive': False, 'entities': ['纸质邮票册'],
+            'keywords': ['整理'], 'trigger_terms': ['书桌边']}]}, ensure_ascii=False)
+        # The captured Provider response has a bare fence plus one unique call.
+        result = read_stream(iter([('```', [delta(raw, NAME, identity='call-real')]), ('', None)]))
+        self.assertEqual(result, raw)
+        self.assertEqual(validate_output(result, [source], [])['memories'][0]['content'], source)
+        invalid = json.loads(raw)
+        invalid['memories'][0]['entities'] = ['不存在的线索']
+        invalid = json.dumps(invalid, ensure_ascii=False)
+        with self.assertRaises(MemoryError):
+            validate_output(read_stream(iter([('```', [delta(invalid, NAME)])])), [source], [])
+
+    def test_oversized_clue_arrays_remain_rejected_with_specific_retry_feedback(self):
+        source = '周六上午我通常在书桌边整理纸质邮票册'
+        memory = {'category': 'fact', 'content': source, 'source_quote': source, 'source_index': 0,
+            'kind': 'explicit', 'subject': 'user', 'value': 'durable', 'sensitive': False}
+        for field in ('entities', 'keywords', 'trigger_terms'):
+            with self.subTest(field=field):
+                valid = json.dumps({'memories': [dict(memory, **{field: ['整理'] * 8})]}, ensure_ascii=False)
+                self.assertEqual(validate_output(valid, [source], [])['memories'][0][field], ['整理'])
+                raw = json.dumps({'memories': [dict(memory, **{field: ['整理'] * 9})]}, ensure_ascii=False)
+                with self.assertRaisesRegex(MemoryError, field + ' has 9 extraction clues; at most 8'):
+                    validate_output(raw, [source], [])
+
     def test_ordinary_fact_uses_same_provider_function_once_without_invented_optional_fields(self):
         source = '我常用青瓷杯喝茶'
         raw = json.dumps({'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
@@ -111,6 +139,11 @@ class ProposalTests(unittest.TestCase):
         examples = [[(None, [delta('{}', NAME, index=1)])],
                     [(None, [delta('{}', 'unrelated_action')])],
                     [('explanation', [delta('{}', NAME)])],
+                    [('```json', [delta('{}', NAME)])],
+                    [('```\nexplanation', [delta('{}', NAME)])],
+                    [('```{}', [delta('{}', NAME)])],
+                    [('```', [delta('{}', 'unrelated_action')])],
+                    [('```', [delta('{}', NAME, index=1)])],
                     [(None, [delta('x' * 32769, NAME)])],
                     [(None, [delta('{}', NAME, identity='one')]), (None, [delta('', identity='two')])]]
         for events in examples:

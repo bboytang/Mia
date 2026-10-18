@@ -378,8 +378,11 @@ def validate_output(value, sources, context):
                 record['sensitive'] = True  # Existing confirmation lifecycle, excluded from retrieval.
         for key in ('entities', 'keywords', 'trigger_terms'):
             terms = proposed.get(key, [])
-            if not isinstance(terms, list) or len(terms) > 8:
-                raise MemoryError('invalid_input', 'Invalid extraction clues')
+            if not isinstance(terms, list):
+                raise MemoryError('invalid_input', key + ' must be an array of at most 8 extraction clues')
+            if len(terms) > 8:
+                raise MemoryError('invalid_input', key + ' has ' + str(len(terms)) +
+                                  ' extraction clues; at most 8 are allowed')
             terms = list(dict.fromkeys(_safe_text(term, 32, 'clue') for term in terms))
             rejected = [term for term in terms if term not in quote]
             if rejected:

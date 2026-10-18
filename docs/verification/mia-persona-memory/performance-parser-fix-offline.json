@@ -1,0 +1,28 @@
+{
+  "offline_only": true,
+  "source_run": 39125539728,
+  "replays": [
+    {
+      "original_arguments_unchanged": true,
+      "validation": true,
+      "memories": 1
+    },
+    {
+      "original_arguments_unchanged": true,
+      "validation": true,
+      "memories": 1
+    },
+    {
+      "original_arguments_unchanged": true,
+      "validation": false,
+      "code": "invalid_input",
+      "message": "entities has 16 extraction clues; at most 8 are allowed"
+    },
+    {
+      "original_arguments_unchanged": true,
+      "validation": false,
+      "code": "invalid_input",
+      "message": "entities has 16 extraction clues; at most 8 are allowed"
+    }
+  ]
+}

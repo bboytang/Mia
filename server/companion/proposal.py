@@ -154,7 +154,9 @@ def read_stream(stream):
             if len(text) + len(arguments) > 32768 or len(name) > 64:
                 raise MemoryError('invalid_input', 'Extraction proposal exceeds bound')
         if seen:
-            if name != NAME or not arguments or text.strip():
+            # Some Providers emit a lone Markdown fence beside a tool call.
+            # It carries no proposal text; keep arguments and all other guards.
+            if name != NAME or not arguments or text.strip() not in ('', '```'):
                 raise MemoryError('invalid_input', 'Invalid extraction function proposal')
             return arguments
         return text  # Existing providers may stream plain JSON instead of a tool.
