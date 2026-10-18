@@ -1603,3 +1603,8 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 
 
 第二十六步首候选59bb6a8a3cf06b7bb97af7ca73dc0ce473b14a50已推送，唯一实际故障运行[39122551508](https://github.com/bboytang/Mia/actions/runs/39122551508)仍在准备；同SHA服务39122544720 success、manager39122544629在途，但语法[39122544657](https://github.com/bboytang/Mia/actions/runs/39122544657)11机制中SQLite恢复测试失败。Python3.10执行set_authorizer(None)后恢复INSERT仍报not authorized；本地3.12通过不能覆盖此兼容性。官方[set_authorizer说明](https://docs.python.org/3.13/library/sqlite3.html#sqlite3.Connection.set_authorizer)注明None停用支持在3.11加入。已将仅CI清除故障改为显式SQLITE_OK回调，保留实际拒绝逻辑，11项本地复验通过（0.149秒）。待推新SHA先核对其语法，再新运行故障合同；旧句柄仍须收终态/原文，不因观察超时重启或把失败删掉。运行模块/模型/来源/门槛及请求上限都不改。
+
+
+第二十六步首运行39122551508 / 59bb6a8已终态failure：实际Provider请求0、接纳任务0，原SQLite回调兼容性错误在第一个任务提交前触发DatabaseError；没有取得任何提取超时/重试/恢复样本。修正后的故障排空路径仍让实际app以0退出（0.2222秒），原GC/Worker/服务正常结束，空闲全组1.7703秒退出；不能以此把故障合同改判通过。原文/依赖/退出证明、语法失败及服务日志、manager XML与SHA256见performance-worker-faults-first-*。同SHA服务39122544720为294项通过，manager39122544629为154项通过；语法39122544657共11项、SQLite恢复一项错误。
+
+兼容修正9f174b5a1ae40983f69bb094ac649d2dde08c698的[Python3.10机制39122689075](https://github.com/bboytang/Mia/actions/runs/39122689075) success后，只启动一次新故障运行[39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838)，精确运行SHA同9f174b5。仅CI故障解除从None改为显式SQLITE_OK回调，模型/原样本/六请求上限/原Worker及全部门槛不改。先收这一句柄，保留首失败，不通过重复同代码取绿；P23未整体验收/P24未开始。

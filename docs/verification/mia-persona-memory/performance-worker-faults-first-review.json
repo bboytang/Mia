@@ -1,0 +1,234 @@
+{
+  "run_id": 39122551508,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39122551508",
+  "observer_sha": "59bb6a8a3cf06b7bb97af7ca73dc0ce473b14a50",
+  "runtime_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "failure",
+  "p23_complete": false,
+  "artifacts": [
+    {
+      "file": "performance-worker-faults-first-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "bd466738e92d2e38459d32056dbb477e5f294a014d09cdcc0020e53f9cd833c4",
+      "sha256": "5e7c1a1dee2652895b8cc6e9b94a084715957fa95c46d8737ffd28eb91b2124d"
+    },
+    {
+      "file": "performance-worker-faults-first-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "1f6e05f5a185f8ac5a30e2780e9738b9ad49e0b4d77969c116ee06352d16ee3b",
+      "sha256": "ba53c5f765903f642d34e61afdeec795b2a49a5f80ac8d1acdf19842bb34510f"
+    },
+    {
+      "file": "performance-worker-faults-first-ci-results.json.gz",
+      "source_path": "mia-p23-worker-faults-first-run.json",
+      "raw_sha256": "90370b97f01462a45f0aa412d774734c5cc681665c6754aed4b66ba13621c26e",
+      "sha256": "5e60f54c9127b61379a142ac47f4cdc7c41194b9ac0e4d50070cc97602835764"
+    },
+    {
+      "file": "performance-worker-faults-first-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-worker-faults-first-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-worker-faults-first-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-faults-first-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-worker-faults-first-syntax.log.gz",
+      "source_path": "mia-p23-worker-faults-syntax-first.log",
+      "raw_sha256": "2366419ce66b7f99f559242754643b84ff33fc6911057be2960138c06e4ebdc0",
+      "sha256": "ef0bab8ffc928d7e553d805b954f5fad02203c5137e9364c8d1dd7f445de7e20"
+    },
+    {
+      "file": "performance-worker-faults-first-service.log.gz",
+      "source_path": "mia-p23-worker-faults-first-service.log",
+      "raw_sha256": "ab8d2bcc16d55dc759b4766827aee06f4c63af24dc95f25b6f74e7d154f95a77",
+      "sha256": "5dc31ce6720fd49bf065be6da425d4f72e400dc2de91863a67e0a5a8ba8302c4"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "bd466738e92d2e38459d32056dbb477e5f294a014d09cdcc0020e53f9cd833c4",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "3f33bee39994e6aeb2ad7eb3c565f2d3c99a830b6e41b8987041594c18f8c879",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "53e8ef2d6174e6dcdc0cd0d3fca0bf7edba3db72a19261ae0cfe00361c51517a",
+    "cgroup-final-memory.current.txt": "03e75da7395fda02f79869be49a284d8c3a02071831e3ae150c057d6b59714ba",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "e49b53ede389a83bec1b46d3f3619e4b43c0a1acb43b03b8791478a9d030f310",
+    "redis.log": "b4b93a15ab1f411ccaba0a5a1b732211b6621134aa742779942c0f70ba4422e9",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "1e2c7f4c2fdaabdf137d113f8f121136e05d02605f4152572a7c068f34008852",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "7db4617cccd58a4e751aa8eab38a3d6b8d63844ac636e6dd2bdb78d6ebf9c723",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/ready.json": "658563beaba819db7f70f1c3505e3684b937b92b2b1cdd872475c76e4ebfe8f1",
+    "app-child/app-results.json": "1f6e05f5a185f8ac5a30e2780e9738b9ad49e0b4d77969c116ee06352d16ee3b",
+    "app-child/memory.sqlite3": "03e7de8734ed1395577685a87992c2867b57b3cbc0c33b42a9964f21dbe1ee3e",
+    "junit/TEST-junit-jupiter.xml": "5cb90c9dd4354db9c7477ece789119711dbe16a6a2cc87d2463fa3b5c98bd6f2",
+    "junit/TEST-junit-vintage.xml": "b4444555ebce370617e4f26aa5d4374d8dfcb7934c15754e12781d03d7365b34",
+    "junit/TEST-junit-platform-suite.xml": "9c5e27fa901a79322fa5add3c091973e65c6f5338c2952a1f0f6149092a3bfed"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "worker_contract_passed": false,
+    "worker_fault_contract_passed": null,
+    "fault_cases": [],
+    "provider_requests": 0,
+    "accepted_extraction_jobs": 0,
+    "app_process_shutdown_seconds": 0.22217408300002717,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 1.7702832920000446,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 32638127\nuser_usec 30111038\nsystem_usec 2527089\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 223\nnr_throttled 121\nthrottled_usec 5961243\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "925515776",
+      "memory.peak": "927318016",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 37989590\nuser_usec 34213952\nsystem_usec 3775638\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 279\nnr_throttled 121\nthrottled_usec 5961243\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1025810432",
+      "memory.peak": "1371136000",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "workload_error_class": "AssertionError",
+    "workload_assertion": "Actual Worker fault contract failed; inspect sanitized child report",
+    "error_class": null,
+    "reason": null
+  },
+  "child": {
+    "ready": true,
+    "passed": true,
+    "worker_contract_passed": null,
+    "worker_fault_contract_passed": null,
+    "fault_scope": "Original Worker/SDK/proposal/validation/BGE/SQLite. Inject a 200ms Worker await deadline (not a wire timeout); await real native completion, reject actual fact INSERT via SQLite authorizer, then remove refusal and verify validated-result reuse and a subsequent real source. No fake model outputs.",
+    "fault_cases": [],
+    "fault_extraction_requests": [],
+    "fault_native_calls": [],
+    "sqlite_denials": [],
+    "provider_requests": 0,
+    "provider_request_purposes": [],
+    "accepted_extraction_jobs": 0,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "285f03a0ebed520b2a855f027d2237aa89628c225981b55da5c4808381291e7f",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "python_peak_after_workload_mib": 351.296875,
+    "app_shutdowns": [
+      {
+        "pid": 5495,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.0005442990000119607,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "provider_errors": null,
+    "case_errors": [
+      {
+        "error_class": "DatabaseError",
+        "assertion": null
+      }
+    ],
+    "error_class": null,
+    "reason": null
+  },
+  "provider_counts": {},
+  "ci_checks": {
+    "service": {
+      "run_id": 39122544720,
+      "tests": 294,
+      "conclusion": "success"
+    },
+    "manager": {
+      "run_id": 39122544629,
+      "tests": 154,
+      "conclusion": "success",
+      "xml_sha256": {
+        "TEST-xiaozhi.modules.security.config.ShiroConfigTest.xml": "da23b33b30f1ce9eb017bd3b6f6d4fc00cfc5691e6bcb31651d70f13155b245e",
+        "TEST-xiaozhi.modules.device.MiaIdentityBaselineTest.xml": "c3f93ca266fea2e5da4f828fec0f35c4cefb6bb96fe9f72f510e35bf75a9cb33",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest.xml": "eadbe3e6acf672f3bc2667ae0c8c36ec226cec72b0fb14340ac475a8ca2c502d",
+        "TEST-xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest.xml": "ae6487698263f2eb4e9a4cc6fb83caf23ef0341e3e14888b613cbef48e0e602c",
+        "TEST-xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest.xml": "07a9ce71cd8103084fdd7fe99ff46d6f217c81e5d6392a18db381114356e079c",
+        "TEST-xiaozhi.modules.device.controller.DeviceControllerTest.xml": "74d4c7e73f7aa3794666c488a24fe7c9229b48eba88616b5b8aad32897918b12",
+        "TEST-xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest.xml": "aeb3ee5f7a25e5f49da83554063552615b43267ed029be30e125c4486836cf0c",
+        "TEST-xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest.xml": "91dce5dfe7aaea4e17093a681bcb7f6ee8a732ed1a59659865a2398e80f29519",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest.xml": "37f91366caba90e1e63a079cb6419ae6a3f35e309daf030f8826524b9d6be26b",
+        "TEST-xiaozhi.common.utils.SensitiveDataUtilsTest.xml": "6695541e86929692267c766abf8f2e50641a4cb69186678a0db7013d1cca2f2b",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest.xml": "27ed57c725ee9762a8cd8cc54abed23dcd42a9499b85daed6df9dbfad9520f82",
+        "TEST-xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest.xml": "3d2c84965364e05c54e2fbb69f570c8c84cc327b7a2f7c26bb525ef0e10e9b86",
+        "TEST-xiaozhi.modules.agent.dto.AgentUpdateDTOTest.xml": "a658430dba01b066c27fd747bee155cd3def5a111e353e9d856f3ee008f61dbe",
+        "TEST-xiaozhi.common.redis.RedisSerializationTest.xml": "0faf756c05921ae756561bab72b349398b14cbc4dd3bf509d6c4aa07da852693",
+        "TEST-xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest.xml": "bac6faa82a02889f2510205d37c699fda1e10cbec4e6b8b6705194a69f467d48",
+        "TEST-xiaozhi.modules.sys.loginControllerTest.xml": "3fca83d3ca3b2f3696092b65c682d04ce25338ab30259aa82a1bf1fae90488ac",
+        "TEST-xiaozhi.modules.device.DeviceTest.xml": "925d00f467f35a18a60cd8ab52fc365833ef3bd21fa7ef3354d9675b7b228c63",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest.xml": "7a3c837ab198ea8333bf78d937c4cf6c9d9256d97502dbf4e5449d1ecc872bea",
+        "TEST-xiaozhi.common.utils.AESUtilsTest.xml": "ac45fed7f60bc707fb5c5671dacc3277a1a89aa26fb693e5fef68ed3c7be38ac",
+        "TEST-xiaozhi.common.service.impl.BaseServiceImplTest.xml": "0317f11c09bc63c0f41305e87873d39e7271743d8bb75a4043c5674e5b4c0fb9",
+        "TEST-xiaozhi.modules.config.service.impl.ConfigServiceImplTest.xml": "595b6ebd2955345075f913e38ffbbfd9cc0a08f6627d0513fe6445287f8dd319",
+        "TEST-xiaozhi.common.utils.JsonUtilsTest.xml": "b3afdca1cf154b144899e03e3becbe25451e6d77c046184cd3ccd959b04f526b",
+        "TEST-xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest.xml": "f6c432b77422a9876f9829c5689d3b5b292a65ad8222d35a26cf6fc54fd48b77",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest.xml": "be6ff9c47e7225b31a7b736d5da9488817e2e75842f0b893645f736fad6be6fb"
+      }
+    },
+    "syntax": {
+      "run_id": 39122544657,
+      "tests": 11,
+      "errors": 1,
+      "conclusion": "failure",
+      "failed_case": "SQLite restore INSERT after set_authorizer(None) under Python 3.10"
+    }
+  },
+  "limitations": "Pre-model CI authorizer incompatibility. No Provider requests or accepted jobs; no deadline/SQLite-retry/recovery verdict. Normal idle shutdown is separate and passed."
+}
