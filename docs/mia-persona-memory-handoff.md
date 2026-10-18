@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第三十二步真实并发契约已通过：[39129770362](https://github.com/bboytang/Mia/actions/runs/39129770362)，运行候选fe48aaa7455b6224b4a7d018b99eefbfe6d3661a。2前台原回复+1真实提取共3次SDK，槽位入口active=1/2/2、实际前台排队峰值1，无429/Provider错误；后台1尝试committed/10.6895秒，2前台问句任务有效empty，独立SQLite/来源/768维向量通过。此为一轮受控重叠契约，非正常任务p95。证据performance-model-gate-smoke-*；同SHA服务301/身份173/manager154/实际向量五报告/机制20全通过。关闭恢复回归[39129805499](https://github.com/bboytang/Mia/actions/runs/39129805499)在途，先收同一句柄。剩余主要验收为首句增量、正常有效任务p95/完整公平性；原3提交3无效提案及600ms首句超限保留。全组同时在途关闭仅补证，不新增门槛。P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第三十二步已验证并收证，运行实现fe48aaa7455b6224b4a7d018b99eefbfe6d3661a：真实并发[39129770362](https://github.com/bboytang/Mia/actions/runs/39129770362)2前台+1后台共3SDK，最多2槽/真实1前台排队/本轮无429，后台1尝试10.6895秒提交；同SHA关闭恢复[39129805499](https://github.com/bboytang/Mia/actions/runs/39129805499)在途app3.1025秒exit0、新PID同任务恢复/新增SDK0/attempt仍1，独立事实/向量/SQLite均通过。服务301/身份173/manager154/向量五报告/机制20全通过。完整原文/hash见performance-model-gate-smoke-*及performance-model-gate-shutdown-*。尚余首句增量与正常任务p95/完整公平性；旧3提交3无效提案无正常p95、首句600ms超限保留。下一步同分支核对每段重复权限请求的最小合并，不缓存跨段权限。全组在途同时关闭只补证，不另设门槛。P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23容量基线实现`32407ef9d994eb2c86dcea140fc2de7371d18912`（提取基线20d38cc、本次调度候选fe48aaa，详见上文），服务294/实际BGE五报告/身份173/manager154全通过；模块39091554129及共同39091556465均success，仅模块达到原优化目标，共同419.51ms达到500ms验收但未达400ms原目标。原文/hash见performance-adaptive-*；第十七/十八步容量及第十九步ABBA取舍原文保留。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23容量基线实现`32407ef9d994eb2c86dcea140fc2de7371d18912`（提取基线20d38cc、当前已验证运行fe48aaa，详见上文），服务294/实际BGE五报告/身份173/manager154全通过；模块39091554129及共同39091556465均success，仅模块达到原优化目标，共同419.51ms达到500ms验收但未达400ms原目标。原文/hash见performance-adaptive-*；第十七/十八步容量及第十九步ABBA取舍原文保留。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
