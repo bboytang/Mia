@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第三十一步预算映射修复`8d19284df1a68381272309a5d90c3fbe3978981f`已推送，语法/20机制39128261061 success，唯一新实测[39128331698](https://github.com/bboytang/Mia/actions/runs/39128331698)在途，同SHA服务39128333480、manager39128335290同步验证。首次39127847354模型前KeyError/0请求失败原文已存performance-worker-shutdown-first-*，不计作在途结果。新实测仍要求真实提案持久化、真实向量、原app在途SIGTERM≤20秒、新PID同任务恢复/启动前SDK防重复；Java/数据库为恢复保留，不冒充全服务在途共同关闭。运行仍20d38cc、三提交三拒绝无正常p95/三路429/首句超限保持，P23未整体验收/P24未开始。先收同一句柄，不重复派发。
+- **P23进行中，整体未验收**：第三十一步真实在途应用关闭/持久恢复已验证：[39128331698](https://github.com/bboytang/Mia/actions/runs/39128331698)，CI源码8d19284df1a68381272309a5d90c3fbe3978981f、运行实现20d38cc。原app在真实提案已持久化、真实向量native仍受控在途时3.1258秒exit0；原任务保留retry_wait/attempt1/提案hash且无事实。新PID恢复同任务，新增SDK0/新增提交0，attempt仍1、确认事实/来源及768维3072字节向量与关闭前实际向量hash一致；独立SQLite integrity=ok。最终全服务2.2118秒退出是恢复完成后的空闲关闭，不能代替全组在途关闭证明。同SHA服务296/manager154/机制20均通过，原文/hash见performance-worker-shutdown-compatible-*。第三十步预热3提交3无效提案/无正常p95、三路429/首句超限及调度取舍仍待，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

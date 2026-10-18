@@ -1,0 +1,313 @@
+{
+  "run": {
+    "conclusion": "success",
+    "databaseId": 39128331698,
+    "headSha": "8d19284df1a68381272309a5d90c3fbe3978981f",
+    "status": "completed",
+    "url": "https://github.com/bboytang/Mia/actions/runs/39128331698"
+  },
+  "runtime_sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+  "p23_complete": false,
+  "scope": "Actual app in-flight validated-vector hold shutdown and fresh-process durable recovery. Java/databases stay live for restart; final all-service shutdown is idle. No whole-group in-flight verdict.",
+  "artifacts": [
+    {
+      "file": "performance-worker-shutdown-compatible-parent.json.gz",
+      "raw_sha256": "9d521eafc4cc17485cad069bbc89a7480892b25a215c9dcbc04bc4b2b18d0b47",
+      "sha256": "b10ad2462da78fc7d78d741038855ccbdc33e31ff3b4d794076e8c221271eced"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-recovery-child.json.gz",
+      "raw_sha256": "8d81b5db397adf28077f5b9af94cab5d51a69032f54f5d9f91a2b027df89cebc",
+      "sha256": "41ab33f863b5abcc167527e0b951693261b64b5ee6a663e812f36032f39dd4f3"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-inflight-child.json.gz",
+      "raw_sha256": "491ba959affc76b91b8980b6a5f0c54802f8d470743490a7ea26345e68651954",
+      "sha256": "0f73ebc1f227db7059aafd0308197863c4196fcc9c1458c66bc95ab09aa4097b"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-ci-results.json.gz",
+      "raw_sha256": "25c50d05be9d9d72d1f726400fdbb967649c0ed57295b556d6a2e9744ce44fcc",
+      "sha256": "3f3f21a39b9a0d90cfffdd58ee199246acc11c8c338d7bc224b0733630bc2bb4"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-preparation-dependencies.txt.gz",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-export-dependencies.txt.gz",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-runtime-system.txt.gz",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-container-stopped.txt.gz",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-service.log.gz",
+      "raw_sha256": "5878d4fac47f1823403d1b36b11f8a46154d0dcb8e55a0454535078e76bc53fb",
+      "sha256": "ee7558ed873ced14f4d2562f39c3a0e4a1b2dd17e7fc7371796e49e5673f122b"
+    },
+    {
+      "file": "performance-worker-shutdown-compatible-syntax.log.gz",
+      "raw_sha256": "d4e604330a35e97919cd05e0b40e24ddae00e43027a05326a0f061e3762f9bae",
+      "sha256": "a134d416b92f575b547b27ac7feaf9609938b0ea17d1a6bc4a0b4f30525456cd"
+    }
+  ],
+  "raw_artifact_hashes": {
+    "app-lifecycle-results.json": "9d521eafc4cc17485cad069bbc89a7480892b25a215c9dcbc04bc4b2b18d0b47",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "2ce470c65af8c627af67b0a6dba20089378c43c8c25b36a0d921c69e51f04a8f",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "a13d2bd3fce9b4087e756704f8266ca4ae7e591e40e76f06d71ba4514e8ffedd",
+    "cgroup-final-memory.current.txt": "4c2040913c5ac95ea901767ac77e91045c769498b611c501d8c02c7da31e2949",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "065caae92a4199e0b90af41b3dd457f3b465fb12711ce6f8c26d11b9c67a53d1",
+    "redis.log": "7918b824afa772e6da4ac77623c836eead93d2ab671a9446dd9587eec48fa42d",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "9edb8147dbabb69a02e202d9f9b2eae76021af37b9ae7a843bc66de191d41353",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "262c66479661af88fdd02f4e941f37c8c14a8d415e33c2ea9c5f5b92ab4ef44f",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "shutdown-inflight-child.json": "491ba959affc76b91b8980b6a5f0c54802f8d470743490a7ea26345e68651954",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/memory.sqlite3-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "app-child/shutdown-held.json": "92f2d3da910814fa9a3505e97b39845fb593e4566e9a800e78a2424fdfe9e890",
+    "app-child/ready.json": "d72fb8316533e19f28eab122ef05cbaf2c51c9adcbeba8a80b592e8cd612a3ab",
+    "app-child/app-results.json": "8d81b5db397adf28077f5b9af94cab5d51a69032f54f5d9f91a2b027df89cebc",
+    "app-child/memory.sqlite3-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+    "app-child/memory.sqlite3": "d0014936fd9366ae40815a7fb4d470ebda694b2ee152e169dad4feed11f36233",
+    "junit/TEST-junit-jupiter.xml": "379b177e231fb52e091602acf11871699595baff6b59e6f28a8cd1932ea8abf1",
+    "junit/TEST-junit-vintage.xml": "f80be982df0185acb85c9f565229817586616b5eef093dab0897430c8e341f6b",
+    "junit/TEST-junit-platform-suite.xml": "e381efcccd671b2fc8e63a7c9d2f8e0267b77c1a03e6b31bed1aa89873f1816e"
+  },
+  "summary": {
+    "app_lifecycle_preflight_passed": true,
+    "worker_contract_passed": true,
+    "inflight_app_shutdown_recovery_passed": true,
+    "inflight_shutdown": {
+      "pid": 5366,
+      "seconds": 3.1257917009999687,
+      "returncode": 0,
+      "provider_requests": 1,
+      "checkpoint": {
+        "id": "b99076706cb186f2b4673f0df8559340e760be60f6fcce9f3b7aef1a1cb0b97e",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "retry_wait",
+        "attempts": 1,
+        "validated_sha256": "f2b8326c90c280d30466a3457b79447050c0d79a562acc15d5e1d0cfe45c6477",
+        "facts": []
+      },
+      "scope": "Entire app WS/HTTP/GC/Worker process; Java/databases remain live for restart, not all-service in-flight shutdown"
+    },
+    "inflight_held": {
+      "source_sha256": "79817e689a0f2630cb76dc3ff2dee503a9485bb0c9321161cc3b4552ad381ebf",
+      "validated_actual_output": true,
+      "pid": 5366,
+      "job_id": "b99076706cb186f2b4673f0df8559340e760be60f6fcce9f3b7aef1a1cb0b97e",
+      "stage": "validated_vector",
+      "actual_vector_sha256": "b82102dd26d9302790fc883fa2e8bdcd30663af9213f91b6f7d188b082b5fb74",
+      "persisted_attempts": 1
+    },
+    "inflight_checkpoint_before_signal": {
+      "id": "b99076706cb186f2b4673f0df8559340e760be60f6fcce9f3b7aef1a1cb0b97e",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "state": "validated",
+      "attempts": 1,
+      "validated_sha256": "f2b8326c90c280d30466a3457b79447050c0d79a562acc15d5e1d0cfe45c6477",
+      "facts": []
+    },
+    "recovery_checkpoint": {
+      "id": "b99076706cb186f2b4673f0df8559340e760be60f6fcce9f3b7aef1a1cb0b97e",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "state": "committed",
+      "attempts": 1,
+      "validated_sha256": null,
+      "facts": [
+        {
+          "id": "1d1afbb594dc465e8f1e253c14bd6dcf",
+          "owner": "user:941040003:agent:mia-p23-2",
+          "content": "我每周六在书桌边整理纸质邮票册",
+          "confirmed": 1,
+          "excerpt": "我每周六在书桌边整理纸质邮票册",
+          "dimension": 768,
+          "vector_bytes": 3072,
+          "vector_sha256": "b82102dd26d9302790fc883fa2e8bdcd30663af9213f91b6f7d188b082b5fb74"
+        }
+      ]
+    },
+    "provider_requests": 1,
+    "accepted_extraction_jobs": 1,
+    "app_process_shutdown_seconds": 0.28816944999999805,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 2.211831629999949,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "error_class": null,
+    "reason": null,
+    "workload_error_class": null,
+    "workload_assertion": null
+  },
+  "child_summary": {
+    "pid": 5385,
+    "passed": true,
+    "provider_requests": 0,
+    "accepted_extraction_jobs": 0,
+    "recovery_guard_before_launch": true,
+    "recovery_repeated_sdk": null,
+    "app_shutdowns": [
+      {
+        "pid": 5385,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.00040169499999365144,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "python_peak_after_workload_mib": 352.046875,
+    "error_class": null,
+    "reason": null
+  },
+  "independent_sqlite_audit": {
+    "integrity": "ok",
+    "job": {
+      "id": "b99076706cb186f2b4673f0df8559340e760be60f6fcce9f3b7aef1a1cb0b97e",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "state": "committed",
+      "attempts": 1,
+      "validated_result": null
+    },
+    "vector_sha256": "b82102dd26d9302790fc883fa2e8bdcd30663af9213f91b6f7d188b082b5fb74",
+    "confirmed_source_fact_count": 1
+  },
+  "common_peak_mib": 1381.734375,
+  "same_sha_checks": {
+    "sha": "8d19284df1a68381272309a5d90c3fbe3978981f",
+    "service": 39128333480,
+    "manager": 39128335290,
+    "syntax": 39128261061
+  },
+  "manager_xml_totals": {
+    "tests": 154,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "same_sha_ci_results": [
+    {
+      "conclusion": "success",
+      "databaseId": 39128335290,
+      "headSha": "8d19284df1a68381272309a5d90c3fbe3978981f",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39128335290"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39128333480,
+      "headSha": "8d19284df1a68381272309a5d90c3fbe3978981f",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39128333480"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39128331698,
+      "headSha": "8d19284df1a68381272309a5d90c3fbe3978981f",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39128331698"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39128261061,
+      "headSha": "8d19284df1a68381272309a5d90c3fbe3978981f",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39128261061"
+    }
+  ],
+  "same_sha_test_counts": {
+    "service": 296,
+    "service_seconds": 35.103,
+    "manager": 154,
+    "mechanism": 20,
+    "mechanism_seconds": 0.326
+  },
+  "manager_xml_sha256": {
+    "TEST-xiaozhi.modules.security.config.ShiroConfigTest.xml": "b70778f4687b0542008b904c0045bedfc4f9e962b0932533e2a2aa1f15be64f9",
+    "TEST-xiaozhi.modules.device.MiaIdentityBaselineTest.xml": "dc252737fc4e1756856c7522d3a55f3141b589d034ff69a8f7019e2d37085622",
+    "TEST-xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest.xml": "3bb1f6689b94dcab553a5567a1ff55b75bd32c9f4b093dd79631802ef72afd76",
+    "TEST-xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest.xml": "b99628df580b16446e5d4a8bdf1ffc602d6f863cb4896aff3ed6f6947cd35df4",
+    "TEST-xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest.xml": "70ab1c1844ba459d50e0f4d4b268a17e5b377cc8d221fdbc1078e3b6fcb94e1b",
+    "TEST-xiaozhi.modules.device.controller.DeviceControllerTest.xml": "09afc7359a0e42f9481505322ab598ed96811397d9f7aeff45287eab330733d4",
+    "TEST-xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest.xml": "f9b6fb5f95e3adab6b130ff50fc7965de56475d5eadfda3248dc892edb7e361c",
+    "TEST-xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest.xml": "e4e4fe383156a70a3436273bb83ba5c2205e255e4312646842f3f6eadfca0cab",
+    "TEST-xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest.xml": "a3243cd6e7cb9cce1d87a1afdd590166f3ac9e90f392548bc3173f43a5304cc2",
+    "TEST-xiaozhi.common.utils.SensitiveDataUtilsTest.xml": "af5a0bce539169f89309d89bd45155930eb57e1c0ccbecdd955f8538cc8c3c69",
+    "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest.xml": "2fdcc1cae61d91b91b1254b44c13fa6a6733a0db71fde2fddb58a87f29b89d64",
+    "TEST-xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest.xml": "99f5853bcf38b7b91b9982802583919f870637f80d0ba0bf7fca4716566de2d3",
+    "TEST-xiaozhi.modules.agent.dto.AgentUpdateDTOTest.xml": "290861af3371245209a744d3d3d672f31c4527b87b377783fc25c7018345143a",
+    "TEST-xiaozhi.common.redis.RedisSerializationTest.xml": "69e3de720c68838666cb882502a699421776c1167b975a92c43cfc2ac6c1962a",
+    "TEST-xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest.xml": "8e7a9347644514872ca1a22aa670b375386157157f4b06042de694ccb93594ec",
+    "TEST-xiaozhi.modules.sys.loginControllerTest.xml": "f9eb51ee6095d33b9b5a77787456098d268d6c3dcfc65fcc133ac6c4d119d912",
+    "TEST-xiaozhi.modules.device.DeviceTest.xml": "f61079df81716c2efccac4c560a90706b7ec0c530f0a34ee52ca6780765fff4c",
+    "TEST-xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest.xml": "9cb7d40b39d0118b1515e29130a8de798fd78ff356f0ac907c4e0a26ab2a937c",
+    "TEST-xiaozhi.common.utils.AESUtilsTest.xml": "73c2b26221bbbdbc7b104d60f3975801926369d3b60dfab04ffaedd74f28c133",
+    "TEST-xiaozhi.common.service.impl.BaseServiceImplTest.xml": "675e0449943a7e55983b9e8723b1fac616bfd86f9daee4fa62f76f5fe6a2918f",
+    "TEST-xiaozhi.modules.config.service.impl.ConfigServiceImplTest.xml": "99f0665674497b106a280b0a5cfd8af97036bb9038ea3842097c2facd7814181",
+    "TEST-xiaozhi.common.utils.JsonUtilsTest.xml": "690aaf40ec2fb10b53a6bc75c309fb2a3ef414f69dfb378e63c50891462bef5a",
+    "TEST-xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest.xml": "b3e5f673dfef8b7a7e2e10cf76036daa92d8a291b49c0107ae3f6faffcee1303",
+    "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest.xml": "c02358d3192855afd610045c0dce2fb3f61936ca47497f413077411461c829ad"
+  },
+  "inflight_python_peak_mib": 351.671875,
+  "same_run_model_identity": {
+    "before": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "81ea152adb03c9012c210815d3b89b9d866adca54a56f4cfdfd27a5dbf6f2d70",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "after": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "81ea152adb03c9012c210815d3b89b9d866adca54a56f4cfdfd27a5dbf6f2d70",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    }
+  }
+}
