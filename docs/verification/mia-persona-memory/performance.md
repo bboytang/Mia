@@ -2,7 +2,7 @@
 
 2026-10-17 用户批准“先读取交接文档，然后开始p23，每完成一步记录并写交接”。起点为远程最新交接提交 `1c97e91`；P22用户验收通过、选定 `glm-4-flash-250414`，原失败和未覆盖项不变。P24未开始。
 
-当前：第三十步[39126881390](https://github.com/bboytang/Mia/actions/runs/39126881390)已终态failure：源码fd9643207f03a197b01c48697933fc17661f5faf（运行20d38cc）；预热6任务3committed/3failed-invalid_output，共11真实SDK、无Provider错误，11原解析均返回，无首句或正常任务p95数据。独立SQLite核对3所属confirmed事实及768维向量、3失败无新事实，integrity=ok；不能将失败耗时计作正常提交p95。实际观察只到预热，未进入30测量任务/完整公平性判定。证据performance-worker-fairness-fixed-*已保存；不重复同源码取绿。下一步独立验证真实提案持久化后在途SIGTERM/20秒应用退出及新进程恢复，旧失败/三路429/首句超限保留，P23未整体验收/P24未开始。
+当前：第三十一步已实现CI worker-shutdown：原真实提取/原校验/SQLite持久化后，在真实BGE已返回的validated_vector阶段受控停留，向原完整app发送SIGTERM，测进程WS/HTTP/GC/Worker总退出≤20秒；保留任务/原结果后启动全新app，启动前SDK守卫禁止重复模型请求，检查同任务/尝试不增加、原所属事实/来源及原768维向量提交。Java/数据库为恢复保留运行，故这仅覆盖在途应用关闭+恢复，不冒充全服务在途共同关闭。仅CI/测试Java夹具改变，运行实现仍20d38cc，未改模型/验收目标/生产。19项本地机制、Python3.10 AST、Shell/diff通过，待精确SHA GitHub实际验证。第三十步3成功3无效提案及无正常p95、三路429/首句超限保留，P23未整体验收/P24未开始。
 
 ## 第一步：固定范围与数值入口
 
@@ -810,3 +810,10 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 第三十步[39126881390](https://github.com/bboytang/Mia/actions/runs/39126881390)已终态failure：源码fd9643207f03a197b01c48697933fc17661f5faf（运行20d38cc）；预热6任务3committed/3failed-invalid_output，共11真实SDK、无Provider错误，11原解析均返回，无首句或正常任务p95数据。独立SQLite核对3所属confirmed事实及768维向量、3失败无新事实，integrity=ok；不能将失败耗时计作正常提交p95。实际观察只到预热，未进入30测量任务/完整公平性判定。证据performance-worker-fairness-fixed-*已保存；不重复同源码取绿。下一步独立验证真实提案持久化后在途SIGTERM/20秒应用退出及新进程恢复，旧失败/三路429/首句超限保留，P23未整体验收/P24未开始。
 
 本次失败非解析器格式标记误拒绝：11次提取均已返回原输出hash，但普通模式未保存原参数，不能从hash猜测确切无效值。三提交观察耗时30.24/52.62/96.41秒，三失败41.52/83.15/87.99秒，均为预热，不能混成正常p95。应用峰值367.51MiB/共同1392.75MiB、无OOM，app0.2221秒、全组2.3773秒空闲退出。运行及CI与20d38cc字节一致的比较已通过，服务296/身份173/manager154/实际向量五报告引用该已验证提交，明确不是fd96432同SHA回归。
+
+
+## 第三十一步：在途完整应用关闭与持久任务恢复（待CI）
+
+第三十一步已实现CI worker-shutdown：原真实提取/原校验/SQLite持久化后，在真实BGE已返回的validated_vector阶段受控停留，向原完整app发送SIGTERM，测进程WS/HTTP/GC/Worker总退出≤20秒；保留任务/原结果后启动全新app，启动前SDK守卫禁止重复模型请求，检查同任务/尝试不增加、原所属事实/来源及原768维向量提交。Java/数据库为恢复保留运行，故这仅覆盖在途应用关闭+恢复，不冒充全服务在途共同关闭。仅CI/测试Java夹具改变，运行实现仍20d38cc，未改模型/验收目标/生产。19项本地机制、Python3.10 AST、Shell/diff通过，待精确SHA GitHub实际验证。第三十步3成功3无效提案及无正常p95、三路429/首句超限保留，P23未整体验收/P24未开始。
+
+复用已有真实提取SOURCE（独立新SQLite，不用P22留出），只允许最多两次真实请求。受控native hold不改模型响应/向量；关闭时必须确有未结束native work，退出后RO读取原validated_result hash、无已写事实，原任务只能validated/retry_wait。恢复不重建数值库/再次submit，原app/Worker启动前安装SDK防重复守卫，确认新PID、attempt不增加、提交原事实和原向量；原原子提交清空validated_result是预期行为，不错误要求提交后继续保留。恢复完成后最终全组退出仍只是空闲关闭。

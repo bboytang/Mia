@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第三十步[39126881390](https://github.com/bboytang/Mia/actions/runs/39126881390)已终态failure：源码fd9643207f03a197b01c48697933fc17661f5faf（运行20d38cc）；预热6任务3committed/3failed-invalid_output，共11真实SDK、无Provider错误，11原解析均返回，无首句或正常任务p95数据。独立SQLite核对3所属confirmed事实及768维向量、3失败无新事实，integrity=ok；不能将失败耗时计作正常提交p95。实际观察只到预热，未进入30测量任务/完整公平性判定。证据performance-worker-fairness-fixed-*已保存；不重复同源码取绿。下一步独立验证真实提案持久化后在途SIGTERM/20秒应用退出及新进程恢复，旧失败/三路429/首句超限保留，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第三十一步已实现CI worker-shutdown：原真实提取/原校验/SQLite持久化后，在真实BGE已返回的validated_vector阶段受控停留，向原完整app发送SIGTERM，测进程WS/HTTP/GC/Worker总退出≤20秒；保留任务/原结果后启动全新app，启动前SDK守卫禁止重复模型请求，检查同任务/尝试不增加、原所属事实/来源及原768维向量提交。Java/数据库为恢复保留运行，故这仅覆盖在途应用关闭+恢复，不冒充全服务在途共同关闭。仅CI/测试Java夹具改变，运行实现仍20d38cc，未改模型/验收目标/生产。19项本地机制、Python3.10 AST、Shell/diff通过，待精确SHA GitHub实际验证。第三十步3成功3无效提案及无正常p95、三路429/首句超限保留，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

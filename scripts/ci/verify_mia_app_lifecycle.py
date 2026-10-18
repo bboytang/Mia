@@ -69,6 +69,10 @@ async def serve():
         os.environ['MIA_MEMORY_DB'] = str(root / 'memory.sqlite3')
         from mia_behavior_runtime import bootstrap, launch
         config, _ = bootstrap()
+        if os.environ['MIA_P23_MODE'] == 'worker-shutdown':
+            from mia_worker_shutdown import guard_recovery_provider, recovering
+            if recovering():
+                guard_recovery_provider(report, persist)
         from config.manage_api_client import ManageApiClient
         ManageApiClient(config)
         report['cgroup_before'] = group_state()
@@ -107,13 +111,18 @@ async def serve():
             from mia_reply_latency import open_driver
             report['scope'] = 'Actual app/services, original installed ConnectionHandler.chat, real Provider and persistent Worker; synthetic WSS text driver, audio omitted'
             driver = await open_driver(server, scopes, config, root, report, persist)
-        elif os.environ['MIA_P23_MODE'] in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic'):
-            if os.environ['MIA_P23_MODE'] == 'worker-faults':
+        elif os.environ['MIA_P23_MODE'] in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown'):
+            if os.environ['MIA_P23_MODE'] == 'worker-shutdown':
+                from mia_worker_shutdown import open_driver, recovering
+                if recovering():
+                    open_driver = None
+            elif os.environ['MIA_P23_MODE'] == 'worker-faults':
                 from mia_worker_faults import open_driver
             else:
                 from mia_worker_competition import open_driver
             report['scope'] = 'Actual app/services and actual extraction Worker; per-mode probe/fault scope recorded separately, audio omitted'
-            driver = await open_driver(server, scopes, config, root, report, persist)
+            if open_driver is not None:
+                driver = await open_driver(server, scopes, config, root, report, persist)
         report.update(ready=True, members_ready=members(os.getpid()), cgroup_ready=group_state())
         rss = lambda value: int(value['python']['VmRSS'].split()[0]) / 1024
         report['encoder_live_rss_increment_mib'] = rss(report['members_after_encoder']) - rss(report['members_before_encoder'])
@@ -163,9 +172,11 @@ async def control(report):
                 from mia_reply_latency import drive
                 await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
                 report['members_after_workload'] = members(process.pid)
-            elif os.environ['MIA_P23_MODE'] in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic'):
+            elif os.environ['MIA_P23_MODE'] in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown'):
                 sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
-                if os.environ['MIA_P23_MODE'] == 'worker-faults':
+                if os.environ['MIA_P23_MODE'] == 'worker-shutdown':
+                    from mia_worker_shutdown import drive
+                elif os.environ['MIA_P23_MODE'] == 'worker-faults':
                     from mia_worker_faults import drive
                 elif os.environ['MIA_P23_MODE'] in ('worker-fairness', 'worker-fairness-diagnostic'):
                     from mia_worker_fairness import drive
@@ -189,7 +200,7 @@ async def control(report):
             assert child['passed'] and child['code_sha'] == report['code_sha']
             report['provider_requests'] = child['provider_requests']
             report['accepted_extraction_jobs'] = child['accepted_extraction_jobs']
-            if os.environ['MIA_P23_MODE'] not in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic'):
+            if os.environ['MIA_P23_MODE'] not in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown'):
                 assert not child.get('provider_errors') and not child.get('case_errors')
             for port in state['ports']:
                 try:
@@ -217,12 +228,20 @@ def main():
             'task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
     if mode in ('reply-smoke', 'reply-latency'):
         report['scope'] = 'Actual app/services and installed chat, same-Provider empty-memory baseline and real original Worker; sequential pairs with audio omitted'
-    elif mode in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic'):
+    elif mode in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown'):
         report['scope'] = 'Actual app/services and real extraction task; per-mode worker contract, no natural-load percentile or audio claim'
     save(ROOT / 'app-lifecycle-results.json', report)
     try:
         report['cgroup_before'] = group_state()
         asyncio.run(control(report))
+        if mode == 'worker-shutdown':
+            from mia_worker_shutdown import after_exit
+            persist = lambda value: save(ROOT / 'app-lifecycle-results.json', value)
+            after_exit(ROOT, report, persist)
+            report['app_lifecycle_preflight_passed'] = False
+            os.environ['MIA_P23_SHUTDOWN_STAGE'] = 'recover'
+            asyncio.run(control(report))
+            after_exit(ROOT, report, persist)
     except Exception as error:
         report.update(error_class=type(error).__name__, reason=str(error)[:500])
     finally:
@@ -231,6 +250,10 @@ def main():
             child = json.loads(child_path.read_text())
             report['provider_requests'] = child['provider_requests']
             report['accepted_extraction_jobs'] = child['accepted_extraction_jobs']
+            if (mode == 'worker-shutdown' and report.get('inflight_shutdown')
+                    and os.environ.get('MIA_P23_SHUTDOWN_STAGE') == 'recover'):
+                report['provider_requests'] += report['inflight_shutdown']['provider_requests']
+                report['accepted_extraction_jobs'] += 1
         if mode == 'reply-latency' and report.get('first_sentence_acceptance_passed'):
             report['remaining'].remove('same-Provider paired first-sentence delta')
         report['cgroup_final'] = group_state()
@@ -241,7 +264,7 @@ def main():
     print(json.dumps({key: report[key] for key in ('app_lifecycle_preflight_passed', 'p23_complete', 'provider_requests')}))
     if (not report['app_lifecycle_preflight_passed']
             or (mode == 'reply-latency' and not report.get('first_sentence_acceptance_passed'))
-            or (mode in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic') and not report.get('worker_contract_passed'))):
+            or (mode in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown') and not report.get('worker_contract_passed'))):
         raise SystemExit(1)
 
 
