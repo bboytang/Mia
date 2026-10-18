@@ -19,7 +19,7 @@
 1. 读取`AGENTS.md`、主交接、验收决定、实施计划及最近工作记录。
 2. 核对当前分支、HEAD、未提交文件、远端实际SHA和未推送提交；保存已有工作，不reset/clean/强推。
 3. P22实测代码为`2925b63e6ea010ac287d4e388fd6255e7d202244`；证据提交为`1a05c98044ebd3e333bce041c29f4c26c782f2a8`。后续文档提交记录用户通过决定，原始结果不变。
-4. 第三十一步CI源码`5a65e565700922a960c007d52f51f2489ba7aeb7`已推送，语法/19机制39127789383 success，唯一在途应用关闭/持久恢复[39127847354](https://github.com/bboytang/Mia/actions/runs/39127847354)在途；同SHA服务39127789379、manager39127789387同步验证。真实提案持久化后受控validated_vector暂停，原app SIGTERM≤20秒、新PID原任务恢复、启动前SDK防重复；Java/数据库为恢复保留，不冒充全服务在途共同关闭。运行仍20d38cc。第三十步预热3committed/3failed无正常p95、三路429/首句超限及调度取舍保持，P23未整体验收/P24未开始。先收唯一run，不重复派发。
+4. 第三十一步首次实测[39127847354](https://github.com/bboytang/Mia/actions/runs/39127847354)终态failure，源码5a65e565700922a960c007d52f51f2489ba7aeb7；新模式遗漏真实回复观察器的请求预算映射，原app就绪前KeyError(worker-shutdown)，真实SDK/接纳任务均0，未取得在途关闭证据。原stop_service清理回调已drained，但子进程因异常exit1，不声称正常退出或20秒通过。performance-worker-shutdown-first-*原文/hash已保存。已补齐CI模式预算为原最多两请求，新增回归，本地20机制通过，待修复新SHA唯一复测；运行实现仍20d38cc、旧提案失败/429/首句超限保持，P23未整体验收/P24未开始。
 
 已拉取当前分支即已包含交接和证据；`docs/handoff/`里的旧补充包仅为历史快照，不重复导入tracked.patch或覆盖本地文件。详细失败、模型比较和旧run留在工作记录/验证目录，不在本接续入口重复。
 

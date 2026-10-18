@@ -1,0 +1,152 @@
+{
+  "run": {
+    "conclusion": "failure",
+    "databaseId": 39127847354,
+    "headSha": "5a65e565700922a960c007d52f51f2489ba7aeb7",
+    "status": "completed",
+    "url": "https://github.com/bboytang/Mia/actions/runs/39127847354"
+  },
+  "runtime_sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+  "p23_complete": false,
+  "scope": "Actual app in-flight validated-vector hold shutdown and fresh-process durable recovery. Java/databases stay live for restart; final all-service shutdown is idle. No whole-group in-flight verdict.",
+  "artifacts": [
+    {
+      "file": "performance-worker-shutdown-first-parent.json.gz",
+      "raw_sha256": "3652ebc4834cfd6d4f65596249fa5be795d934c12dc6de86b3fe37e9dc9a6424",
+      "sha256": "79b708aeb2fc9d50c4bef71ee0c613540fe252b61e231b57adf076af8aeedb46"
+    },
+    {
+      "file": "performance-worker-shutdown-first-recovery-child.json.gz",
+      "raw_sha256": "4560798aa3203bf7a40648c2dbda8eab30d7ee6b146c3566eb92e881900e9372",
+      "sha256": "9b2bbe419a0f3a63a91e846041ad670045a3d4c9d87e845ee678fd901c575308"
+    },
+    {
+      "file": "performance-worker-shutdown-first-ci-results.json.gz",
+      "raw_sha256": "9af76a5e73f63e46203a6ed50f2a53a12ee8939dff31d3bf8fc448198d1d7595",
+      "sha256": "4ba38e40835db7cf82976cf7e7a826c67afcf9ce8ab65016a2d883564fc4a384"
+    },
+    {
+      "file": "performance-worker-shutdown-first-preparation-dependencies.txt.gz",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-worker-shutdown-first-export-dependencies.txt.gz",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-worker-shutdown-first-runtime-system.txt.gz",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-shutdown-first-container-stopped.txt.gz",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-worker-shutdown-first-service.log.gz",
+      "raw_sha256": "deb5622d8952b405bba0de70c58d628c1e6c241bc3cdf3c2255e6ad95528aacf",
+      "sha256": "eab6bb2567fda182c894c941ce2689a285779da076654f2892beaffdbcf4aded"
+    },
+    {
+      "file": "performance-worker-shutdown-first-syntax.log.gz",
+      "raw_sha256": "e53092971c71d5a843d4649777e8a4cd9936a0d8d9e3b529ba183840da3adc94",
+      "sha256": "5d992af693ec9a829759243511de21f8ba1c284dddf017230b863aaeb1c8e54c"
+    }
+  ],
+  "raw_artifact_hashes": {
+    "app-lifecycle-results.json": "3652ebc4834cfd6d4f65596249fa5be795d934c12dc6de86b3fe37e9dc9a6424",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "c0d558fe3a06e1a71065b4a71dd5157d550e54edc6e169c08b5a1aa9895aa230",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "bb19dd44919a8af3d9cd9b5e282dbe5204fad95f24e62c87962a0c9b3f47e190",
+    "cgroup-final-memory.current.txt": "18603f30c8ea2176bd65c319cdd99154f30a180b392c99299df0f46e98b4b5b4",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "29af70919afb574fd5cf222c3ab4a90388b1801a6b0ed949d3423501cc76d33f",
+    "redis.log": "82a30b75abd8f57dda9718ff01118627201efad36fdb2df3e862766eedd45898",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "9f85aef81ad80269f3e0820c8af5137b5ffdfbe1c078a8c1dd9f7cb2b6669c9a",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "2853865299b2bfed9e88c50dc16d059f528e7faeea4fde61e5132c3168d067a2",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "bbd83c8e9ed52bc1cc5d5ea8b581cad5b0fcf6615b3b76a4228604dfc5be1382",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/app-results.json": "4560798aa3203bf7a40648c2dbda8eab30d7ee6b146c3566eb92e881900e9372",
+    "app-child/memory.sqlite3": "bcdb43328a45d0c8ced962f0c4c4a2fe635315b99fc6b631915937be797677eb",
+    "junit/TEST-junit-jupiter.xml": "8967d01c038170f96d266a3b4f687cf4bf9e21a7add50f90be91dfb511ae5d2f",
+    "junit/TEST-junit-vintage.xml": "ed2e14b1cb15c2943ab47f36bb752eb807647e353fd83d6fd342d2aa798c7da0",
+    "junit/TEST-junit-platform-suite.xml": "ae12200b809da8f9e1d1e4ea72dc6662ee5b407a611955f919802ec6404361fb"
+  },
+  "summary": {
+    "app_lifecycle_preflight_passed": false,
+    "worker_contract_passed": null,
+    "inflight_app_shutdown_recovery_passed": null,
+    "inflight_shutdown": null,
+    "inflight_held": null,
+    "inflight_checkpoint_before_signal": null,
+    "recovery_checkpoint": null,
+    "provider_requests": 0,
+    "accepted_extraction_jobs": 0,
+    "app_process_shutdown_seconds": null,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": null,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": false,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "error_class": "AssertionError",
+    "reason": "Actual app process exited before readiness; inspect sanitized child report",
+    "workload_error_class": null,
+    "workload_assertion": null
+  },
+  "child_summary": {
+    "pid": 5493,
+    "passed": false,
+    "provider_requests": 0,
+    "accepted_extraction_jobs": 0,
+    "recovery_guard_before_launch": null,
+    "recovery_repeated_sdk": null,
+    "app_shutdowns": [
+      {
+        "pid": 5493,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.00039196699998456097,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "python_peak_after_workload_mib": null,
+    "error_class": "KeyError",
+    "reason": "'worker-shutdown'"
+  },
+  "common_peak_mib": 1188.16015625,
+  "same_sha_checks": {
+    "sha": "5a65e565700922a960c007d52f51f2489ba7aeb7",
+    "service": 39127789379,
+    "manager": 39127789387,
+    "syntax": 39127789383
+  },
+  "manager_xml_totals": {
+    "tests": 154,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

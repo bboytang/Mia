@@ -15,6 +15,9 @@ spec.loader.exec_module(latency)
 
 
 class EmptyMemoryBaselineTests(unittest.TestCase):
+    def test_shutdown_mode_has_only_two_original_extraction_attempts(self):
+        self.assertEqual(latency.REQUEST_CAPS['worker-shutdown'], 2)
+
     def test_original_prompt_budget_and_question_survive_without_index_access(self):
         scope = AuthenticatedScope('user:1:agent:a', 1, 1, 'a', 'mia', 'device', 'client', 0, 1,
             datetime.now(timezone.utc) + timedelta(days=1), frozenset({'memory:read'}))
