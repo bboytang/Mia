@@ -4,6 +4,7 @@ import asyncio
 import hashlib
 import json
 import os
+from pathlib import Path
 import ssl
 import threading
 import time
@@ -138,8 +139,18 @@ async def open_driver(server, scopes, config, root, report, persist):
     existing_llm.create_instance, worker.resolve = factory, resolve
 
     async def watch():
+        from mia_companion.model_requests import model_requests
         previous = None
+        previous_gate = None
         while True:
+            gate = model_requests.snapshot()
+            if gate != previous_gate:
+                with lock:
+                    transitions = report.setdefault('model_gate_transitions', [])
+                    assert len(transitions) < 256, 'Unbounded gate evidence'
+                    transitions.append(dict(gate, at_ms=elapsed()))
+                    persist(report)
+                previous_gate = gate
             value = worker.foreground
             if value != previous:
                 with lock:
@@ -294,4 +305,13 @@ async def drive(state, report, persist):
         extraction_requests=result['requests'], foreground_peak=result['foreground_peak'])
     if overlap:
         report['worker_overlap_contract_passed'] = result['passed'] and len(report['foreground_cases']) == 2
+        child = json.loads((Path(os.environ['MIA_P23_REPORT_DIR']) / 'app-child/app-results.json').read_text())
+        states = child['model_gate_transitions']
+        entries = child['model_gate_sdk_entries']
+        assert all(1 <= x['active'] <= 2 for x in entries)
+        assert max(x['active'] for x in states) == 2
+        assert any(x['waiting_foreground'] for x in states), 'No actual foreground request queued'
+        report['model_gate_runtime_verified'] = True
+        report['model_gate_transitions'] = states
+        report['model_gate_sdk_entries'] = entries
     persist(report)

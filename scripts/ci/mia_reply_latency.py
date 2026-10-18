@@ -46,10 +46,12 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
     provider._p23_sample = None
 
     def counted(*args, **kwargs):
+        from mia_companion.model_requests import model_requests
         sample = provider._p23_sample
         capture = None
         started = time.perf_counter()
         with lock:
+            report.setdefault('model_gate_sdk_entries', []).append(dict(model_requests.snapshot(), purpose=purpose))
             assert report['provider_requests'] < report['provider_request_cap'], 'P23 real request cap exceeded'
             report['provider_requests'] += 1
             report.setdefault('provider_request_purposes', []).append(purpose)
@@ -219,12 +221,14 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
                 def generate():
                     queue = conn.tts.tts_text_queue
                     queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.FIRST, ContentType.ACTION))
-                    stream = provider.response(conn.session_id, baseline['messages'], max_tokens=baseline['max_tokens'])
-                    try:
-                        for text in stream:
-                            queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.MIDDLE, ContentType.TEXT, text))
-                    finally:
-                        stream.close()
+                    from mia_companion.model_requests import model_requests
+                    with model_requests.acquire(foreground=True, timeout=10):
+                        stream = provider.response(conn.session_id, baseline['messages'], max_tokens=baseline['max_tokens'])
+                        try:
+                            for text in stream:
+                                queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.MIDDLE, ContentType.TEXT, text))
+                        finally:
+                            stream.close()
                     queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.LAST, ContentType.ACTION))
 
                 await asyncio.to_thread(generate)

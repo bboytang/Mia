@@ -84,6 +84,60 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
     def row(self, result):
         return self.jobs.current({'id': result['id']})
 
+    async def test_timed_out_queued_extraction_never_starts_sdk_after_slot_release(self):
+        from server.companion.model_requests import ModelRequestGate
+        gate = ModelRequestGate()
+        leases = [gate.acquire(foreground=True), gate.acquire(foreground=True)]
+        provider = SimpleNamespace(response_no_stream=Mock(return_value='{"memories":[]}'),
+            client=SimpleNamespace(close=Mock()))
+        async def resolve(scope):
+            return LLMMemoryExtractor(lambda: provider)
+        self.worker.resolve = resolve
+        self.worker.extraction_timeout = .03
+        with patch('server.companion.extraction.model_requests', gate):
+            try:
+                admitted = await self.worker.submit(self.event())
+                await self.worker.run_once()
+                self.assertEqual(self.row(admitted)['state'], 'retry_wait')
+                self.assertEqual(self.row(admitted)['attempts'], 1)
+            finally:
+                for lease in leases:
+                    lease.release()
+            deadline = time.monotonic() + 2
+            while not self.worker.lane.done.is_set():
+                self.assertLess(time.monotonic(), deadline)
+                await asyncio.sleep(.01)
+        provider.response_no_stream.assert_not_called()
+        provider.client.close.assert_called_once()
+        self.assertEqual(gate.snapshot()['active'], 0)
+
+    async def test_outer_timeout_retains_slot_until_actual_model_call_finishes(self):
+        from server.companion.model_requests import ModelRequestGate
+        gate = ModelRequestGate()
+        release = threading.Event()
+        def response(*args):
+            release.wait(2)
+            return '{"memories":[]}'
+        provider = SimpleNamespace(response_no_stream=response, client=SimpleNamespace(close=Mock()))
+        async def resolve(scope):
+            return LLMMemoryExtractor(lambda: provider)
+        self.worker.resolve = resolve
+        self.worker.extraction_timeout = .03
+        with patch('server.companion.extraction.model_requests', gate):
+            try:
+                await self.worker.submit(self.event())
+                await self.worker.run_once()
+                self.assertEqual(gate.snapshot()['active'], 1)
+                provider.client.close.assert_not_called()
+            finally:
+                release.set()
+            deadline = time.monotonic() + 2
+            while not self.worker.lane.done.is_set():
+                self.assertLess(time.monotonic(), deadline)
+                await asyncio.sleep(.01)
+        provider.client.close.assert_called_once()
+        self.assertEqual(gate.snapshot()['active'], 0)
+
     async def test_admission_is_durable_not_saved_and_duplicates_share_one_job(self):
         event = self.event()
         result = await self.worker.submit(event)

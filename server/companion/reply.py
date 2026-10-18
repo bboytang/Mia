@@ -13,6 +13,7 @@ from .authorization import AuthenticatedScope, PrivateAuthorizationRequired, req
 from .context import ContextBuilder, ContextError, ContextLimits, packed
 from .embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable, SemanticEncoder
 from .semantic import SemanticMemoryIndex
+from .model_requests import model_requests
 
 
 class OfflineEncoder:
@@ -185,12 +186,15 @@ def response(conn, functions, depth):
     request = turn.bundle.request()
     tools = request.get('tools')
     # The same provider object/client/stream continues to own all generation.
-    stream = (conn.llm.response_with_functions(conn.session_id, request['messages'], functions=tools,
-                max_tokens=request['max_tokens']) if tools else
-              conn.llm.response(conn.session_id, request['messages'], max_tokens=request['max_tokens']))
     def guarded():
+        lease = model_requests.acquire(foreground=True, timeout=10,
+            cancelled=lambda: getattr(conn, 'client_abort', False))
+        stream = None
         try:
             wait(conn, validate(conn, turn))
+            stream = (conn.llm.response_with_functions(conn.session_id, request['messages'], functions=tools,
+                max_tokens=request['max_tokens']) if tools else
+                conn.llm.response(conn.session_id, request['messages'], max_tokens=request['max_tokens']))
             for delta in stream:
                 if getattr(conn, '_mia_context_turn', None) is not turn:
                     raise ContextError('context_turn_superseded')
@@ -201,6 +205,9 @@ def response(conn, functions, depth):
                 yield delta if tools or functions is None else (delta, None)
             wait(conn, validate(conn, turn))
         finally:
-            if hasattr(stream, 'close'):
-                stream.close()
+            try:
+                if hasattr(stream, 'close'):
+                    stream.close()
+            finally:
+                lease.release()
     return guarded()

@@ -6,6 +6,7 @@ import unicodedata
 
 from .memory import MemoryError, SECRET, SENSITIVE, _safe_text, parse_extraction, trait_supported
 from .persona import PersonaGuardrail
+from .model_requests import model_requests
 
 
 INSTRUCTIONS = '''Extract only useful durable information from actual USER excerpts.
@@ -510,6 +511,7 @@ class LLMMemoryExtractor:
         if not any(source_supported(source, None, allow_transient=bool(tracking['enabled'])) for source in sources):
             return {'memories': [], 'trait': None}
         provider = self.factory()
+        lease = None
         try:
             natural = len(sources) == 1 and natural_change_requested(sources[0], context)
             growth = not natural and growth_eligible(context)
@@ -554,6 +556,9 @@ class LLMMemoryExtractor:
                        'existing_memories': model_context, 'emotion_tracking_enabled': bool(tracking['enabled'])}
             if feedback:
                 payload['validation_feedback'] = feedback
+            cancellation = getattr(context, 'request_cancelled', None)
+            lease = model_requests.acquire(foreground=False,
+                cancelled=cancellation.is_set if cancellation is not None else lambda: False)
             if function_capable:
                 from .proposal import NAME, read_stream, tool_definition
                 whole = len(sources) == 1 and source_supported(sources[0], payload['user_excerpts'][0])
@@ -575,5 +580,9 @@ class LLMMemoryExtractor:
                 json.dumps(payload, ensure_ascii=False))
         finally:
             client = getattr(provider, 'client', None)
-            if client is not None and hasattr(client, 'close'):
-                client.close()
+            try:
+                if client is not None and hasattr(client, 'close'):
+                    client.close()
+            finally:
+                if lease is not None:
+                    lease.release()

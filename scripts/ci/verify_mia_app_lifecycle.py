@@ -225,7 +225,7 @@ def main():
         'app_lifecycle_preflight_passed': False, 'p23_complete': False, 'provider_requests': 0,
         'scope': 'Actual full-import app/BGE/idle Worker lifecycle in common 2CPU/2GiB parent; not inflight/reply/Worker fairness acceptance',
         'remaining': ['same-Provider paired first-sentence delta', 'two actual foreground replies and persistent extraction',
-            'task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
+            'task fairness/faults/120-second terminal latency', 'inflight application shutdown and durable recovery']}
     if mode in ('reply-smoke', 'reply-latency'):
         report['scope'] = 'Actual app/services and installed chat, same-Provider empty-memory baseline and real original Worker; sequential pairs with audio omitted'
     elif mode in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown'):
@@ -256,6 +256,8 @@ def main():
                 report['accepted_extraction_jobs'] += 1
         if mode == 'reply-latency' and report.get('first_sentence_acceptance_passed'):
             report['remaining'].remove('same-Provider paired first-sentence delta')
+        if mode == 'worker-shutdown' and report.get('inflight_app_shutdown_recovery_passed'):
+            report['remaining'].remove('inflight application shutdown and durable recovery')
         report['cgroup_final'] = group_state()
         events = dict(line.split() for line in report['cgroup_final']['memory.events'].splitlines())
         if any(int(events[key]) for key in ('oom', 'oom_kill')):

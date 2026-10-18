@@ -221,11 +221,16 @@ class MemoryWorker:
                 if self.foreground:
                     return False
                 await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=True)
+                context.request_cancelled = threading.Event()
                 try:
                     output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']], context),
                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))
                 except asyncio.TimeoutError:
                     raise TimeoutError('extraction_timeout') from None
+                finally:
+                    # A cancelled/deadline-expired native waiter must never start
+                    # a fresh model request when a slot becomes available later.
+                    context.request_cancelled.set()
                 try:
                     validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
                 except MemoryError as error:
