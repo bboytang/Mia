@@ -1,0 +1,624 @@
+{
+  "run_id": 39126355175,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39126355175",
+  "observer_sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+  "runtime_sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+  "conclusion": "success",
+  "p23_complete": false,
+  "scope": "Actual two frozen diagnostic inputs committed and independently audited; no full normal-load fairness/p95, foreground competition, or inflight shutdown verdict",
+  "artifacts": [
+    {
+      "file": "performance-parser-fix-diagnostic-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "59240454925c8fe15182412a704494690dadc34597e3f70ca36a5ec0b8dd6bde",
+      "sha256": "83796796350236d634a30cd05d3ffdab260b3390fcaa46b9d0a3c6b5dd9a67f4"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "026a5f7182533880770ebb9becde2e269db6b23ed8cf580a92a58d91906681d6",
+      "sha256": "cd100e13fdd6ca1826e3dfbf4b65565cf87f685c8729bcdca3625ff63aaa1f81"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-ci-results.json.gz",
+      "source_path": "mia-p23-parser-diagnostic-run.json",
+      "raw_sha256": "e107b8cec1e041e979aa62560ce0de821623d4f183ac4c7484416d0d3e119a77",
+      "sha256": "ece4ada77d4ad65c70c86e95ab4977db62415c554c8ecb8dfb2b99dfba593f7e"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-service.log.gz",
+      "raw_sha256": "ab4a3a71b452c859259dab9fa58e482a87e38711fd32564e5324409e6830acdb",
+      "sha256": "020f2bc4dcd6075ec2219b89a99fad075c25969be52caf45ca9bd92384c097e7"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-identity.log.gz",
+      "raw_sha256": "085c737753121c28f6adb13f1cee0331b84ce86edc5231c40174a3d9a1579368",
+      "sha256": "5ff54b94107d968c2fa40fcff9c184f7f6f0e67fd49eab5c32e3adc400fb10b2"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-syntax.log.gz",
+      "raw_sha256": "3b5e3ab8224d854f2062eb1910ae35fd1f4e1872c1b84d5fcd1dc1718246297b",
+      "sha256": "b1b472fc7c3df62a357378b8cd4954d72cb20291a4c2b19aeb36f83cee123f86"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-vector-results.json.gz",
+      "raw_sha256": "3ca1fd6c862fd3323b38d67726af08e676ec0bc3bdaa26b9ed6d1b30cb9963f2",
+      "sha256": "5523bb7fc3ec161a27ebb87df336c0ba2eb15125168270519c5ec13f38e70962"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-reply-results.json.gz",
+      "raw_sha256": "6af1b644778812780656c6b196a4d8e8017bb14e11a2a8840a5fbdff4f4d9677",
+      "sha256": "07aefe8dd0979607f9f2ad96548260ffa37b09fb6e878fa9efac6524f17325ef"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-extraction-results.json.gz",
+      "raw_sha256": "5d5f3c41e9e59e5374d8926daec095cf81f7525cb52624ee0b3c2cdc885d160a",
+      "sha256": "80da2727144a8ce0534c854121868aefcf14ba5fefa3958f48b17881df9e8bb6"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-context-results.json.gz",
+      "raw_sha256": "5a4d7c42ddcbea5f2459d4cd94f5007d126c64f39d979f628b564ee060cfec1d",
+      "sha256": "8a4af052d407866c7bdd24778623b52896a85d65752dfe6d4718c55fc08244f9"
+    },
+    {
+      "file": "performance-parser-fix-diagnostic-retrieval-results.json.gz",
+      "raw_sha256": "33fc4dec06a0381c3975ee49a9af61a98c3e73a13501fc956f9ee808df386acd",
+      "sha256": "33b9f91fe121e0617667fc2721fd16e3c0dc444993200830f48ead8ba20c9335"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "59240454925c8fe15182412a704494690dadc34597e3f70ca36a5ec0b8dd6bde",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "8e4b14b8fcb450db2157eb7f74dbd763d659650a6f98becf4b23c19887ad7176",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "e9830c767995e1f414f4aea35dd13684c2f08f6675830e34781123286453fe0d",
+    "cgroup-final-memory.current.txt": "366154494586e432784b6fe57663346c2630920302a52f35322f696f8ff3acaf",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "af25629aa27f6f966a7f6448f00e3574e36344600c208dd0cdf4a01a25f1be52",
+    "redis.log": "de4e57451f43259ba5fd83e0af83d84a0b43a1e688975cc05b6ba603b57d7eab",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "acf913e92ed2a2ae010a9ccffafe7b9f6e0c9366d3764f16b229237f41b762a8",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "826a338b1951d38cc7182335462a485a547d84078b38573968b850bbd05d9ab1",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/ready.json": "041591f13e08925b8e45a80e6e015cdd126a6e36330a5d1fe0df80107e29ce8a",
+    "app-child/app-results.json": "026a5f7182533880770ebb9becde2e269db6b23ed8cf580a92a58d91906681d6",
+    "app-child/memory.sqlite3": "2a8c574d8ef4f824137bf13e876eb62a26df9cb4266f6df61d61d239bd40e5e8",
+    "junit/TEST-junit-jupiter.xml": "b8ed763a9942757effdcedb604679bcdd86e43648c5ccd5a62436c2208f2055a",
+    "junit/TEST-junit-vintage.xml": "d85e772416b89b7ad485dc86ca57a11fb640aedccd725d79b5f4f2e332496125",
+    "junit/TEST-junit-platform-suite.xml": "a732e88c00ed07d57a72b2b79c00a6ad62778d5d7bd9e8930ab90edd77ac9010"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "worker_contract_passed": true,
+    "worker_diagnostic_complete": true,
+    "diagnostic_jobs": [
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040001:agent:mia-p23-0",
+        "profile": "short",
+        "source": "周六上午我通常在书桌边整理纸质邮票册",
+        "raw_source": "周六上午我通常在书桌边整理纸质邮票册",
+        "session_id": "p23-fair-0-short",
+        "submitted_at_ms": 181.56348000002254,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "bf4aecdef38cbf020cd08243acbf839332d14ca743d44f9ebc23cb2583dbaebe",
+          "state": "pending"
+        },
+        "admitted_at_ms": 208.813962000022,
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "submit_to_observed_terminal_seconds": 6.861711172000014
+      },
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040003:agent:mia-p23-2",
+        "profile": "dense",
+        "source": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "raw_source": "整理纸质邮票册时，我先在书桌上铺一块浅色棉布，把准备归位的邮票按收集年份分成几叠，再逐张把卷起的边角轻轻理平，用干净的镊子夹住外缘放进透明护邮袋，接着对照册页右下角的铅笔编号确认位置，把新添的邮票登记在横线记录本里，登记内容包括拿到邮票的月份和图案名称，放好后我会轻轻合上册页，用软布擦掉封面浮灰，把邮票册直立放回书桌左侧的木架，最后把镊子收进蓝色笔盒，再将棉布叠好放进抽屉",
+        "session_id": "p23-fair-0-dense",
+        "submitted_at_ms": 7068.824457999995,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+          "state": "pending"
+        },
+        "admitted_at_ms": 7088.174664000007,
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "submit_to_observed_terminal_seconds": 24.640313982000006
+      }
+    ],
+    "fair_measurement_scope": "Diagnostic collection only: two original frozen warm inputs/Scopes, no normal-load or D08 verdict. Failed model/parse outcomes are retained.",
+    "provider_requests": 3,
+    "accepted_extraction_jobs": 2,
+    "app_process_shutdown_seconds": 0.2590179899999612,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 2.2753904420000026,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 32464813\nuser_usec 30064575\nsystem_usec 2400237\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 217\nnr_throttled 116\nthrottled_usec 5592571\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "922390528",
+      "memory.peak": "922398720",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 43282786\nuser_usec 39390349\nsystem_usec 3892436\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 587\nnr_throttled 125\nthrottled_usec 6051816\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1030750208",
+      "memory.peak": "1426202624",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "workload_error_class": null,
+    "workload_assertion": null,
+    "error_class": null,
+    "reason": null
+  },
+  "child": {
+    "ready": true,
+    "passed": true,
+    "worker_diagnostic_complete": true,
+    "worker_probe_scope": "Diagnostic only: original frozen warm short input at Scope 0 and dense input at Scope 2; no fairness/normal-task percentile verdict",
+    "fair_jobs": [
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040001:agent:mia-p23-0",
+        "profile": "short",
+        "source": "周六上午我通常在书桌边整理纸质邮票册",
+        "raw_source": "周六上午我通常在书桌边整理纸质邮票册",
+        "session_id": "p23-fair-0-short",
+        "submitted_at_ms": 181.56348000002254,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "bf4aecdef38cbf020cd08243acbf839332d14ca743d44f9ebc23cb2583dbaebe",
+          "state": "pending"
+        },
+        "admitted_at_ms": 208.813962000022,
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "submit_to_observed_terminal_seconds": 6.861711172000014
+      },
+      {
+        "round": 0,
+        "warm": true,
+        "owner": "user:941040003:agent:mia-p23-2",
+        "profile": "dense",
+        "source": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "raw_source": "整理纸质邮票册时，我先在书桌上铺一块浅色棉布，把准备归位的邮票按收集年份分成几叠，再逐张把卷起的边角轻轻理平，用干净的镊子夹住外缘放进透明护邮袋，接着对照册页右下角的铅笔编号确认位置，把新添的邮票登记在横线记录本里，登记内容包括拿到邮票的月份和图案名称，放好后我会轻轻合上册页，用软布擦掉封面浮灰，把邮票册直立放回书桌左侧的木架，最后把镊子收进蓝色笔盒，再将棉布叠好放进抽屉",
+        "session_id": "p23-fair-0-dense",
+        "submitted_at_ms": 7068.824457999995,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+          "state": "pending"
+        },
+        "admitted_at_ms": 7088.174664000007,
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "submit_to_observed_terminal_seconds": 24.640313982000006
+      }
+    ],
+    "fair_dataset_sha256": "96ee8721f7fdc0dd6deec5dcb617f326104063773b7dd4af34c6baa1890c7448",
+    "capacity_per_owner": {
+      "user:941040001:agent:mia-p23-0": 1000,
+      "user:941040002:agent:mia-p23-1": 10000,
+      "user:941040003:agent:mia-p23-2": 32
+    },
+    "provider_requests": 3,
+    "provider_request_purposes": [
+      "extraction",
+      "extraction",
+      "extraction"
+    ],
+    "accepted_extraction_jobs": 2,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "285f03a0ebed520b2a855f027d2237aa89628c225981b55da5c4808381291e7f",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "native_extractions": [
+      {
+        "job_id": "bf4aecdef38cbf020cd08243acbf839332d14ca743d44f9ebc23cb2583dbaebe",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "attempt": 1,
+        "sources": [
+          "周六上午我通常在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "5bb055e54217d49ca75793e6e1e7894cd3234e1c0dfcfc0c7a171d58fc89f319",
+        "started_at_ms": 405.5039319999878,
+        "original_output_sha256": "7ed641087e16b3694bf00b1ff77c7e4edebfd00491eefe0da0f8585ced846778",
+        "original_output_capture_truncated": false,
+        "original_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"周六上午我通常在书桌边整理纸质邮票册\", \"source_quote\": \"周六上午我通常在书桌边整理纸质邮票册\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"anchor\": \"周六上午\", \"entities\": [\"周六上午\", \"书桌边\", \"整理\", \"纸质邮票册\"], \"keywords\": [\"周六上午\", \"书桌边\", \"整理\", \"纸质邮票册\"], \"trigger_terms\": [\"周六上午\", \"书桌边\", \"整理\", \"纸质邮票册\"], \"relations\": []}]}",
+        "original_output_validation": {
+          "passed": true
+        },
+        "finished_at_ms": 6805.818541000008
+      },
+      {
+        "job_id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 1,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "started_at_ms": 7268.927693000023,
+        "original_output_sha256": "63f24f169f899c105d4e96c2d0772beb7aff983bb29187946c80ab456fef4e1c",
+        "original_output_capture_truncated": false,
+        "original_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉\", \"source_index\": 0, \"source_quote\": \"整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉\", \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"entities\": [\"整理纸质邮票册\", \"浅色棉布\", \"邮票\", \"收集年份\", \"卷起的边角\", \"透明护邮袋\", \"铅笔编号\", \"横线记录本\", \"拿到邮票的月份\", \"图案名称\", \"封面浮灰\", \"邮票册\", \"木架\", \"镊子\", \"蓝色笔盒\", \"棉布\"], \"keywords\": [\"整理邮票册\", \"浅色棉布\", \"邮票\", \"收集年份\", \"卷起的边角\", \"透明护邮袋\", \"铅笔编号\", \"横线记录本\", \"拿到邮票的月份\", \"图案名称\", \"封面浮灰\", \"邮票册\", \"木架\", \"镊子\", \"蓝色笔盒\", \"棉布\"], \"trigger_terms\": [\"整理邮票册\", \"浅色棉布\", \"邮票\", \"收集年份\", \"卷起的边角\", \"透明护邮袋\", \"铅笔编号\", \"横线记录本\", \"拿到邮票的月份\", \"图案名称\", \"封面浮灰\", \"邮票册\", \"木架\", \"镊子\", \"蓝色笔盒\", \"棉布\"], \"relations\": []}]}",
+        "original_output_validation": {
+          "passed": false,
+          "error_class": "MemoryError",
+          "code": "invalid_input",
+          "message": "entities has 16 extraction clues; at most 8 are allowed",
+          "rejected_clues": {}
+        },
+        "finished_at_ms": 19053.239070000018
+      },
+      {
+        "job_id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 2,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "started_at_ms": 20173.837445999994,
+        "original_output_sha256": "a51622cd97f41e0e35f03fd02ffe4a94bdded8b9424234fe20ac6b76389095fd",
+        "original_output_capture_truncated": false,
+        "original_output": "{\"memories\": [{\"category\": \"fact\", \"content\": \"整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉\", \"source_quote\": \"整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉\", \"source_index\": 0, \"kind\": \"explicit\", \"subject\": \"user\", \"value\": \"durable\", \"sensitive\": false, \"entities\": [\"整理纸质邮票册\", \"浅色棉布\", \"邮票\", \"收集年份\", \"卷起的边角\", \"透明护邮袋\", \"铅笔编号\", \"横线记录本\"], \"keywords\": [\"整理\", \"邮票册\", \"棉布\", \"邮票\", \"年份\", \"边角\", \"护邮袋\", \"记录\"], \"trigger_terms\": [\"整理\", \"邮票册\", \"棉布\", \"邮票\", \"年份\", \"边角\", \"护邮袋\", \"记录\"], \"relations\": []}]}",
+        "original_output_validation": {
+          "passed": true
+        },
+        "finished_at_ms": 31214.670098999988
+      }
+    ],
+    "extraction_requests": [
+      {
+        "job_id": "bf4aecdef38cbf020cd08243acbf839332d14ca743d44f9ebc23cb2583dbaebe",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "attempt": 1,
+        "sources": [
+          "周六上午我通常在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "5bb055e54217d49ca75793e6e1e7894cd3234e1c0dfcfc0c7a171d58fc89f319",
+        "at_ms": 984.4322289999923,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "a3010d29b6664a248442eb59fb36899b50ba138839fbe0e9455670c69fa3239a",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0017030000094564457,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 6576.986964000014,
+        "create_return_at_ms": 6578.25154599999
+      },
+      {
+        "job_id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 1,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "at_ms": 7313.909345000013,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "3c37557502c540f714f58e9c5550cfdd942af052a044cb407602be35e7d86a23",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0011220000146749953,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 19010.825638000028,
+        "create_return_at_ms": 19012.58148599999
+      },
+      {
+        "job_id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 2,
+        "sources": [
+          "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+        ],
+        "source_sha256": "5fef569a02c401b7299fb7361a4e8552fa2e4ad407dbd7279af3267544b8770c",
+        "at_ms": 20217.078274000018,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "7241c6254cee260373bd25a7ee25f8d52ee4455da6bdc093c43072143d9a2472",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.3628579999599424,
+        "foreground_peak_before_handoff": 0,
+        "response_handoff_at_ms": 31172.173983999983,
+        "create_return_at_ms": 31174.339299999985
+      }
+    ],
+    "python_peak_after_workload_mib": 354.84765625,
+    "app_shutdowns": [
+      {
+        "pid": 6144,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.000459288000001834,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "provider_errors": null,
+    "case_errors": null,
+    "error_class": null,
+    "reason": null
+  },
+  "provider_counts": {
+    "extraction": 3
+  },
+  "offline_replays": [
+    {
+      "owner": "user:941040001:agent:mia-p23-0",
+      "profile": "short",
+      "attempt": 1,
+      "job_id": "bf4aecdef38cbf020cd08243acbf839332d14ca743d44f9ebc23cb2583dbaebe",
+      "first_attempt_message_hash_matches_old": true,
+      "native_error": {
+        "error_class": null,
+        "error_code": null,
+        "error_message": null,
+        "original_output_validation": {
+          "passed": true
+        }
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": true,
+        "output_sha256": "7ed641087e16b3694bf00b1ff77c7e4edebfd00491eefe0da0f8585ced846778"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 377,
+      "distinct_call_ids": [
+        "call_202610182017426b58baf0d77b47e7_0"
+      ],
+      "distinct_indexes": [
+        0
+      ]
+    },
+    {
+      "owner": "user:941040003:agent:mia-p23-2",
+      "profile": "dense",
+      "attempt": 1,
+      "job_id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+      "first_attempt_message_hash_matches_old": true,
+      "native_error": {
+        "error_class": null,
+        "error_code": null,
+        "error_message": null,
+        "original_output_validation": {
+          "passed": false,
+          "error_class": "MemoryError",
+          "code": "invalid_input",
+          "message": "entities has 16 extraction clues; at most 8 are allowed",
+          "rejected_clues": {}
+        }
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": true,
+        "output_sha256": "63f24f169f899c105d4e96c2d0772beb7aff983bb29187946c80ab456fef4e1c"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 987,
+      "distinct_call_ids": [
+        "call_20261018201748536ec8d824954278_0"
+      ],
+      "distinct_indexes": [
+        0
+      ]
+    },
+    {
+      "owner": "user:941040003:agent:mia-p23-2",
+      "profile": "dense",
+      "attempt": 2,
+      "job_id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+      "first_attempt_message_hash_matches_old": null,
+      "native_error": {
+        "error_class": null,
+        "error_code": null,
+        "error_message": null,
+        "original_output_validation": {
+          "passed": true
+        }
+      },
+      "parts_seen": 2,
+      "capture_truncated": false,
+      "request_truncated": false,
+      "offline_parse": {
+        "passed": true,
+        "output_sha256": "a51622cd97f41e0e35f03fd02ffe4a94bdded8b9424234fe20ac6b76389095fd"
+      },
+      "name_fragments": [
+        "mia_memory_proposal"
+      ],
+      "concatenated_name": "mia_memory_proposal",
+      "nonempty_content_characters": 3,
+      "content_prefix": "```",
+      "argument_characters": 775,
+      "distinct_call_ids": [
+        "call_202610182018012d94a0880ad64513_0"
+      ],
+      "distinct_indexes": [
+        0
+      ]
+    }
+  ],
+  "common_peak_mib": 1360.1328125,
+  "sqlite_audit": {
+    "integrity": "ok",
+    "jobs": [
+      {
+        "id": "bf4aecdef38cbf020cd08243acbf839332d14ca743d44f9ebc23cb2583dbaebe",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "confirmed_fact": {
+          "id": "bb27442db5c84ab9a95a34371b000432",
+          "owner": "user:941040001:agent:mia-p23-0",
+          "content": "周六上午我通常在书桌边整理纸质邮票册",
+          "dimension": 768,
+          "vector_bytes": 3072,
+          "vector_sha256": "148748b5f8024bfc81783239825e41f2dfd768a5e78f2bfdbef5bf3eabe995e7"
+        }
+      },
+      {
+        "id": "53b58bf7ccae6061a4b8accddd0889c5b80d5a3a19eeca104d8abe5a42464e4e",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "confirmed_fact": {
+          "id": "76dba2b03ef24c41a758855dbde157d4",
+          "owner": "user:941040003:agent:mia-p23-2",
+          "content": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+          "dimension": 768,
+          "vector_bytes": 3072,
+          "vector_sha256": "32e77db4a062007dcb057be369a87decee27c299b4e0c62df16ce6278d429140"
+        }
+      }
+    ]
+  },
+  "same_sha_checks": {
+    "sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+    "service": {
+      "run_id": 39126346921,
+      "tests": 296,
+      "seconds": 35.877
+    },
+    "identity": {
+      "run_id": 39126346906,
+      "tests": 173
+    },
+    "manager": {
+      "run_id": 39126346931,
+      "tests": 154
+    },
+    "syntax": {
+      "run_id": 39126355175,
+      "tests": 16,
+      "seconds": 0.312
+    },
+    "extraction_syntax": {
+      "run_id": 39126346935
+    },
+    "actual_vectors": {
+      "run_id": 39126346925,
+      "reports": [
+        {
+          "name": "vector-results.json",
+          "passed": true,
+          "sha256": "3ca1fd6c862fd3323b38d67726af08e676ec0bc3bdaa26b9ed6d1b30cb9963f2"
+        },
+        {
+          "name": "reply-results.json",
+          "passed": true,
+          "sha256": "6af1b644778812780656c6b196a4d8e8017bb14e11a2a8840a5fbdff4f4d9677"
+        },
+        {
+          "name": "extraction-results.json",
+          "passed": true,
+          "sha256": "5d5f3c41e9e59e5374d8926daec095cf81f7525cb52624ee0b3c2cdc885d160a"
+        },
+        {
+          "name": "context-results.json",
+          "passed": true,
+          "sha256": "5a4d7c42ddcbea5f2459d4cd94f5007d126c64f39d979f628b564ee060cfec1d"
+        },
+        {
+          "name": "retrieval-results.json",
+          "passed": true,
+          "sha256": "33fc4dec06a0381c3975ee49a9af61a98c3e73a13501fc956f9ee808df386acd"
+        }
+      ]
+    }
+  }
+}

@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十九步运行修复已推送`20d38ccef8b57126203e888dcc67875a90b02500`，唯一冻结短/长诊断[39126355175](https://github.com/bboytang/Mia/actions/runs/39126355175)在途；精确同SHA服务39126346921、实际向量39126346925、身份39126346906、manager39126346931及提取语法39126346935同步验证。仅独立格式标记兼容及线索数量反馈改变，原参数/8项上限/两尝试/模型/验收门槛保持。70项本地提取相关测试通过；此前诊断两failed及原失败证据保留，等待实测结果，不提前宣布正常任务通过。三路429/首句超限/在途关闭及调度取舍仍待，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第二十九步已验证：运行修复`20d38ccef8b57126203e888dcc67875a90b02500`，唯一真实诊断[39126355175](https://github.com/bboytang/Mia/actions/runs/39126355175)两任务committed，短1次/6.8617秒、长2次/24.6403秒，共3次真实SDK。长首次16项被原校验拒绝，第二次依据明确反馈生成合法提案；三个响应均带独立格式标记，原arguments逐字保留。独立SQLite核对两所属confirmed事实/来源及768维3072字节向量、integrity=ok。同SHA服务296、身份173、manager154、实际向量五报告、机制16通过；原文/hash见performance-parser-fix-diagnostic-*。仅两个输入修复证明，尚非36任务/正常p95/完整公平性。下一步恢复冻结完整Worker验证；三路429、首句超限、在途关闭及调度取舍仍待，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。当前P23运行实现`32407ef9d994eb2c86dcea140fc2de7371d18912`，服务294/实际BGE五报告/身份173/manager154全通过；模块39091554129及共同39091556465均success，仅模块达到原优化目标，共同419.51ms达到500ms验收但未达400ms原目标。原文/hash见performance-adaptive-*；第十七/十八步容量及第十九步ABBA取舍原文保留。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。P23容量基线实现`32407ef9d994eb2c86dcea140fc2de7371d18912`（当前提取修复20d38cc，详见上文），服务294/实际BGE五报告/身份173/manager154全通过；模块39091554129及共同39091556465均success，仅模块达到原优化目标，共同419.51ms达到500ms验收但未达400ms原目标。原文/hash见performance-adaptive-*；第十七/十八步容量及第十九步ABBA取舍原文保留。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
