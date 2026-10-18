@@ -1,0 +1,476 @@
+{
+  "run_id": 39093919726,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39093919726",
+  "observer_sha": "b40db9f80b9bde6bbe357496e165777c0ab45bd3",
+  "runtime_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "failure",
+  "p23_complete": false,
+  "artifacts": [
+    {
+      "file": "performance-reply-latency-first-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "1fd98e86a50736e4f92b1621e211e148bbb6eb49de259e71ca242a2e3869265d",
+      "sha256": "c155b65028ea43d7c6b1e54227667ba3cdac675498b6d2964fb52e9cff6d9777"
+    },
+    {
+      "file": "performance-reply-latency-first-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "f93f792f83a58c607d07885e2612ded789fbe32d1159c1215f724e2b7bbd3657",
+      "sha256": "b4ff748a537e641d6864968865709013c787c50188b9d9d5f5e4d15ea50741d3"
+    },
+    {
+      "file": "performance-reply-latency-first-ci-results.json.gz",
+      "source_path": "GitHub run metadata",
+      "raw_sha256": "a0ce6b3f486b675e2bef6e1569191c37c47597849a7b4e15184233f7914eb354",
+      "sha256": "ccd00c6d53edcf3be5b15a5286f95e7650fbda5381da19983b2f66a72266d2e5"
+    },
+    {
+      "file": "performance-reply-latency-first-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "924eea922e1c11e930cf3aa68172bf141546167b46c154e385970a0cf28fc451",
+      "sha256": "ddc56cb4a65232b8c23eee7d94a3ee8683982bc1416df044c3868834f98ba57a"
+    },
+    {
+      "file": "performance-reply-latency-first-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-reply-latency-first-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-reply-latency-first-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "1fd98e86a50736e4f92b1621e211e148bbb6eb49de259e71ca242a2e3869265d",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "54ad6c4e9534e12a3ce84e36d6e774c6a9364b4ff888f769ddc86bad085247bb",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "183e25bf6700d9d2284e32029cba423fa34bb4e18ca86204b42a57ae3553b4d7",
+    "cgroup-final-memory.current.txt": "2523779ed807193f67f7b4f8eceb0c43b3171f2c9a924ebca5fa37a7fd597b74",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "d7e7f2dcfe8aeccba13835bd996aa1bf9e1e9a92a0d46c7bf399c311246e48af",
+    "redis.log": "07a19da848c21c4ddbac68736899f27ca439bb9e5eb1a47e0e6dc452af064b35",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "2880b49f4f1331b8d563bd300aef3fd90ef2e732697ce8ab5f7c290be6ead1f4",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "3c95e91590541edbeef00b6a0a3d12e85056a3b4b9ac09cc717ce48e8133de3d",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "924eea922e1c11e930cf3aa68172bf141546167b46c154e385970a0cf28fc451",
+    "app-child/ready.json": "ffe40a50fac4f6ab92a711360af2a237bee113dec9914e5d11bb327f6196b92d",
+    "app-child/app-results.json": "f93f792f83a58c607d07885e2612ded789fbe32d1159c1215f724e2b7bbd3657",
+    "app-child/memory.sqlite3": "1e7a8e10e32d5689d70648f8b6a856fc4e63639dc2c9bd91d5ee79ae147a2d5b",
+    "app-child/context-profile.json": "4867816ff5a4178a7be89da4042a937f180e73eb3333833acec4318f3de1c680",
+    "junit/TEST-junit-jupiter.xml": "5bed80e4e87b1d842be698ad65d6ee269a50263d2f299d178ae41f9cb87ab273",
+    "junit/TEST-junit-vintage.xml": "a767d300fb01ffb4246b792d8186210cb919fd4aa84ce92de42879f3c5ee0a53",
+    "junit/TEST-junit-platform-suite.xml": "d290e89a5ecc648995dfeba19370af8e680a08f16543c72d4e97a2a3368cce01"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "app_pid": 5502,
+    "members_ready": {
+      "mysql": {
+        "pid": 4736,
+        "start_ticks": "27634",
+        "cgroup": "/miap23.slice/docker-7181e8f876c03cadfa3a1a6c9ececd4b5122f366ec094788deea53dc1b52a662.scope",
+        "VmHWM": "495132 kB",
+        "VmRSS": "495132 kB"
+      },
+      "redis": {
+        "pid": 4798,
+        "start_ticks": "27645",
+        "cgroup": "/miap23.slice/docker-5ddba802cd4d98606806af7fc79aac343e8f8b962716793897a12d35c414a945.scope",
+        "VmHWM": "29600 kB",
+        "VmRSS": "29376 kB"
+      },
+      "manager": {
+        "pid": 5335,
+        "start_ticks": "28411",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "449292 kB",
+        "VmRSS": "449292 kB"
+      },
+      "python": {
+        "pid": 5502,
+        "start_ticks": "29943",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359484 kB",
+        "VmRSS": "315356 kB"
+      },
+      "harness": {
+        "pid": 5501,
+        "start_ticks": "29934",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20048 kB",
+        "VmRSS": "20048 kB"
+      }
+    },
+    "app_process_shutdown_seconds": 0.4555107510000198,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 2.3997728389999793,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 34474611\nuser_usec 31918485\nsystem_usec 2556126\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 233\nnr_throttled 132\nthrottled_usec 6406914\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "963801088",
+      "memory.peak": "963801088",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 224092853\nuser_usec 204084621\nsystem_usec 20008232\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 3045\nnr_throttled 328\nthrottled_usec 11309864\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1148506112",
+      "memory.peak": "1640521728",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "reply_contract_passed": true,
+    "first_sentence_acceptance_passed": false,
+    "error_class": null,
+    "reason": null
+  },
+  "provider_requests": 72,
+  "accepted_extraction_jobs": 36,
+  "provider_request_purposes": [
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply"
+  ],
+  "child": {
+    "ready": true,
+    "passed": true,
+    "authorized_owners": [
+      "user:941040001:agent:mia-p23-0",
+      "user:941040002:agent:mia-p23-1",
+      "user:941040003:agent:mia-p23-2"
+    ],
+    "app_ready_seconds": 1.792239228000028,
+    "cold_query_encode_ms": 414.28351500002236,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "285f03a0ebed520b2a855f027d2237aa89628c225981b55da5c4808381291e7f",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "python_peak_before_encoder_mib": 120.05078125,
+    "python_peak_after_encoder_mib": 351.05859375,
+    "encoder_peak_increment_mib": 231.0078125,
+    "encoder_live_rss_increment_mib": 169.9765625,
+    "members_before_encoder": {
+      "mysql": {
+        "pid": 4736,
+        "start_ticks": "27634",
+        "cgroup": "/miap23.slice/docker-7181e8f876c03cadfa3a1a6c9ececd4b5122f366ec094788deea53dc1b52a662.scope",
+        "VmHWM": "495132 kB",
+        "VmRSS": "495132 kB"
+      },
+      "redis": {
+        "pid": 4798,
+        "start_ticks": "27645",
+        "cgroup": "/miap23.slice/docker-5ddba802cd4d98606806af7fc79aac343e8f8b962716793897a12d35c414a945.scope",
+        "VmHWM": "29600 kB",
+        "VmRSS": "29376 kB"
+      },
+      "manager": {
+        "pid": 5335,
+        "start_ticks": "28411",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "449228 kB",
+        "VmRSS": "449228 kB"
+      },
+      "python": {
+        "pid": 5502,
+        "start_ticks": "29943",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "123436 kB",
+        "VmRSS": "123436 kB"
+      },
+      "harness": {
+        "pid": 5501,
+        "start_ticks": "29934",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20032 kB",
+        "VmRSS": "20032 kB"
+      }
+    },
+    "members_ready": {
+      "mysql": {
+        "pid": 4736,
+        "start_ticks": "27634",
+        "cgroup": "/miap23.slice/docker-7181e8f876c03cadfa3a1a6c9ececd4b5122f366ec094788deea53dc1b52a662.scope",
+        "VmHWM": "495132 kB",
+        "VmRSS": "495132 kB"
+      },
+      "redis": {
+        "pid": 4798,
+        "start_ticks": "27645",
+        "cgroup": "/miap23.slice/docker-5ddba802cd4d98606806af7fc79aac343e8f8b962716793897a12d35c414a945.scope",
+        "VmHWM": "29600 kB",
+        "VmRSS": "29376 kB"
+      },
+      "manager": {
+        "pid": 5335,
+        "start_ticks": "28411",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "449292 kB",
+        "VmRSS": "449292 kB"
+      },
+      "python": {
+        "pid": 5502,
+        "start_ticks": "29943",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359484 kB",
+        "VmRSS": "315356 kB"
+      },
+      "harness": {
+        "pid": 5501,
+        "start_ticks": "29934",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20032 kB",
+        "VmRSS": "20032 kB"
+      }
+    },
+    "app_lifecycles": [
+      {
+        "pid": 5502,
+        "ports": [
+          40667,
+          44815
+        ],
+        "gc_running": true,
+        "actual_service_tasks": [
+          "SimpleHttpServer.start",
+          "WebSocketServer.start"
+        ],
+        "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+        "server_class": "core.websocket_server.WebSocketServer",
+        "worker_class": "mia_companion.jobs.MemoryWorker",
+        "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+      }
+    ],
+    "app_shutdowns": [
+      {
+        "pid": 5502,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.000407808999966619,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "integrity": "ok",
+    "provider_errors": null,
+    "case_errors": null,
+    "error_class": null,
+    "reason": null
+  },
+  "measurement_complete": true,
+  "provider_request_counts": {
+    "reply": 72
+  },
+  "query_verdicts": [
+    {
+      "capacity": 1000,
+      "query_index": 0,
+      "count": 5,
+      "delta_p50_ms": 798.1598069999905,
+      "delta_p95_ms": 1008.5245215999862,
+      "acceptance_passed": false,
+      "optimization_targets_met": false,
+      "variant_p95_ms": {
+        "baseline": 1608.6021857999867,
+        "memory": 2008.9315913999826
+      }
+    },
+    {
+      "capacity": 1000,
+      "query_index": 1,
+      "count": 5,
+      "delta_p50_ms": -335.84881800004496,
+      "delta_p95_ms": 159.10746419999666,
+      "acceptance_passed": true,
+      "optimization_targets_met": true,
+      "variant_p95_ms": {
+        "baseline": 2142.1608959999844,
+        "memory": 1407.531724399962
+      }
+    },
+    {
+      "capacity": 1000,
+      "query_index": 2,
+      "count": 5,
+      "delta_p50_ms": 524.9539320000167,
+      "delta_p95_ms": 738.2863093999845,
+      "acceptance_passed": false,
+      "optimization_targets_met": false,
+      "variant_p95_ms": {
+        "baseline": 3293.153993399994,
+        "memory": 1569.9067715999831
+      }
+    },
+    {
+      "capacity": 10000,
+      "query_index": 0,
+      "count": 5,
+      "delta_p50_ms": 723.3637250000129,
+      "delta_p95_ms": 957.7955775999953,
+      "acceptance_passed": false,
+      "optimization_targets_met": false,
+      "variant_p95_ms": {
+        "baseline": 1381.7612263999877,
+        "memory": 2015.3656662000003
+      }
+    },
+    {
+      "capacity": 10000,
+      "query_index": 1,
+      "count": 5,
+      "delta_p50_ms": 178.3822950000058,
+      "delta_p95_ms": 310.4923147999443,
+      "acceptance_passed": true,
+      "optimization_targets_met": true,
+      "variant_p95_ms": {
+        "baseline": 1484.853678599984,
+        "memory": 1524.137212999949
+      }
+    },
+    {
+      "capacity": 10000,
+      "query_index": 2,
+      "count": 5,
+      "delta_p50_ms": 446.4676499999314,
+      "delta_p95_ms": 904.1806893999818,
+      "acceptance_passed": false,
+      "optimization_targets_met": false,
+      "variant_p95_ms": {
+        "baseline": 1241.4473646000488,
+        "memory": 1683.2881418000397
+      }
+    }
+  ],
+  "first_sentence_acceptance_passed": false,
+  "first_sentence_optimization_targets_met": false,
+  "sequential_measured_jobs": {
+    "count": 30,
+    "states": {
+      "empty": 30
+    },
+    "submit_to_terminal_upper_bound_p95_seconds": 0.18666798625002057,
+    "scope": "Original Worker in sequential reply test, not two-foreground fairness or model extraction proof"
+  },
+  "python_peak_after_workload_mib": 444.87109375,
+  "common_peak_mib": 1564.5234375,
+  "observer_source_matches_smoke_sha": "05dcd473729c64f233792872c2b1afe7567e6115",
+  "observer_source_comparison": "Only four handoff Markdown files differ between smoke 05dcd47 and formal b40db9f; all execution source bytes match.",
+  "measurement_limitations": [
+    "Primary timer is first nonempty checked TEXT queue frame, not original TTS segmentation readiness; examples include emoji-only newline frames.",
+    "Subsequent queued TEXT timestamps were not retained, so first speech-ready timing cannot be reconstructed from this run.",
+    "Original six-query first-TEXT failures remain unchanged; add an observer that records all queue frames and original TTS text segmentation before another speech-ready measurement."
+  ]
+}
