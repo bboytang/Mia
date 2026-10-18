@@ -603,3 +603,12 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 当前无在途任务，运行模块仍32407ef。用户接受的419.51ms原400ms优化差距不阻塞后续，但没有授权把600ms首句上限改成其他数值。P23未整体验收/P24未开始，双前台+实际提取模型公平/故障及有任务在途的全服务关闭仍未测，未部署/改生产数据。
 
 最新接续：第二十二步正式39093919726/b40db9f完成failure：72真实回复/36有效empty，六查询四组首检查后TEXT增量超600ms（最差1008.52ms）；资源/退出通过。发现首TEXT可为emoji/换行，尚非原TTS首可播分段；旧失败/全部样本保留，下一步只修正观察器并记录两时点，不改样本/模型/600与500门槛。无在途任务，P23未整体验收/P24未开始；见performance-reply-latency-first-*。历史在途描述仅过程记录。
+
+
+## 第二十三步：修正TTS-ready观测点（已实现，待CI）
+
+第二十二步完整首TEXT失败原文不动。新增P23-speech-ready-v2，仅CI观察器变化：原首检查后TEXT改作first_checked_text诊断保留；first_sentence_ms改为原TTSProviderBase文本消费者完成原分段、Markdown清理和correct_words替换后，首次非空可交给波形合成的文本。以继承原基类的探针执行原tts_text_priority_thread/_get_segment_text/_process_remaining_text_stream，只有波形调用边界不执行真实合成；不新增文本分句规则，不按内容/情绪词挑选快样本，不调用/伪造音频。该边界是原通用TTS基类的文本准备观察，不宣称生产具体TTS引擎或物理声音延迟。
+
+每次完整保存检查后TEXT/action帧及时间戳、原分段结果及时间戳、预处理后文本，双时点在同一次模型回复中记录，报告独立的配对差值，避免再次只能留首帧而无法复核。新增实际原TTS机制检查：受控纯emoji换行帧被消费后不得产生speech-ready；随后正常中文帧须经原首段逗号规则得到“中文测试”，并正常排空/退出探针线程；记录原TTS基类、textUtils和MarkdownCleaner模块文件hash。此机械检查在真实Provider请求前执行，不是模型答案或语义通过证据。
+
+本地7机制测试通过（0.023秒），含emoji首TEXT只作为诊断而不抢占speech-ready、全部帧时间戳保留、停止唤醒不改写已完成样本；AST/Python3.10/YAML/Shell/diff通过。实际完整TTS模块导入/消费者机制与真实回复契约仍须GitHub。模型glm-4-flash-250414、原三查询、真实BGE/1k/10k/32数值夹具、一次预热五对实测、72回复/请求上限144、600ms验收/500ms原目标全部不变。先同新观察器reply-smoke验证后派发正式reply-latency；运行模块仍32407ef，不改人设/提示/排序/授权或生产配置。唯一SHA/句柄随后记录，P23整体未验收/P24未开始。

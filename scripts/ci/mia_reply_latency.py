@@ -5,7 +5,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from queue import Queue
 import ssl
 import threading
 import time
@@ -106,6 +105,7 @@ async def open_driver(server, scopes, config, root, report, persist):
     from mia_companion import reply, xiaozhi_adapter as adapter
     from verify_mia_performance import populate
     from websockets.asyncio.server import serve
+    from mia_tts_timing import TIMING_REVISION, make_probe, verify_original_text_stage
 
     lock = threading.RLock()
     factory = existing_llm.create_instance
@@ -116,9 +116,11 @@ async def open_driver(server, scopes, config, root, report, persist):
         provider_request_purposes=[], cases=[], accepted_extraction_jobs=0, job_submit_times={},
         model=MODEL, dataset_sha256=hashlib.sha256(fixture_path.read_bytes()).hexdigest(),
         fixture_kind='Numbered synthetic capacity rows repeat actual BGE seed vectors; no claim of model-extracted bulk facts or semantic quality',
-        timing_stage='First nonempty text enqueued after original GuardedTTSQueue; no waveform/audio timing',
+        timing_revision=TIMING_REVISION,
+        timing_stage='First nonempty text after original TTS consumer segmentation and text preprocessing; no waveform/audio timing',
         sdk_timing_scope='SDK start to first content includes remote compute and transport, not pure network time; pre-SDK interval includes context/permission overhead',
         baseline_scope='Same Provider/core/role with original empty context assembly and phrase guard; no retrieval/context validation/jobs')
+    report['tts_stage_mechanism'] = await verify_original_text_stage(server.logger)
 
     def extract_factory(name, model):
         assert name == model['type']
@@ -145,30 +147,8 @@ async def open_driver(server, scopes, config, root, report, persist):
     report['first_sentence_cases_scope'] = 'Sequential paired replies; real original Worker drains each admitted turn; not two-foreground fairness'
     transport = AuthManager('synthetic-p23-latency-transport')
 
-    class TimedQueue(Queue):
-        def __init__(self, sample):
-            super().__init__()
-            self.sample = sample
-
-        def put(self, item, block=True, timeout=None):
-            with lock:
-                if item.content_type == ContentType.TEXT and item.content_detail and 'first_sentence_ms' not in self.sample:
-                    self.sample['first_sentence_ms'] = (time.perf_counter() - self.sample['started']) * 1000
-                    self.sample['first_sentence'] = item.content_detail
-            return super().put(item, block=block, timeout=timeout)
-
-    class Sink:
-        def __init__(self, sample):
-            self.tts_text_queue = TimedQueue(sample)
-
-        def store_tts_text(self, *args):
-            pass
-
-        def tts_one_sentence(self, conn, kind, text):
-            self.tts_text_queue.put(TTSMessageDTO(conn.sentence_id, SentenceType.MIDDLE, kind, text))
-
     async def connection(socket):
-        conn = provider = None
+        conn = provider = probe = None
         try:
             headers = dict(socket.request.headers)
             assert transport.verify_token(headers.get('authorization', '')[7:], headers.get('client-id'), headers.get('device-id'))
@@ -176,16 +156,18 @@ async def open_driver(server, scopes, config, root, report, persist):
             assert request['type'] == 'p23_reply' and request['variant'] in ('baseline', 'memory')
             assert type(request['query_index']) is int and 0 <= request['query_index'] < len(fixture['queries'])
             query = fixture['queries'][request['query_index']]
-            sample = {'case': request['case'], 'variant': request['variant'], 'query': query, 'warm': request['warm']}
+            sample = {'case': request['case'], 'variant': request['variant'], 'query': query,
+                'warm': request['warm'], 'timing_revision': TIMING_REVISION}
             conn = object.__new__(ConnectionHandler)
             conn.__dict__.update(config=config, headers=headers, websocket=socket, read_config_from_api=True,
                 need_bind=False, dialogue=Dialogue(), session_id=uuid.uuid4().hex, sentence_id=uuid.uuid4().hex,
-                loop=asyncio.get_running_loop(), client_abort=False, tts=Sink(sample), logger=server.logger,
+                loop=asyncio.get_running_loop(), client_abort=False, stop_event=threading.Event(), logger=server.logger,
                 intent_type='nointent', current_speaker=None, system_introduced_speakers=set(), features={'emoji': False})
             private = await load_private_config(conn)
             scope = conn._mia_scope
             assert scope.owner in report['capacity_per_owner']
             model = private['LLM'][private['selected_module']['LLM']]
+            probe = conn.tts = make_probe(conn, sample, lock, {'correct_words': private['correct_words']})
             provider = conn.llm = observe_provider(model, 'reply', report, lock, persist, factory)
             profile = root / 'context-profile.json'
             profile.write_text(json.dumps({'provider_module': type(provider).__module__, 'model': provider.model_name,
@@ -244,6 +226,7 @@ async def open_driver(server, scopes, config, root, report, persist):
                         'submit_to_observed_terminal_seconds': time.perf_counter() - accepted}
                 assert job['state'] in ('committed', 'empty'), 'Normal reply extraction did not reach saved/valid empty'
                 assert job['attempts'] <= 2
+            assert await asyncio.to_thread(probe.drained.wait, 2), 'Original TTS text processing did not drain'
             with lock:
                 sample['output_replacement'] = getattr(conn, '_mia_output_replacement', None)
                 assert not sample['output_replacement'] and 'first_sentence_ms' in sample and 'sdk_first_content_ms' in sample
@@ -259,6 +242,8 @@ async def open_driver(server, scopes, config, root, report, persist):
                 persist(report)
             await socket.send(json.dumps({'type': 'p23_error', 'error_class': type(error).__name__}))
         finally:
+            if probe:
+                await probe.close()
             if provider:
                 provider.client.close()
 
@@ -275,13 +260,15 @@ async def drive(state, report, persist):
     from verify_mia_performance import summary
     from mia_performance_budgets import LIMITS, OPTIMIZATION_TARGETS, REVISION
     from websockets.asyncio.client import connect
+    from mia_tts_timing import TIMING_REVISION
 
     smoke = os.environ['MIA_P23_MODE'] == 'reply-smoke'
     peers = json.loads(os.environ['MIA_P23_PEERS'])
     tls = ssl.create_default_context(cafile=os.environ['MIA_SCOPE_CA'])
     transport = AuthManager('synthetic-p23-latency-transport')
     rows = []
-    report.update(reply_cases=rows, acceptance_revision=REVISION, limits=LIMITS, optimization_targets=OPTIMIZATION_TARGETS)
+    report.update(reply_cases=rows, acceptance_revision=REVISION, limits=LIMITS,
+        optimization_targets=OPTIMIZATION_TARGETS, timing_revision=TIMING_REVISION)
     for owner_index in range(1 if smoke else 2):
         peer = peers[owner_index]
         headers = {'device-id': peer['device_id'], 'client-id': peer['client_id'],
@@ -305,6 +292,7 @@ async def drive(state, report, persist):
                             if value['type'] in ('p23_case', 'p23_error'):
                                 break
                         assert value['type'] == 'p23_case', 'Actual reply contract failed; inspect sanitized child report'
+                        assert value['timing_revision'] == TIMING_REVISION
                         pair['variants'][variant] = value
                         persist(report)
                 baseline, memory = (pair['variants'][name] for name in ('baseline', 'memory'))
@@ -314,8 +302,10 @@ async def drive(state, report, persist):
                 assert not baseline['sdk_request']['fact_ids'] and memory['sdk_request']['fact_ids']
                 assert all(value.startswith(memory['scope_owner'] + '-') for value in memory['sdk_request']['fact_ids'])
                 pair['first_sentence_delta_ms'] = memory['first_sentence_ms'] - baseline['first_sentence_ms']
+                pair['first_checked_text_delta_ms'] = memory['first_checked_text_ms'] - baseline['first_checked_text_ms']
             measured = [p['first_sentence_delta_ms'] for p in row['pairs'] if not p['warm']]
             row['first_sentence_delta'] = summary(measured)
+            row['first_checked_text_delta'] = summary([p['first_checked_text_delta_ms'] for p in row['pairs'] if not p['warm']])
             if not smoke:
                 assert len(measured) == 5
                 row['acceptance_passed'] = row['first_sentence_delta']['p95_ms'] <= LIMITS['first_sentence_delta_p95_ms']

@@ -5,12 +5,14 @@ on:
       - 'scripts/ci/verify_mia_shared_envelope.py'
       - 'scripts/ci/verify_mia_app_lifecycle.py'
       - 'scripts/ci/mia_reply_latency.py'
+      - 'scripts/ci/mia_tts_timing.py'
       - 'scripts/ci/mia_behavior_runtime.py'
       - 'scripts/ci/mia_thread_diagnostics.py'
       - 'scripts/ci/mia_query_scheduling.py'
       - 'scripts/ci/tests/test_mia_query_scheduling.py'
       - 'scripts/ci/tests/test_mia_app_lifecycle.py'
       - 'scripts/ci/tests/test_mia_reply_latency.py'
+      - 'scripts/ci/tests/test_mia_tts_timing.py'
       - 'scripts/ci/mia_performance_budgets.py'
       - 'scripts/ci/run_mia_shared_envelope.sh'
       - 'server/companion/manager_tests/MiaPerformanceIntegrationTest.java'
@@ -39,6 +41,7 @@ jobs:
           python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py
           python -m py_compile scripts/ci/verify_mia_app_lifecycle.py
           python -m py_compile scripts/ci/mia_reply_latency.py
+          python -m py_compile scripts/ci/mia_tts_timing.py
           python -m unittest discover -s scripts/ci/tests -p 'test_mia_*.py' -v
           bash -n scripts/ci/run_mia_shared_envelope.sh
   shared:
