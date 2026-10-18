@@ -1,19 +1,19 @@
 # Mia 人格与长期记忆：当前交接
 
-更新：2026-10-17。本文件是当前接续入口；历史过程见[工作记录](mia-persona-memory-worklog.md)，完整范围见[V1.2方案](mia-persona-memory-v1.2.md)和[实施计划](mia-persona-memory-implementation.md)。
+更新：2026-10-18。本文件是当前接续入口；历史过程见[工作记录](mia-persona-memory-worklog.md)，完整范围见[V1.2方案](mia-persona-memory-v1.2.md)和[实施计划](mia-persona-memory-implementation.md)。
 
 ## 当前决定与执行点
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第十八步cba3fd3原/扩展query并行编码候选，37项本地专项通过，同SHA四回归与模块/共同容量在途。已验证第十七步694a2a6四回归全通过，模块必测达到原目标（10k竞争386ms），共同10k仍失败（602ms）。验收上限500/250/600ms与实际优化目标400/150/500ms继续分列；详见[性能进度](verification/mia-persona-memory/performance.md)。P24未开始。
+- **P23进行中，整体未验收**：第十八步cba3fd3六项终态收齐：四回归全通过，模块/共同容量均failure，10k竞争544.94/654.67ms。原文/hash见performance-paired-*；无在途任务，下一步同共同资源组ABBA诊断每请求编码串行/成对调度，尚未实现。验收500/250/600ms、优化400/150/500ms保持分列；P23未验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。当前P23运行候选`cf464efc52c35cc3431711de99dcc1d44bd497f6`：服务39074530883（288项）、实际BGE39074530849（五报告）、身份39074530868（173项）、manager39074530861（154项）全success；[模块39074536811](https://github.com/bboytang/Mia/actions/runs/39074536811)/[共同39074538532](https://github.com/bboytang/Mia/actions/runs/39074538532)在v1下failure。v2另存复判，不改原报告，原文/hash见performance-single-*。双判定规则55e232d / [只读复判39075439137](https://github.com/bboytang/Mia/actions/runs/39075439137) success，原文/hash见performance-single-v2-*；此前失败保持。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。当前P23运行实现`cba3fd3f80219f7d1fd542a86a4d8c799af87a22`，四回归全通过；模块39076426163/共同39076427631均failure，原始证据performance-paired-*。第十七步694a2a6模块达到原目标、共同容量仍失败，证据performance-parallel-*保留；旧单线程cf464ef与v2只读复判仅历史。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -84,3 +84,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 第十八步已实现独立原/扩展query并行编码候选；仍受原编码器两槽上限，有一支失败须收敛另一支，成对取消不提前释放原生槽。37本地专项通过，9.995秒；待新SHA六项实际验证，句柄随后记录。第十七步模块385.76ms达原目标，共享602.20ms失败不改写；优化目标400/150/500ms保持。
 
 第十八步候选`cba3fd3f80219f7d1fd542a86a4d8c799af87a22`已推送：唯一模块39076426163、共同39076427631；服务39076406908、实际BGE39076406957、身份39076406864、manager39076406989四回归在途。继续同一组句柄，暂不再改运行实现；37项本地专项不代替实际性能。原优化400/150/500ms与验收500/250/600ms分列，P23未验收/P24未开始。
+
+2026-10-18最新接续：第十八步cba3fd3六项终态收齐：四回归全通过，模块/共同容量均failure，10k竞争544.94/654.67ms。原文/hash见performance-paired-*；无在途任务，下一步同共同资源组ABBA诊断每请求编码串行/成对调度，尚未实现。验收500/250/600ms、优化400/150/500ms保持分列；P23未验收/P24未开始。历史“在途/下一步”段落仅为过程记录，以本段和顶部当前状态为准。
