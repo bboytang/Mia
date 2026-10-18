@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十四步首次真实三路重叠 [39096533921](https://github.com/bboytang/Mia/actions/runs/39096533921) / d745655终态failure：实际SDK为1提取+2回复，其中一前台RateLimitError 429/code1302；实际foreground峰值2，但观察器提前中止，后台仍extracting/attempt1、事实0，无正常关闭结论。原文/hash见performance-worker-smoke-first-*；同SHA服务294、manager154、9机制全通过。先修正故障后排空及独立提取落库观察，不重复同配置三路取绿；运行请求调度取舍已异步询问用户，精确账户限额未知。原首句三组超限保留，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第二十五步已实现故障后正常排空/独立worker-extraction，10本地机制检查通过（含真实子进程SIGTERM退出），待唯一CI核对实际提取落库；运行仍32407ef，不启动前台SDK或交接等待，最多两次真实请求。第二十四步三路429及后台extracting原文performance-worker-smoke-first-*保留，用户请求调度取舍尚待答复；不以孤立提取替代三路/公平/故障/在途关闭验收。首句三组超限保持，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

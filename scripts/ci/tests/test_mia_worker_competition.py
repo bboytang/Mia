@@ -1,10 +1,15 @@
+import asyncio
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sqlite3
+import sys
+import tempfile
 import threading
 from types import SimpleNamespace
 import unittest
+from unittest.mock import AsyncMock, patch
 
 from server.companion.extraction import source_supported
 
@@ -43,6 +48,51 @@ class ExtractionBindingTests(unittest.TestCase):
         self.assertTrue(source_supported(probe.SOURCE, None))
         self.assertTrue(source_supported(probe.SOURCE, probe.SOURCE))
         self.assertFalse(source_supported('周三的钢琴练习安排是什么？', None))
+
+
+class FailedWorkloadShutdownTests(unittest.IsolatedAsyncioTestCase):
+    async def test_workload_failure_still_sends_sigterm_and_reaps_real_child_cleanly(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            environment = {'MIA_P23_REPORT_DIR': directory, 'MIA_P23_MODE': 'worker-extraction',
+                'MIA_SCOPE_UPSTREAM': directory}
+            with patch.dict(os.environ, environment):
+                spec = importlib.util.spec_from_file_location('worker_lifecycle_test',
+                    Path(__file__).resolve().parents[1] / 'verify_mia_app_lifecycle.py')
+                lifecycle = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(lifecycle)
+                (root / 'app-child').mkdir()
+                # A real child owns SIGTERM and exits zero. No app/model claim.
+                child = '''import json,os,pathlib,signal,time
+root=pathlib.Path(os.environ['MIA_P23_REPORT_DIR'])/'app-child'
+def stop(*args):
+ (root/'app-results.json').write_text(json.dumps({'passed':True,'code_sha':'unit',
+  'provider_requests':0,'accepted_extraction_jobs':0}))
+ raise SystemExit(0)
+signal.signal(signal.SIGTERM,stop)
+(root/'ready.json').write_text(json.dumps({'pid':os.getpid(),'ports':[]}))
+while True:time.sleep(.01)
+'''
+                spawn = asyncio.create_subprocess_exec
+
+                async def actual_child(*args, **kwargs):
+                    return await spawn(sys.executable, '-c', child, **kwargs)
+
+                report = {'code_sha': 'unit'}
+                previous_path = list(sys.path)
+                try:
+                    with patch.object(asyncio, 'create_subprocess_exec', actual_child), \
+                            patch.object(lifecycle, 'members', return_value={}), \
+                            patch.object(lifecycle, 'group_state', return_value={}), \
+                            patch.dict(sys.modules, {'mia_worker_competition': SimpleNamespace(
+                                drive=AsyncMock(side_effect=AssertionError('Injected workload failure')))}):
+                        await asyncio.wait_for(lifecycle.control(report), 10)
+                finally:
+                    sys.path[:] = previous_path
+                self.assertFalse(report['worker_contract_passed'])
+                self.assertEqual(report['workload_assertion'], 'Injected workload failure')
+                self.assertTrue(report['app_lifecycle_preflight_passed'])
+                self.assertEqual(report['app_returncode'], 0)
 
 
 if __name__ == '__main__':

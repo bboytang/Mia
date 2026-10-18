@@ -35,15 +35,18 @@ async def open_driver(server, scopes, config, root, report, persist):
     lock, local = threading.RLock(), threading.local()
     replies = await open_replies(server, scopes, config, root, report, persist, lock=lock)
     worker = server._mia_worker
+    overlap = os.environ['MIA_P23_MODE'] == 'worker-smoke'
     started = time.perf_counter()
     elapsed = lambda: (time.perf_counter() - started) * 1000
     report.update(worker_probe={'source': SOURCE, 'owner': scopes[2].owner},
-        extraction_requests=[], foreground_transitions=[], foreground_peak=0,
-        first_sentence_cases_scope='Two concurrent actual memory replies, not same-Provider baseline or a D08 percentile measurement',
+        extraction_requests=[], native_extractions=[], foreground_transitions=[], foreground_peak=0,
+        first_sentence_cases_scope=('Two concurrent actual memory replies, not same-Provider baseline or a D08 percentile measurement'
+            if overlap else 'No foreground replies in isolated extraction contract'),
         worker_probe_scope='Original Worker.submit/resolve/LLMMemoryExtractor/SDK/validation/BGE/commit; '
             'one new synthetic user source. Two original chat replies use fixed P23 questions. '
             'A bounded SDK response handoff rendezvous can keep the native lane occupied until both foreground chats enter; '
-            'this is controlled overlap, not an unmodified end-to-end latency measurement.')
+            'this is controlled overlap, not an unmodified end-to-end latency measurement.'
+            if overlap else 'Original Worker and real SDK/proposal/validation/BGE/commit for one new source, no foreground replies or concurrency acceptance.')
     persist(report)
     original_factory, original_resolve = existing_llm.create_instance, worker.resolve
 
@@ -66,7 +69,7 @@ async def open_driver(server, scopes, config, root, report, persist):
                 response = create(*args, **kwargs)  # Original SDK and real remote response.
                 handoff = time.perf_counter()
                 deadline = handoff + 6
-                while report['foreground_peak'] < 2 and time.perf_counter() < deadline:
+                while overlap and report['foreground_peak'] < 2 and time.perf_counter() < deadline:
                     time.sleep(.005)
                 with lock:
                     entry['response_handoff_wait_ms'] = (time.perf_counter() - handoff) * 1000
@@ -87,9 +90,19 @@ async def open_driver(server, scopes, config, root, report, persist):
 
         def extract(sources, context):
             local.context = active_job(worker, scope.owner, sources)
+            evidence = dict(local.context, started_at_ms=elapsed())
+            with lock:
+                report['native_extractions'].append(evidence)
+                persist(report)
             try:
-                return extractor(sources, context)  # No proposal repair or substitute response.
+                result = extractor(sources, context)  # No proposal repair or substitute response.
+                with lock:
+                    evidence['original_output_sha256'] = hashlib.sha256(json.dumps(result, ensure_ascii=False).encode()).hexdigest()
+                return result
             finally:
+                with lock:
+                    evidence['finished_at_ms'] = elapsed()
+                    persist(report)
                 local.context = None
 
         return extract
@@ -160,16 +173,23 @@ async def open_driver(server, scopes, config, root, report, persist):
                 assert vectors[0]['dimension'] == 768 and vectors[0]['model_id'] == worker.index.encoder.model_id
                 assert vectors[0]['revision'] == worker.index.encoder.revision
                 assert report['worker_probe']['submit_to_observed_terminal_seconds'] <= 120
-                assert report['foreground_peak'] == 2
-                assert any(x.get('foreground_peak_before_handoff') == 2 for x in calls)
-                report['worker_overlap_contract_passed'] = True
+                if overlap:
+                    assert report['foreground_peak'] == 2
+                    assert any(x.get('foreground_peak_before_handoff') == 2 for x in calls)
+                else:
+                    assert report['foreground_peak'] == 0 and not report['cases']
+                report['worker_extraction_contract_passed'] = True
+                report['worker_contract_passed'] = not report.get('case_errors') and not report.get('provider_errors')
+                if overlap:
+                    report['worker_overlap_contract_passed'] = report['worker_contract_passed']
                 persist(report)
             else:
                 assert request['type'] == 'probe_status'
             with lock:
                 value = {'type': 'p23_worker', 'probe': report['worker_probe'],
                     'requests': report['extraction_requests'], 'foreground_peak': report['foreground_peak'],
-                    'passed': report.get('worker_overlap_contract_passed', False)}
+                    'extraction_passed': report.get('worker_extraction_contract_passed', False),
+                    'passed': report.get('worker_contract_passed', False)}
                 serialized = json.dumps(value)
             await socket.send(serialized)
         except Exception as error:
@@ -221,18 +241,24 @@ async def drive(state, report, persist):
         return await call(state['worker_port'], peers[2], {'type': kind}, 'p23_worker')
 
     await command('submit_probe')
-    deadline = time.monotonic() + 15
-    while True:
-        value = await command('probe_status')
-        if value['requests']:
-            break
-        assert time.monotonic() < deadline, 'No actual extraction SDK request observed'
-        await asyncio.sleep(.05)
-    report['foreground_cases'] = await asyncio.gather(*[
-        call(state['text_port'], peers[i], {'type': 'p23_reply', 'case': f'worker-smoke-front-{i}',
-            'variant': 'memory', 'query_index': 1, 'warm': False}, 'p23_case') for i in range(2)])
+    overlap = os.environ['MIA_P23_MODE'] == 'worker-smoke'
+    if overlap:
+        deadline = time.monotonic() + 15
+        while True:
+            value = await command('probe_status')
+            if value['requests']:
+                break
+            assert time.monotonic() < deadline, 'No actual extraction SDK request observed'
+            await asyncio.sleep(.05)
+        values = await asyncio.gather(*[
+            call(state['text_port'], peers[i], {'type': 'p23_reply', 'case': f'worker-smoke-front-{i}',
+                'variant': 'memory', 'query_index': 1, 'warm': False}, 'p23_case') for i in range(2)], return_exceptions=True)
+        report['foreground_cases'] = [x for x in values if not isinstance(x, BaseException)]
+        report['foreground_errors'] = [{'error_class': type(x).__name__} for x in values if isinstance(x, BaseException)]
+        persist(report)
     result = await command('finish_probe')
-    assert result['passed']
-    report.update(worker_overlap_contract_passed=True, worker_probe=result['probe'],
+    report.update(worker_contract_passed=result['passed'], worker_extraction_contract_passed=result['extraction_passed'], worker_probe=result['probe'],
         extraction_requests=result['requests'], foreground_peak=result['foreground_peak'])
+    if overlap:
+        report['worker_overlap_contract_passed'] = result['passed'] and len(report['foreground_cases']) == 2
     persist(report)

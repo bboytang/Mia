@@ -107,9 +107,9 @@ async def serve():
             from mia_reply_latency import open_driver
             report['scope'] = 'Actual app/services, original installed ConnectionHandler.chat, real Provider and persistent Worker; synthetic WSS text driver, audio omitted'
             driver = await open_driver(server, scopes, config, root, report, persist)
-        elif os.environ['MIA_P23_MODE'] == 'worker-smoke':
+        elif os.environ['MIA_P23_MODE'] in ('worker-smoke', 'worker-extraction'):
             from mia_worker_competition import open_driver
-            report['scope'] = 'Actual app/services, two original chat replies and one actual extraction Worker; controlled native overlap, audio omitted'
+            report['scope'] = 'Actual app/services and actual extraction Worker; per-mode concurrency scope in worker_probe_scope, audio omitted'
             driver = await open_driver(server, scopes, config, root, report, persist)
         report.update(ready=True, members_ready=members(os.getpid()), cgroup_ready=group_state())
         rss = lambda value: int(value['python']['VmRSS'].split()[0]) / 1024
@@ -160,10 +160,15 @@ async def control(report):
                 from mia_reply_latency import drive
                 await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
                 report['members_after_workload'] = members(process.pid)
-            elif os.environ['MIA_P23_MODE'] == 'worker-smoke':
+            elif os.environ['MIA_P23_MODE'] in ('worker-smoke', 'worker-extraction'):
                 sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
                 from mia_worker_competition import drive
-                await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
+                try:
+                    await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
+                except Exception as error:
+                    report.update(worker_contract_passed=False, workload_error_class=type(error).__name__,
+                        workload_assertion=str(error) if isinstance(error, AssertionError) else None)
+                    save(ROOT / 'app-lifecycle-results.json', report)
                 report['members_after_workload'] = members(process.pid)
             report['shutdown_signal_monotonic'] = time.monotonic()
             save(ROOT / 'app-lifecycle-results.json', report)
@@ -176,7 +181,8 @@ async def control(report):
             assert child['passed'] and child['code_sha'] == report['code_sha']
             report['provider_requests'] = child['provider_requests']
             report['accepted_extraction_jobs'] = child['accepted_extraction_jobs']
-            assert not child.get('provider_errors') and not child.get('case_errors')
+            if os.environ['MIA_P23_MODE'] not in ('worker-smoke', 'worker-extraction'):
+                assert not child.get('provider_errors') and not child.get('case_errors')
             for port in state['ports']:
                 try:
                     reader, writer = await asyncio.wait_for(asyncio.open_connection('127.0.0.1', port), 1)
@@ -203,8 +209,8 @@ def main():
             'task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
     if mode in ('reply-smoke', 'reply-latency'):
         report['scope'] = 'Actual app/services and installed chat, same-Provider empty-memory baseline and real original Worker; sequential pairs with audio omitted'
-    elif mode == 'worker-smoke':
-        report['scope'] = 'Actual app/services, two original chat replies and a real extraction task; controlled overlap contract, no natural-load percentile or audio claim'
+    elif mode in ('worker-smoke', 'worker-extraction'):
+        report['scope'] = 'Actual app/services and real extraction task; per-mode worker contract, no natural-load percentile or audio claim'
     save(ROOT / 'app-lifecycle-results.json', report)
     try:
         report['cgroup_before'] = group_state()
@@ -226,7 +232,8 @@ def main():
         save(ROOT / 'app-lifecycle-results.json', report)
     print(json.dumps({key: report[key] for key in ('app_lifecycle_preflight_passed', 'p23_complete', 'provider_requests')}))
     if (not report['app_lifecycle_preflight_passed']
-            or (mode == 'reply-latency' and not report.get('first_sentence_acceptance_passed'))):
+            or (mode == 'reply-latency' and not report.get('first_sentence_acceptance_passed'))
+            or (mode in ('worker-smoke', 'worker-extraction') and not report.get('worker_contract_passed'))):
         raise SystemExit(1)
 
 
