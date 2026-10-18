@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十五步独立真实提取 [39097111073](https://github.com/bboytang/Mia/actions/runs/39097111073) / `2bffe440734c0f208e1f7c9a1c002c9b1aa1a182` success：一次真实SDK/attempt1，4.8062秒committed，原来源confirmed事实及768维向量经退出后SQLite独立核对；没有前台SDK或交接等待。原文/hash见performance-worker-extraction-first-*；同SHA服务294、manager154、10机制均通过，共同峰值1369.50MiB无OOM，空闲全组1.9524秒正常退出。当前无在途任务；继续实际提取超时/数据库重试及恢复验证，运行调度取舍尚待用户答复。旧三路429、首句三组超限及P23剩余范围保留，P24未开始。
+- **P23进行中，整体未验收**：第二十六步已实现仅CI的worker-faults：真实原Worker等待超时两尝试/迟到有效提案不写库、实际SQLite事实INSERT拒绝/校验结果复用及后续新事实恢复；本地11机制检查通过，待唯一GitHub实测。没有前台SDK或CI限流器，最多6真实模型请求，运行仍32407ef；不替代三路/Scope公平或在途关闭验收。旧三路429、首句三组超限保留，运行请求调度取舍尚待用户答复，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

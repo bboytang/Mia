@@ -1589,3 +1589,14 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 完整Python应用峰值351.19MiB，共同父组1369.50MiB、2CPU/2GiB/swap0、无OOM。实际app SIGTERM正常退出0.2725秒、原Worker/GC/服务及原生lane结束；Java/控制器/MySQL/Redis总计1.9524秒正常退出、数据库exit0无OOM，五原PID消失。所有原任务已终态，因此仍仅空闲关闭。此单样本不判任务p95、真实双前台公平/故障、首句增量或有任务在途的20秒恢复验收。
 
 当前无在途任务。第二十四步三路429/中止extracting事实0及第二十三步首句三组超限保持，不将孤立成功替代并发失败。请求调度/Provider额度取舍尚待用户答复；可以继续不依赖该选择的实际后台等待超时、SQLite写入拒绝及校验结果复用/后续恢复验证，不新增CI专用限流器取绿，不修改生产配置或读取凭据。P23整体未验收/P24未开始。
+
+
+## 第二十六步：实际后台超时、SQLite重试及恢复（已实现，待CI）
+
+新增显式worker-faults，仍是原完整app、实际manager/MySQL/Redis、真实BGE及同父组2CPU/2GiB/swap0；运行模块32407ef不改。固定三顺序场景：原P23邮票来源先以200ms Worker等待期限运行，要求两实际提取尝试后failed/timeout，原生lane全部结束后仍无该事实；同来源随后通过真实SQLite authorizer拒绝memories的INSERT，要求观察到retry_wait/database、原_schema1校验结果已持久化，解除拒绝后committed且attempt1/SDK1；最后用新来源“我每周三在餐桌边擦拭陶瓷茶杯”提交正常任务，核对新事实/向量及恢复。
+
+200ms仅故障注入的原Worker等待期限，不称网络超时，不改120秒任务期限、实际SDK30秒配置或最多两尝试。原SDK/LLMMemoryExtractor/proposal读取/Worker/BGE及提交全部执行，最多6次真实请求；无前台SDK、无模型响应替代、无CI限流器。观察器在原提取器返回后只对输出副本调用原validate_output，记录原输出hash及至少一个明确原来源提案可通过验证，用于证明有效迟到结果也未写库；向原Worker返回的仍是未修改的原值。原生调用实际结束后才进入下一场景，避免凭调用者超时假装底层模型已经停止。
+
+SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍允许。必须先记录实际持久retry_wait/database、attempt1/一个模型请求及校验结果hash，再解除拒绝；最终SDK仍为1，不能为数据库重试重复调用模型。后续新事实须带该场景真实session/source、confirmed和固定768维向量。所有模型输出仍由原约束判断，若模型提案无效导致不能满足场景则如实失败，不填造通过。
+
+本地11机制测试通过（0.152秒）：新增实际SQLite缓存写语句被拒绝、持久任务仍可更新/保留校验结果、解除后恢复写入；原故障后真实子进程SIGTERM退出等检查保持。Python3.10 AST、编译、YAML、Shell、diff通过。真实SDK/持久故障/恢复及资源仍待GitHub唯一新SHA/句柄；这三个受控场景不是正常五轮任务p95、双前台Scope公平或有任务在途20秒关闭的证据。用户运行调度取舍待答复，三路429及首句三组超限原文保持。P23整体未验收/P24未开始，未部署/改生产配置/读取凭据。
