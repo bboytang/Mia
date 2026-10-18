@@ -4,6 +4,7 @@
 
 #include <esp_app_desc.h>
 #include <esp_app_format.h>
+#include <esp_chip_info.h>
 #include <esp_crt_bundle.h>
 #include <esp_flash.h>
 #include <esp_http_client.h>
@@ -25,6 +26,7 @@ namespace mia::passport {
 namespace {
 constexpr const char* kTag = "PassportOTA";
 std::atomic<bool> upgrading{false};
+std::atomic<bool> trial_decided{false};
 esp_timer_handle_t trial_timer = nullptr;
 
 struct Store {
@@ -78,9 +80,9 @@ bool HashRegion(uint32_t address, size_t size, Digest& digest) {
     return ok;
 }
 
-bool ReadExact(esp_http_client_handle_t http, uint8_t* data, size_t size) {
+bool ReadExact(esp_http_client_handle_t http, uint8_t* data, size_t size, int64_t total_deadline) {
     size_t done = 0;
-    auto deadline = esp_timer_get_time() + 30000000;
+    auto deadline = std::min(esp_timer_get_time() + 30000000, total_deadline);
     while (done < size) {
         if (esp_timer_get_time() > deadline)
             return false;
@@ -115,12 +117,14 @@ bool IsTrialBoot() {
 
 bool NeedsBootConfirmation() {
     esp_ota_img_states_t state;
+    Store store;
     return esp_ota_get_state_partition(esp_ota_get_running_partition(), &state) != ESP_OK ||
-           state != ESP_OTA_IMG_VALID;
+           state != ESP_OTA_IMG_VALID ||
+           store.Get("confirmed") < uint32_t(CONFIG_MIA_PASSPORT_RELEASE_SEQUENCE);
 }
 
 void RollbackBoot() {
-    if (!IsTrialBoot())
+    if (!IsTrialBoot() || trial_decided.exchange(true))
         return;
     Store store;
     store.Status("health_failed");
@@ -133,6 +137,7 @@ void StartBootGuard() {
     Store store;
     const auto* running = esp_ota_get_running_partition();
     if (IsTrialBoot()) {
+        trial_decided = false;
         esp_timer_create_args_t args = {};
         args.callback = [](void*) { RollbackBoot(); };
         args.name = "mia_trial";
@@ -141,7 +146,13 @@ void StartBootGuard() {
         ESP_LOGI(kTag, "Trial boot: authenticated voice health check required within 120s");
     } else if ((store.Status() == "trial" || store.Status() == "health_failed") &&
                store.Get("target_addr") != running->address) {
-        store.Status("rolled_back");
+        auto* other = esp_ota_get_next_update_partition(running);
+        esp_ota_img_states_t state;
+        bool rolled_back = store.Status() == "health_failed" ||
+                           (other && other->address == store.Get("target_addr") &&
+                            esp_ota_get_state_partition(other, &state) == ESP_OK &&
+                            (state == ESP_OTA_IMG_ABORTED || state == ESP_OTA_IMG_INVALID));
+        store.Status(rolled_back ? "rolled_back" : "interrupted");
     } else if (store.Status() == "trial" && store.Get("target_addr") == running->address) {
         // Recover a power loss after IDF confirmation and before the NVS result commit.
         esp_ota_img_states_t state;
@@ -158,12 +169,19 @@ bool ConfirmBoot() {
     if (!NeedsBootConfirmation())
         return true;
     bool trial = IsTrialBoot();
+    if (trial && trial_decided.exchange(true))
+        return false;
     // First USB installation has no OTA selection record yet. Establish a VALID
     // baseline only after the same authenticated voice health check as an update.
     if (!trial && esp_ota_set_boot_partition(esp_ota_get_running_partition()) != ESP_OK)
         return false;
-    if (esp_ota_mark_app_valid_cancel_rollback() != ESP_OK)
+    if (esp_ota_mark_app_valid_cancel_rollback() != ESP_OK) {
+        if (trial) {
+            trial_decided = false;
+            RollbackBoot();
+        }
         return false;
+    }
     if (trial_timer)
         esp_timer_stop(trial_timer);
     Store store;
@@ -216,6 +234,7 @@ bool Upgrade(const std::string& url, std::function<void(int, size_t)> progress) 
         return false;
 
     Download download;
+    auto deadline = esp_timer_get_time() + 300000000;
     esp_http_client_config_t config = {};
     config.url = url.c_str();
     config.timeout_ms = 15000;
@@ -230,7 +249,7 @@ bool Upgrade(const std::string& url, std::function<void(int, size_t)> progress) 
         return fail();
     std::array<uint8_t, kCapsuleHeaderSize> header;
     Manifest manifest;
-    if (!ReadExact(download.http, header.data(), header.size()) ||
+    if (!ReadExact(download.http, header.data(), header.size(), deadline) ||
         !DecodeManifest(
             header,
             std::max(store.Get("confirmed"), uint32_t(CONFIG_MIA_PASSPORT_RELEASE_SEQUENCE)),
@@ -246,14 +265,20 @@ bool Upgrade(const std::string& url, std::function<void(int, size_t)> progress) 
 
     // Check actual ESP metadata before esp_ota_begin erases any sector.
     std::array<uint8_t, 288> first;
-    if (!ReadExact(download.http, first.data(), first.size()))
+    if (!ReadExact(download.http, first.data(), first.size(), deadline))
         return fail();
     esp_image_header_t image;
     esp_app_desc_t desc;
     std::memcpy(&image, first.data(), sizeof(image));
     std::memcpy(&desc, first.data() + sizeof(image) + sizeof(esp_image_segment_header_t),
                 sizeof(desc));
-    if (image.magic != ESP_IMAGE_HEADER_MAGIC || image.chip_id != 5 ||
+    esp_chip_info_t chip;
+    esp_chip_info(&chip);
+    auto minimum_revision = image.min_chip_rev_full ? image.min_chip_rev_full : image.min_chip_rev;
+    if (image.magic != ESP_IMAGE_HEADER_MAGIC || image.chip_id != 5 || (first[3] >> 4) != 3 ||
+        chip.revision < minimum_revision ||
+        (image.max_chip_rev_full != 0 && image.max_chip_rev_full != 65535 &&
+         chip.revision > image.max_chip_rev_full) ||
         desc.magic_word != ESP_APP_DESC_MAGIC_WORD ||
         strnlen(desc.version, sizeof(desc.version)) >= sizeof(desc.version) ||
         manifest.version != desc.version ||
@@ -268,7 +293,6 @@ bool Upgrade(const std::string& url, std::function<void(int, size_t)> progress) 
     size_t first_offset = 0;
     auto last_report = esp_timer_get_time();
     size_t recent = 0;
-    auto deadline = esp_timer_get_time() + 300000000;
     bool ok = StreamImage(
         manifest.image_size,
         [&](uint8_t* data, size_t wanted) {

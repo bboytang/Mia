@@ -1,10 +1,10 @@
 # FoloToy AI Passport (ai-passport)
 
-## Mia development variant
+## Mia firmware variants
 
-`mia-ai-passport-dev` reuses this board's pins and drivers with a distinct release
-identity. It is for CI capacity evaluation only, not approved for flashing. See
-[Mia architecture, protected flash regions, staged implementation and OTA design](../../../../docs/firmware/mia-ai-passport.md).
+`mia-ai-passport` and `mia-ai-passport-dev` reuse this board's pins and drivers with a distinct release
+identity. First installation requires device layout/security review and explicit owner confirmation. See
+[Mia architecture, protected flash regions, staged implementation and OTA design](../../../../docs/firmware/mia-ai-passport-release.md).
 This variant pins the current Mia HTTP/WS endpoints, enables the existing
 BluFi provisioning transport, and blocks legacy unsigned firmware/asset updates.
 

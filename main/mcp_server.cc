@@ -153,7 +153,11 @@ void McpServer::AddUserOnlyTools() {
                                "The URL of the firmware binary file to download and install")}),
         [this](const PropertyList& properties) -> ReturnValue {
             auto url = properties["url"].value<std::string>();
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+            ESP_LOGI(TAG, "User requested signed Mia firmware upgrade");
+#else
             ESP_LOGI(TAG, "User requested firmware upgrade from URL: %s", url.c_str());
+#endif
 
             auto& app = Application::GetInstance();
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT

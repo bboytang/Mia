@@ -192,7 +192,11 @@ void Application::Run() {
     while (true) {
         auto bits = xEventGroupWaitBits(event_group_, ALL_EVENTS, pdTRUE, pdFALSE, portMAX_DELAY);
 
-        if (bits & MAIN_EVENT_ERROR) {
+        if ((bits & MAIN_EVENT_ERROR)
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+            && GetDeviceState() != kDeviceStateUpgrading
+#endif
+        ) {
             if (GetDeviceState() == kDeviceStateNotifying) {
                 StopNotification();
             }
@@ -602,6 +606,10 @@ void Application::InitializeProtocol() {
     protocol_->OnAudioChannelClosed([this, &board]() {
         board.SetPowerSaveLevel(PowerSaveLevel::LOW_POWER);
         Schedule([this]() {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+            if (GetDeviceState() == kDeviceStateUpgrading)
+                return;
+#endif
             auto display = Board::GetInstance().GetDisplay();
             display->SetChatMessage("system", "");
             SetDeviceState(kDeviceStateIdle);
@@ -1298,7 +1306,8 @@ bool Application::UpgradeFirmware(const std::string& url, const std::string& ver
     audio_service_.Start();
     board.SetPowerSaveLevel(PowerSaveLevel::LOW_POWER);
     Schedule([this, previous = ready->previous]() {
-        SetDeviceState(previous);
+        if (GetDeviceState() == kDeviceStateUpgrading)
+            SetDeviceState(previous);
         Alert(Lang::Strings::ERROR, Lang::Strings::UPGRADE_FAILED, "cancel",
               Lang::Sounds::OGG_EXCLAMATION);
     });
@@ -1374,6 +1383,7 @@ bool Application::RequestFirmwareUpgrade(const std::string& url) {
                 std::unique_ptr<std::string> request(static_cast<std::string*>(arg));
                 Application::GetInstance().UpgradeFirmware(*request);
                 worker_busy = false;
+                request.reset();
                 vTaskDelete(nullptr);
             },
             "mia_ota", 12288, request, 2, nullptr) != pdPASS) {

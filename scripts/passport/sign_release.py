@@ -80,6 +80,8 @@ def metadata(app, table, assets, sequence):
 
 
 def sign(app, table, assets, sequence, private_key, public_key):
+    from scripts.passport.image_format import image_info
+    image_info(app)
     header, version = metadata(app, table, assets, sequence)
     if public_point(public_key) not in app:
         raise ValueError('application does not embed this release public key')
