@@ -43,12 +43,21 @@ Outputs `build/merged-binary.bin` (8 MB flash, USB Serial/JTAG console).
 The three physical keys map to XiaoZhi's voice-assistant actions:
 
 - **OK** — single click: toggle the chat state (or enter Wi-Fi config mode
-  while starting up)
+  while starting up); on Mia, hold for 5 seconds while idle to enter BluFi
+  provisioning
 - **UP** — single click: volume +10; long press: max volume
 - **DOWN** — single click: volume -10; long press: mute
 
 Because the ladder shares one ADC pin, XiaoZhi reads it as three
 independent ADC buttons (the same pattern as the ESP-BOX-Lite).
+
+The Mia five-second OK action also works from the dimmed or screen-off idle
+stages: the hold wakes the device and continues into provisioning. It is ignored
+during listening, speaking, notifications, activation and OTA. BluFi connects
+the phone to the Passport over BLE, then sends the selected Wi-Fi SSID and
+password to the device; it does not create a Passport Wi-Fi hotspot. A successful
+connection is saved alongside existing SSIDs. The Mia iPhone app does not yet
+provide this BluFi screen, so that client remains outside this change.
 
 ## Power management
 

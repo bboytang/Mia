@@ -37,6 +37,8 @@ enum {
     kAdcButtonNum,
 };
 
+static constexpr uint16_t kWifiProvisionLongPressMs = 5000;
+
 // ============================================================================
 // Idle power policy: three stages, each counted from the last key press.
 //
@@ -201,9 +203,18 @@ public:
 // end of a press sequence and the current key level. Both are what let the board
 // drop exactly one press - the one that woke it - instead of guessing with a time
 // window.
-class PassportAdcButton : public AdcButton {
+class PassportAdcButton : public Button {
 public:
-    using AdcButton::AdcButton;
+    explicit PassportAdcButton(const button_adc_config_t& adc_config,
+                               uint16_t long_press_time_ms = 2000)
+        : Button(nullptr) {
+        button_config_t button_config = {
+            .long_press_time = long_press_time_ms,
+            .short_press_time = 0,
+        };
+        ESP_ERROR_CHECK(
+            iot_button_new_adc_device(&button_config, &adc_config, &button_handle_));
+    }
 
     // BUTTON_PRESS_END is emitted after the sequence's click or long press, so a
     // guard released here has already filtered those out.
@@ -398,7 +409,12 @@ private:
         adc_cfg.button_index = kAdcButtonOk;      // OK:   ~595 mV
         adc_cfg.min = BSP_ADC_BUTTON_OK_MIN;
         adc_cfg.max = BSP_ADC_BUTTON_OK_MAX;
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+        adc_button_[kAdcButtonOk] =
+            new PassportAdcButton(adc_cfg, kWifiProvisionLongPressMs);
+#else
         adc_button_[kAdcButtonOk] = new PassportAdcButton(adc_cfg);
+#endif
 
         if (wake_boot) {
             // The wake press is still down here, so the key level tells a real wake
@@ -468,6 +484,18 @@ private:
                 ToggleChat();
             });
         });
+
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+        ok->OnLongPress([this]() {
+            // A five-second hold is deliberate, so it may enter provisioning even
+            // when the same press woke the panel from the screen-off idle stage.
+            Application::GetInstance().Schedule([this]() {
+                if (Application::GetInstance().GetDeviceState() == kDeviceStateIdle) {
+                    EnterWifiConfigMode();
+                }
+            });
+        });
+#endif
 
         // Cancel the idle countdown on press-down rather than on click, so a key
         // held for a long press also wakes the screen and the CPU immediately.
