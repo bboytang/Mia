@@ -1627,3 +1627,16 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 独立只读原SQLite核对三个任务owner/state/attempt/error、两个实际事实及向量长度/维度/hash、无超时来源记录，integrity_check=ok；原请求与唯一同Scope原生任务/attempt/来源、原生开始/结束及原输出hash全部保留。原文、运行/依赖/数据库退出证明、同SHA11机制日志与SHA256见performance-worker-faults-compatible-*。完整应用峰值351.11MiB，共同父组1338.96MiB，2CPU/2GiB/swap0、无OOM。实际app SIGTERM正常退出0.2513秒，原Worker/GC/服务/原生lane结束；Java/控制器/两数据库共1.9174秒正常退出、数据库exit0且五原PID消失。任务此前均已终态，仍仅空闲关闭，不当在途20秒恢复证据。
 
 当前无在途任务，继续补正常后台多Scope公平/一次预热五轮实测任务p50/p95；该步骤可独立于尚待用户答复的真实三路限流策略开展，但不能替代2前台+1后台要求。三路429与首句三组超限原文、P23全部剩余要求保持；P23整体未验收/P24未开始，未部署/改生产配置或读取凭据。
+
+
+## 第二十七步：正常后台Scope公平与五轮任务延迟（已实现，待CI）
+
+新增显式worker-fairness，仍用实际完整app/manager/MySQL/Redis/固定BGE，所有服务同2CPU/2GiB/swap0父组，三个真实授权Scope保留1k/10k/32数值背景。新增P23-normal-worker-v1独立合成第一人称来源：六主题各一短一长，共12条，短18–25字、长178–189字；不是P22留出、不是问句empty短路，也不宣称自然语言任意保存率。冻结前按原source_supported预条件选择明确自述事实、避免问题/假设任务短路；真实输入仍经过原_user_excerpts的NFKC/长度/秘密检查后才构造TurnCompleted，原语料与实际规范化来源均留存，不改运行解析器。
+
+六轮每Scope各两个profile任务并发接纳、原单后台lane调度；第一轮预热，后五轮测量，共36真实持久任务、30实测，其中短/长各15、每Scope10。每任务必须有原SDK请求与唯一同Scope原生调用/attempt/来源绑定，保存或有效empty才作为正常终态，最多两尝试；实际Provider请求硬上限72，未启用CI限流器/假输出。原模板/上下文、模型glm-4-flash-250414及原验证/BGE/提交不改。
+
+每轮要求六任务全部接纳早于第一个实际原生调用结束，确保不是空队列的公平口号；从真实原生进入顺序核对前三个不同任务覆盖三个Scope。每个Peer只返回本Scope任务，跨Scope审计只保留在可信服务端/控制器文件。逐任务记录接纳前开始至首次观察终态上界，整体/短长/各Owner分报p50/p95及全部样本，120秒上限保持；只验证正常后台Scope调度，不替代2前台+1后台竞争或首句基线。
+
+本地14机制检查通过（0.159秒），新增拒绝贪心单Scope顺序、积压尚未形成、缺失/外人原生记录等错误公平证据；语料12条唯一、profile长度及原SDK可达前提核对。原故障/真实子进程/SQLite兼容测试保持，Python3.10 AST、编译、YAML、Shell、diff通过。实际SDK输出、所有任务/五轮延迟与资源仍待GitHub唯一新SHA/句柄。运行实现仍32407ef；旧三路429、首句三组超限、真实在途关闭及用户运行请求调度取舍保持，P23整体未验收/P24未开始。
+
+冻结语料SHA256：`96ee8721f7fdc0dd6deec5dcb617f326104063773b7dd4af34c6baa1890c7448`，路径`server/tests/fixtures/persona_memory_worker_p23_v1.json`。

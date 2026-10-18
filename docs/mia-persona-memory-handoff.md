@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十六步实际故障 [39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838) / `9f174b5a1ae40983f69bb094ac649d2dde08c698` success，独立SQLite核对通过：超时任务两尝试failed/timeout、两个迟到有效提案无写入；数据库拒绝后原校验结果复用，SDK1/attempt1 committed；后续新事实恢复committed。共4真实请求/3任务，无Provider错误，共同峰值1338.96MiB无OOM，空闲全组1.9174秒退出。原文/hash见performance-worker-faults-compatible-*，首兼容失败保留。当前无在途任务；接续补正常后台Scope公平与五轮任务p95，双前台限流策略待用户答复，首句超限/在途关闭等尚未收齐，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第二十七步已实现正常后台三Scope公平/任务p95观察器，本地14机制通过；新增冻结12条真实提取来源（18–25字短句/178–189字长句），六轮×三Scope×双profile，首轮预热/五轮实测，共36任务、实际SDK上限72。复用原_user_excerpts规范化及原Worker/SDK/BGE，要求真实积压和各Scope首轮服务、保存/有效空结果及任务p95≤120秒；没有前台SDK，不替代三路验收。待推新SHA唯一CI；运行仍32407ef，三路429/首句超限及在途关闭未收齐，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

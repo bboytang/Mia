@@ -113,7 +113,7 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
     fixture = json.loads(fixture_path.read_text())
     cap = {'reply-smoke': 4, 'reply-latency': 144, 'worker-smoke': 8,
-        'worker-extraction': 2, 'worker-faults': 6}[os.environ['MIA_P23_MODE']]
+        'worker-extraction': 2, 'worker-faults': 6, 'worker-fairness': 72}[os.environ['MIA_P23_MODE']]
     report.update(provider_request_cap=cap,
         provider_request_purposes=[], cases=[], accepted_extraction_jobs=0, job_submit_times={},
         model=MODEL, dataset_sha256=hashlib.sha256(fixture_path.read_bytes()).hexdigest(),

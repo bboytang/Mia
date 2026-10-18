@@ -60,8 +60,8 @@ async def open_driver(server, scopes, config, root, report, persist):
             assert payload['user_excerpts'] == context['sources']
             entry = dict(context, at_ms=elapsed(), model=kwargs['model'],
                 messages_sha256=hashlib.sha256(json.dumps(kwargs['messages'], ensure_ascii=False).encode()).hexdigest(),
-                tools_count=len(kwargs.get('tools', [])), foreground_at_start=worker.foreground)
-            assert entry['model'] == 'glm-4-flash-250414' and entry['tools_count'] == 1
+                max_tokens=kwargs.get('max_tokens'), tools_count=len(kwargs.get('tools', [])), foreground_at_start=worker.foreground)
+            assert entry['model'] == 'glm-4-flash-250414' and entry['tools_count'] == 1 and entry['max_tokens'] == 4096
             with lock:
                 report['extraction_requests'].append(entry)
                 persist(report)
@@ -201,7 +201,12 @@ async def open_driver(server, scopes, config, root, report, persist):
 
     tls = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     tls.load_cert_chain(os.environ['MIA_TLS_CERT_FILE'], os.environ['MIA_TLS_KEY_FILE'])
-    commands = await serve(connection, '127.0.0.1', 0, ssl=tls)
+    if os.environ['MIA_P23_MODE'] == 'worker-fairness':
+        from mia_worker_fairness import handler_for
+        handler = handler_for(worker, scopes, report, lock, persist, elapsed)
+    else:
+        handler = connection
+    commands = await serve(handler, '127.0.0.1', 0, ssl=tls)
     report['worker_driver_port'] = commands.sockets[0].getsockname()[1]
     persist(report)
 
