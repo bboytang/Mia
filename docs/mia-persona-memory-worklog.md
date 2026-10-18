@@ -1640,3 +1640,6 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 本地14机制检查通过（0.159秒），新增拒绝贪心单Scope顺序、积压尚未形成、缺失/外人原生记录等错误公平证据；语料12条唯一、profile长度及原SDK可达前提核对。原故障/真实子进程/SQLite兼容测试保持，Python3.10 AST、编译、YAML、Shell、diff通过。实际SDK输出、所有任务/五轮延迟与资源仍待GitHub唯一新SHA/句柄。运行实现仍32407ef；旧三路429、首句三组超限、真实在途关闭及用户运行请求调度取舍保持，P23整体未验收/P24未开始。
 
 冻结语料SHA256：`96ee8721f7fdc0dd6deec5dcb617f326104063773b7dd4af34c6baa1890c7448`，路径`server/tests/fixtures/persona_memory_worker_p23_v1.json`。
+
+
+第二十七步观察器`b7420a52d7602c770598c6e201b0ba36e8ebd28a`已推送，语法/14机制39124073523 success，唯一worker-fairness [39124113845](https://github.com/bboytang/Mia/actions/runs/39124113845)在途；同SHA服务39124073480、manager39124073512同步验证。冻结12条短/长事实，36任务（6预热/30实测）/SDK上限72，核对实际积压下三Scope服务及正常任务p95≤120秒；没有前台SDK，不替代三路验收。先收同一句柄及原文，运行仍32407ef；三路429、首句超限、在途关闭及用户调度取舍保持，P23未整体验收/P24未开始。
