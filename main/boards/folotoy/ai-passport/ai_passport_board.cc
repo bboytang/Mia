@@ -41,6 +41,9 @@ enum {
 //    360 s    screen and codec off, CPU down-clocked - the "soft sleep" stage
 //   2160 s    deep sleep, entered from the soft-sleep stage as a fallback
 //
+// The Mia variant uses 60 / 120 / 1800 seconds and wakes/restores the panel on
+// application activity as well as keys. Other Passport builds keep this policy.
+//
 // All three are gated by Application::CanEnterSleepMode(), which PowerSaveTimer
 // polls once per second, so an ongoing conversation or playback pushes the
 // deadline back instead of interrupting it. The NVS "sleep_mode" flag the
@@ -71,10 +74,18 @@ enum {
 
 // Backlight drops to kDimBrightness this long after the last input.
 static constexpr int kDimSeconds = 60;
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+// Mia: deadlines are measured from becoming idle after the last interaction.
+static constexpr int kSoftSleepSeconds = 120;
+static constexpr int kDeepSleepSeconds = 1800;
+static constexpr bool kWakeOnActivity = true;
+#else
 // Screen, codec and CPU down this long after the last input.
 static constexpr int kSoftSleepSeconds = 360;
 // Deep sleep this long after the last input.
 static constexpr int kDeepSleepSeconds = 2160;
+static constexpr bool kWakeOnActivity = false;
+#endif
 // PowerSaveTimer counts the fallback from the soft-sleep deadline rather than
 // from the last input.
 static constexpr int kDeepSleepAfterSoftSleepTicks = kDeepSleepSeconds - kSoftSleepSeconds;
@@ -605,7 +616,7 @@ private:
         // logic: both belong to the soft-sleep stage below, and PowerSaveTimer
         // would otherwise apply them at the dim stage (and with automatic light
         // sleep enabled, which is deliberately not used here).
-        power_save_timer_ = new PowerSaveTimer(-1, kDimSeconds, kSoftSleepSeconds);
+        power_save_timer_ = new PowerSaveTimer(-1, kDimSeconds, kSoftSleepSeconds, kWakeOnActivity);
         power_save_timer_->OnEnterSleepMode([this]() {
             ESP_LOGI(TAG, "Idle %ds: backlight to %d%%", kDimSeconds, kDimBrightness);
             auto* backlight = GetBacklight();
@@ -627,6 +638,12 @@ private:
     // exit callback while it is in its sleep stage, which is exactly from the dim
     // deadline on, so this one path serves both stages.
     void WakeFromIdle() {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+        // Activity can wake the timer without a physical key. Invalidate any
+        // queued idle transition and start the deep-sleep fallback afresh.
+        last_key_us_ = esp_timer_get_time();
+        soft_sleep_ticks_ = 0;
+#endif
         if (soft_sleep_active_) {
             ExitSoftSleep();
             return;
@@ -1024,6 +1041,19 @@ private:
     };
 
 public:
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    void SetPowerSaveLevel(PowerSaveLevel level) override {
+        WifiBoard::SetPowerSaveLevel(level);
+        if (level == PowerSaveLevel::PERFORMANCE) {
+            Application::GetInstance().Schedule([this]() {
+                last_key_us_ = esp_timer_get_time();
+                soft_sleep_ticks_ = 0;
+                WakeUpPowerSaveTimer();
+            });
+        }
+    }
+#endif
+
     AiPassportBoard() : display_(nullptr), battery_(nullptr) {
         ReleaseDeepSleepHolds();
         InitializeCodecI2c();

@@ -52,6 +52,14 @@ independent ADC buttons (the same pattern as the ESP-BOX-Lite).
 
 ## Power management
 
+The pending Mia update uses 60 seconds to dim to 10%, 120 seconds to turn the
+screen off and down-clock while retaining Wi-Fi, and 1800 seconds to enter deep
+sleep. Voice activity restores normal brightness, suspends the idle deadlines,
+and starts a fresh countdown when idle resumes. This update is source-only until
+the owner's current-device tests finish; no new OTA package has been published.
+
+The original `ai-passport` variant retains the following existing policy:
+
 The Passport is a battery wearable, so the board gives up power in three stages,
 all counted from the last key press:
 
