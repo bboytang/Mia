@@ -16,11 +16,12 @@
 新策略的实际屏幕、CPU、电流和唤醒验证安排在统一 OTA 之后，不声称当前 1.0.0
 设备已切换到新时间表。下文关于安装包和 1.0.0 发布基线的记录保持适用。
 
-下一版仅增加一个换网入口：Mia 在待命状态持续按住 OK 键 5 秒进入现有 BluFi
-配网。暗屏或熄屏待命时，同一次持续按压会先唤醒再进入配网；语音交互、通知、
-激活和 OTA 状态不响应这个动作。手机通过 BLE 连接 Passport，再把目标 Wi-Fi 的
-SSID 和密码发送给设备，并非连接 Passport 创建的 Wi-Fi 热点。暂不增加 Mia iPhone
-客户端配网页面，也不增加后端联网搜索。
+下一版仅增加一个换网入口：Mia 在待命状态持续按住 OK 键 5 秒开启设备 Wi-Fi
+配网热点。暗屏或熄屏待命时，同一次持续按压会先唤醒再进入配网；语音交互、
+通知、激活和 OTA 状态不响应这个动作。手机连接设备屏幕显示的热点，在浏览器
+打开屏幕显示的 HTTP 地址，选择目标 2.4 GHz Wi-Fi 并输入密码；手机提示热点
+无法上网时仍保持连接。用户已明确选择热点网页方式，因此 Mia 构建显式开启
+Hotspot、关闭 BluFi。暂不增加 Mia iPhone 客户端配网页面，也不增加后端联网搜索。
 
 用户确认：先用现有 HTTP/WS；OTA 直接由原小智后端管理；iPhone 不承担 OTA；
 不要求完整 Flash 备份；首次实际刷机仍必须等待用户明确确认。固件源码不含设备
@@ -41,7 +42,7 @@ python scripts/build.py folotoy/ai-passport --name mia-ai-passport --language zh
 - 两个 3MiB 槽，保护历史 cardid、Recovery、完整 NVS/PHY；资源 640KiB，使用
   14px 中文字库。是否适合实机显示仍需验证。
 - 保持小智发现、激活、设备认证和 WS/Opus 语义；发现响应限制 16KiB，绑定后
-  使用下发 token。Wi-Fi 保留 BluFi 传输；Mia iPhone 专属 BLE 配置/绑定界面仍未实现。
+  使用下发 token。下一版 Wi-Fi 使用热点网页配网；Mia iPhone 专属 BLE 配置/绑定界面仍未实现。
 - 固件升级接入原 OTA version/url 响应和 `self.upgrade_firmware` MCP 入口。
   仅接受同一配置源下原 manager/单模块下载路径；禁止重定向、任意 URL、路径穿越。
 - 签名、SHA-256、芯片/版本/分区/资源校验、备用槽写入、启动确认、失败回滚和

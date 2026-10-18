@@ -5,8 +5,8 @@
 `mia-ai-passport` and `mia-ai-passport-dev` reuse this board's pins and drivers with a distinct release
 identity. First installation requires device layout/security review and explicit owner confirmation. See
 [Mia architecture, protected flash regions, staged implementation and OTA design](../../../../docs/firmware/mia-ai-passport-release.md).
-This variant pins the current Mia HTTP/WS endpoints, enables the existing
-BluFi provisioning transport, and blocks legacy unsigned firmware/asset updates.
+This variant pins the current Mia HTTP/WS endpoints, uses the existing Wi-Fi
+hotspot/browser provisioning, and blocks legacy unsigned firmware/asset updates.
 
 Board definition that lets the XiaoZhi voice assistant run on the
 [FoloToy AI Passport](https://github.com/FoloToy/ai-passport) wearable.
@@ -43,8 +43,8 @@ Outputs `build/merged-binary.bin` (8 MB flash, USB Serial/JTAG console).
 The three physical keys map to XiaoZhi's voice-assistant actions:
 
 - **OK** — single click: toggle the chat state (or enter Wi-Fi config mode
-  while starting up); on Mia, hold for 5 seconds while idle to enter BluFi
-  provisioning
+  while starting up); on Mia, hold for 5 seconds while idle to start the
+  Wi-Fi provisioning hotspot
 - **UP** — single click: volume +10; long press: max volume
 - **DOWN** — single click: volume -10; long press: mute
 
@@ -53,11 +53,12 @@ independent ADC buttons (the same pattern as the ESP-BOX-Lite).
 
 The Mia five-second OK action also works from the dimmed or screen-off idle
 stages: the hold wakes the device and continues into provisioning. It is ignored
-during listening, speaking, notifications, activation and OTA. BluFi connects
-the phone to the Passport over BLE, then sends the selected Wi-Fi SSID and
-password to the device; it does not create a Passport Wi-Fi hotspot. A successful
-connection is saved alongside existing SSIDs. The Mia iPhone app does not yet
-provide this BluFi screen, so that client remains outside this change.
+during listening, speaking, notifications, activation and OTA. Connect the phone
+to the hotspot named on the Passport screen, then open the HTTP address shown
+there in a browser and enter the target 2.4 GHz Wi-Fi SSID and password. Stay
+connected if the phone warns that this hotspot has no Internet access. A
+successful connection is saved alongside existing SSIDs. Mia explicitly enables
+hotspot provisioning and disables BluFi; no Mia iPhone app change is required.
 
 ## Power management
 

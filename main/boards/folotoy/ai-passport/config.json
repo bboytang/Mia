@@ -25,7 +25,8 @@
                 "CONFIG_MIA_PASSPORT_OTA_URL=\"http://43.143.230.174:8002/xiaozhi/ota/\"",
                 "CONFIG_MIA_PASSPORT_WEBSOCKET_URL=\"ws://43.143.230.174:8000/xiaozhi/v1/\"",
                 "CONFIG_OTA_URL=\"\"",
-                "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=y",
+                "CONFIG_USE_HOTSPOT_WIFI_PROVISIONING=y",
+                "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=n",
                 "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
                 "CONFIG_APP_PROJECT_VER_FROM_CONFIG=y",
                 "CONFIG_APP_PROJECT_VER=\"1.0.0\""
@@ -43,7 +44,8 @@
                 "CONFIG_MIA_PASSPORT_OTA_URL=\"http://43.143.230.174:8002/xiaozhi/ota/\"",
                 "CONFIG_MIA_PASSPORT_WEBSOCKET_URL=\"ws://43.143.230.174:8000/xiaozhi/v1/\"",
                 "CONFIG_OTA_URL=\"\"",
-                "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=y",
+                "CONFIG_USE_HOTSPOT_WIFI_PROVISIONING=y",
+                "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=n",
                 "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
                 "CONFIG_APP_PROJECT_VER_FROM_CONFIG=y",
                 "CONFIG_APP_PROJECT_VER=\"1.0.0\""
