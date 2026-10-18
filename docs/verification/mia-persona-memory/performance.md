@@ -2,7 +2,7 @@
 
 2026-10-17 用户批准“先读取交接文档，然后开始p23，每完成一步记录并写交接”。起点为远程最新交接提交 `1c97e91`；P22用户验收通过、选定 `glm-4-flash-250414`，原失败和未覆盖项不变。P24未开始。
 
-当前：第三十一步已实现CI worker-shutdown：原真实提取/原校验/SQLite持久化后，在真实BGE已返回的validated_vector阶段受控停留，向原完整app发送SIGTERM，测进程WS/HTTP/GC/Worker总退出≤20秒；保留任务/原结果后启动全新app，启动前SDK守卫禁止重复模型请求，检查同任务/尝试不增加、原所属事实/来源及原768维向量提交。Java/数据库为恢复保留运行，故这仅覆盖在途应用关闭+恢复，不冒充全服务在途共同关闭。仅CI/测试Java夹具改变，运行实现仍20d38cc，未改模型/验收目标/生产。19项本地机制、Python3.10 AST、Shell/diff通过，待精确SHA GitHub实际验证。第三十步3成功3无效提案及无正常p95、三路429/首句超限保留，P23未整体验收/P24未开始。
+当前：第三十一步CI源码`5a65e565700922a960c007d52f51f2489ba7aeb7`已推送，语法/19机制39127789383 success，唯一在途应用关闭/持久恢复[39127847354](https://github.com/bboytang/Mia/actions/runs/39127847354)在途；同SHA服务39127789379、manager39127789387同步验证。真实提案持久化后受控validated_vector暂停，原app SIGTERM≤20秒、新PID原任务恢复、启动前SDK防重复；Java/数据库为恢复保留，不冒充全服务在途共同关闭。运行仍20d38cc。第三十步预热3committed/3failed无正常p95、三路429/首句超限及调度取舍保持，P23未整体验收/P24未开始。先收唯一run，不重复派发。
 
 ## 第一步：固定范围与数值入口
 
@@ -817,3 +817,6 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 第三十一步已实现CI worker-shutdown：原真实提取/原校验/SQLite持久化后，在真实BGE已返回的validated_vector阶段受控停留，向原完整app发送SIGTERM，测进程WS/HTTP/GC/Worker总退出≤20秒；保留任务/原结果后启动全新app，启动前SDK守卫禁止重复模型请求，检查同任务/尝试不增加、原所属事实/来源及原768维向量提交。Java/数据库为恢复保留运行，故这仅覆盖在途应用关闭+恢复，不冒充全服务在途共同关闭。仅CI/测试Java夹具改变，运行实现仍20d38cc，未改模型/验收目标/生产。19项本地机制、Python3.10 AST、Shell/diff通过，待精确SHA GitHub实际验证。第三十步3成功3无效提案及无正常p95、三路429/首句超限保留，P23未整体验收/P24未开始。
 
 复用已有真实提取SOURCE（独立新SQLite，不用P22留出），只允许最多两次真实请求。受控native hold不改模型响应/向量；关闭时必须确有未结束native work，退出后RO读取原validated_result hash、无已写事实，原任务只能validated/retry_wait。恢复不重建数值库/再次submit，原app/Worker启动前安装SDK防重复守卫，确认新PID、attempt不增加、提交原事实和原向量；原原子提交清空validated_result是预期行为，不错误要求提交后继续保留。恢复完成后最终全组退出仍只是空闲关闭。
+
+
+第三十一步CI源码`5a65e565700922a960c007d52f51f2489ba7aeb7`已推送，语法/19机制39127789383 success，唯一在途应用关闭/持久恢复[39127847354](https://github.com/bboytang/Mia/actions/runs/39127847354)在途；同SHA服务39127789379、manager39127789387同步验证。真实提案持久化后受控validated_vector暂停，原app SIGTERM≤20秒、新PID原任务恢复、启动前SDK防重复；Java/数据库为恢复保留，不冒充全服务在途共同关闭。运行仍20d38cc。第三十步预热3committed/3failed无正常p95、三路429/首句超限及调度取舍保持，P23未整体验收/P24未开始。先收唯一run，不重复派发。
