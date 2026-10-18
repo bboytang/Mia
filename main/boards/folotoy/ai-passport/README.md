@@ -62,11 +62,11 @@ hotspot provisioning and disables BluFi; no Mia iPhone app change is required.
 
 ## Power management
 
-The pending Mia update uses 60 seconds to dim to 10%, 120 seconds to turn the
+The Mia 1.0.1 OTA update uses 60 seconds to dim to 10%, 120 seconds to turn the
 screen off and down-clock while retaining Wi-Fi, and 1800 seconds to enter deep
 sleep. Voice activity restores normal brightness, suspends the idle deadlines,
-and starts a fresh countdown when idle resumes. This update is source-only until
-the owner's current-device tests finish; no new OTA package has been published.
+and starts a fresh countdown when idle resumes. The owner has requested a signed
+1.0.1 trial OTA package; the new power stages still need device verification.
 
 The original `ai-passport` variant retains the following existing policy:
 
@@ -289,7 +289,7 @@ move the three deadlines off the `skip_unhandled_events` timer first.
   nothing: measured on hardware, every register readback returned `0xF0` and both
   suspend attempts failed.
 
-### Mia animated face (pending next OTA)
+### Mia animated face (1.0.1 OTA)
 
 Only the Mia variants use `MiaDisplay`, a `SpiLcdDisplay` subclass. It reuses
 ST7789/LVGL and keeps the existing status, battery/network indicators, subtitles,
@@ -308,9 +308,8 @@ core application dependency is introduced. The stock Passport UI is unchanged.
 Host tests compile the exact geometry header and check expressions, fallback,
 blink timing and object bounds. CI must build both Mia variants and the stock
 board. Smoothness, subtitle overlap, heap during long conversations, sleep/wake,
-and audio playback under animation load still require device testing. This is
-unreleased work: do not package, sign or publish it before the remaining device
-tests and combined-release review.
+and audio playback under animation load still require device testing. These
+changes are included in the owner-requested 1.0.1 trial OTA release.
 
 Mia subtitles are normalized to simplified Chinese in `SetChatMessage`, covering
 both ASR and assistant/notification text. OpenCC 1.1.9 dictionary data is pinned
