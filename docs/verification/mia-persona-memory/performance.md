@@ -2,7 +2,7 @@
 
 2026-10-17 用户批准“先读取交接文档，然后开始p23，每完成一步记录并写交接”。起点为远程最新交接提交 `1c97e91`；P22用户验收通过、选定 `glm-4-flash-250414`，原失败和未覆盖项不变。P24未开始。
 
-当前：第二十一步观察器`32289bbe0c3ca486a15c559dcdf731eab6ef222f`已推送，唯一实际app/BGE/空闲Worker共同资源生命周期运行[39092315830](https://github.com/bboytang/Mia/actions/runs/39092315830)在途；push语法/5机制测试39092314489已success。运行模块仍32407ef，原两容量已达验收；419.51ms原目标差距按用户决定不阻塞后续。继续同一句柄，不重复派发；本预检无聊天Provider请求，不代替真实首句、提取任务及在途关闭。P23未整体验收/P24未开始。
+当前：第二十一步32289bb / 实际应用生命周期39092315830 success：应用+BGE峰值350.99MiB，共同父组峰值1239.61MiB、无OOM；空闲应用退出0.1685秒、五进程服务组退出2.3543秒。无Provider/提取任务，不代表在途关闭通过。无在途任务；下一步实际回复/同Provider首句与真实Worker，P23未整体验收/P24未开始。第二十步容量验收通过及419.51ms目标差距保留，原文/hash见performance-app-lifecycle-first-*。
 
 ## 第一步：固定范围与数值入口
 
@@ -542,3 +542,16 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 本地新增三项finalizer机制测试（含真实受控子进程），连同已有两项调度测试共5项通过（0.030秒），Python3.10 AST/语法、workflow YAML、Shell/diff通过。完整应用/BGE/共同资源实测只在GitHub运行，唯一新观察器SHA/句柄随后记录；未有新启动/RSS/退出通过结论。后续仍需实际唯一回复链与同Provider基线、两前台+真实提取Worker公平/故障/120秒终态，以及有在途任务的全服务20秒关闭。
 
 第二十一步观察器`32289bbe0c3ca486a15c559dcdf731eab6ef222f`已推送，唯一实际app/BGE/空闲Worker共同资源生命周期运行[39092315830](https://github.com/bboytang/Mia/actions/runs/39092315830)在途；push语法/5机制测试39092314489已success。运行模块仍32407ef，原两容量已达验收；419.51ms原目标差距按用户决定不阻塞后续。继续同一句柄，不重复派发；本预检无聊天Provider请求，不代替真实首句、提取任务及在途关闭。P23未整体验收/P24未开始。
+
+
+## 第二十一步完成：实际应用/BGE启动及空闲服务组退出通过
+
+观察器32289bbe0c3ca486a15c559dcdf731eab6ef222f / [唯一生命周期运行39092315830](https://github.com/bboytang/Mia/actions/runs/39092315830) success，push语法/5机制测试39092314489 success。原始parent/child报告、依赖快照、数据库退出证明及SHA256已无损归档performance-app-lifecycle-first-*。独立复核五个不同原PID（真实app、Java、MySQL、Redis、轻量控制器）均在共同父组；CPU实际2核、内存2GiB、swap0，父组峰值1299824640字节（1239.61MiB），无OOM。
+
+原app.main、WebSocketServer/HTTP、GC和原MemoryWorker实际启动，三用户Scope经真实manager TLS授权。应用ready 1.760秒（不含launch前app模块导入）；Worker原index冷加载/编码403.75ms，这一个冷样本不当预热p95结果。固定BGE U8U8/768维/512-token、model/revision/hash及ORT1/1线程保持。完整应用编码前Python峰值120.01MiB，编码后350.99MiB，峰值增量230.98MiB、实时RSS增量170.08MiB；高水位差与实时增量分开报告，不冒充独立进程编码器资源。SQLite完整性正常。
+
+从控制器发送SIGTERM到实际应用进程exit=0为0.1685秒，原Worker task/GC/服务任务正常结束，两个实际端口关闭；继续到原Java/控制器/MySQL/Redis退出共2.3543秒。两数据库先graceful stop并以0退出、无OOM，五原PID/start_ticks均已消失，没有把强杀/非零退出报为正常关闭。该结果仅空闲Worker，accepted jobs=0、Provider请求0；不能据此声称真实回复、首句增量、提取任务公平/故障/120秒终态或有任务在途的20秒关闭已通过。
+
+当前无在途任务，运行模块仍32407ef，第二十步两容量验收通过及419.51ms原400ms目标差距保留。下一步在同一共同资源环境新增P23实际回复/同Provider无记忆首句基线，限定glm-4-flash-250414并复用既有受保护CI测试凭据；先核对真实请求/原回复链/受检首句时点，再冻结样本测量，不重跑P22留出或模型比较。P23整体未验收/P24未开始，未部署/改生产数据，音频/真机未测。
+
+最新接续：第二十一步32289bb / 实际应用生命周期39092315830 success：应用+BGE峰值350.99MiB，共同父组峰值1239.61MiB、无OOM；空闲应用退出0.1685秒、五进程服务组退出2.3543秒。无Provider/提取任务，不代表在途关闭通过。无在途任务；下一步实际回复/同Provider首句与真实Worker，P23未整体验收/P24未开始。第二十步容量验收通过及419.51ms目标差距保留，原文/hash见performance-app-lifecycle-first-*。历史在途段落仅过程记录。

@@ -1,0 +1,292 @@
+{
+  "run_id": 39092315830,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39092315830",
+  "observer_sha": "32289bbe0c3ca486a15c559dcdf731eab6ef222f",
+  "runtime_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "success",
+  "p23_complete": false,
+  "artifacts": [
+    {
+      "file": "performance-app-lifecycle-first-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "69b825b6e0b3f0cdf50c4b3cdf856449aa76df3821dadbefb70d282205879b9a",
+      "sha256": "61b65a705b4d5000997de075af90b36a55d47ca234c30c11a87e9b2cf9904147"
+    },
+    {
+      "file": "performance-app-lifecycle-first-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "f36f85ce61209fa458ef56b18c0177935b2735f7297c571550caac4eec4cd50f",
+      "sha256": "32cfe73c29eaebaf4f85e7fc07d6b75938172540b506e8c6bc6328cca9067d95"
+    },
+    {
+      "file": "performance-app-lifecycle-first-ci-results.json.gz",
+      "source_path": "GitHub run metadata",
+      "raw_sha256": "ccdc5e4db54e4f3ce92a7f5e719ee25c034ed193f705f9a6ac3f7070318e2b99",
+      "sha256": "ac8c3b8ef0b3a6ac019f74f5125812f0143228759ea638d145805b36775e933d"
+    },
+    {
+      "file": "performance-app-lifecycle-first-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "924eea922e1c11e930cf3aa68172bf141546167b46c154e385970a0cf28fc451",
+      "sha256": "ddc56cb4a65232b8c23eee7d94a3ee8683982bc1416df044c3868834f98ba57a"
+    },
+    {
+      "file": "performance-app-lifecycle-first-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-app-lifecycle-first-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-app-lifecycle-first-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "69b825b6e0b3f0cdf50c4b3cdf856449aa76df3821dadbefb70d282205879b9a",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "dbd90fed17ff75d38eb611135de852ca5d84cc99254e7023e69b1223c3f5f107",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "90ff19103a040340d60fe30f5f9e1b65bf064da462ba37ff9c975d2a86b0789a",
+    "cgroup-final-memory.current.txt": "43b04e84298c538fab7543aba06ed58924ef70596ba338a5aed930af17e40216",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "e49b53ede389a83bec1b46d3f3619e4b43c0a1acb43b03b8791478a9d030f310",
+    "redis.log": "731b109140c8c3c49d6089bf06a139842a7983e108170fe5d4ec2e7a3d400329",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "3f29b68985659bc7b1c898ecc68401e22536d024ec87dc48c6841f0ad40b577b",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "b69977e171c25629221c8c209fae23ff8c310b39b86e3619cd6bc7b0434ba094",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "924eea922e1c11e930cf3aa68172bf141546167b46c154e385970a0cf28fc451",
+    "app-child/ready.json": "b322462d2d394858d3c8f83cf632075afc925e8ccf999a5ebbdeeb5f06fa58e3",
+    "app-child/app-results.json": "f36f85ce61209fa458ef56b18c0177935b2735f7297c571550caac4eec4cd50f",
+    "app-child/memory.sqlite3": "9ac7a1810604de0a52c012d508f05fbad614a3e6195dc0fdd63e12f5aff07e1c",
+    "junit/TEST-junit-jupiter.xml": "c267781bc8b23aabf15dfa8d4663820396487e733dafa50dff6a7b98047c6efb",
+    "junit/TEST-junit-vintage.xml": "fbe623029651f0d405997561e16a252510a814ee3c7f6db5f131a9a6e0d7fc71",
+    "junit/TEST-junit-platform-suite.xml": "6f0ab05cd46b3866a8c0d700df24f5e8f092f1caf2b768bf7410b444d785ac4a"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "app_pid": 5639,
+    "members_ready": {
+      "mysql": {
+        "pid": 4871,
+        "start_ticks": "67102",
+        "cgroup": "/miap23.slice/docker-b032a12ad677fd619592bfb44862459034fd1fed6857c4b1eae7365b18cf7b66.scope",
+        "VmHWM": "495128 kB",
+        "VmRSS": "495128 kB"
+      },
+      "redis": {
+        "pid": 4936,
+        "start_ticks": "67113",
+        "cgroup": "/miap23.slice/docker-5d7d5a2a79514315c9484acc206aef80fa5a1b834e9f99eda00170fd70696c5c.scope",
+        "VmHWM": "29596 kB",
+        "VmRSS": "29364 kB"
+      },
+      "manager": {
+        "pid": 5471,
+        "start_ticks": "67880",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "466816 kB",
+        "VmRSS": "461708 kB"
+      },
+      "python": {
+        "pid": 5639,
+        "start_ticks": "69341",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359412 kB",
+        "VmRSS": "297316 kB"
+      },
+      "harness": {
+        "pid": 5638,
+        "start_ticks": "69333",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20080 kB",
+        "VmRSS": "20080 kB"
+      }
+    },
+    "app_process_shutdown_seconds": 0.16845460000001822,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 2.354302804999975,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; idle Worker, no accepted jobs"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 32535791\nuser_usec 29969064\nsystem_usec 2566726\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 224\nnr_throttled 117\nthrottled_usec 5444987\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "980795392",
+      "memory.peak": "980803584",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 34914692\nuser_usec 31952266\nsystem_usec 2962426\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 251\nnr_throttled 117\nthrottled_usec 5444987\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "985743360",
+      "memory.peak": "1299824640",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "error_class": null,
+    "reason": null
+  },
+  "child": {
+    "ready": true,
+    "passed": true,
+    "authorized_owners": [
+      "user:941040001:agent:mia-p23-0",
+      "user:941040002:agent:mia-p23-1",
+      "user:941040003:agent:mia-p23-2"
+    ],
+    "app_ready_seconds": 1.7599023860000216,
+    "cold_query_encode_ms": 403.749408000067,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "285f03a0ebed520b2a855f027d2237aa89628c225981b55da5c4808381291e7f",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "python_peak_before_encoder_mib": 120.01171875,
+    "python_peak_after_encoder_mib": 350.98828125,
+    "encoder_peak_increment_mib": 230.9765625,
+    "encoder_live_rss_increment_mib": 170.08203125,
+    "members_before_encoder": {
+      "mysql": {
+        "pid": 4871,
+        "start_ticks": "67102",
+        "cgroup": "/miap23.slice/docker-b032a12ad677fd619592bfb44862459034fd1fed6857c4b1eae7365b18cf7b66.scope",
+        "VmHWM": "495128 kB",
+        "VmRSS": "495128 kB"
+      },
+      "redis": {
+        "pid": 4936,
+        "start_ticks": "67113",
+        "cgroup": "/miap23.slice/docker-5d7d5a2a79514315c9484acc206aef80fa5a1b834e9f99eda00170fd70696c5c.scope",
+        "VmHWM": "29596 kB",
+        "VmRSS": "29364 kB"
+      },
+      "manager": {
+        "pid": 5471,
+        "start_ticks": "67880",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "466816 kB",
+        "VmRSS": "461648 kB"
+      },
+      "python": {
+        "pid": 5639,
+        "start_ticks": "69341",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "123152 kB",
+        "VmRSS": "123152 kB"
+      },
+      "harness": {
+        "pid": 5638,
+        "start_ticks": "69333",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20068 kB",
+        "VmRSS": "20068 kB"
+      }
+    },
+    "members_ready": {
+      "mysql": {
+        "pid": 4871,
+        "start_ticks": "67102",
+        "cgroup": "/miap23.slice/docker-b032a12ad677fd619592bfb44862459034fd1fed6857c4b1eae7365b18cf7b66.scope",
+        "VmHWM": "495128 kB",
+        "VmRSS": "495128 kB"
+      },
+      "redis": {
+        "pid": 4936,
+        "start_ticks": "67113",
+        "cgroup": "/miap23.slice/docker-5d7d5a2a79514315c9484acc206aef80fa5a1b834e9f99eda00170fd70696c5c.scope",
+        "VmHWM": "29596 kB",
+        "VmRSS": "29364 kB"
+      },
+      "manager": {
+        "pid": 5471,
+        "start_ticks": "67880",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "466816 kB",
+        "VmRSS": "461704 kB"
+      },
+      "python": {
+        "pid": 5639,
+        "start_ticks": "69341",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359412 kB",
+        "VmRSS": "297316 kB"
+      },
+      "harness": {
+        "pid": 5638,
+        "start_ticks": "69333",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20068 kB",
+        "VmRSS": "20068 kB"
+      }
+    },
+    "app_lifecycles": [
+      {
+        "pid": 5639,
+        "ports": [
+          37679,
+          48093
+        ],
+        "gc_running": true,
+        "actual_service_tasks": [
+          "SimpleHttpServer.start",
+          "WebSocketServer.start"
+        ],
+        "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+        "server_class": "core.websocket_server.WebSocketServer",
+        "worker_class": "mia_companion.jobs.MemoryWorker",
+        "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+      }
+    ],
+    "app_shutdowns": [
+      {
+        "pid": 5639,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.0005705810000335987,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "integrity": "ok",
+    "error_class": null,
+    "reason": null
+  }
+}
