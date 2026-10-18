@@ -1,5 +1,8 @@
 #include "wifi_board.h"
 #include "display/lcd_display.h"
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+#include "mia_display.h"
+#endif
 #include "codecs/es8311_audio_codec.h"
 #include "application.h"
 #include "button.h"
@@ -558,7 +561,11 @@ private:
         esp_lcd_panel_disp_on_off(panel, true);
 
         panel_ = panel;
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+        display_ = new MiaDisplay(panel_io, panel,
+#else
         display_ = new SpiLcdDisplay(panel_io, panel,
+#endif
                                      DISPLAY_WIDTH, DISPLAY_HEIGHT,
                                      DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y,
                                      DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
@@ -694,6 +701,9 @@ private:
         // Calling EnableInput(false) from here would be undone by the next read.
         Application::GetInstance().GetAudioService().EnableWakeWordDetection(false);
 
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+        display_->SetPowerSaveMode(true);
+#endif
         SleepPanel();
         GetBacklight()->SetBrightness(0);
         SetStandbyClock(true);
@@ -709,6 +719,9 @@ private:
         ESP_LOGI(TAG, "Input: waking from soft sleep");
 
         WakePanel();
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+        display_->SetPowerSaveMode(false);
+#endif
         GetBacklight()->RestoreBrightness();
 
         // The idle branch of the state machine does not run again on its own, so

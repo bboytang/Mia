@@ -278,3 +278,26 @@ move the three deadlines off the `skip_unhandled_events` timer first.
   so that one shifts too (`kEs8311I2cAddress`). Using the unshifted address talks to
   nothing: measured on hardware, every register readback returned `0xF0` and both
   suspend attempts failed.
+
+### Mia animated face (pending next OTA)
+
+Only the Mia variants use `MiaDisplay`, a `SpiLcdDisplay` subclass. It reuses
+ST7789/LVGL and keeps the existing status, battery/network indicators, subtitles,
+notifications and preview-image path. A black 216x178 face region contains two
+cyan eyes and a mouth. Fixed LVGL objects animate at 20 Hz, with no per-frame
+allocation, image decoding, extra full-screen framebuffer or new resource assets.
+The installed 1.0.0 assets and partition layout remain compatible with app OTA.
+
+`mia_face.h` provides blink/gaze geometry, six moods and listening/speaking/
+connecting activity. Existing localized status notifications select activity;
+backend emotion names select mood (unknown names use neutral). Speaking motion
+is a stylized loop, not synchronized to PCM or phonemes. Soft sleep pauses the
+LVGL timer before panel sleep-in; waking resumes it. No new voice protocol or
+core application dependency is introduced. The stock Passport UI is unchanged.
+
+Host tests compile the exact geometry header and check expressions, fallback,
+blink timing and object bounds. CI must build both Mia variants and the stock
+board. Smoothness, subtitle overlap, heap during long conversations, sleep/wake,
+and audio playback under animation load still require device testing. This is
+unreleased work: do not package, sign or publish it before the remaining device
+tests and combined-release review.
