@@ -4,6 +4,8 @@ on:
     paths:
       - 'scripts/ci/verify_mia_shared_envelope.py'
       - 'scripts/ci/mia_thread_diagnostics.py'
+      - 'scripts/ci/mia_query_scheduling.py'
+      - 'scripts/ci/tests/test_mia_query_scheduling.py'
       - 'scripts/ci/mia_performance_budgets.py'
       - 'scripts/ci/run_mia_shared_envelope.sh'
       - 'server/companion/manager_tests/MiaPerformanceIntegrationTest.java'
@@ -13,7 +15,7 @@ on:
       mode:
         description: Capacity gate or separate shared-resource hot-path diagnosis
         type: choice
-        options: [capacity, diagnostic, threads]
+        options: [capacity, diagnostic, threads, scheduling]
         default: capacity
 permissions:
   contents: read
@@ -29,7 +31,8 @@ jobs:
         with:
           python-version: '3.10'
       - run: |
-          python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py
+          python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py
+          python -m unittest discover -s scripts/ci/tests -p test_mia_query_scheduling.py -v
           bash -n scripts/ci/run_mia_shared_envelope.sh
   shared:
     if: github.event_name == 'workflow_dispatch'

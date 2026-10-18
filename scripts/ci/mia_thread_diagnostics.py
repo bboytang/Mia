@@ -1,4 +1,4 @@
-"""Paired actual ORT thread experiments in fresh processes, never D08 acceptance."""
+"""Actual ORT thread/query scheduling pairs in fresh processes, never acceptance."""
 
 import asyncio
 import hashlib
@@ -43,17 +43,22 @@ async def run_pairs(report, save, group_state, members):
     import numpy as np
 
     root = Path(os.environ['MIA_P23_REPORT_DIR'])
+    scheduling = report['mode'] == 'scheduling'
+    order_key, arms_key = ('scheduling_order', 'scheduling_arms') if scheduling else ('thread_order', 'thread_arms')
     report.update(cgroup_before=group_state(), members_before=members(),
-        thread_order=[2, 1, 1, 2], thread_arms=[],
         trial_scope='Fresh Python processes in ABBA order; actual manager/databases stay in same parent; not acceptance')
-    for number, threads in enumerate(report['thread_order']):
-        directory = root / f'thread-arm-{number}-{threads}'
+    report[order_key] = ['paired', 'serial', 'serial', 'paired'] if scheduling else [2, 1, 1, 2]
+    report[arms_key] = []
+    for number, setting in enumerate(report[order_key]):
+        directory = root / f'{"scheduling" if scheduling else "thread"}-arm-{number}-{setting}'
         directory.mkdir()
-        arm = {'number': number, 'intra_op_num_threads': threads, 'directory': directory.name}
-        report['thread_arms'].append(arm)
+        arm = {'number': number, 'directory': directory.name,
+            ('query_scheduling' if scheduling else 'intra_op_num_threads'): setting}
+        report[arms_key].append(arm)
         save(report)
         environment = dict(os.environ, MIA_P23_REPORT_DIR=str(directory),
-            MIA_P23_MODE='thread-arm', MIA_P23_THREADS=str(threads))
+            MIA_P23_MODE='scheduling-arm' if scheduling else 'thread-arm')
+        environment['MIA_P23_QUERY_SCHEDULING' if scheduling else 'MIA_P23_THREADS'] = str(setting)
         with (directory / 'python.log').open('wb') as output:
             process = await asyncio.create_subprocess_exec(sys.executable,
                 str(Path(__file__).with_name('verify_mia_shared_envelope.py')),
@@ -66,14 +71,20 @@ async def run_pairs(report, save, group_state, members):
                 if process.returncode is None:
                     process.kill()
                     await process.wait()
-        assert arm['returncode'] == 0, 'Thread arm failed; preserve its original report/log'
+        assert arm['returncode'] == 0, 'Diagnostic arm failed; preserve its original report/log'
         result = json.loads((directory / 'shared-results.json').read_text())
         assert result['code_sha'] == report['code_sha'] and result['diagnostic_complete']
-        assert result['trial_session_options']['intra_op_num_threads'] == threads
+        if scheduling:
+            assert result['query_scheduling'] == setting
+            assert result['encoder_session_options']['intra_op_num_threads'] == 1
+        else:
+            assert result['trial_session_options']['intra_op_num_threads'] == setting
         assert result['members_before']['python']['pid'] == arm['pid']
         row = result['capacity'][0]
         assert row['integrity'] == 'ok' and row['diagnostics']['competition']['rebuild']['indexed'] == 32
         assert row['static_features']['entries'] == 20000
+        assert all(value['count'] == len(value['samples_ms']) == 15
+            for value in row['diagnostics']['competition']['foreground'])
         arm.update(diagnostic_complete=True, rss_peak_mib=row['rss_peak_mib'],
             python_cpu_seconds=row['python_cpu_seconds'], wall_seconds=row['wall_seconds'],
             sequential_pipeline=row['diagnostics']['sequential_pipeline'],
@@ -81,7 +92,7 @@ async def run_pairs(report, save, group_state, members):
         save(report)
 
     results = [json.loads((root / arm['directory'] / 'shared-results.json').read_text())
-        for arm in report['thread_arms']]
+        for arm in report[arms_key]]
     baseline = results[0]
     comparisons = []
     for number, result in enumerate(results):
@@ -102,9 +113,11 @@ async def run_pairs(report, save, group_state, members):
             'retrievals_exact_equal': current == original,
             'selected_ids_and_order_equal': selected(current) == selected(original),
             'candidate_ids_order_sources_equal': candidates(current) == candidates(original)})
-    report['thread_consistency'] = comparisons
+    report['scheduling_consistency' if scheduling else 'thread_consistency'] = comparisons
     report['all_checks_exact_equal'] = all(value['vectors_bitwise_equal']
         and value['retrievals_exact_equal'] for value in comparisons)
     events = dict(line.split() for line in group_state()['memory.events'].splitlines())
     assert events['oom'] == events['oom_kill'] == '0'
+    if scheduling:
+        assert report['all_checks_exact_equal'], 'Scheduling changed actual vectors or complete retrieval results'
     report['diagnostic_complete'] = True

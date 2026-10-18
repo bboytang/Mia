@@ -124,7 +124,7 @@ async def evaluate(report):
     report['embedding'] = {'model_id': encoder.model_id, 'revision': encoder.revision, 'dimension': encoder.dimension}
     vectors = {(i, profile): encoder.encode(seed[profile]).astype('<f4')
         for i, seed in enumerate(fixture['records']) for profile in ('short', 'dense')}
-    if report['mode'] == 'thread-arm':
+    if report['mode'] in ('thread-arm', 'scheduling-arm'):
         from mia_thread_diagnostics import check_vectors
         report['encoder_check_vectors'] = check_vectors(encoder, fixture, vectors)
     report['capacity'] = []
@@ -141,11 +141,18 @@ async def evaluate(report):
                 for scope, count in zip(scopes, (size, size, 32)):
                     populate(store, scope, count, 'dense', fixture, vectors)
                 index = SemanticMemoryIndex(store, encoder)
-                if report['mode'] == 'thread-arm':
+                if report['mode'] == 'scheduling-arm':
+                    report['query_scheduling'] = os.environ['MIA_P23_QUERY_SCHEDULING']
+                    assert report['query_scheduling'] in ('serial', 'paired')
+                    report['scheduling_trial_scope'] = 'Healthy per-request encode serialization only; current gather error draining retained; not historical fault equivalence'
+                    if report['query_scheduling'] == 'serial':
+                        from mia_query_scheduling import serialize_query_encodes
+                        serialize_query_encodes(index)
+                if report['mode'] in ('thread-arm', 'scheduling-arm'):
                     row['result_checks'] = [{'scope_owner': scope.owner, 'query': query,
                         'retrieval': await index.retrieve(scope, auth, query)}
                         for scope in scopes[:2] for query in fixture['queries']]
-                if report['mode'] in ('diagnostic', 'thread-arm'):
+                if report['mode'] in ('diagnostic', 'thread-arm', 'scheduling-arm'):
                     from mia_performance_diagnostics import diagnose
                     # diagnose warms the first owner itself. Warm the other owner
                     # too, retaining both real Scopes in the same bounded cache.
@@ -153,6 +160,8 @@ async def evaluate(report):
                         await index.retrieve(scopes[1], auth, query)
                     row['diagnostics'] = await diagnose(index, scopes[0], auth, fixture['queries'], summary,
                         lambda: compete(index, scopes, auth, fixture['queries']))
+                    if report['mode'] == 'scheduling-arm':
+                        row['diagnostics']['scope'] = 'Original methods with declared CI query-scheduling trial; no ranking change; not acceptance or fault equivalence'
                     row['authorization_requests_scope'] = 'Whole diagnostic including separate profile; not timed acceptance'
                 else:
                     row['sequential'] = []
@@ -186,7 +195,7 @@ async def evaluate(report):
 
 def main():
     mode = os.environ.get('MIA_P23_MODE', 'capacity')
-    assert mode in ('capacity', 'diagnostic', 'threads', 'thread-arm')
+    assert mode in ('capacity', 'diagnostic', 'threads', 'thread-arm', 'scheduling', 'scheduling-arm')
     report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': mode,
         'acceptance_revision': ACCEPTANCE_REVISION, 'limits': LIMITS, 'optimization_targets': OPTIMIZATION_TARGETS,
         'shared_envelope_preflight_passed': False, 'diagnostic_complete': False,
@@ -203,7 +212,7 @@ def main():
             'real persistent Worker task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
     save(report)
     try:
-        if mode == 'threads':
+        if mode in ('threads', 'scheduling'):
             from mia_thread_diagnostics import run_pairs
             asyncio.run(run_pairs(report, save, group_state, members))
         else:
