@@ -32,7 +32,7 @@ class ActualSQLiteWriteRefusalTests(unittest.TestCase):
         db.execute("UPDATE mia_jobs SET state='retry_wait'")
         self.assertEqual(db.execute('SELECT state,validated_result FROM mia_jobs').fetchone(),
             ('retry_wait', 'original-result'))
-        db.set_authorizer(None)
+        db.set_authorizer(faults.allow_sqlite_operation)
         db.execute(insert, ('recovered',))
         self.assertEqual(db.execute('SELECT content FROM memories').fetchall(), [('existing',), ('recovered',)])
 

@@ -21,6 +21,11 @@ def reject_fact_insert(action, table, *unused):
     return sqlite3.SQLITE_DENY if action == sqlite3.SQLITE_INSERT and table == 'memories' else sqlite3.SQLITE_OK
 
 
+def allow_sqlite_operation(*unused):
+    # Python 3.10 does not support disabling this callback with None.
+    return sqlite3.SQLITE_OK
+
+
 async def open_driver(server, scopes, config, root, report, persist):
     import core.utils.llm as existing_llm
     from core.auth import AuthManager
@@ -111,7 +116,7 @@ async def open_driver(server, scopes, config, root, report, persist):
 
     def set_authorizer(callback):
         with worker.jobs.store.lock:
-            worker.jobs.store.db.set_authorizer(callback)
+            worker.jobs.store.db.set_authorizer(callback if callback is not None else allow_sqlite_operation)
 
     async def finish(case, scope):
         admission = case['admission']

@@ -1600,3 +1600,6 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍允许。必须先记录实际持久retry_wait/database、attempt1/一个模型请求及校验结果hash，再解除拒绝；最终SDK仍为1，不能为数据库重试重复调用模型。后续新事实须带该场景真实session/source、confirmed和固定768维向量。所有模型输出仍由原约束判断，若模型提案无效导致不能满足场景则如实失败，不填造通过。
 
 本地11机制测试通过（0.152秒）：新增实际SQLite缓存写语句被拒绝、持久任务仍可更新/保留校验结果、解除后恢复写入；原故障后真实子进程SIGTERM退出等检查保持。Python3.10 AST、编译、YAML、Shell、diff通过。真实SDK/持久故障/恢复及资源仍待GitHub唯一新SHA/句柄；这三个受控场景不是正常五轮任务p95、双前台Scope公平或有任务在途20秒关闭的证据。用户运行调度取舍待答复，三路429及首句三组超限原文保持。P23整体未验收/P24未开始，未部署/改生产配置/读取凭据。
+
+
+第二十六步首候选59bb6a8a3cf06b7bb97af7ca73dc0ce473b14a50已推送，唯一实际故障运行[39122551508](https://github.com/bboytang/Mia/actions/runs/39122551508)仍在准备；同SHA服务39122544720 success、manager39122544629在途，但语法[39122544657](https://github.com/bboytang/Mia/actions/runs/39122544657)11机制中SQLite恢复测试失败。Python3.10执行set_authorizer(None)后恢复INSERT仍报not authorized；本地3.12通过不能覆盖此兼容性。官方[set_authorizer说明](https://docs.python.org/3.13/library/sqlite3.html#sqlite3.Connection.set_authorizer)注明None停用支持在3.11加入。已将仅CI清除故障改为显式SQLITE_OK回调，保留实际拒绝逻辑，11项本地复验通过（0.149秒）。待推新SHA先核对其语法，再新运行故障合同；旧句柄仍须收终态/原文，不因观察超时重启或把失败删掉。运行模块/模型/来源/门槛及请求上限都不改。
