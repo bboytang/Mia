@@ -1539,3 +1539,14 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 36实际任务均由原extractor对问题正常短路为empty，没有提取模型请求；30个实测（排除六预热）submit开始至观察终态上界p95为0.1835秒。该结果只覆盖顺序问题任务，不证明真实提取模型/双前台公平性。完整应用峰值471.66MiB（集成RSS，不冒充隔离编码器），共同父组峰值1607716864字节/1533.24MiB，2CPU/2GiB/swap0、无OOM，SQLite完整性正常。实际app进程SIGTERM正常退出0.3776秒，原Worker/GC/服务任务及原生lane都已结束；原Java/MySQL/Redis/控制器在同一计时起点后2.2232秒全部正常退出、数据库exit0且原PID消失。这仍是任务已终态的空闲关闭，不是有任务在途的20秒恢复验收。
 
 当前无在途任务，P23未整体验收/P24未开始，未部署或改生产配置/数据。下一步继续独立的双前台+真实提取Worker竞争、公平/超时/故障和持久在途关闭/恢复验证；必须先用新的P23独立来源确认实际提取SDK调用与原持久任务绑定，不能复用已冻结P22留出或把空结果任务当实际模型竞争。首句瓶颈和两套门槛继续保留，运行优化如发生须按新SHA验证受影响项；此刻没有新运行候选。
+
+
+## 第二十四步：真实提取与双前台重叠契约（已实现，待CI）
+
+新增仅CI的worker-smoke，不改变运行模块32407ef或原模型/提示/鉴权/Worker/编码器/验收门槛。继续原完整app、manager/MySQL/Redis与2CPU/2GiB/swap0环境，原P23数值库各Scope为1k/10k/32；一个新的独立合成来源“我每周六在书桌边整理纸质邮票册”通过真实授权Scope直接提交原TurnCompleted/Worker.submit，明确不是重跑P22行为留出或声称此前问题任务调用了提取模型。两个前台继续原ConnectionHandler.chat/ContextBuilder/输出guard/TTS文本消费者及原问题，分别位于1k/10k Scope。
+
+原Worker.resolve返回的LLMMemoryExtractor及实际SDK/原proposal读取/验证/BGE/提交全部执行；观察器要求SDK中的user_excerpts与唯一正在extracting的同Scope持久任务匹配，记录实际请求hash、job_id、attempt及调用模型/工具数，拒绝外人、pending、其他来源或多重匹配。为确定两前台与原后台lane重叠，在实际SDK.create返回响应后设至多6秒的响应交接等待，直到实际completed_chat计数已观察到2；不伪造输出、不修改计数/返回事实。明确属于受控重叠链路契约，不能当自然负载的延迟/公平性或首句p95验收。
+
+正常契约要求原后台任务committed、最多两次提取尝试、实际模型请求且有唯一原来源事实与768维向量；两个原前台回复正常完成并各接纳原问题任务，所有任务结束后才空闲退出。Provider请求硬上限8，仍只用现有受保护CI凭据及glm-4-flash-250414。先验证这一小规模真实链路，再做正常负载五轮/Scope公平与故障及在途关闭；本步骤本身没有此类全部通过结论。
+
+本地9机制测试通过（0.021秒），包含原source_supported不走问题empty短路、唯一持久任务绑定的Scope/状态/来源/歧义反例；Python3.10 AST、编译、YAML、Shell及diff通过。实际SDK输出/落库/重叠/资源仍须GitHub，唯一新SHA/运行句柄随后记录。第二十三步72回复、首句三组超限及完整原文保持，P23未整体验收/P24未开始。

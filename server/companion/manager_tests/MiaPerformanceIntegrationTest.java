@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import xiaozhi.modules.security.service.SysUserTokenService;
 import xiaozhi.modules.sys.service.SysParamsService;
 
-/** P23 common resources; dedicated Provider only in explicit reply modes, no P22 cases. */
+/** P23 common resources; dedicated Provider only in explicit reply/Worker modes, no P22 cases. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
     "server.servlet.context-path=/xiaozhi", "server.ssl.enabled=true",
     "server.ssl.key-store=${MIA_SCOPE_KEYSTORE}", "server.ssl.key-store-password=mia-ci-only",
@@ -61,7 +61,7 @@ class MiaPerformanceIntegrationTest {
         for (var logger : logging.getLoggerList()) logger.setLevel(Level.ERROR);
         String mode = System.getenv().getOrDefault("MIA_P23_MODE", "capacity");
         String selected = null;
-        if (mode.equals("reply-smoke") || mode.equals("reply-latency")) {
+        if (mode.equals("reply-smoke") || mode.equals("reply-latency") || mode.equals("worker-smoke")) {
             String key = System.getenv("MIA_TEST_LLM_API_KEY"), endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
             assertNotNull(key, "Dedicated P23 test Provider key is not configured");
             assertNotNull(endpoint, "Dedicated P23 test Provider endpoint is not configured");

@@ -107,12 +107,16 @@ async def serve():
             from mia_reply_latency import open_driver
             report['scope'] = 'Actual app/services, original installed ConnectionHandler.chat, real Provider and persistent Worker; synthetic WSS text driver, audio omitted'
             driver = await open_driver(server, scopes, config, root, report, persist)
+        elif os.environ['MIA_P23_MODE'] == 'worker-smoke':
+            from mia_worker_competition import open_driver
+            report['scope'] = 'Actual app/services, two original chat replies and one actual extraction Worker; controlled native overlap, audio omitted'
+            driver = await open_driver(server, scopes, config, root, report, persist)
         report.update(ready=True, members_ready=members(os.getpid()), cgroup_ready=group_state())
         rss = lambda value: int(value['python']['VmRSS'].split()[0]) / 1024
         report['encoder_live_rss_increment_mib'] = rss(report['members_after_encoder']) - rss(report['members_before_encoder'])
         persist(report)
         save(root / 'ready.json', {'pid': os.getpid(), 'ports': report['app_lifecycles'][-1]['ports'],
-            'text_port': report.get('text_driver_port')})
+            'text_port': report.get('text_driver_port'), 'worker_port': report.get('worker_driver_port')})
         await task  # Original app's SIGTERM handler and original stop_service own shutdown.
         assert len(report['app_shutdowns']) == 1 and report['app_shutdowns'][0]['drained']
         report['members_after_workload'] = members(os.getpid())
@@ -156,6 +160,11 @@ async def control(report):
                 from mia_reply_latency import drive
                 await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
                 report['members_after_workload'] = members(process.pid)
+            elif os.environ['MIA_P23_MODE'] == 'worker-smoke':
+                sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
+                from mia_worker_competition import drive
+                await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
+                report['members_after_workload'] = members(process.pid)
             report['shutdown_signal_monotonic'] = time.monotonic()
             save(ROOT / 'app-lifecycle-results.json', report)
             process.send_signal(signal.SIGTERM)
@@ -194,6 +203,8 @@ def main():
             'task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
     if mode in ('reply-smoke', 'reply-latency'):
         report['scope'] = 'Actual app/services and installed chat, same-Provider empty-memory baseline and real original Worker; sequential pairs with audio omitted'
+    elif mode == 'worker-smoke':
+        report['scope'] = 'Actual app/services, two original chat replies and a real extraction task; controlled overlap contract, no natural-load percentile or audio claim'
     save(ROOT / 'app-lifecycle-results.json', report)
     try:
         report['cgroup_before'] = group_state()
