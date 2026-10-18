@@ -19,7 +19,7 @@
 1. 读取`AGENTS.md`、主交接、验收决定、实施计划及最近工作记录。
 2. 核对当前分支、HEAD、未提交文件、远端实际SHA和未推送提交；保存已有工作，不reset/clean/强推。
 3. P22实测代码为`2925b63e6ea010ac287d4e388fd6255e7d202244`；证据提交为`1a05c98044ebd3e333bce041c29f4c26c782f2a8`。后续文档提交记录用户通过决定，原始结果不变。
-4. 第二十五步已实现故障后正常排空/独立worker-extraction，10本地机制检查通过（含真实子进程SIGTERM退出），待唯一CI核对实际提取落库；运行仍32407ef，不启动前台SDK或交接等待，最多两次真实请求。第二十四步三路429及后台extracting原文performance-worker-smoke-first-*保留，用户请求调度取舍尚待答复；不以孤立提取替代三路/公平/故障/在途关闭验收。首句三组超限保持，P23未整体验收/P24未开始。
+4. 第二十五步独立真实提取 [39097111073](https://github.com/bboytang/Mia/actions/runs/39097111073) / `2bffe440734c0f208e1f7c9a1c002c9b1aa1a182` success：一次真实SDK/attempt1，4.8062秒committed，原来源confirmed事实及768维向量经退出后SQLite独立核对；没有前台SDK或交接等待。原文/hash见performance-worker-extraction-first-*；同SHA服务294、manager154、10机制均通过，共同峰值1369.50MiB无OOM，空闲全组1.9524秒正常退出。当前无在途任务；继续实际提取超时/数据库重试及恢复验证，运行调度取舍尚待用户答复。旧三路429、首句三组超限及P23剩余范围保留，P24未开始。
 
 已拉取当前分支即已包含交接和证据；`docs/handoff/`里的旧补充包仅为历史快照，不重复导入tracked.patch或覆盖本地文件。详细失败、模型比较和旧run留在工作记录/验证目录，不在本接续入口重复。
 

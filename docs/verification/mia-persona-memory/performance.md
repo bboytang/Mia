@@ -2,7 +2,7 @@
 
 2026-10-17 用户批准“先读取交接文档，然后开始p23，每完成一步记录并写交接”。起点为远程最新交接提交 `1c97e91`；P22用户验收通过、选定 `glm-4-flash-250414`，原失败和未覆盖项不变。P24未开始。
 
-当前：第二十五步已实现故障后正常排空/独立worker-extraction，10本地机制检查通过（含真实子进程SIGTERM退出），待唯一CI核对实际提取落库；运行仍32407ef，不启动前台SDK或交接等待，最多两次真实请求。第二十四步三路429及后台extracting原文performance-worker-smoke-first-*保留，用户请求调度取舍尚待答复；不以孤立提取替代三路/公平/故障/在途关闭验收。首句三组超限保持，P23未整体验收/P24未开始。
+当前：第二十五步独立真实提取 [39097111073](https://github.com/bboytang/Mia/actions/runs/39097111073) / `2bffe440734c0f208e1f7c9a1c002c9b1aa1a182` success：一次真实SDK/attempt1，4.8062秒committed，原来源confirmed事实及768维向量经退出后SQLite独立核对；没有前台SDK或交接等待。原文/hash见performance-worker-extraction-first-*；同SHA服务294、manager154、10机制均通过，共同峰值1369.50MiB无OOM，空闲全组1.9524秒正常退出。当前无在途任务；继续实际提取超时/数据库重试及恢复验证，运行调度取舍尚待用户答复。旧三路429、首句三组超限及P23剩余范围保留，P24未开始。
 
 ## 第一步：固定范围与数值入口
 
@@ -681,3 +681,19 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 新增显式worker-extraction模式，只运行一个新的事实任务，不启动前台SDK请求，也不执行6秒交接等待；实际原Worker.resolve/LLMMemoryExtractor/SDK/原proposal读取/校验/BGE/提交保持。硬上限两次真实提取请求，最多两尝试/120秒任务期限不改；要求实际committed、完整原来源/会话及confirmed事实、固定768维向量，并记录原提取器返回hash/原生调用时间。不以此孤立链路称双前台公平/故障/自然负载或首句通过，原三路失败仍未解决。
 
 本地10机制测试通过（0.161秒），Python3.10 AST、编译、YAML、Shell、diff检查通过。运行模块仍32407ef；用户尚未答复运行调度/Provider并发额度取舍，未新增CI专用限流器或修改运行架构/配置。继续不依赖该选择的提取落库验证，唯一源码SHA/CI句柄随后记录。首句三组超限及P23剩余范围保持，P24未开始。
+
+
+第二十五步观察器`2bffe440734c0f208e1f7c9a1c002c9b1aa1a182`已推送，唯一worker-extraction [39097111073](https://github.com/bboytang/Mia/actions/runs/39097111073)在途；服务39097109309、manager39097109291、语法/10机制39097109353同步验证。继续同一句柄核对一个真实提取任务的原校验/BGE/committed，最多两请求、没有前台SDK/交接等待；运行仍32407ef，不以此替代三路验收。旧三路429/后台extracting证据保留，用户运行调度取舍待答复；首句三组超限保持，P23未整体验收/P24未开始。
+
+
+## 第二十五步完成：一次真实提取、原校验/BGE与committed已核对
+
+[39097111073](https://github.com/bboytang/Mia/actions/runs/39097111073) / 精确观察器SHA `2bffe440734c0f208e1f7c9a1c002c9b1aa1a182` success。实际提取SDK请求1次、原任务attempt1、接纳到观察终态上界4.8062秒；原LLMMemoryExtractor输出经原proposal读取及原Worker验证，完整来源“我每周六在书桌边整理纸质邮票册”保存为confirmed事实，唯一同Scope原持久任务state=committed。固定768维BGE向量3072字节，模型/revision/hash保持；本次向量SHA256为ea1d6cd9ce3c9953a47061b04194c41451e4531bebc186bfbfb7ebb9316479ec。
+
+独立打开退出后的原SQLite，只读核对任务owner/state/attempt、事实owner/完整content/confirmed、source/会话，以及真实向量长度/维度/hash，与parent/child报告完全一致，integrity_check=ok。真实SDK payload中的本次来源、模型glm-4-flash-250414、唯一proposal工具、消息hash、同Scope正在extracting任务ID/attempt均已留存；原生提取开始/结束时点及原输出hash也保留。没有前台SDK请求、foreground峰值0，没有人为交接等待（记录约0.0013ms观察边界）；Provider/契约错误0。原文、CI元数据/依赖/退出证明、语法/服务日志、XML及所有SHA256见performance-worker-extraction-first-*。
+
+同SHA[服务39097109309](https://github.com/bboytang/Mia/actions/runs/39097109309)294项通过（35.214秒）；[manager39097109291](https://github.com/bboytang/Mia/actions/runs/39097109291)24份XML合计154项、无失败/错误/跳过；本正式run语法10机制测试通过（0.247秒），包括工作负载失败后真实子进程SIGTERM正常退出的回归。运行实现仍32407ef，观察器修正不冒充运行架构改变。
+
+完整Python应用峰值351.19MiB，共同父组1369.50MiB、2CPU/2GiB/swap0、无OOM。实际app SIGTERM正常退出0.2725秒、原Worker/GC/服务及原生lane结束；Java/控制器/MySQL/Redis总计1.9524秒正常退出、数据库exit0无OOM，五原PID消失。所有原任务已终态，因此仍仅空闲关闭。此单样本不判任务p95、真实双前台公平/故障、首句增量或有任务在途的20秒恢复验收。
+
+当前无在途任务。第二十四步三路429/中止extracting事实0及第二十三步首句三组超限保持，不将孤立成功替代并发失败。请求调度/Provider额度取舍尚待用户答复；可以继续不依赖该选择的实际后台等待超时、SQLite写入拒绝及校验结果复用/后续恢复验证，不新增CI专用限流器取绿，不修改生产配置或读取凭据。P23整体未验收/P24未开始。
