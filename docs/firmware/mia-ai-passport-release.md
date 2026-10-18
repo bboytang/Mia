@@ -69,6 +69,30 @@ factory `0x10000+0x300000`、cardid `0x356000+0x4000`，可带 Recovery 声明�
 即使表中省略 Recovery，仍保护 `0x700000+0x100000`。其它布局、启用/未知的芯片
 安全状态一律拒绝自动打包，需单独审查，不能假定未知区域为空。
 
+2026-10-18 收到用户通过 v3 工具取得的实际检查报告：ESP32-C3 revision **v1.1**、
+8MB，Secure Boot/Flash encryption/secure download 均未启用。表的 MD5 与 SHA-256
+通过核对，SHA-256 为 `c27caf47475307eda5358c6291eaecf55d68844083909d7b5b1296d85a93d484`。
+实际是上述 NVS/PHY/factory/cardid 加以下五个资源分区的九分区版本；表中没有
+Recovery 声明，**不能据此认为历史 Recovery 区域为空，也未确认其中有可用镜像**。
+
+| 原厂资源 | 地址 | 大小 | Mia 迁移影响 |
+| --- | ---: | ---: | --- |
+| imgstore | `0x310000` | `0x20000` | 未来 A 槽最大范围重叠前 64KiB |
+| imgframe | `0x330000` | `0x26000` | 不属于新分区，保留字节不等于可访问 |
+| imguser | `0x35a000` | `0x20000` | 未来 B 槽覆盖部分区域 |
+| audio | `0x37a000` | `0x80000` | 未来 B 槽覆盖 |
+| imgava | `0x3fa000` | `0x100000` | 未来 B 槽覆盖 |
+
+用户明确选择：“接受放弃原厂图片、头像和音频资源，继续审核 Mia 双槽方案”。
+打包器仅额外接受这个**精确九分区布局**，类型、subtype、flags、偏移和大小逐项
+核对，并要求独立布尔标记 `factory_resources_discard_approved=true`。该标记不允许
+未知分区、改动边界或类型绕过检查。包内记录全部被退役的资源范围；首次 USB
+只写当前 app 实际长度，不写 B 槽，不主动擦除这些资源。但新表不再提供原资源
+入口，后续 OTA 可能覆盖，不能承诺保留原厂用户内容。
+
+NVS、PHY、cardid 和历史 Recovery 区间仍保留。用户对资源的决定**不构成首次刷机
+许可**，`flash_authorized` 保持 false，需在用户审核具体安装包后另获明确确认。
+
 核对报告后，工程审核记录 `identity_regions_reviewed=true`、
 `recovery_boot_change_noted=true`，其它实测信息和分区表 SHA-256 必须匹配。
 这表示身份保留范围与 bootloader 变化已被说明，**不表示用户已授权实际刷机**。

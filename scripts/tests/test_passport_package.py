@@ -8,7 +8,7 @@ import tempfile
 import unittest
 import zipfile
 
-from scripts.passport.package_release import image_info, review_device, make_package
+from scripts.passport.package_release import image_info, review_device, make_package, FACTORY_RESOURCES
 from scripts.passport.sign_release import public_point, sign
 from scripts.tests.test_passport_safety import candidate, ORIGINAL, table
 
@@ -73,6 +73,10 @@ class PassportPackageTests(unittest.TestCase):
             self.assertEqual(len(archive.read('usb/assets.bin')), 0xa0000)
             self.assertEqual(archive.read('usb/otadata-initial.bin'), b'\xff'*0x2000)
             self.assertTrue(archive.read(result['ota']['file']).startswith(b'MIAOTA1\0'))
+            ota = json.loads(archive.read(result['ota']['manifest_file']))
+            self.assertEqual(ota['capsule_sha256'], result['ota']['sha256'])
+            self.assertEqual(ota['image_sha256'], hashlib.sha256(self.app).hexdigest())
+            self.assertFalse(ota['usb_flashable'])
             self.assertTrue(archive.read('usb/mia-ai-passport.bin').startswith(b'\xe9'))
             for segment in result['segments']:
                 self.assertEqual(hashlib.sha256(archive.read(segment['file'])).hexdigest(), segment['sha256'])
@@ -106,6 +110,37 @@ class PassportPackageTests(unittest.TestCase):
         review = {**self.review, 'partition_table_sha256':hashlib.sha256(current).hexdigest()}
         with self.assertRaisesRegex(ValueError,'unrecognized'):
             review_device(current, review)
+
+    def test_device_resource_layout_needs_separate_owner_decision(self):
+        entries = ORIGINAL[:-1] + [(1, 0x82, address, size, label)
+                                  for label, (address, size) in FACTORY_RESOURCES.items()]
+        self.device_table = table(sorted(entries, key=lambda p: p[2]))
+        self.review['partition_table_sha256'] = hashlib.sha256(self.device_table).hexdigest()
+        for value in (None, False, 'true'):
+            self.review['factory_resources_discard_approved'] = value
+            with self.assertRaisesRegex(ValueError, 'explicit owner decision'):
+                self.package()
+            self.assertFalse(self.output.exists())
+        self.review['factory_resources_discard_approved'] = True
+        result = self.package()
+        self.assertEqual({p['label'] for p in result['retired_factory_resources']}, set(FACTORY_RESOURCES))
+        self.assertFalse(result['flash_authorized'])
+        self.assertFalse(result['recovery_boot_hook_preserved'])
+        self.assertIn(dict(offset=0x700000, bytes=0x100000, label='recovery'), result['protected'])
+
+    def test_resource_discard_decision_cannot_approve_unknown_ranges_or_types(self):
+        entries = ORIGINAL[:-1] + [(1, 0x82, address, size, label)
+                                  for label, (address, size) in FACTORY_RESOURCES.items()]
+        index = next(i for i, p in enumerate(entries) if p[4] == 'imgava')
+        for changed in [(1,0x82,0x3fa000,0xff000,'imgava'),
+                        (1,2,0x3fa000,0x100000,'imgava'),
+                        (1,0x82,0x3fa000,0x100000,'unknown')]:
+            altered = entries.copy(); altered[index] = changed
+            raw = table(sorted(altered, key=lambda p: p[2]))
+            review = {**self.review, 'factory_resources_discard_approved': True,
+                      'partition_table_sha256': hashlib.sha256(raw).hexdigest()}
+            with self.assertRaises(ValueError):
+                review_device(raw, review)
 
     def test_original_four_partition_revision_still_protects_recovery_address(self):
         old = table(ORIGINAL[:-1])
