@@ -87,6 +87,12 @@ bool WebsocketProtocol::OpenAudioChannel() {
     }
 #endif
     std::string token = settings.GetString("token");
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    if (token.empty()) {
+        ESP_LOGE(TAG, "Mia device must be bound before opening the voice channel");
+        return false;
+    }
+#endif
     int version = settings.GetInt("version");
     if (version != 0) {
         version_ = version;

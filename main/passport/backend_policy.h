@@ -30,4 +30,31 @@ inline bool IsVoiceEndpoint(std::string_view url, std::string_view pin) {
     return IsPinnedEndpoint(url, pin, "ws://") || IsPinnedEndpoint(url, pin, "wss://");
 }
 
+inline bool IsFirmwareEndpoint(std::string_view url, std::string_view discovery) {
+    if (!IsDiscoveryEndpoint(discovery, discovery) || !IsDiscoveryEndpoint(url, url)) {
+        return false;
+    }
+    auto origin_end = discovery.find('/', discovery.find("://") + 3);
+    auto origin = discovery.substr(0, origin_end);
+    if (!url.starts_with(origin) || url.size() <= origin.size() || url[origin.size()] != '/') {
+        return false;
+    }
+    auto path = url.substr(origin.size());
+    constexpr std::string_view manager = "/xiaozhi/otaMag/download/";
+    constexpr std::string_view standalone = "/xiaozhi/ota/download/";
+    size_t prefix = path.starts_with(manager)      ? manager.size()
+                    : path.starts_with(standalone) ? standalone.size()
+                                                   : 0;
+    if (!prefix || path.size() == prefix) {
+        return false;
+    }
+    for (char ch : path.substr(prefix)) {
+        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') ||
+              ch == '-' || ch == '_' || ch == '.')) {
+            return false;
+        }
+    }
+    return path.substr(prefix) != "." && path.substr(prefix) != "..";
+}
+
 }  // namespace mia::passport

@@ -18,6 +18,9 @@
 #include "lvgl_image.h"
 #include "lvgl_theme.h"
 #include "settings.h"
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+#include "passport/signed_update.h"
+#endif
 
 #define TAG "MCP"
 
@@ -153,6 +156,9 @@ void McpServer::AddUserOnlyTools() {
             ESP_LOGI(TAG, "User requested firmware upgrade from URL: %s", url.c_str());
 
             auto& app = Application::GetInstance();
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+            return app.RequestFirmwareUpgrade(url);
+#else
             app.Schedule([url, &app]() {
                 bool success = app.UpgradeFirmware(url);
                 if (!success) {
@@ -161,7 +167,15 @@ void McpServer::AddUserOnlyTools() {
             });
 
             return true;
+#endif
         });
+
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    AddUserOnlyTool(
+        "self.firmware.get_status", "Read Mia firmware confirmation and rollback status",
+        PropertyList(),
+        [](const PropertyList&) -> ReturnValue { return mia::passport::UpgradeStatusJson(); });
+#endif
 
     // Display control
 #ifdef HAVE_LVGL

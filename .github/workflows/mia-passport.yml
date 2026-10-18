@@ -23,6 +23,8 @@ jobs:
           - board: folotoy/ai-passport
             variant: mia-ai-passport-dev
           - board: folotoy/ai-passport
+            variant: mia-ai-passport
+          - board: folotoy/ai-passport
             variant: ai-passport
           - board: xmini/c3
             variant: xmini-c3
@@ -40,12 +42,34 @@ jobs:
           idf.py --version
           python scripts/build.py "$BOARD" --name "$VARIANT" --language zh-CN
       - name: Measure candidate A/B capacity
-        if: matrix.variant == 'mia-ai-passport-dev'
-        run: python -m scripts.passport.build_report build > passport-capacity.json
+        if: matrix.variant == 'mia-ai-passport-dev' || matrix.variant == 'mia-ai-passport'
+        run: |
+          python -m scripts.passport.build_report build > passport-capacity.json
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.passport.package_release import image_info
+          for file, application in [('xiaozhi.bin', True), ('bootloader/bootloader.bin', False)]:
+              image_info((Path('build') / file).read_bytes(), application)
+          print('Built ESP image segment checksums and appended SHA-256 verified')
+          PY
       - name: Upload review evidence only
         if: matrix.variant == 'mia-ai-passport-dev'
         uses: actions/upload-artifact@v7
         with:
-          name: passport-capacity-${{ github.sha }}
+          name: passport-capacity-${{ matrix.variant }}-${{ github.sha }}
           path: passport-capacity.json
+          if-no-files-found: error
+      - name: Collect internal packaging inputs (no flash plan)
+        if: matrix.variant == 'mia-ai-passport'
+        run: |
+          mkdir -p packaging-inputs
+          cp passport-capacity.json packaging-inputs/
+          tar -czf packaging-inputs/engineering-inputs.tar.gz -C build xiaozhi.bin bootloader/bootloader.bin partition_table/partition-table.bin generated_assets.bin
+          echo 'Engineering inputs only. Final USB package requires a verified device table and security review. No writes authorized.' > packaging-inputs/READ-ME.txt
+      - name: Upload internal packaging inputs
+        if: matrix.variant == 'mia-ai-passport'
+        uses: actions/upload-artifact@v7
+        with:
+          name: passport-engineering-inputs-${{ github.sha }}
+          path: packaging-inputs/
           if-no-files-found: error

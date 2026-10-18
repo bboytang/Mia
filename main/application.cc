@@ -1,4 +1,9 @@
 #include "application.h"
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+#include "passport/signed_update.h"
+#include <atomic>
+#include <freertos/semphr.h>
+#endif
 #include "assets.h"
 #include "assets/lang_config.h"
 #include "audio_codec.h"
@@ -305,7 +310,13 @@ void Application::HandleNetworkConnectedEvent() {
                 app->activation_task_handle_ = nullptr;
                 vTaskDelete(NULL);
             },
-            "activation", 4096 * 2, this, 2, &activation_task_handle_);
+            "activation",
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+            12288,
+#else
+            4096 * 2,
+#endif
+            this, 2, &activation_task_handle_);
     }
 
     // Update the status bar immediately to show the network state
@@ -375,6 +386,19 @@ void Application::ActivationTask() {
     // Initialize the protocol
     InitializeProtocol();
 
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    if (mia::passport::NeedsBootConfirmation()) {
+        auto& board = Board::GetInstance();
+        auto* codec = board.GetAudioCodec();
+        if (!board.GetDisplay() || !codec || codec->input_sample_rate() <= 0 ||
+            codec->output_sample_rate() <= 0 || !protocol_->OpenAudioChannel()) {
+            mia::passport::RollbackBoot();
+        } else {
+            mia::passport::ConfirmBoot();
+            protocol_->CloseAudioChannel();
+        }
+    }
+#endif
     // Signal completion to main loop
     xEventGroupSetBits(event_group_, MAIN_EVENT_ACTIVATION_DONE);
 }
@@ -490,7 +514,11 @@ void Application::CheckNewVersion() {
         retry_count = 0;
         retry_delay = 10;  // Reset retry delay
 
-        if (ota_->HasNewVersion()) {
+        if (ota_->HasNewVersion()
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+            && !mia::passport::IsTrialBoot()
+#endif
+        ) {
             if (UpgradeFirmware(ota_->GetFirmwareUrl(), ota_->GetFirmwareVersion())) {
                 return;  // This line will never be reached after reboot
             }
@@ -1210,6 +1238,72 @@ void Application::Reboot() {
 }
 
 bool Application::UpgradeFirmware(const std::string& url, const std::string& version) {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    // This branch runs only on the activation/OTA worker, never the main loop.
+    static std::atomic<bool> busy{false};
+    if (busy.exchange(true))
+        return false;
+    struct Unlock {
+        std::atomic<bool>& value;
+        ~Unlock() { value = false; }
+    } unlock{busy};
+    struct Ready {
+        SemaphoreHandle_t semaphore = xSemaphoreCreateBinary();
+        std::atomic<bool> cancelled{false};
+        DeviceState previous = kDeviceStateIdle;
+        bool accepted = false;
+        ~Ready() {
+            if (semaphore)
+                vSemaphoreDelete(semaphore);
+        }
+    };
+    auto ready = std::make_shared<Ready>();
+    if (!ready->semaphore)
+        return false;
+    Schedule([this, ready]() {
+        if (ready->cancelled)
+            return;
+        auto state = GetDeviceState();
+        ready->previous = state;
+        if (state == kDeviceStateIdle || state == kDeviceStateActivating) {
+            if (protocol_ && protocol_->IsAudioChannelOpened())
+                protocol_->CloseAudioChannel();
+            SetDeviceState(kDeviceStateUpgrading);
+            Board::GetInstance().GetDisplay()->SetStatus(Lang::Strings::OTA_UPGRADE);
+            ready->accepted = true;
+        }
+        xSemaphoreGive(ready->semaphore);
+    });
+    if (xSemaphoreTake(ready->semaphore, pdMS_TO_TICKS(5000)) != pdTRUE) {
+        ready->cancelled = true;
+        Schedule([this]() {
+            if (GetDeviceState() == kDeviceStateUpgrading)
+                SetDeviceState(kDeviceStateIdle);
+        });
+        return false;
+    }
+    if (!ready->accepted)
+        return false;
+    auto& board = Board::GetInstance();
+    board.SetPowerSaveLevel(PowerSaveLevel::PERFORMANCE);
+    audio_service_.Stop();
+    bool success = mia::passport::Upgrade(url, [this](int progress, size_t) {
+        Schedule([progress]() {
+            Board::GetInstance().GetDisplay()->SetChatMessage(
+                "system", (std::to_string(progress) + "%").c_str());
+        });
+    });
+    if (success)
+        esp_restart();
+    audio_service_.Start();
+    board.SetPowerSaveLevel(PowerSaveLevel::LOW_POWER);
+    Schedule([this, previous = ready->previous]() {
+        SetDeviceState(previous);
+        Alert(Lang::Strings::ERROR, Lang::Strings::UPGRADE_FAILED, "cancel",
+              Lang::Sounds::OGG_EXCLAMATION);
+    });
+    return false;
+#else
     auto& board = Board::GetInstance();
     auto display = board.GetDisplay();
 
@@ -1266,7 +1360,30 @@ bool Application::UpgradeFirmware(const std::string& url, const std::string& ver
         Reboot();
         return true;
     }
+#endif
 }
+
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+bool Application::RequestFirmwareUpgrade(const std::string& url) {
+    static std::atomic<bool> worker_busy{false};
+    if (url.size() > 512 || worker_busy.exchange(true))
+        return false;
+    auto* request = new std::string(url);
+    if (xTaskCreate(
+            [](void* arg) {
+                std::unique_ptr<std::string> request(static_cast<std::string*>(arg));
+                Application::GetInstance().UpgradeFirmware(*request);
+                worker_busy = false;
+                vTaskDelete(nullptr);
+            },
+            "mia_ota", 12288, request, 2, nullptr) != pdPASS) {
+        delete request;
+        worker_busy = false;
+        return false;
+    }
+    return true;
+}
+#endif
 
 void Application::WakeWordInvoke(const std::string& wake_word) {
     if (!protocol_) {

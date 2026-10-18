@@ -69,6 +69,9 @@ public:
     void Run();
 
     DeviceState GetDeviceState() const { return state_machine_.GetState(); }
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    bool RequestFirmwareUpgrade(const std::string& url);
+#endif
     bool IsVoiceDetected() const { return audio_service_.IsVoiceDetected(); }
     
     /**

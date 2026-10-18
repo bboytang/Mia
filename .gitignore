@@ -22,3 +22,6 @@ ios/*.xcodeproj/
 ios/build/
 
 .venv/
+
+# Private firmware release signing key; only the public key belongs in source.
+.private/passport-signing/

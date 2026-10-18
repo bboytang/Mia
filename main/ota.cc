@@ -3,6 +3,9 @@
 #include "settings.h"
 #include "assets/lang_config.h"
 #include "passport/backend_policy.h"
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+#include "passport/signed_update.h"
+#endif
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -121,7 +124,22 @@ NetworkResult<> Ota::CheckVersion() {
         return std::unexpected(NetworkError::HttpFailed(*status_code));
     }
 
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    data.clear();
+    char chunk[512];
+    while (true) {
+        auto count = http->Read(chunk, sizeof(chunk));
+        if (!count || *count < 0 || data.size() + *count > 16384) {
+            http->Close();
+            return std::unexpected(NetworkError::ProtocolError());
+        }
+        if (*count == 0)
+            break;
+        data.append(chunk, *count);
+    }
+#else
     data = http->ReadAll();
+#endif
     http->Close();
 
     // Response: { "firmware": { "version": "1.0.0", "url": "http://" } }
@@ -146,10 +164,10 @@ NetworkResult<> Ota::CheckVersion() {
         cJSON_Delete(root);
         return std::unexpected(NetworkError::ProtocolError());
     }
-    // Keep activation/discovery, but never persist MQTT credentials or accept a
-    // legacy firmware URL in this profile. The signed updater is a later phase.
-    cJSON_DeleteItemFromObjectCaseSensitive(root, "mqtt");
-    cJSON_DeleteItemFromObjectCaseSensitive(root, "firmware");
+    // Keep the native firmware version/URL response. The downloader accepts only
+    // a signed capsule from the same manager; an unsigned .bin fails before erase.
+    while (cJSON_HasObjectItem(root, "mqtt"))
+        cJSON_DeleteItemFromObject(root, "mqtt");
 #endif
 
     has_activation_code_ = false;
@@ -303,8 +321,7 @@ void Ota::MarkCurrentVersionValid() {
 
 bool Ota::Upgrade(const std::string& firmware_url, std::function<void(int progress, size_t speed)> callback) {
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
-    ESP_LOGE(TAG, "Unsigned OTA disabled for Mia Passport development profile");
-    return false;
+    return mia::passport::Upgrade(firmware_url, std::move(callback));
 #endif
     ESP_LOGI(TAG, "Upgrading firmware from %s", firmware_url.c_str());
     esp_ota_handle_t update_handle = 0;

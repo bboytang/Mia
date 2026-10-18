@@ -37,9 +37,9 @@ def report(build):
                 application=measure(app, min(p['size'] for p in slots)),
                 assets=measure(build / 'generated_assets.bin', assets['size']), partitions=table,
                 signature_included=False, hardware_verified=False,
-                release_blockers=['Factory flash audit and migration approval',
-                                 'Signed OTA, trial boot health check, rollback fault injection',
-                                 'TLS endpoint and device binding integration'])
+                board_type='mia-ai-passport', signed_ota_format='MIAOTA1-prefix-v1',
+                release_blockers=['Device partition table and security review; first-flash owner confirmation',
+                                 'Physical audio, display, provisioning, forward OTA and rollback verification'])
 
 
 def main():

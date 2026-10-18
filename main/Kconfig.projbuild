@@ -7,12 +7,19 @@ config OTA_URL
         The application will access this URL to check for new firmwares and server address.
 
 config MIA_PASSPORT_DEVELOPMENT
-    bool "Mia AI Passport development profile (not for flashing)"
+    bool "Mia AI Passport protected firmware profile"
     depends on BOARD_TYPE_FOLOTOY_AI_PASSPORT
     default n
     help
         Pins Mia discovery and voice endpoints, protects NVS on initialization
-        failure, and disables legacy unsigned OTA. Requires flash audit before use.
+        failure, and accepts only signed Mia OTA capsules. Requires device layout
+        review before first installation.
+
+config MIA_PASSPORT_RELEASE_SEQUENCE
+    int "Minimum confirmed Mia release sequence"
+    depends on MIA_PASSPORT_DEVELOPMENT
+    range 1 2147483647
+    default 1
 
 config MIA_PASSPORT_OTA_URL
     string "Mia discovery endpoint (HTTP or HTTPS)"

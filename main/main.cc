@@ -8,6 +8,9 @@
 #include <freertos/task.h>
 
 #include "application.h"
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+#include "passport/signed_update.h"
+#endif
 
 #define TAG "main"
 
@@ -28,6 +31,9 @@ extern "C" void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    mia::passport::StartBootGuard();
+#endif
     // Initialize and run the application
     auto& app = Application::GetInstance();
     app.Initialize();
