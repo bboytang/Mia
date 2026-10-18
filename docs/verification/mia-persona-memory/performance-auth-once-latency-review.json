@@ -1,0 +1,606 @@
+{
+  "run_id": 39174700155,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39174700155",
+  "observer_sha": "d1879881a808b479b66307ff11acdd111b179452",
+  "runtime_sha": "d1879881a808b479b66307ff11acdd111b179452",
+  "conclusion": "failure",
+  "p23_complete": false,
+  "artifacts": [
+    {
+      "file": "performance-auth-once-latency-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "2f90f8e7c245028166a10c79b4939e9e8ad57a7d9b2ff218ea600c21f2aa6b31",
+      "sha256": "962dcf2768cb6d4513ebc5abc51a0be0eb104e7fd398d4755c6997dddea0a40d"
+    },
+    {
+      "file": "performance-auth-once-latency-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "32e4f254589ebd59e39fd354e968d368ed5d9d3e57a74bd20e3554b61509fee0",
+      "sha256": "c2a10c7aacf79e545132a17d610ea6fa0d476ccb399a68bc99f0e77b2a59f4f9"
+    },
+    {
+      "file": "performance-auth-once-latency-ci-results.json.gz",
+      "source_path": "mia-p23-auth-once-latency-run.json",
+      "raw_sha256": "970dbcfeed2906b6fa87decab83ba943a7ccf1198c915f1c4040309e1c07bbba",
+      "sha256": "6d18eaad0d6d0a495e09bb503e427b075cee8045d18fef94604d00e1e98cae4d"
+    },
+    {
+      "file": "performance-auth-once-latency-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "e01a9b9b0928b47eb60a8f60a28acebaf281fd28230786919b0cbd310c8c1e90",
+      "sha256": "8807a0dc13f14ea21688533efde456d6e5553ede17733279b48b6bd9bd26ea51"
+    },
+    {
+      "file": "performance-auth-once-latency-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+      "sha256": "779f4114c5a61f2c3c80194656772dfb37721853718f780f85d1a13e153915df"
+    },
+    {
+      "file": "performance-auth-once-latency-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-auth-once-latency-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-auth-once-latency-syntax.log.gz",
+      "source_path": "mia-p23-auth-once-latency-syntax.log",
+      "raw_sha256": "9c454139484a4326267430da92d757aa83f28ccc97fbf7dfbcaec3b1b4e53429",
+      "sha256": "26fad3bf469d2754ec9f761ac448ed0fdede44c76159f916a7caa72daa72aa74"
+    },
+    {
+      "file": "performance-auth-once-latency-regression-runs.json.gz",
+      "source_path": "GitHub Actions API exact d187988 runs",
+      "raw_sha256": "e42689321e13b4e84386dcaaf3fa819fd1c0f567f6eab5c4018ee51251bcf82e",
+      "sha256": "e61a40c6a97b71e124da1948c0372e9f80244131e491e2c2026b833fe9143739"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "2f90f8e7c245028166a10c79b4939e9e8ad57a7d9b2ff218ea600c21f2aa6b31",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "0d96c001ca7353f747b7e792c11480622529202e7c6601a3cf8311ca6de08f53",
+    "export-dependencies.txt": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+    "cgroup-final-cpu.stat.txt": "36371d9dca40168b12982c447051636658a02ccfa4d8319383b909324c9b9812",
+    "cgroup-final-memory.current.txt": "9c7cea7f0eda06e7f0e424d49df4373ca1a42320d3f2707cd41141fc1661e23f",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "d7e7f2dcfe8aeccba13835bd996aa1bf9e1e9a92a0d46c7bf399c311246e48af",
+    "redis.log": "f649db2fd71804c134376b99016bc8e65f17d1060cc780282209549f9858407f",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "5f29700b2eb18e9c21f13ce863ed414eb92aec88498a5e4660cd01314d2f7993",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "0061797cba4da6acdebc354a661542db8e2d181ae8ad309bac9d957caeed7e71",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e01a9b9b0928b47eb60a8f60a28acebaf281fd28230786919b0cbd310c8c1e90",
+    "app-child/ready.json": "752f369b99c398a5ba788ebed143096bc837bd3c3259c8b8b0475b4d1452e328",
+    "app-child/app-results.json": "32e4f254589ebd59e39fd354e968d368ed5d9d3e57a74bd20e3554b61509fee0",
+    "app-child/memory.sqlite3": "74725354fcdff97b5cd59564b0356a401e345df5514b8f88894c4264b5d18c17",
+    "app-child/context-profile.json": "4867816ff5a4178a7be89da4042a937f180e73eb3333833acec4318f3de1c680",
+    "junit/TEST-junit-jupiter.xml": "378d05cb0048c33b312c35893eb729ff533d22f9fadbc2c4549d7ed7fc3774bc",
+    "junit/TEST-junit-vintage.xml": "f1fa7ceda9b560358165c1b2d160abd83fed7ce9e92dd275fbc1242b26b5a086",
+    "junit/TEST-junit-platform-suite.xml": "24c5d6bcf4677ff784a4e8f216e73b27025b0f4e4e0bb96ca2164d0e1201c704"
+  },
+  "syntax_checks": {
+    "job_id": 117814867263,
+    "tests": 20,
+    "passed": true,
+    "checks": [
+      "Python compile",
+      "20 CI mechanism tests",
+      "Shell syntax"
+    ]
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "app_pid": 5337,
+    "members_ready": {
+      "mysql": {
+        "pid": 4597,
+        "start_ticks": "48169",
+        "cgroup": "/miap23.slice/docker-4dfb7239501ef29f78f8c83624acbba29cc3029ec93bdfb80a78445fb519366f.scope",
+        "VmHWM": "495564 kB",
+        "VmRSS": "495564 kB"
+      },
+      "redis": {
+        "pid": 4662,
+        "start_ticks": "48177",
+        "cgroup": "/miap23.slice/docker-805b5a5dab5b9dc617e089f8215de6cc684c6cf396c04e5886649df5b5b58f80.scope",
+        "VmHWM": "29380 kB",
+        "VmRSS": "28964 kB"
+      },
+      "manager": {
+        "pid": 5169,
+        "start_ticks": "48815",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "423624 kB",
+        "VmRSS": "421052 kB"
+      },
+      "python": {
+        "pid": 5337,
+        "start_ticks": "49703",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359992 kB",
+        "VmRSS": "316032 kB"
+      },
+      "harness": {
+        "pid": 5336,
+        "start_ticks": "49699",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20308 kB",
+        "VmRSS": "20308 kB"
+      }
+    },
+    "app_process_shutdown_seconds": 0.45128886100008003,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 1.5940924520000408,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 19584338\nuser_usec 17629550\nsystem_usec 1954787\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 151\nnr_throttled 70\nthrottled_usec 3143964\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "935526400",
+      "memory.peak": "939560960",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 99372044\nuser_usec 89142387\nsystem_usec 10229657\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 2475\nnr_throttled 95\nthrottled_usec 3828435\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1088765952",
+      "memory.peak": "1586036736",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "reply_contract_passed": true,
+    "first_sentence_acceptance_passed": false,
+    "error_class": null,
+    "reason": null,
+    "reply_cases_count": 6
+  },
+  "provider_requests": 72,
+  "accepted_extraction_jobs": 36,
+  "provider_request_purposes": [
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply",
+    "reply"
+  ],
+  "child": {
+    "ready": true,
+    "passed": true,
+    "authorized_owners": [
+      "user:941040001:agent:mia-p23-0",
+      "user:941040002:agent:mia-p23-1",
+      "user:941040003:agent:mia-p23-2"
+    ],
+    "app_ready_seconds": 0.9996815210000136,
+    "cold_query_encode_ms": 212.64637000001585,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "81ea152adb03c9012c210815d3b89b9d866adca54a56f4cfdfd27a5dbf6f2d70",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "python_peak_before_encoder_mib": 120.578125,
+    "python_peak_after_encoder_mib": 351.5546875,
+    "encoder_peak_increment_mib": 230.9765625,
+    "encoder_live_rss_increment_mib": 170.484375,
+    "members_before_encoder": {
+      "mysql": {
+        "pid": 4597,
+        "start_ticks": "48169",
+        "cgroup": "/miap23.slice/docker-4dfb7239501ef29f78f8c83624acbba29cc3029ec93bdfb80a78445fb519366f.scope",
+        "VmHWM": "495564 kB",
+        "VmRSS": "495564 kB"
+      },
+      "redis": {
+        "pid": 4662,
+        "start_ticks": "48177",
+        "cgroup": "/miap23.slice/docker-805b5a5dab5b9dc617e089f8215de6cc684c6cf396c04e5886649df5b5b58f80.scope",
+        "VmHWM": "29380 kB",
+        "VmRSS": "28964 kB"
+      },
+      "manager": {
+        "pid": 5169,
+        "start_ticks": "48815",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "423624 kB",
+        "VmRSS": "420844 kB"
+      },
+      "python": {
+        "pid": 5337,
+        "start_ticks": "49703",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "124032 kB",
+        "VmRSS": "124032 kB"
+      },
+      "harness": {
+        "pid": 5336,
+        "start_ticks": "49699",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20296 kB",
+        "VmRSS": "20296 kB"
+      }
+    },
+    "members_ready": {
+      "mysql": {
+        "pid": 4597,
+        "start_ticks": "48169",
+        "cgroup": "/miap23.slice/docker-4dfb7239501ef29f78f8c83624acbba29cc3029ec93bdfb80a78445fb519366f.scope",
+        "VmHWM": "495564 kB",
+        "VmRSS": "495564 kB"
+      },
+      "redis": {
+        "pid": 4662,
+        "start_ticks": "48177",
+        "cgroup": "/miap23.slice/docker-805b5a5dab5b9dc617e089f8215de6cc684c6cf396c04e5886649df5b5b58f80.scope",
+        "VmHWM": "29380 kB",
+        "VmRSS": "28964 kB"
+      },
+      "manager": {
+        "pid": 5169,
+        "start_ticks": "48815",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "423624 kB",
+        "VmRSS": "421052 kB"
+      },
+      "python": {
+        "pid": 5337,
+        "start_ticks": "49703",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359992 kB",
+        "VmRSS": "316032 kB"
+      },
+      "harness": {
+        "pid": 5336,
+        "start_ticks": "49699",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20296 kB",
+        "VmRSS": "20296 kB"
+      }
+    },
+    "app_lifecycles": [
+      {
+        "pid": 5337,
+        "ports": [
+          45441,
+          46247
+        ],
+        "gc_running": true,
+        "actual_service_tasks": [
+          "SimpleHttpServer.start",
+          "WebSocketServer.start"
+        ],
+        "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+        "server_class": "core.websocket_server.WebSocketServer",
+        "worker_class": "mia_companion.jobs.MemoryWorker",
+        "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+      }
+    ],
+    "app_shutdowns": [
+      {
+        "pid": 5337,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.00036703399996440567,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "integrity": "ok",
+    "timing_revision": "P23-speech-ready-v2",
+    "tts_stage_mechanism": {
+      "emoji_frame_did_not_mark_speech_ready": true,
+      "original_segment_text": "中文测试",
+      "source_sha256": {
+        "base.py": "8c9c6d9da3774d2f78d05e5d0e7c5081d750752466f36a593733911430bac00f",
+        "textUtils.py": "b80793c2e50fbe8bdc19422fb5d38268187295a3a608b105c0de95c120214875",
+        "tts.py": "9fd464ea757b1d2e3db2b761d18c0314e2de6a9797f7f76a961f9017bd0a9d8f"
+      },
+      "probe": {
+        "queued_frames": [
+          {
+            "at_ms": 0.2618949999941833,
+            "sentence_type": "FIRST",
+            "content_type": "ACTION",
+            "text": null
+          },
+          {
+            "at_ms": 0.27925099999492886,
+            "sentence_type": "MIDDLE",
+            "content_type": "TEXT",
+            "text": "🌿🌿🌿\n"
+          },
+          {
+            "at_ms": 0.5275959999835322,
+            "sentence_type": "MIDDLE",
+            "content_type": "TEXT",
+            "text": "中文测试，后半句。"
+          },
+          {
+            "at_ms": 0.7456249999790998,
+            "sentence_type": "LAST",
+            "content_type": "ACTION",
+            "text": null
+          }
+        ],
+        "segment_checks": [
+          {
+            "at_ms": 0.41900599995869925,
+            "text": null
+          },
+          {
+            "at_ms": 0.6231439999737631,
+            "text": "中文测试"
+          }
+        ],
+        "speech_ready_segments": [
+          {
+            "at_ms": 0.6794990000003054,
+            "segment": "中文测试",
+            "tts_text": "中文测试"
+          },
+          {
+            "at_ms": 0.7934009999530645,
+            "segment": "后半句",
+            "tts_text": "后半句"
+          }
+        ],
+        "first_checked_text_ms": 0.27925099999492886,
+        "first_checked_text": "🌿🌿🌿\n",
+        "first_sentence_ms": 0.6794990000003054,
+        "first_sentence": "中文测试"
+      },
+      "scope": "Controlled original TTS text processing only; no Provider or waveform call"
+    },
+    "provider_errors": null,
+    "case_errors": null,
+    "error_class": null,
+    "reason": null,
+    "cases_count": 72
+  },
+  "measurement_complete": true,
+  "provider_request_counts": {
+    "reply": 72
+  },
+  "query_verdicts": [
+    {
+      "capacity": 1000,
+      "query_index": 0,
+      "count": 5,
+      "first_checked_text_delta_p95_ms": 579.559399000027,
+      "delta_p50_ms": 348.7974430000236,
+      "delta_p95_ms": 579.5112311999446,
+      "acceptance_passed": true,
+      "optimization_targets_met": false,
+      "variant_p95_ms": {
+        "baseline": 1238.9882178000335,
+        "memory": 1538.795224799992
+      }
+    },
+    {
+      "capacity": 1000,
+      "query_index": 1,
+      "count": 5,
+      "first_checked_text_delta_p95_ms": 115.2331418000358,
+      "delta_p50_ms": -53.005901000005906,
+      "delta_p95_ms": 115.03597880009691,
+      "acceptance_passed": true,
+      "optimization_targets_met": true,
+      "variant_p95_ms": {
+        "baseline": 1413.9167065999573,
+        "memory": 1105.0243407999915
+      }
+    },
+    {
+      "capacity": 1000,
+      "query_index": 2,
+      "count": 5,
+      "first_checked_text_delta_p95_ms": 708.9333946000124,
+      "delta_p50_ms": -217.34258500009673,
+      "delta_p95_ms": 337.0922890000202,
+      "acceptance_passed": true,
+      "optimization_targets_met": true,
+      "variant_p95_ms": {
+        "baseline": 1272.3709392000728,
+        "memory": 1472.7839182000253
+      }
+    },
+    {
+      "capacity": 10000,
+      "query_index": 0,
+      "count": 5,
+      "first_checked_text_delta_p95_ms": 912.8525666000542,
+      "delta_p50_ms": 818.6225509999758,
+      "delta_p95_ms": 912.8408424000781,
+      "acceptance_passed": false,
+      "optimization_targets_met": false,
+      "variant_p95_ms": {
+        "baseline": 1011.8164695999894,
+        "memory": 1835.6700022000268
+      }
+    },
+    {
+      "capacity": 10000,
+      "query_index": 1,
+      "count": 5,
+      "first_checked_text_delta_p95_ms": 247.15895659994658,
+      "delta_p50_ms": 216.86544199997115,
+      "delta_p95_ms": 277.3838769999202,
+      "acceptance_passed": true,
+      "optimization_targets_met": true,
+      "variant_p95_ms": {
+        "baseline": 1874.649967600044,
+        "memory": 1671.2643717999981
+      }
+    },
+    {
+      "capacity": 10000,
+      "query_index": 2,
+      "count": 5,
+      "first_checked_text_delta_p95_ms": 723.5922358000151,
+      "delta_p50_ms": -43.09645000000728,
+      "delta_p95_ms": 361.6112192000173,
+      "acceptance_passed": true,
+      "optimization_targets_met": true,
+      "variant_p95_ms": {
+        "baseline": 1603.1823997999254,
+        "memory": 1555.1594821999743
+      }
+    }
+  ],
+  "first_sentence_acceptance_passed": false,
+  "first_sentence_optimization_targets_met": false,
+  "sequential_measured_jobs": {
+    "count": 30,
+    "states": {
+      "empty": 30
+    },
+    "submit_to_terminal_upper_bound_p95_seconds": 0.12893748744996286,
+    "scope": "Original Worker in sequential reply test, not two-foreground fairness or model extraction proof"
+  },
+  "python_peak_after_workload_mib": 451.94140625,
+  "common_peak_mib": 1512.5625,
+  "regression_runs": [
+    {
+      "conclusion": "failure",
+      "databaseId": 39174700155,
+      "headSha": "d1879881a808b479b66307ff11acdd111b179452",
+      "name": "Verify Mia P23 shared service envelope",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39174700155"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39174657331,
+      "headSha": "d1879881a808b479b66307ff11acdd111b179452",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39174657331"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39174657355,
+      "headSha": "d1879881a808b479b66307ff11acdd111b179452",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39174657355"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39174657358,
+      "headSha": "d1879881a808b479b66307ff11acdd111b179452",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39174657358"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39174657347,
+      "headSha": "d1879881a808b479b66307ff11acdd111b179452",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39174657347"
+    }
+  ]
+}
