@@ -1,6 +1,7 @@
 """Frozen normal-load background Scope fairness, separate from foreground concurrency."""
 
 import asyncio
+from collections import Counter
 import hashlib
 import json
 import os
@@ -39,6 +40,20 @@ def latency_summary(jobs):
     assert len(samples) >= 2
     return {'count': len(samples), 'p50_seconds': statistics.median(samples),
         'p95_seconds': statistics.quantiles(samples, n=100, method='inclusive')[94], 'samples_seconds': samples}
+
+
+def task_verdict(jobs):
+    assert len(jobs) == 36 and all('state' in x for x in jobs)
+    measured = [x for x in jobs if not x['warm']]
+    assert len(measured) == 30
+    successful = [x for x in measured if x['state'] in ('committed', 'empty')]
+    valid = all(x['state'] in ('committed', 'empty') for x in jobs)
+    normal = latency_summary(measured) if len(successful) == 30 else None
+    return {'terminal_task_outcomes': dict(Counter(x['state'] for x in measured)),
+        'terminal_task_latency': latency_summary(measured),
+        'successful_task_latency_exploratory': latency_summary(successful) if len(successful) >= 2 else None,
+        'normal_task_latency': normal, 'all_normal_jobs_valid': valid,
+        'normal_task_acceptance_passed': valid and normal is not None and normal['p95_seconds'] <= 120}
 
 
 def handler_for(worker, scopes, report, lock, persist, elapsed):
@@ -110,8 +125,6 @@ def handler_for(worker, scopes, report, lock, persist, elapsed):
                     assert time.monotonic() < deadline, 'Normal background jobs did not terminate'
                     await asyncio.sleep(.05)
                 assert all(1 <= x['attempts'] <= 2 for x in own)
-                if not diagnostic:
-                    assert all(x['state'] in ('committed', 'empty') for x in own)
                 for job in own:
                     calls = [x for x in report['extraction_requests'] if x['job_id'] == job['admission']['id']]
                     assert len(calls) == job['attempts'], 'Normal factual task bypassed the real SDK or made an uncounted call'
@@ -183,16 +196,18 @@ async def drive(state, report, persist):
         persist(report)
         assert evidence['all_admitted_before_first_native_finished'], 'No complete three-Scope backlog to assess fairness'
         assert evidence['scope_first_cycle_fair'], 'One Scope was served twice before all backlogged Scopes received service'
-    assert child['worker_fairness_contract_passed']
     measured = [x for x in report['fair_jobs'] if not x['warm']]
-    assert len(measured) == 30
-    report['normal_task_latency'] = latency_summary(measured)
-    report['normal_task_latency_by_profile'] = {profile: latency_summary([x for x in measured if x['profile'] == profile])
-        for profile in ('short', 'dense')}
-    report['normal_task_latency_by_owner'] = {owner: latency_summary([x for x in measured if x['owner'] == owner])
-        for owner in {x['owner'] for x in measured}}
-    passed = report['normal_task_latency']['p95_seconds'] <= 120
-    report.update(normal_task_acceptance_passed=passed, worker_fairness_contract_passed=True, worker_contract_passed=passed,
+    report.update(task_verdict(report['fair_jobs']))
+    if report['normal_task_latency'] is not None:
+        report['normal_task_latency_by_profile'] = {profile: latency_summary([x for x in measured if x['profile'] == profile])
+            for profile in ('short', 'dense')}
+        report['normal_task_latency_by_owner'] = {owner: latency_summary([x for x in measured if x['owner'] == owner])
+            for owner in {x['owner'] for x in measured}}
+    passed = report['normal_task_acceptance_passed'] and child['worker_fairness_contract_passed']
+    report.update(scope_fairness_sampling_passed=True, fairness_batch_complete=True,
+        worker_fairness_contract_passed=child['worker_fairness_contract_passed'], worker_contract_passed=passed,
         fair_measurement_scope='Six rounds of two real factual tasks per Scope; first round warm, five measured. '
+            'Invalid outputs remain failed and are never normal-success latency samples. '
+            'Terminal latency includes failures and is a separate diagnostic. '
             'Original single background lane and three owner backlogs; no foreground SDK or same-Provider first-sentence verdict.')
     persist(report)

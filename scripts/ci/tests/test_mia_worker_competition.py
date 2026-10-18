@@ -1,5 +1,6 @@
 import asyncio
 import importlib.util
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,7 @@ import unittest
 from unittest.mock import AsyncMock, patch
 
 from server.companion.extraction import source_supported
+from server.companion import jobs as actual_jobs, memory as actual_memory
 
 
 spec = importlib.util.spec_from_file_location('mia_worker_competition',
@@ -21,6 +23,34 @@ spec.loader.exec_module(probe)
 
 
 class ExtractionBindingTests(unittest.TestCase):
+    def test_failed_original_validation_is_bound_recorded_and_not_repaired(self):
+        source, owner = '我常用青瓷杯喝茶', 'user:1:agent:a'
+        value = {'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
+            'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable',
+            'sensitive': False, 'keywords': ['喝茶喝茶']}]}
+        db = sqlite3.connect(':memory:')
+        self.addCleanup(db.close)
+        db.row_factory = sqlite3.Row
+        db.execute('CREATE TABLE mia_jobs(id TEXT,owner TEXT,state TEXT,source_payload TEXT,attempts INTEGER)')
+        db.execute('INSERT INTO mia_jobs VALUES (?,?,?,?,1)', ('job', owner, 'extracting', json.dumps({'text': source})))
+        worker = SimpleNamespace(jobs=SimpleNamespace(store=SimpleNamespace(db=db, lock=threading.RLock())))
+        before = json.dumps(value, ensure_ascii=False)
+        report = {'native_extractions': [{'owner': owner, 'job_id': 'job', 'attempt': 1,
+            'original_output_sha256': hashlib.sha256(before.encode()).hexdigest()}]}
+        with patch.dict(sys.modules, {'mia_companion': sys.modules['server.companion'],
+                'mia_companion.jobs': actual_jobs, 'mia_companion.memory': actual_memory}), \
+                patch.object(actual_jobs, 'validate_output', wraps=actual_jobs.validate_output) as original:
+            probe.observe_validation_failures(worker, report, threading.RLock(), lambda value: None)
+            with self.assertRaises(actual_memory.MemoryError):
+                actual_jobs.validate_output(value, [source], [])
+            self.assertEqual(original.call_count, 1)
+        self.assertEqual(json.dumps(value, ensure_ascii=False), before)
+        failure = report['validation_failures'][0]
+        self.assertEqual((failure['job_id'], failure['owner'], failure['attempt']), ('job', owner, 1))
+        self.assertEqual(failure['original_output'], value)
+        self.assertEqual(failure['rejected_clues'], {'keywords': ['喝茶喝茶']})
+        self.assertEqual(db.execute('SELECT state FROM mia_jobs').fetchone()[0], 'extracting')
+
     def test_pending_foreign_and_ambiguous_rows_cannot_prove_sdk_job_binding(self):
         db = sqlite3.connect(':memory:')
         self.addCleanup(db.close)

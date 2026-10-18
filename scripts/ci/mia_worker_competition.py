@@ -26,6 +26,36 @@ def active_job(worker, owner, sources):
         'sources': sources, 'source_sha256': hashlib.sha256(sources[0].encode()).hexdigest()}
 
 
+def observe_validation_failures(worker, report, lock, persist):
+    import mia_companion.jobs as jobs
+    from mia_companion.memory import MemoryError as ProposalError
+    original = jobs.validate_output
+
+    def validate(value, sources, context):
+        try:
+            return original(value, sources, context)
+        except ProposalError as error:
+            with lock:
+                native = report['native_extractions'][-1]
+                binding = active_job(worker, native['owner'], sources)
+                assert binding['job_id'] == native['job_id'] and binding['attempt'] == native['attempt']
+                encoded = json.dumps(value, ensure_ascii=False).encode()
+                failure = dict(binding, error_code=error.code, error_message=str(error),
+                    rejected_clues=getattr(error, 'rejected_clues', {}),
+                    original_output_sha256=hashlib.sha256(encoded).hexdigest(),
+                    original_output_capture_truncated=len(encoded) > 131072)
+                assert failure['original_output_sha256'] == native['original_output_sha256']
+                if len(encoded) <= 131072:
+                    failure['original_output'] = value
+                failures = report.setdefault('validation_failures', [])
+                assert len(failures) < 72
+                failures.append(failure)
+                persist(report)
+            raise  # The original Worker receives the same rejected proposal/error.
+
+    jobs.validate_output = validate
+
+
 async def open_driver(server, scopes, config, root, report, persist):
     import core.utils.llm as existing_llm
     from core.auth import AuthManager
@@ -40,6 +70,8 @@ async def open_driver(server, scopes, config, root, report, persist):
         report['capture_extraction_stream'] = True
     replies = await open_replies(server, scopes, config, root, report, persist, lock=lock)
     worker = server._mia_worker
+    if os.environ['MIA_P23_MODE'] == 'worker-fairness':
+        observe_validation_failures(worker, report, lock, persist)
     overlap = os.environ['MIA_P23_MODE'] == 'worker-smoke'
     started = time.perf_counter()
     elapsed = lambda: (time.perf_counter() - started) * 1000
