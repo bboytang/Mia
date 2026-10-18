@@ -1,0 +1,474 @@
+{
+  "run_id": 39129770362,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39129770362",
+  "observer_sha": "fe48aaa7455b6224b4a7d018b99eefbfe6d3661a",
+  "runtime_sha": "fe48aaa7455b6224b4a7d018b99eefbfe6d3661a",
+  "conclusion": "success",
+  "p23_complete": false,
+  "artifacts": [
+    {
+      "file": "performance-model-gate-smoke-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "3f8e8bb8fd6b0ae1c6e7c0686874e01c8e5181aa4c42791f6e7d4eeb415278a0",
+      "sha256": "bede47088a02ade336c744504eee212cc822c61a240d208f8152a06f6f67f863"
+    },
+    {
+      "file": "performance-model-gate-smoke-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "96f51d99c700e31836bcef7a187f576b235c19e1ee33036cad457e4026f1c87c",
+      "sha256": "9ecf9e975af34b2a992e646aac48bfc29725a5e25d55350ce0a308a51d2f2eaf"
+    },
+    {
+      "file": "performance-model-gate-smoke-ci-results.json.gz",
+      "source_path": "mia-p23-model-gate-smoke-run.json",
+      "raw_sha256": "0a3dd2e9261766248a62acaacfff938902f1bf43d853d1fbbd25e52a9270211a",
+      "sha256": "ae9dd01bbdb3f4010a51053d66db3d5f970b6daafde435a390eb7940e62467cf"
+    },
+    {
+      "file": "performance-model-gate-smoke-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "3c975671211a780037f6c1795c724f5930fd75af20175eec08b15a34be4394e8",
+      "sha256": "c8cefa686ef5cc4487946ba696e58dab5d5786d9b28a6d50c3d0fe0cbad7bce3"
+    },
+    {
+      "file": "performance-model-gate-smoke-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-model-gate-smoke-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-model-gate-smoke-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-model-gate-smoke-service.log.gz",
+      "source_path": "mia-p23-model-gate-smoke-service.log",
+      "raw_sha256": "437a403d9f67ae0bcc7dbd5fadf1f6f51ee3a91f930ba5f16d49812221d45ab5",
+      "sha256": "15eb770e806d2f45457f6e8c21480085422be93eb71f6a1dc9e3b52e196bddfc"
+    },
+    {
+      "file": "performance-model-gate-smoke-identity.log.gz",
+      "raw_sha256": "5e0aebbb17fccc25a2bf6935cf9dd0d085e26adb28321d02640eac3c3ec1a148",
+      "sha256": "765e247c23fa9f0eea18e3228cc87617eab9a7e314250d5080c9dd3eb5302e98"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "3f8e8bb8fd6b0ae1c6e7c0686874e01c8e5181aa4c42791f6e7d4eeb415278a0",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "1dee8ec3896070aeb9f3c86d626e0c8f1459f3ca468e5339c2da633d188b45fe",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "911fb10053d5572c0794dba5cbbb25da3ea9480af6a75fedb94438291ce59ef6",
+    "cgroup-final-memory.current.txt": "7eb221022a5787e8d6ebd6d34db31db32e5794d0487bbb7118161cc13f330ee3",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "af25629aa27f6f966a7f6448f00e3574e36344600c208dd0cdf4a01a25f1be52",
+    "redis.log": "d6bf52e8fdf6d9008383eb498074116996d7404fd9e3e3067d5d1dc9a0b165d6",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "97f9dbbe3497a4261f0605e858b4bced3ac523b9ef29a590f27c4d17647bac6c",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "5c8240c6c4714a52bf4b8561d49e3d91afe1c91176c491ef4e984fc769ce2228",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "3c975671211a780037f6c1795c724f5930fd75af20175eec08b15a34be4394e8",
+    "app-child/ready.json": "5ec241380d1742fe79b967c7e8188121f74d3649f12cd1bf0b20a55e882c27d2",
+    "app-child/app-results.json": "96f51d99c700e31836bcef7a187f576b235c19e1ee33036cad457e4026f1c87c",
+    "app-child/memory.sqlite3": "c3a82b1023e09c337276bfe356445c636d360b154215d327fdcba9eb69a272d7",
+    "app-child/context-profile.json": "4867816ff5a4178a7be89da4042a937f180e73eb3333833acec4318f3de1c680",
+    "junit/TEST-junit-jupiter.xml": "c0ca545e5fe3c00e40a3fdde55be417d65c27a9232e4c0594853d4e45aafb478",
+    "junit/TEST-junit-vintage.xml": "c7bf0a0bd48c5d5669a616600f299c608b3df4fddfd7f5e51abf3b494668bef1",
+    "junit/TEST-junit-platform-suite.xml": "b05b7e2f5ade816381d12809569c86c1aa7e06e0706dc348b4ef28614f9cde56"
+  },
+  "ci_checks": {
+    "service": {
+      "conclusion": "success",
+      "databaseId": 39129717375,
+      "headSha": "fe48aaa7455b6224b4a7d018b99eefbfe6d3661a",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39129717375",
+      "tests": 301
+    },
+    "manager": {
+      "conclusion": "success",
+      "databaseId": 39129717377,
+      "headSha": "fe48aaa7455b6224b4a7d018b99eefbfe6d3661a",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39129717377",
+      "tests": 154,
+      "xml_sha256": {
+        "TEST-xiaozhi.modules.security.config.ShiroConfigTest.xml": "9a3aaa04e86896ceea857e04321e034cc1147ad3c15c1a662b139b909de18d7f",
+        "TEST-xiaozhi.modules.device.MiaIdentityBaselineTest.xml": "1c77055882cc86bcfa239a3672d270d448833c173f1050296abe6f2b79969486",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest.xml": "ed7e9c08551fad03a125329fe2b794c993bef31f5e6ae3449017e6b272bce19b",
+        "TEST-xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest.xml": "991afa1cf18782c6b7354c525788b842e8b9186fd84fec9dbc040be8a7d73164",
+        "TEST-xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest.xml": "b70b38ceace8dba06c9076fbf1a27a45c436f020a9d117d9fadbedc41cd65b14",
+        "TEST-xiaozhi.modules.device.controller.DeviceControllerTest.xml": "6aedaebcb4f422751d8dfd33a6b6afa060580b8abdbd375011836e047b8efb49",
+        "TEST-xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest.xml": "38f5dffc3129a5c3979543d0bc09f6f7bc3ed95f454216365f5c45683d08c0e2",
+        "TEST-xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest.xml": "dbd288d9dbcb1ee0059c598b2b9942189634ecd4cff92e1294cdaeae393d51e2",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest.xml": "8fa5bb4f25a199973a88354503cff3c05581893f84291441a18543f399ebd671",
+        "TEST-xiaozhi.common.utils.SensitiveDataUtilsTest.xml": "a6169623571a52c48771c23e5a93b8e522dbbdeabceeac00974a45b49015ada3",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest.xml": "9ce0a0a7d9b46d85aceb7a59b637ed6962dc2656b664329e65a258eaf10d74c3",
+        "TEST-xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest.xml": "ceb230c1ec397d8e3ee7a3b93d0a63ad71a5bc7a8b524093b3f7b5a2043a344d",
+        "TEST-xiaozhi.modules.agent.dto.AgentUpdateDTOTest.xml": "47dd3f76bf9fad633bde32b47877191c0a6344dfbf17758bf3067d2a845ac4ee",
+        "TEST-xiaozhi.common.redis.RedisSerializationTest.xml": "16acf3bbb3b31043abcacfb8f4b518a5ae3b70a675b4044eee8fc9859b08e593",
+        "TEST-xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest.xml": "7ba1267eee926510d617fa676ad24941801e673e89e976613ee5178e7160f16d",
+        "TEST-xiaozhi.modules.sys.loginControllerTest.xml": "5698d8569a2de89507f8fb307c23c37dd2a72015467d2df0bb223f65c8f02aa8",
+        "TEST-xiaozhi.modules.device.DeviceTest.xml": "cb3878f39f2ce680aae9b0ac790fd35c91e0c43b1b94bde7f681deab3854bfc5",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest.xml": "60867d2265a66a76cf5857f6775ae206c11fc34467e00ab256e4f0a21dd8a88e",
+        "TEST-xiaozhi.common.utils.AESUtilsTest.xml": "134cf3aaaa1bf8c15a07494713647346c5c4185918f7480de988f9ce269dd044",
+        "TEST-xiaozhi.common.service.impl.BaseServiceImplTest.xml": "02e8989b47c25a6543285a2e4ff0f240c2f90c6288e4fd3ad1a55874dc69c1d5",
+        "TEST-xiaozhi.modules.config.service.impl.ConfigServiceImplTest.xml": "f575fd989ae208baf91aabe6c1ef1dc54e7a2cd5b534581e683e5ff6cc3e7237",
+        "TEST-xiaozhi.common.utils.JsonUtilsTest.xml": "28eea169b10053b75f2a9c157183f71420c8b0b1d911abb7ae4bb78d905fc9b0",
+        "TEST-xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest.xml": "9c2bf2b711d1e519353c1ae6b442ae1e79488530eee0865d52933c34ad3c555b",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest.xml": "8f688bbb36a4c7e333f745f45d878a871324408700925941e78edf9ea3d9b4b5"
+      }
+    }
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "provider_requests": 3,
+    "accepted_extraction_jobs": 3,
+    "worker_overlap_contract_passed": true,
+    "worker_probe": {
+      "source": "我每周六在书桌边整理纸质邮票册",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "admission": {
+        "status": "accepted",
+        "accepted": true,
+        "id": "b980c89ca0e0834bd9c51710235038a54b9ed56db794a8f12611387e40bf4307",
+        "state": "pending"
+      },
+      "submit_at_ms": 136.6023780000205,
+      "state": "committed",
+      "attempts": 1,
+      "submit_to_observed_terminal_seconds": 10.689465207000012,
+      "fact_ids": [
+        "8570cb0c0730490789de9a5bb36431ac"
+      ],
+      "facts": [
+        {
+          "id": "8570cb0c0730490789de9a5bb36431ac",
+          "category": "fact",
+          "content": "我每周六在书桌边整理纸质邮票册",
+          "confirmed": true,
+          "created_at": 1792328794,
+          "updated_at": 1792328794,
+          "source": "我每周六在书桌边整理纸质邮票册",
+          "session_id": "p23-worker-overlap",
+          "evidence_session_count": 1,
+          "evidence_source_count": 1
+        }
+      ],
+      "vectors": [
+        {
+          "memory_id": "8570cb0c0730490789de9a5bb36431ac",
+          "bytes": 3072,
+          "sha256": "ea1d6cd9ce3c9953a47061b04194c41451e4531bebc186bfbfb7ebb9316479ec",
+          "dimension": 768,
+          "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+          "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65"
+        }
+      ],
+      "extraction_call_count": 1
+    },
+    "foreground_peak": 2,
+    "extraction_requests": [
+      {
+        "job_id": "b980c89ca0e0834bd9c51710235038a54b9ed56db794a8f12611387e40bf4307",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 1,
+        "sources": [
+          "我每周六在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "79817e689a0f2630cb76dc3ff2dee503a9485bb0c9321161cc3b4552ad381ebf",
+        "at_ms": 1047.514179000018,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "ebafe6ac57b5ca6085a0650a450e4e8181f4e4d36bd9e565788c9ff34e44c34e",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0025539999910506594,
+        "foreground_peak_before_handoff": 2,
+        "response_handoff_at_ms": 7084.035500000027,
+        "create_return_at_ms": 7085.222388000034
+      }
+    ],
+    "app_process_shutdown_seconds": 0.34353812000000516,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 1.7061606679999954,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 57864620\nuser_usec 53250404\nsystem_usec 4614215\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 380\nnr_throttled 203\nthrottled_usec 9837062\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1044086784",
+      "memory.peak": "1528295424",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "error_class": null,
+    "reason": null
+  },
+  "child": {
+    "ready": true,
+    "passed": true,
+    "provider_requests": 3,
+    "provider_request_purposes": [
+      "extraction",
+      "reply",
+      "reply"
+    ],
+    "accepted_extraction_jobs": 3,
+    "worker_overlap_contract_passed": true,
+    "worker_probe": {
+      "source": "我每周六在书桌边整理纸质邮票册",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "admission": {
+        "status": "accepted",
+        "accepted": true,
+        "id": "b980c89ca0e0834bd9c51710235038a54b9ed56db794a8f12611387e40bf4307",
+        "state": "pending"
+      },
+      "submit_at_ms": 136.6023780000205,
+      "state": "committed",
+      "attempts": 1,
+      "submit_to_observed_terminal_seconds": 10.689465207000012,
+      "fact_ids": [
+        "8570cb0c0730490789de9a5bb36431ac"
+      ],
+      "facts": [
+        {
+          "id": "8570cb0c0730490789de9a5bb36431ac",
+          "category": "fact",
+          "content": "我每周六在书桌边整理纸质邮票册",
+          "confirmed": true,
+          "created_at": 1792328794,
+          "updated_at": 1792328794,
+          "source": "我每周六在书桌边整理纸质邮票册",
+          "session_id": "p23-worker-overlap",
+          "evidence_session_count": 1,
+          "evidence_source_count": 1
+        }
+      ],
+      "vectors": [
+        {
+          "memory_id": "8570cb0c0730490789de9a5bb36431ac",
+          "bytes": 3072,
+          "sha256": "ea1d6cd9ce3c9953a47061b04194c41451e4531bebc186bfbfb7ebb9316479ec",
+          "dimension": 768,
+          "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+          "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65"
+        }
+      ],
+      "extraction_call_count": 1
+    },
+    "foreground_peak": 2,
+    "foreground_transitions": [
+      {
+        "at_ms": 2.26417300001458,
+        "foreground": 0
+      },
+      {
+        "at_ms": 1496.2700160000395,
+        "foreground": 1
+      },
+      {
+        "at_ms": 1502.5155270000141,
+        "foreground": 2
+      },
+      {
+        "at_ms": 9742.641492000019,
+        "foreground": 1
+      },
+      {
+        "at_ms": 10443.17232100002,
+        "foreground": 0
+      }
+    ],
+    "extraction_requests": [
+      {
+        "job_id": "b980c89ca0e0834bd9c51710235038a54b9ed56db794a8f12611387e40bf4307",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "attempt": 1,
+        "sources": [
+          "我每周六在书桌边整理纸质邮票册"
+        ],
+        "source_sha256": "79817e689a0f2630cb76dc3ff2dee503a9485bb0c9321161cc3b4552ad381ebf",
+        "at_ms": 1047.514179000018,
+        "model": "glm-4-flash-250414",
+        "messages_sha256": "ebafe6ac57b5ca6085a0650a450e4e8181f4e4d36bd9e565788c9ff34e44c34e",
+        "max_tokens": 4096,
+        "tools_count": 1,
+        "foreground_at_start": 0,
+        "response_handoff_wait_ms": 0.0025539999910506594,
+        "foreground_peak_before_handoff": 2,
+        "response_handoff_at_ms": 7084.035500000027,
+        "create_return_at_ms": 7085.222388000034
+      }
+    ],
+    "worker_probe_scope": "Original Worker.submit/resolve/LLMMemoryExtractor/SDK/validation/BGE/commit; one new synthetic user source. Two original chat replies use fixed P23 questions. A bounded SDK response handoff rendezvous can keep the native lane occupied until both foreground chats enter; this is controlled overlap, not an unmodified end-to-end latency measurement.",
+    "first_sentence_cases_scope": "Two concurrent actual memory replies, not same-Provider baseline or a D08 percentile measurement",
+    "python_peak_after_workload_mib": 434.2421875,
+    "app_shutdowns": [
+      {
+        "pid": 5508,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.000364467999986573,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "case_errors": null,
+    "provider_errors": null,
+    "error_class": null,
+    "reason": null
+  },
+  "provider_counts": {
+    "extraction": 1,
+    "reply": 2
+  },
+  "actual_database_independently_verified": true,
+  "common_peak_mib": 1457.49609375,
+  "model_gate_runtime_verified": true,
+  "model_gate_sdk_entries": [
+    {
+      "active": 1,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "purpose": "extraction"
+    },
+    {
+      "active": 2,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "purpose": "reply"
+    },
+    {
+      "active": 2,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "purpose": "reply"
+    }
+  ],
+  "model_gate_transitions": [
+    {
+      "active": 0,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "at_ms": 1.7012050000175805
+    },
+    {
+      "active": 1,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "at_ms": 1052.8244900000345
+    },
+    {
+      "active": 2,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "at_ms": 2195.9951219999994
+    },
+    {
+      "active": 2,
+      "waiting_foreground": 1,
+      "waiting_background": 0,
+      "at_ms": 4726.148853000041
+    },
+    {
+      "active": 2,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "at_ms": 7091.0975460000145
+    },
+    {
+      "active": 1,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "at_ms": 9740.687535999996
+    },
+    {
+      "active": 0,
+      "waiting_foreground": 0,
+      "waiting_background": 0,
+      "at_ms": 10441.316171000039
+    }
+  ],
+  "scope": "One controlled real extraction plus two original foreground chat replies, actual model gate queue observed; not a latency percentile or full normal-job fairness verdict.",
+  "first_sentence_cases": [
+    {
+      "case": "worker-smoke-front-0",
+      "first_sentence_ms": 2894.7823760000233,
+      "sdk_start_ms": 794.7778140000423,
+      "sdk_first_content_ms": 839.0331909999986,
+      "total_case_ms": 9196.308720000048
+    },
+    {
+      "case": "worker-smoke-front-1",
+      "first_sentence_ms": 7742.3843580000375,
+      "sdk_start_ms": 5649.826574000031,
+      "sdk_first_content_ms": 1364.7156719999884,
+      "total_case_ms": 9300.00235700004
+    }
+  ],
+  "same_sha_other_checks": {
+    "identity": {
+      "run": 39129717364,
+      "tests": 173
+    },
+    "vectors": {
+      "run": 39129717419,
+      "reports": [
+        {
+          "file": "vector-results.json",
+          "passed": true,
+          "raw_sha256": "7b68c4aaf53761448a259d2ba40d2b27cc674e19885909d1784de24440eae448"
+        },
+        {
+          "file": "reply-results.json",
+          "passed": true,
+          "raw_sha256": "369a79b8485a10dab72296b7c5d3f97763b7598eff9d36f69045eeef55f9015f"
+        },
+        {
+          "file": "extraction-results.json",
+          "passed": true,
+          "raw_sha256": "0738c4da3f55d3f2fc8fa388c234e36bf7812527e50341a7f77962464f33aedd"
+        },
+        {
+          "file": "context-results.json",
+          "passed": true,
+          "raw_sha256": "f52e9b1ec0a22315f544fa4cea7007adb0441202a158119d6933e8088d4f31c7"
+        },
+        {
+          "file": "retrieval-results.json",
+          "passed": true,
+          "raw_sha256": "7e4557edd6c3dd0d3fa2d898dda26c2776fa8bd5c208b755e435f53adc19841c"
+        }
+      ]
+    },
+    "syntax": 39129717381,
+    "extraction_syntax": 39129717406,
+    "service_seconds": 27.781
+  }
+}
