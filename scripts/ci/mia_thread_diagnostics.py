@@ -44,6 +44,14 @@ async def run_pairs(report, save, group_state, members):
 
     root = Path(os.environ['MIA_P23_REPORT_DIR'])
     scheduling = report['mode'] == 'scheduling'
+    if scheduling:
+        import inspect
+        from mia_companion.semantic import SemanticMemoryIndex
+        report['scheduling_runtime_retrieve_sha256'] = hashlib.sha256(
+            inspect.getsource(SemanticMemoryIndex.retrieve).encode()).hexdigest()
+        # This ABBA compares the frozen unconditional-pair implementation. A
+        # later adaptive/serial implementation must not be mislabeled "paired".
+        assert report['scheduling_runtime_retrieve_sha256'] == '4e14b2dc275a7355975a3b540b550f0c378855fd3c97274013b4c8993fbd55e7', 'Scheduling experiment is frozen at observer 48aad92; use that ref'
     order_key, arms_key = ('scheduling_order', 'scheduling_arms') if scheduling else ('thread_order', 'thread_arms')
     report.update(cgroup_before=group_state(), members_before=members(),
         trial_scope='Fresh Python processes in ABBA order; actual manager/databases stay in same parent; not acceptance')

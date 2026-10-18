@@ -276,6 +276,44 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
             self.encoder.hook = None
         self.assertEqual(actual, expected)
 
+    async def test_competing_indexes_serialize_own_pairs_but_keep_requests_concurrent(self):
+        self.fact('散步带蓝色水壶', triggers=['散步'], keywords=['蓝色水壶'])
+        await self.index.rebuild_batch(self.scope, self.auth)
+        other = SemanticMemoryIndex(self.store, self.encoder)
+        queries = ('散步甲', '散步乙')
+        expected = [await index.retrieve(self.scope, self.auth, query)
+            for index, query in zip((self.index, other), queries)]
+        barrier, guard = threading.Barrier(2, timeout=2), threading.Lock()
+        active, calls = set(), []
+
+        def held(text, query):
+            request = '甲' if '甲' in text else '乙'
+            with guard:
+                if request in active:
+                    raise AssertionError('Competing request occupied both encode slots')
+                active.add(request)
+                calls.append((request, '关联线索' in text))
+            try:
+                barrier.wait()
+            finally:
+                with guard:
+                    active.remove(request)
+
+        self.encoder.hook = held
+        tasks = [asyncio.create_task(index.retrieve(self.scope, self.auth, query))
+            for index, query in zip((self.index, other), queries)]
+        try:
+            self.assertEqual(await asyncio.gather(*tasks), expected)
+            self.assertEqual(set(calls[:2]), {('甲', False), ('乙', False)})
+            self.assertEqual(set(calls[2:]), {('甲', True), ('乙', True)})
+        finally:
+            barrier.abort()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            self.encoder.hook = None
+        self.assertEqual(active, set())
+        self.assertEqual(self.index._activity['foreground'], 0)
+        self.assertEqual((self.index._slots._value, other._slots._value), (2, 2))
+
     async def test_paired_encode_failure_drains_and_cancellation_retains_native_slots(self):
         self.fact('散步带蓝色水壶', triggers=['散步'], keywords=['蓝色水壶'])
         await self.index.rebuild_batch(self.scope, self.auth)
