@@ -3,9 +3,12 @@ on:
   push:
     paths:
       - 'scripts/ci/verify_mia_shared_envelope.py'
+      - 'scripts/ci/verify_mia_app_lifecycle.py'
+      - 'scripts/ci/mia_behavior_runtime.py'
       - 'scripts/ci/mia_thread_diagnostics.py'
       - 'scripts/ci/mia_query_scheduling.py'
       - 'scripts/ci/tests/test_mia_query_scheduling.py'
+      - 'scripts/ci/tests/test_mia_app_lifecycle.py'
       - 'scripts/ci/mia_performance_budgets.py'
       - 'scripts/ci/run_mia_shared_envelope.sh'
       - 'server/companion/manager_tests/MiaPerformanceIntegrationTest.java'
@@ -15,7 +18,7 @@ on:
       mode:
         description: Capacity gate or separate shared-resource hot-path diagnosis
         type: choice
-        options: [capacity, diagnostic, threads, scheduling]
+        options: [capacity, diagnostic, threads, scheduling, app-lifecycle]
         default: capacity
 permissions:
   contents: read
@@ -32,7 +35,8 @@ jobs:
           python-version: '3.10'
       - run: |
           python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py
-          python -m unittest discover -s scripts/ci/tests -p test_mia_query_scheduling.py -v
+          python -m py_compile scripts/ci/verify_mia_app_lifecycle.py
+          python -m unittest discover -s scripts/ci/tests -p 'test_mia_*.py' -v
           bash -n scripts/ci/run_mia_shared_envelope.sh
   shared:
     if: github.event_name == 'workflow_dispatch'
@@ -62,7 +66,15 @@ jobs:
       - name: Prepare dependencies outside measured envelope
         run: |
           mkdir -p "$MIA_P23_REPORT_DIR"
-          python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          if [ "$MIA_P23_MODE" = app-lifecycle ]; then
+            sudo apt-get update
+            sudo apt-get install -y libopus0 libsndfile1 ffmpeg
+            dpkg-query --show libopus0 libsndfile1 ffmpeg > "$MIA_P23_REPORT_DIR/runtime-system.txt"
+            python -m pip install torch==2.2.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cpu
+            python -m pip install -r upstream/main/xiaozhi-server/requirements.txt
+          else
+            python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          fi
           python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3 httpx==0.28.1
           python -m pip freeze > "$MIA_P23_REPORT_DIR/preparation-dependencies.txt"
           docker pull mysql:8.4
@@ -101,7 +113,16 @@ jobs:
             -file "$MIA_SCOPE_CA" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
       - name: Prepare pinned actual BGE outside measured envelope
         run: |
-          python scripts/ci/prepare_mia_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$MIA_EMBEDDING_DIR"
+          mia_export_python=python
+          if [ "$MIA_P23_MODE" = app-lifecycle ]; then
+            python -m venv "$RUNNER_TEMP/mia-p23-export"
+            mia_export_python="$RUNNER_TEMP/mia-p23-export/bin/python"
+            "$mia_export_python" -m pip install pip==25.3 typing_extensions==4.16.0
+            "$mia_export_python" -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+            "$mia_export_python" -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
+            "$mia_export_python" -m pip freeze > "$MIA_P23_REPORT_DIR/export-dependencies.txt"
+          fi
+          "$mia_export_python" scripts/ci/prepare_mia_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$MIA_EMBEDDING_DIR"
           python - <<'PYMODEL'
           import hashlib, json, os
           from pathlib import Path

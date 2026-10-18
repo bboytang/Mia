@@ -529,3 +529,14 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 用户随后明确“差一点没事的”：该19.51ms原目标差距保留记录，不再阻塞P23后续集成验证；不声称已达400ms、不进一步调整500ms验收上限，也不修改SQLite150ms/首句增量500ms原优化目标。当前无在途任务，运行实现32407ef。下一步转实际reply/app与同Provider无记忆基线首句增量、真实持久Worker的公平/故障/120秒终态及全服务含在途关闭20秒；当前manager/BGE/两数据库共同数值预检已过，不等于完整P23通过。P23整体未验收/P24未开始，Provider请求0、未部署/改生产数据，真机未测。
 
 最新接续：第二十步32407ef六验证全终态success：四回归通过，模块/共同1k/10k达到验收，10k竞争307.52/419.51ms；共同仍差原400ms目标19.51ms。用户“差一点没事的”，保留差距、不阻塞后续，不修改原目标/验收上限。无在途任务，下一步实际reply/app、同Provider首句、真实Worker及全服务关闭。P23整体未验收/P24未开始；原文/hash见performance-adaptive-*。历史在途/下一候选段落仅过程记录。
+
+
+## 第二十一步：实际应用生命周期共同资源预检（已实现，待CI）
+
+用户要求继续下阶段。保持P23未整体验收/P24未开始：数值容量已达到验收，419.51ms与原400ms目标的差距按用户决定不阻塞后续，不继续微调容量取绿。先补齐真实应用冷导入/启动/BGE加载/退出的共同资源证据，再做实际回复、同Provider首句及提取任务。
+
+新增仅CI的app-lifecycle模式，复用原app.main、WebSocketServer/HTTP/GC、原持久Worker及既有mia_behavior_runtime观测器。实际应用是单独子进程，真实manager/TLS授权三Scope、MySQL/Redis、Python应用及轻量控制器共同受2CPU/2GiB/swap0限制，逐PID核对父组。使用Worker原index编码入口冷加载既定BGE，记录完整应用加载后/编码后Python峰值和实时RSS增量、原生配置、SQLite完整性及父组峰值；集成RSS增量不冒充隔离编码器512MiB结果。
+
+控制器从进程外发SIGTERM，实测应用完整退出与WS/HTTP端口关闭；随后Java/控制器/数据库退出，MySQL/Redis先按5秒graceful stop，明确拒绝137/非零退出/OOM作为正常关闭。外部finalizer从同一SIGTERM起点核对五个原PID/start_ticks均退出及总耗时≤20秒；这是空闲Worker预检，accepted jobs=0、Provider请求0，不替代在途关闭/任务公平和首句验收。不重跑P22留出、不修改运行模块/生产数据。模型导出及完整上游依赖准备在测量外，运行torch2.2.2与导出torch2.6环境分开，原固定模型/资源不变。
+
+本地新增三项finalizer机制测试（含真实受控子进程），连同已有两项调度测试共5项通过（0.030秒），Python3.10 AST/语法、workflow YAML、Shell/diff通过。完整应用/BGE/共同资源实测只在GitHub运行，唯一新观察器SHA/句柄随后记录；未有新启动/RSS/退出通过结论。后续仍需实际唯一回复链与同Provider基线、两前台+真实提取Worker公平/故障/120秒终态，以及有在途任务的全服务20秒关闭。

@@ -19,8 +19,18 @@ cleanup() {
         miap23-mysql miap23-redis > "$mia_results/container-final.txt" 2>&1
     docker logs miap23-mysql > "$mia_results/mysql.log" 2>&1
     docker logs miap23-redis > "$mia_results/redis.log" 2>&1
+    if [ "${MIA_P23_MODE:-capacity}" = app-lifecycle ]; then
+        docker stop --time 5 miap23-mysql miap23-redis > "$mia_results/container-stop.txt" 2>&1
+        docker inspect --format '{{.Name}} {{.State.ExitCode}} {{.State.OOMKilled}} {{.State.Running}}' \
+            miap23-mysql miap23-redis > "$mia_results/container-stopped.txt" 2>&1
+    fi
     docker rm -fv miap23-mysql miap23-redis >/dev/null 2>&1
     sudo systemctl stop miap23-measure.service miap23.slice >/dev/null 2>&1
+    if [ "${MIA_P23_MODE:-capacity}" = app-lifecycle ] && [ -f "$mia_results/app-lifecycle-results.json" ]; then
+        if ! python "$GITHUB_WORKSPACE/scripts/ci/verify_mia_app_lifecycle.py" --finalize; then
+            mia_result=1
+        fi
+    fi
     exit "$mia_result"
 }
 trap cleanup EXIT
@@ -66,6 +76,10 @@ PY
 )
 mia_classpath="target/test-classes:target/classes:$(cat "$RUNNER_TEMP/mia-p23-classpath.txt"):$HOME/.m2/repository/org/junit/platform/junit-platform-console-standalone/1.10.1/junit-platform-console-standalone-1.10.1.jar"
 mia_python=$(command -v python)
+mia_script=$GITHUB_WORKSPACE/scripts/ci/verify_mia_shared_envelope.py
+if [ "${MIA_P23_MODE:-capacity}" = app-lifecycle ]; then
+    mia_script=$GITHUB_WORKSPACE/scripts/ci/verify_mia_app_lifecycle.py
+fi
 
 # Only the already-built Java test process and its Python child run here.
 # No Maven JVM, model export, or compile runs in the measured group.
@@ -78,7 +92,7 @@ sudo systemd-run --unit=miap23-measure --slice=miap23.slice --wait --pipe --coll
     --setenv="MIA_SCOPE_KEYSTORE=$MIA_SCOPE_KEYSTORE" \
     --setenv="MIA_EMBEDDING_DIR=$MIA_EMBEDDING_DIR" \
     --setenv="MIA_P23_REPORT_DIR=$mia_results" \
-    --setenv="MIA_P23_SCRIPT=$GITHUB_WORKSPACE/scripts/ci/verify_mia_shared_envelope.py" \
+    --setenv="MIA_P23_SCRIPT=$mia_script" \
     --setenv="MIA_P23_PYTHON=$mia_python" \
     --setenv="MIA_P23_MODE=${MIA_P23_MODE:-capacity}" \
     --setenv="MIA_P23_DATABASE_PIDS=$mia_database_pids" \
