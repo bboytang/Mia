@@ -19,7 +19,7 @@
 1. 读取`AGENTS.md`、主交接、验收决定、实施计划及最近工作记录。
 2. 核对当前分支、HEAD、未提交文件、远端实际SHA和未推送提交；保存已有工作，不reset/clean/强推。
 3. P22实测代码为`2925b63e6ea010ac287d4e388fd6255e7d202244`；证据提交为`1a05c98044ebd3e333bce041c29f4c26c782f2a8`。后续文档提交记录用户通过决定，原始结果不变。
-4. 第二十四步观察器`d7456553f9a08665694f4ac94146b146fbab9009`已推送，唯一worker-smoke [39096533921](https://github.com/bboytang/Mia/actions/runs/39096533921)在途；push语法/9机制检查39096529001 success，服务39096529030、manager39096529041在途。继续此组句柄验证实际提取SDK/持久任务/原BGE落库及两个真实chat受控重叠；Provider请求上限8，6秒内响应交接等待明确不当自然负载公平/延迟证据。运行仍32407ef、原首句三组超限保留，P23未整体验收/P24未开始。
+4. 第二十四步首次真实三路重叠 [39096533921](https://github.com/bboytang/Mia/actions/runs/39096533921) / d745655终态failure：实际SDK为1提取+2回复，其中一前台RateLimitError 429/code1302；实际foreground峰值2，但观察器提前中止，后台仍extracting/attempt1、事实0，无正常关闭结论。原文/hash见performance-worker-smoke-first-*；同SHA服务294、manager154、9机制全通过。先修正故障后排空及独立提取落库观察，不重复同配置三路取绿；运行请求调度取舍已异步询问用户，精确账户限额未知。原首句三组超限保留，P23未整体验收/P24未开始。
 
 已拉取当前分支即已包含交接和证据；`docs/handoff/`里的旧补充包仅为历史快照，不重复导入tracked.patch或覆盖本地文件。详细失败、模型比较和旧run留在工作记录/验证目录，不在本接续入口重复。
 

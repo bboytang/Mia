@@ -1553,3 +1553,14 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 
 
 第二十四步观察器`d7456553f9a08665694f4ac94146b146fbab9009`已推送，唯一worker-smoke [39096533921](https://github.com/bboytang/Mia/actions/runs/39096533921)在途；push语法/9机制检查39096529001 success，服务39096529030、manager39096529041在途。继续此组句柄验证实际提取SDK/持久任务/原BGE落库及两个真实chat受控重叠；Provider请求上限8，6秒内响应交接等待明确不当自然负载公平/延迟证据。运行仍32407ef、原首句三组超限保留，P23未整体验收/P24未开始。
+
+
+## 第二十四步首次真实并发结果：出现真实429，观察器提前中止
+
+[39096533921](https://github.com/bboytang/Mia/actions/runs/39096533921) / d7456553f9a08665694f4ac94146b146fbab9009终态failure。原SDK实际发出三个请求（一个提取、两个前台回复），原Worker foreground计数实际达到2，其中一个前台产生RateLimitError，HTTP429/code1302；Provider请求没有替代或重试取绿。此证据证明实际负载下遇到限流，不能据三个请求直接推定账户配置的精确并发上限，更不能把异常回复算作正常首句/任务完成。未读取凭据或账户私有额度。
+
+观察器收到任一前台失败后提前退出并杀掉app，未给另一前台/原后台提取留下排空时间；SQLite实际只存在一个extracting/attempt1持久任务，新来源事实数0、完整性ok。后台实际SDK已与唯一同Scope任务/来源绑定，但提取返回/验证/768维向量/committed尚未完成，不宣称已验。原始parent/child、依赖、数据库退出文件、同SHA服务日志与全部SHA256见performance-worker-smoke-first-*；完整应用正常关闭无有效结论。失败后任务记录仍保留，不能据此冒充重启恢复通过。
+
+同SHA[服务39096529030](https://github.com/bboytang/Mia/actions/runs/39096529030)294项通过（31.917秒）；[manager39096529041](https://github.com/bboytang/Mia/actions/runs/39096529041)24份XML累计154项，无失败/错误/跳过；[语法39096529001](https://github.com/bboytang/Mia/actions/runs/39096529001)9机制全通过。相关实际源码版本及XML/日志hash在review，不以回归成功覆盖真实三路失败。
+
+接续先修正CI在故障后过早杀进程，独立核对实际提取返回和落库；保留原三路失败，不用CI专用限流器伪称运行代码支持三路。同时已异步询问用户：在运行代码中加入有界模型请求调度/前台优先、排队计入延迟，或保留运行链等待测试Provider并发额度提升；该材料取舍尚未收到答复，不读/变更账户或生产配置。可以继续不依赖此选择的单提取契约与持久故障观察。首句三组超限仍在，P23未整体验收/P24未开始。
