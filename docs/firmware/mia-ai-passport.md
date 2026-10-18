@@ -70,6 +70,10 @@ TLS 地址由后续审核确认后填入 `CONFIG_MIA_PASSPORT_OTA_URL`、
 新增 release variant 复用相同引脚、Kconfig 板型和 CMake 映射；`BOARD_NAME` 为
 独立 `mia-ai-passport-dev`，不复用原版本的 OTA 身份。主入口直接进入 Application，
 没有测试菜单或多固件选择器。现有 LCD/表情与按键复用，Mia 专属美术界面尚未完成。
+专用配置通过 `main/CMakeLists.txt` 选择已有 14px/1bpp 中文字库；保持图标与表情，
+原 ai-passport 仍为 20px/4bpp。默认 20px 资源在 Actions 实测为 1,324,917 字节，
+无法放入 640KiB 资源区；缩小字库以保留两个 3MiB 槽和历史保护区。可读性需实测，
+后续如需更大文字，应审核专用压缩/子集字库，不能删掉身份区或 Recovery 腾空间。
 
 - `main/passport/backend_policy.h` 为可 host 编译的端点匹配模块。
 - `main/ota.cc` 仅此配置固定发现端点、拒绝被重定向的语音地址，过滤旧 firmware/MQTT。
