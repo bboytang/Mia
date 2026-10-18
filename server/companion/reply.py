@@ -100,14 +100,21 @@ class ReplyTurn:
 
 
 async def validate(conn, turn=None):
-    await require_connection(conn)
+    authorization = getattr(conn, '_mia_authorization', None)
+    if authorization is None:
+        raise PrivateAuthorizationRequired()
     turn = turn or getattr(conn, '_mia_context_turn', None)
     if turn is None or turn.bundle.scope != getattr(conn, '_mia_scope', None):
         raise ContextError('context_turn_unavailable')
     limits = await asyncio.to_thread(provider_limits, conn.llm)
     if limits != turn.bundle.limits:
         raise ContextError('context_limits_changed')
-    await turn.builder.validate(turn.bundle, conn._mia_authorization)
+    # Context validation already checks current manager permission for this
+    # exact Scope. Do it once per delivery, without caching across deltas.
+    await turn.builder.validate(turn.bundle, authorization)
+    if (turn.bundle.scope != getattr(conn, '_mia_scope', None)
+            or authorization is not getattr(conn, '_mia_authorization', None)):
+        raise ContextError('context_turn_unavailable')
     return turn
 
 

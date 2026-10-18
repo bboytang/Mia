@@ -8,7 +8,7 @@ from pathlib import Path
 import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import numpy as np
 
@@ -200,6 +200,43 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(delivered, ['😌第一句。'])
         self.assertEqual(self.provider.closed, 1)
         self.assertEqual(self.provider.calls[0]['max_tokens'], 1024)
+
+    async def test_each_validation_checks_current_permission_once_without_reusing_proof(self):
+        await self.fact()
+        turn = await reply.prepare(self.conn, [], 0)
+        self.auth.require = AsyncMock(wraps=self.auth.require)
+        for count in (1, 2):
+            await reply.validate(self.conn, turn)
+            self.assertEqual(self.auth.require.await_count, count)
+        self.auth.active = False
+        with self.assertRaises(PrivateAuthorizationRequired):
+            await reply.validate(self.conn, turn)
+        self.assertEqual(self.auth.require.await_count, 3)
+
+    async def test_stream_stops_on_revocation_before_next_delivery_and_releases_slot(self):
+        self.conn.loop = asyncio.get_running_loop()
+        self.provider.hook = lambda: setattr(self.auth, 'active', False)
+        delivered = []
+        def consume():
+            with self.assertRaises(PrivateAuthorizationRequired):
+                for delta in reply.response(self.conn, None, 0):
+                    delivered.append(delta)
+        await asyncio.to_thread(consume)
+        self.assertEqual(delivered, ['😌第一句。'])
+        self.assertEqual(self.provider.closed, 1)
+        self.assertEqual(reply.model_requests.snapshot()['active'], 0)
+
+    async def test_scope_or_authorization_changed_during_await_cannot_deliver_old_context(self):
+        turn = await reply.prepare(self.conn, [], 0)
+        original = self.auth.require
+        for name, value in (('_mia_scope', None), ('_mia_authorization', Policy())):
+            self.conn._mia_scope, self.conn._mia_authorization = self.scope, self.auth
+            async def require(scope, permission):
+                await original(scope, permission)
+                setattr(self.conn, name, value)
+            self.auth.require = require
+            with self.subTest(changed=name), self.assertRaisesRegex(ContextError, 'context_turn_unavailable'):
+                await reply.validate(self.conn, turn)
 
     async def test_tool_dispatch_rechecks_revision_authorization_and_declared_tools(self):
         fact = await self.fact()

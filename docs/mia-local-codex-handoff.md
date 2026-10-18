@@ -9,7 +9,7 @@
 ## 本地工作区
 
 - 仓库：`https://github.com/bboytang/Mia`。
-- 分支：`feature/mia-persona-memory-v1.2`。
+- 分支：`feature/mia-persona-memory-v1.2`（用户已明确固定）。
 - 路径：`C:\MiaDev\Mia`。
 - Python优先使用`C:\MiaDev\mia-venv\Scripts\python.exe`；GitHub CLI位于`C:\MiaDev\Tools\GitHubCLI\2.102.0\bin\gh.exe`。
 - 跨设备时重新确认工具路径和访问权限，不复制密钥。
@@ -19,7 +19,7 @@
 1. 读取`AGENTS.md`、主交接、验收决定、实施计划及最近工作记录。
 2. 核对当前分支、HEAD、未提交文件、远端实际SHA和未推送提交；保存已有工作，不reset/clean/强推。
 3. P22实测代码为`2925b63e6ea010ac287d4e388fd6255e7d202244`；证据提交为`1a05c98044ebd3e333bce041c29f4c26c782f2a8`。后续文档提交记录用户通过决定，原始结果不变。
-4. 第三十二步真实并发契约已通过：[39129770362](https://github.com/bboytang/Mia/actions/runs/39129770362)，运行候选fe48aaa7455b6224b4a7d018b99eefbfe6d3661a。2前台原回复+1真实提取共3次SDK，槽位入口active=1/2/2、实际前台排队峰值1，无429/Provider错误；后台1尝试committed/10.6895秒，2前台问句任务有效empty，独立SQLite/来源/768维向量通过。此为一轮受控重叠契约，非正常任务p95。证据performance-model-gate-smoke-*；同SHA服务301/身份173/manager154/实际向量五报告/机制20全通过。关闭恢复回归[39129805499](https://github.com/bboytang/Mia/actions/runs/39129805499)在途，先收同一句柄。剩余主要验收为首句增量、正常有效任务p95/完整公平性；原3提交3无效提案及600ms首句超限保留。全组同时在途关闭仅补证，不新增门槛。P23未整体验收/P24未开始。
+4. 第三十三步固定分支feature/mia-persona-memory-v1.2（用户明确选择）。已实现逐段权限校验去重：仍由原ContextBuilder每段验证当前权限/快照，不缓存跨段证明；等待期间Scope或授权对象变化拒绝旧上下文。90项本地相关回归通过，待新SHA GitHub回归和原冻结首句实测，不提前认定600ms达标。已验证运行fe48aaa的真实双前台+后台及3.1025秒在途关闭/新PID零SDK恢复证据已补齐到本分支。剩余首句增量、正常有效任务p95/完整公平性；旧3提交3提案拒绝/无正常p95保留，P23未整体验收/P24未开始。
 
 已拉取当前分支即已包含交接和证据；`docs/handoff/`里的旧补充包仅为历史快照，不重复导入tracked.patch或覆盖本地文件。详细失败、模型比较和旧run留在工作记录/验证目录，不在本接续入口重复。
 
