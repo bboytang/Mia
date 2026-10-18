@@ -45,13 +45,39 @@ def inspect(port, output):
     return report
 
 
+def import_browser(path, output):
+    """Import a local non-secret browser readout; never treat it as approval."""
+    data = json.loads(path.read_text())
+    if data.get('schema') != 1 or data.get('source') != 'mia-passport-browser-inspection':
+        raise ValueError('unrecognized browser inspection report')
+    raw = data.get('partition_table_hex')
+    if not isinstance(raw, str) or len(raw) != 8192:
+        raise ValueError('expected exactly 4KiB partition table')
+    table = bytes.fromhex(raw)
+    from scripts.passport.audit_flash import partitions
+    layout = partitions(table)
+    if hashlib.sha256(table).hexdigest() != data.get('partition_table_sha256'):
+        raise ValueError('browser partition table hash mismatch')
+    keys = ('chip', 'flash_bytes', 'chip_revision', 'secure_boot', 'flash_encryption',
+            'partition_table_sha256')
+    report = {key: data.get(key) for key in keys}
+    report.update(partitions=layout, identity_regions_reviewed=False,
+                  recovery_boot_change_noted=False, flash_authorized=False, full_flash_backup_read=False)
+    output.mkdir(mode=0o700, parents=True, exist_ok=False)
+    (output / 'partition-table.bin').write_bytes(table)
+    (output / 'device-review.json').write_text(json.dumps(report, indent=2)+'\n')
+    return report
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--port', required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument('--port')
+    source.add_argument('--browser-report', type=Path)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     try:
-        report = inspect(args.port, args.output)
+        report = import_browser(args.browser_report, args.output) if args.browser_report else inspect(args.port, args.output)
     except (ValueError, OSError, subprocess.SubprocessError) as exc:
         parser.exit(2, f'read-only inspection failed: {type(exc).__name__}; no flash writes were requested\n')
     print(json.dumps(report, indent=2))

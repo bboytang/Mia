@@ -48,6 +48,22 @@ python -m scripts.passport.inspect_device --port /dev/ttyACM0 --output /private/
 这不是 Android USB 驱动支持声明：Android 工具能否读指定区间、分段写和读回校验
 仍需在平板上确认。不能把普通 Chrome Web Serial 或某个 BLE 小程序当成已验证方案。
 
+仅有安卓平板时，提供独立静态只读页面，源码与构建方式见
+[`tools/passport-inspect/README.md`](../../tools/passport-inspect/README.md)。
+使用锁定的乐鑫 esptool-js 0.7.0 和 Google CDC WebUSB 兼容层；全部依赖和 RAM stub
+打包为单个 HTML，无运行时网络请求、上传、Flash 写入或擦除入口。命令白名单只允许
+同步、RAM stub、寄存器访问、安全信息及固定范围读取。输出本地
+`passport-inspection.json`，不包含身份区/NVS/密钥。真实 Android USB 尚待验证。
+本地 HTML 是否获得 USB 权限取决于平板浏览器；若不支持，需要另行审核 HTTPS
+静态托管。没有部署网页或修改生产服务器。导入报告仍会重新核对表结构/MD5/SHA，
+并清除所有审核/刷机批准标记：
+
+```sh
+python -m scripts.passport.inspect_device \\
+  --browser-report /private/path/passport-inspection.json \\
+  --output /private/path/passport-inspection
+```
+
 目前打包工具自动支持历史契约：NVS `0x9000+0x6000`、PHY `0xf000+0x1000`、
 factory `0x10000+0x300000`、cardid `0x356000+0x4000`，可带 Recovery 声明。
 即使表中省略 Recovery，仍保护 `0x700000+0x100000`。其它布局、启用/未知的芯片
@@ -111,8 +127,8 @@ SHA-256；核对应用实际嵌入的签名公钥；签名后再验证；逐段�
 1. 平板以 Chrome 打开上述 HTTPS 页面，数据线/OTG 连接已开机设备，点击
    “连接设备”，选择 `USB JTAG/serial debug unit`。仅连接不代表已授权写入。
 2. 当前页面没有导出 4KiB 分区表或完整芯片安全状态的控件，因此目前只连接并保存
-   非敏感连接日志；不要用“直接刷入官方固件”替代实机分区检查。服务器上的 Python
-   工具无法通过网页访问平板 USB。仅有这个页面时，实机只读检查路径仍未打通。
+   非敏感连接日志；不要用“直接刷入官方固件”替代实机分区检查。断开官网连接后，
+   可使用上述 Mia 静态只读工具；服务器 Python 无法通过官网访问平板 USB。
 3. 检查通过、取得最终 `flash-plan.json`，且用户明确批准首次写入后，解压审核包。
    在“选择本地固件”中加入 **`usb/` 内的五个文件**。不要选择 `ota/` 中的文件。
 4. 逐项手动填写地址：bootloader `0x0`、partition-table `0x8000`、

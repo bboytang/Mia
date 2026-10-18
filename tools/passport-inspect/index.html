@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Mia AI Passport 只读检查</title>
+<style>
+body{font:18px/1.7 system-ui,sans-serif;max-width:38em;margin:3em auto;padding:0 1.2em;color:#202631;background:#f5f7fb}button,a{font:inherit;display:inline-block;padding:.7em 1em;border-radius:.5em}button{background:#214bb0;color:white;border:0}button:disabled{opacity:.5}a[hidden]{display:none}#status{white-space:pre-wrap;overflow-wrap:anywhere}small{display:block;margin-top:2em;color:#475268}
+</style>
+<h1>Mia AI Passport 只读检查</h1>
+<p>读取芯片信息、安全状态和 4KiB 分区表，不读取设备密钥、Wi-Fi 密码或完整 Flash。</p>
+<p>用安卓 Chrome 打开，通过 USB 数据线连接已开机的 AI Passport；先断开其它刷机页面。检查会暂时进入下载模式，完成后重新上电。</p>
+<button id="inspect">连接并只读检查</button>
+<a id="download" download="passport-inspection.json" hidden>保存检查报告</a>
+<p id="status" role="status" aria-live="polite">尚未连接。报告仅保存在浏览器本地，不会上传服务器。</p>
+<small>此工具没有 Flash 刷写或擦除入口。检查结果不授权刷机；首次写入仍须单独确认。实际平板 USB 兼容性待验证。</small>
+<!-- BUNDLE -->
+</html>

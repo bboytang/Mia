@@ -1,4 +1,5 @@
 import hashlib
+import json
 from pathlib import Path
 import tempfile
 from types import SimpleNamespace
@@ -6,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from scripts.passport.create_signing_key import create
-from scripts.passport.inspect_device import inspect, summary
+from scripts.passport.inspect_device import inspect, summary, import_browser
 from scripts.passport.sign_release import public_point
 from scripts.tests.test_passport_safety import table, ORIGINAL
 
@@ -18,6 +19,28 @@ Flash Encryption: Disabled
 
 
 class PassportProbeTests(unittest.TestCase):
+    def test_browser_import_checks_real_table_hash_and_clears_approval(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)
+            raw = table(ORIGINAL)
+            data = dict(schema=1, source='mia-passport-browser-inspection',
+                        partition_table_hex=raw.hex(),
+                        partition_table_sha256=hashlib.sha256(raw).hexdigest(),
+                        chip='esp32c3', flash_bytes=0x800000, chip_revision=4,
+                        secure_boot=False, flash_encryption=False,
+                        identity_regions_reviewed=True, flash_authorized=True)
+            source = path/'report.json'
+            source.write_text(json.dumps(data))
+            result = import_browser(source,path/'inspection')
+            self.assertEqual((path/'inspection/partition-table.bin').read_bytes(),raw)
+            self.assertFalse(result['identity_regions_reviewed'])
+            self.assertFalse(result['flash_authorized'])
+            data['partition_table_sha256'] = '0'*64
+            source.write_text(json.dumps(data))
+            with self.assertRaises(ValueError):
+                import_browser(source,path/'invalid')
+            self.assertFalse((path/'invalid').exists())
+
     def test_read_only_metadata_is_not_automatically_authorized(self):
         result = summary(LOG, table(ORIGINAL))
         self.assertEqual(result['chip_revision'],4)

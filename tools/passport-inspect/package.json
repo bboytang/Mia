@@ -1,0 +1,16 @@
+{
+  "name": "mia-passport-readonly-inspection",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs && node verify-bundle.mjs",
+    "test": "node probe.test.mjs"
+  },
+  "dependencies": {
+    "esptool-js": "0.7.0",
+    "web-serial-polyfill": "1.0.15"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}
