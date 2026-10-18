@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十三步TTS-ready契约[39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073) / aabc72e success，实际原TTS机制及双时点逐帧复核通过；原文/hash见performance-speech-smoke-first-*。已启动唯一正式[39095590962](https://github.com/bboytang/Mia/actions/runs/39095590962)，精确SHA `0ca2da4bdfc09789f79b5babace3570507bd5d83`；相较aabc72e仅四份交接文档不同，全部执行源码一致。继续该运行收72回复及配对差值，不重复冒烟/改冻结样本或门槛。旧首TEXT失败保留，运行实现仍32407ef；双前台+实际提取公平/故障及在途关闭未测，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第二十三步正式speech-ready [39095590962](https://github.com/bboytang/Mia/actions/runs/39095590962) / `0ca2da4bdfc09789f79b5babace3570507bd5d83`已完整测量，终态failure：72真实回复/36原Worker有效empty，无Provider/Scope/契约错误，三组满足600ms、三组超限（1k散步2020.10、10k散步874.30、10k植物610.83ms）。双时点逐帧/逐配对/六组p95均独立核对，原文/hash/耗时分解见performance-speech-latency-first-*；旧首TEXT失败不改写。共同峰值1533.24MiB无OOM，正常空闲全组2.2232秒退出。当前无在途运行；运行实现仍32407ef，模型/样本/600ms验收及500ms目标保持。接续先补齐双前台+实际提取Worker公平/故障及在途关闭，并保留首句瓶颈待优化；不以小幅差距接受替代两组明显超限，不重复同源码取绿。P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

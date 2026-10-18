@@ -1,0 +1,179 @@
+{
+  "scope": "Exact per-pair timing decomposition; SDK to first content includes remote compute and transport. First content to speech includes later model streaming, guard/permission work and consumer scheduling; neither is pure local CPU/network cost. Component percentiles must not be summed.",
+  "queries": [
+    {
+      "capacity": 1000,
+      "query_index": 0,
+      "p95_ms": 2020.097649200011,
+      "largest_two_deltas": [
+        {
+          "number": 2,
+          "speech_delta_ms": 2081.915562000006,
+          "pre_sdk_delta_ms": 254.13645599996926,
+          "sdk_to_first_content_delta_ms": 1305.3683599999886,
+          "first_content_to_speech_delta_ms": 522.4107460000482,
+          "baseline_text": "好奇 嗯嗯",
+          "memory_text": "平静 根据你之前提到的习惯，去湖边散步时，你可以准备蓝色水壶，装上温水",
+          "baseline_first_checked": "🤔好奇 嗯嗯，去湖边散步听起来很惬意呢。",
+          "memory_first_checked": "😌平静 根据你之前提到的习惯，去湖边散步时，你可以准备蓝色水壶，装上温水，出门前记得检查杯盖拧紧了哦。"
+        },
+        {
+          "number": 4,
+          "speech_delta_ms": 1772.8259980000303,
+          "pre_sdk_delta_ms": 234.1728610000473,
+          "sdk_to_first_content_delta_ms": 1412.9690080000046,
+          "first_content_to_speech_delta_ms": 125.68412899997838,
+          "baseline_text": "好奇 嗯嗯",
+          "memory_text": "平静 嗯，去湖边散步的话，根据你的习惯",
+          "baseline_first_checked": "🤔好奇 嗯嗯，去湖边散步听起来很惬意呢。",
+          "memory_first_checked": "😌平静 嗯，去湖边散步的话，根据你的习惯，可以带上一只蓝色水壶哦。"
+        }
+      ]
+    },
+    {
+      "capacity": 1000,
+      "query_index": 1,
+      "p95_ms": 141.97651080004331,
+      "largest_two_deltas": [
+        {
+          "number": 5,
+          "speech_delta_ms": 166.23327300004576,
+          "pre_sdk_delta_ms": 225.70869700001595,
+          "sdk_to_first_content_delta_ms": 65.35766300004298,
+          "first_content_to_speech_delta_ms": -124.83308700001317,
+          "baseline_text": "平静 周三的钢琴练习安排",
+          "memory_text": "平静 你周三晚上会在书房练习钢琴",
+          "baseline_first_checked": "😌平静 周三的钢琴练习安排，你最好看看你的练习计划或者和老师确认一下哦。",
+          "memory_first_checked": "😌平静 你周三晚上会在书房练习钢琴，是吗？"
+        },
+        {
+          "number": 2,
+          "speech_delta_ms": 44.94946200003369,
+          "pre_sdk_delta_ms": 213.59916600005135,
+          "sdk_to_first_content_delta_ms": 45.15908700000182,
+          "first_content_to_speech_delta_ms": -213.80879100001948,
+          "baseline_text": "平静 周三的钢琴练习安排，你最好去问问你的钢琴老师或者查看一下课程表",
+          "memory_text": "平静 你周三晚上会在书房练习钢琴",
+          "baseline_first_checked": "😌平静 周三的钢琴练习安排，你最好去问问你的钢琴老师或者查看一下课程表，这样最清楚啦。",
+          "memory_first_checked": "😌平静 你周三晚上会在书房练习钢琴，是吗？"
+        }
+      ]
+    },
+    {
+      "capacity": 1000,
+      "query_index": 2,
+      "p95_ms": 244.98965599997285,
+      "largest_two_deltas": [
+        {
+          "number": 4,
+          "speech_delta_ms": 324.436382999977,
+          "pre_sdk_delta_ms": 275.24013399994374,
+          "sdk_to_first_content_delta_ms": 23.308320000012372,
+          "first_content_to_speech_delta_ms": 25.887929000020904,
+          "baseline_text": "我呀，平时照顾阳台上的植物，会先确保它们有足够的光照",
+          "memory_text": "平静 你平时很细心地照顾阳台上的植物呢",
+          "baseline_first_checked": "🌿🌿🌿\n",
+          "memory_first_checked": "😌平静 你平时很细心地照顾阳台上的植物呢。"
+        },
+        {
+          "number": 1,
+          "speech_delta_ms": -72.7972520000435,
+          "pre_sdk_delta_ms": 224.3138659999886,
+          "sdk_to_first_content_delta_ms": -139.00174399998377,
+          "first_content_to_speech_delta_ms": -158.10937400004832,
+          "baseline_text": "我呀，平时照顾阳台上的植物，会先确保它们有足够的光照",
+          "memory_text": "平静 你平时很细心地照顾阳台上的植物呢",
+          "baseline_first_checked": "🌿🌿🌿\n",
+          "memory_first_checked": "😌平静 你平时很细心地照顾阳台上的植物呢。"
+        }
+      ]
+    },
+    {
+      "capacity": 10000,
+      "query_index": 0,
+      "p95_ms": 874.3042230000015,
+      "largest_two_deltas": [
+        {
+          "number": 1,
+          "speech_delta_ms": 889.4587400000091,
+          "pre_sdk_delta_ms": 394.9986460000332,
+          "sdk_to_first_content_delta_ms": 96.09563299994761,
+          "first_content_to_speech_delta_ms": 398.3644610000283,
+          "baseline_text": "好奇 嗯嗯",
+          "memory_text": "平静 根据你之前提到的习惯，去湖边散步时，你可以准备蓝色水壶，装上温水",
+          "baseline_first_checked": "🤔好奇 嗯嗯，去湖边散步听起来很惬意呢。",
+          "memory_first_checked": "😌平静 根据你之前提到的习惯，去湖边散步时，你可以准备蓝色水壶，装上温水，出门前记得检查杯盖是否拧紧哦。"
+        },
+        {
+          "number": 3,
+          "speech_delta_ms": 813.6861549999708,
+          "pre_sdk_delta_ms": 404.72053699994603,
+          "sdk_to_first_content_delta_ms": 38.063638000039646,
+          "first_content_to_speech_delta_ms": 370.9019799999851,
+          "baseline_text": "好奇 嗯嗯",
+          "memory_text": "平静 根据你之前提到的习惯，去湖边散步时，你可以准备蓝色水壶，装上温水",
+          "baseline_first_checked": "🤔好奇 嗯嗯，去湖边散步听起来很惬意呢。",
+          "memory_first_checked": "😌平静 根据你之前提到的习惯，去湖边散步时，你可以准备蓝色水壶，装上温水，出门前记得检查杯盖拧紧了哦。"
+        }
+      ]
+    },
+    {
+      "capacity": 10000,
+      "query_index": 1,
+      "p95_ms": 510.5916634001004,
+      "largest_two_deltas": [
+        {
+          "number": 1,
+          "speech_delta_ms": 621.5449770000987,
+          "pre_sdk_delta_ms": 460.8271340000556,
+          "sdk_to_first_content_delta_ms": 343.69884900002035,
+          "first_content_to_speech_delta_ms": -182.98100599997724,
+          "baseline_text": "平静 周三的钢琴练习安排，你最好去问问你的钢琴老师或者查看一下课程表",
+          "memory_text": "平静 你周三晚上会在书房练习钢琴",
+          "baseline_first_checked": "😌平静 周三的钢琴练习安排，你最好去问问你的钢琴老师或者查看一下课程表，这样最清楚啦。",
+          "memory_first_checked": "😌平静 你周三晚上会在书房练习钢琴，是吗？"
+        },
+        {
+          "number": 4,
+          "speech_delta_ms": 66.77840900010779,
+          "pre_sdk_delta_ms": 381.4863040000773,
+          "sdk_to_first_content_delta_ms": -295.6241779999118,
+          "first_content_to_speech_delta_ms": -19.08371700005773,
+          "baseline_text": "平静 周三的钢琴练习安排",
+          "memory_text": "平静周三晚上你会在书房练习钢琴",
+          "baseline_first_checked": "😌平静 周三的钢琴练习安排，你记得吗？",
+          "memory_first_checked": "😌平静\n"
+        }
+      ]
+    },
+    {
+      "capacity": 10000,
+      "query_index": 2,
+      "p95_ms": 610.8280054000032,
+      "largest_two_deltas": [
+        {
+          "number": 4,
+          "speech_delta_ms": 709.1007340000033,
+          "pre_sdk_delta_ms": 392.4943889999213,
+          "sdk_to_first_content_delta_ms": 532.9709100000173,
+          "first_content_to_speech_delta_ms": -216.36456499993528,
+          "baseline_text": "我呀，平时照顾阳台上的植物，会先确保它们有足够的光照",
+          "memory_text": "平静 你平时很细心地照顾阳台上的植物呢",
+          "baseline_first_checked": "🌿🌿🌿\n",
+          "memory_first_checked": "😌平静 你平时很细心地照顾阳台上的植物呢。"
+        },
+        {
+          "number": 1,
+          "speech_delta_ms": 217.7370910000036,
+          "pre_sdk_delta_ms": 399.0313499999729,
+          "sdk_to_first_content_delta_ms": 254.98732500011556,
+          "first_content_to_speech_delta_ms": -436.2815840000849,
+          "baseline_text": "我呀，平时照顾阳台上的植物，会先确保它们有足够的光照",
+          "memory_text": "平静 你平时很细心地照顾阳台上的植物呢",
+          "baseline_first_checked": "🌿🌿🌿\n",
+          "memory_first_checked": "😌平静 你平时很细心地照顾阳台上的植物呢。"
+        }
+      ]
+    }
+  ]
+}
