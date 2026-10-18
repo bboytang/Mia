@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十七步观察器`b7420a52d7602c770598c6e201b0ba36e8ebd28a`已推送，语法/14机制39124073523 success，唯一worker-fairness [39124113845](https://github.com/bboytang/Mia/actions/runs/39124113845)在途；同SHA服务39124073480、manager39124073512同步验证。冻结12条短/长事实，36任务（6预热/30实测）/SDK上限72，核对实际积压下三Scope服务及正常任务p95≤120秒；没有前台SDK，不替代三路验收。先收同一句柄及原文，运行仍32407ef；三路429、首句超限、在途关闭及用户调度取舍保持，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第二十七步正常后台 [39124113845](https://github.com/bboytang/Mia/actions/runs/39124113845) / b7420a5终态failure：预热6任务均两尝试后invalid_output，共12真实SDK、无Provider错误，未进入五轮实测，不能判正常任务p95或六轮公平通过。原文/hash见performance-worker-fairness-first-*；实际SQLite六failed/新来源0/完整性ok，单次预热首次服务覆盖三Scope。资源1402.69MiB无OOM、空闲全组1.5472秒退出；同SHA服务294/manager154/14机制全通过不覆盖提取失败。接续仅新增有界原生异常/真实SSE诊断，以冻结预热短长样本小规模复现，不改语料/模型/门槛或替换答案；旧三路429/首句超限/在途关闭及调度取舍保持，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本

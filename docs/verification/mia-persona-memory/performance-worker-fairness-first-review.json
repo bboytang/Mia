@@ -1,0 +1,334 @@
+{
+  "run_id": 39124113845,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39124113845",
+  "observer_sha": "b7420a52d7602c770598c6e201b0ba36e8ebd28a",
+  "runtime_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "failure",
+  "p23_complete": false,
+  "scope": "Normal actual background Worker only; no foreground SDK/same-Provider first-sentence/inflight acceptance",
+  "artifacts": [
+    {
+      "file": "performance-worker-fairness-first-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "338b69b1986fe2160b3439f7d0f23131bb61caefa7a51246b3161df928f03132",
+      "sha256": "12035da33e7dfe17d8d6c87b23dd018752b87eb3dc5a7a21869a4a4ac7d99efd"
+    },
+    {
+      "file": "performance-worker-fairness-first-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "656aca90f603fb27cabf57fc54b80a941ca6709c47a5624a7fc124b3bb76dce9",
+      "sha256": "096556c0006697809ead71c58bf221576479fa9dc277894a97b89141fe0d8f89"
+    },
+    {
+      "file": "performance-worker-fairness-first-ci-results.json.gz",
+      "source_path": "mia-p23-worker-fairness-run.json",
+      "raw_sha256": "ce094ecc1def6aed122f836bbf95f30740bacb5ba3fb5a0b70e15223600db409",
+      "sha256": "211480483683e1baef1809c1d71dc0aaab20cf01958e5f82e92b46c744438b97"
+    },
+    {
+      "file": "performance-worker-fairness-first-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-worker-fairness-first-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-worker-fairness-first-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-fairness-first-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-worker-fairness-first-service.log.gz",
+      "source_path": "mia-p23-worker-fairness-service.log",
+      "raw_sha256": "94eeeb3865730e0fe80faa37369b14d1937e109fd8022f6c407d1133f24200b7",
+      "sha256": "76cc0a2d9c5b44933baf57100b1fd2b271d9315c2627bbb80a6f710a7ced7467"
+    },
+    {
+      "file": "performance-worker-fairness-first-syntax.log.gz",
+      "source_path": "mia-p23-worker-fairness-syntax.log",
+      "raw_sha256": "6892a6adfafd90f24c42eaf191285b997760eb1b2cc66e23111173c00bac5d68",
+      "sha256": "edae990b9dc7f40f8efba7b4e02718ff90db8471656c34079f055cc9589a841b"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "338b69b1986fe2160b3439f7d0f23131bb61caefa7a51246b3161df928f03132",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "d95808c7ddfe1ad2e0c9cdec470955f5967201ff3b8d8ac2cddc5b3fcb8e7e31",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "5d942964c08b4f878bcee3e13ff48cd1320994316c26cbb2acaa0cd61909cbc0",
+    "cgroup-final-memory.current.txt": "a0dd1084e33ce3492add2aaf6ea9c687b2f591c8cb3075e02133ba6b913e949c",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "5c49bc5e9cc455303582e54b0160d96364b08a9750453a497d07fa0c9cbfe1ea",
+    "redis.log": "810f316925da19236a40a2f485054ca2fae60de80ffd814bfa655e3bdfa2505a",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "6f266d6149030f63a9865c3cc88c2a111283b1bb405b3abf8f579a30e341b053",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "71458a3761389f7388acd43298917a97524ff2481e28c6a229ce721c0acac0c1",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/ready.json": "3c7b19671f09b29e80f11ae2331aa8309661558d6f9034253e4862ab00764765",
+    "app-child/app-results.json": "656aca90f603fb27cabf57fc54b80a941ca6709c47a5624a7fc124b3bb76dce9",
+    "app-child/memory.sqlite3": "110a940949563e41d60c6fe21b04faee8f1f3658a93ac4bf1bffad0698a97834",
+    "junit/TEST-junit-jupiter.xml": "5c16fef07a2e9cb6d2451a40d78ad7c68c8d152178e858cf4b96fbd5e4fd24eb",
+    "junit/TEST-junit-vintage.xml": "a7bae862b26859f12f01eb22539c67a5de8ad47d3a6b33a250984a843ee5e6ef",
+    "junit/TEST-junit-platform-suite.xml": "f0d8473367ff439f07d3d6c90e3095c1c30fcf22c35993528f5a908facceff8c"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "worker_contract_passed": false,
+    "worker_fairness_contract_passed": null,
+    "normal_task_acceptance_passed": null,
+    "fair_rounds": [],
+    "fair_dataset_sha256": "96ee8721f7fdc0dd6deec5dcb617f326104063773b7dd4af34c6baa1890c7448",
+    "normal_task_latency": null,
+    "normal_task_latency_by_profile": null,
+    "normal_task_latency_by_owner": null,
+    "fair_measurement_scope": null,
+    "provider_requests": 12,
+    "accepted_extraction_jobs": 6,
+    "app_process_shutdown_seconds": 0.2734997919999955,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 1.547224760000006,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 32547743\nuser_usec 30018671\nsystem_usec 2529072\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 211\nnr_throttled 128\nthrottled_usec 6293312\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "965238784",
+      "memory.peak": "966422528",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 55412653\nuser_usec 49807570\nsystem_usec 5605082\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 1396\nnr_throttled 146\nthrottled_usec 7429422\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1076396032",
+      "memory.peak": "1470824448",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "workload_error_class": "AssertionError",
+    "workload_assertion": "A normal Scope did not finish successfully",
+    "error_class": null,
+    "reason": null
+  },
+  "child": {
+    "ready": true,
+    "passed": true,
+    "worker_fairness_contract_passed": null,
+    "worker_probe_scope": "Synthetic first-person workload sources for actual original Worker numerical/fairness measurement, not P22 holdouts or semantic-quality acceptance. Six rounds across three authorized Scopes; round zero warm, five measured. Each owner gets one short and one dense source per round. No foreground SDK requests in this independent stage.",
+    "fair_dataset_sha256": "96ee8721f7fdc0dd6deec5dcb617f326104063773b7dd4af34c6baa1890c7448",
+    "capacity_per_owner": {
+      "user:941040001:agent:mia-p23-0": 1000,
+      "user:941040002:agent:mia-p23-1": 10000,
+      "user:941040003:agent:mia-p23-2": 32
+    },
+    "provider_requests": 12,
+    "provider_request_purposes": [
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction",
+      "extraction"
+    ],
+    "accepted_extraction_jobs": 6,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "285f03a0ebed520b2a855f027d2237aa89628c225981b55da5c4808381291e7f",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "python_peak_after_workload_mib": 355.20703125,
+    "app_shutdowns": [
+      {
+        "pid": 5538,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.00039687800000365314,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "provider_errors": null,
+    "case_errors": [
+      {
+        "error_class": "AssertionError",
+        "assertion": ""
+      },
+      {
+        "error_class": "AssertionError",
+        "assertion": ""
+      },
+      {
+        "error_class": "AssertionError",
+        "assertion": ""
+      }
+    ],
+    "error_class": null,
+    "reason": null
+  },
+  "provider_counts": {
+    "extraction": 12
+  },
+  "ci_checks": {
+    "service": {
+      "conclusion": "success",
+      "databaseId": 39124073480,
+      "headSha": "b7420a52d7602c770598c6e201b0ba36e8ebd28a",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39124073480",
+      "tests": 294
+    },
+    "manager": {
+      "conclusion": "success",
+      "databaseId": 39124073512,
+      "headSha": "b7420a52d7602c770598c6e201b0ba36e8ebd28a",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39124073512",
+      "tests": 154,
+      "xml_sha256": {
+        "TEST-xiaozhi.modules.security.config.ShiroConfigTest.xml": "ccc34340f9c5f9fc707ce7127eca7eb9f5896867594634aeb60a8708acd27d7e",
+        "TEST-xiaozhi.modules.device.MiaIdentityBaselineTest.xml": "c52160a8511d41ac97efdbd86575dfe5a79c71f4b468ffd69d3378f6c9d1f267",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest.xml": "a9e80ccf5f0689bbd916fae377d4f326d8c81d551b534260238f85c76ea1300e",
+        "TEST-xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest.xml": "d0eeac24c18ccb30b09d176dd70556e55dc4af420d089c59e26130e99b6734e5",
+        "TEST-xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest.xml": "a5c3a2bcd8a8f0c02ebb71c0192b8f8c7d826a14ca482827198738f0eb11ddb5",
+        "TEST-xiaozhi.modules.device.controller.DeviceControllerTest.xml": "b649abe96f66107f5e0498bfb2acc05b683de260ab86d2a871afb37a2bc7f424",
+        "TEST-xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest.xml": "121916c616c0fc806adc866bd386448fae8b60892cc7f7389010418f19176fcb",
+        "TEST-xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest.xml": "ee2091ef602b199f535255ca6c9b47b59415d71512207319d98fe47e184fffdb",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest.xml": "8cf4eda0604baf96845b9210b30830572ed1d107dbaa2d9090c0803143b13385",
+        "TEST-xiaozhi.common.utils.SensitiveDataUtilsTest.xml": "a3a9195f005de17886eff26798f95b95775e794cc04bbecb0c60db9d4acdf2d0",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest.xml": "707d0ec1de0d24a986863c170ac3ddad014ff066a6b905983f7008d62ba73aab",
+        "TEST-xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest.xml": "7938f38af8df7b4b7f011d6ed7cf904d70a9448bd46a6ee2ca87a1f738b6eafc",
+        "TEST-xiaozhi.modules.agent.dto.AgentUpdateDTOTest.xml": "c4ff671a803c4adeb2f173db4ddbd190a7c46c05cc2a41ab694c9d8296a71d9e",
+        "TEST-xiaozhi.common.redis.RedisSerializationTest.xml": "349f4f05b200f7c705a30cb34cdc056866ae084d53055dcef07fa6153947ab83",
+        "TEST-xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest.xml": "96b0132e7db4536e482f4c6e084cd709ad153015d7563e2f585f436954cf50dd",
+        "TEST-xiaozhi.modules.sys.loginControllerTest.xml": "f92f52920eb5528eea63c9fe75809cd19633d54cc7df99457b73f84dad56a4a4",
+        "TEST-xiaozhi.modules.device.DeviceTest.xml": "f68ec3f27b11ea800131bb0ff1b606c12a573dfec5210bec75f06b96e67fc18f",
+        "TEST-xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest.xml": "1afbd65065af59c0af8cea1761652847ffa3035cde10c549b70b736dfe8e8f77",
+        "TEST-xiaozhi.common.utils.AESUtilsTest.xml": "797d780c77a85bf4fd410aaa6dc111cefb03c1ba96b7bfdbd03b23635792e082",
+        "TEST-xiaozhi.common.service.impl.BaseServiceImplTest.xml": "80764b98b44ab5caa44b9608ac8fc65e029e244a97b8b87d971a62925be3b036",
+        "TEST-xiaozhi.modules.config.service.impl.ConfigServiceImplTest.xml": "c1e4447ef3785977851b3b9b1ef37e68ca31696a71f846775e06d605bd689867",
+        "TEST-xiaozhi.common.utils.JsonUtilsTest.xml": "ef33bfb65c41c08e525fe23fea37a821267a6dde1d8de8f41c8464646b817401",
+        "TEST-xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest.xml": "0c59a75d23a515310cf60978cbe3005410b3bd945793d3f24b061bcf172f02eb",
+        "TEST-xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest.xml": "70a943dd62a85d2c30219021f6d102a52a094268dbf6645542c3b6b7e1cf4461"
+      }
+    }
+  },
+  "measurement_complete": false,
+  "admitted_job_counts": {
+    "failed": 6
+  },
+  "warm_round_observation": {
+    "admitted": 6,
+    "sdk_requests": 12,
+    "terminal_states": {
+      "failed": 6
+    },
+    "first_three_owners": [
+      "user:941040001:agent:mia-p23-0",
+      "user:941040003:agent:mia-p23-2",
+      "user:941040002:agent:mia-p23-1"
+    ],
+    "first_cycle_covered_three_scopes": true,
+    "all_admitted_before_first_native_finished": true,
+    "time_to_failed_upper_bound_seconds": [
+      39.40261612799998,
+      51.629040277,
+      104.51347641100001,
+      64.90814783000002,
+      112.95113228399998,
+      99.305530831
+    ],
+    "native_outputs_returned": 2,
+    "note": "Warm observations only. All jobs invalid_output/attempt2; no valid saved/empty tasks, five measured rounds never started. Hash-only observer cannot reconstruct model deltas/errors."
+  },
+  "database_after_failure": {
+    "integrity": "ok",
+    "tasks": [
+      {
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output"
+      },
+      {
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output"
+      },
+      {
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output"
+      },
+      {
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output"
+      },
+      {
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output"
+      },
+      {
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output"
+      }
+    ],
+    "new_source_count": 0
+  },
+  "common_peak_mib": 1402.6875
+}
