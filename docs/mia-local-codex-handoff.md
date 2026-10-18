@@ -19,7 +19,7 @@
 1. 读取`AGENTS.md`、主交接、验收决定、实施计划及最近工作记录。
 2. 核对当前分支、HEAD、未提交文件、远端实际SHA和未推送提交；保存已有工作，不reset/clean/强推。
 3. P22实测代码为`2925b63e6ea010ac287d4e388fd6255e7d202244`；证据提交为`1a05c98044ebd3e333bce041c29f4c26c782f2a8`。后续文档提交记录用户通过决定，原始结果不变。
-4. 第二十三步观察器`aabc72e054728c3724dd2b67c03809750b471359`已推送，唯一TTS-ready契约[39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073)在途；push语法/7机制测试39095216555 success。先用实际原TTS机制检查及一个真实基线/实际回复配对确认双时点，尚未启动新的正式72回复。第二十二步旧首TEXT失败和原始数据保留；模型/三查询/门槛/运行实现均未改，P23未整体验收/P24未开始。后续正式运行如仅因交接提交导致SHA不同，记录精确SHA并验证全部执行源码一致，不伪称同一commit。
+4. 第二十三步TTS-ready契约[39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073) / aabc72e success，实际原TTS机制及双时点逐帧复核通过；原文/hash见performance-speech-smoke-first-*。已启动唯一正式[39095590962](https://github.com/bboytang/Mia/actions/runs/39095590962)，精确SHA `0ca2da4bdfc09789f79b5babace3570507bd5d83`；相较aabc72e仅四份交接文档不同，全部执行源码一致。继续该运行收72回复及配对差值，不重复冒烟/改冻结样本或门槛。旧首TEXT失败保留，运行实现仍32407ef；双前台+实际提取公平/故障及在途关闭未测，P23未整体验收/P24未开始。
 
 已拉取当前分支即已包含交接和证据；`docs/handoff/`里的旧补充包仅为历史快照，不重复导入tracked.patch或覆盖本地文件。详细失败、模型比较和旧run留在工作记录/验证目录，不在本接续入口重复。
 

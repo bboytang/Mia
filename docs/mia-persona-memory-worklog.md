@@ -1506,3 +1506,12 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 本地7机制测试通过（0.023秒），含emoji首TEXT只作为诊断而不抢占speech-ready、全部帧时间戳保留、停止唤醒不改写已完成样本；AST/Python3.10/YAML/Shell/diff通过。实际完整TTS模块导入/消费者机制与真实回复契约仍须GitHub。模型glm-4-flash-250414、原三查询、真实BGE/1k/10k/32数值夹具、一次预热五对实测、72回复/请求上限144、600ms验收/500ms原目标全部不变。先同新观察器reply-smoke验证后派发正式reply-latency；运行模块仍32407ef，不改人设/提示/排序/授权或生产配置。唯一SHA/句柄随后记录，P23整体未验收/P24未开始。
 
 第二十三步观察器`aabc72e054728c3724dd2b67c03809750b471359`已推送，唯一TTS-ready契约[39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073)在途；push语法/7机制测试39095216555 success。先用实际原TTS机制检查及一个真实基线/实际回复配对确认双时点，尚未启动新的正式72回复。第二十二步旧首TEXT失败和原始数据保留；模型/三查询/门槛/运行实现均未改，P23未整体验收/P24未开始。后续正式运行如仅因交接提交导致SHA不同，记录精确SHA并验证全部执行源码一致，不伪称同一commit。
+
+
+## 第二十三步契约完成，正式speech-ready配对测量在途
+
+观察器aabc72e054728c3724dd2b67c03809750b471359 / [39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073) success。实际原TTS基类消费者机械检查确认纯emoji换行未产生speech-ready、中文首段由原分段得到“中文测试”，三份实际原模块hash已留存。两次真实glm-4-flash-250414回复和一个原Worker任务均正常，模型4096输出预算不变、无Provider/Scope/契约错误。逐帧独立核对first_checked_text等于首个非空检查后TEXT、first_sentence等于原分段/清理后的首个非空tts_text，所有后续时间戳完整保留；没有调用波形合成或音频服务。
+
+此单配对基线/实际speech-ready为866.83/1402.75ms，差535.93ms；首TEXT为866.68/1402.60ms。仅一个配对不判D08。任务为正常empty、attempts=1、submit到观察终态上界0.1239秒，无提取模型请求，不能视作真实后台提取竞争。应用编码后峰值351.72MiB，共同父组峰值1370.68MiB，2CPU/2GiB/swap0、无OOM；空闲全组正常退出2.2584秒。原始parent/child、运行元数据/依赖/退出证明及SHA256见performance-speech-smoke-first-*。
+
+契约核对后仅派发一次正式[reply-latency39095590962](https://github.com/bboytang/Mia/actions/runs/39095590962)，精确SHA 0ca2da4bdfc09789f79b5babace3570507bd5d83。git diff确认aabc72e到此SHA仅四份交接文档不同，.github/scripts/ci/server执行源码完全一致；不是同一commit的表述。两Scope×三查询×一次预热/五次实测配对、72回复/请求上限144、600ms验收与500ms原目标保持。暂不改运行实现/观察器，先收同一句柄并独立重算speech-ready及旧首TEXT双时点。第二十二步旧失败原文保持；P23未整体验收/P24未开始。

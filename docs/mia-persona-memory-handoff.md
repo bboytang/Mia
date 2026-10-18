@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十三步观察器`aabc72e054728c3724dd2b67c03809750b471359`已推送，唯一TTS-ready契约[39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073)在途；push语法/7机制测试39095216555 success。先用实际原TTS机制检查及一个真实基线/实际回复配对确认双时点，尚未启动新的正式72回复。第二十二步旧首TEXT失败和原始数据保留；模型/三查询/门槛/运行实现均未改，P23未整体验收/P24未开始。后续正式运行如仅因交接提交导致SHA不同，记录精确SHA并验证全部执行源码一致，不伪称同一commit。
+- **P23进行中，整体未验收**：第二十三步TTS-ready契约[39095218073](https://github.com/bboytang/Mia/actions/runs/39095218073) / aabc72e success，实际原TTS机制及双时点逐帧复核通过；原文/hash见performance-speech-smoke-first-*。已启动唯一正式[39095590962](https://github.com/bboytang/Mia/actions/runs/39095590962)，精确SHA `0ca2da4bdfc09789f79b5babace3570507bd5d83`；相较aabc72e仅四份交接文档不同，全部执行源码一致。继续该运行收72回复及配对差值，不重复冒烟/改冻结样本或门槛。旧首TEXT失败保留，运行实现仍32407ef；双前台+实际提取公平/故障及在途关闭未测，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
