@@ -301,3 +301,12 @@ board. Smoothness, subtitle overlap, heap during long conversations, sleep/wake,
 and audio playback under animation load still require device testing. This is
 unreleased work: do not package, sign or publish it before the remaining device
 tests and combined-release review.
+
+Mia subtitles are normalized to simplified Chinese in `SetChatMessage`, covering
+both ASR and assistant/notification text. OpenCC 1.1.9 dictionary data is pinned
+under `third_party/opencc` with its Apache-2.0 license. Configure-time generation
+writes constexpr tables into the build directory; Taiwan variant normalization
+then longest phrase/character matching preserves forms such as 著作 and 乾坤.
+This changes display text only, not server history, audio or other boards.
+Both Mia build variants select `CONFIG_LANGUAGE_ZH_CN=y` for built-in prompts.
+The dictionaries are application code/data, not changes to the frozen assets.

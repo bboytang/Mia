@@ -10,6 +10,7 @@ public:
     void SetupUI() override;
     void SetEmotion(const char* emotion) override;
     void SetStatus(const char* status) override;
+    void SetChatMessage(const char* role, const char* content) override;
     void SetPowerSaveMode(bool on) override;
 
 private:

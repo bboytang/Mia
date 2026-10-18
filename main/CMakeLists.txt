@@ -906,6 +906,23 @@ endif()
 if(CONFIG_MIA_PASSPORT_DEVELOPMENT)
     # The manager matches OTA by type, not by the build variant name.
     set(BOARD_TYPE "mia-ai-passport")
+    if(NOT CMAKE_BUILD_EARLY_EXPANSION)
+        set(MIA_DICTIONARY_SOURCE "${PROJECT_DIR}/third_party/opencc")
+        set(MIA_DICTIONARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/mia_dictionary")
+        set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+            "${PROJECT_DIR}/scripts/passport/generate_simplified.py"
+            "${MIA_DICTIONARY_SOURCE}/TSCharacters.txt"
+            "${MIA_DICTIONARY_SOURCE}/TSPhrases.txt"
+            "${MIA_DICTIONARY_SOURCE}/TWVariants.txt"
+            "${MIA_DICTIONARY_SOURCE}/TWVariantsRevPhrases.txt")
+        execute_process(COMMAND python "${PROJECT_DIR}/scripts/passport/generate_simplified.py"
+            "${MIA_DICTIONARY_SOURCE}" "${MIA_DICTIONARY_DIR}/mia_simplified_dictionary.h"
+            RESULT_VARIABLE MIA_DICTIONARY_RESULT)
+        if(NOT MIA_DICTIONARY_RESULT EQUAL 0)
+            message(FATAL_ERROR "Failed to generate Mia simplified subtitle dictionary")
+        endif()
+        list(APPEND INCLUDE_DIRS "${MIA_DICTIONARY_DIR}")
+    endif()
     list(APPEND SOURCES "passport/capsule.cc" "passport/crypto_psa.cc" "passport/signed_update.cc")
 endif()
 if(NOT BOARD_MANUFACTURER AND BOARD_DIR MATCHES "^([^/]+)/")

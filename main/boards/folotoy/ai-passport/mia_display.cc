@@ -2,6 +2,7 @@
 
 #if CONFIG_MIA_PASSPORT_DEVELOPMENT
 #include "mia_display.h"
+#include "mia_simplified.h"
 
 #include "assets/lang_config.h"
 
@@ -78,6 +79,11 @@ void MiaDisplay::SetStatus(const char* status) {
         activity_ = mia_face::Activity::Connecting;
     else
         activity_ = mia_face::Activity::Idle;
+}
+
+void MiaDisplay::SetChatMessage(const char* role, const char* content) {
+    const auto simplified = mia_text::Simplify(content);
+    SpiLcdDisplay::SetChatMessage(role, simplified.c_str());
 }
 
 void MiaDisplay::SetPowerSaveMode(bool on) {
