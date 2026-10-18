@@ -1,0 +1,256 @@
+{
+  "run_id": 39091554129,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39091554129",
+  "code_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "success",
+  "acceptance_revision": "D08-v2-20261017",
+  "limits": {
+    "encode_hybrid_p95_ms": 500,
+    "sqlite_10k_p95_ms": 250,
+    "first_sentence_delta_p95_ms": 600,
+    "python_peak_rss_mib": 512
+  },
+  "optimization_targets": {
+    "encode_hybrid_p95_ms": 400,
+    "sqlite_10k_p95_ms": 150,
+    "first_sentence_delta_p95_ms": 500,
+    "python_peak_rss_mib": 512
+  },
+  "acceptance_passed": true,
+  "optimization_targets_met": true,
+  "p23_complete": false,
+  "encoder_session_options": {
+    "intra_op_num_threads": 1,
+    "inter_op_num_threads": 1,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "artifact_file": "performance-adaptive-capacity-results.json.gz",
+  "raw_sha256": "0839a44332317159b8980be27a1b654de1e5b4919e05fe4e3bc461925977683f",
+  "sha256": "6e1b754bf0aeec3156d3357af23736da402bcb248f3fdee85c010d69c0ecdeff",
+  "sample_group_counts": [
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15,
+    15,
+    15,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    15,
+    15
+  ],
+  "capacity": [
+    {
+      "size_per_scope": 1000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 7.747429000005468,
+      "hybrid_worst_query_p95_ms": 41.86888760000045,
+      "competition_max_p95_ms": 72.42926169999606,
+      "competition_foreground": [
+        {
+          "count": 15,
+          "p50_ms": 63.923532000004,
+          "p95_ms": 66.82123629999381
+        },
+        {
+          "count": 15,
+          "p50_ms": 64.17034000000399,
+          "p95_ms": 72.42926169999606
+        }
+      ],
+      "rss_peak_mib": 283.78515625,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 7342346
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "acceptance_passed": true,
+      "optimization_targets_met": true
+    },
+    {
+      "size_per_scope": 1000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 8.660441999995783,
+      "hybrid_worst_query_p95_ms": 49.722264000001815,
+      "competition_max_p95_ms": 86.8295311000054,
+      "competition_foreground": [
+        {
+          "count": 15,
+          "p50_ms": 77.73461200000042,
+          "p95_ms": 86.51100129999634
+        },
+        {
+          "count": 15,
+          "p50_ms": 78.15208399999563,
+          "p95_ms": 86.8295311000054
+        }
+      ],
+      "rss_peak_mib": 303.94921875,
+      "static_features": {
+        "entries": 1000,
+        "accounted_bytes": 9064934
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "acceptance_passed": true,
+      "optimization_targets_met": true
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "short",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 58.53279840000312,
+      "hybrid_worst_query_p95_ms": 166.62273080000034,
+      "competition_max_p95_ms": 271.48797820000107,
+      "competition_foreground": [
+        {
+          "count": 15,
+          "p50_ms": 237.69607600000597,
+          "p95_ms": 266.52144600000156
+        },
+        {
+          "count": 15,
+          "p50_ms": 240.1385929999975,
+          "p95_ms": 271.48797820000107
+        }
+      ],
+      "rss_peak_mib": 326.1328125,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 73428818
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "acceptance_passed": true,
+      "optimization_targets_met": true
+    },
+    {
+      "size_per_scope": 10000,
+      "profile": "dense",
+      "required": true,
+      "sqlite_worst_query_p95_ms": 65.04379779998999,
+      "hybrid_worst_query_p95_ms": 182.84095939998792,
+      "competition_max_p95_ms": 307.51979880000135,
+      "competition_foreground": [
+        {
+          "count": 15,
+          "p50_ms": 268.230243000005,
+          "p95_ms": 289.083173100002
+        },
+        {
+          "count": 15,
+          "p50_ms": 273.39108999998984,
+          "p95_ms": 307.51979880000135
+        }
+      ],
+      "rss_peak_mib": 367.50390625,
+      "static_features": {
+        "entries": 10000,
+        "accounted_bytes": 90655406
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "acceptance_passed": true,
+      "optimization_targets_met": true
+    },
+    {
+      "size_per_scope": 50000,
+      "profile": "dense",
+      "required": false,
+      "sqlite_worst_query_p95_ms": 310.5936637999946,
+      "hybrid_worst_query_p95_ms": 2223.594553400011,
+      "competition_max_p95_ms": 4306.488777100011,
+      "competition_foreground": [
+        {
+          "count": 15,
+          "p50_ms": 4199.156020999993,
+          "p95_ms": 4272.163034099995
+        },
+        {
+          "count": 15,
+          "p50_ms": 4222.661407000004,
+          "p95_ms": 4306.488777100011
+        }
+      ],
+      "rss_peak_mib": 478.25,
+      "static_features": {
+        "entries": 0,
+        "accounted_bytes": 0
+      },
+      "integrity": "ok",
+      "rebuilt": {
+        "indexed": 32,
+        "has_more": false
+      },
+      "acceptance_passed": false,
+      "optimization_targets_met": false
+    }
+  ],
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.peak": "1629106176",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 169319412\nuser_usec 143759831\nsystem_usec 25559580\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 1613\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0"
+  },
+  "source_artifact_hashes": {
+    "performance-results.json": "0839a44332317159b8980be27a1b654de1e5b4919e05fe4e3bc461925977683f"
+  }
+}

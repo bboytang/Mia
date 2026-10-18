@@ -6,14 +6,14 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十步候选`32407ef9d994eb2c86dcea140fc2de7371d18912`已推送：唯一模块[39091554129](https://github.com/bboytang/Mia/actions/runs/39091554129)、共同[39091556465](https://github.com/bboytang/Mia/actions/runs/39091556465)；服务39091541331、实际BGE39091541455、身份39091541327、manager39091541334四回归在途。38项本地专项通过，push语法39091541474 success；继续同一组句柄，暂不再改运行实现。第十八步两容量失败与第十九步单路/竞争取舍原文保留，验收500/250/600ms与原优化400/150/500ms分别判定；P23整体未验收/P24未开始。
+- **P23进行中，整体未验收**：第二十步32407ef六验证全终态success：四回归通过，模块/共同1k/10k达到验收，10k竞争307.52/419.51ms；共同仍差原400ms目标19.51ms。用户“差一点没事的”，保留差距、不阻塞后续，不修改原目标/验收上限。无在途任务，下一步实际reply/app、同Provider首句、真实Worker及全服务关闭。P23整体未验收/P24未开始；原文/hash见performance-adaptive-*。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
 
 - 仓库：`https://github.com/bboytang/Mia`；分支：`feature/mia-persona-memory-v1.2`。
 - 本机工作区：`C:\MiaDev\Mia`。跨设备接续以仓库材料为准。
-- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。当前P23运行实现`cba3fd3f80219f7d1fd542a86a4d8c799af87a22`，四回归全通过；模块39076426163/共同39076427631均failure，原始证据performance-paired-*。第十七步694a2a6模块达到原目标、共同容量仍失败，证据performance-parallel-*保留；旧单线程cf464ef与v2只读复判仅历史。
+- P22实测代码：`2925b63e6ea010ac287d4e388fd6255e7d202244`。当前P23运行实现`32407ef9d994eb2c86dcea140fc2de7371d18912`，服务294/实际BGE五报告/身份173/manager154全通过；模块39091554129及共同39091556465均success，仅模块达到原优化目标，共同419.51ms达到500ms验收但未达400ms原目标。原文/hash见performance-adaptive-*；第十七/十八步容量及第十九步ABBA取舍原文保留。
 - 实测证据提交：`1a05c98044ebd3e333bce041c29f4c26c782f2a8`；其后文档提交包含本次用户验收决定。当前HEAD和远端以Git/API核对，不把这里的证据SHA误当永远最新HEAD。
 - [串行实测报告](verification/mia-persona-memory/glm-4-flash-250414-one-pass.md)：157真实请求、89行为记录，无Provider错误；六项任务全部终态。
 - [原始报告摘要及哈希](verification/mia-persona-memory/glm250414-review.json)，同目录`glm250414-*.json.gz`保留完整原文。
@@ -100,3 +100,5 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 本地34项语义/检索/原生机制回归（9.978秒）及4项批评分（0.235秒）共38项通过，CI串行观察器2项另通过；Python3.10 AST/diff通过。第十九步scheduling诊断已冻结48aad92的retrieve源码指纹，后续运行代码变化时fail-closed，防止把新自适应调度误标为旧paired试验；旧四轮证据保持。下一步新SHA四回归与模块/共同容量各一次，句柄随后记录，实际收益尚未验证。P23未验收/P24未开始；验收500/250/600ms与原优化400/150/500ms保持分列。
 
 第二十步候选`32407ef9d994eb2c86dcea140fc2de7371d18912`已推送：唯一模块[39091554129](https://github.com/bboytang/Mia/actions/runs/39091554129)、共同[39091556465](https://github.com/bboytang/Mia/actions/runs/39091556465)；服务39091541331、实际BGE39091541455、身份39091541327、manager39091541334四回归在途。38项本地专项通过，push语法39091541474 success；继续同一组句柄，暂不再改运行实现。第十八步两容量失败与第十九步单路/竞争取舍原文保留，验收500/250/600ms与原优化400/150/500ms分别判定；P23整体未验收/P24未开始。
+
+最新接续：第二十步32407ef六验证全终态success：四回归通过，模块/共同1k/10k达到验收，10k竞争307.52/419.51ms；共同仍差原400ms目标19.51ms。用户“差一点没事的”，保留差距、不阻塞后续，不修改原目标/验收上限。无在途任务，下一步实际reply/app、同Provider首句、真实Worker及全服务关闭。P23整体未验收/P24未开始；原文/hash见performance-adaptive-*。历史在途/下一候选段落仅过程记录。
