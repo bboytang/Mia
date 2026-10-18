@@ -19,17 +19,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [mia-ai-passport-dev, ai-passport]
+        include:
+          - board: folotoy/ai-passport
+            variant: mia-ai-passport-dev
+          - board: folotoy/ai-passport
+            variant: ai-passport
+          - board: xmini/c3
+            variant: xmini-c3
+          - board: m5stack/atom-echos3r
+            variant: atom-echos3r
     steps:
       - uses: actions/checkout@v7
       - name: Build ESP32-C3 (no device access)
         shell: bash
         env:
+          BOARD: ${{ matrix.board }}
           VARIANT: ${{ matrix.variant }}
         run: |
           source "$IDF_PATH/export.sh"
           idf.py --version
-          python scripts/build.py folotoy/ai-passport --name "$VARIANT" --language zh-CN
+          python scripts/build.py "$BOARD" --name "$VARIANT" --language zh-CN
       - name: Measure candidate A/B capacity
         if: matrix.variant == 'mia-ai-passport-dev'
         run: python -m scripts.passport.build_report build > passport-capacity.json

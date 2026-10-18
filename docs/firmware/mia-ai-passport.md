@@ -196,6 +196,6 @@ python -m scripts.passport.build_report build
 
 host 测试覆盖端点限制的真实 C++ 编译执行、原厂/新版 BSP 表、MD5 损坏、缺失 MD5、
 边界/重叠/标签/对齐错误、完整备份长度、候选保护范围、超容及错误芯片/SDK。
-GitHub Actions 构建专用配置和原 ai-passport 配置。另需其他芯片/网络代表构建，
-以及真实语音录放、打断、重连、表情、按键、BLE/iPhone互通、断电回滚和电量测试；
+GitHub Actions 构建专用配置、原 ai-passport、xmini-c3 OLED 及 S3 atom-echos3r
+无屏配置，覆盖本次条件编译和共用代码。仍需真实语音录放、打断、重连、表情、按键、BLE/iPhone互通、断电回滚和电量测试；
 没有设备连接，任何 CI 成功都不代表这些实测成功。
