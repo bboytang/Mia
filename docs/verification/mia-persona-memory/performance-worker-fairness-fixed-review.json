@@ -1,0 +1,175 @@
+{
+  "run": {
+    "conclusion": "failure",
+    "databaseId": 39126881390,
+    "headSha": "fd9643207f03a197b01c48697933fc17661f5faf",
+    "url": "https://github.com/bboytang/Mia/actions/runs/39126881390"
+  },
+  "runtime_sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+  "p23_complete": false,
+  "measurement_complete": false,
+  "normal_p95": null,
+  "scope": "Warm round stopped after three invalid outputs; no measured rounds or normal-success latency verdict",
+  "artifacts": [
+    {
+      "file": "performance-worker-fairness-fixed-parent.json.gz",
+      "raw_sha256": "f222b47a78abfb215e26a7621f2029e3859667a6c471046be9a09cabfb9237cd",
+      "sha256": "8604ef6c965d59b803457b0ed26ca62a2f9b02227e353826591e96a46520247e"
+    },
+    {
+      "file": "performance-worker-fairness-fixed-child.json.gz",
+      "raw_sha256": "98144d3954b74c1674caa0f5dba2dd3d444882db8edf13eb11648ece54de286c",
+      "sha256": "b8a29ddc5b95ce63518c9d775f92dedeab420a305808420b6d785d895d32451a"
+    },
+    {
+      "file": "performance-worker-fairness-fixed-ci-results.json.gz",
+      "raw_sha256": "41e7dafe91e9215252a0f280a1c7f6ca38bab06f6e683d2d3ece9fe3a8ef6245",
+      "sha256": "e20e51e9754ccf21c7ed9f6fc7cb9d5b7f3d7401bb7911d87d61929434d9cffb"
+    },
+    {
+      "file": "performance-worker-fairness-fixed-preparation-dependencies.txt.gz",
+      "raw_sha256": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+      "sha256": "57e4a35ffbb6231878a96a8ee7981b8832bb763996c5a86346b3cffce4b3d803"
+    },
+    {
+      "file": "performance-worker-fairness-fixed-export-dependencies.txt.gz",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-worker-fairness-fixed-runtime-system.txt.gz",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-fairness-fixed-container-stopped.txt.gz",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    }
+  ],
+  "raw_artifact_hashes": {
+    "app-lifecycle-results.json": "f222b47a78abfb215e26a7621f2029e3859667a6c471046be9a09cabfb9237cd",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "0e8bce53a24e96fdc18608c3baa735f95b071e07bca6a938c108d6712994c68b",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "b3571413617ddb2efa287ef22784bacc8e9379b31c0b5a647e28164ce9ca6850",
+    "cgroup-final-memory.current.txt": "dd5a426fdfb4057b59ad957dca029647fe7359776fa50f7ce32a2917a10820d9",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "4af2e1e3e7fde5561b8c2c2d96f078cdb59cfb6e690553021746f5ebfd6e49d8",
+    "redis.log": "7bfb32ede411d35bc608da2657bae4f585f1611e6fa2261f5b58e26c90b4a7d1",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "d748e129721849a615de8c9e3f01a5ffd56353acf93cb09c76589879bb13fe47",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "a8298132a99de63971ba42ed74ceac20f7ed214d6366ffe39f75bc287e0a8c8c",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "e140f88f6db9bccdab5679d3d76c2b52d61bfa3e46168a6ed5e928e8f96bcc5d",
+    "app-child/ready.json": "eb98f1dd40f4f25f45b5e34c458063a2bbf1f0068e73e15f1991f856fcb954ad",
+    "app-child/app-results.json": "98144d3954b74c1674caa0f5dba2dd3d444882db8edf13eb11648ece54de286c",
+    "app-child/memory.sqlite3": "0e8f0083392af96ef2ae24f11d9e17928ffbd410561cce6ebe48c79a66f708ec",
+    "junit/TEST-junit-jupiter.xml": "a75e8be3d619020eb53a8a239beba08d5190b56611cd68ed6f9e87bb99dff635",
+    "junit/TEST-junit-vintage.xml": "669d9e5a69d980f0761aec10101fe018bddcb9516b41cd52e2a795f95167d5d1",
+    "junit/TEST-junit-platform-suite.xml": "3eec5e08cde7535533e430ba6b9031c4291a4cdaed85b16cb8032917a312fc76"
+  },
+  "same_runtime_ci_reference": {
+    "sha": "20d38ccef8b57126203e888dcc67875a90b02500",
+    "service": 39126346921,
+    "identity": 39126346906,
+    "manager": 39126346931,
+    "actual_vectors": 39126346925,
+    "byte_identical_runtime_and_ci": true,
+    "same_commit": false
+  },
+  "sqlite_integrity": "ok",
+  "tasks": [
+    {
+      "id": "58a9171fbe0ab0cd1968f4f6421b849052e4b80a636e8a76294699f9863bba93",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "state": "failed",
+      "attempts": 2,
+      "error_category": "invalid_output",
+      "profile": "dense",
+      "round": 0,
+      "seconds": 41.520886391000005,
+      "saved_fact_count": 0
+    },
+    {
+      "id": "2ee4ddea532b86edcd908e0df5db6d3bbc3e20bf9c817330a9db049fbdeac22a",
+      "owner": "user:941040002:agent:mia-p23-1",
+      "state": "committed",
+      "attempts": 2,
+      "error_category": null,
+      "profile": "dense",
+      "round": 0,
+      "seconds": 52.61792168499996,
+      "saved_fact_count": 1
+    },
+    {
+      "id": "d981298dfb601f6ef5e02d2565121e99229651e2626c4caf4ae0533683a30ffb",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "state": "failed",
+      "attempts": 2,
+      "error_category": "invalid_output",
+      "profile": "short",
+      "round": 0,
+      "seconds": 87.992023194,
+      "saved_fact_count": 0
+    },
+    {
+      "id": "ac4fa5e0ddb5d795cce01eb55ffa6d984becb5dff57323f86c5fa79ce09dc40a",
+      "owner": "user:941040002:agent:mia-p23-1",
+      "state": "committed",
+      "attempts": 2,
+      "error_category": null,
+      "profile": "short",
+      "round": 0,
+      "seconds": 96.40566378199998,
+      "saved_fact_count": 1
+    },
+    {
+      "id": "a4523d9d566b1e080cf7466462b228e376a1cc5e24da2c41465b2b305584514a",
+      "owner": "user:941040001:agent:mia-p23-0",
+      "state": "committed",
+      "attempts": 1,
+      "error_category": null,
+      "profile": "short",
+      "round": 0,
+      "seconds": 30.23712445899997,
+      "saved_fact_count": 1
+    },
+    {
+      "id": "19c8b88364a3259bdc3ac02f37493ec06f66e54def12baf4efc8576e3d06da73",
+      "owner": "user:941040001:agent:mia-p23-0",
+      "state": "failed",
+      "attempts": 2,
+      "error_category": "invalid_output",
+      "profile": "dense",
+      "round": 0,
+      "seconds": 83.14667850900003,
+      "saved_fact_count": 0
+    }
+  ],
+  "task_counts": {
+    "failed": 3,
+    "committed": 3
+  },
+  "native_parser_failures": 0,
+  "provider_requests": 11,
+  "failure_detail_limit": "Original arguments were not captured in normal mode; all eleven extractor calls returned hashes, so failures are after parsing, but exact rejected values cannot be reconstructed.",
+  "idle_shutdown": {
+    "elapsed_seconds": 2.3772720499999878,
+    "databases_stopped_with_zero_exit_no_oom": true,
+    "remaining_original_processes": [],
+    "passed": true,
+    "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+  },
+  "python_peak_mib": 367.5078125,
+  "common_peak_mib": 1392.75,
+  "app_shutdown_seconds": 0.22213378899999725
+}
