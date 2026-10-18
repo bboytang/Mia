@@ -28,6 +28,13 @@ production server without approval. Android USB/CDC, ROM reset, disconnect and
 report download require a physical tablet/device test; mocked tests do not prove
 USB compatibility.
 
+On Android the page explicitly prefers the CDC WebUSB compatibility layer even
+when `navigator.serial` exists, matching the official Passport flasher. Desktop
+browsers retain native Web Serial. The bundle test exercises both Android platform
+signals with both APIs present, checks the USB picker filter, and rejects a wrong
+API choice. An empty picker still requires checking the physical connection and
+whether another tab holds the USB device; it is not proof of a faulty board.
+
 Click “连接并只读检查”, select `USB JTAG/serial debug unit`, wait, then save
 `passport-inspection.json`. It contains no key, MAC, NVS or Wi-Fi readout. Safety
 preflight rejects wrong chips, enabled/unknown security, non-8MB flash, malformed

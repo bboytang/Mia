@@ -13,7 +13,13 @@ button.addEventListener('click', async () => {
   let transport;
   try {
     if (!window.isSecureContext) throw new Error('需要 HTTPS 安全页面；本地文件是否支持需由浏览器确认');
-    const serial = navigator.serial || (navigator.usb ? usbSerial : null);
+    const android = /Android/i.test(navigator.userAgent || '') || navigator.userAgentData?.platform === 'Android';
+    const hasUsb = typeof navigator.usb?.requestDevice === 'function';
+    // Android may expose a serial API without enumerating the USB CDC device.
+    // Match the official Passport tool: prefer WebUSB on Android.
+    const serial = android && hasUsb ? usbSerial
+      : typeof navigator.serial?.requestPort === 'function' ? navigator.serial
+      : hasUsb ? usbSerial : null;
     if (!serial) throw new Error('当前浏览器不支持 USB 连接，请使用安卓 Chrome');
     const port = await serial.requestPort({filters: [{usbVendorId: 0x303a, usbProductId: 0x1001}]});
     const info = port.getInfo();
