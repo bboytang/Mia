@@ -488,6 +488,10 @@ bool Assets::EmoteStrategy::Apply(Assets* assets, bool refresh_display_theme) {
 
 bool Assets::Download(std::string url,
                       std::function<void(int progress, size_t speed)> progress_callback) {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    ESP_LOGE(TAG, "Unsigned asset updates disabled for Mia Passport development profile");
+    return false;
+#endif
     ESP_LOGI(TAG, "Downloading new version of assets from %s", url.c_str());
 
     auto network = Board::GetInstance().GetNetwork();

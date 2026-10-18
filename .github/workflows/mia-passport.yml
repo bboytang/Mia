@@ -1,0 +1,42 @@
+name: Verify Mia AI Passport development
+on:
+  push:
+    branches: ['feature/mia-passport-*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  host:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Host regression and flash safety tests
+        run: python3 -m unittest discover -s scripts/tests -v
+  firmware:
+    runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:v6.1
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [mia-ai-passport-dev, ai-passport]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build ESP32-C3 (no device access)
+        shell: bash
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          source "$IDF_PATH/export.sh"
+          idf.py --version
+          python scripts/build.py folotoy/ai-passport --name "$VARIANT" --language zh-CN
+      - name: Measure candidate A/B capacity
+        if: matrix.variant == 'mia-ai-passport-dev'
+        run: python -m scripts.passport.build_report build > passport-capacity.json
+      - name: Upload review evidence only
+        if: matrix.variant == 'mia-ai-passport-dev'
+        uses: actions/upload-artifact@v7
+        with:
+          name: passport-capacity-${{ github.sha }}
+          path: passport-capacity.json
+          if-no-files-found: error

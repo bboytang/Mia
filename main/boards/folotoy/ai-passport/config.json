@@ -12,6 +12,20 @@
                 "CONFIG_USE_ESP_WAKE_WORD=n",
                 "CONFIG_PM_ENABLE=y"
             ]
+        },
+        {
+            "name": "mia-ai-passport-dev",
+            "sdkconfig_append": [
+                "CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y",
+                "CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y",
+                "CONFIG_USE_ESP_WAKE_WORD=n",
+                "CONFIG_PM_ENABLE=y",
+                "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/mia-passport-8m-candidate.csv\"",
+                "CONFIG_MIA_PASSPORT_DEVELOPMENT=y",
+                "CONFIG_OTA_URL=\"\"",
+                "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=y",
+                "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y"
+            ]
         }
     ]
 }

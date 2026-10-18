@@ -2,6 +2,7 @@
 #include "system_info.h"
 #include "settings.h"
 #include "assets/lang_config.h"
+#include "passport/backend_policy.h"
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -46,6 +47,10 @@ Ota::~Ota() {
 }
 
 std::string Ota::GetCheckVersionUrl() {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    // Ignore an old/public discovery URL retained in NVS.
+    return CONFIG_MIA_PASSPORT_OTA_URL;
+#endif
     Settings settings("wifi", false);
     std::string url = settings.GetString("ota_url");
     if (url.empty()) {
@@ -85,6 +90,11 @@ NetworkResult<> Ota::CheckVersion() {
     ESP_LOGI(TAG, "Current version: %s", current_version_.c_str());
 
     std::string url = GetCheckVersionUrl();
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    if (!mia::passport::IsPinnedEndpoint(url, CONFIG_MIA_PASSPORT_OTA_URL, "https://")) {
+        return std::unexpected(NetworkError::InvalidArgument());
+    }
+#endif
     if (url.length() < 10) {
         ESP_LOGE(TAG, "Check version URL is not properly set");
         return std::unexpected(NetworkError::InvalidArgument());
@@ -123,6 +133,24 @@ NetworkResult<> Ota::CheckVersion() {
         ESP_LOGE(TAG, "Failed to parse JSON response");
         return std::unexpected(NetworkError::ProtocolError());
     }
+
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    // Validate before persisting credentials or any other response fields.
+    auto voice = cJSON_GetObjectItem(root, "websocket");
+    auto voice_url = cJSON_GetObjectItem(voice, "url");
+    auto activation_required = cJSON_IsObject(cJSON_GetObjectItem(root, "activation"));
+    if ((!cJSON_IsString(voice_url) && !activation_required) ||
+        (cJSON_IsString(voice_url) &&
+         !mia::passport::IsPinnedEndpoint(voice_url->valuestring, CONFIG_MIA_PASSPORT_WEBSOCKET_URL,
+                                          "wss://"))) {
+        cJSON_Delete(root);
+        return std::unexpected(NetworkError::ProtocolError());
+    }
+    // Keep activation/discovery, but never persist MQTT credentials or accept a
+    // legacy firmware URL in this profile. The signed updater is a later phase.
+    cJSON_DeleteItemFromObjectCaseSensitive(root, "mqtt");
+    cJSON_DeleteItemFromObjectCaseSensitive(root, "firmware");
+#endif
 
     has_activation_code_ = false;
     has_activation_challenge_ = false;
@@ -250,6 +278,10 @@ NetworkResult<> Ota::CheckVersion() {
 }
 
 void Ota::MarkCurrentVersionValid() {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    // Discovery alone is not the health check required to confirm a trial boot.
+    return;
+#endif
     auto partition = esp_ota_get_running_partition();
     if (strcmp(partition->label, "factory") == 0) {
         ESP_LOGI(TAG, "Running from factory partition, skipping");
@@ -270,6 +302,10 @@ void Ota::MarkCurrentVersionValid() {
 }
 
 bool Ota::Upgrade(const std::string& firmware_url, std::function<void(int progress, size_t speed)> callback) {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    ESP_LOGE(TAG, "Unsigned OTA disabled for Mia Passport development profile");
+    return false;
+#endif
     ESP_LOGI(TAG, "Upgrading firmware from %s", firmware_url.c_str());
     esp_ota_handle_t update_handle = 0;
     auto update_partition = esp_ota_get_next_update_partition(NULL);

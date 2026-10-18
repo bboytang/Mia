@@ -16,9 +16,15 @@ extern "C" void app_main(void)
     // Initialize NVS flash for WiFi configuration
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+        // Factory identity may be in this NVS. Stop without erasing it.
+        ESP_LOGE(TAG, "NVS requires offline audit; refusing automatic erase");
+        ESP_ERROR_CHECK(ret);
+#else
         ESP_LOGW(TAG, "Erasing NVS flash to fix corruption");
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
+#endif
     }
     ESP_ERROR_CHECK(ret);
 

@@ -3,6 +3,7 @@
 #include "board.h"
 #include "settings.h"
 #include "system_info.h"
+#include "passport/backend_policy.h"
 
 #include <esp_log.h>
 #include <arpa/inet.h>
@@ -79,6 +80,12 @@ void WebsocketProtocol::CloseAudioChannel(bool send_goodbye) {
 bool WebsocketProtocol::OpenAudioChannel() {
     Settings settings("websocket", false);
     std::string url = settings.GetString("url");
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    if (!mia::passport::IsPinnedEndpoint(url, CONFIG_MIA_PASSPORT_WEBSOCKET_URL, "wss://")) {
+        ESP_LOGE(TAG, "Mia voice endpoint is missing or does not match configuration");
+        return false;
+    }
+#endif
     std::string token = settings.GetString("token");
     int version = settings.GetInt("version");
     if (version != 0) {

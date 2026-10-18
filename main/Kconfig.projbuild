@@ -6,6 +6,24 @@ config OTA_URL
     help
         The application will access this URL to check for new firmwares and server address.
 
+config MIA_PASSPORT_DEVELOPMENT
+    bool "Mia AI Passport development profile (not for flashing)"
+    depends on BOARD_TYPE_FOLOTOY_AI_PASSPORT
+    default n
+    help
+        Pins Mia discovery and voice endpoints, protects NVS on initialization
+        failure, and disables legacy unsigned OTA. Requires flash audit before use.
+
+config MIA_PASSPORT_OTA_URL
+    string "Mia HTTPS discovery endpoint"
+    depends on MIA_PASSPORT_DEVELOPMENT
+    default ""
+
+config MIA_PASSPORT_WEBSOCKET_URL
+    string "Mia WSS voice endpoint"
+    depends on MIA_PASSPORT_DEVELOPMENT
+    default ""
+
 choice
     prompt "Flash Assets"
     default FLASH_DEFAULT_ASSETS if !USE_EMOTE_MESSAGE_STYLE

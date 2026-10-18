@@ -1,0 +1,11 @@
+# DEVELOPMENT ONLY. Requires device flash audit and explicit migration review.
+# Preserve historical cardid and Recovery; never flash a merged image.
+# Name, Type, SubType, Offset, Size, Flags
+nvs,      data, nvs,     0x9000,   0x6000,
+phy_init, data, phy,     0xf000,   0x1000,
+otadata,  data, ota,     0x10000,  0x2000,
+ota_0,    app,  ota_0,   0x20000,  0x300000,
+cardid,   data, nvs,     0x356000, 0x4000, readonly
+ota_1,    app,  ota_1,   0x360000, 0x300000,
+assets,   data, spiffs,  0x660000, 0xa0000,
+recovery, app,  test,    0x700000, 0x100000,
