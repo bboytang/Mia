@@ -47,8 +47,12 @@ def handler_for(worker, scopes, report, lock, persist, elapsed):
     from mia_companion.xiaozhi_adapter import _user_excerpts
 
     fixture = json.loads(FIXTURE.read_text())
+    diagnostic = os.environ['MIA_P23_MODE'] == 'worker-fairness-diagnostic'
     report.update(fair_jobs=[], fair_dataset_sha256=hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
         worker_probe_scope=fixture['scope'], first_sentence_cases_scope='No foreground SDK requests; normal background fairness only')
+    if diagnostic:
+        report.update(worker_probe_scope='Diagnostic only: original frozen warm short input at Scope 0 and dense input at Scope 2; no fairness/normal-task percentile verdict',
+            first_sentence_cases_scope='No foreground SDK requests in diagnostic collection')
     snapshots = {scope.owner: scope.snapshot() for scope in scopes}
     transport = AuthManager('synthetic-p23-latency-transport')
 
@@ -64,6 +68,8 @@ def handler_for(worker, scopes, report, lock, persist, elapsed):
             own = [x for x in report['fair_jobs'] if x['round'] == number and x['owner'] == scope.owner]
             if request['type'] == 'submit_fair':
                 profile = request['profile']
+                if diagnostic:
+                    assert number == 0 and (scope.owner, profile) in ((scopes[0].owner, 'short'), (scopes[2].owner, 'dense'))
                 assert profile in ('short', 'dense') and all(x['profile'] != profile for x in own)
                 assert all('state' in x for x in report['fair_jobs'] if x['round'] < number)
                 raw_source = fixture['rounds'][number][profile]
@@ -84,7 +90,7 @@ def handler_for(worker, scopes, report, lock, persist, elapsed):
                     persist(report)
                 own = [job]
             else:
-                assert request['type'] == 'finish_fair' and len(own) == 2
+                assert request['type'] == 'finish_fair' and len(own) == (1 if diagnostic else 2)
                 await worker.authorization.require(scope, 'memory:read')
                 deadline = time.monotonic() + 125
                 while True:
@@ -103,7 +109,9 @@ def handler_for(worker, scopes, report, lock, persist, elapsed):
                         break
                     assert time.monotonic() < deadline, 'Normal background jobs did not terminate'
                     await asyncio.sleep(.05)
-                assert all(x['state'] in ('committed', 'empty') and 1 <= x['attempts'] <= 2 for x in own)
+                assert all(1 <= x['attempts'] <= 2 for x in own)
+                if not diagnostic:
+                    assert all(x['state'] in ('committed', 'empty') for x in own)
                 for job in own:
                     calls = [x for x in report['extraction_requests'] if x['job_id'] == job['admission']['id']]
                     assert len(calls) == job['attempts'], 'Normal factual task bypassed the real SDK or made an uncounted call'
@@ -112,6 +120,8 @@ def handler_for(worker, scopes, report, lock, persist, elapsed):
                 report['worker_fairness_contract_passed'] = (len(report['fair_jobs']) == 36
                     and all(x.get('state') in ('committed', 'empty') for x in report['fair_jobs'])
                     and not report.get('provider_errors') and not report.get('case_errors'))
+                if diagnostic:
+                    report['worker_diagnostic_complete'] = len(report['fair_jobs']) == 2 and all('state' in x for x in report['fair_jobs'])
                 persist(report)
             # A peer receives only its own jobs; cross-Scope audit stays server-side.
             await socket.send(json.dumps({'type': 'p23_fair', 'jobs': own}))
@@ -143,6 +153,20 @@ async def drive(state, report, persist):
             result = json.loads(await asyncio.wait_for(socket.recv(), 135))
             assert result['type'] == 'p23_fair', 'Normal Worker fairness contract failed; inspect sanitized child report'
             return result['jobs']
+
+    if os.environ['MIA_P23_MODE'] == 'worker-fairness-diagnostic':
+        report['diagnostic_jobs'] = []
+        for peer_index, profile in ((0, 'short'), (2, 'dense')):
+            await command(peers[peer_index], {'type': 'submit_fair', 'round': 0, 'profile': profile})
+            jobs = await command(peers[peer_index], {'type': 'finish_fair', 'round': 0})
+            report['diagnostic_jobs'].extend(jobs)
+            persist(report)
+        child = json.loads((Path(os.environ['MIA_P23_REPORT_DIR']) / 'app-child/app-results.json').read_text())
+        assert child['worker_diagnostic_complete'] and len(child['extraction_streams']) == child['provider_requests']
+        report.update(worker_diagnostic_complete=True, worker_contract_passed=True,
+            fair_measurement_scope='Diagnostic collection only: two original frozen warm inputs/Scopes, no normal-load or D08 verdict. Failed model/parse outcomes are retained.')
+        persist(report)
+        return
 
     for number in range(6):
         await asyncio.gather(*[command(peer, {'type': 'submit_fair', 'round': number, 'profile': profile})

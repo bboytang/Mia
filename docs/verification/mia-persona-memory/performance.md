@@ -2,7 +2,7 @@
 
 2026-10-17 用户批准“先读取交接文档，然后开始p23，每完成一步记录并写交接”。起点为远程最新交接提交 `1c97e91`；P22用户验收通过、选定 `glm-4-flash-250414`，原失败和未覆盖项不变。P24未开始。
 
-当前：第二十七步正常后台 [39124113845](https://github.com/bboytang/Mia/actions/runs/39124113845) / b7420a5终态failure：预热6任务均两尝试后invalid_output，共12真实SDK、无Provider错误，未进入五轮实测，不能判正常任务p95或六轮公平通过。原文/hash见performance-worker-fairness-first-*；实际SQLite六failed/新来源0/完整性ok，单次预热首次服务覆盖三Scope。资源1402.69MiB无OOM、空闲全组1.5472秒退出；同SHA服务294/manager154/14机制全通过不覆盖提取失败。接续仅新增有界原生异常/真实SSE诊断，以冻结预热短长样本小规模复现，不改语料/模型/门槛或替换答案；旧三路429/首句超限/在途关闭及调度取舍保持，P23未整体验收/P24未开始。
+当前：第二十八步已实现仅CI的worker-fairness-diagnostic与有界原SDK片段/原生异常记录，16本地机制通过；只复现冻结预热Scope0短句与Scope2长句，最多4真实请求，原语料/SDK参数/解析器/Worker返回值不改。采集完成可为success，但不是正常任务/公平/D08通过；第二十七步6failed/12SDK原文保持。待新SHA唯一CI；运行仍32407ef，三路429/首句超限/在途关闭及用户调度取舍保持，P23未整体验收/P24未开始。
 
 ## 第一步：固定范围与数值入口
 
@@ -762,3 +762,14 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 原始parent/child、语料hash、依赖/退出证明、同SHA服务及语法日志、manager XML和SHA256见performance-worker-fairness-first-*。同SHA服务39124073480为294项通过（35.872秒），manager39124073512为154项通过，正式run机制14项通过（0.191秒）；这些成功不覆盖真实提取失败。完整应用峰值355.21MiB，共同父组1402.69MiB，2CPU/2GiB/swap0、无OOM。实际app0.2735秒正常退出，全组1.5472秒、两数据库exit0且原PID消失；所有任务此前已failed，仍为空闲关闭。
 
 下一步仅增加CI诊断：保留原生MemoryError类别/安全校验信息及有界原始工具调用SSE片段，原响应仍原样交给原解析器，不预填/修复答案。先以原冻结预热的短/长来源、相同Scope/上下文做小规模复现，核对请求hash和实际错误，再决定最小修复；不重跑P22留出、不改采样语料/人设/模型/两尝试/验收门槛，不重复全36任务取绿。运行仍32407ef；三路429、首句超限、在途关闭及用户调度取舍保持，P23整体未验收/P24未开始。
+
+
+## 第二十八步：冻结失败输入的有界SDK诊断（已实现，待CI）
+
+不重复全36任务，不改P23-normal-worker-v1语料/模型/预算/原解析器或两尝试。新增worker-fairness-diagnostic：仅按原预热实际Scope0短句、Scope2长句两输入及各自原数值背景顺序运行，最多4次真实请求；同原_user_excerpts/TurnCompleted/Worker/LLMMemoryExtractor/SDK/proposal路径。失败终态在诊断中如实返回，采集完整与D08验收分开，不能将诊断success当正常任务通过。后续核对首尝试消息hash及依赖，确认是否真正复现相同输入，再分析具体错误。
+
+新增原SDK观察字段：保存原调用kwargs（不含HTTP鉴权，只有原Provider提交的模型/消息/工具等字段）及其hash；SDK解码后实际被原Provider/read_stream消费的content、tool_calls index/id/function name/arguments及finish_reason逐片保留，不把它称原始HTTP线缆SSE。重复函数名和未完成参数片段都原样记录，原chunk仍原样yield，绝不重建/修复提案。输入和消费片段每请求各限1MiB，片段最多8192帧；超界只保留前缀并明确截断标记，同时记录全部已消费片段流hash，不无限堆积。仅本诊断启用，其他性能模式不增加逐片采集。
+
+原生调用补记异常类别，只有本地ProposalError才保存其安全错误code/message；Provider异常沿用既有脱敏结构，不打印原凭据/HTTP错误正文。若原解析器返回值，还记录其有界原值并对副本用原validate_output审计，保存原校验信息，不改变向原Worker返回的原值。报告统一沿用现有测试凭据脱敏保存，模型上下文只有明确合成P23数据。
+
+本地16机制检查通过（0.170秒），新增原函数名/参数片段不拼接修复、原SDK对象不变、输入/流超界截断/全消费hash等边界；原SQLite3.10、真实子进程退出及公平证据反例继续通过。Python3.10 AST、编译、YAML、Shell及diff通过；实际GLM片段/解析失败仍待唯一新SHA/CI。运行仍32407ef、原失败未改写，P23未整体验收/P24未开始，未改生产配置或读取凭据。

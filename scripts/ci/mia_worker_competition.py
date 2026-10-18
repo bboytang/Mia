@@ -29,10 +29,14 @@ async def open_driver(server, scopes, config, root, report, persist):
     import core.utils.llm as existing_llm
     from core.auth import AuthManager
     from mia_companion.jobs import TurnCompleted
+    from mia_companion.memory import MemoryError as ProposalError
     from websockets.asyncio.server import serve
     from mia_reply_latency import open_driver as open_replies
 
     lock, local = threading.RLock(), threading.local()
+    diagnostic = os.environ['MIA_P23_MODE'] == 'worker-fairness-diagnostic'
+    if diagnostic:
+        report['capture_extraction_stream'] = True
     replies = await open_replies(server, scopes, config, root, report, persist, lock=lock)
     worker = server._mia_worker
     overlap = os.environ['MIA_P23_MODE'] == 'worker-smoke'
@@ -98,7 +102,31 @@ async def open_driver(server, scopes, config, root, report, persist):
                 result = extractor(sources, context)  # No proposal repair or substitute response.
                 with lock:
                     evidence['original_output_sha256'] = hashlib.sha256(json.dumps(result, ensure_ascii=False).encode()).hexdigest()
+                    if diagnostic:
+                        encoded = json.dumps(result, ensure_ascii=False).encode()
+                        evidence['original_output_capture_truncated'] = len(encoded) > 131072
+                        if len(encoded) <= 131072:
+                            evidence['original_output'] = result
+                if diagnostic:
+                    from mia_companion.extraction import validate_output
+                    try:
+                        validate_output(json.loads(json.dumps(result)), sources, context)
+                        validation = {'passed': True}
+                    except Exception as error:
+                        validation = {'passed': False, 'error_class': type(error).__name__}
+                        if isinstance(error, ProposalError):
+                            validation.update(code=error.code, message=str(error),
+                                rejected_clues=getattr(error, 'rejected_clues', {}))
+                    with lock:
+                        evidence['original_output_validation'] = validation
                 return result
+            except Exception as error:
+                with lock:
+                    evidence['error_class'] = type(error).__name__
+                    if isinstance(error, ProposalError):
+                        evidence.update(error_code=error.code, error_message=str(error))
+                    persist(report)
+                raise
             finally:
                 with lock:
                     evidence['finished_at_ms'] = elapsed()
@@ -201,7 +229,7 @@ async def open_driver(server, scopes, config, root, report, persist):
 
     tls = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     tls.load_cert_chain(os.environ['MIA_TLS_CERT_FILE'], os.environ['MIA_TLS_KEY_FILE'])
-    if os.environ['MIA_P23_MODE'] == 'worker-fairness':
+    if os.environ['MIA_P23_MODE'] in ('worker-fairness', 'worker-fairness-diagnostic'):
         from mia_worker_fairness import handler_for
         handler = handler_for(worker, scopes, report, lock, persist, elapsed)
     else:

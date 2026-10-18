@@ -44,11 +44,16 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
 
     def counted(*args, **kwargs):
         sample = provider._p23_sample
+        capture = None
         started = time.perf_counter()
         with lock:
             assert report['provider_requests'] < report['provider_request_cap'], 'P23 real request cap exceeded'
             report['provider_requests'] += 1
             report.setdefault('provider_request_purposes', []).append(purpose)
+            if purpose == 'extraction' and report.get('capture_extraction_stream'):
+                from mia_extraction_diagnostics import StreamCapture
+                capture = StreamCapture(report['provider_requests'], kwargs)
+                report.setdefault('extraction_streams', []).append(capture.entry)
             if sample is not None:
                 assert 'sdk_start_ms' not in sample, 'Expected a single real reply request'
                 sample['sdk_start_ms'] = (started - sample['started']) * 1000
@@ -65,6 +70,9 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
         except Exception as error:
             with lock:
                 report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), purpose=purpose))
+                if capture:
+                    capture.entry['create_error_class'] = type(error).__name__
+                    capture.finish()
                 persist(report)
             raise
         if not kwargs.get('stream'):
@@ -75,6 +83,8 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                 try:
                     for chunk in response:
                         with lock:
+                            if capture:
+                                capture.append(chunk)
                             if sample is not None and 'sdk_first_content_ms' not in sample:
                                 if any(getattr(choice.delta, 'content', None) for choice in chunk.choices):
                                     sample['sdk_first_content_ms'] = (time.perf_counter() - started) * 1000
@@ -84,9 +94,20 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                         report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), purpose=purpose))
                         persist(report)
                     raise
+                finally:
+                    if capture:
+                        with lock:
+                            capture.finish()
+                            persist(report)
 
             def close(self):
-                response.close()
+                try:
+                    response.close()
+                finally:
+                    if capture:
+                        with lock:
+                            capture.finish()
+                            persist(report)
 
         return Stream()
 
@@ -113,7 +134,8 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
     fixture_path = Path(__file__).resolve().parents[2] / 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
     fixture = json.loads(fixture_path.read_text())
     cap = {'reply-smoke': 4, 'reply-latency': 144, 'worker-smoke': 8,
-        'worker-extraction': 2, 'worker-faults': 6, 'worker-fairness': 72}[os.environ['MIA_P23_MODE']]
+        'worker-extraction': 2, 'worker-faults': 6, 'worker-fairness': 72,
+        'worker-fairness-diagnostic': 4}[os.environ['MIA_P23_MODE']]
     report.update(provider_request_cap=cap,
         provider_request_purposes=[], cases=[], accepted_extraction_jobs=0, job_submit_times={},
         model=MODEL, dataset_sha256=hashlib.sha256(fixture_path.read_bytes()).hexdigest(),
