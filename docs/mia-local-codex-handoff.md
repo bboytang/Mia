@@ -19,7 +19,7 @@
 1. 读取`AGENTS.md`、主交接、验收决定、实施计划及最近工作记录。
 2. 核对当前分支、HEAD、未提交文件、远端实际SHA和未推送提交；保存已有工作，不reset/clean/强推。
 3. P22实测代码为`2925b63e6ea010ac287d4e388fd6255e7d202244`；证据提交为`1a05c98044ebd3e333bce041c29f4c26c782f2a8`。后续文档提交记录用户通过决定，原始结果不变。
-4. 第二十六步兼容修正`9f174b5a1ae40983f69bb094ac649d2dde08c698`的Python3.10机制检查39122689075 success，唯一修正后故障运行[39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838)在途。首候选59bb6a8 / 39122551508及语法39122544657 failure原文/hash见performance-worker-faults-first-*：授权回调兼容性错误先于模型，SDK0/任务0，正常空闲退出1.7703秒不等于故障合同通过。先收同一新句柄，不再改源码/样本/门槛；运行仍32407ef，三路429、首句超限和调度取舍待答复保持，P23未整体验收/P24未开始。
+4. 第二十六步实际故障 [39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838) / `9f174b5a1ae40983f69bb094ac649d2dde08c698` success，独立SQLite核对通过：超时任务两尝试failed/timeout、两个迟到有效提案无写入；数据库拒绝后原校验结果复用，SDK1/attempt1 committed；后续新事实恢复committed。共4真实请求/3任务，无Provider错误，共同峰值1338.96MiB无OOM，空闲全组1.9174秒退出。原文/hash见performance-worker-faults-compatible-*，首兼容失败保留。当前无在途任务；接续补正常后台Scope公平与五轮任务p95，双前台限流策略待用户答复，首句超限/在途关闭等尚未收齐，P23未整体验收/P24未开始。
 
 已拉取当前分支即已包含交接和证据；`docs/handoff/`里的旧补充包仅为历史快照，不重复导入tracked.patch或覆盖本地文件。详细失败、模型比较和旧run留在工作记录/验证目录，不在本接续入口重复。
 

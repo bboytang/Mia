@@ -1608,3 +1608,22 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 第二十六步首运行39122551508 / 59bb6a8已终态failure：实际Provider请求0、接纳任务0，原SQLite回调兼容性错误在第一个任务提交前触发DatabaseError；没有取得任何提取超时/重试/恢复样本。修正后的故障排空路径仍让实际app以0退出（0.2222秒），原GC/Worker/服务正常结束，空闲全组1.7703秒退出；不能以此把故障合同改判通过。原文/依赖/退出证明、语法失败及服务日志、manager XML与SHA256见performance-worker-faults-first-*。同SHA服务39122544720为294项通过，manager39122544629为154项通过；语法39122544657共11项、SQLite恢复一项错误。
 
 兼容修正9f174b5a1ae40983f69bb094ac649d2dde08c698的[Python3.10机制39122689075](https://github.com/bboytang/Mia/actions/runs/39122689075) success后，只启动一次新故障运行[39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838)，精确运行SHA同9f174b5。仅CI故障解除从None改为显式SQLITE_OK回调，模型/原样本/六请求上限/原Worker及全部门槛不改。先收这一句柄，保留首失败，不通过重复同代码取绿；P23未整体验收/P24未开始。
+
+
+## 第二十六步完成：真实提取超时、SQLite结果复用及后续恢复通过
+
+[39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838) / 精确SHA `9f174b5a1ae40983f69bb094ac649d2dde08c698` success，共4真实glm-4-flash-250414提取SDK请求、3个原Worker任务，无Provider/契约错误。该SHA机制11项在GitHub Python3.10通过（0.230秒）。59bb6a8首候选的兼容失败/SDK0/任务0原文仍在performance-worker-faults-first-*；9f只更改CI回调解除/测试和交接，不改运行模块32407ef、原模型/来源/门槛。服务294/manager154沿用59bb6a8中未变的运行/Java夹具源码证据，明确不是同SHA重新执行。
+
+| 场景 | 原持久终态 | 实际SDK / attempts | 接纳前开始到观察终态及原生收敛上界 |
+| --- | --- | --- | --- |
+| Worker等待200ms（故障注入） | failed / timeout | 2 / 2 | 10.2965秒 |
+| 真实SQLite INSERT拒绝后重试 | committed | 1 / 1 | 5.0603秒 |
+| 随后新事实恢复 | committed | 1 / 1 | 4.7650秒 |
+
+超时原生两次均实际返回，经原validate_output对副本审计通过且含明确原来源；原值未替换/改写。两次原生调用全部结束后，原邮票事实仍为0；下一场景开始时间晚于两原生结束，SQLite最终sources中p23-fault-0记录数0，原任务最终failed/timeout/attempt2，证实有效迟到提案也没有通过失效等待写入。200ms是Worker等待注入，不声称HTTP线缆超时，也未把调用者超时冒充SDK已终止。
+
+数据库场景实际SQLite authorizer拒绝一次memories INSERT；原Worker出现持久retry_wait/database，attempt1、实际SDK1，原_schema1校验结果hash已留存，然后解除拒绝。最终committed仍attempt1/SDK1，没有为数据库故障重复调用模型。最终邮票事实confirmed，完整source/会话p23-fault-1及768维向量与原库一致；该向量hash与第二十五步固定模型同源向量逐位相同。恢复场景新事实“我每周三在餐桌边擦拭陶瓷茶杯”由真实SDK新提案保存，confirmed/source/p23-fault-2和另一768维向量亦逐项核对。
+
+独立只读原SQLite核对三个任务owner/state/attempt/error、两个实际事实及向量长度/维度/hash、无超时来源记录，integrity_check=ok；原请求与唯一同Scope原生任务/attempt/来源、原生开始/结束及原输出hash全部保留。原文、运行/依赖/数据库退出证明、同SHA11机制日志与SHA256见performance-worker-faults-compatible-*。完整应用峰值351.11MiB，共同父组1338.96MiB，2CPU/2GiB/swap0、无OOM。实际app SIGTERM正常退出0.2513秒，原Worker/GC/服务/原生lane结束；Java/控制器/两数据库共1.9174秒正常退出、数据库exit0且五原PID消失。任务此前均已终态，仍仅空闲关闭，不当在途20秒恢复证据。
+
+当前无在途任务，继续补正常后台多Scope公平/一次预热五轮实测任务p50/p95；该步骤可独立于尚待用户答复的真实三路限流策略开展，但不能替代2前台+1后台要求。三路429与首句三组超限原文、P23全部剩余要求保持；P23整体未验收/P24未开始，未部署/改生产配置或读取凭据。

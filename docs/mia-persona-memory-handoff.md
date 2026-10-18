@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第二十六步兼容修正`9f174b5a1ae40983f69bb094ac649d2dde08c698`的Python3.10机制检查39122689075 success，唯一修正后故障运行[39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838)在途。首候选59bb6a8 / 39122551508及语法39122544657 failure原文/hash见performance-worker-faults-first-*：授权回调兼容性错误先于模型，SDK0/任务0，正常空闲退出1.7703秒不等于故障合同通过。先收同一新句柄，不再改源码/样本/门槛；运行仍32407ef，三路429、首句超限和调度取舍待答复保持，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第二十六步实际故障 [39122901838](https://github.com/bboytang/Mia/actions/runs/39122901838) / `9f174b5a1ae40983f69bb094ac649d2dde08c698` success，独立SQLite核对通过：超时任务两尝试failed/timeout、两个迟到有效提案无写入；数据库拒绝后原校验结果复用，SDK1/attempt1 committed；后续新事实恢复committed。共4真实请求/3任务，无Provider错误，共同峰值1338.96MiB无OOM，空闲全组1.9174秒退出。原文/hash见performance-worker-faults-compatible-*，首兼容失败保留。当前无在途任务；接续补正常后台Scope公平与五轮任务p95，双前台限流策略待用户答复，首句超限/在途关闭等尚未收齐，P23未整体验收/P24未开始。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
