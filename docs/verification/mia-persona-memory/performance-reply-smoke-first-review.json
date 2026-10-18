@@ -1,0 +1,480 @@
+{
+  "run_id": 39093458495,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39093458495",
+  "observer_sha": "05dcd473729c64f233792872c2b1afe7567e6115",
+  "runtime_sha": "32407ef9d994eb2c86dcea140fc2de7371d18912",
+  "conclusion": "success",
+  "p23_complete": false,
+  "artifacts": [
+    {
+      "file": "performance-reply-smoke-first-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "3809ef3835ccc77444a811f8e39a436dc7c9be0d34faf43f69fefbc16e5dd504",
+      "sha256": "f915bb4e08c968f714aca5f6a1f18111a477ddc5c981020043abc3bb08f4b162"
+    },
+    {
+      "file": "performance-reply-smoke-first-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "7f37f43d6d50e3d286b616e0b36f65186722414ce66f48aef4adb93955adf53b",
+      "sha256": "a9fb7d1f7fb65fea52ab5ea9ade872482c2cce09be62393322195f0e1172a813"
+    },
+    {
+      "file": "performance-reply-smoke-first-ci-results.json.gz",
+      "source_path": "GitHub run metadata",
+      "raw_sha256": "6d10cadf70701e2aa217081b2c95dead4f1429c9513c2b0765bcd2f587ec9c43",
+      "sha256": "5f56fc586654155fe4b5f636ef4fe018b4460e32fa8da42e85e274bceaad6fb8"
+    },
+    {
+      "file": "performance-reply-smoke-first-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "924eea922e1c11e930cf3aa68172bf141546167b46c154e385970a0cf28fc451",
+      "sha256": "ddc56cb4a65232b8c23eee7d94a3ee8683982bc1416df044c3868834f98ba57a"
+    },
+    {
+      "file": "performance-reply-smoke-first-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+      "sha256": "c826ae84e7c1447087c8cdf2b83899cd5cf1cb915c00efa589face7a410f275e"
+    },
+    {
+      "file": "performance-reply-smoke-first-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-reply-smoke-first-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    }
+  ],
+  "source_artifact_hashes": {
+    "app-lifecycle-results.json": "3809ef3835ccc77444a811f8e39a436dc7c9be0d34faf43f69fefbc16e5dd504",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "2d840bd634807b71198a944313b9623a0f51dad1751815786211edbccab72cec",
+    "export-dependencies.txt": "2209903c4ae9e8f700388c2d2826ad344417bbe96b41ba3861a060cbe03e5690",
+    "cgroup-final-cpu.stat.txt": "78146c79fa9d670788785dce9cf218daf87529fde7cd8347f210d35cf556092a",
+    "cgroup-final-memory.current.txt": "da22a4df80ee2607b2bf6d7a44b49ccefcfe8d7591cb36970c0b1f7d8d74d635",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "afff2f40e2028e9e90cce5b429ac0d3d602aeb6b523943b0a5eccb266e4e8415",
+    "redis.log": "c754b7d94ef51608d1e5df0986a785d6334f4cf9abcae388fa1555986e7562c4",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "14e8d74b508a20322201906e647a1a908b5c37cbeda94596d33e124ba35dfd03",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "7fdb6167ed08ee3c73b98e6b55d7d218b03b2cee912825140c039130dca9f085",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "924eea922e1c11e930cf3aa68172bf141546167b46c154e385970a0cf28fc451",
+    "app-child/ready.json": "5d7c2a694cb332f9832a00b018f17977619c3c7f041fa56f6ffeb80c6b264504",
+    "app-child/app-results.json": "7f37f43d6d50e3d286b616e0b36f65186722414ce66f48aef4adb93955adf53b",
+    "app-child/memory.sqlite3": "2d3c974b472492d879f2f8e7d050138c8f4dbee047a35abaf3e907db1a4f6ade",
+    "app-child/context-profile.json": "4867816ff5a4178a7be89da4042a937f180e73eb3333833acec4318f3de1c680",
+    "junit/TEST-junit-jupiter.xml": "109d9b140f3c8eb3e496a9b3686a8bfd240a10b5f8dc0d3dd9415236ab0a0a9f",
+    "junit/TEST-junit-vintage.xml": "b0e3085204c3125a06d9d6b87daecedce00cbab532a53c74a008be6b09c45a2f",
+    "junit/TEST-junit-platform-suite.xml": "bb7e70dcaae1483d698f5cd28a15b518165d875f217c3be1ac86a2ce83076f79"
+  },
+  "parent": {
+    "app_lifecycle_preflight_passed": true,
+    "app_pid": 5508,
+    "members_ready": {
+      "mysql": {
+        "pid": 4769,
+        "start_ticks": "35536",
+        "cgroup": "/miap23.slice/docker-d1b76936c9b344575d7bbbc7e3b8bf512f9f420eec39a027143d448d89b01ca3.scope",
+        "VmHWM": "495140 kB",
+        "VmRSS": "495140 kB"
+      },
+      "redis": {
+        "pid": 4835,
+        "start_ticks": "35547",
+        "cgroup": "/miap23.slice/docker-9d8ca29add20528d46f8b0a2cc73597ae97447b6e2def35bec8f27fd2e3826cb.scope",
+        "VmHWM": "29636 kB",
+        "VmRSS": "29352 kB"
+      },
+      "manager": {
+        "pid": 5339,
+        "start_ticks": "36212",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "412328 kB",
+        "VmRSS": "408524 kB"
+      },
+      "python": {
+        "pid": 5508,
+        "start_ticks": "37796",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359460 kB",
+        "VmRSS": "316852 kB"
+      },
+      "harness": {
+        "pid": 5507,
+        "start_ticks": "37789",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20076 kB",
+        "VmRSS": "20076 kB"
+      }
+    },
+    "app_process_shutdown_seconds": 0.3768834999999626,
+    "app_returncode": 0,
+    "idle_service_group_shutdown": {
+      "elapsed_seconds": 2.608563355000001,
+      "databases_stopped_with_zero_exit_no_oom": true,
+      "remaining_original_processes": [],
+      "passed": true,
+      "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+    },
+    "cgroup_before": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 35195156\nuser_usec 32553081\nsystem_usec 2642074\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 227\nnr_throttled 134\nthrottled_usec 6370626\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "923779072",
+      "memory.peak": "923787264",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "cgroup_final": {
+      "cpu.max": "200000 100000",
+      "cpu.stat": "usage_usec 55213019\nuser_usec 50626873\nsystem_usec 4586145\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 407\nnr_throttled 195\nthrottled_usec 9175522\nnr_bursts 0\nburst_usec 0",
+      "memory.max": "2147483648",
+      "memory.swap.max": "0",
+      "memory.current": "1060593664",
+      "memory.peak": "1439985664",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+    },
+    "reply_contract_passed": true,
+    "first_sentence_acceptance_passed": null,
+    "reply_cases": [
+      {
+        "capacity": 1000,
+        "query_index": 0,
+        "pairs": [
+          {
+            "number": 0,
+            "warm": false,
+            "variants": {
+              "baseline": {
+                "type": "p23_case",
+                "case": "0-0-0-baseline",
+                "variant": "baseline",
+                "query": "我去湖边散步应该准备什么？",
+                "warm": false,
+                "scope_owner": "user:941040001:agent:mia-p23-0",
+                "capacity": 1000,
+                "sdk_start_ms": 1.5422839999814641,
+                "sdk_request": {
+                  "model": "glm-4-flash-250414",
+                  "max_tokens": 4096,
+                  "messages_sha256": "cf22edf9901210627dded2797672d9256234427f44a634ff7936440c907cc1c5",
+                  "system_sha256": "f440a7a2a16b1ccc53b5df9a54270086d34e578b495ca5068490c67db2533150",
+                  "fact_ids": [],
+                  "events": 0,
+                  "last_message": {
+                    "role": "user",
+                    "content": "我去湖边散步应该准备什么？"
+                  },
+                  "tools_count": 0
+                },
+                "sdk_first_content_ms": 913.769157000047,
+                "first_sentence_ms": 1255.1617799999804,
+                "first_sentence": "🤔好奇 嗯嗯，去湖边散步听起来很惬意呢。",
+                "chat_completed": null,
+                "output_replacement": null,
+                "total_case_ms": 4777.375781999979
+              },
+              "memory": {
+                "type": "p23_case",
+                "case": "0-0-0-memory",
+                "variant": "memory",
+                "query": "我去湖边散步应该准备什么？",
+                "warm": false,
+                "scope_owner": "user:941040001:agent:mia-p23-0",
+                "capacity": 1000,
+                "sdk_start_ms": 675.2670029999877,
+                "sdk_request": {
+                  "model": "glm-4-flash-250414",
+                  "max_tokens": 4096,
+                  "messages_sha256": "c0d28bd8e69010618acba11e0819943ff3e6c39be3199a37a984faa015ec8b48",
+                  "system_sha256": "f440a7a2a16b1ccc53b5df9a54270086d34e578b495ca5068490c67db2533150",
+                  "fact_ids": [
+                    "user:941040001:agent:mia-p23-0-00000",
+                    "user:941040001:agent:mia-p23-0-00009",
+                    "user:941040001:agent:mia-p23-0-00006",
+                    "user:941040001:agent:mia-p23-0-00003"
+                  ],
+                  "events": 0,
+                  "last_message": {
+                    "role": "user",
+                    "content": "我去湖边散步应该准备什么？"
+                  },
+                  "tools_count": 0
+                },
+                "sdk_first_content_ms": 508.96288600000616,
+                "first_sentence_ms": 1668.2476159999737,
+                "first_sentence": "😌平静 嗨呀，去湖边散步呀？",
+                "chat_completed": true,
+                "admission": {
+                  "status": "accepted",
+                  "accepted": true,
+                  "id": "5a73f65c0659a94a3d0433df6535e3d6dd372a2d78ddfc93d24cca6fd9bc1d5f",
+                  "state": "pending"
+                },
+                "job": {
+                  "id": "5a73f65c0659a94a3d0433df6535e3d6dd372a2d78ddfc93d24cca6fd9bc1d5f",
+                  "state": "empty",
+                  "attempts": 1,
+                  "submit_to_observed_terminal_seconds": 0.19694431000004897
+                },
+                "output_replacement": null,
+                "total_case_ms": 6669.532747000005
+              }
+            },
+            "order": [
+              "baseline",
+              "memory"
+            ],
+            "first_sentence_delta_ms": 413.0858359999934
+          }
+        ],
+        "first_sentence_delta": {
+          "count": 1,
+          "p50_ms": 413.0858359999934,
+          "p95_ms": 413.0858359999934,
+          "samples_ms": [
+            413.0858359999934
+          ]
+        }
+      }
+    ],
+    "error_class": null,
+    "reason": null
+  },
+  "provider_requests": 2,
+  "accepted_extraction_jobs": 1,
+  "provider_request_purposes": [
+    "reply",
+    "reply"
+  ],
+  "child": {
+    "ready": true,
+    "passed": true,
+    "authorized_owners": [
+      "user:941040001:agent:mia-p23-0",
+      "user:941040002:agent:mia-p23-1",
+      "user:941040003:agent:mia-p23-2"
+    ],
+    "app_ready_seconds": 1.3917462800000067,
+    "cold_query_encode_ms": 427.01259199998276,
+    "embedding": {
+      "model_id": "BAAI/bge-base-zh-v1.5/u8u8/dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+      "revision": "f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+      "dimension": 768,
+      "vector_sha256": "285f03a0ebed520b2a855f027d2237aa89628c225981b55da5c4808381291e7f",
+      "session_options": {
+        "intra_op_num_threads": 1,
+        "inter_op_num_threads": 1,
+        "providers": [
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "python_peak_before_encoder_mib": 119.99609375,
+    "python_peak_after_encoder_mib": 351.03515625,
+    "encoder_peak_increment_mib": 231.0390625,
+    "encoder_live_rss_increment_mib": 169.9765625,
+    "members_before_encoder": {
+      "mysql": {
+        "pid": 4769,
+        "start_ticks": "35536",
+        "cgroup": "/miap23.slice/docker-d1b76936c9b344575d7bbbc7e3b8bf512f9f420eec39a027143d448d89b01ca3.scope",
+        "VmHWM": "495140 kB",
+        "VmRSS": "495140 kB"
+      },
+      "redis": {
+        "pid": 4835,
+        "start_ticks": "35547",
+        "cgroup": "/miap23.slice/docker-9d8ca29add20528d46f8b0a2cc73597ae97447b6e2def35bec8f27fd2e3826cb.scope",
+        "VmHWM": "29636 kB",
+        "VmRSS": "29352 kB"
+      },
+      "manager": {
+        "pid": 5339,
+        "start_ticks": "36212",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "412584 kB",
+        "VmRSS": "412584 kB"
+      },
+      "python": {
+        "pid": 5508,
+        "start_ticks": "37796",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "123372 kB",
+        "VmRSS": "123372 kB"
+      },
+      "harness": {
+        "pid": 5507,
+        "start_ticks": "37789",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20060 kB",
+        "VmRSS": "20060 kB"
+      }
+    },
+    "members_ready": {
+      "mysql": {
+        "pid": 4769,
+        "start_ticks": "35536",
+        "cgroup": "/miap23.slice/docker-d1b76936c9b344575d7bbbc7e3b8bf512f9f420eec39a027143d448d89b01ca3.scope",
+        "VmHWM": "495140 kB",
+        "VmRSS": "495140 kB"
+      },
+      "redis": {
+        "pid": 4835,
+        "start_ticks": "35547",
+        "cgroup": "/miap23.slice/docker-9d8ca29add20528d46f8b0a2cc73597ae97447b6e2def35bec8f27fd2e3826cb.scope",
+        "VmHWM": "29636 kB",
+        "VmRSS": "29352 kB"
+      },
+      "manager": {
+        "pid": 5339,
+        "start_ticks": "36212",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "412328 kB",
+        "VmRSS": "408524 kB"
+      },
+      "python": {
+        "pid": 5508,
+        "start_ticks": "37796",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "359460 kB",
+        "VmRSS": "316852 kB"
+      },
+      "harness": {
+        "pid": 5507,
+        "start_ticks": "37789",
+        "cgroup": "/miap23.slice/miap23-measure.service",
+        "VmHWM": "20060 kB",
+        "VmRSS": "20060 kB"
+      }
+    },
+    "app_lifecycles": [
+      {
+        "pid": 5508,
+        "ports": [
+          54147,
+          37637
+        ],
+        "gc_running": true,
+        "actual_service_tasks": [
+          "SimpleHttpServer.start",
+          "WebSocketServer.start"
+        ],
+        "app_sha256": "4722505bfb4bd6516fd928157cc5ba0dfd735e58dd6de0934f53c8165e538cc4",
+        "server_class": "core.websocket_server.WebSocketServer",
+        "worker_class": "mia_companion.jobs.MemoryWorker",
+        "scope": "Actual app.main, WebSocketServer, SimpleHttpServer, GC and original Worker; separate synthetic WSS text driver; audio consumers omitted"
+      }
+    ],
+    "app_shutdowns": [
+      {
+        "pid": 5508,
+        "budget_seconds": 20,
+        "cleanup_seconds": 0.0004956870000114577,
+        "drained": true,
+        "worker_closing": true,
+        "worker_task_done": true,
+        "gc_stopped": true,
+        "service_tasks_done": [
+          true,
+          true,
+          true
+        ],
+        "native_finished": true
+      }
+    ],
+    "integrity": "ok",
+    "provider_errors": null,
+    "case_errors": null,
+    "cases": [
+      {
+        "case": "0-0-0-baseline",
+        "variant": "baseline",
+        "query": "我去湖边散步应该准备什么？",
+        "warm": false,
+        "scope_owner": "user:941040001:agent:mia-p23-0",
+        "capacity": 1000,
+        "sdk_start_ms": 1.5422839999814641,
+        "sdk_request": {
+          "model": "glm-4-flash-250414",
+          "max_tokens": 4096,
+          "messages_sha256": "cf22edf9901210627dded2797672d9256234427f44a634ff7936440c907cc1c5",
+          "system_sha256": "f440a7a2a16b1ccc53b5df9a54270086d34e578b495ca5068490c67db2533150",
+          "fact_ids": [],
+          "events": 0,
+          "last_message": {
+            "role": "user",
+            "content": "我去湖边散步应该准备什么？"
+          },
+          "tools_count": 0
+        },
+        "sdk_first_content_ms": 913.769157000047,
+        "first_sentence_ms": 1255.1617799999804,
+        "first_sentence": "🤔好奇 嗯嗯，去湖边散步听起来很惬意呢。",
+        "chat_completed": null,
+        "output_replacement": null,
+        "total_case_ms": 4777.375781999979
+      },
+      {
+        "case": "0-0-0-memory",
+        "variant": "memory",
+        "query": "我去湖边散步应该准备什么？",
+        "warm": false,
+        "scope_owner": "user:941040001:agent:mia-p23-0",
+        "capacity": 1000,
+        "sdk_start_ms": 675.2670029999877,
+        "sdk_request": {
+          "model": "glm-4-flash-250414",
+          "max_tokens": 4096,
+          "messages_sha256": "c0d28bd8e69010618acba11e0819943ff3e6c39be3199a37a984faa015ec8b48",
+          "system_sha256": "f440a7a2a16b1ccc53b5df9a54270086d34e578b495ca5068490c67db2533150",
+          "fact_ids": [
+            "user:941040001:agent:mia-p23-0-00000",
+            "user:941040001:agent:mia-p23-0-00009",
+            "user:941040001:agent:mia-p23-0-00006",
+            "user:941040001:agent:mia-p23-0-00003"
+          ],
+          "events": 0,
+          "last_message": {
+            "role": "user",
+            "content": "我去湖边散步应该准备什么？"
+          },
+          "tools_count": 0
+        },
+        "sdk_first_content_ms": 508.96288600000616,
+        "first_sentence_ms": 1668.2476159999737,
+        "first_sentence": "😌平静 嗨呀，去湖边散步呀？",
+        "chat_completed": true,
+        "admission": {
+          "status": "accepted",
+          "accepted": true,
+          "id": "5a73f65c0659a94a3d0433df6535e3d6dd372a2d78ddfc93d24cca6fd9bc1d5f",
+          "state": "pending"
+        },
+        "job": {
+          "id": "5a73f65c0659a94a3d0433df6535e3d6dd372a2d78ddfc93d24cca6fd9bc1d5f",
+          "state": "empty",
+          "attempts": 1,
+          "submit_to_observed_terminal_seconds": 0.19694431000004897
+        },
+        "output_replacement": null,
+        "total_case_ms": 6669.532747000005
+      }
+    ],
+    "error_class": null,
+    "reason": null
+  }
+}

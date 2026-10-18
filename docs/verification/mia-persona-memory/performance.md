@@ -2,7 +2,7 @@
 
 2026-10-17 用户批准“先读取交接文档，然后开始p23，每完成一步记录并写交接”。起点为远程最新交接提交 `1c97e91`；P22用户验收通过、选定 `glm-4-flash-250414`，原失败和未覆盖项不变。P24未开始。
 
-当前：第二十二步观察器`05dcd473729c64f233792872c2b1afe7567e6115`已推送，唯一真实回复契约[39093458495](https://github.com/bboytang/Mia/actions/runs/39093458495)在途；服务39093456104、manager39093456090和语法/6机制测试39093456092在途。先收同一句柄的1k基线/实际配对（真实SDK请求上限4），通过后才派发同SHA正式reply-latency，不以单样本判D08。第二十一步app生命周期已通过，原文performance-app-lifecycle-first-*；运行模块仍32407ef，P23未整体验收/P24未开始，生产配置/数据未改。
+当前：第二十二步契约05dcd47 / 39093458495 success（2真实GLM回复、1原Worker有效empty，无提取模型调用），服务294/manager154/6机制测试通过。正式首句唯一39093919726在途，精确SHA b40db9f与契约SHA仅交接文档不同、执行源码完全一致；继续同一句柄，勿重复采样。P23未整体验收/P24未开始；原文/hash见performance-reply-smoke-first-*。
 
 ## 第一步：固定范围与数值入口
 
@@ -570,3 +570,14 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 本地6机制测试通过（0.037秒），含独立验证无记忆基线不接触index/事实库仍保留原core/role/问题/预算；新增分支缩进错误在本地检查中已修正，复验AST/YAML/Shell/diff通过。实际Provider/Java/资源只在GitHub验证，唯一新SHA/运行句柄随后记录；当前未发生本步骤Provider请求，无新首句或任务验收结论。P23整体未验收/P24未开始，第二十步容量及用户接受的原目标小幅差距保留。
 
 第二十二步观察器`05dcd473729c64f233792872c2b1afe7567e6115`已推送，唯一真实回复契约[39093458495](https://github.com/bboytang/Mia/actions/runs/39093458495)在途；服务39093456104、manager39093456090和语法/6机制测试39093456092在途。先收同一句柄的1k基线/实际配对（真实SDK请求上限4），通过后才派发同SHA正式reply-latency，不以单样本判D08。第二十一步app生命周期已通过，原文performance-app-lifecycle-first-*；运行模块仍32407ef，P23未整体验收/P24未开始，生产配置/数据未改。
+
+
+## 第二十二步契约完成，正式首句测量在途
+
+观察器05dcd473729c64f233792872c2b1afe7567e6115 / [唯一reply-smoke39093458495](https://github.com/bboytang/Mia/actions/runs/39093458495) success。同观察器服务39093456104为294项、manager39093456090为154项、语法/6机制测试39093456092均success。原始parent/child、依赖、数据库退出及哈希见performance-reply-smoke-first-*，相关CI计数/日志及XML hash见performance-reply-smoke-first-ci-checks.json；运行模块未改，与32407ef对应的既有向量/身份报告继续按运行实现溯源，不当新观察器回归。
+
+实际SDK请求2次，均为glm-4-flash-250414回复，无Provider错误；基线与实际回复的系统prompt SHA/当前问题/max_tokens=4096一致，基线事实为空、实际只选中本Scope事实，实际原chat完成且无故障替换。基线受检首短句1255.16ms，实际1668.25ms，差413.09ms；SDK开始前1.54/675.27ms、SDK至首content913.77/508.96ms。仅一个冷配对，不能判D08、不能拿网络波动或首token替代正式已检查短句。正常接纳原Worker任务1个，原extractor对问题短路为empty，attempts=1、submit到观察终态0.197秒；没有实际提取模型调用，不冒充后台模型竞争/公平性。Python应用峰值351.04MiB，共同父组峰值1373.28MiB、无OOM，空闲服务组2.609秒正常退出。
+
+契约原始数据核对后启动正式首句采样，未重复smoke。GitHub API拒绝直接commit SHA作为workflow_dispatch ref（422，未创建run/Provider请求）；因此在当前分支b40db9f80b9bde6bbe357496e165777c0ab45bd3启动[唯一reply-latency39093919726](https://github.com/bboytang/Mia/actions/runs/39093919726)。已用git diff确认05dcd47到b40db9f仅四份交接文档不同，.github/scripts/ci/server所有执行源码完全相同；正式run精确SHA是b40db9f，不把它写成05dcd47。正式72回复、每查询一次预热/五对实测、请求上限144等冻结定义保持，后续继续本句柄收全部样本，暂不再修改观察器/运行代码。P23未整体验收/P24未开始；首句新结论仍待报告，双前台/真实提取公平故障及在途关闭尚待验证。
+
+最新接续：第二十二步契约05dcd47 / 39093458495 success（2真实GLM回复、1原Worker有效empty，无提取模型调用），服务294/manager154/6机制测试通过。正式首句唯一39093919726在途，精确SHA b40db9f与契约SHA仅交接文档不同、执行源码完全一致；继续同一句柄，勿重复采样。P23未整体验收/P24未开始；原文/hash见performance-reply-smoke-first-*。历史在途/同SHA描述以本段精确版本记录为准。
