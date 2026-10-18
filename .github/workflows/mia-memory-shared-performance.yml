@@ -4,11 +4,13 @@ on:
     paths:
       - 'scripts/ci/verify_mia_shared_envelope.py'
       - 'scripts/ci/verify_mia_app_lifecycle.py'
+      - 'scripts/ci/mia_reply_latency.py'
       - 'scripts/ci/mia_behavior_runtime.py'
       - 'scripts/ci/mia_thread_diagnostics.py'
       - 'scripts/ci/mia_query_scheduling.py'
       - 'scripts/ci/tests/test_mia_query_scheduling.py'
       - 'scripts/ci/tests/test_mia_app_lifecycle.py'
+      - 'scripts/ci/tests/test_mia_reply_latency.py'
       - 'scripts/ci/mia_performance_budgets.py'
       - 'scripts/ci/run_mia_shared_envelope.sh'
       - 'server/companion/manager_tests/MiaPerformanceIntegrationTest.java'
@@ -18,7 +20,7 @@ on:
       mode:
         description: Capacity gate or separate shared-resource hot-path diagnosis
         type: choice
-        options: [capacity, diagnostic, threads, scheduling, app-lifecycle]
+        options: [capacity, diagnostic, threads, scheduling, app-lifecycle, reply-smoke, reply-latency]
         default: capacity
 permissions:
   contents: read
@@ -36,12 +38,13 @@ jobs:
       - run: |
           python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py
           python -m py_compile scripts/ci/verify_mia_app_lifecycle.py
+          python -m py_compile scripts/ci/mia_reply_latency.py
           python -m unittest discover -s scripts/ci/tests -p 'test_mia_*.py' -v
           bash -n scripts/ci/run_mia_shared_envelope.sh
   shared:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
       MIA_P23_REPORT_DIR: /tmp/mia-p23-shared-results
@@ -66,7 +69,7 @@ jobs:
       - name: Prepare dependencies outside measured envelope
         run: |
           mkdir -p "$MIA_P23_REPORT_DIR"
-          if [ "$MIA_P23_MODE" = app-lifecycle ]; then
+          if [[ "$MIA_P23_MODE" =~ ^(app-lifecycle|reply-smoke|reply-latency)$ ]]; then
             sudo apt-get update
             sudo apt-get install -y libopus0 libsndfile1 ffmpeg
             dpkg-query --show libopus0 libsndfile1 ffmpeg > "$MIA_P23_REPORT_DIR/runtime-system.txt"
@@ -114,7 +117,7 @@ jobs:
       - name: Prepare pinned actual BGE outside measured envelope
         run: |
           mia_export_python=python
-          if [ "$MIA_P23_MODE" = app-lifecycle ]; then
+          if [[ "$MIA_P23_MODE" =~ ^(app-lifecycle|reply-smoke|reply-latency)$ ]]; then
             python -m venv "$RUNNER_TEMP/mia-p23-export"
             mia_export_python="$RUNNER_TEMP/mia-p23-export/bin/python"
             "$mia_export_python" -m pip install pip==25.3 typing_extensions==4.16.0
@@ -143,6 +146,9 @@ jobs:
           mvn --batch-mode dependency:get -Dartifact=org.junit.platform:junit-platform-console-standalone:1.10.1
           java -version 2> "$MIA_P23_REPORT_DIR/java-version.txt"
       - name: Actual manager, databases and Python-BGE share one 2CPU 2GiB parent
+        env:
+          MIA_TEST_LLM_API_KEY: ${{ secrets.MIA_TEST_LLM_API_KEY }}
+          MIA_TEST_LLM_BASE_URL: ${{ secrets.MIA_TEST_LLM_BASE_URL }}
         run: bash scripts/ci/run_mia_shared_envelope.sh
       - name: Preserve all original results including failures
         if: always()

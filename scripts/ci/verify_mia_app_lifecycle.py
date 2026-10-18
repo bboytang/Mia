@@ -18,7 +18,7 @@ CGROUP = Path('/sys/fs/cgroup/miap23.slice')
 
 def save(path, report):
     text = json.dumps(report, ensure_ascii=False, indent=2)
-    values = [os.environ.get('MIA_SCOPE_SERVER_SECRET', '')]
+    values = [os.environ.get(name, '') for name in ('MIA_SCOPE_SERVER_SECRET', 'MIA_TEST_LLM_API_KEY')]
     values += [peer['private_credential'] for peer in json.loads(os.environ.get('MIA_P23_PEERS', '[]'))]
     for value in values:
         if value:
@@ -56,12 +56,13 @@ def members(app_pid):
 async def serve():
     root = ROOT / 'app-child'
     root.mkdir(exist_ok=True)
-    report = {'code_sha': os.environ['GITHUB_SHA'], 'pid': os.getpid(), 'ready': False,
+    report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': os.environ['MIA_P23_MODE'], 'pid': os.getpid(), 'ready': False,
         'passed': False, 'provider_requests': 0, 'accepted_extraction_jobs': 0,
         'scope': 'Original installed app.main, WS/HTTP/GC, idle persistent Worker and actual BGE; no audio/chat/extraction workload'}
     persist = lambda value: save(root / 'app-results.json', value)
     persist(report)
     task = None
+    driver = None
     try:
         sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
         os.chdir(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server')
@@ -99,20 +100,31 @@ async def serve():
         report['encoder_peak_increment_mib'] = (report['python_peak_after_encoder_mib']
             - report['python_peak_before_encoder_mib'])
         report['resource_scope'] = 'Integrated Python peaks and high-water increment; not isolated encoder RSS or idle-service capacity'
+        report['members_after_encoder'] = members(os.getpid())
         report['integrity'] = worker.jobs.store.db.execute('PRAGMA integrity_check').fetchone()[0]
         assert report['integrity'] == 'ok'
+        if os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-latency'):
+            from mia_reply_latency import open_driver
+            report['scope'] = 'Actual app/services, original installed ConnectionHandler.chat, real Provider and persistent Worker; synthetic WSS text driver, audio omitted'
+            driver = await open_driver(server, scopes, config, root, report, persist)
         report.update(ready=True, members_ready=members(os.getpid()), cgroup_ready=group_state())
         rss = lambda value: int(value['python']['VmRSS'].split()[0]) / 1024
-        report['encoder_live_rss_increment_mib'] = rss(report['members_ready']) - rss(report['members_before_encoder'])
+        report['encoder_live_rss_increment_mib'] = rss(report['members_after_encoder']) - rss(report['members_before_encoder'])
         persist(report)
-        save(root / 'ready.json', {'pid': os.getpid(), 'ports': report['app_lifecycles'][-1]['ports']})
+        save(root / 'ready.json', {'pid': os.getpid(), 'ports': report['app_lifecycles'][-1]['ports'],
+            'text_port': report.get('text_driver_port')})
         await task  # Original app's SIGTERM handler and original stop_service own shutdown.
         assert len(report['app_shutdowns']) == 1 and report['app_shutdowns'][0]['drained']
+        report['members_after_workload'] = members(os.getpid())
+        report['python_peak_after_workload_mib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
         report['passed'] = True
     except BaseException as error:
         report.update(error_class=type(error).__name__, reason=str(error)[:500])
         raise
     finally:
+        if driver:
+            driver.close()
+            await driver.wait_closed()
         if task and not task.done():
             task.cancel()
             await asyncio.gather(task, return_exceptions=True)
@@ -139,6 +151,11 @@ async def control(report):
             assert state['pid'] == process.pid
             report['members_ready'] = members(process.pid)
             report['cgroup_ready'] = group_state()
+            if os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-latency'):
+                sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
+                from mia_reply_latency import drive
+                await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
+                report['members_after_workload'] = members(process.pid)
             report['shutdown_signal_monotonic'] = time.monotonic()
             save(ROOT / 'app-lifecycle-results.json', report)
             process.send_signal(signal.SIGTERM)
@@ -148,6 +165,9 @@ async def control(report):
             assert process.returncode == 0, 'Actual app process failed during shutdown'
             child = json.loads((ROOT / 'app-child/app-results.json').read_text())
             assert child['passed'] and child['code_sha'] == report['code_sha']
+            report['provider_requests'] = child['provider_requests']
+            report['accepted_extraction_jobs'] = child['accepted_extraction_jobs']
+            assert not child.get('provider_errors') and not child.get('case_errors')
             for port in state['ports']:
                 try:
                     reader, writer = await asyncio.wait_for(asyncio.open_connection('127.0.0.1', port), 1)
@@ -166,11 +186,14 @@ async def control(report):
 
 
 def main():
-    report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': 'app-lifecycle',
+    mode = os.environ['MIA_P23_MODE']
+    report = {'code_sha': os.environ['GITHUB_SHA'], 'mode': mode,
         'app_lifecycle_preflight_passed': False, 'p23_complete': False, 'provider_requests': 0,
         'scope': 'Actual full-import app/BGE/idle Worker lifecycle in common 2CPU/2GiB parent; not inflight/reply/Worker fairness acceptance',
         'remaining': ['same-Provider paired first-sentence delta', 'two actual foreground replies and persistent extraction',
             'task fairness/faults/120-second terminal latency', 'inflight total service shutdown within 20 seconds']}
+    if mode in ('reply-smoke', 'reply-latency'):
+        report['scope'] = 'Actual app/services and installed chat, same-Provider empty-memory baseline and real original Worker; sequential pairs with audio omitted'
     save(ROOT / 'app-lifecycle-results.json', report)
     try:
         report['cgroup_before'] = group_state()
@@ -178,13 +201,21 @@ def main():
     except Exception as error:
         report.update(error_class=type(error).__name__, reason=str(error)[:500])
     finally:
+        child_path = ROOT / 'app-child/app-results.json'
+        if child_path.exists():
+            child = json.loads(child_path.read_text())
+            report['provider_requests'] = child['provider_requests']
+            report['accepted_extraction_jobs'] = child['accepted_extraction_jobs']
+        if mode == 'reply-latency' and report.get('first_sentence_acceptance_passed'):
+            report['remaining'].remove('same-Provider paired first-sentence delta')
         report['cgroup_final'] = group_state()
         events = dict(line.split() for line in report['cgroup_final']['memory.events'].splitlines())
         if any(int(events[key]) for key in ('oom', 'oom_kill')):
             report['app_lifecycle_preflight_passed'] = False
         save(ROOT / 'app-lifecycle-results.json', report)
     print(json.dumps({key: report[key] for key in ('app_lifecycle_preflight_passed', 'p23_complete', 'provider_requests')}))
-    if not report['app_lifecycle_preflight_passed']:
+    if (not report['app_lifecycle_preflight_passed']
+            or (mode == 'reply-latency' and not report.get('first_sentence_acceptance_passed'))):
         raise SystemExit(1)
 
 
@@ -211,7 +242,7 @@ def finalize():
     report['idle_service_group_shutdown'] = {'elapsed_seconds': elapsed,
         'databases_stopped_with_zero_exit_no_oom': containers_clean,
         'remaining_original_processes': still_running, 'passed': passed,
-        'scope': 'From SIGTERM to actual app through Java/harness/MySQL/Redis exit; idle Worker, no accepted jobs'}
+        'scope': 'From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal'}
     save(path, report)
     if not passed:
         raise SystemExit(1)

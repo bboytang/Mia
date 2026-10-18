@@ -1451,3 +1451,16 @@ _clues完成后，原query与expanded_text已独立确定，原实现仍依次aw
 从控制器发送SIGTERM到实际应用进程exit=0为0.1685秒，原Worker task/GC/服务任务正常结束，两个实际端口关闭；继续到原Java/控制器/MySQL/Redis退出共2.3543秒。两数据库先graceful stop并以0退出、无OOM，五原PID/start_ticks均已消失，没有把强杀/非零退出报为正常关闭。该结果仅空闲Worker，accepted jobs=0、Provider请求0；不能据此声称真实回复、首句增量、提取任务公平/故障/120秒终态或有任务在途的20秒关闭已通过。
 
 当前无在途任务，运行模块仍32407ef，第二十步两容量验收通过及419.51ms原400ms目标差距保留。下一步在同一共同资源环境新增P23实际回复/同Provider无记忆首句基线，限定glm-4-flash-250414并复用既有受保护CI测试凭据；先核对真实请求/原回复链/受检首句时点，再冻结样本测量，不重跑P22留出或模型比较。P23整体未验收/P24未开始，未部署/改生产数据，音频/真机未测。
+
+
+## 第二十二步：P23真实回复/同Provider首句入口（已实现，待CI）
+
+保持第二十一步已通过的实际app/原Worker/共同2CPU2GiB环境，新增reply-smoke与reply-latency两种显式模式。固定用户选定glm-4-flash-250414，复用现有受保护CI测试Provider凭据，在临时manager测试库配置三独立用户；不改Secrets/生产配置，不比较其他模型、不重跑P22留出。凭据仅经已有环境绑定与setenv变量名传入受限Java/子进程，不插入命令参数值或报告。
+
+实际安装ConnectionHandler完整导入、原chat/decorator、上下文/Scope复核、原GuardedTTSQueue和原持久Worker参与，另用真实TLS WSS合成文字驱动，省略音频消费者而非模型/embedding响应。唯一事实库按原数值夹具以真实BGE种子复制扩容，前两Scope各1k/10k，第三32；不宣称大规模事实经模型提取或语义质量已验。基线以同Provider/固定core/policy/role/问题及原空上下文装配生成，原短句guard仍执行；显式跳过记忆检索、快照/逐delta权限及任务接纳，其成本计入集成额外延迟，不冒充同一完整chat路径。原实际回复必须选中本Scope事实、正常chat完成、无故障替换且真正接纳到原Worker。
+
+首句时点固定为原GuardedTTSQueue检查后的首个非空可播文本入队；另记case开始至SDK开始、SDK开始至首个content（含远端计算和传输，不称纯网络延迟）、全部原始配对样本和真实模型/SDK请求hash、所选Scope事实ID。原Worker自动执行并到committed/有效empty后再发下一样本，记录实际attempts及submit开始至观察到终态上界；问题可能经原extractor正常短路为空，不能把这种结果当实际提取模型调用。此步顺序配对，不代替双前台公平/故障或在途关闭。
+
+先仅派发reply-smoke：1k Scope一个问题、基线/实际各一次，真实SDK请求硬上限4（含最多两次提取）；仅契约/链路检查，不判D08。契约通过后，才在同一源码派发reply-latency：两Scope容量×三原查询，每查询一对预热+五对实测，交替先后，共72真实回复、最多36个任务×两提取尝试，总请求上限144；保留负增量、逐查询配对差值p50/p95，验收≤600ms、原优化目标≤500ms分列，不取不同run最低值或以首token冒充已检查首句。
+
+本地6机制测试通过（0.037秒），含独立验证无记忆基线不接触index/事实库仍保留原core/role/问题/预算；新增分支缩进错误在本地检查中已修正，复验AST/YAML/Shell/diff通过。实际Provider/Java/资源只在GitHub验证，唯一新SHA/运行句柄随后记录；当前未发生本步骤Provider请求，无新首句或任务验收结论。P23整体未验收/P24未开始，第二十步容量及用户接受的原目标小幅差距保留。

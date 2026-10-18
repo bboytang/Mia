@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import xiaozhi.modules.security.service.SysUserTokenService;
 import xiaozhi.modules.sys.service.SysParamsService;
 
-/** P23 shared-envelope preflight; no Provider or P22 semantic acceptance cases. */
+/** P23 common resources; dedicated Provider only in explicit reply modes, no P22 cases. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
     "server.servlet.context-path=/xiaozhi", "server.ssl.enabled=true",
     "server.ssl.key-store=${MIA_SCOPE_KEYSTORE}", "server.ssl.key-store-password=mia-ci-only",
@@ -59,12 +59,31 @@ class MiaPerformanceIntegrationTest {
         // suppress database parameters containing synthetic authorization tokens.
         LoggerContext logging = (LoggerContext) LoggerFactory.getILoggerFactory();
         for (var logger : logging.getLoggerList()) logger.setLevel(Level.ERROR);
+        String mode = System.getenv().getOrDefault("MIA_P23_MODE", "capacity");
+        String selected = null;
+        if (mode.equals("reply-smoke") || mode.equals("reply-latency")) {
+            String key = System.getenv("MIA_TEST_LLM_API_KEY"), endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
+            assertNotNull(key, "Dedicated P23 test Provider key is not configured");
+            assertNotNull(endpoint, "Dedicated P23 test Provider endpoint is not configured");
+            assertFalse(key.isBlank(), "Dedicated P23 test Provider key is empty");
+            URI uri = URI.create(endpoint);
+            assertTrue("https".equals(uri.getScheme()) && uri.getHost() != null && uri.getUserInfo() == null
+                && uri.getQuery() == null && uri.getFragment() == null, "Dedicated P23 HTTPS endpoint is invalid");
+            selected = "LLM_MiaP23";
+            String model = mapper.writeValueAsString(Map.of("type", "openai", "api_key", key,
+                "base_url", endpoint, "model_name", "glm-4-flash-250414", "max_tokens", 4096,
+                "temperature", 0.1, "timeout", 30));
+            db.update("INSERT INTO ai_model_config(id,model_type,model_code,model_name,is_default,is_enabled,config_json,sort) VALUES (?,'LLM','openai','Mia P23 isolated',0,1,?,999)", selected, model);
+        }
         List<Map<String, Object>> peers = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             long user = 941040001L + i;
             String agent = "mia-p23-" + i, device = "02:00:00:00:23:0" + i, client = "mia-p23-client-" + i;
             db.update("INSERT INTO sys_user(id,username,super_admin,status) VALUES (?,?,0,1)", user, agent);
             db.update("INSERT INTO ai_agent(id,user_id,agent_name) VALUES (?,?,?)", agent, user, "P23 synthetic user");
+            if (selected != null) {
+                db.update("UPDATE ai_agent SET llm_model_id=?,system_prompt=? WHERE id=?", selected, "用自然简短的中文聊天。", agent);
+            }
             db.update("INSERT INTO ai_device(id,mac_address,user_id,agent_id,board,auto_update) VALUES (?,?,?,?,?,0)",
                 device, device, user, agent, "MIA_CI");
             String token = tokens.createToken(user).getData().getToken();
@@ -85,7 +104,7 @@ class MiaPerformanceIntegrationTest {
         env.put("MIA_P23_PEERS", mapper.writeValueAsString(peers));
         env.put("MIA_P23_MANAGER_PID", Long.toString(ProcessHandle.current().pid()));
         Process running = process.start();
-        if (!running.waitFor(900, TimeUnit.SECONDS)) {
+        if (!running.waitFor(mode.equals("reply-latency") ? 2700 : 900, TimeUnit.SECONDS)) {
             running.destroyForcibly();
             fail("Shared-envelope preflight timed out; inspect sanitized reports");
         }

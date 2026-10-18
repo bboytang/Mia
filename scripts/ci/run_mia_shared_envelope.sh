@@ -19,14 +19,14 @@ cleanup() {
         miap23-mysql miap23-redis > "$mia_results/container-final.txt" 2>&1
     docker logs miap23-mysql > "$mia_results/mysql.log" 2>&1
     docker logs miap23-redis > "$mia_results/redis.log" 2>&1
-    if [ "${MIA_P23_MODE:-capacity}" = app-lifecycle ]; then
+    if [[ "${MIA_P23_MODE:-capacity}" =~ ^(app-lifecycle|reply-smoke|reply-latency)$ ]]; then
         docker stop --time 5 miap23-mysql miap23-redis > "$mia_results/container-stop.txt" 2>&1
         docker inspect --format '{{.Name}} {{.State.ExitCode}} {{.State.OOMKilled}} {{.State.Running}}' \
             miap23-mysql miap23-redis > "$mia_results/container-stopped.txt" 2>&1
     fi
     docker rm -fv miap23-mysql miap23-redis >/dev/null 2>&1
     sudo systemctl stop miap23-measure.service miap23.slice >/dev/null 2>&1
-    if [ "${MIA_P23_MODE:-capacity}" = app-lifecycle ] && [ -f "$mia_results/app-lifecycle-results.json" ]; then
+    if [[ "${MIA_P23_MODE:-capacity}" =~ ^(app-lifecycle|reply-smoke|reply-latency)$ ]] && [ -f "$mia_results/app-lifecycle-results.json" ]; then
         if ! python "$GITHUB_WORKSPACE/scripts/ci/verify_mia_app_lifecycle.py" --finalize; then
             mia_result=1
         fi
@@ -77,19 +77,27 @@ PY
 mia_classpath="target/test-classes:target/classes:$(cat "$RUNNER_TEMP/mia-p23-classpath.txt"):$HOME/.m2/repository/org/junit/platform/junit-platform-console-standalone/1.10.1/junit-platform-console-standalone-1.10.1.jar"
 mia_python=$(command -v python)
 mia_script=$GITHUB_WORKSPACE/scripts/ci/verify_mia_shared_envelope.py
-if [ "${MIA_P23_MODE:-capacity}" = app-lifecycle ]; then
+if [[ "${MIA_P23_MODE:-capacity}" =~ ^(app-lifecycle|reply-smoke|reply-latency)$ ]]; then
     mia_script=$GITHUB_WORKSPACE/scripts/ci/verify_mia_app_lifecycle.py
+fi
+mia_provider_environment=()
+mia_sudo_environment=()
+if [[ "${MIA_P23_MODE:-capacity}" =~ ^reply-(smoke|latency)$ ]]; then
+    mia_provider_environment=(--setenv=MIA_TEST_LLM_API_KEY --setenv=MIA_TEST_LLM_BASE_URL)
+    mia_sudo_environment=(--preserve-env=MIA_TEST_LLM_API_KEY,MIA_TEST_LLM_BASE_URL)
 fi
 
 # Only the already-built Java test process and its Python child run here.
 # No Maven JVM, model export, or compile runs in the measured group.
-sudo systemd-run --unit=miap23-measure --slice=miap23.slice --wait --pipe --collect \
+sudo "${mia_sudo_environment[@]}" systemd-run --unit=miap23-measure --slice=miap23.slice --wait --pipe --collect \
     --uid="$(id -u)" --gid="$(id -g)" \
     --property="WorkingDirectory=$MIA_SCOPE_UPSTREAM/main/manager-api" \
     --setenv="PATH=$PATH" --setenv="LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-}" \
     --setenv="GITHUB_SHA=$GITHUB_SHA" \
     --setenv="MIA_SCOPE_UPSTREAM=$MIA_SCOPE_UPSTREAM" \
     --setenv="MIA_SCOPE_KEYSTORE=$MIA_SCOPE_KEYSTORE" \
+    --setenv="MIA_SCOPE_CA=$MIA_SCOPE_CA" \
+    --setenv="MIA_TLS_CERT_FILE=$MIA_TLS_CERT_FILE" --setenv="MIA_TLS_KEY_FILE=$MIA_TLS_KEY_FILE" \
     --setenv="MIA_EMBEDDING_DIR=$MIA_EMBEDDING_DIR" \
     --setenv="MIA_P23_REPORT_DIR=$mia_results" \
     --setenv="MIA_P23_SCRIPT=$mia_script" \
@@ -100,6 +108,7 @@ sudo systemd-run --unit=miap23-measure --slice=miap23.slice --wait --pipe --coll
     --setenv=SPRING_DATASOURCE_DRUID_PASSWORD=mia-ci-only \
     --setenv=SPRING_DATA_REDIS_HOST=127.0.0.1 \
     --setenv=OMP_NUM_THREADS=2 --setenv=OPENBLAS_NUM_THREADS=2 \
+    "${mia_provider_environment[@]}" \
     "$JAVA_HOME/bin/java" -Xmx512m -XX:MaxMetaspaceSize=256m -XX:ActiveProcessorCount=2 -Xss512k \
     -cp "$mia_classpath" org.junit.platform.console.ConsoleLauncher execute \
     --select-class=xiaozhi.modules.device.MiaPerformanceIntegrationTest \
