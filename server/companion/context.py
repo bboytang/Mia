@@ -285,7 +285,14 @@ class ContextBuilder:
                 data.pop('requested_change', None)
             from .affect import POLICY as AFFECT_POLICY, guidance
             from .character import system_core
-            messages = [{'role': 'system', 'content': system_core(CORE, inputs.get('character')) + POLICY + (AFFECT_POLICY + guidance(affect) if affect else '')},
+            character = inputs.get('character')
+            system = system_core(CORE, character) + POLICY + (AFFECT_POLICY + guidance(affect) if affect else '')
+            recent_replies = [message['content'] for group in retained for message in group
+                              if message['role'] == 'assistant' and message.get('content')][-2:]
+            if character and any(character['address'] in content for content in recent_replies):
+                system += ('\n最近两次回复中已经使用过亲昵称谓，本轮普通接话不要再加称谓，直接说正文。'
+                           '仅当用户明确询问称呼或确实需要主动呼唤对方时才使用，不把此规则说出来。\n')
+            messages = [{'role': 'system', 'content': system},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             for group in retained:
                 for message in group:

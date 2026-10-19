@@ -35,6 +35,14 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('原角色配置保留，不自动改写', bundle.request_json)
         self.assertEqual(self.data(bundle)['facts'], [])
         self.assertEqual(self.store.list_memories(self.scope.owner), [])
+
+    async def test_recent_addressing_discourages_repetition_without_removing_the_configured_name(self):
+        self.save()
+        bundle = await self.build(query='你接着说', history=[{'role': 'user', 'content': '刚忙完'},
+            {'role': 'assistant', 'content': '哥哥，先休息一下。'}])
+        self.assertIn('本轮普通接话不要再加称谓', bundle.request()['messages'][0]['content'])
+        self.assertIn('仅当用户明确询问称呼', bundle.request()['messages'][0]['content'])
+        self.assertEqual(character.active(self.store, self.scope.owner)['address'], '哥哥')
         self.assertEqual(self.store.personality(self.scope.owner)['traits'], [])
         other = replace(self.scope, owner='user:2:agent:other', user_id=2, agent_id='other')
         another = await self.builder.build(other, self.auth, 'other', '你好', limits=self.limits)
