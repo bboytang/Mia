@@ -105,7 +105,15 @@ class PrivateAuthorization:
             client = ManageApiClient._get_instance()
             if client is None or client.config.get("url") != manager["url"]:
                 raise PrivateAuthorizationRequired()
-            return await asyncio.wait_for(client._async_request("POST", endpoint, json=body, timeout=timeout), timeout=timeout)
+            async def send():
+                # The deployed manager client owns a session per request; the
+                # fixed upstream client owns sessions per event loop. Both paths
+                # call the single-attempt method, never its retry wrapper.
+                if callable(getattr(client, "_build_client", None)):
+                    async with client._build_client() as session:
+                        return await client._async_request(session, "POST", endpoint, json=body, timeout=timeout)
+                return await client._async_request("POST", endpoint, json=body, timeout=timeout)
+            return await asyncio.wait_for(send(), timeout=timeout)
         except Exception:
             # Never propagate HTTP request bodies, credentials or provider errors.
             raise PrivateAuthorizationRequired() from None

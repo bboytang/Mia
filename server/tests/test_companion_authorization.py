@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta, timezone
+from contextlib import asynccontextmanager
+import asyncio
 import json
+import sys
 from types import SimpleNamespace
 import unittest
 from unittest.mock import AsyncMock, patch
@@ -16,6 +19,66 @@ def scope_data():
 
 
 class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_both_manager_client_signatures_use_one_request_and_close_owned_session(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        body = {"fixture": "trusted"}
+        result = scope_data()
+        session = object()
+        closed = []
+
+        @asynccontextmanager
+        async def build_client():
+            try:
+                yield session
+            finally:
+                closed.append(True)
+
+        for owned in (False, True):
+            with self.subTest(owned_session=owned):
+                request = AsyncMock(return_value=result)
+                client = SimpleNamespace(config=config["manager-api"], _async_request=request)
+                if owned:
+                    client._build_client = build_client
+                manager = SimpleNamespace(_get_instance=lambda: client)
+                with patch.dict(sys.modules, {"config.manage_api_client": SimpleNamespace(ManageApiClient=manager)}):
+                    self.assertEqual(await auth.PrivateAuthorization(config)._request("/config/proof", body), result)
+                args = (session, "POST", "/config/proof") if owned else ("POST", "/config/proof")
+                request.assert_awaited_once_with(*args, json=body, timeout=3)
+        self.assertEqual(closed, [True])
+
+    async def test_owned_manager_session_closes_on_denial_timeout_and_cancellation_without_retry(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        for failure in ("denied", "timeout", "cancelled"):
+            with self.subTest(failure=failure):
+                started, closed = asyncio.Event(), []
+
+                @asynccontextmanager
+                async def build_client():
+                    try:
+                        yield object()
+                    finally:
+                        closed.append(True)
+
+                async def send(*args, **kwargs):
+                    started.set()
+                    if failure == "denied":
+                        raise ValueError("private response must not escape")
+                    await asyncio.Event().wait()
+
+                request = AsyncMock(side_effect=send)
+                client = SimpleNamespace(config=config["manager-api"], _build_client=build_client,
+                                         _async_request=request)
+                manager = SimpleNamespace(_get_instance=lambda: client)
+                with patch.dict(sys.modules, {"config.manage_api_client": SimpleNamespace(ManageApiClient=manager)}):
+                    task = asyncio.create_task(auth.PrivateAuthorization(config)._request("/config/proof", {}, timeout=0.05))
+                    await started.wait()
+                    if failure == "cancelled":
+                        task.cancel()
+                    with self.assertRaises(asyncio.CancelledError if failure == "cancelled" else auth.PrivateAuthorizationRequired):
+                        await task
+                request.assert_awaited_once()
+                self.assertEqual(closed, [True])
+
     async def test_rejects_malformed_proof_and_expired_permission_before_any_request(self):
         valid = scope_data()
         self.assertEqual(auth._manager_scope(dict(valid, binding_version=0)).binding_version, 0)
