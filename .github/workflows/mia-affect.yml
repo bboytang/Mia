@@ -35,7 +35,7 @@ jobs:
         env:
           MIA_TEST_LLM_API_KEY: ${{ secrets.MIA_TEST_LLM_API_KEY }}
           MIA_TEST_LLM_BASE_URL: ${{ secrets.MIA_TEST_LLM_BASE_URL }}
-          MIA_TEST_LLM_MODEL: ${{ secrets.MIA_TEST_LLM_MODEL }}
+          MIA_TEST_LLM_MODEL: glm-4-flash-250414
           MIA_AFFECT_REPORT: ${{ runner.temp }}/mia-affect.json
         run: python scripts/ci/verify_mia_affect.py
       - uses: actions/upload-artifact@v4

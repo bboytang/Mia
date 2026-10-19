@@ -12,6 +12,7 @@ import sys
 import tempfile
 import time
 
+import httpx
 import openai
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -40,12 +41,17 @@ async def evaluate():
               'passed': False, 'cases': [], 'maximum_requests': 8, 'sdk_calls': 0,
               'implicit_retries': 0, 'production_data_used': False, 'asr_tts_calls': 0,
               'role_written': False, 'physical_audio_verified': False}
-    model = os.environ['MIA_TEST_LLM_MODEL']
-    assert model == 'glm-4-flash-250414', 'Keep the current GLM; do not silently substitute'
-    client = openai.OpenAI(api_key=os.environ['MIA_TEST_LLM_API_KEY'], base_url=os.environ['MIA_TEST_LLM_BASE_URL'],
-                           max_retries=0, timeout=30)
-    report['model'] = model
+    client, sends = None, []
+    def sent(request):
+        sends.append(1)
+        if len(sends) > 8:
+            raise RuntimeError('Fixed HTTP request budget exceeded')
     try:
+        model = os.environ['MIA_TEST_LLM_MODEL']
+        assert model == 'glm-4-flash-250414', 'Keep the current GLM; do not silently substitute'
+        client = openai.OpenAI(api_key=os.environ['MIA_TEST_LLM_API_KEY'], base_url=os.environ['MIA_TEST_LLM_BASE_URL'],
+            max_retries=0, timeout=30, http_client=httpx.Client(timeout=30, follow_redirects=False, event_hooks={'request': [sent]}))
+        report['model'] = model
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'isolated.sqlite3'
             now = [1800000000]
@@ -113,7 +119,8 @@ async def evaluate():
         report['failed_case'] = locals().get('name')
         report['failed_raw_response'] = locals().get('raw', '')
     finally:
-        client.close()
+        if client:client.close()
+        report['http_sends'] = len(sends)
         Path(os.environ['MIA_AFFECT_REPORT']).write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
     print(json.dumps({'passed': report['passed'], 'cases': len(report['cases']), 'sdk_calls': report['sdk_calls']}))
     if not report['passed']:raise SystemExit('Affect evaluation failed; retain the original report')
