@@ -41,6 +41,9 @@ def _valid(store, owner, event_id):
 
 def context(store, owner, query, facts, *, session_id=None, turn_id=None):
     """Inside the context snapshot transaction; current facts came from scoped RAG."""
+    from .features import settings
+    if not settings(store, owner)['interaction_events']:
+        return []
     facts = [dict(fact) for fact in facts]
     for fact in facts:
         clues = store.db.execute('SELECT x.entities,x.keywords,x.trigger_terms FROM mia_memory_meta x JOIN memories m '

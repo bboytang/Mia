@@ -27,6 +27,7 @@ PREIMAGES = {
     WORDS_DTO: '8e773a8f4e4d9b81177d888386f430ea65facc0777ba17d906f567d2ea8aaf2d',
 }
 PAYLOADS = {
+    'MiaCompanionManagementController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/MiaCompanionManagementController.java',
     'MiaDeviceAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/MiaDeviceAuthorizationService.java',
     'MiaDeviceAuthorizationController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/MiaDeviceAuthorizationController.java',
     '202610141825.sql': 'main/manager-api/src/main/resources/db/changelog/202610141825.sql',

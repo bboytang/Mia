@@ -29,6 +29,7 @@ def main():
     desktop_patch = str(bundle / 'production-dialogs.patch')
     patch = str(bundle / 'responsive.patch')
     private_patch = str(bundle / 'private-authorization.patch')
+    settings_patch = str(bundle / 'companion-settings.patch')
     with tempfile.TemporaryDirectory(prefix='mia-admin-check-') as scratch:
         for relative in manifest['files']:
             source = root / relative
@@ -36,7 +37,7 @@ def main():
                 target = Path(scratch) / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, target)
-        for candidate in (desktop_patch, patch, private_patch):
+        for candidate in (desktop_patch, patch, private_patch, settings_patch):
             subprocess.run(['git', 'apply', '--unidiff-zero', '--check', candidate], cwd=scratch, check=True)
             subprocess.run(['git', 'apply', '--unidiff-zero', candidate], cwd=scratch, check=True)
     if args.apply:
@@ -45,6 +46,8 @@ def main():
         subprocess.run(['git', 'apply', '--unidiff-zero', patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', '--check', private_patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', private_patch], cwd=root, check=True)
+        subprocess.run(['git', 'apply', '--unidiff-zero', settings_patch], cwd=root, check=True)
+        shutil.copy2(bundle / 'MiaSettingsDialog.vue', root / 'main/manager-web/src/components/MiaSettingsDialog.vue')
         print(f'Applied responsive source changes for upstream {manifest["commit"]}')
     else:
         print(f'All source checks passed for upstream {manifest["commit"]}; no files changed')

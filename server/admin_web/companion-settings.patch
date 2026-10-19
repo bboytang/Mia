@@ -1,0 +1,33 @@
+--- a/main/manager-web/src/components/DeviceItem.vue
++++ b/main/manager-web/src/components/DeviceItem.vue
+@@ -28,7 +28,9 @@
+     <div class="device-name">
+       {{ $t('home.voiceModel') }}：{{ device.ttsModelName }} ({{ device.ttsVoiceName }})
+     </div>
++    <MiaSettingsDialog v-model="miaSettingsOpen" :agent-id="device.agentId" @configure="handleConfigure" />
+     <div class="device-actions" style="display: flex;gap: 10px;align-items: center;">
++      <button type="button" class="settings-btn" @click="miaSettingsOpen = true">Mia 功能管理</button>
+       <button type="button" class="settings-btn" @click="handleConfigure">
+         {{ $t('home.configureRole') }}
+       </button>
+@@ -59,9 +61,11 @@
+ 
+ <script>
+ import i18n from '@/i18n';
++import MiaSettingsDialog from '@/components/MiaSettingsDialog.vue';
+ 
+ export default {
+   name: 'DeviceItem',
++  components: { MiaSettingsDialog },
+   props: {
+     device: { type: Object, required: true },
+     featureStatus: { 
+@@ -74,7 +78,7 @@
+     }
+   },
+   data() {
+-    return { switchValue: false }
++    return { switchValue: false, miaSettingsOpen: false }
+   },
+   computed: {
+     formattedLastConnectedTime() {

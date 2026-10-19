@@ -330,6 +330,9 @@ class SemanticMemoryIndex:
         if not isinstance(query, str) or not query.strip() or len(query) > 4096:
             raise ValueError('Invalid hybrid query')
         await self._require(scope, authorization, 'memory:read')
+        from .features import settings
+        if not (await asyncio.to_thread(settings, self.store, scope.owner))['memory_recall']:
+            return []
         state = await asyncio.to_thread(self._snapshot, scope)
         available = await asyncio.to_thread(self._clues, scope, state, query)
         clues, expanded_text = [], query

@@ -258,6 +258,9 @@ class MemoryStore:
         self.db.execute('UPDATE mia_scope_versions SET event_epoch=event_epoch+1,observation_epoch=observation_epoch+1 WHERE owner=?', (owner,))
 
     def _trait(self, owner, trait, now):
+        from .features import settings
+        if not settings(self, owner)['personality_growth']:
+            return False
         if trait is None or not trait["evidence_ids"]:
             return False
         if SENSITIVE.search(trait["name"] + trait["description"]):
@@ -532,6 +535,10 @@ class MemoryStore:
         action = request.get("action")
         if not isinstance(action, str):
             raise MemoryError("invalid_input", "Invalid memory action")
+        if action in {'feature_settings', 'set_feature_settings'}:
+            from .features import settings, update
+            return {'features': update(self, owner, request.get('features')) if action == 'set_feature_settings'
+                    else settings(self, owner)}
         if action in {'emotion_consent', 'emotion_status', 'observations', 'observation_update', 'observation_delete', 'emotion_clear'}:
             from .emotions import manage
             return manage(self, owner, request)
@@ -552,7 +559,7 @@ class MemoryStore:
             raise MemoryError("invalid_input", "Unknown memory action")
         state = self.snapshot(owner)
         return {"memories": self.list_memories(owner), "paused": state["paused"], "personality": self.personality(owner),
-                "management": {"version": 1, "actions": ["job_status", "events", "event_delete", "emotion_consent", "emotion_status",
+                "management": {"version": 1, "actions": ["feature_settings", "set_feature_settings", "job_status", "events", "event_delete", "emotion_consent", "emotion_status",
                     "observations", "observation_update", "observation_delete", "emotion_clear"]}}
 
     def close(self):

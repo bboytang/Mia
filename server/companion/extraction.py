@@ -251,6 +251,8 @@ def growth_eligible(context):
     Any valid length-2-or-more shared anchor contains a shared two-character pair.
     The unchanged validator still checks the model's actual complete proposal.
     """
+    if not getattr(context, 'growth_enabled', True):
+        return False
     facts = {row['id']: row for row in context}
     if len(facts) < 3:
         return False
@@ -273,6 +275,8 @@ def context_for(store, owner, expected_consent=None):
             'ORDER BY m.updated_at DESC,m.rowid DESC LIMIT 8', (owner,)).fetchall()
         from .emotions import consent
         result = EvidenceContext()
+        from .features import settings
+        result.growth_enabled = settings(store, owner)['personality_growth']
         result.tracking = consent(store, owner)
         if result.tracking['version'] != expected_consent:
             result.tracking = dict(result.tracking, enabled=0)

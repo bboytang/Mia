@@ -234,10 +234,20 @@ def patch_app(text):
         '        await mia.stop_service(ws_server, gc_manager, [stdin_task, ws_task, ota_task], timeout=20)\n')
 
 
+def patch_http(text):
+    text = replace_once(text, 'from aiohttp import web\n',
+                        'from aiohttp import web\nfrom mia_companion.management import ManagementHandler\n')
+    return replace_once(text, '                app = web.Application()\n',
+                        '                app = web.Application()\n'
+                        '                app.router.add_post("/mia/management", ManagementHandler(self.config).handle)\n')
+
+
 PATCHERS = dict(zip(EXPECTED, [patch_connection, patch_tts, patch_dialogue, patch_manager,
                               patch_websocket, patch_tools, patch_intent, patch_report]))
 EXPECTED[PYTHON + "app.py"] = "65c37299c510128006b658de6858492a4c8df044b26ed6a83bc3eba1b9d1a77b"
 PATCHERS[PYTHON + "app.py"] = patch_app
+EXPECTED[PYTHON + "core/http_server.py"] = "d136a04d70562ddcf64be3fc97d2575f312e1af1f6831947b3066d39869ff1d4"
+PATCHERS[PYTHON + "core/http_server.py"] = patch_http
 
 
 def build_changes(root):
@@ -268,7 +278,8 @@ def install(root, changes):
     try:
         for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql", "schema-v2.sql", "persona.py",
                      "embedding.py", "semantic.py", "retrieval.py", "context.py", "reply.py", "jobs.py", "extraction.py", "proposal.py", "model_requests.py",
-                     "events.py", "emotions.py", "schema-v3.sql", "schema-v4.sql", "request_accounting.py", "requirements-vector.txt"]:
+                     "events.py", "emotions.py", "schema-v3.sql", "schema-v4.sql", "schema-v5.sql", "features.py", "management.py",
+                     "request_accounting.py", "requirements-vector.txt"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")
