@@ -1,0 +1,94 @@
+{
+  "code_sha": "9861e9724643139fb9ee63a8992597df20a94567",
+  "necessary_same_sha_ci": [
+    {
+      "conclusion": "success",
+      "databaseId": 39193636438,
+      "headSha": "9861e9724643139fb9ee63a8992597df20a94567",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39193636438",
+      "workflowName": "Verify Mia structured extraction provider"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39193636385,
+      "headSha": "9861e9724643139fb9ee63a8992597df20a94567",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39193636385",
+      "workflowName": "Test Mia Protocol Server"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39193636420,
+      "headSha": "9861e9724643139fb9ee63a8992597df20a94567",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39193636420",
+      "workflowName": "Verify Mia manager baseline"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39193636412,
+      "headSha": "9861e9724643139fb9ee63a8992597df20a94567",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39193636412",
+      "workflowName": "Verify Mia binding authorization"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39193636304,
+      "headSha": "9861e9724643139fb9ee63a8992597df20a94567",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39193636304",
+      "workflowName": "Verify Mia actual semantic vectors"
+    }
+  ],
+  "service_tests": 353,
+  "local_companion_tests": 287,
+  "remote_requests": 0,
+  "v1_revocation_after_queue": {
+    "case": "test_legacy_waiter_rechecks_authorization_after_slot_without_changing_counter",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "cancelled",
+        "attempts": 1,
+        "error_category": "authorization_or_memory_changed",
+        "version": null,
+        "phase": null,
+        "waiting_at": null,
+        "slot_acquired_at": null
+      }
+    ],
+    "ledger": []
+  },
+  "performance_evidence_sha": "19b503dd08926ae83e5a40d997517eed1d429046",
+  "performance_run": "https://github.com/bboytang/Mia/actions/runs/39192505563",
+  "performance_evidence": "performance-v2-final-review.json",
+  "not_a_new_performance_measurement": true,
+  "unchanged_since_performance_files": {
+    "server/companion/request_accounting.py": "799d7a70c5b83fb5d4394bbc1f2fe067dd6b21050fb1f8761f883f48136598b9",
+    "server/companion/model_requests.py": "3e0a73e775f2144dbeff70564d2cfd9e5a9e252bd55070c1fda481744328239b",
+    "server/companion/schema.py": "5ef6b33ee76834b4106cb39379e7a12c7be719386f6f6f2fdb0faabab323e064",
+    "server/companion/schema-v4.sql": "f890b5b763dde6fb1eb5417fca75dd8b1a22c83f681534b8f8c04c08e4863afe",
+    "server/companion/memory.py": "751b976a4c624bca68262b3bb64fdc242b7c02c9539caa70363cbf4d6df4a049",
+    "server/companion/semantic.py": "8379b4e47466e0f76e5ebf8d6fe1ad0e779c689b4d6bb502b1671b6a9d1b545a",
+    "server/companion/retrieval.py": "5f0a555832c09744ddd602f2789951d31236fd7886fae4de80eb34ba4683cb5b",
+    "server/companion/reply.py": "390dda68af6ea4c1ddf262b70bae42afcf96ed4f0156dbab948cc0f9b119124d",
+    "server/companion/context.py": "0540d8ec00813d6d0e48d77d17796b7a71fc6330d2496d1cdec796f1fbcd7add",
+    "server/companion/persona.py": "8bf26d38ffd6fd1f43b54d9b5f1e8ba418bcce0f33c1d2d5fe61d35c20151994",
+    "server/companion/authorization.py": "2dd246c136d94b12d6e3e2b34f61d4196c7b67b9c91c71c9cdb16d9887605dcd"
+  },
+  "delta_since_measurement": "diff --git a/server/companion/extraction.py b/server/companion/extraction.py\nindex 6307397..912499f 100644\n--- a/server/companion/extraction.py\n+++ b/server/companion/extraction.py\n@@ -640,6 +640,9 @@ class LLMMemoryExtractor:\n                     'not the original evidence or permission rules. Do not invent properties omitted from the schema; '\n                     'absent relations mean no proposed relationship, not permission to invent an ID.')\n                 try:\n+                    before_sdk = getattr(context, 'before_sdk', None)\n+                    if before_sdk is not None:\n+                        before_sdk()\n                     return read_stream(provider.response_with_functions('',\n                         [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],\n                         functions=[tool]))\n@@ -648,6 +651,9 @@ class LLMMemoryExtractor:\n                 except Exception:\n                     raise ProviderError() from None\n             try:\n+                before_sdk = getattr(context, 'before_sdk', None)\n+                if before_sdk is not None:\n+                    before_sdk()\n                 return provider.response_no_stream(instruction, json.dumps(payload, ensure_ascii=False))\n             except (MemoryError, PrivateAuthorizationRequired, sqlite3.Error, TimeoutError):\n                 raise\ndiff --git a/server/companion/jobs.py b/server/companion/jobs.py\nindex db658f5..08ac150 100644\n--- a/server/companion/jobs.py\n+++ b/server/companion/jobs.py\n@@ -247,9 +247,14 @@ class MemoryWorker:\n                 await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=policy['version'] == 1)\n                 context.request_cancelled = threading.Event()\n                 context.model_request_phase = 'preparing'\n+                from .request_accounting import RequestAccounting\n+                accounting = RequestAccounting(self, job, context)\n                 if policy['version'] == 2:\n-                    from .request_accounting import RequestAccounting\n-                    context.request_accounting = RequestAccounting(self, job, context)\n+                    context.request_accounting = accounting\n+                else:\n+                    # Keep V1's queue-charged counter, but never exempt old\n+                    # tasks from current permission/source/deadline checks.\n+                    context.before_sdk = lambda: accounting.call(accounting.preflight())\n                 try:\n                     output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']], context),\n                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))\n",
+  "p23_complete": false,
+  "ready_for_step36": false,
+  "remaining": [
+    "Formal warm first-sentence delta 912.84ms failure retained",
+    "Real GLM V2 complete-task validity/fairness/success p95 remains unverified",
+    "Nonempty fact commit/BGE competition and new V2 actual inflight group shutdown need separate approval",
+    "Shared measured background idle opportunity, not actual saturated aging quota; deterministic quota tests separately passed",
+    "Physical iOS/hardware/audio verification remains separate"
+  ]
+}

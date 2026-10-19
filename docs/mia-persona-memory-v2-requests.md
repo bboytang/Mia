@@ -153,3 +153,23 @@ ledger显示后台实际槽排队strict约0.51ms、four-ten约1805.90ms；strict
 旧V1任务保持计数不意味着豁免安全复核。新增“V1已排队→撤权→取得槽”反例在19b503d失败：attempt仍1、提交被拒，但实际SDK spy已经1，不能接受。原始performance-v2-legacy-preflight-before.log.gz保留。现对V1普通JSON/原生工具路径也在SDK前调用既有Scope/context/取消/deadline复核；不写V2请求账本、不退款或改变V1排队计次。V2事务/SDK内部观察/HTTP预算路径保持；287相关回归通过。新反例现在legacy attempt1/SDK0/HTTP0，终态cancelled。
 
 该补充需要最终源码的必要服务/身份/manager/真实BGE/安装后结构提取及迁移同SHA回归。共享资源已在19b503d完成，request_accounting/model_requests/schema字节未改变，V2分支只保留同一构造调用；提取新增before_sdk分支对V2为None、不产生新I/O。依照用户不重复无意义性能测试要求，不再派第三次共享试验；**性能测量明确标19b503d，不冒充最终SHA实测**。剩余5项必要CI收齐后停止，所有旧19b503d六CI/原始数值/失败仍保留。
+
+补充剩余性能边界（已证实实现，负载影响证据不足）：Worker保存显式事实仍须经SemanticMemoryIndex._background_ready等待前台检索空档后做真实BGE编码；本批两共享控制提案都是有效empty，没有新增事实编码/提交竞争，不能冒充长期记忆正常保存p95。持续检索占满时，这个原有等待也可能耗尽120秒；不能因模型槽公平而宣称整个保存链无条件公平。BGE调度未改，实际负载影响应在后续获批真实提案/正式公平性范围验证，不能删除该保护或延长期限。
+
+## 最终停止点（覆盖以上全部历史接续文字）
+
+**第三批完成并停止，等待用户审核。最终运行代码9861e9724643139fb9ee63a8992597df20a94567。** 末次修正[9861e97源码diff](https://github.com/bboytang/Mia/commit/9861e9724643139fb9ee63a8992597df20a94567)补V1取槽后安全复核，不重定义旧attempt。最终287本地companion通过，以下五项必要**同9861e97 SHA** CI全部success：
+
+| 最终验证 | 精确CI链接 |
+| --- | --- |
+| 服务/持久任务/迁移/协议/安全，353项 | [39193636385](https://github.com/bboytang/Mia/actions/runs/39193636385) |
+| 身份/Scope/绑定，173 Java及实际集成 | [39193636412](https://github.com/bboytang/Mia/actions/runs/39193636412) |
+| manager，150原回归＋4基线 | [39193636420](https://github.com/bboytang/Mia/actions/runs/39193636420) |
+| 真实BGE/安装后提取/回复/上下文/检索，五报告passed | [39193636304](https://github.com/bboytang/Mia/actions/runs/39193636304) |
+| 结构提取契约语法 | [39193636438](https://github.com/bboytang/Mia/actions/runs/39193636438) |
+
+共享资源和39观测机制仍明确来自**19b503d/[39192505563](https://github.com/bboytang/Mia/actions/runs/39192505563)**，不是9861e97重测。最终请求记账/门闩/schema、BGE/检索/上下文/授权/Guard等11文件与该测量SHA字节相同，hash及仅V1安全补充diff见[最终复核](verification/mia-persona-memory/performance-v2-complete-review.json)。V2只保留同一次accounting构造、before_sdk分支为None，不额外产生I/O；没有第三次共享采样。保留该测量的1711.60ms冷特征/259–337ms五暖、21次manager241–251ms、34调度SDK/MockHTTP＋4chatMock、远端0、2CPU/2GiB/swap0共同1465.63MiB/应用436.87MiB、空闲关闭2.187秒等证据；不声称最终SHA另有新性能数值。
+
+最新原始日志/机制/五BGE报告为performance-v2-complete-*，旧performance-v2-final-*专指19b503d，保留不覆盖。V1反例最终CI显示cancelled/attempt1/真实SDK spy0/MockHTTP0/无V2 ledger；其他V2各项保持。所有代码与文档已提交固定分支，.private/与tools/保留，无在途任务。
+
+**不具备直接启动第三十六步正式验收的充分条件。** 当前已解决V2可审计预算、旧/新任务SDK前复核、Worker入口及受控模型后台机会；未解决/未证实的正式暖态首句超限、真实GLM提案稳定性/完整正常成功p95、非空事实BGE提交竞争、新V2真实在途全组关闭和真机音频仍在。保持所有冻结指标、安全规则、两次/120秒、SQLite/BGE/GLM不变；不部署、不改生产、不进入P24或自动启动完整36/72。下一步仅待用户审核本报告和后续验证/性能方案。
