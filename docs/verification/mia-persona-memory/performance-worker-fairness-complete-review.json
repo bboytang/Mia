@@ -1,0 +1,908 @@
+{
+  "run": {
+    "conclusion": "failure",
+    "headSha": "c47a3f30120236d9776caca20a5e3a9e3f687a09",
+    "jobs": [
+      {
+        "completedAt": "2026-10-19T00:14:17Z",
+        "conclusion": "failure",
+        "databaseId": 117826817741,
+        "name": "shared",
+        "startedAt": "2026-10-18T23:59:19Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare dependencies outside measured envelope",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare isolated TLS certificates and explicit test trust",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare pinned actual BGE outside measured envelope",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install actual companion and compile manager test outside envelope",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Actual manager, databases and Python-BGE share one 2CPU 2GiB parent",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Preserve all original results including failures",
+            "number": 11,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 19,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 20,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 21,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 22,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 23,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/bboytang/Mia/actions/runs/39178747148/job/117826817741"
+      },
+      {
+        "completedAt": "2026-10-18T23:59:24Z",
+        "conclusion": "success",
+        "databaseId": 117826817838,
+        "name": "syntax",
+        "startedAt": "2026-10-18T23:59:18Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 9,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/bboytang/Mia/actions/runs/39178747148/job/117826817838"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/bboytang/Mia/actions/runs/39178747148"
+  },
+  "runtime_sha": "d1879881a808b479b66307ff11acdd111b179452",
+  "p23_complete": false,
+  "measurement_complete": true,
+  "artifacts": [
+    {
+      "file": "performance-worker-fairness-complete-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "40b8a32e8b7cb73c97e3cf240aa2e6a96e6d62c3af990aa6e17e7cbce5940f38",
+      "sha256": "1dfa236340ee3175c831af6033bb574d5929eac324bc84804d7ccf2f94f1e450"
+    },
+    {
+      "file": "performance-worker-fairness-complete-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "29b72379d228c7c7a25c5a4b31532c638b8e1e1da815eeafda925ae90ca976bc",
+      "sha256": "757a9f52afc6972499bb8bb598a3df74310473cfa64fd4265ad674ef4fdac6d5"
+    },
+    {
+      "file": "performance-worker-fairness-complete-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "c16bc955986357dd5c5443ad221b733c4cf59e94252fdc26d368accd8b10b538",
+      "sha256": "10241aa842c5fd1cd7deba36f3ec82c981a46dba1524b7bc8d09a9fcd86f5e40"
+    },
+    {
+      "file": "performance-worker-fairness-complete-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+      "sha256": "779f4114c5a61f2c3c80194656772dfb37721853718f780f85d1a13e153915df"
+    },
+    {
+      "file": "performance-worker-fairness-complete-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-worker-fairness-complete-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-worker-fairness-complete-ci-results.json.gz",
+      "source_path": "mia-p23-fairness-c47a3f3-run.json",
+      "raw_sha256": "79a560b2248103cc44c76f1674b816e0699d28b1424ac7a89702cac5362f961e",
+      "sha256": "505496f2afea3d9b1f6611924208fa8a2c9632a9109d2ce330f85132171d2f38"
+    },
+    {
+      "file": "performance-worker-fairness-complete-syntax.log.gz",
+      "source_path": "mia-p23-fairness-c47a3f3-syntax.log",
+      "raw_sha256": "4e6b7a6261ed88545affca1ce318b7e512d7fa533eee6fcceaa2d4b25934725d",
+      "sha256": "2ca13b27c129c3b88b52d764835da427df6ed01625fa1efcbacf83590109f9a9"
+    }
+  ],
+  "raw_artifact_hashes": {
+    "app-lifecycle-results.json": "40b8a32e8b7cb73c97e3cf240aa2e6a96e6d62c3af990aa6e17e7cbce5940f38",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "81ddcef02ad9f221fe37563a8305b28d33bfa32f4dfcce4d10b93c6d5034727e",
+    "export-dependencies.txt": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+    "cgroup-final-cpu.stat.txt": "500f9b1bd8c448c1c5c088870a61e2cd3872f948141b3bf6018b8aaa97b8d432",
+    "cgroup-final-memory.current.txt": "aa1c592181981af1dceefba02d48cf3d801ee30cfb9ff7cc0b8b1cb18c05655b",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "8a4ce3c507a9c1369170be25ee73a0142c9bb39a798f16a904a4667be539d89a",
+    "redis.log": "afa6322c2a7145da1ccb6378a142f59664222e06bd2699be31414f580673c41e",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "2691b1af0da9925ecfd2db58d99755a020445d90190eed2cb84f7276c34ec1f3",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "88b3912b125d46486b46879b794b32b4f40593eaf3fc685b6b53330f6022f1c0",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "c16bc955986357dd5c5443ad221b733c4cf59e94252fdc26d368accd8b10b538",
+    "app-child/memory.sqlite3-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "app-child/ready.json": "94747b24b728b43b2abe52dc70691d7797378f445afa70a6bf2e834950ba3b6f",
+    "app-child/app-results.json": "29b72379d228c7c7a25c5a4b31532c638b8e1e1da815eeafda925ae90ca976bc",
+    "app-child/memory.sqlite3-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+    "app-child/memory.sqlite3": "9db851b43c65f9b37dfde21119e74f7e6c4981448b756b274399ca7d7a246f90",
+    "junit/TEST-junit-jupiter.xml": "6af05541247bfdba035ed33793def3134dfd9b7fe9153ba59250f4d4f4177506",
+    "junit/TEST-junit-vintage.xml": "1a8bb42fff268d5f14b309d52832393ae4b61805965afbc75dfe788af4ee2a65",
+    "junit/TEST-junit-platform-suite.xml": "b4c114990258bac670e049ee867a83b729f701346558961ad7363c96f0c83842"
+  },
+  "fairness_batch_complete": true,
+  "scope_fairness_sampling_passed": true,
+  "fair_rounds": [
+    {
+      "claim_order": [
+        "eb3c25bfea0cd430066678b54c3eeb6426510fc4bcc1a3eb15fcefc546327de6",
+        "8769e8a2cbbae1e1443ce6aa7a518dab4f14447bf2cc3817f0ca3b56424f9757",
+        "def8c9c3a0c390ac54573c19b266d78af71b3f0c35e48d2c3e866eed29c5ab65",
+        "870f78e068b079d11c335f025c088394d23c75f343650078c8f02b54613191ff",
+        "186f10d91b398c66843025831921b53c5e587c83c1d5fba8fcd48466078a7645",
+        "9fa6cbb51380f84314b413c594c17159b5e63cc681ab28ab7735d8d1684a2fdd"
+      ],
+      "first_three_owners": [
+        "user:941040002:agent:mia-p23-1",
+        "user:941040001:agent:mia-p23-0",
+        "user:941040003:agent:mia-p23-2"
+      ],
+      "scope_first_cycle_fair": true,
+      "all_admitted_before_first_native_finished": true,
+      "round": 0,
+      "warm": true
+    },
+    {
+      "claim_order": [
+        "109036624a74412bcafddb6ee46f9076cacb981b14c035311d3d070f1988a250",
+        "38f2e8bb2daa09bf57200d666e41eea7c9dd2d16be086e83335e15d2f3e360c2",
+        "d4bb3a2e3b1d04a0e68ed104cdb23d5f492d0ef65922dfa42af1f274eeff70a3",
+        "f5334778ea3ee868c69caa6b5ee3992b4a9d18a5842410a1e629f1187b221e00",
+        "09be75da5033df9c5f45b321b55495a0aa0506cb1b09e202b65abda3302af441",
+        "080a7f1119f695b32c608df61960d2c49d99538ba89566228ca22266735d0d92"
+      ],
+      "first_three_owners": [
+        "user:941040003:agent:mia-p23-2",
+        "user:941040002:agent:mia-p23-1",
+        "user:941040001:agent:mia-p23-0"
+      ],
+      "scope_first_cycle_fair": true,
+      "all_admitted_before_first_native_finished": true,
+      "round": 1,
+      "warm": false
+    },
+    {
+      "claim_order": [
+        "87d38cb05db75db79519467b64572b3958bd85f88fff2f3033ac734da689434a",
+        "d14f2eb0311e410cdc1e802a3953b19a7f27a34284437dc0fed411524453a0ca",
+        "97ac2baf6df52542ab5f4d35a3b2d4947c8eaae6b9c433b16fdef3812267d544",
+        "b3bb5931da6dabe8607615569b16727b4c4b11da61d0b69c151a71aeadacabbb",
+        "e9eb494ce9241521e80e3e6960c92223d95cdc7c56bb70b3642373c369e1a2fe",
+        "c877530ab3f440fb3fb3a1a639629d8a4cc20ca52d9b49d387aae5d00e445063"
+      ],
+      "first_three_owners": [
+        "user:941040001:agent:mia-p23-0",
+        "user:941040003:agent:mia-p23-2",
+        "user:941040002:agent:mia-p23-1"
+      ],
+      "scope_first_cycle_fair": true,
+      "all_admitted_before_first_native_finished": true,
+      "round": 2,
+      "warm": false
+    },
+    {
+      "claim_order": [
+        "14a42eaee5643d79b9be9bdac712f02b2222c642f5e26ca08fc15a2fd4eb8d44",
+        "18b3f948f56eb466437410be484313fb123af23c4b3e27187b0c690fc74f81ec",
+        "5db5ea0dd7308f1ec4069e6a288d7014a92d31915e41ca69e984bacdbc17116d",
+        "437323b57d0697ef120a2e1136ffc7797953d92cc573c580f81eab3854f37c4b",
+        "a64ff1a0a8b24e50ce9b1f4444e5a14c65e503b4d44880f743f89ad1e6e96777",
+        "f879b7c783260fc465898a02daac9f4b2217f5047c2bfd6ef9efa0111dd820af"
+      ],
+      "first_three_owners": [
+        "user:941040001:agent:mia-p23-0",
+        "user:941040003:agent:mia-p23-2",
+        "user:941040002:agent:mia-p23-1"
+      ],
+      "scope_first_cycle_fair": true,
+      "all_admitted_before_first_native_finished": true,
+      "round": 3,
+      "warm": false
+    },
+    {
+      "claim_order": [
+        "f83128aa3ab2e1c9113947b718cc3631ff4aa66742fc08e549c1230da4c005ab",
+        "d1011d14b5d8f56388099ee60612c49cd71452b012f9ba2572e885f0234deb1b",
+        "0136135c37100c9b10d0b29ce677941ebec80fca6c26d191034793020e43eb14",
+        "5fc106e45898db5bfe045b15d86089f7f66de0fe316e260d04358d9a270fdbc2",
+        "71b97c594aeee0dda84729644650575ffa7e1fa6d68ad91ece65daf533bf4af9",
+        "647466d7458238d2714df7523a93c9ff707668eaec4467777ad469c56c90ec3b"
+      ],
+      "first_three_owners": [
+        "user:941040002:agent:mia-p23-1",
+        "user:941040003:agent:mia-p23-2",
+        "user:941040001:agent:mia-p23-0"
+      ],
+      "scope_first_cycle_fair": true,
+      "all_admitted_before_first_native_finished": true,
+      "round": 4,
+      "warm": false
+    },
+    {
+      "claim_order": [
+        "120bc6038a6adb03ca11f886d727323e4507bdd7eaefa340ba5eaa342a4cf815",
+        "fd3e608c858bfc5235de594e8b5e3531be4e36a289ecf26175ba5e66f2443e94",
+        "0aae50a7b1ed4e627e8559f3fedde373e1cc6c71bb99dfbb6058d534b0fcccfc",
+        "6a6c5282f06d09071aa7b60e2d9781e34e6a8b51ff81dd6ad1f9a177492d5bcf",
+        "60d7dc18d1f743783198ab6c2074e45c3bc695c22ddf49bcbcdca643be17cf5a",
+        "5c51386771d9254a9e3975ad24e23073ed8f354b237554350b5b6dbb12c46218"
+      ],
+      "first_three_owners": [
+        "user:941040001:agent:mia-p23-0",
+        "user:941040002:agent:mia-p23-1",
+        "user:941040003:agent:mia-p23-2"
+      ],
+      "scope_first_cycle_fair": true,
+      "all_admitted_before_first_native_finished": true,
+      "round": 5,
+      "warm": false
+    }
+  ],
+  "normal_task_latency": null,
+  "normal_task_acceptance_passed": false,
+  "terminal_task_outcomes": {
+    "failed": 24,
+    "committed": 6
+  },
+  "terminal_task_latency": {
+    "count": 30,
+    "p50_seconds": 63.59459811699996,
+    "p95_seconds": 98.9702752125,
+    "samples_seconds": [
+      60.3602425040001,
+      84.85344835900003,
+      52.209159858000014,
+      79.79005527200003,
+      41.74901852800007,
+      64.81277661299998,
+      44.07462635,
+      66.68298602499999,
+      62.37641962099995,
+      82.77902805899994,
+      57.180325066000016,
+      87.10861253499999,
+      22.730783450999997,
+      66.223586985,
+      39.707741026,
+      99.85141441199998,
+      33.41398149099999,
+      55.56111062500009,
+      67.68322555800003,
+      97.89332730200002,
+      45.67069353400008,
+      82.18483731999993,
+      56.52614743100002,
+      87.36996592800004,
+      41.48285878999991,
+      75.11901045,
+      53.427322692999965,
+      80.03335479300009,
+      60.40481616399996,
+      103.28444330600009
+    ]
+  },
+  "successful_task_latency_exploratory": {
+    "count": 6,
+    "p50_seconds": 74.73100704199996,
+    "p95_seconds": 99.24048561325006,
+    "samples_seconds": [
+      64.81277661299998,
+      66.68298602499999,
+      82.77902805899994,
+      87.10861253499999,
+      55.56111062500009,
+      103.28444330600009
+    ]
+  },
+  "app_process_shutdown_seconds": 0.4347025399999893,
+  "idle_service_group_shutdown": {
+    "elapsed_seconds": 2.1362222640000255,
+    "databases_stopped_with_zero_exit_no_oom": true,
+    "remaining_original_processes": [],
+    "passed": true,
+    "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+  },
+  "provider_requests": 66,
+  "provider_errors": [],
+  "case_errors": [],
+  "validation_failure_count": 56,
+  "validation_error_counts": {
+    "Invalid extraction JSON": 39,
+    "entities has 16 extraction clues; at most 8 are allowed": 1,
+    "entities must be an array of at most 8 extraction clues": 1,
+    "entities has 9 extraction clues; at most 8 are allowed": 3,
+    "keywords has 9 extraction clues; at most 8 are allowed": 1,
+    "trigger_terms clue must occur as a contiguous literal substring of source_quote; do not abbreviate or join separated words": 2,
+    "entities has 17 extraction clues; at most 8 are allowed": 1,
+    "entities has 18 extraction clues; at most 8 are allowed": 1,
+    "entities has 12 extraction clues; at most 8 are allowed": 1,
+    "entities has 11 extraction clues; at most 8 are allowed": 3,
+    "trigger_terms has 9 extraction clues; at most 8 are allowed": 1,
+    "entities has 10 extraction clues; at most 8 are allowed": 2
+  },
+  "python_peak_after_workload_mib": 418.1953125,
+  "common_peak_mib": 1475.3203125,
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "cpu.stat": "usage_usec 192903070\nuser_usec 178978516\nsystem_usec 13924553\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 5975\nnr_throttled 174\nthrottled_usec 8791938\nnr_bursts 0\nburst_usec 0",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0",
+    "memory.current": "1082966016",
+    "memory.peak": "1546985472",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+  },
+  "sqlite_audit": {
+    "integrity": "ok",
+    "task_states": {
+      "committed": 10,
+      "failed": 26
+    },
+    "tasks": [
+      {
+        "id": "eb3c25bfea0cd430066678b54c3eeb6426510fc4bcc1a3eb15fcefc546327de6",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "8769e8a2cbbae1e1443ce6aa7a518dab4f14447bf2cc3817f0ca3b56424f9757",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "def8c9c3a0c390ac54573c19b266d78af71b3f0c35e48d2c3e866eed29c5ab65",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "9fa6cbb51380f84314b413c594c17159b5e63cc681ab28ab7735d8d1684a2fdd",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "870f78e068b079d11c335f025c088394d23c75f343650078c8f02b54613191ff",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "186f10d91b398c66843025831921b53c5e587c83c1d5fba8fcd48466078a7645",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "109036624a74412bcafddb6ee46f9076cacb981b14c035311d3d070f1988a250",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "38f2e8bb2daa09bf57200d666e41eea7c9dd2d16be086e83335e15d2f3e360c2",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "d4bb3a2e3b1d04a0e68ed104cdb23d5f492d0ef65922dfa42af1f274eeff70a3",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "f5334778ea3ee868c69caa6b5ee3992b4a9d18a5842410a1e629f1187b221e00",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "080a7f1119f695b32c608df61960d2c49d99538ba89566228ca22266735d0d92",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "09be75da5033df9c5f45b321b55495a0aa0506cb1b09e202b65abda3302af441",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "87d38cb05db75db79519467b64572b3958bd85f88fff2f3033ac734da689434a",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "b3bb5931da6dabe8607615569b16727b4c4b11da61d0b69c151a71aeadacabbb",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "d14f2eb0311e410cdc1e802a3953b19a7f27a34284437dc0fed411524453a0ca",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "97ac2baf6df52542ab5f4d35a3b2d4947c8eaae6b9c433b16fdef3812267d544",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "c877530ab3f440fb3fb3a1a639629d8a4cc20ca52d9b49d387aae5d00e445063",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "e9eb494ce9241521e80e3e6960c92223d95cdc7c56bb70b3642373c369e1a2fe",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "14a42eaee5643d79b9be9bdac712f02b2222c642f5e26ca08fc15a2fd4eb8d44",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "18b3f948f56eb466437410be484313fb123af23c4b3e27187b0c690fc74f81ec",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "5db5ea0dd7308f1ec4069e6a288d7014a92d31915e41ca69e984bacdbc17116d",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "437323b57d0697ef120a2e1136ffc7797953d92cc573c580f81eab3854f37c4b",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "a64ff1a0a8b24e50ce9b1f4444e5a14c65e503b4d44880f743f89ad1e6e96777",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "source_payload": "{}"
+      },
+      {
+        "id": "f879b7c783260fc465898a02daac9f4b2217f5047c2bfd6ef9efa0111dd820af",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "f83128aa3ab2e1c9113947b718cc3631ff4aa66742fc08e549c1230da4c005ab",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "d1011d14b5d8f56388099ee60612c49cd71452b012f9ba2572e885f0234deb1b",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "5fc106e45898db5bfe045b15d86089f7f66de0fe316e260d04358d9a270fdbc2",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "71b97c594aeee0dda84729644650575ffa7e1fa6d68ad91ece65daf533bf4af9",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "0136135c37100c9b10d0b29ce677941ebec80fca6c26d191034793020e43eb14",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "647466d7458238d2714df7523a93c9ff707668eaec4467777ad469c56c90ec3b",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "120bc6038a6adb03ca11f886d727323e4507bdd7eaefa340ba5eaa342a4cf815",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "fd3e608c858bfc5235de594e8b5e3531be4e36a289ecf26175ba5e66f2443e94",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "6a6c5282f06d09071aa7b60e2d9781e34e6a8b51ff81dd6ad1f9a177492d5bcf",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "0aae50a7b1ed4e627e8559f3fedde373e1cc6c71bb99dfbb6058d534b0fcccfc",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "60d7dc18d1f743783198ab6c2074e45c3bc695c22ddf49bcbcdca643be17cf5a",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "invalid_output",
+        "source_payload": "{}"
+      },
+      {
+        "id": "5c51386771d9254a9e3975ad24e23073ed8f354b237554350b5b6dbb12c46218",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "source_payload": "{}"
+      }
+    ],
+    "facts": [
+      {
+        "id": "737782a874c442c1959cf021754ae7cf",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "content": "周六上午我通常在书桌边整理纸质邮票册",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-0-short",
+            "excerpt": "周六上午我通常在书桌边整理纸质邮票册"
+          }
+        ]
+      },
+      {
+        "id": "65c668930f55452e9fcd89085064f073",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "content": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-0-dense",
+            "excerpt": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+          }
+        ]
+      },
+      {
+        "id": "c618cdff64ca4e5eb09cb625cdc771e5",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "content": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-0-dense",
+            "excerpt": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉"
+          }
+        ]
+      },
+      {
+        "id": "4802f4e086ba4881bfda279ecd5df711",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "content": "周六上午我通常在书桌边整理纸质邮票册",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-0-short",
+            "excerpt": "周六上午我通常在书桌边整理纸质邮票册"
+          }
+        ]
+      },
+      {
+        "id": "a58f4ad7930745d8a91a6de754d1faea",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "content": "我习惯在周三晚饭后擦拭餐桌边的陶瓷茶杯",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-1-short",
+            "excerpt": "我习惯在周三晚饭后擦拭餐桌边的陶瓷茶杯"
+          }
+        ]
+      },
+      {
+        "id": "7b4257a114e14c5d9eade6d59cfec442",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "content": "每个月的第一个周日下午,我会整理书架上的纸质地图夹",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-2-short",
+            "excerpt": "每个月的第一个周日下午,我会整理书架上的纸质地图夹"
+          }
+        ]
+      },
+      {
+        "id": "cec6f1d25e1642c89c9aa31fc184465c",
+        "owner": "user:941040002:agent:mia-p23-1",
+        "content": "整理纸质地图夹时,我把餐桌清理出一块空处,先按城市名称把地图摊成几组,再沿着原来的折痕慢慢展开,把纸张边缘和图例都仔细检查一遍,把用过的交通票据移到单独的小信封里,然后在活页索引上记录每张地图的版次和取用日期,索引按城市拼音排序,折回地图时我会对齐边角,避免多添一道折线,再把各组地图装进对应的透明文件袋,文件袋上的白色标签只写城市名和年份,全部归位后合上文件夹,横放回书架中层",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-2-dense",
+            "excerpt": "整理纸质地图夹时,我把餐桌清理出一块空处,先按城市名称把地图摊成几组,再沿着原来的折痕慢慢展开,把纸张边缘和图例都仔细检查一遍,把用过的交通票据移到单独的小信封里,然后在活页索引上记录每张地图的版次和取用日期,索引按城市拼音排序,折回地图时我会对齐边角,避免多添一道折线,再把各组地图装进对应的透明文件袋,文件袋上的白色标签只写城市名和年份,全部归位后合上文件夹,横放回书架中层"
+          }
+        ]
+      },
+      {
+        "id": "6803970c315440d49dde0470bde36f84",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "content": "每个月的第一个周日下午,我会整理书架上的纸质地图夹",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-2-short",
+            "excerpt": "每个月的第一个周日下午,我会整理书架上的纸质地图夹"
+          }
+        ]
+      },
+      {
+        "id": "f0ad37e404714dd4a52d972d57516494",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "content": "星期天起床后我先检查阳台上薄荷盆的土壤",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-3-short",
+            "excerpt": "星期天起床后我先检查阳台上薄荷盆的土壤"
+          }
+        ]
+      },
+      {
+        "id": "2badd8d4253249bc8543e0a338cb9781",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "content": "整理一周的速写时,我会先在台灯下把速写本翻到折角标记处,按画画的日期查看每一页,把还想补充的轮廓用铅笔在页边轻轻记下来,画在散纸上的小稿则按题材分成几组,用纸夹固定在同一张底卡上,接着把当天用过的铅笔削好,橡皮表面沾到的铅灰擦干净,再把散纸小稿装进牛皮纸文件袋,在袋口写上这一周的日期,合起速写本以后,我把它和文件袋一起放进书桌右侧的矮抽屉,最后关掉台灯并收起桌上的纸屑",
+        "confirmed": 1,
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "sources": [
+          {
+            "session_id": "p23-fair-5-dense",
+            "excerpt": "整理一周的速写时,我会先在台灯下把速写本翻到折角标记处,按画画的日期查看每一页,把还想补充的轮廓用铅笔在页边轻轻记下来,画在散纸上的小稿则按题材分成几组,用纸夹固定在同一张底卡上,接着把当天用过的铅笔削好,橡皮表面沾到的铅灰擦干净,再把散纸小稿装进牛皮纸文件袋,在袋口写上这一周的日期,合起速写本以后,我把它和文件袋一起放进书桌右侧的矮抽屉,最后关掉台灯并收起桌上的纸屑"
+          }
+        ]
+      }
+    ],
+    "unique_owners": 3,
+    "all_job_bindings_and_failed_output_hashes_verified": true,
+    "terminal_source_payloads_cleared_by_original_worker": true
+  }
+}

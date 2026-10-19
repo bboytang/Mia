@@ -1,12 +1,12 @@
 # Mia 人格与长期记忆：当前交接
 
-更新：2026-10-18。本文件是当前接续入口；历史过程见[工作记录](mia-persona-memory-worklog.md)，完整范围见[V1.2方案](mia-persona-memory-v1.2.md)和[实施计划](mia-persona-memory-implementation.md)。
+更新：2026-10-19。本文件是当前接续入口；历史过程见[工作记录](mia-persona-memory-worklog.md)，完整范围见[V1.2方案](mia-persona-memory-v1.2.md)和[实施计划](mia-persona-memory-implementation.md)。
 
 ## 当前决定与执行点
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第三十四步观察器c47a3f30120236d9776caca20a5e3a9e3f687a09已推送到固定feature/mia-persona-memory-v1.2；同SHA push语法/25机制[39178738184](https://github.com/bboytang/Mia/actions/runs/39178738184) success，唯一完整正常Worker公平性[39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)在途。原运行实现仍d187988；36任务/最多72请求、原提案校验/两尝试/Scope/120秒不变。收同一句柄，不重复派发；第三十三步首句10k查询0 p95增量912.84ms仍失败，P23未整体验收/P24未开始。
+- **P23进行中，整体未验收**：第三十四步c47a3f3 / [39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)已终态failure：36任务/66真实SDK、全六轮Scope首循环公平且完整采集；共10committed/26failed，测量轮6committed/24failed，正常成功p95=null。失败终态混合p95 98.97秒仅作诊断，不能当120秒验收通过。56次原校验拒绝包含39次Invalid extraction JSON、数量超限/非字面线索/错误数组类型；无Provider或case错误。独立只读SQLite核对36任务归属/状态/尝试、10新事实/原句来源/768维3072字节向量及integrity=ok，所有拒绝输出hash与原生任务/attempt对应；终态source_payload按原行为清空。应用418.20MiB/共同1475.32MiB、无OOM，app0.4347秒/全组2.1362秒空闲退出。原文/hash见performance-worker-fairness-complete-*。P23未整体验收/P24未开始；首句10k查询0 912.84ms仍失败。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
@@ -140,3 +140,10 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 
 
 第三十四步等待期间仅离线拆解第三十三步72原回复，报告[performance-auth-once-stage-audit.json](verification/mia-persona-memory/performance-auth-once-stage-audit.json)保存全部36配对和原报告SHA/hash；三段相加逐对等于原首句差，六组p95与原报告逐项一致。10k查询0最差配对935.49ms=SDK前322.90+SDK至首内容115.01+首内容至可播497.57ms；该组各阶段差值中位数224.66/-29.40/497.57ms，不能相加当p95。后阶段仍混合远端续流/授权/分段，本证据不足以把剩余超限全归因于本地权限，下一步需分开观测这些成本后才决定运行优化；没有新增Provider请求/改变验收或重跑同源码。
+
+
+## 第三十四步收证（2026-10-19）
+
+第三十四步c47a3f3 / [39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)已终态failure：36任务/66真实SDK、全六轮Scope首循环公平且完整采集；共10committed/26failed，测量轮6committed/24failed，正常成功p95=null。失败终态混合p95 98.97秒仅作诊断，不能当120秒验收通过。56次原校验拒绝包含39次Invalid extraction JSON、数量超限/非字面线索/错误数组类型；无Provider或case错误。独立只读SQLite核对36任务归属/状态/尝试、10新事实/原句来源/768维3072字节向量及integrity=ok，所有拒绝输出hash与原生任务/attempt对应；终态source_payload按原行为清空。应用418.20MiB/共同1475.32MiB、无OOM，app0.4347秒/全组2.1362秒空闲退出。原文/hash见performance-worker-fairness-complete-*。P23未整体验收/P24未开始；首句10k查询0 912.84ms仍失败。
+
+下一步第三十五步：已离线确认35个原输出是单个合法JSON对象后附独立末尾三反引号，其中24个在空既有上下文下通过原来源规则、11个仍有数量/类型等非法值；此局部审计不将历史任务改判成功。只扩展现有格式解析支持该独立尾标记，JSON/原字段值不变，空响应/多JSON/说明文字/非法数组/非字面线索仍拒绝，原最多两次尝试及8项上限保持。先本地反例及原输出重放，再新SHA回归/唯一短长诊断，不重复原源码整轮取绿。
