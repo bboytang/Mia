@@ -117,7 +117,7 @@ async def evaluate():
             report['restart_and_device_continuity'] = report['cases'][1]['before']['version'] == 1 and report['cases'][1]['before']['tension'] > 0
             report['repair_gradual'] = 0 < report['cases'][2]['after']['tension'] < report['cases'][1]['after']['tension']
             report['offline_recovery'] = report['cases'][-1]['before']['feeling'] == 'steady'
-            report['residual_expression'] = bool(re.search(r'😔|难过|在意|缓|小心|谨慎|忐忑|心里|迟疑', report['cases'][1]['spoken_response']))
+            report['residual_expression'] = bool(re.search(r'难过|在意|缓|小心|谨慎|忐忑|心里|迟疑', report['cases'][1]['spoken_response']))
             report['same_question_with_different_affect'] = [report['cases'][i]['spoken_response'] for i in (1, 4)]
             report['user_mood_tracking_still_off'] = features.status(store, scope.owner)['emotion_tracking']['enabled'] == 0
             report['passed'] = (all(item['passed'] for item in report['cases']) and report['restart_and_device_continuity']

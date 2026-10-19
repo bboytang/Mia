@@ -117,10 +117,29 @@ def reset(store, owner):
         store._cancel_jobs(owner)
 
 
+def guidance(current):
+    """Only reviewed server state selects instructions; no user text enters here."""
+    if current['tension'] >= .08 and current['valence'] < 0:
+        return ('\nMia此刻的有效表达状态：受伤的余波，尚未完全平复。这个状态属于Mia，不是用户。'
+                '普通追问时，先简短说出自己还有些在意或需要缓一缓，再自然回应，不要立刻恢复开心或客服问句。'
+                '若用户真诚道歉或澄清，可以表达正在释然，但不否认刚才的感受；不要求用户哄你，不编造情绪的具体前因。\n')
+    if current['valence'] >= .08:
+        return ('\nMia此刻的有效表达状态：感到温暖，愿意坦诚交流。让这份温暖自然影响回应，'
+                '有少许余波也可以并存；不据此编造共同往事，不改变用户角色设定。\n')
+    if current['arousal'] >= .4:
+        return '\nMia此刻的有效表达状态：好奇、注意力较活跃。根据当前话题表达自己的兴趣，不虚构经历或固定爱好。\n'
+    return '\nMia此刻的有效表达状态：较为平静。按用户设定的角色自然回应，允许本轮互动带来新的感受。\n'
+
+
 class AppraisalStream:
-    """Strip a bounded control prefix before ANY dialogue/display/TTS consumer."""
+    """Decode one bounded JSON record before ANY dialogue/display/TTS consumer.
+
+    The fixed XML wrapper tolerates provider spacing and an omitted/mistyped
+    closing marker. JSON fields and literal evidence remain strictly validated.
+    """
     def __init__(self, query):
         self.query, self.buffer, self.done, self.proposal = query, '', False, None
+        self.record, self.emoji = False, ''
 
     def feed(self, text):
         if not isinstance(text, str):
@@ -131,13 +150,33 @@ class AppraisalStream:
             return text
         self.buffer += text
         candidate = self.buffer.lstrip()
-        # The existing model may put its permitted emotion marker before the
-        # internal record. Hold and strip only this finite marker vocabulary.
+        if self.record:
+            # Hold partial wrappers until they are completely stripped. The
+            # model sometimes repeats the opening marker as its closing marker.
+            while candidate.startswith('<'):
+                if '>' not in candidate:
+                    compact = re.sub(r'\s+', '', candidate)
+                    if len(candidate) <= 64 and (OPEN.startswith(compact) or CLOSE.startswith(compact)):
+                        return ''
+                    raise ValueError('Unexpected affect suffix')
+                marker, candidate = candidate.split('>', 1)
+                if re.sub(r'\s+', '', marker + '>') not in {OPEN, CLOSE}:
+                    raise ValueError('Unexpected affect suffix')
+                candidate = candidate.lstrip()
+            if not candidate:
+                self.buffer = ''
+                return ''
+            self.done, self.buffer = True, ''
+            prefix = self.emoji if candidate[0] not in '😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉' else ''
+            return prefix + candidate
+        # Existing providers may put a permitted emotion marker before the
+        # control record. Preserve its emoji, never speak its label.
         lead = r'[\s😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉平静开心好奇惊讶困惑关爱难过俏皮温暖愉快谨慎释然]*'
         if candidate and not candidate.startswith('<'):
             prefix, separator, rest = candidate.partition('<')
             if len(prefix) > 32 or re.fullmatch(lead, prefix) is None:
                 raise ValueError('Missing affect prefix')
+            self.emoji = next((char for char in prefix if char in '😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉'), '')
             if not separator:
                 return ''
             candidate = '<' + rest
@@ -145,8 +184,6 @@ class AppraisalStream:
             if len(self.buffer) > 32:
                 raise ValueError('Affect prefix overflow')
             return ''
-        # Some providers insert spaces inside the XML marker across deltas.
-        # Normalize only the fixed marker, never JSON fields or source quotes.
         if '>' not in candidate:
             if len(candidate) <= 64 and OPEN.startswith(re.sub(r'\s+', '', candidate)):
                 return ''
@@ -154,18 +191,19 @@ class AppraisalStream:
         header, body = candidate.split('>', 1)
         if re.sub(r'\s+', '', header + '>') != OPEN:
             raise ValueError('Missing affect prefix')
-        closing = re.search(r'<\s*/\s*mia-affect\s*>', body)
-        if closing is None:
+        body = body.lstrip()
+        try:
+            raw, end = json.JSONDecoder().raw_decode(body)
+        except json.JSONDecodeError:
             if len(body) > 1024:
                 raise ValueError('Affect prefix overflow')
             return ''
-        raw, rest = body[:closing.start()], body[closing.end():]
-        if len(raw) > 1024:
+        if end > 1024:
             raise ValueError('Affect prefix overflow')
-        self.proposal = appraisal(json.loads(raw), self.query)
-        self.done, self.buffer = True, ''
-        return rest.lstrip()
+        self.proposal = appraisal(raw, self.query)
+        self.record, self.buffer = True, body[end:]
+        return self.feed('')
 
     def finish(self):
-        if not self.done and self.buffer:
+        if not self.done and (self.buffer or self.record):
             raise ValueError('Incomplete affect record')

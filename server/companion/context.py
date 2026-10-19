@@ -267,8 +267,8 @@ class ContextBuilder:
                         'conflict': '用户对先前说法提出不确定信息；此时尚待确认。'}[record['reconciliation']['kind']]}
             else:
                 data.pop('requested_change', None)
-            from .affect import POLICY as AFFECT_POLICY
-            messages = [{'role': 'system', 'content': CORE + POLICY + (AFFECT_POLICY if affect else '')},
+            from .affect import POLICY as AFFECT_POLICY, guidance
+            messages = [{'role': 'system', 'content': CORE + POLICY + (AFFECT_POLICY + guidance(affect) if affect else '')},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             for group in retained:
                 for message in group:

@@ -552,6 +552,8 @@ def completed_chat(function):
                         result = {'status': 'cancelled', 'accepted': False}
                     except Exception:
                         result = {'status': 'unavailable', 'accepted': False}
+                    if event is None:
+                        return
                     conn._mia_job_status = result
                     if await allow_output(conn):
                         await conn.websocket.send(json.dumps({'type': 'mia_memory_job', 'turn_id': event.turn_id, **result}))

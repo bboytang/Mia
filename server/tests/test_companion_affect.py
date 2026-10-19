@@ -52,6 +52,7 @@ class AffectStateTests(unittest.IsolatedAsyncioTestCase):
         hurt = affect.state(self.store, self.scope.owner)
         self.assertLess(hurt['valence'], 0)
         self.assertEqual(hurt['feeling'], 'hurt')
+        self.assertIn('尚未完全平复', (await self.build()).request()['messages'][0]['content'])
         self.commit('steady', 'next')
         residual = affect.state(self.store, self.scope.owner)
         self.assertEqual(residual['feeling'], 'hurt')
@@ -137,6 +138,11 @@ class AppraisalStreamTests(unittest.TestCase):
         spaced = '😌平静\n' + raw.replace('<mia-affect>', '< mia-affect >').replace('</mia-affect>', '< /mia-affect >')
         self.assertEqual(''.join(parser.feed(char) for char in spaced), '😔这句话让我有些难过。')
         parser.finish()
+        for ending in ('', affect.OPEN, '< /mia-affect >'):
+            parser = affect.AppraisalStream('你真烦')
+            wire = record().removesuffix(affect.CLOSE) + ending + '😔我还有些在意。'
+            self.assertEqual(''.join(parser.feed(char) for char in wire), '😔我还有些在意。')
+            parser.finish()
         for bad in ({'feeling': 'evil', 'intensity': 1, 'quote': '你真烦'},
                     {'feeling': 'hurt', 'intensity': True, 'quote': '你真烦'},
                     {'feeling': 'hurt', 'intensity': 2, 'quote': '虚构原话'},
@@ -146,7 +152,9 @@ class AppraisalStreamTests(unittest.TestCase):
     def test_malformed_or_unfinished_record_never_becomes_spoken_text(self):
         for raw in ('普通文字', '<mia-affect>{broken}</mia-affect>不应播放', affect.OPEN + 'x' * 1025):
             parser = affect.AppraisalStream('你真烦')
-            with self.assertRaises(ValueError):parser.feed(raw)
+            with self.assertRaises(ValueError):
+                parser.feed(raw)
+                parser.finish()
         parser = affect.AppraisalStream('你好')
         self.assertEqual(parser.feed('<mia-affect>{'), '')
         with self.assertRaises(ValueError):parser.finish()
@@ -223,3 +231,28 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
             with patch('server.companion.authorization.allow_output', new=AsyncMock(return_value=False)):
                 await asyncio.to_thread(chat, self.conn, '你真烦')
             self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 1 if mode == 'complete' else 0)
+            self.assertIsNone(self.conn._mia_job_status)
+
+
+class AffectManagementTests(unittest.IsolatedAsyncioTestCase):
+    from server.tests import test_companion_features as management_fixture
+    asyncSetUp = management_fixture.ManagementRouteTests.asyncSetUp
+    asyncTearDown = management_fixture.ManagementRouteTests.asyncTearDown
+    post = management_fixture.ManagementRouteTests.post
+
+    async def test_console_own_emotion_read_enable_reset_keeps_user_consent_and_other_settings(self):
+        response = await self.post({'action': 'set_feature_settings', 'features': {'companion_emotion': True}})
+        self.assertTrue((await response.json())['data']['mia_emotion']['enabled'])
+        owner = 'user:1:agent:allowed'
+        with self.store.lock, self.store.db:
+            self.assertTrue(affect.commit(self.store, owner, 's', 't', '你真烦', {'feeling': 'hurt', 'intensity': 2}, 0))
+        response = await self.post({'action': 'status'})
+        self.assertEqual((await response.json())['data']['mia_emotion']['feeling'], 'hurt')
+        response = await self.post({'action': 'reset_mia_emotion'})
+        state = (await response.json())['data']
+        self.assertEqual(state['mia_emotion']['version'], 0)
+        self.assertEqual(state['mia_emotion']['feeling'], 'steady')
+        self.assertEqual(state['emotion_tracking']['enabled'], 0)
+        self.assertFalse(state['paused'])
+        self.assertTrue(state['features']['memory_recall'])
+        self.assertTrue(state['features']['companion_emotion'])
