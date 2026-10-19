@@ -28,10 +28,10 @@ export default {
     return {
       state: null, busy: false, error: '', generation: 0,
       switches: [
-        { key: 'automatic_memory', label: '自动保存记忆', description: '聊天后提取并保存长期信息。关闭后停止新保存，已有记忆保留。' },
-        { key: 'memory_recall', label: '对话中使用长期记忆', description: '回复时检索已保存的用户记忆。关闭后不检索，不删除。' },
+        { key: 'automatic_memory', label: '自动保存记忆', description: '聊天后提取并保存长期信息。关闭后暂停新的记忆、成长和心情采集，已有记录保留。' },
+        { key: 'memory_recall', label: '对话中使用长期记忆', description: '关闭后不在回复中使用已保存的记忆、成长特点、互动事件或心情趋势；不会删除记录，也不会清空当前聊天。' },
         { key: 'personality_growth', label: '人格成长', description: '根据多个真实会话形成表达特点。关闭后停止生成，也不在回复中使用已有特点；不会修改你的角色设定。' },
-        { key: 'interaction_events', label: '互动事件延续', description: '保存并使用有来源的互动事件。关闭后停止新增，也不在回复中使用。' },
+        { key: 'interaction_events', label: '互动事件延续', description: '记忆使用开启时，保存并使用有来源的互动事件。关闭后停止新增，也不在回复中使用。' },
         { key: 'emotion_tracking', label: '我的长期心情追踪', description: '这是对你长期心情的观察，不是 Mia 的情绪。默认关闭，只有你明确开启才采集；关闭不删除已有记录。' }
       ]
     };

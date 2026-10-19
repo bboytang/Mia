@@ -167,7 +167,8 @@ class ContextBuilder:
                 store._owner(scope.owner)
             traits = []
             from .features import settings
-            growth = settings(store, scope.owner)['personality_growth']
+            flags = settings(store, scope.owner)
+            growth = flags['memory_recall'] and flags['personality_growth']
             for row in store.db.execute('SELECT name,description,evidence_ids,updated_at FROM traits WHERE owner=? AND ? ORDER BY name', (scope.owner, growth)):
                 ids = json.loads(row['evidence_ids'])
                 if not isinstance(ids, list) or not 1 <= len(ids) <= 16 or any(not isinstance(value, str) for value in ids):
@@ -184,7 +185,7 @@ class ContextBuilder:
             from . import emotions, events
             selected_events = []
             selected_trend = {'status': 'not_relevant'}
-            if query is not None:
+            if query is not None and flags['memory_recall']:
                 selected_events = events.context(store, scope.owner, query, facts or [], session_id=session_id, turn_id=turn_id)
                 if emotions.RELEVANT.search(query):
                     selected_trend = emotions.trend(store, scope.owner)

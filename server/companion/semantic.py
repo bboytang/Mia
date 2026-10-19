@@ -59,6 +59,13 @@ class SemanticMemoryIndex:
         with self.store.lock:
             return self._state(scope)
 
+    def _recall_snapshot(self, scope):
+        with self.store.lock:
+            row = self.store.db.execute('SELECT o.revision,s.content_epoch,COALESCE(f.memory_recall,1) '
+                'FROM owners o JOIN mia_scope_versions s ON s.owner=o.owner '
+                'LEFT JOIN mia_feature_settings f ON f.owner=o.owner WHERE o.owner=?', (scope.owner,)).fetchone()
+            return (tuple(row[:2]), bool(row[2])) if row else ((0, 0), True)
+
     def _check(self, scope, expected, db=None):
         if self._state(scope, db) != expected:
             raise EmbeddingUnavailable('memory_changed')
@@ -330,10 +337,13 @@ class SemanticMemoryIndex:
         if not isinstance(query, str) or not query.strip() or len(query) > 4096:
             raise ValueError('Invalid hybrid query')
         await self._require(scope, authorization, 'memory:read')
-        from .features import settings
-        if not (await asyncio.to_thread(settings, self.store, scope.owner))['memory_recall']:
-            return []
-        state = await asyncio.to_thread(self._snapshot, scope)
+        state, recall = await asyncio.to_thread(self._recall_snapshot, scope)
+        if not recall:
+            await self._require(scope, authorization, 'memory:read')
+            await asyncio.to_thread(self._snapshot_check, scope, state)
+            return {'snapshot': {'revision': state[0], 'content_epoch': state[1]}, 'query': query,
+                    'expansion': [], 'weights': dict(WEIGHTS), 'threshold': THRESHOLD,
+                    'semantic_floor': SEMANTIC_FLOOR, 'candidates': [], 'results': []}
         available = await asyncio.to_thread(self._clues, scope, state, query)
         clues, expanded_text = [], query
         for clue in available:

@@ -42,7 +42,8 @@ def _valid(store, owner, event_id):
 def context(store, owner, query, facts, *, session_id=None, turn_id=None):
     """Inside the context snapshot transaction; current facts came from scoped RAG."""
     from .features import settings
-    if not settings(store, owner)['interaction_events']:
+    flags = settings(store, owner)
+    if not flags['interaction_events'] or not flags['memory_recall']:
         return []
     facts = [dict(fact) for fact in facts]
     for fact in facts:

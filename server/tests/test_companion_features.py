@@ -21,6 +21,33 @@ class FeatureSwitchTests(unittest.IsolatedAsyncioTestCase):
     build = fixture.ContextBuilderTests.build
     data = fixture.ContextBuilderTests.data
 
+    async def test_console_change_controls_hardware_and_phone_with_the_same_agent_owner(self):
+        from dataclasses import replace
+        from server.companion.context import ContextBuilder
+        from server.companion.semantic import SemanticMemoryIndex
+        self.fact('我喜欢蓝色。')
+        await self.index.rebuild_batch(self.scope, self.auth)
+        phone_store = MemoryStore(Path(self.temp.name) / 'memory.sqlite3')
+        phone_scope = replace(self.scope, device_id='bound-iphone', client_id='ios-client')
+        phone_index = SemanticMemoryIndex(phone_store, self.encoder)
+        phone_builder = ContextBuilder(phone_index)
+        try:
+            hardware_turn = await self.build()
+            phone_turn = await phone_builder.build(phone_scope, self.auth, 'phone-turn', '蓝色', limits=self.limits)
+            self.assertTrue(self.data(phone_turn)['facts'])
+            features.update(self.store, self.scope.owner, {'memory_recall': False})
+            for builder, turn in [(self.builder, hardware_turn), (phone_builder, phone_turn)]:
+                with self.assertRaises(ContextError):
+                    await builder.validate(turn, self.auth)
+            for index, scope in [(self.index, self.scope), (phone_index, phone_scope)]:
+                self.assertEqual((await index.retrieve(scope, self.auth, '蓝色'))['results'], [])
+            self.assertEqual(self.data(await self.build())['facts'], [])
+            next_phone = await phone_builder.build(phone_scope, self.auth, 'next-phone', '蓝色', limits=self.limits)
+            self.assertEqual(self.data(next_phone)['facts'], [])
+            self.assertFalse(features.settings(phone_store, phone_scope.owner)['memory_recall'])
+        finally:
+            phone_store.close()
+
     async def test_recall_disabled_skips_encoder_preserves_facts_and_invalidates_old_reply(self):
         fact = self.fact('我喜欢蓝色。')
         await self.index.rebuild_batch(self.scope, self.auth)
@@ -29,11 +56,11 @@ class FeatureSwitchTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ContextError):
             await self.builder.validate(old, self.auth)
         calls = self.encoder.calls
-        self.assertEqual(await self.index.retrieve(self.scope, self.auth, '蓝色'), [])
+        self.assertEqual((await self.index.retrieve(self.scope, self.auth, '蓝色'))['results'], [])
         self.assertEqual(self.encoder.calls, calls)
         self.assertEqual(self.store.list_memories(self.scope.owner)[0]['id'], fact)
         features.update(self.store, self.scope.owner, {'memory_recall': True})
-        self.assertTrue(await self.index.retrieve(self.scope, self.auth, '蓝色'))
+        self.assertTrue((await self.index.retrieve(self.scope, self.auth, '蓝色'))['results'])
 
     async def test_growth_switch_stops_writes_and_context_but_keeps_existing_traits(self):
         ids = [self.fact('我喜欢蓝色' + thing) for thing in ('衬衫', '杯子', '自行车')]
@@ -48,6 +75,8 @@ class FeatureSwitchTests(unittest.IsolatedAsyncioTestCase):
         with self.store.lock, self.store.db:
             self.assertFalse(self.store._trait(self.scope.owner, dict(trait, name='另一特点'), 2))
         self.assertEqual(len(self.store.personality(self.scope.owner)['traits']), 1)
+        features.update(self.store, self.scope.owner, {'personality_growth': True, 'memory_recall': False})
+        self.assertEqual(self.data(await self.build(query='蓝色'))['traits'], [])
 
     async def test_events_switch_stops_creation_and_use_without_deleting_events(self):
         self.fact('我喜欢蓝色。')
