@@ -6,7 +6,7 @@
 
 - 用户已确认采用 **`glm-4-flash-250414`**。
 - **P22用户验收通过，已收口**，详见[验收决定及保留问题](verification/mia-persona-memory/p22-user-acceptance.md)。
-- **P23进行中，整体未验收**：第三十四步c47a3f3 / [39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)已终态failure：36任务/66真实SDK、全六轮Scope首循环公平且完整采集；共10committed/26failed，测量轮6committed/24failed，正常成功p95=null。失败终态混合p95 98.97秒仅作诊断，不能当120秒验收通过。56次原校验拒绝包含39次Invalid extraction JSON、数量超限/非字面线索/错误数组类型；无Provider或case错误。独立只读SQLite核对36任务归属/状态/尝试、10新事实/原句来源/768维3072字节向量及integrity=ok，所有拒绝输出hash与原生任务/attempt对应；终态source_payload按原行为清空。应用418.20MiB/共同1475.32MiB、无OOM，app0.4347秒/全组2.1362秒空闲退出。原文/hash见performance-worker-fairness-complete-*。P23未整体验收/P24未开始；首句10k查询0 912.84ms仍失败。
+- **P23进行中，整体未验收**：第三十五步运行候选ca038445df26470ecbd9feedba40be5d08ff1050已推送到固定feature/mia-persona-memory-v1.2；唯一冻结短长真实诊断[39180767649](https://github.com/bboytang/Mia/actions/runs/39180767649)在途（最多4请求）。同SHA提取语法39180756160 success，服务39180756118/身份39180756120/manager39180756108/真实向量39180756105在途。只兼容JSON独立尾标记，原字段/8项/来源/两尝试不变；36本地专项通过，完整提取/Worker回归本机缺numpy由CI验证。上一轮c47a3f3完整36任务10提交26失败、测量6提交24失败/无正常p95已收证；首句10k查询0 912.84ms仍失败。继续同一句柄，不重复派发，P23未整体验收/P24未开始/未部署。
 - 生产模型配置未切换，未部署。不得将“选定模型”描述成“已上线”。
 
 ## 仓库与证据版本
@@ -154,3 +154,6 @@ P24在P23后：最终候选相关Python/真实Java/必要iOS回归；干净安�
 只扩展decode既有全匹配格式规则，使独立末尾三反引号的整个JSON正文交给原json.loads；原read_stream返回字节/字段值不变。非JSON/空响应/额外解释/多对象仍拒绝，错误数组字符串不转数组、超过8项不截断、来源/归属/重要性等规则不变。新增两组反例覆盖原工具参数不变、完整围栏兼容及非法值仍拒绝。11提案测试+25CI机制共36项通过，Python3.10 AST/diff通过；本机提取/Worker测试因缺numpy无法导入，完整相关回归交GitHub执行。
 
 原56次拒绝离线重放详见performance-trailing-fence-offline.json：其中35个尾标记样本现在解析为逐字段相同的JSON，24个在空既有上下文下通过原来源规则，11个仍被数量/类型等原校验拒绝；余4个Invalid extraction JSON（含3空输出）继续失败。此局部审计不能恢复历史任务或当成实际提交成功，不改第三十四步10成功/26失败原结论。下一步新SHA四回归及唯一冻结短长诊断，保持两尝试/原模型/语料/120秒，实际收益待新run。首句10k查询0 912.84ms仍失败；P23未整体验收/P24未开始，未改生产/未部署。
+
+
+第三十五步运行候选ca038445df26470ecbd9feedba40be5d08ff1050已推送到固定feature/mia-persona-memory-v1.2；唯一冻结短长真实诊断[39180767649](https://github.com/bboytang/Mia/actions/runs/39180767649)在途（最多4请求）。同SHA提取语法39180756160 success，服务39180756118/身份39180756120/manager39180756108/真实向量39180756105在途。只兼容JSON独立尾标记，原字段/8项/来源/两尝试不变；36本地专项通过，完整提取/Worker回归本机缺numpy由CI验证。上一轮c47a3f3完整36任务10提交26失败、测量6提交24失败/无正常p95已收证；首句10k查询0 912.84ms仍失败。继续同一句柄，不重复派发，P23未整体验收/P24未开始/未部署。
