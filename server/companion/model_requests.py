@@ -56,15 +56,15 @@ class ModelRequestGate:
                 while True:
                     if cancelled():
                         raise ModelQueueError('model_request_cancelled')
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise ModelQueueError('model_request_queue_timeout')
                     preferred = self.foreground if self.foreground else self.background
                     if self.active < 2 and preferred is queue and queue[0] is ticket:
                         queue.popleft()
                         self.active += 1
                         self.condition.notify_all()
                         return Lease(self)
-                    remaining = deadline - time.monotonic()
-                    if remaining <= 0:
-                        raise ModelQueueError('model_request_queue_timeout')
                     self.condition.wait(min(.05, remaining))
             finally:
                 if ticket in queue:

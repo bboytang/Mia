@@ -219,6 +219,11 @@ class MemoryWorker:
                     json.loads(job['source_payload']).get('emotion_consent_version'))
                 context.validation_feedback = self.validation_feedback.get(job['id'])
                 extract = await self.resolve(scope)
+                # Context/model preparation can outlive the durable deadline.
+                # Reject before entering an attempt; do not refund old attempts.
+                if job['deadline'] <= self.jobs.store.clock():
+                    await asyncio.to_thread(self.jobs.update, job, 'failed', error='deadline_exceeded')
+                    return True
                 # A newly active front-end gets priority before entering a native call.
                 if self.foreground:
                     return False

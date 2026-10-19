@@ -1,0 +1,113 @@
+{
+  "base_sha": "82e474768923dd33859e8d97160ef7f4e906f80d",
+  "test_count": 38,
+  "passed": true,
+  "records": [
+    {
+      "case": "bounded_rolling_foreground",
+      "initial_active_foreground": 2,
+      "admission_order": [
+        "front-0",
+        "front-1",
+        "front-2",
+        "front-3",
+        "front-4",
+        "front-5",
+        "background"
+      ],
+      "snapshots_before_release": [
+        {
+          "active": 2,
+          "waiting_foreground": 0,
+          "waiting_background": 1
+        },
+        {
+          "active": 2,
+          "waiting_foreground": 0,
+          "waiting_background": 1
+        },
+        {
+          "active": 2,
+          "waiting_foreground": 0,
+          "waiting_background": 1
+        },
+        {
+          "active": 2,
+          "waiting_foreground": 0,
+          "waiting_background": 1
+        },
+        {
+          "active": 2,
+          "waiting_foreground": 0,
+          "waiting_background": 1
+        },
+        {
+          "active": 2,
+          "waiting_foreground": 0,
+          "waiting_background": 1
+        }
+      ],
+      "background_served_only_after_foreground_waiters_drain": true,
+      "scope": "Finite controlled arrivals, not an unbounded-load guarantee"
+    },
+    {
+      "case": "expired_gate_waiter",
+      "virtual_queue_ms": 30001,
+      "sdk_calls": 0,
+      "gate": {
+        "active": 1,
+        "waiting_foreground": 0,
+        "waiting_background": 0
+      }
+    },
+    {
+      "case": "queue_bound_cancel",
+      "bound": 128,
+      "sdk_calls": 0,
+      "gate_before_native_completion": {
+        "active": 2,
+        "waiting_foreground": 0,
+        "waiting_background": 0
+      }
+    },
+    {
+      "case": "foreground_blocks_until_deadline",
+      "foreground": 2,
+      "virtual_queue_seconds": 120,
+      "sdk_calls": 0,
+      "attempts": 0,
+      "terminal": "deadline_exceeded",
+      "liveness": "No unconditional background guarantee under saturated foreground"
+    },
+    {
+      "case": "expiry_in_preparation",
+      "job_created": 100,
+      "deadline": 220,
+      "clock_before_attempt": 221,
+      "sdk_calls": 0,
+      "attempts": 0,
+      "state": "failed"
+    },
+    {
+      "case": "queued_attempt_restart",
+      "first_attempt_phase": "model_slot_queue",
+      "before": {
+        "state": "retry_wait",
+        "attempts": 1,
+        "error_category": "model_queue_timeout"
+      },
+      "after": {
+        "state": "empty",
+        "attempts": 2,
+        "error_category": null
+      },
+      "actual_mock_sdk_calls": 1,
+      "attempt_policy_change": "Not implemented; requires approval"
+    }
+  ],
+  "files": {
+    "server/companion/jobs.py": "76cb29778633c3702569dbc6e831bfd56cc6410bcaddc19746a462a01a61370c",
+    "server/companion/model_requests.py": "5c12d074b498ffcd6502e0faab73f166a3c9bd282c71db939991816c1753f44f",
+    "server/tests/test_companion_p23_scheduling.py": "8db89898cc62b1329641f85efa4624f6ad0f45eef07ddd82a7f18b6e82bfe41f"
+  }
+}
