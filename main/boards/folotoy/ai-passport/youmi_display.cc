@@ -1,18 +1,18 @@
 #include "sdkconfig.h"
 
 #if CONFIG_MIA_PASSPORT_DEVELOPMENT
-#include "mia_display.h"
+#include "youmi_display.h"
 #include "mia_simplified.h"
 
 #include "assets/lang_config.h"
 
-MiaDisplay::~MiaDisplay() {
+YoumiDisplay::~YoumiDisplay() {
     DisplayLockGuard lock(this);
     if (animation_)
         lv_timer_delete(animation_);
 }
 
-void MiaDisplay::SetupUI() {
+void YoumiDisplay::SetupUI() {
     if (setup_ui_called_)
         return;
     SpiLcdDisplay::SetupUI();
@@ -41,14 +41,14 @@ void MiaDisplay::SetupUI() {
     DrawFrame();
     animation_ = lv_timer_create(
         [](lv_timer_t* timer) {
-            auto self = static_cast<MiaDisplay*>(lv_timer_get_user_data(timer));
+            auto self = static_cast<YoumiDisplay*>(lv_timer_get_user_data(timer));
             if (!lv_obj_has_flag(self->emoji_box_, LV_OBJ_FLAG_HIDDEN))
                 self->DrawFrame();
         },
         50, this);
 }
 
-void MiaDisplay::DrawFrame() {
+void YoumiDisplay::DrawFrame() {
     const auto f = mia_face::Sample(mood_, activity_, lv_tick_get() - started_at_);
     for (int i = 0; i < 2; ++i) {
         lv_obj_set_size(eyes_[i], f.eye_width, f.eye_height);
@@ -58,14 +58,14 @@ void MiaDisplay::DrawFrame() {
     lv_obj_align(mouth_, LV_ALIGN_CENTER, f.gaze_x / 2, 44);
 }
 
-void MiaDisplay::SetEmotion(const char* emotion) {
+void YoumiDisplay::SetEmotion(const char* emotion) {
     DisplayLockGuard lock(this);
     mood_ = mia_face::ParseMood(emotion);
     if (mouth_)
         DrawFrame();
 }
 
-void MiaDisplay::SetStatus(const char* status) {
+void YoumiDisplay::SetStatus(const char* status) {
     SpiLcdDisplay::SetStatus(status);
     if (!status)
         return;
@@ -81,12 +81,12 @@ void MiaDisplay::SetStatus(const char* status) {
         activity_ = mia_face::Activity::Idle;
 }
 
-void MiaDisplay::SetChatMessage(const char* role, const char* content) {
+void YoumiDisplay::SetChatMessage(const char* role, const char* content) {
     const auto simplified = mia_text::Simplify(content);
     SpiLcdDisplay::SetChatMessage(role, simplified.c_str());
 }
 
-void MiaDisplay::SetPowerSaveMode(bool on) {
+void YoumiDisplay::SetPowerSaveMode(bool on) {
     DisplayLockGuard lock(this);
     if (!animation_)
         return;

@@ -291,7 +291,7 @@ move the three deadlines off the `skip_unhandled_events` timer first.
 
 ### Mia animated face (1.0.1 OTA)
 
-Only the Mia variants use `MiaDisplay`, a `SpiLcdDisplay` subclass. It reuses
+Only the Mia variants use `YoumiDisplay`, a `SpiLcdDisplay` subclass. It reuses
 ST7789/LVGL and keeps the existing status, battery/network indicators, subtitles,
 notifications and preview-image path. A black 216x178 face region contains two
 cyan eyes and a mouth. Fixed LVGL objects animate at 20 Hz, with no per-frame
@@ -357,3 +357,10 @@ uses one expiring Redis record, current binding/credential versions and client
 identity, with its original rate limits. No task schema or user account changes.
 The proof survives a restart during enrollment; successful credential storage
 clears it. Ten-minute expiration, revocation and owner checks remain.
+
+### Youmi 1.0.4 OTA
+
+Updates the provisioning SSID prefix to Youmi and renames the display implementation.
+Uses the installed 1.0.3 firmware as its base, retaining the signed updater, board identity,
+partition table, frozen assets, release public key, authorization and audio behavior.
+The application descriptor remains compatible with the installed updater.

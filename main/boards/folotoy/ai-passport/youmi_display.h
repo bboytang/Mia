@@ -3,10 +3,10 @@
 #include "display/lcd_display.h"
 #include "mia_face.h"
 
-class MiaDisplay : public SpiLcdDisplay {
+class YoumiDisplay : public SpiLcdDisplay {
 public:
     using SpiLcdDisplay::SpiLcdDisplay;
-    ~MiaDisplay() override;
+    ~YoumiDisplay() override;
     void SetupUI() override;
     void SetEmotion(const char* emotion) override;
     void SetStatus(const char* status) override;

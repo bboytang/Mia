@@ -1,7 +1,7 @@
 #include "wifi_board.h"
 #include "display/lcd_display.h"
 #if CONFIG_MIA_PASSPORT_DEVELOPMENT
-#include "mia_display.h"
+#include "youmi_display.h"
 #endif
 #include "codecs/es8311_audio_codec.h"
 #include "application.h"
@@ -46,7 +46,7 @@ static constexpr uint16_t kWifiProvisionLongPressMs = 5000;
 //    360 s    screen and codec off, CPU down-clocked - the "soft sleep" stage
 //   2160 s    deep sleep, entered from the soft-sleep stage as a fallback
 //
-// The Mia variant uses 60 / 120 / 1800 seconds and wakes/restores the panel on
+// The Youmi variant uses 60 / 120 / 1800 seconds and wakes/restores the panel on
 // application activity as well as keys. Other Passport builds keep this policy.
 //
 // All three are gated by Application::CanEnterSleepMode(), which PowerSaveTimer
@@ -80,7 +80,7 @@ static constexpr uint16_t kWifiProvisionLongPressMs = 5000;
 // Backlight drops to kDimBrightness this long after the last input.
 static constexpr int kDimSeconds = 60;
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
-// Mia: deadlines are measured from becoming idle after the last interaction.
+// Youmi: deadlines are measured from becoming idle after the last interaction.
 static constexpr int kSoftSleepSeconds = 120;
 static constexpr int kDeepSleepSeconds = 1800;
 static constexpr bool kWakeOnActivity = true;
@@ -590,7 +590,7 @@ private:
 
         panel_ = panel;
 #if CONFIG_MIA_PASSPORT_DEVELOPMENT
-        display_ = new MiaDisplay(panel_io, panel,
+        display_ = new YoumiDisplay(panel_io, panel,
 #else
         display_ = new SpiLcdDisplay(panel_io, panel,
 #endif

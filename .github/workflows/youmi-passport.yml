@@ -1,4 +1,4 @@
-name: Verify Mia AI Passport development
+name: Verify Youmi AI Passport OTA
 on:
   push:
     branches: ['feature/mia-passport-*']
