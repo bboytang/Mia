@@ -270,13 +270,11 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
             await execute_tool(self.conn, {'name': 'weather'})
         self.assertEqual(len(calls), 1)
 
-    async def test_database_outage_keeps_core_without_old_history_or_fake_vectors(self):
+    async def test_database_outage_stops_before_reverting_to_a_different_character(self):
         self.conn._mia_context_builder = reply.builder_for(None)
         self.conn.dialogue.dialogue.insert(0, dto('user', 'OLD_PRIVATE'))
-        turn = await reply.prepare(self.conn, [], 0)
-        self.assertEqual(turn.bundle.diagnostics()['memory_status'], 'unavailable')
-        self.assertNotIn('OLD_PRIVATE', turn.bundle.request_json)
-        self.assertIn('你的名字是 Mia', turn.bundle.request_json)
+        with self.assertRaisesRegex(ContextError, 'character_unavailable'):
+            await reply.prepare(self.conn, [], 0)
         with patch.dict(os.environ, {}, clear=True):
             with self.assertRaises(EmbeddingUnavailable):
                 reply.OfflineEncoder().encode('hello')

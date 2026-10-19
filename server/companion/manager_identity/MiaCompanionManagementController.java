@@ -75,7 +75,7 @@ public class MiaCompanionManagementController {
         long operator = SecurityUser.getUserId();
         grant(agentId, operator);
         if (!(command.get("action") instanceof String action)
-                || !Set.of("status", "pause", "set_feature_settings", "emotion_consent", "reset_mia_emotion", "memory_list", "memory_delete").contains(action)) {
+                || !Set.of("status", "pause", "set_feature_settings", "emotion_consent", "reset_mia_emotion", "memory_list", "memory_delete", "set_character").contains(action)) {
             throw new RenException(ErrorCode.PARAMS_GET_ERROR);
         }
         var factory = new SimpleClientHttpRequestFactory();

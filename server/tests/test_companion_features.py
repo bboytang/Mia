@@ -110,7 +110,8 @@ class FeatureSwitchTests(unittest.IsolatedAsyncioTestCase):
         with self.store.lock, self.store.db:
             self.store.db.execute('DROP TABLE mia_affect_turns')
             self.store.db.execute('DROP TABLE mia_affect_state')
-            self.store.db.execute('DELETE FROM mia_schema_migrations WHERE version=6')
+            self.store.db.execute('DROP TABLE mia_companion_profile')
+            self.store.db.execute('DELETE FROM mia_schema_migrations WHERE version>=6')
             self.store.db.execute('DROP TABLE mia_feature_settings')
             self.store.db.execute('DELETE FROM mia_schema_migrations WHERE version=5')
         path = Path(self.temp.name) / 'memory.sqlite3'
@@ -210,3 +211,17 @@ class ManagementRouteTests(unittest.IsolatedAsyncioTestCase):
         self.allowed = False
         self.assertEqual((await self.post({'action': 'memory_delete', 'id': ids[1]})).status, 403)
         self.assertEqual(len(self.store.list_memories(owner)), 52)
+
+    async def test_owner_can_manage_intrinsic_character_without_mutating_facts_or_user_emotions(self):
+        from server.companion.character import YOUMI_V1
+        response = await self.post({'action': 'set_character', 'version': 0, 'enabled': True, 'values': YOUMI_V1})
+        state = (await response.json())['data']
+        self.assertEqual(state['character']['values']['name'], '悠米')
+        self.assertEqual(state['character']['version'], 1)
+        self.assertEqual(state['counts']['memories'], 0)
+        self.assertEqual(state['emotion_tracking']['enabled'], 0)
+        self.assertEqual((await self.post({'action': 'set_character', 'version': 0, 'enabled': False, 'values': YOUMI_V1})).status, 400)
+        self.allowed = False
+        self.assertEqual((await self.post({'action': 'set_character', 'version': 1, 'enabled': False, 'values': YOUMI_V1})).status, 403)
+        from server.companion.character import status
+        self.assertTrue(status(self.store, 'user:1:agent:allowed')['enabled'])

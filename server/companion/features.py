@@ -30,9 +30,10 @@ def update(store, owner, values):
 def status(store, owner):
     from .emotions import consent
     from .affect import state
+    from .character import status as character_status
     with store.lock, store.db:
         store._owner(owner)
-        return {'features': settings(store, owner), 'paused': store.snapshot(owner)['paused'],
+        return {'character': character_status(store, owner), 'features': settings(store, owner), 'paused': store.snapshot(owner)['paused'],
                 'emotion_tracking': consent(store, owner), 'mia_emotion': state(store, owner),
                 'counts': {name: store.db.execute('SELECT COUNT(*) FROM ' + table + ' WHERE owner=?',
                     (owner,)).fetchone()[0] for name, table in

@@ -112,7 +112,8 @@ class AffectStateTests(unittest.IsolatedAsyncioTestCase):
             self.store.db.execute('DROP TABLE mia_affect_turns')
             self.store.db.execute('DROP TABLE mia_affect_state')
             self.store.db.execute('ALTER TABLE mia_feature_settings DROP COLUMN companion_emotion')
-            self.store.db.execute('DELETE FROM mia_schema_migrations WHERE version=6')
+            self.store.db.execute('DROP TABLE mia_companion_profile')
+            self.store.db.execute('DELETE FROM mia_schema_migrations WHERE version>=6')
             self.store.db.execute('UPDATE mia_schema_migrations SET schema_checksum=? WHERE version=5', (_schema_checksum(self.store.db),))
         self.store.db.set_authorizer(lambda action, name, *rest: sqlite3.SQLITE_DENY
             if action == sqlite3.SQLITE_CREATE_TABLE and name == 'mia_affect_state' else sqlite3.SQLITE_OK)

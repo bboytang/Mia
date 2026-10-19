@@ -191,12 +191,21 @@ class ContextBuilder:
                     selected_trend = emotions.trend(store, scope.owner)
             from .affect import state
             affect = state(store, scope.owner) if flags['companion_emotion'] else None
-            return self._versions(scope), traits, selected_events, selected_trend, affect
+            from .character import active
+            return self._versions(scope), traits, selected_events, selected_trend, affect, active(store, scope.owner)
 
     async def validate(self, bundle, authorization):
         if not isinstance(bundle, ContextBundle):
             raise ContextError('invalid_context_bundle')
         await self.index._require(bundle.scope, authorization, 'memory:read')
+        if bundle.snapshot is None:
+            from .character import active
+            try:
+                current_character = await asyncio.to_thread(active, self.index.store, bundle.scope.owner)
+            except (sqlite3.Error, ValueError):
+                raise ContextError('character_unavailable') from None
+            if current_character != json.loads(bundle.inputs_json).get('character'):
+                raise ContextError('context_changed')
         if bundle.snapshot is not None:
             try:
                 snapshot, *_ = await asyncio.to_thread(self._capture, bundle.scope)
@@ -253,6 +262,8 @@ class ContextBuilder:
                 evidence = {'status': 'unavailable', 'meaning': '本轮用户长期记忆查询不可用。'}
             else:
                 evidence = {'status': 'no_match', 'meaning': '本轮没有与问题匹配的可靠用户长期记忆，用户的这段往事未知。'}
+            if inputs.get('character'):
+                evidence['meaning'] = evidence['meaning'].replace('Mia', inputs['character']['name'])
             data['memory_evidence'] = evidence
             from .extraction import explicit_change
             change = explicit_change(inputs['query'], data['facts'])
@@ -268,12 +279,13 @@ class ContextBuilder:
             else:
                 data.pop('requested_change', None)
             from .affect import POLICY as AFFECT_POLICY, guidance
-            messages = [{'role': 'system', 'content': CORE + POLICY + (AFFECT_POLICY + guidance(affect) if affect else '')},
+            from .character import system_core
+            messages = [{'role': 'system', 'content': system_core(CORE, inputs.get('character')) + POLICY + (AFFECT_POLICY + guidance(affect) if affect else '')},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             for group in retained:
                 for message in group:
                     if message['role'] == 'assistant' and message.get('content'):
-                        message = dict(message, content='【Mia的历史回复，仅表示Mia说过的话，不是用户自述】\n' + message['content'])
+                        message = dict(message, content=('【陪伴者的历史回复，仅表示她说过的话，不是用户自述】\n' if inputs.get('character') else '【Mia的历史回复，仅表示Mia说过的话，不是用户自述】\n') + message['content'])
                     messages.append(message)
             messages.extend(inputs['current'])
             result = {'model': limits.model, 'messages': messages, 'max_tokens': limits.response_tokens}
@@ -333,7 +345,7 @@ class ContextBuilder:
             'selected_fact_ids': [fact['id'] for fact in data['facts']], 'memory_status': inputs['memory_status'],
             'safety': inputs['safety'], 'events': [{'id': item['id'], 'state': item['state']} for item in data['events']],
             'trends': data['emotion_trend']['status']}
-        persona_version = hashlib.sha256(packed([CORE, POLICY, inputs['role'], inputs['traits'], data['events']]).encode()).hexdigest()
+        persona_version = hashlib.sha256(packed([CORE, POLICY, inputs.get('character'), inputs['role'], inputs['traits'], data['events']]).encode()).hexdigest()
         return ContextBundle(scope, turn_id, snapshot, persona_version, limits, packed(inputs), packed(result), packed(diagnostics))
 
     async def build(self, scope, authorization, turn_id, query, *, limits=None, history=None,
@@ -362,19 +374,24 @@ class ContextBuilder:
         except sqlite3.Error:
             status = 'unavailable'
         try:
-            snapshot, traits, event_data, trend_data, affect = await asyncio.to_thread(self._capture, scope, expected,
+            snapshot, traits, event_data, trend_data, affect, character = await asyncio.to_thread(self._capture, scope, expected,
                 query, facts, session_id, turn_id)
         except EmbeddingUnavailable:
             raise ContextError('context_changed') from None
         except (sqlite3.Error, ValueError):
             snapshot, traits, facts, status = None, [], [], 'unavailable'
             event_data, trend_data, affect = [], {'status': 'unavailable'}, None
+            from .character import active
+            try:
+                character = await asyncio.to_thread(active, self.index.store, scope.owner)
+            except (sqlite3.Error, ValueError):
+                raise ContextError('character_unavailable') from None
             if continuation:
                 raise ContextError('context_snapshot_unavailable') from None
             inputs['older_turns_removed'] += len(inputs['history'])
             inputs['history'] = []
         inputs.update(facts=facts, traits=traits, memory_status=status, events=event_data,
-                      emotion_trend=trend_data, mia_affect=affect, session_id=session_id)
+                      emotion_trend=trend_data, mia_affect=affect, character=character, session_id=session_id)
         bundle = await asyncio.to_thread(self._assemble, scope, turn_id, limits, snapshot, inputs)
         await self.validate(bundle, authorization)
         return bundle

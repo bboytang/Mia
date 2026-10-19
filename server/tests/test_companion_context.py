@@ -293,7 +293,7 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaisesRegex(ContextError, 'context_changed'):
             await self.build()
 
-    async def test_embedding_or_database_failure_keeps_core_and_explicit_unavailable_status(self):
+    async def test_embedding_failure_keeps_core_but_unknown_character_storage_stops_reply(self):
         self.fact()
         bundle = await self.build()  # Index intentionally missing.
         self.assertEqual(self.data(bundle)['memory_status'], 'unavailable')
@@ -301,12 +301,8 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.data(bundle)['facts'], [])
         self.assertTrue(bundle.request()['messages'][0]['content'].startswith(CORE))
         self.store.close()
-        fallback = await self.build(history=[{'role': 'user', 'content': 'old private history'}])
-        self.assertEqual(self.data(fallback)['memory_status'], 'unavailable')
-        self.assertNotIn('old private history', fallback.request_json)
-        self.assertTrue(fallback.request()['messages'][0]['content'].startswith(CORE))
-        with self.assertRaisesRegex(ContextError, 'snapshot_unavailable'):
-            await self.builder.continue_turn(fallback, self.auth, tool_chain())
+        with self.assertRaisesRegex(ContextError, 'character_unavailable'):
+            await self.build(history=[{'role': 'user', 'content': 'old private history'}])
 
     async def test_known_severe_input_is_not_sent_to_retrieval(self):
         with self.assertRaisesRegex(ContextError, 'input_blocked'):

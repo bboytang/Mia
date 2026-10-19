@@ -13,9 +13,10 @@
         </button>
       </div>
       <div v-if="state.mia_emotion" class="mia-emotion-status">
-        <p>Mia 当前情绪：{{ state.mia_emotion.enabled ? state.mia_emotion.label : '已停用' }}<span v-if="state.mia_emotion.updated_at"> · 最近互动 {{ new Date(state.mia_emotion.updated_at * 1000).toLocaleString() }}</span></p>
+        <p>{{ state.character && state.character.enabled ? state.character.values.name : 'Mia' }} 当前情绪：{{ state.mia_emotion.enabled ? state.mia_emotion.label : '已停用' }}<span v-if="state.mia_emotion.updated_at"> · 最近互动 {{ new Date(state.mia_emotion.updated_at * 1000).toLocaleString() }}</span></p>
         <el-button size="small" :disabled="busy" @click="change('reset_mia_emotion', true)">重置 Mia 情绪</el-button>
       </div>
+      <MiaCharacterEditor v-if="state.character" :profile="state.character" :disabled="busy" @save="saveCharacter" />
       <p>已保存记忆 {{ state.counts.memories }} 条 · 成长特点 {{ state.counts.traits }} 个 · 互动事件 {{ state.counts.events }} 个</p>
       <p>保存后立即影响后续处理；使用旧上下文的回复可能中止，可重新发起对话。已发出的声音无法撤回。</p>
     </div>
@@ -27,9 +28,11 @@
 <script>
 import { getServiceUrl } from '@/apis/api';
 import RequestService from '@/apis/httpRequest';
+import MiaCharacterEditor from './MiaCharacterEditor.vue';
 
 export default {
   name: 'MiaSettingsDialog',
+  components: { MiaCharacterEditor },
   props: { value: Boolean, agentId: { type: String, required: true } },
   data() {
     return {
@@ -80,6 +83,17 @@ export default {
         if (generation === this.generation) this.state = state;
       } catch (error) { if (generation === this.generation) this.error = error.message; }
       finally { if (generation === this.generation) this.busy = false; }
+    },
+    async saveCharacter(command) {
+      if (this.busy || !this.value) return;
+      const generation = ++this.generation;
+      this.busy = true; this.error = '';
+      try {
+        const state = await this.call(command);
+        if (generation === this.generation) { this.state = state; this.$message.success('性格与情绪基线已保存'); }
+      } catch (error) {
+        if (generation === this.generation) { this.error = error.message; this.state = null; }
+      } finally { if (generation === this.generation) this.busy = false; }
     },
     async change(key, next) {
       if (this.busy) return;

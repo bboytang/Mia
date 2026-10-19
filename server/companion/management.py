@@ -39,7 +39,7 @@ class ManagementHandler:
             if not isinstance(command, dict):
                 raise ValueError()
             action = command.get('action')
-            if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent', 'reset_mia_emotion', 'memory_list', 'memory_delete'}:
+            if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent', 'reset_mia_emotion', 'memory_list', 'memory_delete', 'set_character'}:
                 raise ValueError()
             if self.store is None:
                 from .xiaozhi_adapter import _store
@@ -59,7 +59,10 @@ class ManagementHandler:
                             'SELECT * FROM memories WHERE owner=? ORDER BY updated_at DESC,rowid DESC LIMIT 50 OFFSET ?',
                             (owner, offset)).fetchall())
                     return {'memories': records, 'total': total, 'offset': offset, 'page_size': 50}
-                if action == 'reset_mia_emotion':
+                if action == 'set_character':
+                    from .character import update as update_character
+                    update_character(store, owner, command)
+                elif action == 'reset_mia_emotion':
                     from .affect import reset
                     reset(store, owner)
                 elif action == 'set_feature_settings':

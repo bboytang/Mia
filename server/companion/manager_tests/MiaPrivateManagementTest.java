@@ -127,7 +127,7 @@ class MiaPrivateManagementTest {
     }
 
     @Test void memoryManagementUsesTheSameOwnerAuthorization() throws Exception {
-        for (String action : new String[]{"memory_list", "memory_delete"}) {
+        for (String action : new String[]{"memory_list", "memory_delete", "set_character"}) {
             var command = Map.of("action", action, "id", "synthetic-memory");
             assertEquals(0, post("/agent/" + AGENT + "/mia-settings", command, token(OWNER)).path("code").asInt());
             assertEquals(OWNER, forwarded.get().path("operator_id").asLong());
@@ -135,7 +135,7 @@ class MiaPrivateManagementTest {
             assertNotEquals(0, post("/agent/" + AGENT + "/mia-settings", command, token(OTHER)).path("code").asInt());
             assertNotEquals(0, post("/agent/" + AGENT + "/mia-settings", command, null).path("code").asInt());
         }
-        assertEquals(2, calls.get());
+        assertEquals(3, calls.get());
     }
 
     @Test void invalidOrDestructiveActionsAreNotProxied() throws Exception {
