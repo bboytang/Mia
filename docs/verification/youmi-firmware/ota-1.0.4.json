@@ -1,0 +1,39 @@
+{
+  "recorded_at": "2026-10-19T20:36:40.237333+00:00",
+  "release_url": "https://github.com/bboytang/Youmi/releases/tag/youmi-passport-1.0.4-ota-e967eae",
+  "firmware_branch": "feature/mia-passport-youmi-ota",
+  "manifest": {
+    "schema": 1,
+    "board": "mia-ai-passport",
+    "version": "1.0.4",
+    "sequence": 5,
+    "format": "MIAOTA1-prefix-v1",
+    "capsule_bytes": 2325152,
+    "capsule_sha256": "80dbfb5970d0b8563cccdf5f6087d8963a31e3917b7a018dcc729e6259898dc1",
+    "image_bytes": 2324896,
+    "image_sha256": "0cdaf717376c398fc8fd6026ab7ec887315a3b2c8b2a89ebab6f2aa11f31968b",
+    "usb_flashable": false,
+    "source_commit": "e967eae73a6678be2306bc703e508ad177cf4037",
+    "ci_url": "https://github.com/bboytang/Youmi/actions/runs/39319658708",
+    "partition_and_assets_unchanged": true,
+    "signature_verified": true,
+    "production_updater_host_simulation_passed": true,
+    "firmware_builds_passed": 5,
+    "host_tests_passed": 126,
+    "hardware_verified": false
+  },
+  "publication": {
+    "ota_id": "e702ed146a555fe0a166e70bc2c9d62a",
+    "version": "1.0.4",
+    "sequence": 5,
+    "source": "e967eae73a6678be2306bc703e508ad177cf4037",
+    "capsule_sha256": "80dbfb5970d0b8563cccdf5f6087d8963a31e3917b7a018dcc729e6259898dc1",
+    "capsule_bytes": 2325152,
+    "firmware_path": "uploadfile/0f642262a68cb4c3fd257b06f695b2f4.bin",
+    "previous_versions_preserved": true,
+    "auto_update": 1,
+    "http_download_hash_verified": true,
+    "device_reported_version": "1.0.3",
+    "physical_install_confirmed": false
+  }
+}
