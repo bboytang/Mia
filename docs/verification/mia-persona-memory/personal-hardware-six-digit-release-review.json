@@ -37,5 +37,16 @@
   "new_backups": false,
   "physical_1_0_3_validation_pending": true,
   "private_memory_voice_backend_cutover_pending": true,
-  "p23_formal_acceptance_passed": false
+  "p23_formal_acceptance_passed": false,
+  "production_observation": {
+    "app_version": "1.0.3",
+    "pending_request_present": true,
+    "display_code_length": 6,
+    "owner_confirmed": false,
+    "private_credential_issued": false,
+    "https_status": 200,
+    "unknown_device_denial_code": 10169,
+    "ota_id": "9d7d8251bf4252fdb586ba6d62f492a9",
+    "download_route_hash_verified": true
+  }
 }
