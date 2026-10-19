@@ -3,12 +3,14 @@
 import json
 import re
 import sys
+import sqlite3
 import unicodedata
 
 from .memory import MemoryError, SECRET, SENSITIVE, _safe_text, parse_extraction, trait_supported
 from .persona import PersonaGuardrail
 from .model_requests import model_requests
 from .proposal import ExtractionError, ProviderError
+from .authorization import PrivateAuthorizationRequired
 
 
 INSTRUCTIONS = '''Extract only useful durable information from actual USER excerpts.
@@ -559,7 +561,14 @@ class LLMMemoryExtractor:
         except Exception:
             raise ProviderError() from None
         lease = None
+        accounting = getattr(context, 'request_accounting', None)
+        entered = False
         try:
+            if accounting is not None:
+                from .request_accounting import bind_sdk
+                accounting.enter_native()
+                entered = True
+                bind_sdk(provider, accounting)
             natural = len(sources) == 1 and natural_change_requested(sources[0], context)
             growth = not natural and growth_eligible(context)
             has_importance = any(IMPORTANCE.search(source) for source in sources)
@@ -608,8 +617,12 @@ class LLMMemoryExtractor:
             cancellation = getattr(context, 'request_cancelled', None)
             if hasattr(context, 'model_request_phase'):
                 context.model_request_phase = 'queued'
+            if accounting is not None:
+                accounting.call(accounting.observe('waiting_slot'))
             lease = model_requests.acquire(foreground=False,
                 cancelled=cancellation.is_set if cancellation is not None else lambda: False)
+            if accounting is not None:
+                accounting.call(accounting.observe('slot_acquired'))
             if hasattr(context, 'model_request_phase'):
                 context.model_request_phase = 'active'
             if function_capable:
@@ -630,19 +643,20 @@ class LLMMemoryExtractor:
                     return read_stream(provider.response_with_functions('',
                         [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
                         functions=[tool]))
-                except MemoryError:
+                except (MemoryError, PrivateAuthorizationRequired, sqlite3.Error, TimeoutError):
                     raise
                 except Exception:
                     raise ProviderError() from None
             try:
                 return provider.response_no_stream(instruction, json.dumps(payload, ensure_ascii=False))
-            except MemoryError:
+            except (MemoryError, PrivateAuthorizationRequired, sqlite3.Error, TimeoutError):
                 raise
             except Exception:
                 raise ProviderError() from None
         finally:
             client = getattr(provider, 'client', None)
             failed = sys.exc_info()[0] is not None
+            outcome = getattr(sys.exc_info()[1], 'category', 'native_failed') if failed else 'response_complete'
             try:
                 if client is not None and hasattr(client, 'close'):
                     try:
@@ -651,5 +665,11 @@ class LLMMemoryExtractor:
                         if not failed:
                             raise ProviderError() from None
             finally:
-                if lease is not None:
-                    lease.release()
+                try:
+                    if entered:
+                        accounting.call(accounting.finished(outcome), cleanup=True)
+                finally:
+                    if entered:
+                        accounting.leave_native()
+                    if lease is not None:
+                        lease.release()

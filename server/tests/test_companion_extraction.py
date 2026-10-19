@@ -443,7 +443,7 @@ class ExtractionPipelineTests(unittest.IsolatedAsyncioTestCase):
             datetime.now(timezone.utc) + timedelta(days=1), frozenset({'memory:read', 'memory:write', 'memory:manage'}))
         self.policy = Policy()
         self.policy.scope = self.scope
-        self.jobs = JobStore(self.store)
+        self.jobs = JobStore(self.store, policy_version=1)
         self.encoder = UnitEncoder()
         self.calls = 0
         self.source = '我喜欢蓝色'

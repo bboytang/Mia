@@ -1856,3 +1856,5 @@ R6检查点6ab9c8ad2369fd3a7493bcc954e7330759187a8f；R7原消费者19种长度/
 第二批最终收口并停止：39188213889 success，bb5b971/远端0/4固定Mock SDK/5次只读预热；全部四臂终态、两个trace各303事件无drop，19组件及旧句取消通过。只读SQLite四任务empty/attempt1/提取SDK0、source_payload清空、11032夹具事实/integrity=ok；共同1472.07MiB/Python整体417.30MiB、2CPU/2GiB/swap0/无OOM，空闲app0.3022秒/全组2.4489秒关闭。原真实39187014445仍failure/2真实请求，冷10k扫描2093ms、manager25次563ms等分段复核保存，不外推暖态p95；Guard CPU0.026ms、句边界到原TTS文本19.25ms。离线503证明SDK默认2重试会使1SDK调用成为3HTTP次数，运行策略未改、方案待批准。主交接/Windows入口/性能记录均改为第二批结束等待确认；正式首句912.84ms失败及36任务10/26保持，完整验收/生产/P24未启动。详见mia-persona-memory-r5-r7.md最终收口与全部原文/hash。
 
 第三批检查点1：授权858551c基线与远端一致，无tracked改动/在途CI。新增独立V2策略/请求表、原事务终态清理、安装器v4文件与幂等/故障升级/回滚拒绝测试。无事实或旧attempt回填，尚未切换默认执行。详见mia-persona-memory-v2-requests.md，下一步请求事务及实际SDK/HTTP预算。
+
+第三批检查点2：V2默认接纳、先事务intent后SDK、max_retries=0/HTTP单发送、Scope/可信context/deadline再复核、原生真实结束释放、process_lost保守恢复及持久脱敏反馈已接入。47定向通过，278相关回归通过；首轮失败均保存并说明时间注入/夹具原因。新旧任务混合不回填旧attempt。精确差异/账本见第三批报告及performance-v2-accounting-local.json；下一步调度参数对照与共同资源观测。

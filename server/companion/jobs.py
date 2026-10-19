@@ -32,7 +32,7 @@ class TurnCompleted:
 
 
 class JobStore:
-    def __init__(self, store, capacity=128, lifetime=120, *, policy_version=1):
+    def __init__(self, store, capacity=128, lifetime=120, *, policy_version=2):
         if policy_version not in (1, 2):
             raise ValueError('Unsupported job policy')
         self.store, self.capacity, self.lifetime = store, capacity, lifetime
@@ -74,6 +74,8 @@ class JobStore:
             return {'status': 'accepted', 'accepted': True, 'id': key, 'state': 'pending'}
 
     def recover(self):
+        from .request_accounting import recover_requests
+        recover_requests(self.store)
         with self.store.lock, self.store.db:
             self.store.db.execute("UPDATE mia_jobs SET state=CASE WHEN validated_result IS NULL THEN 'pending' ELSE 'validated' END "
                                   "WHERE state='extracting'")
@@ -155,7 +157,7 @@ class NativeLane:
             try:
                 loop.call_soon_threadsafe(deliver, value, error)
             except RuntimeError:
-                pass  # Process loop has closed; native work never writes to SQLite.
+                pass  # Late completion is reconciled on the next process start.
         threading.Thread(target=run, daemon=True, name='mia-memory-extractor').start()
         return await asyncio.wait_for(future, timeout)
 
@@ -216,6 +218,7 @@ class MemoryWorker:
         if not self.queue:
             return False
         job = self.queue.popleft()
+        policy = await asyncio.to_thread(self.jobs.policy, job)
         self.tick += 1
         self.served[job['owner']] = self.tick
         result = self.results.get(job['id'], job['validated_result'])
@@ -227,7 +230,8 @@ class MemoryWorker:
                     return True
                 context = await asyncio.to_thread(context_for, self.jobs.store, scope.owner,
                     json.loads(job['source_payload']).get('emotion_consent_version'))
-                context.validation_feedback = self.validation_feedback.get(job['id'])
+                context.validation_feedback = (json.loads(policy['feedback']) if policy.get('feedback')
+                    else self.validation_feedback.get(job['id']))
                 extract = await self.resolve(scope)
                 # Context/model preparation can outlive the durable deadline.
                 # Reject before entering an attempt; do not refund old attempts.
@@ -237,9 +241,12 @@ class MemoryWorker:
                 # A newly active front-end gets priority before entering a native call.
                 if self.foreground:
                     return False
-                await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=True)
+                await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=policy['version'] == 1)
                 context.request_cancelled = threading.Event()
                 context.model_request_phase = 'preparing'
+                if policy['version'] == 2:
+                    from .request_accounting import RequestAccounting
+                    context.request_accounting = RequestAccounting(self, job, context)
                 try:
                     output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']], context),
                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))
@@ -255,6 +262,8 @@ class MemoryWorker:
                     # a fresh model request when a slot becomes available later.
                     context.request_cancelled.set()
                 validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
+                if policy['version'] == 2:
+                    await asyncio.to_thread(context.request_accounting.phase, 'validation_succeeded')
                 self.validation_feedback.pop(job['id'], None)
                 result = json.dumps(validated, ensure_ascii=False)
                 self.results[job['id']] = result
@@ -263,6 +272,8 @@ class MemoryWorker:
                 raise MemoryError('extractor_version_changed', 'Unverified legacy task result')
             if result is not None:
                 await asyncio.to_thread(self.jobs.update, job, 'validated', result=result)
+                if policy['version'] == 2:
+                    await asyncio.to_thread(self._v2_validation, job, None)
                 self.results.pop(job['id'], None)
             await self._scope(job)
             structured = json.loads(result)
@@ -280,6 +291,8 @@ class MemoryWorker:
                         min(3, max(0.001, job['deadline'] - self.jobs.store.clock())))
                     vectors[i] = self.index._vector(vector).tobytes()
             await self._scope(job)
+            if policy['version'] == 2:
+                await asyncio.to_thread(self._v2_phase, job, 'committing')
             await asyncio.to_thread(self.jobs.commit, job, structured, vectors)
         except PrivateAuthorizationRequired:
             await asyncio.to_thread(self.jobs.update, job, 'cancelled', error='authorization_or_memory_changed')
@@ -291,6 +304,8 @@ class MemoryWorker:
                 return True
             current = await asyncio.to_thread(self.jobs.current, job)
             feedback = validation_feedback(error)
+            if policy['version'] == 2:
+                await asyncio.to_thread(self._v2_validation, job, feedback, getattr(error, 'category', 'invalid_output'))
             if current['attempts'] < 2 and feedback is not None:
                 self.validation_feedback[job['id']] = feedback
             else:
@@ -306,6 +321,20 @@ class MemoryWorker:
             await asyncio.to_thread(self.jobs.update, job, 'failed' if terminal else 'retry_wait',
                                     result=result, error=category)
         return True
+
+    def _v2_phase(self, job, phase):
+        with self.jobs.store.lock, self.jobs.store.db:
+            self.jobs.store.db.execute("UPDATE mia_job_policy SET phase=?,phase_at=? WHERE job_id=? AND phase!='terminal'",
+                (phase, self.jobs.store.clock(), job['id']))
+
+    def _v2_validation(self, job, feedback, category=None):
+        with self.jobs.store.lock, self.jobs.store.db:
+            self.jobs.store.db.execute("UPDATE mia_job_policy SET feedback=?,phase=?,phase_at=? WHERE job_id=? AND phase!='terminal'",
+                (json.dumps(feedback, ensure_ascii=False) if feedback else None,
+                 'validation_failed' if category else 'validation_succeeded', self.jobs.store.clock(), job['id']))
+            self.jobs.store.db.execute('UPDATE mia_model_requests SET outcome=? WHERE job_id=? AND ordinal='
+                '(SELECT MAX(ordinal) FROM mia_model_requests WHERE job_id=?)',
+                (category or 'validation_succeeded', job['id'], job['id']))
 
     async def run(self):
         while not self.closing:

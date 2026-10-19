@@ -58,7 +58,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             datetime.now(timezone.utc) + timedelta(days=1), frozenset({'memory:read', 'memory:write', 'memory:manage'}))
         self.peer = replace(self.scope, owner='user:2:agent:two', user_id=2, operator_id=2, agent_id='two')
         self.policy = Policy([self.scope, self.peer])
-        self.jobs = JobStore(self.store)
+        self.jobs = JobStore(self.store, policy_version=1)
         self.calls = []
         self.encoder = UnitEncoder()
         self.output = {'memories': [{'category': 'preference', 'content': '我喜欢蓝色', 'source_index': 0,
@@ -171,7 +171,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.jobs.update(self.row(result), 'extracting', attempt=True)
         self.store.close()
         self.store = MemoryStore(self.path, clock=lambda: self.now[0])
-        self.jobs = JobStore(self.store)
+        self.jobs = JobStore(self.store, policy_version=1)
         self.jobs.recover()
         worker = MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder)
         await worker.run_once()
@@ -183,7 +183,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.jobs.update(self.row(result), 'validated', result=json.dumps(validate_output(self.output, ['我喜欢蓝色'], [])))
         self.store.close()
         self.store = MemoryStore(self.path, clock=lambda: self.now[0])
-        self.jobs = JobStore(self.store)
+        self.jobs = JobStore(self.store, policy_version=1)
         self.jobs.recover()
         await MemoryWorker(self.jobs, self.policy, self.resolve, encoder=self.encoder).run_once()
         self.assertEqual(self.calls, [])
@@ -647,6 +647,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         factory.create_instance = create
         server = SimpleNamespace(config={'read_config_from_api': True})
         with patch('server.companion.xiaozhi_adapter._store', return_value=self.store), \
+                patch('server.companion.jobs.JobStore', return_value=self.jobs), \
                 patch('server.companion.reply._encoder', self.encoder), \
                 patch('server.companion.authorization.PrivateAuthorization', return_value=self.policy), \
                 patch.dict(sys.modules, {'core': ModuleType('core'), 'core.utils': ModuleType('core.utils'),

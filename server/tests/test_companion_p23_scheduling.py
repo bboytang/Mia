@@ -153,7 +153,7 @@ class WorkerCounterexamples(unittest.IsolatedAsyncioTestCase):
             while not self.worker.lane.done.is_set():
                 self.assertLess(time.monotonic(), deadline)
                 await asyncio.sleep(.001)
-            self.jobs = JobStore(self.store)
+            self.jobs = JobStore(self.store, policy_version=1)
             self.jobs.recover()
             self.now[0] += 2
             self.worker = MemoryWorker(self.jobs, self.policy, resolve, encoder=self.encoder)

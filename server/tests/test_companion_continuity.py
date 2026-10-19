@@ -297,7 +297,7 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         await self.worker.run_once()
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0], 0)
         self.store.handle(self.scope.owner, {'action': 'emotion_clear'})
-        self.worker = MemoryWorker(JobStore(self.store), self.policy, self.worker.resolve, encoder=self.encoder)
+        self.worker = MemoryWorker(JobStore(self.store, policy_version=1), self.policy, self.worker.resolve, encoder=self.encoder)
         await self.worker.run_once()
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0], 0)
 
