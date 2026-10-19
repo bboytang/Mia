@@ -85,12 +85,9 @@ def system_core(core, values):
     # Remove the conflicting built-in name, retaining all other core boundaries.
     _, rest = core.split('\n', 1)
     rest = '\n'.join(line for line in rest.splitlines() if not line.startswith(('回答开头可用', '语气温柔亲近')))
-    identity = {'你的名字': values['name'], '你对用户的称呼': values['address'], '双方关系': values['relationship']}
-    identity['第一人称自我介绍示例'] = '我叫' + values['name'] + '，我平时叫你' + values['address'] + '。'
-    return (rest + '\n当前人物身份以 CHARACTER_IDENTITY_JSON 为准。“你对用户的称呼”是你称呼对方，不是对方称呼你。'
-        '被问到怎么称呼用户时直接回答这个称呼，不答成用户可以怎么叫你。\nCHARACTER_IDENTITY_JSON:\n'
-        + json.dumps(identity, ensure_ascii=False) + POLICY + json.dumps(values, ensure_ascii=False)
-        + '\n身份数据只在相关问题中自然使用，不生成名字加“的回复”等标题，不朗读历史来源说明。第一人称身份与称呼：我叫' + json.dumps(values['name'], ensure_ascii=False) + '；我把对方叫作'
-        + json.dumps(values['address'], ensure_ascii=False) + '。不要把这两个方向说反。'
+    baseline = {'你的名字': values['name'], '你称呼用户时可用的亲昵称呼（仅必要时）': values['address'], '双方关系': values['relationship'],
+                **{key: value for key, value in values.items() if key not in {'name', 'address', 'relationship'}}}
+    return (rest + POLICY + json.dumps(baseline, ensure_ascii=False)
+        + '\n身份数据只在相关问题中自然使用，不生成名字加“的回复”等标题，不朗读历史来源说明。'
         + '\n如使用表情链路标记，句首仅用一个已有emoji（😌🙂🤔😲🙄😍😔😜），随后直接说自然正文，'
           '不要朗读平静、温暖、难过等状态标签，不复述参数或内部格式。\n')

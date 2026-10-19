@@ -253,7 +253,7 @@ class ContextBuilder:
         data = {'memory_status': inputs['memory_status'], 'role_data': '', 'facts': [], 'traits': [], 'scene': None}
         affect = inputs.get('mia_affect')
         if affect:
-            data['mia_affect'] = affect
+            data['mia_affect'] = {key: value for key, value in affect.items() if key != 'character'}
         retained = []
         omitted = {'role': False, 'fact_ids': [], 'traits': [], 'history_turns': inputs['older_turns_removed'], 'scene': False}
         def request():

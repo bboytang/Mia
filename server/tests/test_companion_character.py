@@ -1,4 +1,5 @@
 import json
+import json
 import sqlite3
 from pathlib import Path
 from dataclasses import replace
@@ -56,6 +57,13 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('本轮普通接话不要再加称谓', bundle.request()['messages'][0]['content'])
         self.assertIn('仅当用户明确询问称呼', bundle.request()['messages'][0]['content'])
         self.assertEqual(character.active(self.store, self.scope.owner)['address'], '哥哥')
+
+    async def test_model_sees_address_once_without_redundant_identity_examples_or_affect_copy(self):
+        self.save();features.update(self.store, self.scope.owner, {'companion_emotion': True})
+        bundle = await self.build(query='今天下雨了')
+        self.assertEqual(bundle.request_json.count('哥哥'), 1)
+        self.assertNotIn('character', self.data(bundle)['mia_affect'])
+        self.assertEqual(json.loads(bundle.inputs_json)['character']['address'], '哥哥')
 
     async def test_disposition_changes_actual_affect_and_anger_repairs_gradually_without_erasing_profile(self):
         self.save();features.update(self.store, self.scope.owner, {'companion_emotion': True})
