@@ -1,0 +1,10 @@
+{
+  "base_image": "mia-xiaozhi-web:settings-66d4290",
+  "original_jar_sha256": "e9aeabadbeb272cf12e92997a62de7228b2c151db15de1145d78acb00ebe0cf3",
+  "jar_sha256": "d46f507cbe11ed66043a3db257b20e8b3f817a31570a1af29ef9d091d096ba4a",
+  "replaced_classes": [
+    "BOOT-INF/classes/xiaozhi/modules/device/controller/MiaCompanionManagementController.class"
+  ],
+  "all_other_jar_entries_preserved": true,
+  "manager_code_sha": "de2f580d5f7d53cc8a7e8a3c46b447173278586f"
+}

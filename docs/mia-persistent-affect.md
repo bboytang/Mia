@@ -27,4 +27,20 @@ SQLite V6 是增量迁移，V1–V5 SQL 不改；V5→V6 失败原子回滚。�
 
 第七次 [39259110947](https://github.com/bboytang/Mia/actions/runs/39259110947) 共8 SDK/8 HTTP：分类与正文混在同一流仍不可靠，两个回合只有分类无正文；设置情绪命令还出现无依据受伤分类（已拒绝）及错误的“会设置/记住”说法，未通过。该设计未部署。最终改成上述短评价＋原回复两步，删除全部流式控制标记/解析代码；用户已知每回合至多增加一次同 GLM 请求。评价有严格来源检查，失败不影响正文；显式后台情绪设置命令不由聊天伪执行。九场景请求上限调整为18，保留全部旧失败，后续真实结果分列。
 
-最终两步方案 `9b75366954d75e309ad0343176c576d09e2fdf49` / [39260314077](https://github.com/bboytang/Mia/actions/runs/39260314077) 九个场景全部通过，16 SDK/16 HTTP、重试0、未使用生产数据、未调用ASR/TTS。受伤后同一问题实际回应“我现在感觉还有些难过，需要缓一缓”；温暖状态下同题回应不同，角色仍为空。重开SQLite、切换设备Scope、逐步修复、24小时离线恢复、用户心情未开启及显式改后台状态不伪执行均通过。此处验证的是状态机制与有限回应驱动；正文仍存在客服式问句及“没事”等简化表达，不宣称达到视频演技或消除全部主语混淆。后续只补回复投影后的诊断一致性、超时不阻断正常回复和评价期间关闭开关的竞态回归，appraisal/context/模型评估源码不变；最终部署SHA及对应自动检查随后追加。
+最终两步方案 `9b75366954d75e309ad0343176c576d09e2fdf49` / [39260314077](https://github.com/bboytang/Mia/actions/runs/39260314077) 九个场景全部通过，16 SDK/16 HTTP、重试0、未使用生产数据、未调用ASR/TTS。受伤后同一问题实际回应“我现在感觉还有些难过，需要缓一缓”；温暖状态下同题回应不同；隔离评估的角色为空，未改生产角色。重开SQLite、切换设备Scope、逐步修复、24小时离线恢复、用户心情未开启及显式改后台状态不伪执行均通过。此处验证的是状态机制与有限回应驱动；正文仍存在客服式问句及“没事”等简化表达，不宣称达到视频演技或消除全部主语混淆。后续只补回复投影后的诊断一致性、超时不阻断正常回复和评价期间关闭开关的竞态回归，appraisal/context/模型评估源码不变；最终部署SHA及对应自动检查随后追加。
+
+## 已上线与最终复核
+
+2026-10-19 已上线后端 `5092bb2b1d5198f0c0933e40a0c1ccee20d8dbcf` / `mia-xiaozhi-server:affect-5092bb2`。同SHA GitHub [391项服务回归](https://github.com/bboytang/Mia/actions/runs/39260543844)、[180项身份/权限](https://github.com/bboytang/Mia/actions/runs/39260543815)、[manager](https://github.com/bboytang/Mia/actions/runs/39260543898)、[真实BGE/上下文/提取](https://github.com/bboytang/Mia/actions/runs/39260543923) 全部 success。两步模型评估为 `9b75366` / [39260314077](https://github.com/bboytang/Mia/actions/runs/39260314077)：8组真实评价＋回复及1组不请求模型的管理命令，共16 SDK/16 HTTP。两提交之间的 affect/context/评估器源码逐字节相同；不冒称同SHA重测。
+
+后台制品为 `de2f580d5f7d53cc8a7e8a3c46b447173278586f` / `mia-xiaozhi-web:affect-de2f580`，[84项四浏览器回归及构建](https://github.com/bboytang/Mia/actions/runs/39256766492)和[180项Java权限回归](https://github.com/bboytang/Mia/actions/runs/39256766463)通过。其界面和管理Controller源码与最终后端提交相同。保留原生产JAR其他所有项，仅替换该管理Controller；旧静态hash资源保留。
+
+线上29个后端文件、442个网页文件和JAR hash全部匹配。SQLite V5→V6、integrity=ok，47事实/47向量及原事实、来源、特点、检查点、向量、事件、观察联合指纹不变；两容器运行、重启0、无OOM，HTTPS200、语音TLS1.3。未新增备份，不改角色、GLM、音色或固件1.0.3。
+
+已按用户本次要求为当前智能体开启 `companion_emotion`，其他智能体默认仍关闭。真实manager所有者证明及当前1个有效授权设备Scope验证通过：后端上下文的 `mia_affect.subject=mia`、enabled=true；临时关闭记忆检索验证后恢复原设置。初始为平静、version=0，没有把模拟测试情绪写入生产。独立连接/双设备共享、持久化重开和并发旧版本不覆盖新状态由自动测试覆盖，不能说双实机音频已验收。完成钩子沿用现有聊天生成/交付校验完成语义，没有新增硬件播放确认；实机播放及语气仍需实际使用验证。
+
+用户心情授权与Mia情绪分别存储、分别控制。此次线上复核发现原有用户心情授权已为开启（此前部署记录为关闭），本次原样保留，设置往返前后完全一致，没有调用用户心情授权写入动作；不能继续把旧“仍关闭”描述当成当前值，也不推断是谁何时改的。自动保存、长期记忆、成长、事件的原开关均保留。
+
+入口：原后台 → 智能体卡片 → **Mia 功能管理** → **Mia 的持续情绪**。同页显示当前情绪及最近互动时间，并提供确认后的重置。角色仍从原角色页由用户自行编辑。
+
+证据：[部署](verification/mia-persona-memory/persistent-affect-deployment-review.json)、[真实授权/共享上下文/开关](verification/mia-persona-memory/persistent-affect-live-management-review.json)、[安装hash](verification/mia-persona-memory/persistent-affect-runtime-assets-review.json)、[隔离镜像](verification/mia-persona-memory/persistent-affect-isolated-image-review.json)、[JAR最小替换](verification/mia-persona-memory/persistent-affect-manager-build-review.json)、[制品源码对应](verification/mia-persona-memory/persistent-affect-source-equivalence.json)、[最终真实模型原文](verification/mia-persona-memory/persistent-affect-model-9b75366-passed.json)。此前六份失败原文按原SHA分别保留在同目录 `persistent-affect-model-*-failed.json`，首轮别名校验失败保留原CI日志链接。

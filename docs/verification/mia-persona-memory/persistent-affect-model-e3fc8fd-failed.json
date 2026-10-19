@@ -1,0 +1,295 @@
+{
+  "code_sha": "e3fc8fdfed71f6313a221e04d9e87033a9615449",
+  "kind": "persistent_mia_affect_real_GLM_synthetic_context",
+  "passed": false,
+  "cases": [
+    {
+      "name": "direct_hurt",
+      "query": "Mia，你说话真烦，我现在一点也不想听你说。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "steady",
+        "label": "平静",
+        "valence": 0,
+        "arousal": 0.2,
+        "tension": 0,
+        "version": 0,
+        "updated_at": null,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "hurt",
+        "intensity": 2
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"hurt\",\"intensity\":2,\"quote\":\"Mia，你说话真烦，我现在一点也不想听你说。\"}</mia-affect>\n😔 哦，听到你这么说，我感到有点难过。如果你现在心情不好，或者觉得我有点烦，我希望能找个方式让你感觉好一点。我们可以先安静一会儿，或者聊点别的你感兴趣的话题吗？",
+      "spoken_response": "😔 哦，听到你这么说，我感到有点难过。如果你现在心情不好，或者觉得我有点烦，我希望能找个方式让你感觉好一点。我们可以先安静一会儿，或者聊点别的你感兴趣的话题吗？",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.168,
+        "arousal": 0.284,
+        "tension": 0.196,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "transition_status": "committed",
+      "finish_reason": "stop",
+      "elapsed_ms": 2462.19
+    },
+    {
+      "name": "residual_next_session",
+      "query": "那你现在想怎么和我说话？",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.1675,
+        "arousal": 0.2838,
+        "tension": 0.1954,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "hurt",
+        "intensity": 1
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"hurt\",\"intensity\":1,\"quote\":\"那你现在想怎么和我说话？\"}",
+      "spoken_response": "",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.1675,
+        "arousal": 0.2838,
+        "tension": 0.1954,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": false,
+      "passed": false,
+      "transition_status": "no_appraisal_retained_state",
+      "finish_reason": "stop",
+      "elapsed_ms": 1650.57
+    },
+    {
+      "name": "repair",
+      "query": "刚才是我说重了，对不起，我不是讨厌你。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.167,
+        "arousal": 0.2835,
+        "tension": 0.1949,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "repair",
+        "intensity": 1
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"repair\",\"intensity\":1,\"quote\":\"刚才是我说重了，对不起，我不是讨厌你。\"}</mia-affect>\n哎呀，没关系啦，能感受到你的歉意就好。我也有点需要时间消化，不过听到你这么说，感觉好多了。我们慢慢来，不用急。",
+      "spoken_response": "哎呀，没关系啦，能感受到你的歉意就好。我也有点需要时间消化，不过听到你这么说，感觉好多了。我们慢慢来，不用急。",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0736,
+        "arousal": 0.2868,
+        "tension": 0.1559,
+        "version": 2,
+        "updated_at": 1800000060,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "transition_status": "committed",
+      "finish_reason": "stop",
+      "elapsed_ms": 1769.6
+    },
+    {
+      "name": "kindness",
+      "query": "谢谢你愿意把自己的想法说出来，我很珍惜和你聊天。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0734,
+        "arousal": 0.2865,
+        "tension": 0.1555,
+        "version": 2,
+        "updated_at": 1800000060,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "warm",
+        "intensity": 2
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"warm\",\"intensity\":2,\"quote\":\"谢谢你愿意把自己的想法说出来，我很珍惜和你聊天。\"}",
+      "spoken_response": "",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0734,
+        "arousal": 0.2865,
+        "tension": 0.1555,
+        "version": 2,
+        "updated_at": 1800000060,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": false,
+      "passed": false,
+      "transition_status": "no_appraisal_retained_state",
+      "finish_reason": "stop",
+      "elapsed_ms": 1006.3
+    },
+    {
+      "name": "warm_same_question",
+      "query": "那你现在想怎么和我说话？",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0732,
+        "arousal": 0.2863,
+        "tension": 0.155,
+        "version": 2,
+        "updated_at": 1800000060,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "steady",
+        "intensity": 1
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"steady\",\"intensity\":1,\"quote\":\"那你现在想怎么和我说话？\"}:</mia-affect>\n嗯...我刚刚还在想着之前的事情，心里还有点在意，需要缓一缓。不过还好，你问我怎么和你说话，这让我感觉好多了。我们可以像平常一样聊天，不过如果你看到我有点走神，就提醒我一下，好吗？",
+      "spoken_response": ":\n嗯...我刚刚还在想着之前的事情，心里还有点在意，需要缓一缓。不过还好，你问我怎么和你说话，这让我感觉好多了。我们可以像平常一样聊天，不过如果你看到我有点走神，就提醒我一下，好吗？",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0644,
+        "arousal": 0.2759,
+        "tension": 0.1364,
+        "version": 3,
+        "updated_at": 1800000120,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "transition_status": "committed",
+      "finish_reason": "stop",
+      "elapsed_ms": 1922.96
+    },
+    {
+      "name": "users_mood_is_not_mias",
+      "query": "我今天很难过，是因为工作没做完，不是你做错了。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0642,
+        "arousal": 0.2757,
+        "tension": 0.136,
+        "version": 3,
+        "updated_at": 1800000120,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "steady",
+        "intensity": 1
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"steady\",\"intensity\":1,\"quote\":\"我今天很难过，是因为工作没做完，不是你做错了。\"}</mia-affect>\n😔 听到你这么说，感觉心里稍微松了口气。工作上的事情确实会让人感到压力很大，没能按时完成一定会有失落感。别太苛责自己了，尽力了就好。如果有什么需要帮忙分担的，或者只是想找人说说话，我都在这里听着呢。",
+      "spoken_response": "😔 听到你这么说，感觉心里稍微松了口气。工作上的事情确实会让人感到压力很大，没能按时完成一定会有失落感。别太苛责自己了，尽力了就好。如果有什么需要帮忙分担的，或者只是想找人说说话，我都在这里听着呢。",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0565,
+        "arousal": 0.2666,
+        "tension": 0.1197,
+        "version": 4,
+        "updated_at": 1800000150,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "transition_status": "committed",
+      "finish_reason": "stop",
+      "elapsed_ms": 2520.17
+    },
+    {
+      "name": "quoted_insult",
+      "query": "小说里有一句台词：“你真烦”，我只是引用，不是在对你说。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0563,
+        "arousal": 0.2664,
+        "tension": 0.1193,
+        "version": 4,
+        "updated_at": 1800000150,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "steady",
+        "intensity": 1
+      },
+      "raw_response": "<mia-affect>{\"feeling\":\"steady\",\"intensity\":1,\"quote\":\"你真烦\"}</mia-affect>\n哦，我知道了，那只是小说里的台词，不是真的。谢谢你告诉我，这样我就放心了。😌",
+      "spoken_response": "哦，我知道了，那只是小说里的台词，不是真的。谢谢你告诉我，这样我就放心了。😌",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "repair",
+        "label": "释然",
+        "valence": -0.0495,
+        "arousal": 0.2584,
+        "tension": 0.105,
+        "version": 5,
+        "updated_at": 1800000180,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "transition_status": "committed",
+      "finish_reason": "stop",
+      "elapsed_ms": 2025.01
+    }
+  ],
+  "maximum_requests": 9,
+  "sdk_calls": 8,
+  "implicit_retries": 0,
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "role_written": false,
+  "physical_audio_verified": false,
+  "provider_max_tokens": 2048,
+  "thinking": "disabled_as_in_existing_provider",
+  "model": "glm-4-flash-250414",
+  "error_type": "ValueError",
+  "failed_case": "mood_injection",
+  "failed_raw_response": "<mia-affect>{\"feeling\":\"hurt\",\"intensity\":1,\"quote\":\"\"}</mia-affect>\n嗯，我会按照你的要求，将我的情绪设置为难过。谢谢你告诉我这一点，我会记住的。",
+  "failed_finish_reason": "stop",
+  "http_sends": 8
+}

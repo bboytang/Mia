@@ -1,0 +1,60 @@
+{
+  "code_sha": "f529863d127c8fd7b36dd37e0a9e07bca6e60f08",
+  "kind": "persistent_mia_affect_real_GLM_synthetic_context",
+  "passed": false,
+  "cases": [
+    {
+      "name": "direct_hurt",
+      "query": "Mia，你说话真烦，我现在一点也不想听你说。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "steady",
+        "label": "平静",
+        "valence": 0,
+        "arousal": 0.2,
+        "tension": 0,
+        "version": 0,
+        "updated_at": null,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "hurt",
+        "intensity": 2
+      },
+      "raw_response": "😔😔😔<mia-affect>{\"feeling\":\"hurt\",\"intensity\":2,\"quote\":\"Mia，你说话真烦，我现在一点也不想听你说。\"}</mia-affect>\n听到你这么说，我感到有些难过。我原本是想和你好好聊天的，不知道我说了什么让你不开心了。如果你现在不想说话，我尊重你的感受，我们可以先安静一会儿。",
+      "spoken_response": "😔听到你这么说，我感到有些难过。我原本是想和你好好聊天的，不知道我说了什么让你不开心了。如果你现在不想说话，我尊重你的感受，我们可以先安静一会儿。",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.168,
+        "arousal": 0.284,
+        "tension": 0.196,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "finish_reason": "stop",
+      "elapsed_ms": 3672.52
+    }
+  ],
+  "maximum_requests": 9,
+  "sdk_calls": 2,
+  "implicit_retries": 0,
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "role_written": false,
+  "physical_audio_verified": false,
+  "provider_max_tokens": 2048,
+  "thinking": "disabled_as_in_existing_provider",
+  "model": "glm-4-flash-250414",
+  "error_type": "ValueError",
+  "failed_case": "residual_next_session",
+  "failed_raw_response": "😔我还有些在意，需要缓一缓。我们可以聊点别的吗？",
+  "failed_finish_reason": "stop",
+  "http_sends": 2
+}

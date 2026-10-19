@@ -1,0 +1,98 @@
+{
+  "code_sha": "70d7ef0e259f051fb9b5b60e9f1f029bdcdeaf28",
+  "kind": "persistent_mia_affect_real_GLM_synthetic_context",
+  "passed": false,
+  "cases": [
+    {
+      "name": "direct_hurt",
+      "query": "Mia，你说话真烦，我现在一点也不想听你说。",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "steady",
+        "label": "平静",
+        "valence": 0,
+        "arousal": 0.2,
+        "tension": 0,
+        "version": 0,
+        "updated_at": null,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "hurt",
+        "intensity": 2
+      },
+      "raw_response": "😔\n\n<mia-affect>{\"feeling\":\"hurt\",\"intensity\":2,\"quote\":\"Mia，你说话真烦，我现在一点也不想听你说。\"}</mia-affect>\n\n我有点难过，听到你这么说。是发生什么事了吗？如果你现在不想说话，我也可以先安静一会儿。",
+      "spoken_response": "我有点难过，听到你这么说。是发生什么事了吗？如果你现在不想说话，我也可以先安静一会儿。",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.168,
+        "arousal": 0.284,
+        "tension": 0.196,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "finish_reason": "stop",
+      "elapsed_ms": 2806.37
+    },
+    {
+      "name": "residual_next_session",
+      "query": "那你现在想怎么和我说话？",
+      "before": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.1675,
+        "arousal": 0.2838,
+        "tension": 0.1954,
+        "version": 1,
+        "updated_at": 1800000000,
+        "recovery_half_life_seconds": 7200
+      },
+      "appraisal": {
+        "feeling": "steady",
+        "intensity": 1
+      },
+      "raw_response": "😌平静\n<mia-affect>{\"feeling\":\"steady\",\"intensity\":1,\"quote\":\"\"}</mia-affect>\n嗯，我现在想和你自然地聊天，就像平时一样。我们可以聊些轻松的话题，或者如果你有什么想说的，我在这里愿意听。你想聊些什么呢？",
+      "spoken_response": "嗯，我现在想和你自然地聊天，就像平时一样。我们可以聊些轻松的话题，或者如果你有什么想说的，我在这里愿意听。你想聊些什么呢？",
+      "after": {
+        "enabled": true,
+        "subject": "mia",
+        "feeling": "hurt",
+        "label": "难过",
+        "valence": -0.1474,
+        "arousal": 0.2737,
+        "tension": 0.172,
+        "version": 2,
+        "updated_at": 1800000030,
+        "recovery_half_life_seconds": 7200
+      },
+      "committed": true,
+      "passed": true,
+      "finish_reason": "stop",
+      "elapsed_ms": 1577.07
+    }
+  ],
+  "maximum_requests": 9,
+  "sdk_calls": 3,
+  "implicit_retries": 0,
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "role_written": false,
+  "physical_audio_verified": false,
+  "provider_max_tokens": 2048,
+  "thinking": "disabled_as_in_existing_provider",
+  "model": "glm-4-flash-250414",
+  "error_type": "ValueError",
+  "failed_case": "repair",
+  "failed_raw_response": "<mia-affect>{\"feeling\":\"repair\",\"intensity\":2,\"quote\":\"刚才是我说重了，对不起，我不是讨厌你。\"}<mia-affect>\n没关系，真的没关系。我明白有时候可能表达得不太清楚，或者声音大了点，但那并不是讨厌。能感受到你的歉意，我就放心了。我们之间是很好的，对吧？😌",
+  "failed_finish_reason": "stop",
+  "http_sends": 3
+}

@@ -1,0 +1,8 @@
+{
+  "backend_code_sha": "5092bb2b1d5198f0c0933e40a0c1ccee20d8dbcf",
+  "frontend_code_sha": "de2f580d5f7d53cc8a7e8a3c46b447173278586f",
+  "backend_files_verified": 29,
+  "frontend_files_verified": 442,
+  "jar_sha256": "d46f507cbe11ed66043a3db257b20e8b3f817a31570a1af29ef9d091d096ba4a",
+  "passed": true
+}

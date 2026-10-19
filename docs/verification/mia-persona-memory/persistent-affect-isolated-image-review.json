@@ -1,0 +1,9 @@
+{
+  "kind": "isolated_runtime_image_smoke",
+  "verified_assets": 29,
+  "schema": 6,
+  "provider_requests": 0,
+  "production_data_mounted": false,
+  "passed": true,
+  "production_provider_preimage_matches_pinned_source": true
+}

@@ -1,0 +1,59 @@
+{
+  "kind": "live_owner_proof_persistent_mia_affect_context_and_shared_backend_settings",
+  "before": {
+    "sha256": "4c06bcf1953f08c11c36b6ad4c078406361d97473d212f5b669164ffdaf266ad",
+    "facts": 47,
+    "vectors": 47,
+    "integrity": "ok",
+    "schema": 6,
+    "uncompleted_native": 0
+  },
+  "after": {
+    "sha256": "4c06bcf1953f08c11c36b6ad4c078406361d97473d212f5b669164ffdaf266ad",
+    "facts": 47,
+    "vectors": 47,
+    "integrity": "ok",
+    "schema": 6,
+    "uncompleted_native": 0
+  },
+  "counts": {
+    "memories": 47,
+    "traits": 0,
+    "events": 0
+  },
+  "settings": {
+    "memory_recall": true,
+    "personality_growth": true,
+    "interaction_events": true,
+    "companion_emotion": true
+  },
+  "paused": false,
+  "emotion_tracking_enabled": 1,
+  "authorized_device_scope_checks": [
+    {
+      "device_hash": "2285c646b169dc4b",
+      "owner_hash": "3c222265ee11e50b"
+    }
+  ],
+  "other_settings_restored": true,
+  "mia_emotion_enabled_by_user_request": true,
+  "mia_emotion": {
+    "enabled": true,
+    "subject": "mia",
+    "feeling": "steady",
+    "label": "平静",
+    "valence": 0,
+    "arousal": 0.2,
+    "tension": 0,
+    "version": 0,
+    "updated_at": null,
+    "recovery_half_life_seconds": 7200
+  },
+  "provider_calls": 0,
+  "asr_tts_calls": 0,
+  "physical_audio_verified": false,
+  "new_backups": false,
+  "role_model_voice_unchanged": true,
+  "backend_code_sha": "5092bb2b1d5198f0c0933e40a0c1ccee20d8dbcf",
+  "frontend_code_sha": "de2f580d5f7d53cc8a7e8a3c46b447173278586f"
+}

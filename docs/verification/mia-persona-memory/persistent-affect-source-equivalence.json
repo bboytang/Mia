@@ -1,0 +1,16 @@
+{
+  "backend_code_sha": "5092bb2b1d5198f0c0933e40a0c1ccee20d8dbcf",
+  "byte_identical_component_sources": {
+    "9b75366954d75e309ad0343176c576d09e2fdf49": {
+      "server/companion/affect.py": "0d85fd7cc8059533db57247619a7422fb1f2fced0f25aa1b75a5aa0dc307dd28",
+      "server/companion/context.py": "6bc6674a5f7a932aad8a5a3a58710eb076dc8db9334e5822bb50caf6f1c34241",
+      "scripts/ci/verify_mia_affect.py": "532ec59c15bb859c2e5614913ccd786d8119c406c84b653149d102254bb7783e"
+    },
+    "de2f580d5f7d53cc8a7e8a3c46b447173278586f": {
+      "server/admin_web/MiaSettingsDialog.vue": "ba73c17d208174656c4f6aea06a51570570fd93ea1b8b42d876bcd39716bbe9a",
+      "server/companion/manager_identity/MiaCompanionManagementController.java": "8a181ca39f4abc46342c232d35c2d66a2d0a7a40c1cf5e1c7b6432148a0f6fdd"
+    }
+  },
+  "persona_core_unchanged_from": "aebec000d864160963e01b0be9fcf9ff7dcab8b9",
+  "passed": true
+}

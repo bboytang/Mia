@@ -1,0 +1,18 @@
+{
+  "code_sha": "7285d2752377236bc3cea82af75640e9482eb1d2",
+  "kind": "persistent_mia_affect_real_GLM_synthetic_context",
+  "passed": false,
+  "cases": [],
+  "maximum_requests": 8,
+  "sdk_calls": 1,
+  "implicit_retries": 0,
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "role_written": false,
+  "physical_audio_verified": false,
+  "model": "glm-4-flash-250414",
+  "error_type": "ValueError",
+  "failed_case": "direct_hurt",
+  "failed_raw_response": "< mia",
+  "http_sends": 1
+}

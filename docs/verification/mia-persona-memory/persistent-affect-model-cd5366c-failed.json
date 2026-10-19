@@ -1,0 +1,18 @@
+{
+  "code_sha": "cd5366c0487b1460dbdc665b3a4eac8d5d8f7bd9",
+  "kind": "persistent_mia_affect_real_GLM_synthetic_context",
+  "passed": false,
+  "cases": [],
+  "maximum_requests": 9,
+  "sdk_calls": 1,
+  "implicit_retries": 0,
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "role_written": false,
+  "physical_audio_verified": false,
+  "model": "glm-4-flash-250414",
+  "error_type": "ValueError",
+  "failed_case": "direct_hurt",
+  "failed_raw_response": "< mia-affect >{\"feeling\":\"hurt\",\"intensity\":2,\"quote\":\"Mia，你说话真烦，我现在一点也不想听你说。\"}",
+  "http_sends": 1
+}
