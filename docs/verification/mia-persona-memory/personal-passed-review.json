@@ -1,0 +1,26 @@
+{
+  "sha": "ed9afd911528b311a33106819cce3787172d5d7e",
+  "run": "https://github.com/bboytang/Mia/actions/runs/39197016530",
+  "passed": true,
+  "scope": "One synthetic user; actual manager TLS, WSS text bridge, GLM, BGE, SQLite; no ASR/audio synthesis/playback",
+  "sdk_calls": 8,
+  "reply_sdk_calls": 7,
+  "extraction_sdk_calls": 1,
+  "extraction_http_entries": 1,
+  "correction_sdk_calls": 0,
+  "correction_attempts": 0,
+  "initial_fact_attempts": 1,
+  "processes": 3,
+  "facts_after_delete": 0,
+  "manual_response_review": "Identity Mia, normal companionship, new-session blue bicycle recall, post-restart silver bicycle answer, deletion then restart asks user for color instead of inventing old memory. Literal commute vs liking is a small paraphrase overreach in original recall; no fabricated shared episode.",
+  "artifacts": [
+    {
+      "file": "personal-passed-results.json.gz",
+      "raw_sha256": "d2070521bb3ab059c51afaf2504c8c28f1cca5e55c8456e6eb6b55a724f3f168"
+    },
+    {
+      "file": "personal-passed-state.sqlite3.gz",
+      "raw_sha256": "b841a3eede1f7aed708423d012937849c781fdf2ae1624c3ecc2f9ef7367b9cd"
+    }
+  ]
+}

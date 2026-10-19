@@ -646,7 +646,7 @@ class LLMMemoryExtractor:
                 for fact in context:
                     terms = []
                     for field in ('trigger_terms', 'keywords', 'entities'):
-                        values = fact.get(field, [])
+                        values = fact.get(field) or []
                         values = json.loads(values) if isinstance(values, str) else values
                         terms.extend(term for term in values if isinstance(term, str)
                             and 2 <= len(term) <= 32 and term in fact['content']

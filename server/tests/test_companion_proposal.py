@@ -83,6 +83,18 @@ class ProposalTests(unittest.TestCase):
         self.assertIsNone(explicit_change(source, [target, dict(target, id='other')]))
         self.assertIsNone(explicit_change(source, [dict(target, trigger_terms='["不存在的活动"]')]))
 
+    def test_legacy_null_clues_leave_ambiguous_correction_on_model_path(self):
+        from unittest.mock import Mock
+        source = '我梳头用角梳，不是木梳'
+        context = [{'id': 'legacy', 'category': 'fact', 'content': '我平常用木梳梳头',
+            'entities': None, 'keywords': None, 'trigger_terms': None}]
+        provider = Mock()
+        provider.response_no_stream.return_value = '{"memories":[]}'
+        self.assertEqual(LLMMemoryExtractor(lambda: provider)([source], context), '{"memories":[]}')
+        shown = json.loads(provider.response_no_stream.call_args.args[1])
+        self.assertEqual(shown['natural_anchor_hints'], [])
+        self.assertIsNone(context[0]['trigger_terms'])
+
     def test_all_branches_project_source_evidence_without_serialized_metadata_or_aliases(self):
         cases = [(['我平常用木梳梳头'], '我梳头用角梳，不是木梳'),
             (['我喜欢书法'], '我常用青瓷杯喝茶'),
