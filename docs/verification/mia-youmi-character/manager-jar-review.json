@@ -1,0 +1,22 @@
+{
+  "compiled_ci_class": {
+    "entry": "BOOT-INF/classes/xiaozhi/modules/device/controller/MiaCompanionManagementController.class",
+    "sha256": "4460026c5ad8f1c987343e4df9f894348146d04450c6fcde6fc248304b27b853",
+    "source_sha": "0c1ab442db80125039012dfaa0fa652753085b0b",
+    "runtime_sha": "caf3a959262656719be1f0cb352dcb8c13f4055f",
+    "source_unchanged_between_commits": true,
+    "ci_run": 39283409070,
+    "junit": {
+      "tests": 181,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "jar_sha256": "8c75e6e3e103344f475744475c926e8df51572c3711ad4123d27db6660dac95d",
+  "changed_entries": [
+    "BOOT-INF/classes/xiaozhi/modules/device/controller/MiaCompanionManagementController.class"
+  ],
+  "other_jar_entries_unchanged": true,
+  "source_commit": "0c1ab442db80125039012dfaa0fa652753085b0b"
+}

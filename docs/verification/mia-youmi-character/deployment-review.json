@@ -1,0 +1,44 @@
+{
+  "backend_code_sha": "caf3a959262656719be1f0cb352dcb8c13f4055f",
+  "frontend_code_sha": "698484e962f76718ab3e9bcb819d147ce2ae8dfa",
+  "voice_image": "mia-xiaozhi-server:youmi-caf3a95",
+  "web_image": "mia-xiaozhi-web:youmi-caf3a95",
+  "before": {
+    "facts": 0,
+    "vectors": 0,
+    "integrity": "ok",
+    "schema": 6,
+    "uncompleted_native": 0,
+    "active_jobs": 0,
+    "affect_data_sha256": "20bd58041524d64b0ec138e6dd3af6c21762bcb2f550d9693599f3ccaf8c5034",
+    "fact_data_sha256": "7b3936e43caa7d515ccadbb663c942911f01bdd748bbdc8e0eb1e93f3670445f"
+  },
+  "after": {
+    "facts": 0,
+    "vectors": 0,
+    "integrity": "ok",
+    "schema": 7,
+    "uncompleted_native": 0,
+    "active_jobs": 0,
+    "affect_data_sha256": "20bd58041524d64b0ec138e6dd3af6c21762bcb2f550d9693599f3ccaf8c5034",
+    "fact_data_sha256": "7b3936e43caa7d515ccadbb663c942911f01bdd748bbdc8e0eb1e93f3670445f"
+  },
+  "https_status": 200,
+  "manager_ready": true,
+  "voice_tls": "TLSv1.3",
+  "new_backups": false,
+  "firmware_unchanged": "1.0.3",
+  "original_compose_overrides_preserved": true,
+  "services": {
+    "xiaozhi-esp32-server": {
+      "running": true,
+      "restart_count": 0,
+      "oom_killed": false
+    },
+    "xiaozhi-esp32-server-web": {
+      "running": true,
+      "restart_count": 0,
+      "oom_killed": false
+    }
+  }
+}
