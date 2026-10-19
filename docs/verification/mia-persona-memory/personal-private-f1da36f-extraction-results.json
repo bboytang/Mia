@@ -1,0 +1,158 @@
+{
+  "code_sha": "f1da36fdbb1c1997d170d953f27e28544b18dbf5",
+  "passed": true,
+  "kind": "P17_installed_SDK_real_BGE_extraction",
+  "chat_provider_calls": 0,
+  "model_outputs": "synthetic_controlled_fixture",
+  "manager": "policy_fixture_real_manager_separate",
+  "resource_limit": {
+    "cpu": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "full_B03": "not_accepted",
+  "dataset_sha256": "17ec242f91e6a0c4488fe98aa7e36a986a559da20b656cdea5abf7d144350e3b",
+  "cases": [
+    {
+      "id": "neutral",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "negation",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "mixed_quote",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "medical",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": false
+    },
+    {
+      "id": "inferred",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_inferred",
+      "confirmation_origin": "model_inferred_candidate",
+      "indexed": false
+    },
+    {
+      "id": "greeting",
+      "state": "empty",
+      "sdk_calls": 0
+    },
+    {
+      "id": "hypothesis",
+      "state": "empty",
+      "sdk_calls": 0
+    },
+    {
+      "id": "joke",
+      "state": "empty",
+      "sdk_calls": 0
+    },
+    {
+      "id": "quote",
+      "state": "empty",
+      "sdk_calls": 0
+    },
+    {
+      "id": "relation",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "ongoing_goal",
+      "state": "committed",
+      "sdk_calls": 1,
+      "source_type": "user_explicit",
+      "confirmation_origin": "model_user_excerpt",
+      "indexed": true
+    },
+    {
+      "id": "unproved_clue",
+      "state": "failed",
+      "sdk_calls": 2
+    },
+    {
+      "id": "false_quote",
+      "state": "failed",
+      "sdk_calls": 2
+    },
+    {
+      "id": "credential",
+      "state": "credential_rejected",
+      "sdk_calls": 0
+    }
+  ],
+  "sdk_calls": 16,
+  "db_retry_did_not_repeat_model": true,
+  "confirmed_fact_count": 5,
+  "pending_fact_count": 2,
+  "maintenance": [
+    {
+      "kind": "correction",
+      "state": "committed",
+      "sdk_calls": 0,
+      "old_context_rejected": true,
+      "old_fact_not_current": true,
+      "producer": "validated_explicit_user_protocol",
+      "retry_reused_validation": true
+    },
+    {
+      "kind": "time_change",
+      "state": "committed",
+      "sdk_calls": 0,
+      "old_context_rejected": true,
+      "old_fact_not_current": true,
+      "producer": "validated_explicit_user_protocol",
+      "retry_reused_validation": false
+    },
+    {
+      "kind": "conflict",
+      "state": "committed",
+      "sdk_calls": 0,
+      "old_context_rejected": true,
+      "old_fact_not_current": true,
+      "producer": "validated_explicit_user_protocol",
+      "retry_reused_validation": false
+    }
+  ],
+  "persona_events": {
+    "pending_then_completed": true,
+    "database_reopened": true,
+    "new_session_restored": true,
+    "repeated_query_one_event": true,
+    "deleted_evidence_not_used": true,
+    "assistant_output": "synthetic_controlled_fixture"
+  },
+  "emotion_trend": {
+    "clock": "SIMULATED_UTC_not_real_seven_day_acceptance",
+    "observations": 5,
+    "sessions": 3,
+    "calendar_span_days": 7,
+    "related_context": true,
+    "disable_retains_five_but_blocks_usage": true
+  },
+  "peak_rss_mib": 305.55859375
+}

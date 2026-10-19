@@ -2,6 +2,16 @@
 
 2026-10-19。优先一个人的日常使用，保留现有SQLite、BGE、GLM和安全校验。原P23多人压力与首句指标仍按历史结果记录，本版本不宣称P23通过。
 
+当前已部署 `aebec000d864160963e01b0be9fcf9ff7dcab8b9`。四项同SHA CI均通过：[367项服务测试](https://github.com/bboytang/Mia/actions/runs/39208658664)、[175项身份测试](https://github.com/bboytang/Mia/actions/runs/39208658659)、[manager](https://github.com/bboytang/Mia/actions/runs/39208658655)、[真实BGE/提取/上下文](https://github.com/bboytang/Mia/actions/runs/39208658619)。22个线上文件hash匹配，HTTPS/WSS就绪，更新前后47事实/47向量、完整性正常，无新增备份或数据改写。
+
+用户确认正常连续聊天、两条偏好自动保存和重启后召回；期间实际发生同会话说话者串错，不能称全部召回都准确。此次只标注模型请求里的历史Mia回复，原对话/来源/安全不变。70+31本地定向测试与最后3例固定真实GLM重放通过，之前两种无效方案失败证据保留；共12真实SDK/HTTP、隐式重试0，非稳定性统计。部署后同会话追问待用户确认。详见[说话者复核](verification/mia-persona-memory/personal-speaker-history-review.json)。
+
+音频连接复用已上线，每个音频包仍实时复核权限；固定13次复核首73.47ms、其后4.78–7.73ms。是否消除实际通话般断续仍待用户明确反馈，不称音频验收通过。固件仍1.0.3，不需重新授权；[iPhone个人包](https://github.com/bboytang/Mia/releases/tag/mia-personal-ios-20261019-2d2c1bf)需个人签名，未验证iPhone实机音频。真实硬件纠正/删除仍只具有先前隔离单用户端到端证据，天气API鉴权故障另记，不冒充现有全部功能通过。
+
+以下保留历史过程和异SHA证据，当前状态以顶部及末尾最新记录为准。
+
+当前检查点：私有语音后端已部署 `f1da36fdbb1c1997d170d953f27e28544b18dbf5`，硬件1.0.3已授权。WSS证书校验及101、原45事实指纹保持、V4迁移/45真实BGE向量通过。实机已经有声，但旧8192硬编码预算触发完整硬件工具超限，声音是安全兜底；最新修复后用户已确认正常连续有声聊天；两条真实偏好自动保存并同步向量，现47事实/47向量，两任务attempt1/2分别4/7秒，共3次实际HTTP，含一次来源语义拒绝后有效重试。四项同SHA CI均成功、服务361测试。跨会话实机召回等待反馈，纠正/删除及再一次生产进程重启未重复实测，与原隔离端到端通过证据分列。个人服务器明确输入预算24576、保守GLM窗口32768及回复2048，绑定原Provider/endpoint/model，原测试默认8192与全部安全检查保持；P23不改判。以下部署准备和未切换描述保留为历史过程。
+
 最新部署状态（下文旧检查点仅作历史）：HTTPS、硬件授权后台及网页已部署；1.0.3 签名 OTA 已上传原升级接口并验证实际下载 hash。1.0.2 已被设备实际安装，但用户指出32位码无法完整显示；该实机失败及原发布包保留。现改成6位数字，设备私有128位证明不显示、不进入公开固件，六位码本身不能兑换凭据。等待用户重启至1.0.3并在原设备页确认后，才切换私有记忆语音后端，避免提前中断旧固件启动健康检查。
 
 授权后台/网页源码 `a7c5024789e0c91df8e0a1d7d4a1cb3ae48ed272`：[身份175测试](https://github.com/bboytang/Mia/actions/runs/39202577821)、[manager](https://github.com/bboytang/Mia/actions/runs/39202577830)、[服务](https://github.com/bboytang/Mia/actions/runs/39202577833)、[网页](https://github.com/bboytang/Mia/actions/runs/39202577825)均通过。固件 `65d77063753cc845ab60e3db5357ee42aad5a1dc`：[126主机测试及五构建](https://github.com/bboytang/Mia/actions/runs/39202578805)通过；[1.0.3 OTA 包](https://github.com/bboytang/Mia/releases/tag/mia-passport-1.0.3-ota-65d7706)序列4，签名、冻结分区/资源和原更新器A→B主机模拟通过，尚不代表1.0.3实机授权或音频通过。

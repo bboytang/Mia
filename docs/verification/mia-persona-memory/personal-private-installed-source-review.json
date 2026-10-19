@@ -1,0 +1,32 @@
+{
+  "voice_source": "aebec000d864160963e01b0be9fcf9ff7dcab8b9",
+  "installed_companion_files": 22,
+  "all_match_git_source": true,
+  "source_sha256": {
+    "__init__.py": "f0537e0c74a0cdf0e6bfa97a11cdc1a8c75b436e62480bc77b72b6258eeba1d5",
+    "xiaozhi_adapter.py": "53c4dfe803fb312316cd6861ea6b617ed9f504827a2137aa8f9297be775380af",
+    "memory.py": "751b976a4c624bca68262b3bb64fdc242b7c02c9539caa70363cbf4d6df4a049",
+    "authorization.py": "ab73bcacacb68e51a49598ff364da6c66d5c472b5dfd86becc6eeed4e9a50691",
+    "context.py": "a3da3163a61718a7ab02e07187262a088943adbe045ff8310bf0130d5f766081",
+    "reply.py": "f922d5356709d5734e34d76da7c75d303d7c83a0763cc6cc0439693c3a5bfbd3",
+    "emotions.py": "c00747c3c3721c62449163e6ec9c04dbdf5681beb004028069a8810cbf96a4a4",
+    "semantic.py": "8379b4e47466e0f76e5ebf8d6fe1ad0e779c689b4d6bb502b1671b6a9d1b545a",
+    "model_requests.py": "3e0a73e775f2144dbeff70564d2cfd9e5a9e252bd55070c1fda481744328239b",
+    "events.py": "7320b1e9cb91501c405cc6186acfa26c66b6fb29299a0b5e634e882e209a5d4d",
+    "persona.py": "8bf26d38ffd6fd1f43b54d9b5f1e8ba418bcce0f33c1d2d5fe61d35c20151994",
+    "retrieval.py": "5f0a555832c09744ddd602f2789951d31236fd7886fae4de80eb34ba4683cb5b",
+    "schema.py": "5ef6b33ee76834b4106cb39379e7a12c7be719386f6f6f2fdb0faabab323e064",
+    "schema-v4.sql": "f890b5b763dde6fb1eb5417fca75dd8b1a22c83f681534b8f8c04c08e4863afe",
+    "request_accounting.py": "799d7a70c5b83fb5d4394bbc1f2fe067dd6b21050fb1f8761f883f48136598b9",
+    "proposal.py": "553e865a01f21c1d0d86ea71df9602c5abeb4c09e5bd3806a999a9668a305a5a",
+    "schema.sql": "accf91e60b23086405c262d916cc7d97d13902eb3b4da332fd6c0307da2a8ab0",
+    "schema-v2.sql": "87511590c95f7781b86784467edcc9ae91821e98f851e9c6ac89fe1bb2cda3f7",
+    "schema-v3.sql": "8d99680ea15c523972d99fcf0720d201406b5d60ac9ee9a51afebb2454ad36d2",
+    "embedding.py": "985040b84da575d76bcf13435d7ed30a1e3ef9ded263c1b5f1637bdae02cda16",
+    "jobs.py": "8b5fc712815f885da812b31872e3e56c0c1b935e1901a6e202bcbd1ae481e1f9",
+    "extraction.py": "b3228b78fbe2475ceb8a9e11b635e11e9d65f168bc8ad9f50b39582422f7fb73"
+  },
+  "connection_preimage_checked": true,
+  "connection_sha256": "a454966147c32057fc91327d11e86160bf422d383966d0adc4a6e3e996aae6f6",
+  "connection_change": "Add owned authorization session close in finally; other installed connection code unchanged"
+}

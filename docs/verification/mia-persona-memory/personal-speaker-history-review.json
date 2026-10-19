@@ -68,5 +68,58 @@
     "Bad live turn actual selected fact set unavailable; do not claim all retrieval causes ruled out.",
     "Physical post-deployment same-session follow-up and audio retest still pending.",
     "No full P23 acceptance or new pressure test."
-  ]
+  ],
+  "candidate_code_sha": "aebec000d864160963e01b0be9fcf9ff7dcab8b9",
+  "additional_local_tests": {
+    "continuity_and_persona": 31,
+    "seconds": 1.325
+  },
+  "ci_runs": {
+    "service": 39208658664,
+    "manager": 39208658655,
+    "identity": 39208658659,
+    "vectors": 39208658619
+  },
+  "ci_complete": true,
+  "deployed": true,
+  "ci_all_success": true,
+  "ci_service_tests": 367,
+  "ci_java_tests": 175,
+  "installed_source_files_verified": 22,
+  "https_status": 200,
+  "wss_upgrade_status": 101,
+  "tls_version": "TLSv1.3",
+  "device_followup_after_fix_pending": true,
+  "deployment": {
+    "voice_source": "aebec000d864160963e01b0be9fcf9ff7dcab8b9",
+    "image": "mia-xiaozhi-server:personal-aebec00",
+    "running": true,
+    "restart_count": 0,
+    "oom_killed": false,
+    "before": {
+      "facts": 47,
+      "vectors": 47,
+      "integrity": "ok",
+      "jobs": {
+        "committed": 2,
+        "empty": 19
+      },
+      "uncompleted_native": 0
+    },
+    "after_container_start": {
+      "facts": 47,
+      "vectors": 47,
+      "integrity": "ok",
+      "jobs": {
+        "committed": 2,
+        "empty": 19
+      },
+      "uncompleted_native": 0
+    },
+    "new_backups": false,
+    "changed_runtime_files": [
+      "mia_companion/context.py"
+    ],
+    "firmware_unchanged": "1.0.3"
+  }
 }

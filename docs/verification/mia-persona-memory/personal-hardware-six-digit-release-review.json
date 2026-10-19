@@ -42,11 +42,12 @@
     "app_version": "1.0.3",
     "pending_request_present": true,
     "display_code_length": 6,
-    "owner_confirmed": false,
-    "private_credential_issued": false,
+    "owner_confirmed": true,
+    "private_credential_issued": true,
     "https_status": 200,
     "unknown_device_denial_code": 10169,
     "ota_id": "9d7d8251bf4252fdb586ba6d62f492a9",
-    "download_route_hash_verified": true
+    "download_route_hash_verified": true,
+    "authorized_voice_connection_initially_failed": true
   }
 }

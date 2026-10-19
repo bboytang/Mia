@@ -1,0 +1,568 @@
+{
+  "code_sha": "f1da36fdbb1c1997d170d953f27e28544b18dbf5",
+  "kind": "P12_real_semantic_vectors_not_full_RAG",
+  "passed": true,
+  "resource_limit": {
+    "cpus": 2,
+    "memory_mib": 2048,
+    "network": "none"
+  },
+  "manager_authorization": "fixture_only_actual_manager_test_separate",
+  "association_four_scores": "not_implemented_P13",
+  "full_behavior": "not_accepted",
+  "encoder_session_options": {
+    "intra_op_num_threads": 1,
+    "inter_op_num_threads": 1,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "asset_sha256": "dc36bd336224eaa24f2c032d9b4864d4121b72c24bbcd371813e5348ceb02e9e",
+  "tokenizer_sha256": "7dfbf1966ebf99d471c3796e9b457329d2b2182b817e144f1e904b957745c839",
+  "reference_cosine_min": 0.958961546421051,
+  "concurrent_scope_retrieval": {
+    "exact_equal": true,
+    "serial": [
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "abb9033bd18642e08422a695897dd6a1",
+            "content": "每次喝全脂牛奶，我的肚子都会不舒服。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.5160889625549316
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "0a56df73b64d4815a62f9aca73c7c4b4",
+            "content": "周末我喜欢沿着湖边步行看日落。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.4435151517391205
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "5c2c2cec3d5d4b3ba99ff2197d30f325",
+            "content": "我目前住在苏州工业园区。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.4440765380859375
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "631c2b31137e4cc49789fe0578e929ef",
+            "content": "我星期三晚上会练习钢琴。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.5805942416191101
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 2
+        },
+        "candidates": [
+          {
+            "id": "29ae12c628dc4066b263c6419ae05d3c",
+            "content": "每次喝全脂牛奶，我的肚子都会不舒服。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.5160889625549316
+          }
+        ]
+      }
+    ],
+    "concurrent": [
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "abb9033bd18642e08422a695897dd6a1",
+            "content": "每次喝全脂牛奶，我的肚子都会不舒服。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.5160889625549316
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "0a56df73b64d4815a62f9aca73c7c4b4",
+            "content": "周末我喜欢沿着湖边步行看日落。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.4435151517391205
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "5c2c2cec3d5d4b3ba99ff2197d30f325",
+            "content": "我目前住在苏州工业园区。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.4440765380859375
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 10
+        },
+        "candidates": [
+          {
+            "id": "631c2b31137e4cc49789fe0578e929ef",
+            "content": "我星期三晚上会练习钢琴。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.5805942416191101
+          }
+        ]
+      },
+      {
+        "snapshot": {
+          "revision": 0,
+          "content_epoch": 2
+        },
+        "candidates": [
+          {
+            "id": "29ae12c628dc4066b263c6419ae05d3c",
+            "content": "每次喝全脂牛奶，我的肚子都会不舒服。",
+            "category": "fact",
+            "content_version": 1,
+            "evidence_version": 2,
+            "entities": null,
+            "keywords": null,
+            "trigger_terms": null,
+            "emotional_weight": null,
+            "cosine": 0.5160889625549316
+          }
+        ]
+      }
+    ]
+  },
+  "real_chinese_cross_phrase": [
+    {
+      "query": "我喝哪类乳品容易闹肚子？",
+      "expected": "abb9033bd18642e08422a695897dd6a1",
+      "ids": [
+        "abb9033bd18642e08422a695897dd6a1"
+      ],
+      "cosines": [
+        0.5160889625549316
+      ]
+    },
+    {
+      "query": "休息日我一般去哪里散步？",
+      "expected": "0a56df73b64d4815a62f9aca73c7c4b4",
+      "ids": [
+        "0a56df73b64d4815a62f9aca73c7c4b4"
+      ],
+      "cosines": [
+        0.4435151517391205
+      ]
+    },
+    {
+      "query": "我现在在哪座城市生活？",
+      "expected": "5c2c2cec3d5d4b3ba99ff2197d30f325",
+      "ids": [
+        "5c2c2cec3d5d4b3ba99ff2197d30f325"
+      ],
+      "cosines": [
+        0.4440765380859375
+      ]
+    },
+    {
+      "query": "我通常哪天晚上练琴？",
+      "expected": "631c2b31137e4cc49789fe0578e929ef",
+      "ids": [
+        "631c2b31137e4cc49789fe0578e929ef"
+      ],
+      "cosines": [
+        0.5805942416191101
+      ]
+    }
+  ],
+  "unrelated_empty": true,
+  "legacy_fts_absent_during_recall": true,
+  "revoked_scope_rejected": true,
+  "sqlite_capacity": {
+    "1000": {
+      "sqlite_p95_ms": 12.262802350007007,
+      "encode_plus_query_p95_ms": 66.70909285000306,
+      "rss_peak_mib": 284.46875,
+      "database_bytes": 4644864,
+      "fixture": "Synthetic records, replicated real seed vector; capacity only, not accuracy"
+    },
+    "10000": {
+      "sqlite_p95_ms": 96.2949139999985,
+      "encode_plus_query_p95_ms": 149.73413269999796,
+      "rss_peak_mib": 284.46875,
+      "database_bytes": 44314624,
+      "fixture": "Synthetic records, replicated real seed vector; capacity only, not accuracy"
+    }
+  },
+  "long_input_diagnostic": {
+    "chars": 1700,
+    "model_max_tokens": 512,
+    "elapsed_ms": 877.4146939999952,
+    "normalized": true,
+    "rss_peak_mib": 284.46875
+  },
+  "concurrent_encoding": {
+    "short": {
+      "cases": 9,
+      "calls": 18,
+      "workers": 4,
+      "native_peak_inflight": 2,
+      "actual_run_windows_overlap": true,
+      "checks": [
+        {
+          "case": 0,
+          "bitwise_equal": true,
+          "sha256": "4d046e913fe660456a0b5a41458809d61271194053345b912c9d1a092a70d4d4",
+          "reference_sha256": "4d046e913fe660456a0b5a41458809d61271194053345b912c9d1a092a70d4d4",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 1,
+          "bitwise_equal": true,
+          "sha256": "24bb5252ad0568570c9e3355431cebb0623547a37de741a373dcc655481895a7",
+          "reference_sha256": "24bb5252ad0568570c9e3355431cebb0623547a37de741a373dcc655481895a7",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 2,
+          "bitwise_equal": true,
+          "sha256": "52bf526fd250a33be3dd65873f6885934561f3b59f53618526f8503ffd25257e",
+          "reference_sha256": "52bf526fd250a33be3dd65873f6885934561f3b59f53618526f8503ffd25257e",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 3,
+          "bitwise_equal": true,
+          "sha256": "926ebe950075e0fbb54b24d0a26c6d7e5173ba976712d56ef58b3441cba1a083",
+          "reference_sha256": "926ebe950075e0fbb54b24d0a26c6d7e5173ba976712d56ef58b3441cba1a083",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 4,
+          "bitwise_equal": true,
+          "sha256": "67d388e8d81d724e8d4d10a9767c13b104be438a7b78ca902b8036f0255f7762",
+          "reference_sha256": "67d388e8d81d724e8d4d10a9767c13b104be438a7b78ca902b8036f0255f7762",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 5,
+          "bitwise_equal": true,
+          "sha256": "06d5ed316373e5259bce2396df7e8a2b5b80121e7d57ee4fd1ef068638b535a9",
+          "reference_sha256": "06d5ed316373e5259bce2396df7e8a2b5b80121e7d57ee4fd1ef068638b535a9",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 6,
+          "bitwise_equal": true,
+          "sha256": "98d78e548518403977b26d55d9a2d3624c64c9c4467adc4cc3a392ba1c2403ab",
+          "reference_sha256": "98d78e548518403977b26d55d9a2d3624c64c9c4467adc4cc3a392ba1c2403ab",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 7,
+          "bitwise_equal": true,
+          "sha256": "71ab0c534dc49f122113942a0591e319135fd67592b251fe197fccea9f40e782",
+          "reference_sha256": "71ab0c534dc49f122113942a0591e319135fd67592b251fe197fccea9f40e782",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 8,
+          "bitwise_equal": true,
+          "sha256": "7ead141dfe89f4f24b82f2d41f2ae36d3bfb9b463bb8a835e8f872fbeb782772",
+          "reference_sha256": "7ead141dfe89f4f24b82f2d41f2ae36d3bfb9b463bb8a835e8f872fbeb782772",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 0,
+          "bitwise_equal": true,
+          "sha256": "4d046e913fe660456a0b5a41458809d61271194053345b912c9d1a092a70d4d4",
+          "reference_sha256": "4d046e913fe660456a0b5a41458809d61271194053345b912c9d1a092a70d4d4",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 1,
+          "bitwise_equal": true,
+          "sha256": "24bb5252ad0568570c9e3355431cebb0623547a37de741a373dcc655481895a7",
+          "reference_sha256": "24bb5252ad0568570c9e3355431cebb0623547a37de741a373dcc655481895a7",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 2,
+          "bitwise_equal": true,
+          "sha256": "52bf526fd250a33be3dd65873f6885934561f3b59f53618526f8503ffd25257e",
+          "reference_sha256": "52bf526fd250a33be3dd65873f6885934561f3b59f53618526f8503ffd25257e",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 3,
+          "bitwise_equal": true,
+          "sha256": "926ebe950075e0fbb54b24d0a26c6d7e5173ba976712d56ef58b3441cba1a083",
+          "reference_sha256": "926ebe950075e0fbb54b24d0a26c6d7e5173ba976712d56ef58b3441cba1a083",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 4,
+          "bitwise_equal": true,
+          "sha256": "67d388e8d81d724e8d4d10a9767c13b104be438a7b78ca902b8036f0255f7762",
+          "reference_sha256": "67d388e8d81d724e8d4d10a9767c13b104be438a7b78ca902b8036f0255f7762",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 5,
+          "bitwise_equal": true,
+          "sha256": "06d5ed316373e5259bce2396df7e8a2b5b80121e7d57ee4fd1ef068638b535a9",
+          "reference_sha256": "06d5ed316373e5259bce2396df7e8a2b5b80121e7d57ee4fd1ef068638b535a9",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 6,
+          "bitwise_equal": true,
+          "sha256": "98d78e548518403977b26d55d9a2d3624c64c9c4467adc4cc3a392ba1c2403ab",
+          "reference_sha256": "98d78e548518403977b26d55d9a2d3624c64c9c4467adc4cc3a392ba1c2403ab",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 7,
+          "bitwise_equal": true,
+          "sha256": "71ab0c534dc49f122113942a0591e319135fd67592b251fe197fccea9f40e782",
+          "reference_sha256": "71ab0c534dc49f122113942a0591e319135fd67592b251fe197fccea9f40e782",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 8,
+          "bitwise_equal": true,
+          "sha256": "7ead141dfe89f4f24b82f2d41f2ae36d3bfb9b463bb8a835e8f872fbeb782772",
+          "reference_sha256": "7ead141dfe89f4f24b82f2d41f2ae36d3bfb9b463bb8a835e8f872fbeb782772",
+          "max_abs_difference": 0.0
+        }
+      ],
+      "native_call_windows_seconds": [
+        [
+          124.520995738,
+          124.564242949
+        ],
+        [
+          124.521231602,
+          124.567290514
+        ],
+        [
+          124.56454376,
+          124.619157741
+        ],
+        [
+          124.56753505,
+          124.620898648
+        ],
+        [
+          124.621121685,
+          124.671347958
+        ],
+        [
+          124.61945197,
+          124.671744099
+        ],
+        [
+          124.6719214,
+          124.708050308
+        ],
+        [
+          124.6716863,
+          124.722959367
+        ],
+        [
+          124.708313879,
+          124.740047836
+        ],
+        [
+          124.723251983,
+          124.751457185
+        ],
+        [
+          124.740304525,
+          124.768403559
+        ],
+        [
+          124.751769267,
+          124.805382361
+        ],
+        [
+          124.768715681,
+          124.822790797
+        ],
+        [
+          124.805685456,
+          124.858085667
+        ],
+        [
+          124.823101908,
+          124.874751257
+        ],
+        [
+          124.875103194,
+          124.908706799
+        ],
+        [
+          124.858395986,
+          124.923598861
+        ],
+        [
+          124.909107457,
+          124.94423709
+        ]
+      ],
+      "all_bitwise_equal": true,
+      "rss_peak_mib": 284.46875
+    },
+    "long": {
+      "cases": 2,
+      "calls": 4,
+      "workers": 2,
+      "native_peak_inflight": 2,
+      "actual_run_windows_overlap": true,
+      "checks": [
+        {
+          "case": 0,
+          "bitwise_equal": true,
+          "sha256": "f9a68f2369972100af4b204ca39956dca129ec298437bedf2cf08a4827e19074",
+          "reference_sha256": "f9a68f2369972100af4b204ca39956dca129ec298437bedf2cf08a4827e19074",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 1,
+          "bitwise_equal": true,
+          "sha256": "4f66069b6279bdf7f9fe2fbf988b33367b0b34a65c3846e368645c6ed89af4d5",
+          "reference_sha256": "4f66069b6279bdf7f9fe2fbf988b33367b0b34a65c3846e368645c6ed89af4d5",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 0,
+          "bitwise_equal": true,
+          "sha256": "f9a68f2369972100af4b204ca39956dca129ec298437bedf2cf08a4827e19074",
+          "reference_sha256": "f9a68f2369972100af4b204ca39956dca129ec298437bedf2cf08a4827e19074",
+          "max_abs_difference": 0.0
+        },
+        {
+          "case": 1,
+          "bitwise_equal": true,
+          "sha256": "4f66069b6279bdf7f9fe2fbf988b33367b0b34a65c3846e368645c6ed89af4d5",
+          "reference_sha256": "4f66069b6279bdf7f9fe2fbf988b33367b0b34a65c3846e368645c6ed89af4d5",
+          "max_abs_difference": 0.0
+        }
+      ],
+      "native_call_windows_seconds": [
+        [
+          126.704909529,
+          127.58611228
+        ],
+        [
+          126.705042083,
+          127.58885552
+        ],
+        [
+          127.588788719,
+          128.428480652
+        ],
+        [
+          127.591547208,
+          128.438459927
+        ]
+      ],
+      "all_bitwise_equal": true,
+      "rss_peak_mib": 377.7578125
+    }
+  }
+}
