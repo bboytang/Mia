@@ -640,6 +640,9 @@ class LLMMemoryExtractor:
                     'not the original evidence or permission rules. Do not invent properties omitted from the schema; '
                     'absent relations mean no proposed relationship, not permission to invent an ID.')
                 try:
+                    before_sdk = getattr(context, 'before_sdk', None)
+                    if before_sdk is not None:
+                        before_sdk()
                     return read_stream(provider.response_with_functions('',
                         [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
                         functions=[tool]))
@@ -648,6 +651,9 @@ class LLMMemoryExtractor:
                 except Exception:
                     raise ProviderError() from None
             try:
+                before_sdk = getattr(context, 'before_sdk', None)
+                if before_sdk is not None:
+                    before_sdk()
                 return provider.response_no_stream(instruction, json.dumps(payload, ensure_ascii=False))
             except (MemoryError, PrivateAuthorizationRequired, sqlite3.Error, TimeoutError):
                 raise

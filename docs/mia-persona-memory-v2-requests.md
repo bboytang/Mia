@@ -53,3 +53,103 @@ R6新诊断：实际10k首先冷特征读，然后固定5暖读；记录缓存�
 该补充286项相关回归通过。其首轮触发既有检索反例自身的并行SQLite写事务竞争：编码hook未拿store.lock，两原生编码线程会对同连接commit交叉。只为该故障注入写入补上既有存储锁，来源变化必须拒绝/删除来源清除线索的原断言原样保留；原失败performance-v2-sdk-observation-after.log.gz不覆盖。新文件/门闩/迁移也补齐身份、向量和提取workflow路径，保证今后单改账本仍有相关CI。
 
 共享诊断39191989529仍收原句柄，不重复派发在途测试。由于请求开始观察点确有源码修正，需要新SHA的必要同SHA回归，不能把旧a229268的绿色归到新代码。
+
+## 原候选共享收证（保留，不替代最终SHA）
+
+a229268 / 39191989529 success：真实2CPU/2GiB/swap0、无OOM；34真实SDK/34 MockTransport入口、另4完整chat Mock SDK、远端0；两臂各一真实Worker任务empty/attempt1。strict-control等前台结束后开始，four-ten在foreground=2时获得空闲槽。该次后台入槽时gate.waiting_foreground=0，属于明确的空闲服务机会；**没有在共享资源中实测触发10秒/4次的饱和老化配额**，不能冒充该证明；配额来自确定性持续排队反例。受控前台最大槽等待0.024→1902.96ms，两固定臂各16样本，不是实际GLM前台p95或正式首句差。
+
+10k冷特征1842.58ms，扫描线程CPU1709.47/墙钟1712.28ms；10000次特征构建聚合1490.11ms、缓存0→10000。五暖读319.53/383.11/286.21/306.12/280.73ms，构建0次，扫描CPU169.64–259.36ms，六完整响应hash相同。冷BGE两调用inclusive105.82ms（并行不能相加当墙钟）、manager2次48.02ms、Python SQLite锁0.069ms；不是SQLite锁竞争主导冷慢，首次静态特征构建/CPU为主要来源。暖begin版本扫描/快照分别有约12.9/8.2ms，尚不能在不完整写入失效证明时跳过。以上为该SHA单轮诊断，不改原正式暖态首句912.84ms失败。
+
+Python整体峰值448.96MiB，共同父组峰值1555.73MiB，无OOM；实际编码器/性能容量旧通过保留。新SDK内部观察点19b503dd08926ae83e5a40d997517eed1d429046已推送，五自动回归和新SHA唯一cap0共享39192505563在途；原共享已终结后才派发，无同源码重复取绿。原始JSON/CI日志与全部artifact hash见performance-v2-shared-first-*，原marker解释以补充修正为准。
+
+## 状态与验证口径
+
+| 阶段 | 持久证据 | 语义 |
+| --- | --- | --- |
+| 接纳 | mia_jobs.created_at + mia_job_policy.version=2/phase | 与真实用户source同一事务接纳；缺策略行是V1 |
+| 排队/取槽 | policy.waiting_at/slot_acquired_at，首次请求复制到ledger | 0 SDK intent时attempt不递增；取槽仍不等于获得调用权限 |
+| 复核 | ledger.rechecked_at | 可信Scope恢复、当前授权/绑定、原始context/来源/同意版本、取消及deadline |
+| 启动意图 | ledger.intent_at/ordinal + jobs.attempts同事务 | 至多2；提交成功后才允许进入SDK，崩溃不退款 |
+| SDK进入 | sdk_started_at | SDK内部请求构建观察；NULL是未观测，不是假定0 |
+| HTTP入口 | http_started_at/http_sends≤1 | 关闭SDK重试/transport重试/redirect，不能解释为远端收据 |
+| 响应/原生结束 | response_completed_at/native_finished_at/outcome | 完整流EOF与调用真实结束分列；取消不假释放槽 |
+| 校验/提交 | outcome + policy.phase、jobs.validated_result、原事务terminal | 校验仍基于原始可信context；已校验结果重试不重复模型 |
+| 恢复/回滚 | process_lost、不变attempt、check_worker_rollback | 单服务进程恢复须确认旧进程退出；进程内活跃原生拒绝恢复；旧V3 Worker拒绝V4 |
+
+同机同库只有原有单应用Worker受支持；进程内registry不冒充跨进程分布式锁。恢复/回滚必须先停止旧应用，不能同时启动两个独立应用解释同一活动任务。回滚检查也不自动证明OS进程消失。保留V2-aware迁移/读取能力、以JobStore(policy_version=1)关闭新V2接纳并收敛活动任务，是支持的兼容回退；旧二进制直接读V4/自动DROP ledger不支持。真实生产升级/回滚操作未执行。
+
+| 用户要求的定向反例 | 已证实验证 |
+| --- | --- |
+| 排队30秒 | V2虚拟30.001s，0attempt/0实际SDK spy/0 Mock HTTP |
+| 取槽记账事务失败 | SQLite authorizer拒绝INSERT，事务回滚，0attempt/0 SDK/0 HTTP |
+| intent后发送前崩溃 | 实际子进程os._exit；保守1attempt、无SDK/HTTP观察，恢复不退款 |
+| HTTP入口后响应前崩溃 | 实际SDK+MockTransport子进程退出，1attempt/1HTTP观察，process_lost后最多第二次 |
+| 两次/底层预算 | 两503=2真实SDK/2 Mock HTTP，终态provider失败；redirect不跟随，transport retry非0拒绝 |
+| 先后到达/持续有界前台 | 真实线程FIFO、4/10与8/20虚拟年龄、滚动队列及容量128反例；非抢占 |
+| 双前台/后台 | V2 Worker foreground=2能够入队，旧V1不偷换语义；受限资源两实际模型lane对照 |
+| 超时/取消/删除/撤权/重绑 | 原V1机制保留，V2前置/intent后及来源版本变化反例均无越权HTTP；不假释放在途槽 |
+| Worker恢复 | 队列不退款，活跃native拒绝假恢复，持久反馈可恢复；validated DB重试复用结果 |
+| 混合版本 | 旧V1和新V2同Worker执行，分别计数，旧行无SDK账本且不被回填 |
+| 升级/重复/回滚 | V3→V4真实SQLite故障事务回滚/重复幂等、旧事实源兼容；活动V2/未知native拒绝回滚 |
+| 2CPU/2GiB/swap0 | 真实共享父组运行manager/MySQL/Redis/Python/BGE与控制模型并发；不冒充真实Provider排队或正式36/72 |
+
+## 兼容与剩余阻塞（最终收证前判断）
+
+已证实：原SQLite唯一事实表、BGE/Scope/来源真实性/删除/隐私校验保持；没有改变提案_schema=1、事实字段、R1计时原点或R2最小模型投影。R3固定Provider原生tools/未知strict不启用仍然有效，R4错误类别/脱敏反馈延续且V2增加重启保存。新任务attempt=0的确定性有效空结果是V2定义，不伪称SDK已执行。iOS job_status已有state和字段保持，内部新阶段不发送成新枚举；源码兼容已检查，iOS/硬件/实际音频未做新增真机验证。
+
+已证实：当前没有R6/R7运行优化。冷CPU特征构建已有量化，不能拿它替代原暖态首句912.84ms失败根因；暖态每delta串行manager复核存在，但删减/快照未证明所有写入与授权失效等价。R7逗号早释放仍不等价，Guard/TTS/iOS/固件代码未改。编码/检索旧容量通过继续有效，不因本次独立冷读/控制lane重新判失败。
+
+证据不足：新V2在真实GLM上的完整36任务有效率、公平正常成功p95、两前台完整chat竞争与新代码真实在途全组关闭；本批不执行这些正式验收。历史fe48aaa在途关闭通过保留，但不冒充本批新V2全链路在途证据。后台机会只保证有限服务事件假设下的机会，不保证无限饱和仍120秒成功。新Schema回滚必须用V2-aware版本，SDK内部观察依赖固定2.8.1，升级需重验。
+
+明确判断：**目前不建议启动第三十六步正式验收。** V2记账/机会机制可以完成本批验收，但正式暖态首句超限尚未解决，真实GLM新结构化有效率仍缺充分证据；先评审暖态安全等价改进与固定上限真实模型验证计划，再由用户决定完整36任务。两次/120秒、600ms/500ms、250ms/150ms、500ms/400ms和安全约束均不降低。不会自动部署、变更生产数据库/配置、进入P24或下一轮测试。
+
+## 19b503d收证（后续混合版本反例补充）
+
+本节覆盖前文全部“待CI/在途/下一步”过程文字。最终已验证代码：**19b503dd08926ae83e5a40d997517eed1d429046**。之后的收证提交只增加文档/证据，不能冒充已跑CI的代码SHA。没有在途测试；没有部署/生产配置或数据变更/P24，没有完整36任务/72回复。新增真实远端Provider请求总数**0**。两个不同源码候选分别跑固定零远端诊断，全部保留，未重采同源码选较好结果。
+
+### 精确提交及源码diff
+
+| 检查点 | 提交/差异 | 行为与根因 |
+| --- | --- | --- |
+| V2状态/迁移 | [36da356cac1ab66755656926f4cde261d49d46f3](https://github.com/bboytang/Mia/commit/36da356cac1ab66755656926f4cde261d49d46f3) | 独立策略/请求表，旧V1不回填；新迁移幂等、回滚拒绝条件 |
+| SDK事务预算 | [aa947e5bc5ee88c809a86296b59ab874c52fda82](https://github.com/bboytang/Mia/commit/aa947e5bc5ee88c809a86296b59ab874c52fda82) | 旧排队扣attempt改为仅新V2事务intent；两次/120秒不变，反馈/结果恢复 |
+| 后台机会 | [0616e92330a8a6033df00e701cb2a587a60e7be8](https://github.com/bboytang/Mia/commit/0616e92330a8a6033df00e701cb2a587a60e7be8) | Worker阻断与队列配套；用户确认4次/10秒，1后台/2全局/128队列；保留原SDK观察器 |
+| 固定观测 | [a229268be63d4dd4bb59cbdf79ec306dc6cc8ca9](https://github.com/bboytang/Mia/commit/a229268be63d4dd4bb59cbdf79ec306dc6cc8ca9) | 冷10k/5暖、固定两臂34Mock SDK与原4chat；旧候选六CI/共享success保留 |
+| 复查修正 | [19b503dd08926ae83e5a40d997517eed1d429046](https://github.com/bboytang/Mia/commit/19b503dd08926ae83e5a40d997517eed1d429046) | 新反例证实SDK开始预写不真实，移至SDK内部构建；补夹具SQLite锁且断言不变 |
+
+完整[基线→最终代码diff](https://github.com/bboytang/Mia/compare/858551c2efaa24e76ea421bf3cb946e9c3d5119c...19b503dd08926ae83e5a40d997517eed1d429046)。运行变动仅任务、请求契约、调度、迁移/安装文件清单；没有改reply/context/semantic/retrieval/persona/authorization/memory事实实现、iOS或固件。旧三版SQL字节/hash均复核不变。
+
+### 最终同SHA六项CI（均success）
+
+| 验证 | 结果/链接 |
+| --- | --- |
+| 服务与V2/迁移/安全/协议 | [352项](https://github.com/bboytang/Mia/actions/runs/39192469096)，含实际子进程崩溃、SDK/HTTP预算及新旧任务；本地companion286项 |
+| 身份/Scope/绑定 | [173 Java项及实际Scope集成](https://github.com/bboytang/Mia/actions/runs/39192469044) |
+| manager兼容 | [150原Java回归＋4真实基线](https://github.com/bboytang/Mia/actions/runs/39192469064) |
+| 真实BGE与安装后提取 | [五份报告全部passed](https://github.com/bboytang/Mia/actions/runs/39192469046)：164检索、10上下文、9回复、14结构提取及向量验证；结构提取RSS305.45MiB |
+| 提取契约语法 | [通过](https://github.com/bboytang/Mia/actions/runs/39192469043)，没有dispatch远端模型 |
+| 共享资源/观测机制 | [39192505563](https://github.com/bboytang/Mia/actions/runs/39192505563)，39机制＋唯一19b503d cap0固定两臂/四chat |
+
+原始最终CI日志为performance-v2-final-*-ci.log.gz，五BGE报告performance-v2-final-*-results.json.gz，V2服务账本performance-v2-final-mechanisms.json.gz；共享全部artifact hash及原始child/parent/cold-warm另存performance-v2-shared-final-*。总复核报告[performance-v2-final-review.json](verification/mia-persona-memory/performance-v2-final-review.json)保留精确SHA、全部六链接、资源和只读SQLite对照。原a229268六CI/共享、首轮机制失败和SDK marker反例失败均保留，未覆盖第三十三步/第三十四步证据。
+
+### 最终真实资源与调度证据（已证实）
+
+实际共同父组cpu.max=200000/100000、memory.max=2147483648、swap.max=0；MySQL/Redis/Java manager/Python应用/控制器同组。共同峰值**1465.63MiB**、Python整体峰值**436.87MiB**，memory.events全部0。没有把应用RSS冒充隔离encoder增量。应用退出0.470秒，全组空闲退出2.187秒；这不是新V2在途退出验收。
+
+34调度真实SDK＝34 MockTransport入口（每臂16前台＋1后台），另4完整chat Mock SDK；远端0。每臂一真实Worker任务，attempt=1/intent1/SDK观察1/HTTP1。后台four-ten在foreground=2且waiting_foreground=0时获得空闲机会，持续满队老化配额仍由确定性反例单独证明。两臂受控前台最大排队0.035→1918.26ms，是一次固定控制场景，不是线上GLM前台p95或正式600ms首句增量。
+
+ledger显示后台实际槽排队strict约0.51ms、four-ten约1805.90ms；strict的主要等待发生在Worker入口、不能拿这个0.51ms冒充接纳后无等待。只读SQLite原任务created_at→updated_at（秒级精度）分别**27秒/11秒**。驱动observed_terminal_seconds为27.12/22.11秒，后者因等前台全部结束才轮询，**不是后台真正终态耗时**；不拿观察器晚读当调度变慢。6任务全部empty、attempt为1/1/0/0/0/0，source_payload清空、feedback清空，2请求账本；11032夹具事实、integrity=ok、外键无误，读取前后DBhash相同。
+
+### 最终R6/R7归因（已证实与证据边界）
+
+10k首次冷特征读取**1711.60ms**；10000次静态特征构建聚合**1353.79ms**，扫描线程CPU/墙钟**1567.76/1570.53ms**，缓存0→10000。五暖读**263.91/337.27/263.25/260.12/259.18ms**，构建0次、扫描CPU156.64–232.36ms；六完整结果hash一致。冷两BGE调用inclusive90.74ms（并行，不能当墙钟相加），manager2次46.51ms、Python锁0.215ms。已证实首读主要是静态特征CPU，非已测SQLite锁等待；不是模型装载冷启动。
+
+暖读begin两次约10.96ms、snapshot约6.17ms；完整受控chat两个开trace样本在首句前各有21次manager请求（241.35/250.71ms）、15次reply.validate（nested186.38/196.67ms，不能相加）。暖态串行manager复核确有成本；它对原正式912.84ms增量的确切份额仍证据不足，没有安全等价快路径就不删检查。R7完整句校验、原19组件/旧句取消继续通过，无提前释放。四受控ABBA首句633.51/499.81/506.55/587.27ms全部保存；观察on/off只有4次且有资源/顺序混杂，不能因on更快宣称观察器零开销或负开销，也不能当正式p95。
+
+已证实：R5的记账/入口饥饿机制问题有修复及定向证据。高度怀疑：暖态串行授权是剩余正式首句系统性成本之一，但不能删除安全边界。证据不足：真实GLM新V2完整任务稳定性、实际饱和老化配额与新V2在途全组关闭、音频/iOS/硬件实测。**第三批到此停止，不启动第三十六步。** 后续建议维持本节前述评审顺序，待用户审核批准。
+
+## 最终混合版本边界补充
+
+旧V1任务保持计数不意味着豁免安全复核。新增“V1已排队→撤权→取得槽”反例在19b503d失败：attempt仍1、提交被拒，但实际SDK spy已经1，不能接受。原始performance-v2-legacy-preflight-before.log.gz保留。现对V1普通JSON/原生工具路径也在SDK前调用既有Scope/context/取消/deadline复核；不写V2请求账本、不退款或改变V1排队计次。V2事务/SDK内部观察/HTTP预算路径保持；287相关回归通过。新反例现在legacy attempt1/SDK0/HTTP0，终态cancelled。
+
+该补充需要最终源码的必要服务/身份/manager/真实BGE/安装后结构提取及迁移同SHA回归。共享资源已在19b503d完成，request_accounting/model_requests/schema字节未改变，V2分支只保留同一构造调用；提取新增before_sdk分支对V2为None、不产生新I/O。依照用户不重复无意义性能测试要求，不再派第三次共享试验；**性能测量明确标19b503d，不冒充最终SHA实测**。剩余5项必要CI收齐后停止，所有旧19b503d六CI/原始数值/失败仍保留。

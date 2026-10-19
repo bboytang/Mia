@@ -1,0 +1,131 @@
+{
+  "sha": "a229268be63d4dd4bb59cbdf79ec306dc6cc8ca9",
+  "run": "https://github.com/bboytang/Mia/actions/runs/39191989529",
+  "scope": "First candidate before SDK-start observation correction; retain separately, not final SHA evidence",
+  "files": {
+    "app-lifecycle-results.json": {
+      "sha256": "7cf3f7dcca515caef80195e1de113f143cd435861747ded27a829ec32e0fe96d",
+      "bytes": 176170
+    },
+    "database-image-digests.txt": {
+      "sha256": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+      "bytes": 156
+    },
+    "runtime-system.txt": {
+      "sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "bytes": 92
+    },
+    "cgroup-final-cpu.max.txt": {
+      "sha256": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+      "bytes": 14
+    },
+    "docker-cgroup-driver.txt": {
+      "sha256": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+      "bytes": 8
+    },
+    "mysql.log": {
+      "sha256": "d8130b26f3d36f5898aedd7462295d3b4848accc17717b55b487bf4ef9821973",
+      "bytes": 4436
+    },
+    "export-dependencies.txt": {
+      "sha256": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+      "bytes": 525
+    },
+    "cgroup-final-cpu.stat.txt": {
+      "sha256": "e9fbc8fc130e8ad016117cc0e982a317b58f2e7392cbfb3f527e0d07d7a70c09",
+      "bytes": 180
+    },
+    "cgroup-final-memory.current.txt": {
+      "sha256": "d8da335024aa6b88d376a6c5c1583fd10de3fab1413a3bfc0136f24d92b78870",
+      "bytes": 10
+    },
+    "container-final.txt": {
+      "sha256": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+      "bytes": 204
+    },
+    "cgroup-final-memory.max.txt": {
+      "sha256": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+      "bytes": 11
+    },
+    "python.log": {
+      "sha256": "e49b53ede389a83bec1b46d3f3619e4b43c0a1acb43b03b8791478a9d030f310",
+      "bytes": 88
+    },
+    "redis.log": {
+      "sha256": "a4bd71568fdd75fd3c828258e73542bb783e96cfaf190fc7cd1ee6e5f31b8548",
+      "bytes": 5888
+    },
+    "cgroup-final-memory.swap.max.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "manager.log": {
+      "sha256": "9dc544e69aa6f144bcd7a387444b21e2193adcae2a090befa5260fc51460ee66",
+      "bytes": 25636
+    },
+    "cgroup-final-memory.events.txt": {
+      "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+      "bytes": 53
+    },
+    "cgroup-final-memory.peak.txt": {
+      "sha256": "49138375a1831446ddfc1541a406be8bb3c2f1118b22c82c8d8585bc49586399",
+      "bytes": 11
+    },
+    "java-version.txt": {
+      "sha256": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+      "bytes": 205
+    },
+    "container-stop.txt": {
+      "sha256": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+      "bytes": 81
+    },
+    "container-stopped.txt": {
+      "sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "bytes": 56
+    },
+    "app-service.log": {
+      "sha256": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+      "bytes": 37
+    },
+    "preparation-dependencies.txt": {
+      "sha256": "3b668fa3c668d6b3dc62e3828bec433958f37f840efd83049031ef98edb2e10e",
+      "bytes": 4103
+    },
+    "app-child/ready.json": {
+      "sha256": "549dfd69b99ba24778515aea06c3e624f82cefed12fabd6f0fcef8084cdad523",
+      "bytes": 102
+    },
+    "app-child/v2-cold-warm.json": {
+      "sha256": "efca2e14da2a4d8554c3772a7387fc6d4d1092a0a57bf0ce3bbe7a8a643df1d7",
+      "bytes": 44516
+    },
+    "app-child/app-results.json": {
+      "sha256": "a18e9cea920d42d37ae76f600418b56311646178d736872c58a573650eeae7c0",
+      "bytes": 210562
+    },
+    "app-child/tts-boundaries.json": {
+      "sha256": "db346e17ae47be3f349c886950fb2d7a85ec37c17d1fc226a94989e40c6ed22e",
+      "bytes": 317906
+    },
+    "app-child/memory.sqlite3": {
+      "sha256": "02bffe679b5aefbd6882853ce1f59b894a65622f465221065e5bf0867cd14ce5",
+      "bytes": 83079168
+    },
+    "app-child/context-profile.json": {
+      "sha256": "8ba22b5259baf78a7bbfdb39c8a84ab8b2a55798d81e29130dc099f5eb9f32c1",
+      "bytes": 244
+    },
+    "junit/TEST-junit-jupiter.xml": {
+      "sha256": "1be1741e4f9ae8aa3ba263f6b662fb056e898063befd948f86e3aa7c1c6e4ebb",
+      "bytes": 22213
+    },
+    "junit/TEST-junit-vintage.xml": {
+      "sha256": "c0ef24264d7010df67b841beb5ff48055ea1f58dfd87842e150d7e364665023f",
+      "bytes": 21775
+    },
+    "junit/TEST-junit-platform-suite.xml": {
+      "sha256": "327c47e7ec9edb5a3458f609e0a038e8dc29ba9f142cb4c8e0416315e6886059",
+      "bytes": 21792
+    }
+  }
+}

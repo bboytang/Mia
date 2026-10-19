@@ -247,9 +247,14 @@ class MemoryWorker:
                 await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=policy['version'] == 1)
                 context.request_cancelled = threading.Event()
                 context.model_request_phase = 'preparing'
+                from .request_accounting import RequestAccounting
+                accounting = RequestAccounting(self, job, context)
                 if policy['version'] == 2:
-                    from .request_accounting import RequestAccounting
-                    context.request_accounting = RequestAccounting(self, job, context)
+                    context.request_accounting = accounting
+                else:
+                    # Keep V1's queue-charged counter, but never exempt old
+                    # tasks from current permission/source/deadline checks.
+                    context.before_sdk = lambda: accounting.call(accounting.preflight())
                 try:
                     output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']], context),
                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))

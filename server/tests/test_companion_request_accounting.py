@@ -401,6 +401,29 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(row['http_sends'], 0)
         self.assertEqual(self.http, [])
 
+    async def test_legacy_waiter_rechecks_authorization_after_slot_without_changing_counter(self):
+        gate = ModelRequestGate(background_after=10, foreground_burst=4)
+        leases = [gate.acquire(foreground=True), gate.acquire(foreground=True)]
+        job = JobStore(self.store, policy_version=1).submit(self.event())
+        with patch('server.companion.jobs.model_requests', gate), patch('server.companion.extraction.model_requests', gate):
+            task = asyncio.create_task(self.worker.run_once())
+            try:
+                async def queued():
+                    while gate.snapshot()['waiting_background'] != 1:
+                        await asyncio.sleep(.001)
+                await asyncio.wait_for(queued(), 3)
+                self.policy.active = False
+                leases[0].release()
+                await asyncio.wait_for(task, 3)
+            finally:
+                for lease in leases:
+                    lease.release()
+        self.assertEqual(self.row(job)['state'], 'cancelled')
+        self.assertEqual(self.row(job)['attempts'], 1)  # V1 queue charge is retained.
+        self.assertEqual(self.requests(job), [])
+        self.assertEqual(sum(p.sdk_calls for p in self.providers), 0)
+        self.assertEqual(self.http, [])
+
     async def test_crash_windows_consume_reservations_without_refunds(self):
         for mode, code, sends in [('intent', 71, 0), ('http', 72, 1)]:
             job = await self.worker.submit(self.event(mode))
