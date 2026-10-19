@@ -35,5 +35,31 @@
     "http_download_hash_verified": true,
     "device_reported_version": "1.0.3",
     "physical_install_confirmed": false
+  },
+  "discovery_compatibility_fix": {
+    "reason": "Installed 1.0.3 pins the original discovery websocket hint and rejects the current WSS hint before reading the offered OTA version.",
+    "source_commit": "c1f03cee38993a119a6eda059691131a93bd053b",
+    "ci_url": "https://github.com/bboytang/Youmi/actions/runs/39321731800",
+    "java_tests": 188,
+    "ota_compatibility_tests": 7,
+    "python_tests": 405,
+    "deployment": {
+      "source_commit": "c1f03cee38993a119a6eda059691131a93bd053b",
+      "ci_run": 39321731800,
+      "image": "mia-xiaozhi-web:ota-discovery-c1f03ce",
+      "changed_jar_entries": [
+        "BOOT-INF/classes/xiaozhi/modules/device/controller/OTAController.class"
+      ],
+      "compiled_class_sha256": "f9a44949b26469d1f182baee4a4798a1c066bae29d865f87b61cdd6eb051e2f6",
+      "other_jar_entries_unchanged": true,
+      "frontend_unchanged": true,
+      "voice_container_unchanged": true,
+      "voice_tls": "TLSv1.3",
+      "https_status": 200,
+      "new_backups": false,
+      "device_install_confirmed": false
+    },
+    "physical_install_confirmed": false,
+    "last_observed_device_version": "1.0.3"
   }
 }
