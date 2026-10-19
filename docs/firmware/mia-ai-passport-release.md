@@ -1,5 +1,9 @@
 # Mia AI Passport：安装包与小智原生 OTA
 
+## 当前发布：1.0.5 UI OTA（2026-10-19）
+
+[1.0.5 签名包已发布](https://github.com/bboytang/Youmi/releases/tag/youmi-passport-1.0.5-ota-41a030f)，并登记原 OTA 后台，sequence=6、自动更新开启。源码 `41a030fb9287bdfc6d8b134b8f3849bd3ac30c98` 的 128 项主机测试、五构建和原生 UI 截图通过；实际包四组 A/B 主机模拟、服务端签名和生产下载哈希通过。分区、资源、签名公钥保持。当前设备上报 1.0.4，重启检查更新；尚未确认本版实机安装、UI/语音共存或运行内存/帧率。详见[发布证据](../verification/youmi-firmware/ota-1.0.5.json)。以下 1.0.0/1.0.1 内容保留为历史。
+
 当前实现以本文为准；[第一阶段架构记录](mia-ai-passport.md)保留早期方案与差异审计。
 
 ## 实机反馈与 1.0.1 OTA 发布
