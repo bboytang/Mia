@@ -107,8 +107,8 @@ def private_config_guards(original):
     text = replace_once(original, 'import java.util.List;',
                         'import java.util.List;\nimport java.util.Map;\n'
                         'import org.springframework.transaction.annotation.Transactional;\n'
-                        'import youmi.common.exception.ErrorCode;\n'
-                        'import youmi.common.exception.RenException;\n'
+                        'import xiaozhi.common.exception.ErrorCode;\n'
+                        'import xiaozhi.common.exception.RenException;\n'
                         'import xiaozhi.modules.device.service.impl.YoumiDeviceAuthorizationService;')
     text = replace_once(text, '    private final ConfigService configService;',
                         '    private final ConfigService configService;\n'

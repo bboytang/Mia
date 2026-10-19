@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import youmi.common.exception.ErrorCode;
-import youmi.common.exception.RenException;
-import youmi.common.redis.RedisUtils;
-import youmi.common.user.UserDetail;
+import xiaozhi.common.exception.ErrorCode;
+import xiaozhi.common.exception.RenException;
+import xiaozhi.common.redis.RedisUtils;
+import xiaozhi.common.user.UserDetail;
 import xiaozhi.modules.agent.dao.AgentDao;
 import xiaozhi.modules.agent.entity.AgentEntity;
 import xiaozhi.modules.agent.service.AgentService;

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import youmi.common.exception.ErrorCode;
-import youmi.common.exception.RenException;
-import youmi.common.utils.Result;
+import xiaozhi.common.exception.ErrorCode;
+import xiaozhi.common.exception.RenException;
+import xiaozhi.common.utils.Result;
 import xiaozhi.modules.config.service.ConfigService;
 import xiaozhi.modules.device.service.impl.YoumiDeviceAuthorizationService;
 

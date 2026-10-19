@@ -9,8 +9,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import lombok.RequiredArgsConstructor;
-import youmi.common.exception.ErrorCode;
-import youmi.common.exception.RenException;
+import xiaozhi.common.exception.ErrorCode;
+import xiaozhi.common.exception.RenException;
 
 /** Guards the existing report/title/summary writes; model calls hold no DB locks. */
 @Service

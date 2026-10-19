@@ -49,8 +49,8 @@ def biz(text):
                         '        var scope = youmiChatAuthorization.require(report.getMiaScope(), report.getSessionId(), true);\n'
                         '        if (!scope.get("agent_id").equals(agentEntity.getId())\n'
                         '                || !scope.get("user_id").equals(agentEntity.getUserId())) {\n'
-                        '            throw new youmi.common.exception.RenException(\n'
-                        '                    youmi.common.exception.ErrorCode.NO_PERMISSION);\n        }\n'
+                        '            throw new xiaozhi.common.exception.RenException(\n'
+                        '                    xiaozhi.common.exception.ErrorCode.NO_PERMISSION);\n        }\n'
                         '        Integer chatHistoryConf = agentEntity.getChatHistoryConf();')
 
 

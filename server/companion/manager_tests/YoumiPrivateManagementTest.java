@@ -24,7 +24,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import youmi.common.constant.Constant;
+import xiaozhi.common.constant.Constant;
 import xiaozhi.modules.security.service.SysUserTokenService;
 import xiaozhi.modules.sys.service.SysParamsService;
 

@@ -20,8 +20,8 @@ import org.springframework.test.context.ActiveProfiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import youmi.common.redis.RedisKeys;
-import youmi.common.redis.RedisUtils;
+import xiaozhi.common.redis.RedisKeys;
+import xiaozhi.common.redis.RedisUtils;
 import xiaozhi.modules.security.service.SysUserTokenService;
 
 /** Real HTTP and persisted identities; no mocked authentication or authorization. */
