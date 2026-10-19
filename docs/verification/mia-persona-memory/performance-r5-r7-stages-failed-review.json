@@ -1,0 +1,198 @@
+{
+  "run_id": 39187014445,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39187014445",
+  "code_sha": "50c0664c8dc77ca57da31d6d44123d2ea281cce7",
+  "conclusion": "failure",
+  "provider_requests": 2,
+  "controlled_sdk_calls": 4,
+  "cause": "Controlled client consumed one intermediate TTS/LLM event as terminal and disconnected; all results retained. ABBA invalid due to possible overlapping connections. No real-model re-sampling.",
+  "files": [
+    {
+      "source": "app-child/app-results.json",
+      "file": "performance-r5-r7-stages-failed-child.json.gz",
+      "raw_sha256": "3875ed4aed6f917243f8f4f4153d66df06cec0312b2bad683b35792ccebd2e83",
+      "gzip_sha256": "4cca1d20a28a7a94b9ff368cb9d44cf948ab0fc0a69114ac7073c90241e35819"
+    },
+    {
+      "source": "app-lifecycle-results.json",
+      "file": "performance-r5-r7-stages-failed-parent.json.gz",
+      "raw_sha256": "943b1061de0b3a1549b58baf86b1fe69c21436edd6baabaf99db91c6529a368b",
+      "gzip_sha256": "6aa9273098c8bc94ca28d023d5635a0c0774c4cc953702c665cb087fa61edd0e"
+    },
+    {
+      "source": "app-service.log",
+      "file": "performance-r5-r7-stages-failed-app.log.gz",
+      "raw_sha256": "602831349b29d219f7cb815c76d7d5772b85af165bd0f72e196fe0ef40de93b3",
+      "gzip_sha256": "7acce3483cfefead41078edcdca143ece36276b728e5fc4051b18d17ba7e3658"
+    },
+    {
+      "source": "mia-r5-r7-stage-39187014445.log",
+      "file": "performance-r5-r7-stages-failed-ci.log.gz",
+      "raw_sha256": "c8ff53edb7c69c4eb6d218594c38335757e99660663d9d0106bade2f6a6671c8",
+      "gzip_sha256": "d37ca0bbe300917ab4995891ee914cf324e31a6295814d9bdb720e879247bc39"
+    },
+    {
+      "source": "mia-r5-r7-stage-39187014445-metadata.json",
+      "file": "performance-r5-r7-stages-failed-metadata.json.gz",
+      "raw_sha256": "0014bf8d20b25885901a88f75d10bc77134e2bbc4c7ce34e0a15bedddf3df017",
+      "gzip_sha256": "63c9a79d376b73172418ddbff54a299d0d12ae01bfed483019eb7dcddc6a48d2"
+    }
+  ],
+  "artifact_files": [
+    {
+      "file": "app-child/app-results.json",
+      "bytes": 1081642,
+      "sha256": "3875ed4aed6f917243f8f4f4153d66df06cec0312b2bad683b35792ccebd2e83"
+    },
+    {
+      "file": "app-child/context-profile.json",
+      "bytes": 252,
+      "sha256": "4867816ff5a4178a7be89da4042a937f180e73eb3333833acec4318f3de1c680"
+    },
+    {
+      "file": "app-child/memory.sqlite3",
+      "bytes": 82812928,
+      "sha256": "73d7f72a13a2a0e1b4233237ca40b28e2a05a05e65bac7ddc6e27240f02c14ba"
+    },
+    {
+      "file": "app-child/memory.sqlite3-shm",
+      "bytes": 163840,
+      "sha256": "e5ac28f55649edb6666e1e7e63af06d2484fe05818c2767f7cba5782bfb31b0f"
+    },
+    {
+      "file": "app-child/memory.sqlite3-wal",
+      "bytes": 75729752,
+      "sha256": "21340f47c6fcefc46a0c2510e07d44421eb8fd4e486fb27f47529b6e111bbc1f"
+    },
+    {
+      "file": "app-child/ready.json",
+      "bytes": 102,
+      "sha256": "20d011cf4b7a462fe23e455547f51b9036a95e4ad774f59c6b6cca4f3230f86d"
+    },
+    {
+      "file": "app-lifecycle-results.json",
+      "bytes": 716679,
+      "sha256": "943b1061de0b3a1549b58baf86b1fe69c21436edd6baabaf99db91c6529a368b"
+    },
+    {
+      "file": "app-service.log",
+      "bytes": 2970,
+      "sha256": "602831349b29d219f7cb815c76d7d5772b85af165bd0f72e196fe0ef40de93b3"
+    },
+    {
+      "file": "cgroup-final-cpu.max.txt",
+      "bytes": 14,
+      "sha256": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69"
+    },
+    {
+      "file": "cgroup-final-cpu.stat.txt",
+      "bytes": 180,
+      "sha256": "b162a5e3a2d70473f249f1f64815fca3d43a94581b82c8f1b3e940dbfc446318"
+    },
+    {
+      "file": "cgroup-final-memory.current.txt",
+      "bytes": 10,
+      "sha256": "dab4f3250849befa9671dcec93930d98c14a3dfb5b20f063a42778390c00684b"
+    },
+    {
+      "file": "cgroup-final-memory.events.txt",
+      "bytes": 53,
+      "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2"
+    },
+    {
+      "file": "cgroup-final-memory.max.txt",
+      "bytes": 11,
+      "sha256": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e"
+    },
+    {
+      "file": "cgroup-final-memory.peak.txt",
+      "bytes": 11,
+      "sha256": "1be4bb17aec9ed9055ddf051b3ba7b65cec7c16ff1d53af16887f1fbda17eede"
+    },
+    {
+      "file": "cgroup-final-memory.swap.max.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "container-final.txt",
+      "bytes": 204,
+      "sha256": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b"
+    },
+    {
+      "file": "container-stop.txt",
+      "bytes": 81,
+      "sha256": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565"
+    },
+    {
+      "file": "container-stopped.txt",
+      "bytes": 56,
+      "sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7"
+    },
+    {
+      "file": "database-image-digests.txt",
+      "bytes": 156,
+      "sha256": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a"
+    },
+    {
+      "file": "docker-cgroup-driver.txt",
+      "bytes": 8,
+      "sha256": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820"
+    },
+    {
+      "file": "export-dependencies.txt",
+      "bytes": 525,
+      "sha256": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40"
+    },
+    {
+      "file": "java-version.txt",
+      "bytes": 205,
+      "sha256": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0"
+    },
+    {
+      "file": "junit/TEST-junit-jupiter.xml",
+      "bytes": 23266,
+      "sha256": "2c4c1d8ade11ae221988a102529b595cd694db6952a823595459da2582d899e7"
+    },
+    {
+      "file": "junit/TEST-junit-platform-suite.xml",
+      "bytes": 21792,
+      "sha256": "ba43cd83e4d9e172d2d692f052a438acb1fb232db927dbccd8d64cdaadf16ad8"
+    },
+    {
+      "file": "junit/TEST-junit-vintage.xml",
+      "bytes": 21775,
+      "sha256": "88f368da96c58fea1c8b0ec078d9fbb6c6f145e62ae76f02a69ca62e1c1e2fd3"
+    },
+    {
+      "file": "manager.log",
+      "bytes": 26839,
+      "sha256": "6c39c60ad83c5ea91331e20761832433ccc7ec45291e895463cd07feeb3c0a93"
+    },
+    {
+      "file": "mysql.log",
+      "bytes": 4436,
+      "sha256": "ba762e18d3e69704e8578dee3791b60c9b1ac697067c0afab255df8b30ecf98b"
+    },
+    {
+      "file": "preparation-dependencies.txt",
+      "bytes": 4103,
+      "sha256": "3b668fa3c668d6b3dc62e3828bec433958f37f840efd83049031ef98edb2e10e"
+    },
+    {
+      "file": "python.log",
+      "bytes": 89,
+      "sha256": "ac94e8fe4fde76da287644f6b24c8c09e78f93d050982e34078e81efee37fb61"
+    },
+    {
+      "file": "redis.log",
+      "bytes": 5888,
+      "sha256": "c57b5cc65f3c176337e5fe1c0e32c7cf0339d31224351cd7ed1bc00d8c01edea"
+    },
+    {
+      "file": "runtime-system.txt",
+      "bytes": 92,
+      "sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259"
+    }
+  ]
+}

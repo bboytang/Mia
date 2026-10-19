@@ -17,9 +17,15 @@ R5可控调度反例及最小修正 → R6实际分段观测 → R7边界诊断/
 1. 将attempt从“进入提取尝试（含排队）”改为“即将发SDK请求”属于持久化语义变化。建议以后保留既有attempts/旧行语义，新版本增加明确的阶段/排队与SDK请求计数，事务先记请求启动再发网络；崩溃于记账后发出前仍保守消耗一次，绝不自动退款或在恢复时猜测重发。需迁移/版本识别方案及旧活动任务兼容策略，不能仅移动attempt=True或用取消后递减冒充正确。若坚持不扩schema，仍需明确批准改变旧列含义、旧任务按保守次数继续，且无精确“远端已收到”保证。
 2. 前台绝对优先无法保证持续饱和下后台活性。若产品要求该负载也有进度，应评审有限前台突发/后台最迟服务机会或显式拒绝过载；这会牺牲部分前台服务机会。当前未实施。正常有界负载仅能给出假设下排队上界，后台总期限仍120秒。
 
+可供下一批审批的最小持久化方案（未执行DDL）：新schema为任务增加`attempt_policy_version`（旧行默认1）与`model_phase`，旧活动任务按旧attempts保守完成，不退款/回填。只有明确标记的新任务使用版本2：排队不递增，获得槽并复核后，在SDK调用之前事务记录`sdk_start_intent`并递增attempts；数据库记账失败则不发请求。崩溃在记账与发送之间仍保守消耗一次，无法声称精确知道供应商是否已收到。恢复以持久阶段/计数为准，不因未观测响应而自动补发第三次；不持久保存原始非法输出或密钥。回滚到不识别新策略的旧Worker前必须收敛/终结活动v2任务，不能让旧二进制猜测新列含义。这些语义、迁移/回滚规则和启动前复核接口需用户单独批准后再实现。
+
+若用户选择保留前台绝对优先与现有保守attempt语义，则应明确“正常负载”的有限到达/请求完成假设，并把饱和过载下可追溯失败作为行为边界；不能用新增重试或暂停120秒时钟换取保证。若要求后台服务配额，还必须证明原生实际完成的时间上界，单纯分配服务机会并不保证模型120秒完成。
+
 R6/R7及最终CI待后续记录。本检查点不将局部边界修复称为调度问题全部解决。
 
 R5本地检查点40项通过（2.240秒），含8新反例与既有Worker/门闩回归；初版38项也通过且独立保留。新增证据`verification/mia-persona-memory/performance-r5-scheduling-{local,checkpoint}.json`保存精确文件hash、调度顺序/槽快照、虚拟期限、Mock SDK次数与任务attempt，原实现2失败日志为`performance-r5-scheduling-before.log.gz`。本批只在全部代码冻结后推送一次执行必要同SHA回归，不逐提交重复CI。
+
+恢复证据边界：本批新增排队计数反例重建Worker对象，文件关闭/重开的恢复由既有回归覆盖；本批未新增真实PID恢复试验。fe48aaa原受控在途关闭/新PID恢复证据保留，不冒充本轮新实测。
 
 R5源码检查点：`b54a649bb0f791fe6ae32770ac59c77f93550eef`，尚未推送；最终候选统一CI待代码冻结。
 
@@ -44,3 +50,19 @@ R6检查点`6ab9c8ad2369fd3a7493bcc954e7330759187a8f`。后续额外加入实际
 已证实简单改为逗号提前放行不等价：`可以慢慢走，`单独可通过，随后`我是ChatGPT。`会使原校验将整句替换为SAFE_REPLY；早释放前缀后无法恢复原替换语义。故未实现分段优化。若实测显示句子等待占主导，应先评审是否允许改变拒绝/打断单元；当前安全等价候选只能在整句校验后预处理/调度TTS，不能消除等待整句的时间。必须保留每段Scope/授权/删除复核、sentence_id隔离、原生完成取消与iOS既有tts start/stop及字幕时序；未改Swift/固件协议，未验证真机或音频。
 
 最终待同SHA回归与固定上限诊断；不将组件检查或观察器路径成功称P23通过，R5持久语义/后台服务机会方案继续等待批准。
+
+## 同SHA回归与唯一诊断句柄
+
+最终候选/检查点R7：`50c0664c8dc77ca57da31d6d44123d2ea281cce7`（R5 b54a649、R6 6ab9c8a），一次代码推送。五项自动CI全部success：[服务327](https://github.com/bboytang/Mia/actions/runs/39186705980)、[身份173](https://github.com/bboytang/Mia/actions/runs/39186705967)、[manager150+4](https://github.com/bboytang/Mia/actions/runs/39186706006)、[实际BGE/SDK五报告](https://github.com/bboytang/Mia/actions/runs/39186705939)、[37项机制/语法](https://github.com/bboytang/Mia/actions/runs/39186705942)。精确SHA、终态步骤、日志及五报告的原文/压缩hash见`verification/mia-persona-memory/performance-r5-r7-ci-review.json`及同前缀gzip，全部已独立校验。第一批R1–R4离线反例/原始重放也包含在327服务/37机制及安装SDK回归中。
+
+唯一小样本诊断：[39187014445](https://github.com/bboytang/Mia/actions/runs/39187014445)，同SHA、mode=reply-stages；2026-10-19已启动，仍在准备依赖。只收这个句柄，上限4远端/另4受控SDK，未执行第三十六步或完整72回复。后续收证结论覆盖此在途描述。
+
+## 真实诊断失败收证与观察器修复
+
+39187014445已终态failure，实际远端请求2/上限4，另4次Mock SDK，Provider错误0；两真实case均完整到达文本就绪，正常提问任务empty/attempt1、提取SDK0。失败已证实属于观察器：新控制驱动只recv一次，遇正常tts/llm中间事件便关闭连接，服务端随后发送终态遇ConnectionClosedOK。四对照可能重叠，**原ABBA无效**，不能选三份完整值或四首句值宣称观察开销已通过。app被失败控制器中断，不将它当新的关闭性能失败。
+
+原报告/CI日志/错误栈、31个artifact文件hash见`performance-r5-r7-stages-failed-*`，完整artifact仍保留于原run。两真实case原始SDK字段与trace完整、dropped=0；仅作为一次未预热10k冷路径诊断：baseline首句1041.64ms、memory3579.17ms，差2537.53ms，不是p95，不改原912.84ms失败。memory在首句前manager25次/563.39ms、profile20次/3.24ms、capture21次/9.12ms、Python SQLite锁等候0.21ms、BEGIN等待加执行1.01ms；检索总2274.41ms、scan2093.02ms、两BGE调用inclusive合计185.27ms（并行不能当墙钟相加）。SDK观察写盘自身67.78ms，baseline14.67ms，明确排除将它冒充运行瓶颈；guard实际检查0.026ms，不是约399ms后阶段等待的全部根因。真实细分表及边界归因待最终只读复核，以上不外推正式暖态p95。
+
+修正仅CI：统一终态读取器跳过所有中间事件，整个读取采用绝对130秒期限；新增2反例与既有共39机制通过。将19组边界大报告单独在请求前保存，避免每次SDK观察重复序列化该大块数据。无运行安全/调度/schema改变。
+
+为验证这个实际失败，只新增**0远端请求**的`reply-stages-replay`：隔离manager配置用固定synthetic凭据/controlled.invalid，不向测量组传真实模型凭据；cap=0、工厂fail-closed；相同4次Mock SDK固定off/on/on/off及19组件输入，完整2CPU/2GiB服务组验证。不是第二次真实模型采样，不补足未用额度，不替换第一次失败/首句数值。待新SHA机制/fixture必要回归后执行一次受控重放并保留结果。

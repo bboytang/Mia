@@ -7,7 +7,8 @@ import sys
 import threading
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import AsyncMock, Mock, patch
+import asyncio
 
 from server.companion.authorization import AuthenticatedScope
 from server.companion.context import ContextBuilder, ContextLimits
@@ -22,9 +23,10 @@ spec.loader.exec_module(latency)
 class EmptyMemoryBaselineTests(unittest.TestCase):
     def test_stage_diagnostic_has_fixed_small_real_request_cap(self):
         self.assertEqual(latency.REQUEST_CAPS['reply-stages'], 4)
+        self.assertEqual(latency.REQUEST_CAPS['reply-stages-replay'], 0)
         root = Path(__file__).resolve().parents[3]
         self.assertIn('reply-stages', (root / '.github/workflows/mia-memory-shared-performance.yml').read_text())
-        self.assertIn('smoke|stages|latency', (root / 'scripts/ci/run_mia_shared_envelope.sh').read_text())
+        self.assertIn('reply-stages-replay', (root / 'scripts/ci/run_mia_shared_envelope.sh').read_text())
 
     def test_frozen_report_corrected_stages_preserve_all_six_total_p95_values(self):
         directory = Path(__file__).resolve().parents[1]
@@ -106,6 +108,22 @@ class EmptyMemoryBaselineTests(unittest.TestCase):
         self.assertEqual(data['events'], [])
         self.assertEqual(data['role_data'], role)
         self.assertEqual(len(json.loads(reference['messages'][1]['content'])['mia_context']['facts']), 1)
+
+
+class DriverTerminalReadTests(unittest.IsolatedAsyncioTestCase):
+    async def test_controlled_driver_ignores_tts_and_llm_until_actual_terminal(self):
+        for terminal in ('p23_case', 'p23_error'):
+            socket = SimpleNamespace(recv=AsyncMock(side_effect=[json.dumps({'type': name})
+                for name in ('tts', 'llm', terminal)]))
+            self.assertEqual(await latency.read_case(socket), {'type': terminal})
+            self.assertEqual(socket.recv.await_count, 3)
+
+    async def test_nonterminal_frames_do_not_restart_the_absolute_deadline(self):
+        socket = SimpleNamespace(recv=AsyncMock(return_value='{"type":"tts"}'))
+        with patch.object(latency, 'time', SimpleNamespace(monotonic=Mock(side_effect=[100, 100.1, 101.1]))):
+            with self.assertRaises(asyncio.TimeoutError):
+                await latency.read_case(socket, timeout=1)
+        self.assertEqual(socket.recv.await_count, 1)
 
 
 if __name__ == '__main__':

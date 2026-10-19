@@ -61,8 +61,10 @@ class MiaPerformanceIntegrationTest {
         for (var logger : logging.getLoggerList()) logger.setLevel(Level.ERROR);
         String mode = System.getenv().getOrDefault("MIA_P23_MODE", "capacity");
         String selected = null;
-        if (mode.equals("reply-smoke") || mode.equals("reply-stages") || mode.equals("reply-latency") || mode.equals("worker-smoke") || mode.equals("worker-extraction") || mode.equals("worker-faults") || mode.equals("worker-fairness") || mode.equals("worker-fairness-diagnostic") || mode.equals("worker-shutdown")) {
-            String key = System.getenv("MIA_TEST_LLM_API_KEY"), endpoint = System.getenv("MIA_TEST_LLM_BASE_URL");
+        if (mode.equals("reply-smoke") || mode.equals("reply-stages") || mode.equals("reply-stages-replay") || mode.equals("reply-latency") || mode.equals("worker-smoke") || mode.equals("worker-extraction") || mode.equals("worker-faults") || mode.equals("worker-fairness") || mode.equals("worker-fairness-diagnostic") || mode.equals("worker-shutdown")) {
+            boolean controlledReplay = mode.equals("reply-stages-replay");
+            String key = controlledReplay ? "synthetic-controlled-only" : System.getenv("MIA_TEST_LLM_API_KEY");
+            String endpoint = controlledReplay ? "https://controlled.invalid/v4" : System.getenv("MIA_TEST_LLM_BASE_URL");
             assertNotNull(key, "Dedicated P23 test Provider key is not configured");
             assertNotNull(endpoint, "Dedicated P23 test Provider endpoint is not configured");
             assertFalse(key.isBlank(), "Dedicated P23 test Provider key is empty");

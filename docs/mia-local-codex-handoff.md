@@ -4,6 +4,8 @@
 
 ## 当前状态
 
+2026-10-19第二批最新状态覆盖下文第一批停止说明：用户已批准R5–R7有界工作，代码`50c0664`五同SHA自动CI全部通过，唯一上限4远端的分段诊断[39187014445](https://github.com/bboytang/Mia/actions/runs/39187014445)在途；详见[第二批报告](mia-persona-memory-r5-r7.md)。不重复派发，不执行完整36任务/72回复，不改持久计数或生产/P24。收齐该诊断并记录后停止，等待用户确认。
+
 用户已确认采用`glm-4-flash-250414`，**P22验收通过**。已知实测问题和未执行范围见[用户验收决定](verification/mia-persona-memory/p22-user-acceptance.md)。2026-10-17用户已批准开始P23，详见主交接及[性能进度](verification/mia-persona-memory/performance.md)，P24未开始；生产配置未因本次验收记录而切换。
 
 ## 本地工作区

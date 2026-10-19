@@ -13,9 +13,21 @@ import uuid
 
 
 MODEL = 'glm-4-flash-250414'
-REQUEST_CAPS = {'reply-smoke': 4, 'reply-stages': 4, 'reply-latency': 144, 'worker-smoke': 8,
+REQUEST_CAPS = {'reply-smoke': 4, 'reply-stages': 4, 'reply-stages-replay': 0, 'reply-latency': 144, 'worker-smoke': 8,
     'worker-extraction': 2, 'worker-faults': 6, 'worker-fairness': 72,
     'worker-fairness-diagnostic': 4, 'worker-shutdown': 2}
+
+
+async def read_case(socket, timeout=130):
+    """Intermediate original TTS/LLM events are not the driver terminal result."""
+    deadline = time.monotonic() + timeout
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise asyncio.TimeoutError()
+        value = json.loads(await asyncio.wait_for(socket.recv(), remaining))
+        if value['type'] in ('p23_case', 'p23_error'):
+            return value
 
 
 def empty_memory_request(builder, scope, limits, query, role, session):
@@ -161,16 +173,23 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
         sdk_timing_scope='All *_ms timestamps use case start; SDK interval is first-content minus SDK-start. Includes remote compute, transport and consumer/observer overhead, not pure network time',
         baseline_scope='Same Provider/core/role with original empty context assembly and phrase guard; no retrieval/context validation/jobs')
     report['tts_stage_mechanism'] = await verify_original_text_stage(server.logger)
-    stages_mode = os.environ['MIA_P23_MODE'] == 'reply-stages'
+    stages_mode = os.environ['MIA_P23_MODE'] in ('reply-stages', 'reply-stages-replay')
     if stages_mode:
         from mia_stage_trace import calibrate
         from mia_tts_boundaries import diagnose
         report.update(stage_observer_calibration=calibrate(), capture_reply_stream=True,
             capture_extraction_stream=True, controlled_sdk_call_cap=4,
-            diagnostic_scope='One 10k real pair, fixed remote request cap 4 including extraction; four controlled SDK ABBA replays, no formal p95')
-        report['tts_boundary_diagnosis'] = await diagnose(server.logger)
+            diagnostic_scope='10k stage diagnosis; per-mode fixed remote cap, four controlled SDK ABBA replays, no formal p95')
+        boundaries = await diagnose(server.logger)
+        raw_boundaries = (json.dumps(boundaries, ensure_ascii=False, indent=2) + '\n').encode()
+        boundary_file = root / 'tts-boundaries.json'
+        boundary_file.write_bytes(raw_boundaries)
+        report['tts_boundary_diagnosis'] = {'file': boundary_file.name, 'passed': boundaries['passed'],
+            'case_count': len(boundaries['cases']), 'sha256': hashlib.sha256(raw_boundaries).hexdigest(),
+            'scope': 'Full controlled component evidence saved before requests; avoid serializing it on every SDK observation'}
 
     def extract_factory(name, model):
+        assert cap > 0, 'Remote model factory disabled in controlled replay'
         assert name == model['type']
         return observe_provider(model, 'extraction', report, lock, persist, factory)
 
@@ -339,15 +358,16 @@ async def drive(state, report, persist):
     from websockets.asyncio.client import connect
     from mia_tts_timing import TIMING_REVISION
 
-    stages = os.environ['MIA_P23_MODE'] == 'reply-stages'
-    smoke = os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-stages')
+    replay = os.environ['MIA_P23_MODE'] == 'reply-stages-replay'
+    stages = os.environ['MIA_P23_MODE'] in ('reply-stages', 'reply-stages-replay')
+    smoke = os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-stages', 'reply-stages-replay')
     peers = json.loads(os.environ['MIA_P23_PEERS'])
     tls = ssl.create_default_context(cafile=os.environ['MIA_SCOPE_CA'])
     transport = AuthManager('synthetic-p23-latency-transport')
     rows = []
     report.update(reply_cases=rows, acceptance_revision=REVISION, limits=LIMITS,
         optimization_targets=OPTIMIZATION_TARGETS, timing_revision=TIMING_REVISION)
-    for owner_index in ((1,) if stages else range(1 if smoke else 2)):
+    for owner_index in (() if replay else (1,) if stages else range(1 if smoke else 2)):
         peer = peers[owner_index]
         headers = {'device-id': peer['device_id'], 'client-id': peer['client_id'],
             'authorization': 'Bearer ' + transport.generate_token(peer['client_id'], peer['device_id']),
@@ -365,10 +385,7 @@ async def drive(state, report, persist):
                             additional_headers=headers, open_timeout=10) as socket:
                         await socket.send(json.dumps({'type': 'p23_reply', 'case': f'{owner_index}-{query_index}-{number}-{variant}',
                             'variant': variant, 'query_index': query_index, 'warm': pair['warm']}))
-                        while True:
-                            value = json.loads(await asyncio.wait_for(socket.recv(), 130))
-                            if value['type'] in ('p23_case', 'p23_error'):
-                                break
+                        value = await read_case(socket)
                         if stages and value['type'] == 'p23_error':
                             pair['variants'][variant] = value
                             persist(report)
@@ -399,12 +416,16 @@ async def drive(state, report, persist):
                 row['optimization_targets_met'] = row['first_sentence_delta']['p95_ms'] <= OPTIMIZATION_TARGETS['first_sentence_delta_p95_ms']
     if stages:
         report['controlled_abba'] = []
+        peer = peers[1]
+        headers = {'device-id': peer['device_id'], 'client-id': peer['client_id'],
+            'authorization': 'Bearer ' + transport.generate_token(peer['client_id'], peer['device_id']),
+            'mia-private-credential': peer['private_credential']}
         for number, enabled in enumerate((False, True, True, False)):
             async with connect('wss://127.0.0.1:' + str(state['text_port']), ssl=tls,
                     additional_headers=headers, open_timeout=10) as socket:
                 await socket.send(json.dumps({'type': 'p23_reply', 'case': 'controlled-' + str(number),
                     'variant': 'memory', 'query_index': 0, 'warm': False, 'controlled': True, 'trace': enabled}))
-                value = json.loads(await asyncio.wait_for(socket.recv(), 130))
+                value = await read_case(socket)
                 report['controlled_abba'].append(value)
                 persist(report)
         assert all(x['type'] == 'p23_case' for x in report['controlled_abba']), 'Controlled stage replay failed; all results preserved'
