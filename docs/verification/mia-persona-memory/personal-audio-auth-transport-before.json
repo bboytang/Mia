@@ -1,0 +1,38 @@
+{
+  "request_limit": 25,
+  "actual_manager_http": 25,
+  "model_requests": 0,
+  "per_request_ms": [
+    20.58672800194472,
+    29.20589502900839,
+    24.15192301850766,
+    23.93868996296078,
+    25.674996082670987,
+    25.429453002288938,
+    30.895470990799367,
+    31.521653989329934,
+    40.248652920126915,
+    36.62982699461281,
+    22.511758957989514,
+    1310.1312069920823
+  ],
+  "reused_transport_ms": [
+    17.803288996219635,
+    10.988535941578448,
+    6.830714060924947,
+    8.154339040629566,
+    8.635498001240194,
+    8.017312036827207,
+    7.952989893965423,
+    6.019383086822927,
+    6.009885924868286,
+    6.184594938531518,
+    7.264632033184171,
+    6.575771956704557
+  ],
+  "all_scopes_equal": true,
+  "source": "f1da36fdbb1c1997d170d953f27e28544b18dbf5",
+  "diagnostic": "Fixed 12 per-request checks and 12 checks sharing only one HTTP transport, plus initial scope restore",
+  "formal_performance_acceptance": false,
+  "privacy": "No user text or reusable credentials recorded"
+}

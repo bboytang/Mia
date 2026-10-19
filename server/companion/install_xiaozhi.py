@@ -29,6 +29,8 @@ def replace_once(text, before, after):
 
 
 def patch_connection(text):
+    cleanup = '            # 确保停止事件被设置\n            if self.stop_event:\n                self.stop_event.set()\n'
+    text = replace_once(text, cleanup, cleanup + '            await mia_auth.close_connection(self)\n')
     text = replace_once(text, "from core.utils.dialogue import Message, Dialogue\n",
                         "from core.utils.dialogue import Message, Dialogue\nfrom mia_companion import xiaozhi_adapter as mia\n"
                         "from mia_companion import authorization as mia_auth\n")

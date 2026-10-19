@@ -5,7 +5,7 @@ import json
 import sys
 from types import SimpleNamespace
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 from server.companion import authorization as auth
 
@@ -19,6 +19,123 @@ def scope_data():
 
 
 class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_connection_transport_reuse_still_revalidates_each_request_and_closes_once(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        data = scope_data()
+        session = SimpleNamespace(aclose=AsyncMock())
+        request = AsyncMock(side_effect=[data, data, dict(data, credential_version=2)])
+        factory = Mock(return_value=session)
+        client = SimpleNamespace(config=config['manager-api'], _build_client=factory, _async_request=request)
+        manager = SimpleNamespace(_get_instance=lambda: client)
+        authorization = auth.PrivateAuthorization(config, connection_loop=asyncio.get_running_loop())
+        with patch.dict(sys.modules, {'config.manage_api_client': SimpleNamespace(ManageApiClient=manager)}):
+            scope = await authorization.restore(auth._manager_scope(data).snapshot())
+            await authorization.require(scope, 'memory:read')
+            with self.assertRaises(auth.PrivateAuthorizationRequired):
+                await authorization.require(scope, 'memory:read')
+            self.assertEqual(request.await_count, 3)
+            self.assertEqual(factory.call_count, 1)
+            self.assertTrue(all(call.args[0] is session for call in request.call_args_list))
+            await auth.close_connection(SimpleNamespace(_mia_authorization=authorization))
+            await authorization.close()
+            session.aclose.assert_awaited_once()
+            with self.assertRaises(auth.PrivateAuthorizationRequired):
+                await authorization.require(scope, 'memory:read')
+            self.assertEqual(request.await_count, 3)
+
+    async def test_connection_session_is_not_shared_with_another_event_loop(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        sessions = []
+
+        class Session:
+            closed = 0
+            async def __aenter__(self):
+                return self
+            async def __aexit__(self, *args):
+                await self.aclose()
+            async def aclose(self):
+                self.closed += 1
+
+        def factory():
+            session = Session()
+            sessions.append(session)
+            return session
+
+        request = AsyncMock(return_value={"fixture": True})
+        client = SimpleNamespace(config=config['manager-api'], _build_client=factory, _async_request=request)
+        manager = SimpleNamespace(_get_instance=lambda: client)
+        authorization = auth.PrivateAuthorization(config, connection_loop=asyncio.get_running_loop())
+        with patch.dict(sys.modules, {'config.manage_api_client': SimpleNamespace(ManageApiClient=manager)}):
+            await authorization._request('/config/proof', {})
+            await asyncio.to_thread(lambda: asyncio.run(authorization._request('/config/proof', {})))
+            await authorization._request('/config/proof', {})
+            self.assertEqual(len(sessions), 2)
+            self.assertEqual([session.closed for session in sessions], [0, 1])
+            self.assertIs(request.call_args_list[0].args[0], request.call_args_list[2].args[0])
+            self.assertIsNot(request.call_args_list[0].args[0], request.call_args_list[1].args[0])
+            await authorization.close()
+            self.assertEqual([session.closed for session in sessions], [1, 1])
+
+    async def test_connection_transport_timeout_and_cancel_do_not_retry_or_leave_a_running_request(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        for cancelled in (False, True):
+            with self.subTest(cancelled=cancelled):
+                started, finished = asyncio.Event(), asyncio.Event()
+                session = SimpleNamespace(aclose=AsyncMock())
+
+                async def waiting(*args, **kwargs):
+                    started.set()
+                    try:
+                        await asyncio.Event().wait()
+                    finally:
+                        finished.set()
+
+                request = AsyncMock(side_effect=waiting)
+                factory = Mock(return_value=session)
+                client = SimpleNamespace(config=config['manager-api'], _build_client=factory, _async_request=request)
+                manager = SimpleNamespace(_get_instance=lambda: client)
+                authorization = auth.PrivateAuthorization(config, connection_loop=asyncio.get_running_loop())
+                with patch.dict(sys.modules, {'config.manage_api_client': SimpleNamespace(ManageApiClient=manager)}):
+                    task = asyncio.create_task(authorization._request('/config/proof', {}, timeout=0.05))
+                    await started.wait()
+                    if cancelled:
+                        task.cancel()
+                    with self.assertRaises(asyncio.CancelledError if cancelled else auth.PrivateAuthorizationRequired):
+                        await task
+                    self.assertTrue(finished.is_set())
+                    request.assert_awaited_once()
+                    request.side_effect = None
+                    request.return_value = {"fixture": True}
+                    self.assertEqual(await authorization._request('/config/proof', {}), {"fixture": True})
+                    self.assertEqual(factory.call_count, 1)
+                    await authorization.close()
+                    session.aclose.assert_awaited_once()
+
+    async def test_closing_connection_rejects_a_late_inflight_authorization_response(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        started, finish = asyncio.Event(), asyncio.Event()
+        session = SimpleNamespace(aclose=AsyncMock())
+
+        async def waiting(*args, **kwargs):
+            started.set()
+            await finish.wait()
+            return scope_data()
+
+        request = AsyncMock(side_effect=waiting)
+        client = SimpleNamespace(config=config['manager-api'], _build_client=Mock(return_value=session),
+                                 _async_request=request)
+        manager = SimpleNamespace(_get_instance=lambda: client)
+        authorization = auth.PrivateAuthorization(config, connection_loop=asyncio.get_running_loop())
+        with patch.dict(sys.modules, {'config.manage_api_client': SimpleNamespace(ManageApiClient=manager)}):
+            task = asyncio.create_task(authorization._request('/config/proof', {}))
+            await started.wait()
+            await authorization.close()
+            finish.set()
+            with self.assertRaises(auth.PrivateAuthorizationRequired):
+                await task
+            session.aclose.assert_awaited_once()
+            request.assert_awaited_once()
+
     async def test_both_manager_client_signatures_use_one_request_and_close_owned_session(self):
         config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
         body = {"fixture": "trusted"}

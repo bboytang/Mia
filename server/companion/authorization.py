@@ -83,8 +83,17 @@ def _manager_scope(data):
 
 
 class PrivateAuthorization:
-    def __init__(self, config):
+    def __init__(self, config, *, connection_loop=None):
         self.config = config
+        self._connection_loop = connection_loop
+        self._session = None
+        self._closed = False
+
+    async def close(self):
+        self._closed = True
+        session, self._session = self._session, None
+        if session is not None:
+            await session.aclose()
 
     async def _request(self, endpoint, body, timeout=3):
         # Reuse the existing server-secret client, with one bounded attempt.
@@ -103,17 +112,28 @@ class PrivateAuthorization:
                     or url.username or url.password or url.query or url.fragment):
                 raise PrivateAuthorizationRequired()
             client = ManageApiClient._get_instance()
-            if client is None or client.config.get("url") != manager["url"]:
+            if self._closed or client is None or client.config.get("url") != manager["url"]:
                 raise PrivateAuthorizationRequired()
             async def send():
+                if self._closed:
+                    raise PrivateAuthorizationRequired()
                 # The deployed manager client owns a session per request; the
                 # fixed upstream client owns sessions per event loop. Both paths
                 # call the single-attempt method, never its retry wrapper.
                 if callable(getattr(client, "_build_client", None)):
+                    if asyncio.get_running_loop() is self._connection_loop:
+                        # Reuse transport only. Every caller still makes a fresh
+                        # manager request and validates its current Scope.
+                        if self._session is None:
+                            self._session = client._build_client()
+                        return await client._async_request(self._session, "POST", endpoint, json=body, timeout=timeout)
                     async with client._build_client() as session:
                         return await client._async_request(session, "POST", endpoint, json=body, timeout=timeout)
                 return await client._async_request("POST", endpoint, json=body, timeout=timeout)
-            return await asyncio.wait_for(send(), timeout=timeout)
+            result = await asyncio.wait_for(send(), timeout=timeout)
+            if self._closed:
+                raise PrivateAuthorizationRequired()
+            return result
         except Exception:
             # Never propagate HTTP request bodies, credentials or provider errors.
             raise PrivateAuthorizationRequired() from None
@@ -172,7 +192,7 @@ class PrivateAuthorization:
 async def load_private_config(conn):
     conn._mia_scope = None
     conn._mia_owner = None
-    conn._mia_authorization = PrivateAuthorization(conn.config)
+    conn._mia_authorization = PrivateAuthorization(conn.config, connection_loop=asyncio.get_running_loop())
     headers = conn.headers or {}
     credential = headers.pop("mia-private-credential", None)
     # A private header must arrive over TLS. A future TLS proxy requires an
@@ -186,10 +206,20 @@ async def load_private_config(conn):
         scope, config = await asyncio.wait_for(conn._mia_authorization.private_config(
             device, client, credential, conn.config["selected_module"]), timeout=3)
     except asyncio.TimeoutError:
+        await conn._mia_authorization.close()
         raise PrivateAuthorizationRequired() from None
+    except BaseException:
+        await conn._mia_authorization.close()
+        raise
     conn._mia_scope = scope
     conn._mia_owner = scope.owner
     return config
+
+
+async def close_connection(conn):
+    authorization = getattr(conn, '_mia_authorization', None)
+    if isinstance(authorization, PrivateAuthorization):
+        await authorization.close()
 
 
 async def require_connection(conn, permission="memory:read"):
