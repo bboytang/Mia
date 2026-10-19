@@ -17,7 +17,7 @@ import openai
 from server.companion.extraction import LLMMemoryExtractor, context_for
 from server.companion.jobs import JobStore, MemoryWorker
 from server.companion.model_requests import ModelRequestGate
-from server.companion.request_accounting import RequestAccounting
+from server.companion.request_accounting import RequestAccounting, bind_sdk
 from server.tests import test_companion_jobs as fixtures
 
 
@@ -105,6 +105,7 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.row(job)['state'], 'committed')
         self.assertEqual(self.row(job)['attempts'], 1)
         self.assertEqual(self.http, ['glm-4-flash-250414'])
+        self.assertEqual(sum(p.sdk_calls for p in self.providers), 1)
         row, = self.requests(job)
         self.assertEqual(row['http_sends'], 1)
         self.assertIsNotNone(row['response_completed_at'])
@@ -113,6 +114,25 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.jobs.policy(job)['phase'], 'terminal')
         self.assertEqual(self.providers[0].client.max_retries, 0)
         self.assertFalse(self.providers[0].client._client.follow_redirects)
+
+    async def test_default_sdk_http_client_is_reviewed_but_transport_retries_are_rejected(self):
+        provider = SDKFixtureProvider(self.transport)
+        provider.client.close()
+        provider.client = openai.OpenAI(api_key='fixture-only')
+        try:
+            bind_sdk(provider, SimpleNamespace())  # No create/send, only configure.
+            self.assertEqual(provider.client.max_retries, 0)
+        finally:
+            provider.client.close()
+        provider = SDKFixtureProvider(self.transport)
+        provider.client.close()
+        provider.client = openai.OpenAI(api_key='fixture-only',
+            http_client=httpx.Client(transport=httpx.HTTPTransport(retries=1)))
+        try:
+            with self.assertRaisesRegex(Exception, 'transport retry budget'):
+                bind_sdk(provider, SimpleNamespace())
+        finally:
+            provider.client.close()
 
     async def test_thirty_seconds_queued_costs_no_v2_attempt(self):
         job = await self.worker.submit(self.event())
@@ -158,6 +178,7 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.row(job)['state'], 'failed')
         self.assertEqual(self.row(job)['error_category'], 'provider')
         self.assertEqual(len(self.http), 2)
+        self.assertEqual(sum(p.sdk_calls for p in self.providers), 2)
         self.assertEqual([r['http_sends'] for r in self.requests(job)], [1, 1])
 
     async def test_redirect_is_not_a_second_http_send(self):
@@ -282,6 +303,38 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.requests(legacy), [])
         self.assertEqual(len(self.requests(current)), 1)
         self.assertEqual(len(self.http), 2)
+
+    async def test_two_foreground_sessions_do_not_block_v2_worker_queue_entry(self):
+        gate = ModelRequestGate(background_after=10, foreground_burst=4)
+        leases = [gate.acquire(foreground=True), gate.acquire(foreground=True)]
+        legacy = JobStore(self.store, policy_version=1).submit(self.event('old-wait'))
+        job = await self.worker.submit(self.event('new-wait'))
+        self.worker.foreground = 2
+        self.output = {'memories': []}  # Exercise model scheduling, no BGE admission wait.
+        with patch('server.companion.jobs.model_requests', gate), patch('server.companion.extraction.model_requests', gate):
+            task = asyncio.create_task(self.worker.run_once())
+            try:
+                async def queued():
+                    while gate.snapshot()['waiting_background'] != 1:
+                        await asyncio.sleep(.001)
+                await asyncio.wait_for(queued(), 3)
+                self.assertEqual(self.row(job)['attempts'], 0)
+                self.assertEqual(self.row(legacy)['attempts'], 0)
+                self.assertEqual(self.http, [])
+                leases[0].release()
+                await asyncio.wait_for(task, 3)
+                self.assertEqual(self.worker.foreground, 2)
+                self.assertEqual(self.row(job)['state'], 'empty')
+                self.assertEqual(self.row(job)['attempts'], 1)
+                self.assertEqual(self.row(legacy)['state'], 'pending')
+                self.assertEqual(gate.snapshot()['active'], 1)
+            finally:
+                for lease in leases:
+                    lease.release()
+                if not task.done():
+                    task.cancel()
+                    with self.assertRaises(asyncio.CancelledError):
+                        await task
 
     async def test_preflight_blocks_cancellation_deadline_revocation_and_rebinding(self):
         for reason in ('cancel', 'deadline', 'revoke', 'rebind', 'clear'):

@@ -14,7 +14,7 @@ from .extraction import context_for, validate_output
 from .embedding import EmbeddingUnavailable
 from .semantic import SemanticMemoryIndex
 from .proposal import validation_feedback
-from .model_requests import ModelQueueError
+from .model_requests import ModelQueueError, model_requests
 
 
 ACTIVE = ('pending', 'extracting', 'validated', 'retry_wait')
@@ -80,7 +80,7 @@ class JobStore:
             self.store.db.execute("UPDATE mia_jobs SET state=CASE WHEN validated_result IS NULL THEN 'pending' ELSE 'validated' END "
                                   "WHERE state='extracting'")
 
-    def ready(self):
+    def ready(self, *, v2_only=False):
         now = int(self.store.clock())
         with self.store.lock, self.store.db:
             from .emotions import prune
@@ -89,7 +89,9 @@ class JobStore:
                 "validated_result=NULL,updated_at=? WHERE state IN ('pending','extracting','validated','retry_wait') AND deadline<=?", (now, now))
             return [dict(row) for row in self.store.db.execute(
                 "SELECT * FROM mia_jobs WHERE state IN ('pending','extracting','validated','retry_wait') "
-                "AND (next_attempt_at IS NULL OR next_attempt_at<=?) ORDER BY created_at,rowid LIMIT ?", (now, self.capacity))]
+                "AND (next_attempt_at IS NULL OR next_attempt_at<=?) " +
+                ("AND EXISTS (SELECT 1 FROM mia_job_policy p WHERE p.job_id=mia_jobs.id AND p.version=2) " if v2_only else '') +
+                "ORDER BY created_at,rowid LIMIT ?", (now, self.capacity))]
 
     def update(self, job, state, *, result=None, error=None, attempt=False):
         now = int(self.store.clock())
@@ -201,13 +203,13 @@ class MemoryWorker:
         return scope
 
     async def run_once(self):
-        rows = await asyncio.to_thread(self.jobs.ready)
+        rows = await asyncio.to_thread(self.jobs.ready, v2_only=bool(self.foreground))
         active = {row['id'] for row in rows}
         self.results = {key: value for key, value in self.results.items() if key in active}
         if self.validation_feedback:
             pending = await asyncio.to_thread(self.jobs.active_ids)
             self.validation_feedback = {key: value for key, value in self.validation_feedback.items() if key in pending}
-        if self.foreground or not self.lane.done.is_set():
+        if (self.foreground and model_requests.background_after is None) or not self.lane.done.is_set():
             return False
         owners = {row['owner'] for row in rows}
         self.served = {owner: count for owner, count in self.served.items() if owner in owners}
@@ -238,8 +240,9 @@ class MemoryWorker:
                 if job['deadline'] <= self.jobs.store.clock():
                     await asyncio.to_thread(self.jobs.update, job, 'failed', error='deadline_exceeded')
                     return True
-                # A newly active front-end gets priority before entering a native call.
-                if self.foreground:
+                # V1 keeps the old entry rule; V2 competes through the gate's
+                # foreground-first, bounded background opportunity policy.
+                if self.foreground and (policy['version'] == 1 or model_requests.background_after is None):
                     return False
                 await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=policy['version'] == 1)
                 context.request_cancelled = threading.Event()

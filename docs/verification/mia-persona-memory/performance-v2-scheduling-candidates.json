@@ -1,0 +1,44 @@
+[
+  {
+    "foreground_burst": 8,
+    "background_after_seconds": 20,
+    "controlled_clock_seconds": 20,
+    "order": [
+      "front-0",
+      "front-1",
+      "front-2",
+      "front-3",
+      "front-4",
+      "front-5",
+      "front-6",
+      "front-7",
+      "background",
+      "front-8"
+    ],
+    "remaining": {
+      "active": 0,
+      "waiting_foreground": 0,
+      "waiting_background": 0
+    },
+    "scope": "Virtual age, real threaded gate; no claim about provider completion time"
+  },
+  {
+    "foreground_burst": 4,
+    "background_after_seconds": 10,
+    "controlled_clock_seconds": 10,
+    "order": [
+      "front-0",
+      "front-1",
+      "front-2",
+      "front-3",
+      "background",
+      "front-4"
+    ],
+    "remaining": {
+      "active": 0,
+      "waiting_foreground": 0,
+      "waiting_background": 0
+    },
+    "scope": "Virtual age, real threaded gate; no claim about provider completion time"
+  }
+]

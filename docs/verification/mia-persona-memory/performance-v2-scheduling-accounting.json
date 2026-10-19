@@ -1,0 +1,551 @@
+[
+  {
+    "case": "test_cancelled_queued_native_waiter_never_reserves_later",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "retry_wait",
+        "attempts": 0,
+        "error_category": "timeout",
+        "version": 2,
+        "phase": "waiting_slot",
+        "waiting_at": 100.0,
+        "slot_acquired_at": null
+      }
+    ],
+    "ledger": []
+  },
+  {
+    "case": "test_context_version_edit_after_slot_is_rejected_before_reservation",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "cancelled",
+        "attempts": 0,
+        "error_category": "evidence_changed",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": []
+  },
+  {
+    "case": "test_crash_windows_consume_reservations_without_refunds",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 2,
+    "mock_http_entries": 2,
+    "jobs": [
+      {
+        "id": "473a85860afbb494160471f9a4a12c8fb9b209f93c144259ff4c34a9f2746344",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      },
+      {
+        "id": "404955beb9fe32bf5c971dba029050032756fde25b29691d719c172d90f5af58",
+        "state": "committed",
+        "attempts": 2,
+        "error_category": null,
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "404955beb9fe32bf5c971dba029050032756fde25b29691d719c172d90f5af58",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": null,
+        "native_finished_at": 100.0,
+        "outcome": "process_lost"
+      },
+      {
+        "job_id": "404955beb9fe32bf5c971dba029050032756fde25b29691d719c172d90f5af58",
+        "ordinal": 2,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "validation_succeeded"
+      },
+      {
+        "job_id": "473a85860afbb494160471f9a4a12c8fb9b209f93c144259ff4c34a9f2746344",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": null,
+        "http_started_at": null,
+        "http_sends": 0,
+        "response_completed_at": null,
+        "native_finished_at": 100.0,
+        "outcome": "process_lost"
+      },
+      {
+        "job_id": "473a85860afbb494160471f9a4a12c8fb9b209f93c144259ff4c34a9f2746344",
+        "ordinal": 2,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "validation_succeeded"
+      }
+    ]
+  },
+  {
+    "case": "test_default_sdk_http_client_is_reviewed_but_transport_retries_are_rejected",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [],
+    "ledger": []
+  },
+  {
+    "case": "test_feedback_survives_worker_restart_and_database_retry_reuses_result",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 2,
+    "mock_http_entries": 2,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "empty",
+        "attempts": 2,
+        "error_category": null,
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 101.0,
+        "slot_acquired_at": 101.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "field_schema"
+      },
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 2,
+        "waiting_at": 101.0,
+        "slot_acquired_at": 101.0,
+        "rechecked_at": 101.0,
+        "intent_at": 101.0,
+        "sdk_started_at": 101.0,
+        "http_started_at": 101.0,
+        "http_sends": 1,
+        "response_completed_at": 101.0,
+        "native_finished_at": 101.0,
+        "outcome": "validation_succeeded"
+      }
+    ]
+  },
+  {
+    "case": "test_legacy_and_v2_tasks_share_worker_without_reinterpreting_attempts",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 2,
+    "mock_http_entries": 2,
+    "jobs": [
+      {
+        "id": "75017a0b5229e9c29b2072188b6cf6461ddd0e1f940b39085081ad1e1c934611",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "version": null,
+        "phase": null,
+        "waiting_at": null,
+        "slot_acquired_at": null
+      },
+      {
+        "id": "cbc917afe28fb69e154ab93c2744dd7299383a4d516d40721c521764cd34f0ad",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "cbc917afe28fb69e154ab93c2744dd7299383a4d516d40721c521764cd34f0ad",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "validation_succeeded"
+      }
+    ]
+  },
+  {
+    "case": "test_preflight_blocks_cancellation_deadline_revocation_and_rebinding",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "097bd4ae85f995b94d3e4ef85c110fbb69a8cc69e3eb604f46a06aaac7d76206",
+        "state": "cancelled",
+        "attempts": 0,
+        "error_category": "authorization_or_memory_changed",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      },
+      {
+        "id": "9ece57362a54f32c9482dd519e6a307ee030b14f142c56cf4c2e42384716cdca",
+        "state": "failed",
+        "attempts": 0,
+        "error_category": "deadline_exceeded",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      },
+      {
+        "id": "59c2a63e5789439ae0d37aac4aa6ec46138441ebc3245c02646a81edc0cba65d",
+        "state": "cancelled",
+        "attempts": 0,
+        "error_category": "authorization_or_memory_changed",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      },
+      {
+        "id": "2a7ebf9b253f3c66cab6fab6f99cd92fd585933cc15a61a6ceddaa5745343699",
+        "state": "cancelled",
+        "attempts": 0,
+        "error_category": "authorization_or_memory_changed",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      },
+      {
+        "id": "6242c317cd6d59247e473cce4234e517e978c75aa01c68aa62d328e4cbd6091b",
+        "state": "cancelled",
+        "attempts": 0,
+        "error_category": "memory_changed",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": []
+  },
+  {
+    "case": "test_redirect_is_not_a_second_http_send",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 1,
+    "mock_http_entries": 1,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "retry_wait",
+        "attempts": 1,
+        "error_category": "provider",
+        "version": 2,
+        "phase": "sdk_started",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": null,
+        "native_finished_at": 100.0,
+        "outcome": "provider"
+      }
+    ]
+  },
+  {
+    "case": "test_reservation_transaction_failure_does_not_call_sdk",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "retry_wait",
+        "attempts": 0,
+        "error_category": "database",
+        "version": 2,
+        "phase": "slot_acquired",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": []
+  },
+  {
+    "case": "test_revocation_after_durable_intent_consumes_attempt_without_sdk",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "cancelled",
+        "attempts": 1,
+        "error_category": "authorization_or_memory_changed",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": null,
+        "http_started_at": null,
+        "http_sends": 0,
+        "response_completed_at": null,
+        "native_finished_at": 100.0,
+        "outcome": "native_failed"
+      }
+    ]
+  },
+  {
+    "case": "test_thirty_seconds_queued_costs_no_v2_attempt",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 0,
+    "mock_http_entries": 0,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "retry_wait",
+        "attempts": 0,
+        "error_category": "model_queue_timeout",
+        "version": 2,
+        "phase": "waiting_slot",
+        "waiting_at": 100.0,
+        "slot_acquired_at": null
+      }
+    ],
+    "ledger": []
+  },
+  {
+    "case": "test_timeout_and_restart_do_not_release_live_native_slot",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 1,
+    "mock_http_entries": 1,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "retry_wait",
+        "attempts": 1,
+        "error_category": "timeout",
+        "version": 2,
+        "phase": "response_complete",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "response_complete"
+      }
+    ]
+  },
+  {
+    "case": "test_two_503_attempts_are_two_sdk_and_two_http_without_hidden_retry",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 2,
+    "mock_http_entries": 2,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "failed",
+        "attempts": 2,
+        "error_category": "provider",
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 101.0,
+        "slot_acquired_at": 101.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": null,
+        "native_finished_at": 100.0,
+        "outcome": "provider"
+      },
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 2,
+        "waiting_at": 101.0,
+        "slot_acquired_at": 101.0,
+        "rechecked_at": 101.0,
+        "intent_at": 101.0,
+        "sdk_started_at": 101.0,
+        "http_started_at": 101.0,
+        "http_sends": 1,
+        "response_completed_at": null,
+        "native_finished_at": 101.0,
+        "outcome": "provider"
+      }
+    ]
+  },
+  {
+    "case": "test_two_foreground_sessions_do_not_block_v2_worker_queue_entry",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 1,
+    "mock_http_entries": 1,
+    "jobs": [
+      {
+        "id": "34054fed0157d408f0cbfddd593f2eb7f093585ce848db67c5e4dfbb52a4e7f1",
+        "state": "pending",
+        "attempts": 0,
+        "error_category": null,
+        "version": null,
+        "phase": null,
+        "waiting_at": null,
+        "slot_acquired_at": null
+      },
+      {
+        "id": "507c9ad487d2df52a4da2ff90e13622c1b135820c568916fdc60c8d88ccb5577",
+        "state": "empty",
+        "attempts": 1,
+        "error_category": null,
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "507c9ad487d2df52a4da2ff90e13622c1b135820c568916fdc60c8d88ccb5577",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "validation_succeeded"
+      }
+    ]
+  },
+  {
+    "case": "test_valid_request_has_one_intent_sdk_http_and_terminal",
+    "remote_requests": 0,
+    "real_sdk_calls_with_mock_transport": 1,
+    "mock_http_entries": 1,
+    "jobs": [
+      {
+        "id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "state": "committed",
+        "attempts": 1,
+        "error_category": null,
+        "version": 2,
+        "phase": "terminal",
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0
+      }
+    ],
+    "ledger": [
+      {
+        "job_id": "806c37b66729f971ecf268a0726ce026268a48ac7c4ef8bfb59314391145e21e",
+        "ordinal": 1,
+        "waiting_at": 100.0,
+        "slot_acquired_at": 100.0,
+        "rechecked_at": 100.0,
+        "intent_at": 100.0,
+        "sdk_started_at": 100.0,
+        "http_started_at": 100.0,
+        "http_sends": 1,
+        "response_completed_at": 100.0,
+        "native_finished_at": 100.0,
+        "outcome": "validation_succeeded"
+      }
+    ]
+  }
+]

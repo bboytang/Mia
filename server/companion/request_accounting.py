@@ -149,8 +149,10 @@ def bind_sdk(provider, accounting):
     from .proposal import provider_capabilities, ExtractionError
     if not provider_capabilities(provider)['native_tools'] or type(provider.client) is not openai.OpenAI:
         raise ExtractionError('tool_contract', 'V2 requires the reviewed single-send Provider contract')
-    original = provider.client
-    client = provider.client = original.with_options(max_retries=0)
+    client = provider.client
+    # This is the per-extraction owned client. Keep its actual SDK entry and
+    # installed observers; cloning would silently discard resource wrappers.
+    client.max_retries = 0
     from openai._base_client import SyncHttpxClientWrapper
     if type(client._client) not in (httpx.Client, openai.DefaultHttpxClient, SyncHttpxClientWrapper):
         raise ExtractionError('tool_contract', 'V2 HTTP transport contract is unreviewed')
