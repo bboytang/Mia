@@ -116,6 +116,7 @@ def context_failure(conn, error):
     if not allow_generation(conn):
         return
     code = str(error) if isinstance(error, ContextError) else 'authorization_required'
+    logger.warning("Mia context rejected (%s)", code)
     notice = conn._mia_context_status = {'status': 'limited', 'code': code, 'turn_id': conn.sentence_id}
     async def status():
         if await allow_output(conn):
