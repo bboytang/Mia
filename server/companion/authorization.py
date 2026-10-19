@@ -2,6 +2,7 @@
 
 import asyncio
 import base64
+import hmac
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import ipaddress
@@ -266,6 +267,32 @@ async def prompt_authorization(conn):
     await conn.websocket.send(json.dumps({
         "type": "mia_authorization", "status": "required",
         "message": "请用智控台授权码完成授权", "session_id": conn.session_id}, ensure_ascii=False))
+
+
+async def route_server_control(conn, message):
+    # Console control has a server identity, never a private companion identity.
+    if not isinstance(message, str) or len(message) > 16384:
+        return False
+    try:
+        command = json.loads(message)
+    except (ValueError, RecursionError):
+        return False
+    if not isinstance(command, dict) or command.get('type') != 'server':
+        return False
+    secret = conn.config.get('manager-api', {}).get('secret', '')
+    content = command.get('content')
+    supplied = content.get('secret') if isinstance(content, dict) else None
+    transport = getattr(conn.websocket, 'transport', None)
+    if (not conn.read_config_from_api or transport is None
+            or not transport.get_extra_info('ssl_object')
+            or not isinstance(secret, str) or not secret
+            or not isinstance(supplied, str) or not hmac.compare_digest(secret.encode(), supplied.encode())
+            or command.get('action') not in {'update_config', 'restart'}):
+        await conn.websocket.send(json.dumps({'type': 'server', 'status': 'error', 'message': '管理命令未获授权'}))
+        return True
+    from core.handle.textHandler.serverMessageHandler import ServerTextMessageHandler
+    await ServerTextMessageHandler().handle(conn, command)
+    return True
 
 
 async def route_required(conn, message):

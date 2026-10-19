@@ -75,7 +75,7 @@ public class MiaCompanionManagementController {
         long operator = SecurityUser.getUserId();
         grant(agentId, operator);
         if (!(command.get("action") instanceof String action)
-                || !Set.of("status", "pause", "set_feature_settings", "emotion_consent", "reset_mia_emotion").contains(action)) {
+                || !Set.of("status", "pause", "set_feature_settings", "emotion_consent", "reset_mia_emotion", "memory_list", "memory_delete").contains(action)) {
             throw new RenException(ErrorCode.PARAMS_GET_ERROR);
         }
         var factory = new SimpleClientHttpRequestFactory();
@@ -94,7 +94,7 @@ public class MiaCompanionManagementController {
             grant(agentId, operator);
             return new Result<>().ok(mapper.convertValue(result.get("data"), Object.class));
         } catch (Exception unavailable) {
-            throw new RenException(ErrorCode.INTERNAL_SERVER_ERROR, "Mia 功能设置暂不可用，未确认保存，请刷新重试");
+            throw new RenException(ErrorCode.INTERNAL_SERVER_ERROR, "Mia 管理服务暂不可用，操作结果未确认，请刷新重试");
         }
     }
 }

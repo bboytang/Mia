@@ -1,13 +1,16 @@
 --- a/main/manager-web/src/components/DeviceItem.vue
 +++ b/main/manager-web/src/components/DeviceItem.vue
-@@ -30,0 +31 @@
+@@ -30,0 +31,2 @@
 +    <MiaSettingsDialog v-model="miaSettingsOpen" :agent-id="device.agentId" @configure="handleConfigure" />
-@@ -31,0 +33 @@
++    <MiaMemoryDialog v-model="miaMemoryOpen" :agent-id="device.agentId" />
+@@ -31,0 +34,2 @@
 +      <button type="button" class="settings-btn" @click="miaSettingsOpen = true">Mia 功能管理</button>
-@@ -61,0 +64 @@
++      <button type="button" class="settings-btn" @click="miaMemoryOpen = true">记忆管理</button>
+@@ -61,0 +66,2 @@
 +import MiaSettingsDialog from '@/components/MiaSettingsDialog.vue';
-@@ -64,0 +68 @@
-+  components: { MiaSettingsDialog },
-@@ -77 +81 @@
++import MiaMemoryDialog from '@/components/MiaMemoryDialog.vue';
+@@ -64,0 +71 @@
++  components: { MiaSettingsDialog, MiaMemoryDialog },
+@@ -77 +84 @@
 -    return { switchValue: false }
-+    return { switchValue: false, miaSettingsOpen: false }
++    return { switchValue: false, miaSettingsOpen: false, miaMemoryOpen: false }

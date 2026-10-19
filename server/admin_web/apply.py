@@ -48,6 +48,7 @@ def main():
         subprocess.run(['git', 'apply', '--unidiff-zero', private_patch], cwd=root, check=True)
         subprocess.run(['git', 'apply', '--unidiff-zero', settings_patch], cwd=root, check=True)
         shutil.copy2(bundle / 'MiaSettingsDialog.vue', root / 'main/manager-web/src/components/MiaSettingsDialog.vue')
+        shutil.copy2(bundle / 'MiaMemoryDialog.vue', root / 'main/manager-web/src/components/MiaMemoryDialog.vue')
         print(f'Applied responsive source changes for upstream {manifest["commit"]}')
     else:
         print(f'All source checks passed for upstream {manifest["commit"]}; no files changed')

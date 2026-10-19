@@ -183,3 +183,30 @@ class ManagementRouteTests(unittest.IsolatedAsyncioTestCase):
         self.allowed = False
         self.assertEqual((await self.post({'action': 'pause', 'paused': True})).status, 403)
         self.assertFalse(self.store.snapshot('user:1:agent:allowed')['paused'])
+
+    async def test_memory_pages_are_owner_scoped_and_delete_invalidates_existing_context(self):
+        owner = 'user:1:agent:allowed'
+        def remember(who, number):
+            content = f'我喜欢颜色{number}'
+            return self.store.apply_extraction(who, str(number), self.store.snapshot(who)['revision'],
+                [content], {'memories': [{'category': 'preference', 'content': content, 'source_index': 0}]},
+                str(number))['memories'][0]
+        foreign = remember('user:2:agent:other', 999)
+        ids = [remember(owner, n) for n in range(53)]
+        first = (await (await self.post({'action': 'memory_list'})).json())['data']
+        second = (await (await self.post({'action': 'memory_list', 'offset': 50})).json())['data']
+        self.assertEqual((first['total'], len(first['memories']), len(second['memories'])), (53, 50, 3))
+        self.assertNotIn(foreign, {r['id'] for r in first['memories'] + second['memories']})
+        revision = self.store.snapshot(owner)['revision']
+        self.assertEqual((await self.post({'action': 'memory_delete', 'id': foreign})).status, 400)
+        self.assertEqual(self.store.snapshot(owner)['revision'], revision)
+        deleted = (await (await self.post({'action': 'memory_delete', 'id': ids[0]})).json())['data']
+        self.assertEqual(deleted['total'], 52)
+        self.assertGreater(self.store.snapshot(owner)['revision'], revision)
+        self.assertFalse(self.store.db.execute('SELECT 1 FROM memory_search WHERE memory_id=?', (ids[0],)).fetchone())
+        self.assertEqual(len(self.store.list_memories('user:2:agent:other')), 1)
+        for offset in [-1, True, '0', 2**63]:
+            self.assertEqual((await self.post({'action': 'memory_list', 'offset': offset})).status, 400)
+        self.allowed = False
+        self.assertEqual((await self.post({'action': 'memory_delete', 'id': ids[1]})).status, 403)
+        self.assertEqual(len(self.store.list_memories(owner)), 52)

@@ -39,7 +39,7 @@ class ManagementHandler:
             if not isinstance(command, dict):
                 raise ValueError()
             action = command.get('action')
-            if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent', 'reset_mia_emotion'}:
+            if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent', 'reset_mia_emotion', 'memory_list', 'memory_delete'}:
                 raise ValueError()
             if self.store is None:
                 from .xiaozhi_adapter import _store
@@ -47,6 +47,18 @@ class ManagementHandler:
             else:
                 store = self.store
             def apply():
+                if action in {'memory_list', 'memory_delete'}:
+                    offset = command.get('offset', 0)
+                    if type(offset) is not int or not 0 <= offset <= 2147483647:
+                        raise ValueError()
+                    if action == 'memory_delete':
+                        store.delete_memory(owner, command.get('id'))
+                    with store.lock:
+                        total = store.db.execute('SELECT COUNT(*) FROM memories WHERE owner=?', (owner,)).fetchone()[0]
+                        records = store._records(store.db.execute(
+                            'SELECT * FROM memories WHERE owner=? ORDER BY updated_at DESC,rowid DESC LIMIT 50 OFFSET ?',
+                            (owner, offset)).fetchall())
+                    return {'memories': records, 'total': total, 'offset': offset, 'page_size': 50}
                 if action == 'reset_mia_emotion':
                     from .affect import reset
                     reset(store, owner)
