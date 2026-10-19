@@ -71,7 +71,7 @@ class MiaBehaviorIntegrationTest {
             model = comparisonModel;
         }
         String suite = System.getenv().getOrDefault("MIA_BEHAVIOR_SUITE", "continuity");
-        assertTrue(suite.equals("continuity") || suite.equals("growth") || suite.equals("scope") || suite.equals("faults") || suite.equals("shutdown") || suite.equals("emotions") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("retrieval_holdout_v3") || suite.equals("inflight") || suite.equals("recovery"));
+        assertTrue(suite.equals("personal") || suite.equals("continuity") || suite.equals("growth") || suite.equals("scope") || suite.equals("faults") || suite.equals("shutdown") || suite.equals("emotions") || suite.equals("tools") || suite.equals("correction") || suite.equals("natural_correction") || suite.equals("retrieval") || suite.equals("retrieval_holdout") || suite.equals("retrieval_holdout_v3") || suite.equals("inflight") || suite.equals("recovery"));
         assertNotNull(key, "Dedicated test provider not configured");
         assertNotNull(endpoint, "Dedicated test endpoint not configured");
         assertNotNull(model, "Dedicated test model not configured");
@@ -88,7 +88,7 @@ class MiaBehaviorIntegrationTest {
         String selectedRound = System.getenv().getOrDefault("MIA_EMOTION_DIAGNOSTIC_ROUND", "all");
         assertTrue(selectedRound.equals("all") || (suite.equals("emotions")
             && List.of("0", "1", "2").contains(selectedRound)), "Single-round selection is emotion diagnostics only");
-        for (int round = 0; round < 3; round++) {
+        for (int round = 0; round < (suite.equals("personal") ? 1 : 3); round++) {
             if (!selectedRound.equals("all") && !selectedRound.equals(Integer.toString(round))) continue;
             long user = 941010001L + round;
             String agent = "mia-behavior-" + round;

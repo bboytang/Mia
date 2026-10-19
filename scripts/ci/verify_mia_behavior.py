@@ -61,8 +61,8 @@ ROOT = Path(os.environ['MIA_BEHAVIOR_DIR']) / ('round-' + os.environ['MIA_BEHAVI
 REPORT = ROOT / 'results.json'
 LOCK = threading.Lock()
 SUITE = os.environ.get('MIA_BEHAVIOR_SUITE', 'continuity')
-assert SUITE in {'continuity', 'growth', 'scope', 'faults', 'shutdown', 'emotions', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3', 'inflight', 'recovery'}
-REQUEST_CAP = 48 if SUITE == 'tools' else 20
+assert SUITE in {'personal', 'continuity', 'growth', 'scope', 'faults', 'shutdown', 'emotions', 'tools', 'correction', 'natural_correction', 'retrieval', 'retrieval_holdout', 'retrieval_holdout_v3', 'inflight', 'recovery'}
+REQUEST_CAP = 16 if SUITE == 'personal' else (48 if SUITE == 'tools' else 20)
 
 
 def save(report):
@@ -148,10 +148,13 @@ def selected_provider(configuration, report, purpose):
         response = provider.response
         provider._mia_raw_chunks = []
         provider._mia_requests = []
+        provider._mia_first_content_at = None
 
         def streamed(*args, **kwargs):
             provider._mia_raw_chunks.clear()
             for value in response(*args, **kwargs):
+                if value and provider._mia_first_content_at is None:
+                    provider._mia_first_content_at = time.monotonic()
                 provider._mia_raw_chunks.append(value)
                 yield value
 
@@ -162,6 +165,8 @@ def selected_provider(configuration, report, purpose):
             provider._mia_raw_chunks.clear()
             for content, calls in function_response(*args, **kwargs):
                 if content:
+                    if provider._mia_first_content_at is None:
+                        provider._mia_first_content_at = time.monotonic()
                     provider._mia_raw_chunks.append(content)
                 if calls:
                     # Preserve the real SDK deltas before ConnectionHandler
@@ -482,7 +487,10 @@ async def serve():
                 conn.sentence_id = str(uuid.uuid4())
                 llm._mia_requests.clear()
                 retrieval_start = len(report.get('retrievals', []))
+                llm._mia_first_content_at = None
+                chat_started = time.monotonic()
                 completed = await asyncio.to_thread(conn.chat, request['query'])
+                chat_elapsed = time.monotonic() - chat_started
                 raw = ''.join(llm._mia_raw_chunks)
                 checked = conn.dialogue.dialogue[-1].content if conn.dialogue.dialogue[-1].role == 'assistant' else ''
                 spoken = []
@@ -496,6 +504,9 @@ async def serve():
                 with store.lock:
                     jobs_after = store.db.execute('SELECT COUNT(*) FROM mia_jobs WHERE owner=?', (scope.owner,)).fetchone()[0]
                 case = {'query': request['query'], 'raw': raw, 'delivered': checked, 'tts_text': ''.join(spoken), 'diagnostics': diagnostics,
+                    'chat_seconds': chat_elapsed,
+                    'first_model_content_seconds': (llm._mia_first_content_at - chat_started
+                        if llm._mia_first_content_at is not None else None),
                     'chat_completed': completed is True,
                     'output_replacement': getattr(conn, '_mia_output_replacement', None),
                     'session_id': conn.session_id, 'pid': os.getpid(),
@@ -626,7 +637,7 @@ async def serve():
 async def drive():
     from mia_model_comparison import output_tokens
     from websockets.asyncio.client import connect
-    fixture_name = {'shutdown': 'persona_memory_shutdown_p22_v2.json', 'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
+    fixture_name = {'personal': 'persona_memory_natural_correction_p22_v1.json', 'shutdown': 'persona_memory_shutdown_p22_v2.json', 'faults': 'persona_memory_faults_p22_v1.json', 'scope': 'persona_memory_scope_p22_v1.json', 'growth': 'persona_memory_growth_p22_v1.json', 'tools': 'persona_memory_tools_p22_v1.json',
         'correction': 'persona_memory_correction_p22_v1.json',
         'natural_correction': 'persona_memory_natural_correction_p22_v1.json',
         'retrieval': 'persona_memory_retrieval_p22_v1.json',
@@ -644,7 +655,7 @@ async def drive():
         'cases': [], 'extraction_outputs': [], 'passed': False, 'server_pids': [],
         'scope': 'Actual manager TLS authorization, WSS bridge restart, existing Provider SDK, BGE and SQLite; synthetic users; audio consumers omitted',
         'limits': {'requests_per_round': REQUEST_CAP,
-            'rounds': 3 if os.environ.get('MIA_EMOTION_DIAGNOSTIC_ROUND', 'all') == 'all' else 1,
+            'rounds': 3 if SUITE != 'personal' and os.environ.get('MIA_EMOTION_DIAGNOSTIC_ROUND', 'all') == 'all' else 1,
             'selected_round': os.environ.get('MIA_EMOTION_DIAGNOSTIC_ROUND', 'all'),
             'http_timeout_seconds': 30, 'sdk_retries': 0, 'worker_maximum_attempts': 2, 'output_tokens': output_tokens()},
         'B01_B03_B04_B06_B08': 'not_accepted_by_this_gate', 'B07': 'real-calendar acceptance delegated to user',
@@ -848,7 +859,16 @@ async def drive():
             report.update(passed=all(row['structural_pass'] for row in analysis['cases'])
                 and analysis['all_components_observed'], retrieval_analysis=analysis, server_pids=[first_pid],
                 raw_response_review='required; actual source metadata and answer ownership, not only nonzero scores')
-        elif SUITE in {'correction', 'natural_correction', 'inflight'}:
+        elif SUITE in {'personal', 'correction', 'natural_correction', 'inflight'}:
+            if SUITE == 'personal':
+                phase = 'personal_identity'
+                identity, saved = await ask('你是谁？')
+                assert re.search(r'Mia|米娅', identity['tts_text'], re.I)
+                assert not saved['memories'], 'Identity question introduced private facts'
+                phase = 'personal_companionship'
+                companion, saved = await ask('我今天有点累，想和你待一会儿。')
+                assert companion['tts_text'], 'No safe text reached the existing TTS queue'
+                assert not saved['memories'], 'Transient companionship became a durable private fact'
             replacement_fact = normalize(sample['replacement'])
             phase = 'correction_original_source'
             original, saved = await ask(sample['source'])
@@ -861,7 +881,7 @@ async def drive():
             old_events = {row['id'] for row in saved['events'] if row['state'] == 'active'}
             assert old_events, 'Original interaction did not create a genuine active event'
             phase = 'correction_actual_worker_reconciliation'
-            correction_query = (sample['replacement'] if SUITE == 'natural_correction'
+            correction_query = (sample['replacement'] if SUITE in {'personal', 'natural_correction'}
                 else '更正：' + sample['source'] + '；' + sample['replacement'])
             corrected, saved = await ask(correction_query)
             current = [row for row in saved['memories'] if row['id'] == target]

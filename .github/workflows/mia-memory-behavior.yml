@@ -61,9 +61,9 @@ on:
   workflow_dispatch:
     inputs:
       suite:
-        description: Real continuity, correction, retrieval or tool/context scenarios with three isolated users
+        description: Personal single-user smoke, or existing three-user behavior suites
         type: choice
-        options: [continuity, growth, scope, faults, shutdown, emotions, tools, correction, natural_correction, retrieval, retrieval_holdout, retrieval_holdout_v3, inflight, recovery]
+        options: [personal, continuity, growth, scope, faults, shutdown, emotions, tools, correction, natural_correction, retrieval, retrieval_holdout, retrieval_holdout_v3, inflight, recovery]
         default: continuity
       test_model:
         description: Explicit isolated comparison only; configured preserves existing test model
