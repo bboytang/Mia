@@ -1,0 +1,71 @@
+{
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "source_hashes": {
+    "core/providers/llm/base.py": "81c5e3e320666c80721d63fc7b173e150d5844812a414b9fccc357b61f1c87ca",
+    "core/providers/llm/openai/openai.py": "5dfec38041d28436362b4a1b0f5946d1bdff7bb9afb3501c6417037a6bd3b006"
+  },
+  "proof_scope": "Static fixed adapter inspection plus already captured SDK requests; no fresh Provider calls. Native tools reviewed, tool_choice/strict response format not forwarded or enabled. Plain JSON is a validated text fallback, not constrained JSON generation.",
+  "captured_run": 39180767649,
+  "requests": [
+    {
+      "number": 1,
+      "request_sha256": "f62f354041a7880f71c98c7f2fad5d8b1dbd4a1c12ab7e27c9ed643e28d1ecb5",
+      "request_parameter_names": [
+        "extra_body",
+        "max_tokens",
+        "messages",
+        "model",
+        "stream",
+        "temperature",
+        "tools"
+      ],
+      "model": "glm-4-flash-250414",
+      "tools_count": 1,
+      "native_function_names": [
+        "mia_memory_proposal"
+      ]
+    },
+    {
+      "number": 2,
+      "request_sha256": "35eaed59e79b65849cd62a4a1de3093e713f9b9e6e193056f2a214f9bf02b504",
+      "request_parameter_names": [
+        "extra_body",
+        "max_tokens",
+        "messages",
+        "model",
+        "stream",
+        "temperature",
+        "tools"
+      ],
+      "model": "glm-4-flash-250414",
+      "tools_count": 1,
+      "native_function_names": [
+        "mia_memory_proposal"
+      ]
+    },
+    {
+      "number": 3,
+      "request_sha256": "6736fc016bc4c39cc1c7fb464eb056a055dc22bb666cb100fddd51539cdef8b0",
+      "request_parameter_names": [
+        "extra_body",
+        "max_tokens",
+        "messages",
+        "model",
+        "stream",
+        "temperature",
+        "tools"
+      ],
+      "model": "glm-4-flash-250414",
+      "tools_count": 1,
+      "native_function_names": [
+        "mia_memory_proposal"
+      ]
+    }
+  ],
+  "capability_policy": {
+    "native_tools": "Only registered fixed OpenAI class and its unchanged bound native method",
+    "function_selection": false,
+    "strict_schema": false,
+    "plain_json": "Existing response_no_stream; unchanged validator required, no second request on malformed tool response"
+  }
+}

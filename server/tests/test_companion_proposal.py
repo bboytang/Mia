@@ -3,6 +3,7 @@
 import json
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, decode, validate_output
 from server.companion.memory import MemoryError
@@ -42,7 +43,9 @@ class ProposalTests(unittest.TestCase):
                             capture(dialogue[1]['content'])
                             yield None, [delta('{"memories":[]}', NAME)]
                     provider = ToolProvider() if native else PlainProvider()
-                    LLMMemoryExtractor(lambda: provider)([source], context)
+                    with patch('server.companion.proposal.provider_capabilities',
+                            return_value={'native_tools': native, 'plain_json': not native}):
+                        LLMMemoryExtractor(lambda: provider)([source], context)
                     self.assertEqual(json.dumps(context, ensure_ascii=False), before)
                     self.assertEqual(captured[0]['id'], context[0]['id'])
                     self.assertEqual(captured[0]['content'], context[0]['content'])
@@ -83,7 +86,8 @@ class ProposalTests(unittest.TestCase):
             with self.subTest(value=value), self.assertRaises(MemoryError):
                 decode(value)
 
-    def test_growth_schema_requires_possible_owned_shared_anchor_without_filling_output(self):
+    @patch('server.companion.proposal.provider_capabilities', return_value={'native_tools': True})
+    def test_growth_schema_requires_possible_owned_shared_anchor_without_filling_output(self, capabilities):
         source = '我常用青瓷杯喝茶'
         raw = json.dumps({'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
             'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable', 'sensitive': False,
@@ -115,7 +119,8 @@ class ProposalTests(unittest.TestCase):
         anchor = schema['function']['parameters']['properties']['memories']['items']['properties']['relations']['items']['properties']['anchor']
         self.assertEqual((anchor['minLength'], anchor['maxLength']), (2, 32))
 
-    def test_original_function_arguments_reach_existing_validator_unchanged_once(self):
+    @patch('server.companion.proposal.provider_capabilities', return_value={'native_tools': True})
+    def test_original_function_arguments_reach_existing_validator_unchanged_once(self, capabilities):
         source = '我梳头用角梳，不是木梳'
         target = {'id': 'owned', 'content': '我平常用木梳梳头', 'category': 'fact',
                   'content_version': 2, 'evidence_version': 3}
@@ -181,7 +186,8 @@ class ProposalTests(unittest.TestCase):
                 with self.assertRaisesRegex(MemoryError, field + ' has 9 extraction clues; at most 8'):
                     validate_output(raw, [source], [])
 
-    def test_ordinary_fact_uses_same_provider_function_once_without_invented_optional_fields(self):
+    @patch('server.companion.proposal.provider_capabilities', return_value={'native_tools': True})
+    def test_ordinary_fact_uses_same_provider_function_once_without_invented_optional_fields(self, capabilities):
         source = '我常用青瓷杯喝茶'
         raw = json.dumps({'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
             'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable', 'sensitive': False,

@@ -27,3 +27,11 @@ R5前台持续活动导致后台饥饿、排队占用尝试/期限；R6重复授
 `project_context`对普通JSON/原生函数、自然纠错、成长和重要性分支统一只投影id/category/content及来源session_id/fingerprint/excerpt；删除无需模型消费的数据库序列化元数据/版本和额外字段，不把存储JSON字符串作为输出示例。服务器原始context与版本仍由tool_definition/validate_output/提交完整使用，模型输入与证据字典无共享可变对象；没有事实或任务schema变更。
 
 新增四分支×两Provider路径反例，检查来源保留、字段最小化和模型局部修改不影响可信context。提案/提取/Worker定向75项在允许正常线程的本地环境通过（1.910秒）；受限沙箱线程首跑停滞已中断，不能把该次算通过。R1原总p95逐项复核误差小于1e-6ms，仅浮点舍入。R3/R4和最终同SHA回归仍待。
+
+## R3：Provider能力契约
+
+只将固定上游`87c6df77…`已复核OpenAI适配器原生绑定方法列为native_tools；类继承默认文本回退、未知覆盖和实例替换均不证明能力。未复核Provider使用现有response_no_stream单次JSON文本路径（仍需原校验），没有该路径则明确拒绝，不自动二次请求。当前glm-4-flash-250414/供应商/凭据不变。
+
+能力矩阵：native tools在固定OpenAI实现与既有三SDK原文中已证实；函数选择/strict schema未由该适配器转发且无兼容证明，均不启用；普通JSON仅为文本回退，不声称供应商保证JSON模式。`verification/mia-persona-memory/performance-r3-provider-contract.json`记录固定源码hash与原39180767649三请求参数（tools存在、tool_choice/response_format/strict不存在）。无新真实请求。
+
+能力选择/继承/未知覆盖/实例替换及两条提取路径14专项通过；连同提取/Worker77项定向回归通过。最终安装到固定上游后的原生路径仍由本批最后同SHA实际向量/SDK回归验证，不将测试替身当远端能力证明。R4待完成。

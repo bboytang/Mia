@@ -540,7 +540,11 @@ class LLMMemoryExtractor:
                 base += GROWTH_INSTRUCTIONS
             if significance:
                 base += IMPORTANCE_TASK_INSTRUCTIONS
-            function_capable = callable(getattr(type(provider), 'response_with_functions', None))
+            from .proposal import provider_capabilities
+            capabilities = provider_capabilities(provider)
+            function_capable = capabilities['native_tools']
+            if not function_capable and not capabilities['plain_json']:
+                raise MemoryError('invalid_input', 'Provider has no reviewed extraction contract')
             if function_capable:
                 from .proposal import instructions
                 base = instructions(natural=natural, growth=growth, significance=significance)

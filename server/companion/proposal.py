@@ -1,11 +1,28 @@
 """One proposal function on the existing Provider; no tool execution or fact writes."""
 
 import unicodedata
+import sys
 
 from .memory import CATEGORIES, MemoryError
 
 
 NAME = 'mia_memory_proposal'
+
+
+def provider_capabilities(provider):
+    """Only the reviewed v0.9.7 OpenAI adapter has a native proposal contract.
+
+    Its method sends tools, but does not forward tool_choice or strict response
+    formats. Inherited plain-text fallbacks and unknown overrides are not proof.
+    """
+    module = sys.modules.get('core.providers.llm.openai.openai')
+    reviewed = getattr(module, 'LLMProvider', None)
+    native = (isinstance(reviewed, type) and isinstance(provider, reviewed)
+        and reviewed.__module__ == 'core.providers.llm.openai.openai'
+        and getattr(getattr(provider, 'response_with_functions', None), '__func__', None)
+            is reviewed.response_with_functions)
+    return {'native_tools': bool(native), 'function_selection': False, 'strict_schema': False,
+        'plain_json': callable(getattr(provider, 'response_no_stream', None))}
 
 
 def instructions(*, natural, growth, significance):
