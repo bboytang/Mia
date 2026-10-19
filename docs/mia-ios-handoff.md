@@ -1,5 +1,7 @@
 # Mia iOS 跨设备 Codex 交接
 
+2026-10-19 最新客户端已补交付：安全默认地址与旧配置迁移版 `fc488d0`，104 单元／6 UI 及完整构建通过。[下载 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-fc488d0bd499/Mia-unsigned.ipa)，需原签名及 Widget 重签覆盖升级；[交付记录](mia-ios-secure-delivery.md)。以下保留此前历史。
+
 > 本文保留此前客户端/部署/回滚历史，未在本次重新核实生产或真机状态。当前开发进度与执行授权以[人格与记忆交接](mia-persona-memory-handoff.md)为准：2026-10-17用户已确认模型和P22通过，等待下一阶段批准。本文旧“最新/下一步”不触发新的部署或开发。
 
 ## 2026-10-13 情绪伙伴升级实施中

@@ -1,0 +1,11 @@
+{
+  "commit": "fc488d0bd499d863aa036203c963730c1954a7eb",
+  "build_run": 39265843521,
+  "tag": "mia-ios-fc488d0bd499",
+  "download_url": "https://github.com/bboytang/Mia/releases/download/mia-ios-fc488d0bd499/Mia-unsigned.ipa",
+  "ipa_sha256": "75cc527216b3ff3263827928c5778d3cf23f8cc847fb3008302f8e14803d5dca",
+  "ipa_size": 10898785,
+  "release_download_matches_ci": true,
+  "signed": false,
+  "physical_device_verified": false
+}

@@ -1,0 +1,18 @@
+{
+  "commit": "fc488d0bd499d863aa036203c963730c1954a7eb",
+  "build_run": 39265843521,
+  "public_ota": "https://43.143.230.174/xiaozhi/ota/",
+  "public_voice": "wss://43.143.230.174:8000/xiaozhi/v1/",
+  "signed": false,
+  "production_data_changed": false,
+  "physical_device_verified": false,
+  "ipa_size": 10898785,
+  "ipa_sha256": "75cc527216b3ff3263827928c5778d3cf23f8cc847fb3008302f8e14803d5dca",
+  "ci_checksum_matches": true,
+  "zip_integrity_passed": true,
+  "app_bundle_id": "com.bboytang.mia",
+  "extension_bundle_id": "com.bboytang.mia.activity",
+  "secure_endpoints_in_device_binary": true,
+  "minimum_os_version": "17.0",
+  "widget_included": true
+}

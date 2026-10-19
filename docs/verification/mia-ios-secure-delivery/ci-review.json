@@ -1,0 +1,14 @@
+{
+  "commit": "fc488d0bd499d863aa036203c963730c1954a7eb",
+  "run_id": 39265843521,
+  "workflow": "Build iOS App",
+  "conclusion": "success",
+  "unit_tests": 104,
+  "ui_tests": 6,
+  "failures": 0,
+  "simulator_build": true,
+  "unsigned_device_build": true,
+  "widget_build": true,
+  "two_screen_previews": true,
+  "physical_device_verified": false
+}
