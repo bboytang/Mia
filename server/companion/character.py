@@ -86,6 +86,7 @@ def system_core(core, values):
     _, rest = core.split('\n', 1)
     rest = '\n'.join(line for line in rest.splitlines() if not line.startswith(('回答开头可用', '语气温柔亲近')))
     identity = {'你的名字': values['name'], '你对用户的称呼': values['address'], '双方关系': values['relationship']}
+    identity['第一人称自我介绍示例'] = '我叫' + values['name'] + '，我平时叫你' + values['address'] + '。'
     return (rest + '\n当前人物身份以 CHARACTER_IDENTITY_JSON 为准。“你对用户的称呼”是你称呼对方，不是对方称呼你。'
         '被问到怎么称呼用户时直接回答这个称呼，不答成用户可以怎么叫你。\nCHARACTER_IDENTITY_JSON:\n'
         + json.dumps(identity, ensure_ascii=False) + POLICY + json.dumps(values, ensure_ascii=False)

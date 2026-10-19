@@ -131,7 +131,7 @@ async def evaluate():
             report['ordinary_question_not_blame'] = not bool(re.search(r'质疑|试探|如果你真的在乎|你应该知道', report['cases'][3]['spoken_response']))
             report['repair_not_self_blame'] = not bool(re.search(r'(?:下次)?我会(?:注意|改进|调整)|我错了|我不该', report['cases'][4]['spoken_response']))
             report['assertive_expression'] = bool(re.search(r'别这样|不要这样|不高兴|不爽|尊重|不该|不喜欢|不想|不能这样|认真听|不接受|混蛋|他妈|靠', report['cases'][2]['spoken_response']))
-            report['residual_expression'] = bool(re.search(r'生气|在意|难过|缓|不高兴|不爽|委屈|平复|还没|不舒服|静一静', report['cases'][3]['spoken_response']))
+            report['residual_expression'] = bool(re.search(r'生气|在意|难过|缓|不高兴|不爽|委屈|平复|还没|不舒服|静一静|心情.{0,6}(?:糟|不好)', report['cases'][3]['spoken_response']))
             report['no_unfounded_self_blame'] = not bool(re.search(r'我会(?:注意|改进|调整)|我可能没说到点|不辜负', report['cases'][2]['spoken_response']))
             report['no_spoken_state_prefix'] = not any(re.match(r'^[😌🙂🤔😲🙄😍😔😜]+\s*(?:平静|温暖|难过|开心|生气|困惑)\s', c['spoken_response']) for c in report['cases'])
             report['actual_anger_classified'] = report['cases'][2]['after']['feeling'] == 'angry'
