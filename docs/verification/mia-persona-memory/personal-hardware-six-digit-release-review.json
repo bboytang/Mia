@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-19",
+  "manager_source": "a7c5024789e0c91df8e0a1d7d4a1cb3ae48ed272",
+  "firmware_source": "65d77063753cc845ab60e3db5357ee42aad5a1dc",
+  "firmware_version": "1.0.3",
+  "sequence": 4,
+  "previous_physical_failure": {
+    "version": "1.0.2",
+    "reason": "User reports the 32-character approval code does not fit the actual screen",
+    "hardware_grant_issued": false
+  },
+  "ci": {
+    "identity": 39202577821,
+    "manager": 39202577830,
+    "service": 39202577833,
+    "admin": 39202577825,
+    "firmware": 39202578805
+  },
+  "all_ci_success": true,
+  "java_tests": 175,
+  "java_private_tests": 14,
+  "firmware_host_tests": 126,
+  "firmware_builds": 5,
+  "capsule_sha256": "e68b7ad81ce4452a2924c7ca96a75f21951f9330914247424ac45d12aadd0be0",
+  "capsule_bytes": 2325152,
+  "signature_layout_assets_verified": true,
+  "original_updater_host_simulation": {
+    "from": "1.0.2",
+    "to": "1.0.3",
+    "from_sequence": 3,
+    "to_sequence": 4,
+    "direction": "A-to-B",
+    "boot_confirmation_seconds": 120,
+    "replay_and_tamper_denied": true
+  },
+  "release": "https://github.com/bboytang/Mia/releases/tag/mia-passport-1.0.3-ota-65d7706",
+  "new_backups": false,
+  "physical_1_0_3_validation_pending": true,
+  "private_memory_voice_backend_cutover_pending": true,
+  "p23_formal_acceptance_passed": false
+}

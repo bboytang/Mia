@@ -2,6 +2,12 @@
 
 2026-10-19。优先一个人的日常使用，保留现有SQLite、BGE、GLM和安全校验。原P23多人压力与首句指标仍按历史结果记录，本版本不宣称P23通过。
 
+最新部署状态（下文旧检查点仅作历史）：HTTPS、硬件授权后台及网页已部署；1.0.3 签名 OTA 已上传原升级接口并验证实际下载 hash。1.0.2 已被设备实际安装，但用户指出32位码无法完整显示；该实机失败及原发布包保留。现改成6位数字，设备私有128位证明不显示、不进入公开固件，六位码本身不能兑换凭据。等待用户重启至1.0.3并在原设备页确认后，才切换私有记忆语音后端，避免提前中断旧固件启动健康检查。
+
+授权后台/网页源码 `a7c5024789e0c91df8e0a1d7d4a1cb3ae48ed272`：[身份175测试](https://github.com/bboytang/Mia/actions/runs/39202577821)、[manager](https://github.com/bboytang/Mia/actions/runs/39202577830)、[服务](https://github.com/bboytang/Mia/actions/runs/39202577833)、[网页](https://github.com/bboytang/Mia/actions/runs/39202577825)均通过。固件 `65d77063753cc845ab60e3db5357ee42aad5a1dc`：[126主机测试及五构建](https://github.com/bboytang/Mia/actions/runs/39202578805)通过；[1.0.3 OTA 包](https://github.com/bboytang/Mia/releases/tag/mia-passport-1.0.3-ota-65d7706)序列4，签名、冻结分区/资源和原更新器A→B主机模拟通过，尚不代表1.0.3实机授权或音频通过。
+
+[iPhone个人包已发布](https://github.com/bboytang/Mia/releases/tag/mia-personal-ios-20261019-2d2c1bf)，仍需自己的签名及Widget重签。实际硬件与近期iPhone绑定同一智能体，未为测试重绑或合并数据。生产实际2CPU、约1.9GiB且已有swapfile，不冒称正式swap0性能验收。无新增备份；原SQLite、旧OTA和全部失败证据保留。
+
 ## 当前候选与验证
 
 当前运行候选 `006c6f77709bea6eaed21cea79bb45cd5946a1dd`。复用原行为测试完成一用户流程；修正已有观察器及明确口误纠正路径，没有新增架构或测试框架。
