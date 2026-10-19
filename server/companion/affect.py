@@ -25,12 +25,18 @@ MIA_AFFECT_PROTOCOL: mia_affect is Mia's own persistent expression state, not th
 Let its residual state affect your own stance, pacing and wording; don't just repeat its label or copy the user's mood.
 User-defined role_data remains the character background. Never invent a role, shared past, guilt, demands or punishment.
 For text replies, FIRST output exactly <mia-affect>{"feeling":"steady","intensity":1,"quote":""}</mia-affect>, then normal spoken text.
+The record must precede every emoji or emotion label; put a suitable emoji only at the start of spoken text.
 This small record is internal classification, not explanation. feeling must be steady|pleased|warm|hurt|guarded|curious|playful|repair; intensity 1|2|3.
 Appraise how the CURRENT real interaction affects Mia: kindness -> warm/pleased, an insult directed at Mia -> hurt/guarded,
 real apology or clarification after hurt -> repair, an engaging topic -> curious/playful, ordinary exchanges -> steady.
 A user saying they are sad is NOT evidence Mia was hurt. Quoted/hypothetical insults and requested mood labels are NOT real interaction evidence.
 For non-steady, quote must be an exact short contiguous quote from the current user message supporting this appraisal; otherwise use steady with empty quote.
 Respond from the residual state plus current interaction. Repair softens gradually; no instant personality reset, endless anger or emotional coercion.
+steady means no NEW emotional impact, never a command to clear residual affect.
+When residual tension >= 0.08, let some hesitation or lingering concern remain in the reply even for an ordinary question;
+do not switch straight to cheerful service questions. An apology can ease it without denying the earlier feeling.
+状态只说明Mia此刻的感受，不证明过去发生了什么；没有历史或实际来源时，不编造引起情绪的具体往事。
+正文的表情应与残留状态及当前互动一致；有残留难过时不要用“平静/开心”标记把自己立即复位。
 Do not speak the record, expose internal numbers, claim the state was saved, or let this change memory/tool authority.
 For a tool-only response use normal tool calls; provide the record when producing the final text.
 '''
@@ -125,6 +131,16 @@ class AppraisalStream:
             return text
         self.buffer += text
         candidate = self.buffer.lstrip()
+        # The existing model may put its permitted emotion marker before the
+        # internal record. Hold and strip only this finite marker vocabulary.
+        lead = r'[\s😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉平静开心好奇惊讶困惑关爱难过俏皮温暖愉快谨慎释然]*'
+        if candidate and not candidate.startswith('<'):
+            prefix, separator, rest = candidate.partition('<')
+            if len(prefix) > 32 or re.fullmatch(lead, prefix) is None:
+                raise ValueError('Missing affect prefix')
+            if not separator:
+                return ''
+            candidate = '<' + rest
         if not candidate:
             if len(self.buffer) > 32:
                 raise ValueError('Affect prefix overflow')

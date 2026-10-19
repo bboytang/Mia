@@ -134,7 +134,7 @@ class AppraisalStreamTests(unittest.TestCase):
         parser.finish()
         self.assertEqual(parser.proposal, {'feeling': 'hurt', 'intensity': 2})
         parser = affect.AppraisalStream('你真烦')
-        spaced = raw.replace('<mia-affect>', '< mia-affect >').replace('</mia-affect>', '< /mia-affect >')
+        spaced = '😌平静\n' + raw.replace('<mia-affect>', '< mia-affect >').replace('</mia-affect>', '< /mia-affect >')
         self.assertEqual(''.join(parser.feed(char) for char in spaced), '😔这句话让我有些难过。')
         parser.finish()
         for bad in ({'feeling': 'evil', 'intensity': 1, 'quote': '你真烦'},
