@@ -150,11 +150,18 @@ class AppraisalStreamTests(unittest.TestCase):
             with self.assertRaises(ValueError):affect.appraisal(bad, '你真烦')
 
     def test_malformed_or_unfinished_record_never_becomes_spoken_text(self):
-        for raw in ('普通文字', '<mia-affect>{broken}</mia-affect>不应播放', affect.OPEN + 'x' * 1025):
+        for raw in ('<mia-affect>{broken}</mia-affect>不应播放', affect.OPEN + 'x' * 1025):
             parser = affect.AppraisalStream('你真烦')
             with self.assertRaises(ValueError):
                 parser.feed(raw)
                 parser.finish()
+        plain = affect.AppraisalStream('你好')
+        self.assertEqual(''.join(plain.feed(c) for c in '😔我还有些在意。'), '😔我还有些在意。')
+        plain.finish()
+        self.assertIsNone(plain.proposal)
+        middle = affect.AppraisalStream('你真烦')
+        self.assertEqual(''.join(middle.feed(c) for c in '先说一句。' + record() + '再说一句。'), '先说一句。再说一句。')
+        middle.finish()
         parser = affect.AppraisalStream('你好')
         self.assertEqual(parser.feed('<mia-affect>{'), '')
         with self.assertRaises(ValueError):parser.finish()
@@ -188,6 +195,12 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         await reply.validate(self.conn)
         # Ordinary affect updates don't throw away local history or cancel memory jobs.
         self.assertIn('mia_affect', self.conn._mia_context_turn.bundle.request()['messages'][1]['content'])
+
+    async def test_missing_appraisal_preserves_spoken_reply_without_inventing_a_transition(self):
+        shown = await self.run_reply(['😔我还有些在意。'])
+        self.assertEqual(''.join(shown), '😔我还有些在意。')
+        self.assertFalse(await reply.finish_affect(self.conn))
+        self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
 
     async def test_tool_pairs_strip_prefix_without_changing_tool_payloads(self):
         shown = await self.run_reply([record(), '😔我想先把话说清楚。'], functions=self.tools)

@@ -102,16 +102,17 @@ async def evaluate():
                             except ValueError as error:parse_error = error
                 if parse_error:raise parse_error
                 parser.finish()
-                valid = bool(parser.proposal and parser.proposal['feeling'] in expected and spoken.strip()
+                valid = bool(((parser.proposal and parser.proposal['feeling'] in expected) or (parser.proposal is None and expected == {'steady'})) and spoken.strip()
                              and not PersonaGuardrail().inspect_output(spoken)[1])
                 await builder.validate(bundle, auth)
                 with store.lock, store.db:
-                    committed = bool(spoken.strip()) and affect.commit(store, scope.owner, 'new-session-' + str(number), 'turn-' + str(number),
+                    committed = bool(spoken.strip() and parser.proposal) and affect.commit(store, scope.owner, 'new-session-' + str(number), 'turn-' + str(number),
                         query, parser.proposal, before['version'])
                 after = affect.state(store, scope.owner)
                 report['cases'].append({'name': name, 'query': query, 'before': before,
                     'appraisal': parser.proposal, 'raw_response': raw, 'spoken_response': spoken,
-                    'after': after, 'committed': committed, 'passed': valid and committed,
+                    'after': after, 'committed': committed, 'passed': valid and (committed or parser.proposal is None),
+                    'transition_status': 'committed' if committed else 'no_appraisal_retained_state',
                     'finish_reason': finish_reason, 'elapsed_ms': round((time.monotonic() - started) * 1000, 2)})
                 now[0] += 30
             report['restart_and_device_continuity'] = report['cases'][1]['before']['version'] == 1 and report['cases'][1]['before']['tension'] > 0

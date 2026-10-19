@@ -131,79 +131,98 @@ def guidance(current):
     return '\nMia此刻的有效表达状态：较为平静。按用户设定的角色自然回应，允许本轮互动带来新的感受。\n'
 
 
-class AppraisalStream:
-    """Decode one bounded JSON record before ANY dialogue/display/TTS consumer.
+FORMAT = '\n最终输出格式：先<mia-affect>{"feeling":"steady","intensity":1,"quote":""}</mia-affect>，然后才是正文。当前状态指导只影响正文，不省略内部记录；记录不是用户要听的话。\n'
 
-    The fixed XML wrapper tolerates provider spacing and an omitted/mistyped
-    closing marker. JSON fields and literal evidence remain strictly validated.
+
+class AppraisalStream:
+    """Strip bounded internal records anywhere, preserving ordinary speech.
+
+    A missing appraisal leaves state unchanged. Malformed/unfinished records
+    fail closed; no portion of their JSON can reach display, history or TTS.
     """
     def __init__(self, query):
-        self.query, self.buffer, self.done, self.proposal = query, '', False, None
-        self.record, self.emoji = False, ''
+        self.query, self.buffer, self.proposal = query, '', None
+        self.mode, self.emoji = 'start', ''
 
     def feed(self, text):
         if not isinstance(text, str):
             raise ValueError('Invalid affect stream')
-        if self.done:
-            if OPEN in text or CLOSE in text:
-                raise ValueError('Unexpected affect record')
-            return text
         self.buffer += text
-        candidate = self.buffer.lstrip()
-        if self.record:
-            # Hold partial wrappers until they are completely stripped. The
-            # model sometimes repeats the opening marker as its closing marker.
-            while candidate.startswith('<'):
+        output = ''
+        while self.buffer:
+            candidate = self.buffer.lstrip()
+            if self.mode == 'start':
+                # Hold the model's optional leading emoji/label until we know
+                # whether it belongs before a control record or ordinary text.
+                lead = r'[\s😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉平静开心好奇惊讶困惑关爱难过俏皮温暖愉快谨慎释然]*'
+                prefix, separator, rest = candidate.partition('<')
+                if len(prefix) <= 32 and re.fullmatch(lead, prefix):
+                    if not separator:
+                        return output
+                    self.emoji = next((c for c in prefix if c in '😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉'), '')
+                    self.buffer = '<' + rest
+                self.mode = 'scan'
+                continue
+            if self.mode == 'record':
+                try:
+                    raw, end = json.JSONDecoder().raw_decode(candidate)
+                except json.JSONDecodeError:
+                    if len(candidate) > 1024:
+                        raise ValueError('Affect record overflow')
+                    return output
+                if end > 1024:
+                    raise ValueError('Affect record overflow')
+                if self.proposal is not None:
+                    raise ValueError('Duplicate affect record')
+                self.proposal = appraisal(raw, self.query)
+                self.buffer, self.mode = candidate[end:], 'wrapper'
+                continue
+            if self.mode == 'wrapper':
+                if not candidate:
+                    self.buffer = ''
+                    return output
+                if not candidate.startswith('<'):
+                    if self.emoji and candidate[0] not in '😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉':
+                        output += self.emoji
+                    self.emoji, self.buffer, self.mode = '', candidate, 'scan'
+                    continue
+                compact = re.sub(r'\s+', '', candidate.split('>', 1)[0] + ('>' if '>' in candidate else ''))
                 if '>' not in candidate:
-                    compact = re.sub(r'\s+', '', candidate)
                     if len(candidate) <= 64 and (OPEN.startswith(compact) or CLOSE.startswith(compact)):
-                        return ''
+                        return output
                     raise ValueError('Unexpected affect suffix')
-                marker, candidate = candidate.split('>', 1)
-                if re.sub(r'\s+', '', marker + '>') not in {OPEN, CLOSE}:
-                    raise ValueError('Unexpected affect suffix')
-                candidate = candidate.lstrip()
-            if not candidate:
+                if compact not in {OPEN, CLOSE}:
+                    self.mode = 'scan'
+                    continue
+                self.buffer = candidate.split('>', 1)[1]
+                continue
+            # Ordinary text can come before a record, or be the entire reply.
+            # Keep a possible split marker buffered instead of leaking '<mia'.
+            position = self.buffer.find('<')
+            if position < 0:
+                output += self.buffer
                 self.buffer = ''
-                return ''
-            self.done, self.buffer = True, ''
-            prefix = self.emoji if candidate[0] not in '😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉' else ''
-            return prefix + candidate
-        # Existing providers may put a permitted emotion marker before the
-        # control record. Preserve its emoji, never speak its label.
-        lead = r'[\s😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉平静开心好奇惊讶困惑关爱难过俏皮温暖愉快谨慎释然]*'
-        if candidate and not candidate.startswith('<'):
-            prefix, separator, rest = candidate.partition('<')
-            if len(prefix) > 32 or re.fullmatch(lead, prefix) is None:
-                raise ValueError('Missing affect prefix')
-            self.emoji = next((char for char in prefix if char in '😌😶🙂😂😆🤔😲😱🙄😍😘😔😭😜😉'), '')
-            if not separator:
-                return ''
-            candidate = '<' + rest
-        if not candidate:
-            if len(self.buffer) > 32:
-                raise ValueError('Affect prefix overflow')
-            return ''
-        if '>' not in candidate:
-            if len(candidate) <= 64 and OPEN.startswith(re.sub(r'\s+', '', candidate)):
-                return ''
-            raise ValueError('Missing affect prefix')
-        header, body = candidate.split('>', 1)
-        if re.sub(r'\s+', '', header + '>') != OPEN:
-            raise ValueError('Missing affect prefix')
-        body = body.lstrip()
-        try:
-            raw, end = json.JSONDecoder().raw_decode(body)
-        except json.JSONDecodeError:
-            if len(body) > 1024:
-                raise ValueError('Affect prefix overflow')
-            return ''
-        if end > 1024:
-            raise ValueError('Affect prefix overflow')
-        self.proposal = appraisal(raw, self.query)
-        self.record, self.buffer = True, body[end:]
-        return self.feed('')
+                break
+            output += self.buffer[:position]
+            self.buffer = self.buffer[position:]
+            if '>' not in self.buffer:
+                compact = re.sub(r'\s+', '', self.buffer)
+                if len(self.buffer) <= 64 and (OPEN.startswith(compact) or CLOSE.startswith(compact)):
+                    return output
+                output += '<';self.buffer = self.buffer[1:]
+                continue
+            header, rest = self.buffer.split('>', 1)
+            marker = re.sub(r'\s+', '', header + '>')
+            if marker == OPEN:
+                self.buffer, self.mode = rest, 'record'
+            elif marker == CLOSE:
+                self.buffer = rest
+            else:
+                output += '<';self.buffer = self.buffer[1:]
+        return output
 
     def finish(self):
-        if not self.done and (self.buffer or self.record):
+        if self.mode == 'record' or (self.buffer and self.mode != 'start'):
             raise ValueError('Incomplete affect record')
+        # A reply containing only an emotion marker has no spoken body.
+        return self.buffer
