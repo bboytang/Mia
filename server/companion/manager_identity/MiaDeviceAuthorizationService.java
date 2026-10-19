@@ -141,15 +141,28 @@ public class MiaDeviceAuthorizationService {
         return prepareCode(deviceId, random(16));
     }
 
-    // The owner copies a device-generated secret from the physical display.
-    // This reuses the same one-time exchange, expiry and binding checks as iOS.
+    // Six digits identify a pending device request; they are never a bearer proof.
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> approveHardwareCode(String deviceId, String code) {
-        if (code == null || !code.matches("[a-f0-9]{32}")) throw new RenException(ErrorCode.NO_PERMISSION);
-        return prepareCode(deviceId, code);
+        if (code != null && code.matches("[a-f0-9]{32}")) return prepareCode(deviceId, code); // 1.0.2 compatibility
+        if (code == null || !code.matches("[0-9]{6}")) throw new RenException(ErrorCode.NO_PERMISSION);
+        Binding current = requireOwner(deviceId);
+        Map<String, Object> pending = hardwarePending(deviceId);
+        if (!currentAuthority(current) || !pendingCurrent(pending, current, row(deviceId, true))
+                || !code.equals(pending.get("code"))) throw new RenException(ErrorCode.NO_PERMISSION);
+        Map<String, Object> result = prepareCode(deviceId, code, (String) pending.get("hash"));
+        pending.put("approved", true);
+        pending.put("authority", hardwareAuthority(current, row(deviceId, true)));
+        pending.put("expires", Instant.now().getEpochSecond() + 600);
+        redis.set(hardwareKey(deviceId), pending, 600);
+        return result;
     }
 
     private Map<String, Object> prepareCode(String deviceId, String code) {
+        return prepareCode(deviceId, code, digest(code));
+    }
+
+    private Map<String, Object> prepareCode(String deviceId, String code, String codeHash) {
         Binding current = requireOwner(deviceId);
         if (!currentAuthority(current)) throw new RenException(ErrorCode.NO_PERMISSION);
         ensureRow(deviceId);
@@ -160,7 +173,7 @@ public class MiaDeviceAuthorizationService {
         }
         db.update("UPDATE ai_mia_device_authorization SET operator_id=?,owner_id=?,agent_id=?,persona_id='mia',"
                 + "authorization_code_hash=?,code_expires_at=?,wrong_attempts=0 WHERE device_id=?",
-                current.operator(), current.owner(), current.agent(), digest(code),
+                current.operator(), current.owner(), current.agent(), codeHash,
                 Timestamp.from(Instant.now().plusSeconds(600)), deviceId);
         return Map.of("authorization_code", code, "expires_in", 600, "device_id", deviceId,
                 "binding_version", number(grant, "binding_version"));
@@ -169,6 +182,7 @@ public class MiaDeviceAuthorizationService {
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> exchange(String deviceId, String clientId, String code, String source) {
         rateLimit(source);
+        if (code.startsWith("hardware:")) return null; // Only the pending-request path may redeem this namespace.
         Binding current = binding(deviceId, true);
         Map<String, Object> grant = row(deviceId, true);
         if (!sameBinding(grant, current) || !currentAuthority(current)) return null;
@@ -179,6 +193,58 @@ public class MiaDeviceAuthorizationService {
             return null;
         }
         return issue(deviceId, clientId);
+    }
+
+    private static String hardwareKey(String deviceId) {
+        return "mia:private-auth:hardware:" + digest(deviceId);
+    }
+
+    private static String hardwareAuthority(Binding binding, Map<String, Object> grant) {
+        return digest(binding.operator() + ":" + binding.owner() + ":" + binding.agent() + ":"
+                + (grant == null ? 0 : number(grant, "binding_version")) + ":"
+                + (grant == null ? 0 : number(grant, "credential_version")));
+    }
+
+    private Map<String, Object> hardwarePending(String deviceId) {
+        Object value = redis.get(hardwareKey(deviceId));
+        if (!(value instanceof Map<?, ?> record)) return null;
+        Map<String, Object> result = new HashMap<>();
+        record.forEach((key, item) -> { if (key instanceof String text) result.put(text, item); });
+        return result;
+    }
+
+    private static boolean pendingCurrent(Map<String, Object> pending, Binding binding, Map<String, Object> grant) {
+        return pending != null && binding != null && pending.get("expires") instanceof Number expires
+                && expires.longValue() > Instant.now().getEpochSecond()
+                && hardwareAuthority(binding, grant).equals(pending.get("authority"));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> pollHardware(String deviceId, String clientId, String proof, String source) {
+        rateLimit(source);
+        if (!proof.matches("[a-f0-9]{32}")) return null;
+        Binding current = binding(deviceId, true);
+        if (!currentAuthority(current)) return null;
+        Map<String, Object> grant = row(deviceId, true);
+        Map<String, Object> pending = hardwarePending(deviceId);
+        String hash = digest("hardware:" + proof);
+        if (!pendingCurrent(pending, current, grant)) {
+            pending = new HashMap<>(Map.of("code", String.format(java.util.Locale.ROOT, "%06d", RANDOM.nextInt(1000000)),
+                    "hash", hash, "client", clientId, "authority", hardwareAuthority(current, grant),
+                    "expires", Instant.now().getEpochSecond() + 600, "approved", false));
+            // The device row lock serializes this single, expiring pending request.
+            redis.set(hardwareKey(deviceId), pending, 600);
+        } else if (!hash.equals(pending.get("hash")) || !clientId.equals(pending.get("client"))) {
+            return null;
+        }
+        if (Boolean.TRUE.equals(pending.get("approved")) && sameBinding(grant, current)
+                && number(grant, "wrong_attempts") < 5 && future(grant.get("code_expires_at"))
+                && matches(grant.get("authorization_code_hash"), "hardware:" + proof)) {
+            Map<String, Object> result = issue(deviceId, clientId);
+            redis.delete(hardwareKey(deviceId));
+            return result;
+        }
+        return Map.of("pending_code", pending.get("code"), "device_id", deviceId, "client_id", clientId);
     }
 
     private Map<String, Object> issue(String deviceId, String clientId) {

@@ -65,6 +65,10 @@ public class MiaDeviceAuthorizationController {
     @PostMapping("/device/mia-auth/exchange")
     public Result<Map<String, Object>> exchange(@RequestBody Map<String, Object> body, HttpServletRequest request) {
         secure(request);
+        if (Boolean.TRUE.equals(body.get("hardware_pairing"))) {
+            return result(grants.pollHardware(field(body, "device_id", 32), field(body, "client_id", 128),
+                    field(body, "authorization_code", 64), request.getRemoteAddr()));
+        }
         return result(grants.exchange(field(body, "device_id", 32), field(body, "client_id", 128),
                 field(body, "authorization_code", 64), request.getRemoteAddr()));
     }

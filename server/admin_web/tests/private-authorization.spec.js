@@ -57,7 +57,7 @@ test('hardware approval sends the physical code through the existing owner endpo
     await route.fulfill({ response });
   });
   await mockBackend(page, false);
-  const code = '89abcdef0123456789abcdef01234567';
+  const code = '042617';
   const requests = [];
   await page.route('**/device/mia-auth/code', async route => {
     const request = route.request();

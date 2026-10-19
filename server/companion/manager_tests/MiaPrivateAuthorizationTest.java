@@ -132,6 +132,47 @@ class MiaPrivateAuthorizationTest {
     }
 
     @Test
+    void sixDigitHardwareCodeApprovesOnlyTheRegisteredSecretAndClient() throws Exception {
+        String proof = "0123456789abcdef0123456789abcdef";
+        Map<String, Object> request = Map.of("device_id", DEVICE_B, "client_id", CLIENT,
+                "authorization_code", proof, "hardware_pairing", true);
+        JsonNode first = post("/device/mia-auth/exchange", request, null).path("data");
+        String shortCode = first.path("pending_code").asText();
+        assertTrue(shortCode.matches("[0-9]{6}"));
+        assertFalse(first.has("private_credential"));
+        assertFalse(first.has("scope"));
+        assertEquals(shortCode, post("/device/mia-auth/exchange", request, null).path("data").path("pending_code").asText());
+        for (String key : redis.keys("mia:private-auth:hardware:*")) {
+            assertFalse(redis.opsForValue().get(key).contains(proof));
+        }
+        assertNotEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                "hardware_code", shortCode), userToken(USER_A)).path("code").asInt());
+        assertEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                "hardware_code", shortCode), userToken(USER_B)).path("code").asInt());
+        assertNotEquals(0, post("/device/mia-auth/exchange", Map.of("device_id", DEVICE_B,
+                "client_id", CLIENT + "-other", "authorization_code", proof,
+                "hardware_pairing", true), null).path("code").asInt());
+        assertNotEquals(0, exchange(DEVICE_B, CLIENT, "hardware:" + proof).path("code").asInt());
+        assertNotEquals(0, exchange(DEVICE_B, CLIENT, shortCode).path("code").asInt());
+        db.update("UPDATE ai_mia_device_authorization SET code_expires_at=UTC_TIMESTAMP()-INTERVAL 1 SECOND WHERE device_id=?", DEVICE_B);
+        assertFalse(post("/device/mia-auth/exchange", request, null).path("data").has("private_credential"));
+        assertEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                "hardware_code", shortCode), userToken(USER_B)).path("code").asInt());
+        JsonNode issued = post("/device/mia-auth/exchange", request, null);
+        assertEquals(0, issued.path("code").asInt());
+        String credential = issued.path("data").path("private_credential").asText();
+        assertTrue(credential.matches("[A-Za-z0-9_-]{43}"));
+        assertEquals(0, verify(DEVICE_B, CLIENT, credential).path("code").asInt());
+        JsonNode replay = post("/device/mia-auth/exchange", request, null).path("data");
+        assertFalse(replay.has("private_credential"));
+        String stale = replay.path("pending_code").asText();
+        assertEquals(0, post("/device/mia-auth/revoke", Map.of("device_id", DEVICE_B), userToken(USER_B)).path("code").asInt());
+        assertNotEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                "hardware_code", stale), userToken(USER_B)).path("code").asInt());
+        assertNotEquals(0, verify(DEVICE_B, CLIENT, credential).path("code").asInt());
+    }
+
+    @Test
     void codeIsConsumedAtomicallyAndOnlyHashesAreStored() throws Exception {
         String code = code(DEVICE_B, USER_B);
         assertTrue(code.length() >= 22);

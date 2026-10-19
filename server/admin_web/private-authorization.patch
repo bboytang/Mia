@@ -75,8 +75,8 @@ diff --git a/main/manager-web/src/views/DeviceManagement.vue b/main/manager-web/
 +    },
 +    approveHardwareCode(deviceId) {
 +      if (this.privateAuthorizationPending) return;
-+      this.$prompt('请输入 Mia 屏幕上的32位授权码，无需 USB。', 'Mia 硬件授权', {
-+        inputValidator: value => /^[a-f0-9]{32}$/.test((value || '').replace(/\s/g, '')) || '请输入完整的32位授权码'
++      this.$prompt('请输入 Mia 屏幕上的6位数字授权码，无需 USB。', 'Mia 硬件授权', {
++        inputValidator: value => /^[0-9]{6}$/.test((value || '').replace(/\s/g, '')) || '请输入完整的6位数字授权码'
 +      }).then(({ value }) => {
 +        const code = value.replace(/\s/g, '');
 +        this.privateAuthorizationPending = true;

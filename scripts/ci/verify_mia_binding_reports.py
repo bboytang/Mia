@@ -35,8 +35,9 @@ def main():
                          'matches_change_scope': actual != expected if intended_change else actual == expected}
     binding_pass = (binding is not None and int(binding.get('tests', '0')) == 4
                     and all(int(binding.get(key, '0')) == 0 for key in ['failures', 'errors', 'skipped']))
-    private_pass = (private is not None and int(private.get('tests', '0')) == 13
+    private_pass = (private is not None and int(private.get('tests', '0')) == 14
                     and private.find("testcase[@name='physicalHardwareCodeRequiresCurrentOwnerAndUsesOriginalOneTimeExchange']") is not None
+                    and private.find("testcase[@name='sixDigitHardwareCodeApprovesOnlyTheRegisteredSecretAndClient']") is not None
                     and all(int(private.get(key, '0')) == 0 for key in ['failures', 'errors', 'skipped']))
     transport_pass = (transport is not None and int(transport.get('tests', '0')) == 1
                       and all(int(transport.get(key, '0')) == 0 for key in ['failures', 'errors', 'skipped']))
