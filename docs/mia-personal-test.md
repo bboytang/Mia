@@ -4,25 +4,33 @@
 
 ## 当前候选与验证
 
-候选 `2d2c1bf41d1683bb49c44e4794270d23e47d2dbd`；运行模块与既有五项CI通过的 `9861e9724643139fb9ee63a8992597df20a94567` 相同，本次只复用行为测试新增一用户选择，不修改架构或生产配置。
+当前运行候选 `006c6f77709bea6eaed21cea79bb45cd5946a1dd`。复用原行为测试完成一用户流程；修正已有观察器及明确口误纠正路径，没有新增架构或测试框架。
 
-- [单用户真实GLM/BGE/SQLite流程](https://github.com/bboytang/Mia/actions/runs/39195182060)：首次失败（观察器契约问题，原始证据已保存），修正后待验证；固定首轮、最多16 SDK调用，SDK重试0、禁止重定向，不选择成功样本。
-- [iPhone原生测试与安装包构建](https://github.com/bboytang/Mia/actions/runs/39195183918)：进行中；包含原Opus/会话/私有授权和UI测试。
+- [单用户真实GLM/BGE/SQLite流程](https://github.com/bboytang/Mia/actions/runs/39197016530)：`ed9afd911528b311a33106819cce3787172d5d7e` 通过。7次回复SDK、1次提取SDK/1次提取HTTP；明确口误经既有确定性路径校验提交，纠正任务attempt0/SDK0。三个真实进程、两次重启，删除后事实0。首模型内容0.767–1.677秒，整回复1.123–2.322秒；不代表实际音频延迟或正式p95。
+- 其后的 `006c6f7` 仅补旧数据库NULL元数据的输入兼容及反例，99项相关本地测试通过；未重复采样真实模型，不把前一SHA流程冒充当前SHA实测。五项必要同SHA CI均已终态成功：[服务](https://github.com/bboytang/Mia/actions/runs/39197588881)、[身份授权](https://github.com/bboytang/Mia/actions/runs/39197588973)、[manager](https://github.com/bboytang/Mia/actions/runs/39197589073)、[真实BGE](https://github.com/bboytang/Mia/actions/runs/39197588875)、[结构化提取](https://github.com/bboytang/Mia/actions/runs/39197589042)。
+- 首四轮失败的原始JSON、SQLite与hash分别保留为 `verification/mia-persona-memory/personal-*-failed-*`；通过证据为 `personal-passed-*`。模型非法来源仍拒绝，没有以放宽校验取得通过。旧关系事件激活要求未由个人流程证明通过。
+- [iPhone原生测试与安装包构建](https://github.com/bboytang/Mia/actions/runs/39195183918)：成功，102项单元及6项UI测试通过，模拟器与unsigned设备/Widget构建成功。iOS源码来自 `2d2c1bf41d1683bb49c44e4794270d23e47d2dbd`，之后到当前运行候选的iOS目录字节未变，没有重复构建。
 - 本地在全新固定上游副本执行companion与identity两个安装器的check/apply，四步及安装后Python语法通过；没有连接或迁移真实数据库。副本 `/tmp/mia-personal-install-zbv42bt1`。
 
 单用户流程复用历史自然纠错第一组：人格身份→短暂陪伴（不存长期事实）→普通叙述蓝色通勤自行车（自动存储、来源保留）→新连接召回→自然纠正为银色（同一事实更新）→进程重启后按新说法召回→所有者删除→第二次进程重启后不能召回。测试桥调用安装后原chat/Worker/manager，输出进现有安全TTS文本队列；不包含ASR、实际合成音频或设备播放。记录首模型内容与整轮耗时，不把它当正式首句p95。
 
 ## 两种设备
 
-**iPhone**：使用本候选成功构建的unsigned IPA；需要沿用自己的签名及Bundle ID，同时重签MiaActivity.appex。保持现有设置及绑定，不卸载清空。个性化记忆需manager HTTPS／语音WSS和本机私有授权（设置→私有授权，用智控台一次性码），不复制其他设备凭据。
+**iPhone**：已准备unsigned IPA，10898413字节，SHA256 `8ea0fd6007c78c2ba6102422514f81313e4a3c46c706d3d8270c6d1b65aa2c53`。本机交付目录 `/tmp/mia-personal-delivery/` 含IPA、SHA256SUMS及manifest；尚未发布新的下载release。需要沿用自己的签名及Bundle ID，同时重签MiaActivity.appex。保持现有设置及绑定，不卸载清空。个性化记忆需manager HTTPS／语音WSS和本机私有授权（设置→私有授权，用智控台一次性码），不复制其他设备凭据。
 
 **Mia硬件**：已从仓库及发布记录确认 FoLoToy AI Passport、ESP32-C3、8MB Flash。昨晚发布固件源码 `9083560e489f866380c4ff49bc2bcbcab393c518`，型号 `mia-ai-passport`；[现有1.0.1 OTA试用包](https://github.com/bboytang/Mia/releases/tag/mia-passport-1.0.1-ota-9083560)。用户确认昨晚已刷并连通，具体在机版本尚未远程读取。本轮不重刷bootloader/分区/资源、不合并独立硬件分支、不要求为服务端测试重复刷机。
 
 已核对实际已发布固件：发送Bearer、Device-Id、Client-Id，尚无Mia-Private-Credential；其冻结入口是HTTP/WS。新记忆后端要求TLS及本设备私有授权，因此现有普通语音连通不能证明新版记忆可用。后端上线前须完成兼容接入，不能在固件未适配时直接把现有服务替换成要求新凭据的版本。保留昨晚已连通版本。
 
+用户已明确选择OTA路径，不要求USB。签名OTA可以补授权代码；不能把长期凭据放进公开固件、经HTTP下发或仅凭MAC自动授予Scope。实际授权接入尚未实现，不将“支持签名OTA”描述成“记忆授权已完成”。独立固件工作区 `/tmp/mia-passport-personal` 基于昨晚发布的9083560，尚无改动，固定记忆工作分支未切换。
+
 ## 安装前的实际边界
 
-生产未部署。当前生产状态不根据旧文档推定；后续需只读核对实际镜像、TLS入口、设备绑定、现有SQLite及manager版本，形成可审核的备份/更新方案，用户已于本轮追加授权“跑通之后就部署”；通过后按备份方案执行必要更新，保留安全约束。新代码启动会执行已有SQLite版本迁移，不能把直接挂载生产数据库的试运行当只读验证。
+**新版尚未部署，部署已获明确授权，无需再次确认。** 用户最新明确要求不再备份；停止新增备份，不因本任务复制现有生产数据。刚才的备份命令被执行环境自动审批服务拒绝启动，没有生成该备份。
+
+已只读核对生产：两服务仍为 `responsive-20261014T134645Z-a30a508`，SQLite45条事实/2个owner；八个待更新Python源码hash与可重建旧基线一致。依赖已满足OpenAI2.8.1/httpx0.28.1/numpy1.26.4/onnxruntime1.23.2，但尚无tokenizers。没有改变已有事实、配置或绑定，没有重启服务。已安装隔离certbot工具并申请IP证书，有效至2026-10-25；证书仅暂存，尚无443反向代理或续期timer，不得据此称HTTPS已上线。
+
+当前执行阻塞：自动审批服务间歇报模型容量不足/超时，后续SSH命令未执行；这是执行服务故障，不是用户授权不足，也不是判定部署不安全。2026-10-19已成功补取一次只读依赖/nginx检查，后续检查仍未启动。恢复后继续部署，无需重问授权；先完成TLS入口与续期、旧库兼容与索引、硬件授权接入，再切换并实际验证。新代码启动会执行已有SQLite版本迁移，不能把直接挂载生产数据库的试运行当只读验证。旧数据线索NULL已兼容；旧事实还需真实BGE索引，不能只迁移表就宣称可召回。
 
 安装包准备不包含真实数据库、密钥、Wi-Fi或设备凭据。后端源码包从固定提交导出，仅供独立暂存环境；使用固定上游 `87c6df77b0220ddbd8fc804f984f83f69f3225e5`，依次执行 `server.companion.install_xiaozhi`、`server.companion.install_identity` 的check/apply，拒绝覆盖已有自定义源码。BGE使用既定离线资产，不在语音进程下载。不得按旧部署文档直接降级旧Worker：V4库需要V2-aware代码，先收敛任务，保留账本和数据。
 
@@ -35,3 +43,9 @@
 5. 删除该条，重连与重启后再问，确认不复现。Mia人设、其他已有记忆和功能应保留。
 
 真实音频流畅度、iPhone后台/耳机、硬件播放以及两设备记忆是否属于同一manager用户/智能体，仍需实际连接核对；不为了测试修改已有归属。
+
+## 2026-10-19 部署继续：HTTPS检查点
+
+执行通道已恢复，用户要求不新增备份继续有效。已实际部署 `mia-xiaozhi-web:personal-tls-006c6f7`，父镜像为原responsive版本，仅替换nginx入口；保留原JAR、前端与语音容器。外部 `https://43.143.230.174/` 返回200、TLS校验0；`mia-personal-certificate.timer` 已active，每日两次检查短证书续期。nginx覆盖客户端传入的Forwarded/X-Forwarded信息，HTTPS状态由实际连接产生。生产复用原三个Compose并追加 `/opt/xiaozhi-server/mia-personal-prep/docker-compose.tls.yml`，后续不能遗漏该覆盖。没有生成备份。
+
+硬件授权最小改动复用原所有者code/exchange接口及原MySQL授权表：固件产生128位随机一次性码，所有者在已有设备页输入确认，再由设备经TLS兑换；同一600秒有效期、单次消费、当前绑定/权限、hash存储及原凭据版本机制不变。新增Java真实接口反例和浏览器交互验证；30项本地授权/安装回归、两个安装器源检查、JS语法与diff通过，Java与浏览器实际验证待本次必要CI。尚未切换记忆后端或发布新版固件，不把HTTPS成功冒充两端记忆可用。

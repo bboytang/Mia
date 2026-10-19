@@ -111,6 +111,27 @@ class MiaPrivateAuthorizationTest {
     }
 
     @Test
+    void physicalHardwareCodeRequiresCurrentOwnerAndUsesOriginalOneTimeExchange() throws Exception {
+        String physicalCode = "89abcdef0123456789abcdef01234567";
+        assertNotEquals(0, exchange(DEVICE_B, CLIENT, physicalCode).path("code").asInt());
+        assertNotEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                "hardware_code", physicalCode), userToken(USER_A)).path("code").asInt());
+        assertEquals(0, db.queryForObject("SELECT COUNT(*) FROM ai_mia_device_authorization WHERE device_id=?", Integer.class, DEVICE_B));
+        for (String invalid : List.of("123456", "g".repeat(32), "a".repeat(33))) {
+            assertNotEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                    "hardware_code", invalid), userToken(USER_B)).path("code").asInt());
+        }
+        assertEquals(0, post("/device/mia-auth/code", Map.of("device_id", DEVICE_B,
+                "hardware_code", physicalCode), userToken(USER_B)).path("code").asInt());
+        assertNotEquals(physicalCode, db.queryForObject("SELECT authorization_code_hash FROM ai_mia_device_authorization WHERE device_id=?", String.class, DEVICE_B));
+        JsonNode issued = exchange(DEVICE_B, CLIENT, physicalCode);
+        assertEquals(0, issued.path("code").asInt());
+        assertEquals(USER_B, issued.path("data").path("scope").path("user_id").asLong());
+        assertEquals(0, verify(DEVICE_B, CLIENT, issued.path("data").path("private_credential").asText()).path("code").asInt());
+        assertNotEquals(0, exchange(DEVICE_B, CLIENT, physicalCode).path("code").asInt());
+    }
+
+    @Test
     void codeIsConsumedAtomicallyAndOnlyHashesAreStored() throws Exception {
         String code = code(DEVICE_B, USER_B);
         assertTrue(code.length() >= 22);

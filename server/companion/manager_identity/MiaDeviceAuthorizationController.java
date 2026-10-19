@@ -56,6 +56,9 @@ public class MiaDeviceAuthorizationController {
     @RequiresPermissions("sys:role:normal")
     public Result<Map<String, Object>> code(@RequestBody Map<String, Object> body, HttpServletRequest request) {
         secure(request);
+        if (body.containsKey("hardware_code")) {
+            return result(grants.approveHardwareCode(field(body, "device_id", 32), field(body, "hardware_code", 32)));
+        }
         return result(grants.createCode(field(body, "device_id", 32)));
     }
 

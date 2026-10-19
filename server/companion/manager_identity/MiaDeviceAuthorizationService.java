@@ -138,6 +138,18 @@ public class MiaDeviceAuthorizationService {
 
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> createCode(String deviceId) {
+        return prepareCode(deviceId, random(16));
+    }
+
+    // The owner copies a device-generated secret from the physical display.
+    // This reuses the same one-time exchange, expiry and binding checks as iOS.
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> approveHardwareCode(String deviceId, String code) {
+        if (code == null || !code.matches("[a-f0-9]{32}")) throw new RenException(ErrorCode.NO_PERMISSION);
+        return prepareCode(deviceId, code);
+    }
+
+    private Map<String, Object> prepareCode(String deviceId, String code) {
         Binding current = requireOwner(deviceId);
         if (!currentAuthority(current)) throw new RenException(ErrorCode.NO_PERMISSION);
         ensureRow(deviceId);
@@ -146,7 +158,6 @@ public class MiaDeviceAuthorizationService {
             db.update("UPDATE ai_mia_device_authorization SET credential_hash=NULL,credential_expires_at=NULL,client_id=NULL,"
                     + "revoked=1,credential_version=credential_version+1 WHERE device_id=?", deviceId);
         }
-        String code = random(16);
         db.update("UPDATE ai_mia_device_authorization SET operator_id=?,owner_id=?,agent_id=?,persona_id='mia',"
                 + "authorization_code_hash=?,code_expires_at=?,wrong_attempts=0 WHERE device_id=?",
                 current.operator(), current.owner(), current.agent(), digest(code),

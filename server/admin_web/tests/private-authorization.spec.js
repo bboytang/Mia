@@ -49,3 +49,30 @@ test('console code and revoke reuse login, preserve binding and clear ephemeral 
   const width = await page.evaluate(() => ({ actual: document.documentElement.scrollWidth, available: innerWidth }));
   expect(width.actual).toBeLessThanOrEqual(width.available + 1);
 });
+
+test('hardware approval sends the physical code through the existing owner endpoint', async ({ page }) => {
+  await page.route('https://mia-fixture.invalid/**', async route => {
+    const url = new URL(route.request().url());
+    const response = await route.fetch({ url: 'http://127.0.0.1:4173' + url.pathname + url.search });
+    await route.fulfill({ response });
+  });
+  await mockBackend(page, false);
+  const code = '89abcdef0123456789abcdef01234567';
+  const requests = [];
+  await page.route('**/device/mia-auth/code', async route => {
+    const request = route.request();
+    requests.push({ body: request.postDataJSON(), authorization: request.headers()['authorization'] });
+    await route.fulfill({ json: { code: 0, data: {
+      device_id: device.id, authorization_code: code, expires_in: 600
+    } } });
+  });
+  await page.goto('https://mia-fixture.invalid/#/device-management?agentId=test-agent');
+  await page.getByRole('button', { name: '硬件授权', exact: true }).first().click();
+  const prompt = page.locator('.el-message-box');
+  await prompt.locator('input').fill(code);
+  await prompt.getByRole('button', { name: /确定/ }).click();
+  await expect(page.getByText('硬件授权已确认，请等待 Mia 完成安全连接。', { exact: true })).toBeVisible();
+  expect(requests).toEqual([{ body: { device_id: device.id, hardware_code: code },
+    authorization: 'Bearer synthetic-test-token' }]);
+  expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(code);
+});
