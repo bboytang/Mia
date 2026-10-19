@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import json
 from pathlib import Path
 import shlex
 import os
@@ -34,6 +35,28 @@ def candidate():
 
 
 class PassportSafetyTests(unittest.TestCase):
+    def test_release_variants_match_the_existing_private_wss_pin(self):
+        config = json.loads((ROOT / 'main/boards/folotoy/ai-passport/config.json').read_text())
+        protected = [build for build in config['builds']
+                     if build['name'] in ('mia-ai-passport', 'mia-ai-passport-dev')]
+        self.assertEqual(len(protected), 2)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)
+            for build in protected:
+                values = dict(value.split('=', 1) for value in build['sdkconfig_append'])
+                pin = json.loads(values['CONFIG_MIA_PASSPORT_WEBSOCKET_URL'])
+                source = ('#include "passport/backend_policy.h"\n'
+                          '#include "passport/private_authorization.h"\n#include <cassert>\n'
+                          'int main() { using namespace mia::passport; '
+                          'constexpr auto pin = ' + json.dumps(pin) + '; '
+                          'assert(IsVoiceEndpoint(pin, kPrivateVoiceUrl)); '
+                          'assert(!IsVoiceEndpoint("ws://43.143.230.174:8000/xiaozhi/v1/", pin)); }')
+                (path / 'pin.cc').write_text(source)
+                subprocess.run([*shlex.split(os.environ.get('CXX', 'c++')), '-std=c++20',
+                                '-Wall', '-Wextra', '-Werror', '-I', str(ROOT / 'main'),
+                                str(path / 'pin.cc'), '-o', str(path / 'pin')], check=True)
+                subprocess.run([str(path / 'pin')], check=True)
+
     def test_endpoint_policy_accepts_pinned_http_ws_and_rejects_endpoint_changes(self):
         source = r'''
 #include "passport/backend_policy.h"
