@@ -7,6 +7,7 @@ Only completed, authorized turns persist it. No timer, extra model call or messa
 import hashlib
 import json
 import math
+import re
 
 from .features import settings
 from .memory import SECRET, _text
@@ -128,15 +129,21 @@ class AppraisalStream:
             if len(self.buffer) > 32:
                 raise ValueError('Affect prefix overflow')
             return ''
-        if not candidate.startswith(OPEN):
-            if OPEN.startswith(candidate):
+        # Some providers insert spaces inside the XML marker across deltas.
+        # Normalize only the fixed marker, never JSON fields or source quotes.
+        if '>' not in candidate:
+            if len(candidate) <= 64 and OPEN.startswith(re.sub(r'\s+', '', candidate)):
                 return ''
             raise ValueError('Missing affect prefix')
-        if CLOSE not in candidate:
-            if len(candidate) > 1024:
+        header, body = candidate.split('>', 1)
+        if re.sub(r'\s+', '', header + '>') != OPEN:
+            raise ValueError('Missing affect prefix')
+        closing = re.search(r'<\s*/\s*mia-affect\s*>', body)
+        if closing is None:
+            if len(body) > 1024:
                 raise ValueError('Affect prefix overflow')
             return ''
-        raw, rest = candidate[len(OPEN):].split(CLOSE, 1)
+        raw, rest = body[:closing.start()], body[closing.end():]
         if len(raw) > 1024:
             raise ValueError('Affect prefix overflow')
         self.proposal = appraisal(json.loads(raw), self.query)

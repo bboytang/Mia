@@ -87,13 +87,17 @@ async def evaluate():
                 report['sdk_calls'] += 1
                 spoken = ''
                 raw = ''
+                parse_error = None
                 with client.chat.completions.create(model=model, messages=request['messages'],
                         max_tokens=640, temperature=.1, stream=True) as stream:
                     for chunk in stream:
                         if not chunk.choices:continue
                         text = chunk.choices[0].delta.content or ''
                         raw += text
-                        spoken += parser.feed(text) if text else ''
+                        if parse_error is None:
+                            try:spoken += parser.feed(text) if text else ''
+                            except ValueError as error:parse_error = error
+                if parse_error:raise parse_error
                 parser.finish()
                 valid = bool(parser.proposal and parser.proposal['feeling'] in expected and spoken.strip()
                              and not PersonaGuardrail().inspect_output(spoken)[1])
