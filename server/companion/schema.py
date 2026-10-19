@@ -31,7 +31,7 @@ def migrate(db):
     if db.in_transaction:
         raise ValueError('Mia schema migration requires its own transaction')
     migrations = [Path(__file__).with_name(name).read_text(encoding='utf-8')
-                  for name in ('schema.sql', 'schema-v2.sql', 'schema-v3.sql')]
+                  for name in ('schema.sql', 'schema-v2.sql', 'schema-v3.sql', 'schema-v4.sql')]
     digests = [hashlib.sha256(sql.encode()).hexdigest() for sql in migrations]
     db.execute('BEGIN IMMEDIATE')
     try:
@@ -68,3 +68,17 @@ def _schema_checksum(db):
     objects = [tuple(row) for row in db.execute(
         "SELECT type,name,sql FROM sqlite_master WHERE name GLOB 'mia_*' ORDER BY type,name")]
     return hashlib.sha256(json.dumps(objects, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
+
+
+def check_worker_rollback(db):
+    """Offline precondition, NOT a schema downgrade or a process-quiescence proof.
+
+    Preserve the request ledger. A pre-V2 binary rejects this schema; rollback
+    uses a V2-aware worker with V1 admission after draining/stopping V2 work.
+    """
+    active = db.execute("SELECT COUNT(*) FROM mia_job_policy p JOIN mia_jobs j ON j.id=p.job_id "
+        "WHERE j.state IN ('pending','extracting','validated','retry_wait')").fetchone()[0]
+    unresolved = db.execute('SELECT COUNT(*) FROM mia_model_requests WHERE native_finished_at IS NULL').fetchone()[0]
+    if active or unresolved:
+        raise ValueError('V2 rollback requires terminal tasks and quiescent, reconciled native requests')
+    return {'compatible_worker_required': True, 'ledger_preserved': True}

@@ -32,8 +32,11 @@ class TurnCompleted:
 
 
 class JobStore:
-    def __init__(self, store, capacity=128, lifetime=120):
+    def __init__(self, store, capacity=128, lifetime=120, *, policy_version=1):
+        if policy_version not in (1, 2):
+            raise ValueError('Unsupported job policy')
         self.store, self.capacity, self.lifetime = store, capacity, lifetime
+        self.policy_version = policy_version
 
     def submit(self, event):
         if not isinstance(event.scope, AuthenticatedScope) or event.scope.persona_id != 'mia':
@@ -66,6 +69,8 @@ class JobStore:
                  event.session_id, event.turn_id, json.dumps({'message_id': event.message_id, 'text': text,
                  'priority': event.priority, 'emotion_consent_version': tracking['version'] if tracking['enabled'] else None},
                  ensure_ascii=False), 'pending', now, now, now + self.lifetime))
+            if self.policy_version == 2:
+                db.execute("INSERT INTO mia_job_policy(job_id,version,phase,phase_at) VALUES (?,2,'admitted',?)", (key, now))
             return {'status': 'accepted', 'accepted': True, 'id': key, 'state': 'pending'}
 
     def recover(self):
@@ -97,6 +102,11 @@ class JobStore:
         with self.store.lock:
             row = self.store.db.execute('SELECT * FROM mia_jobs WHERE id=?', (job['id'],)).fetchone()
             return dict(row)
+
+    def policy(self, job):
+        with self.store.lock:
+            row = self.store.db.execute('SELECT * FROM mia_job_policy WHERE job_id=?', (job['id'],)).fetchone()
+            return dict(row) if row else {'version': 1}
 
     def active_ids(self):
         # Includes deferred retries; ready() is only the scheduling subset.

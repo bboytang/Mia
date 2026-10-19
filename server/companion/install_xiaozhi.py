@@ -266,7 +266,7 @@ def install(root, changes):
     try:
         for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql", "schema-v2.sql", "persona.py",
                      "embedding.py", "semantic.py", "retrieval.py", "context.py", "reply.py", "jobs.py", "extraction.py", "proposal.py", "model_requests.py",
-                     "events.py", "emotions.py", "schema-v3.sql", "requirements-vector.txt"]:
+                     "events.py", "emotions.py", "schema-v3.sql", "schema-v4.sql", "requirements-vector.txt"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
             (root / relative).write_text(changed, encoding="utf-8")

@@ -4,6 +4,8 @@
 
 ## 当前决定与执行点
 
+**第三批实施已获用户授权，基线858551c。** 当前按V2迁移→请求记账/HTTP预算→有界后台机会→回归/性能观测推进；本批不跑完整36/72、不部署/P24。第二批停止文字为历史状态。过程及回滚边界见[第三批报告](mia-persona-memory-v2-requests.md)。
+
 **2026-10-19第二批R5–R7已收口，停止等待用户确认。** 当前观测代码`bb5b971268eb353e7bd91cd83172b0cc21452d6c`，运行修复为R5 `b54a649`两个期限边界；R6/R7仅测量与设计验证，未删安全检查或提前释放文本。服务327/身份173/manager154/实际BGE五报告与39机制通过，精确SHA/CI矩阵见[第二批完整报告](mia-persona-memory-r5-r7.md)。
 
 唯一真实诊断[39187014445](https://github.com/bboytang/Mia/actions/runs/39187014445)仍为failure，实际2真实请求/无Provider错误，观察驱动提前断开使ABBA无效；原文保留。修复观察器后的零远端重放[39188213889](https://github.com/bboytang/Mia/actions/runs/39188213889) success，cap0/4Mock SDK、19组件及旧句取消通过，2CPU/2GiB/swap0、无OOM。当前无在途，不重采模型，不重复CI。
