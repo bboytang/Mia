@@ -70,7 +70,8 @@ def provider_limits(provider):
                 or profile['model'] != provider.model_name
                 or profile['base_url'].rstrip('/') != provider.base_url.rstrip('/')):
             raise ValueError()
-        return ContextLimits.from_provider(provider, profile['context_window'], profile['capacity_source'])
+        return ContextLimits.from_provider(provider, profile['context_window'], profile['capacity_source'],
+            profile.get('input_tokens', 8192))
     except (OSError, KeyError, AttributeError, TypeError, ValueError):
         raise ContextError('context_limits_unverified') from None
 

@@ -177,6 +177,22 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaisesRegex(ContextError, 'mandatory_over_budget'):
             await self.build(limits=ContextLimits('fixture', 1024, 512, 'CI fixture'))
 
+    async def test_reviewed_larger_budget_preserves_complete_tools_and_output_reserve(self):
+        tools = [{'type': 'function', 'function': {'name': 'weather', 'description': '完整说明' * 1000,
+            'parameters': {'type': 'object'}}}]
+        with self.assertRaisesRegex(ContextError, 'mandatory_over_budget'):
+            await self.build(tools=tools)
+        limits = ContextLimits('fixture', 32768, 2048, 'Reviewed capacity fixture', 24576)
+        bundle = await self.build(tools=tools, limits=limits)
+        self.assertEqual(bundle.request()['tools'], tools)
+        self.assertEqual(bundle.request()['max_tokens'], 2048)
+        self.assertEqual(bundle.diagnostics()['input_limit'], 24576)
+        self.assertLessEqual(estimate(bundle.request()) + 2048, limits.context_window)
+        self.assertEqual(ContextLimits('fixture', 9000, 1024, 'fixture', 24576).input_limit(), 7976)
+        for value in (True, None, 0, -1, '24576'):
+            with self.subTest(value=value), self.assertRaisesRegex(ContextError, 'limits_unverified'):
+                ContextLimits('fixture', 32768, 2048, 'fixture', value).input_limit()
+
     async def test_optional_material_is_omitted_with_diagnostics_without_changing_db(self):
         own = self.fact('蓝色' * 240)
         await self.index.rebuild_batch(self.scope, self.auth)

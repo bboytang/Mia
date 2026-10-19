@@ -4,6 +4,7 @@ import asyncio
 from dataclasses import dataclass
 import hashlib
 import json
+import logging
 import re
 import sqlite3
 
@@ -43,11 +44,12 @@ class ContextLimits:
     context_window: int
     response_tokens: int
     capacity_source: str
+    input_tokens: int = 8192
 
     @classmethod
-    def from_provider(cls, provider, context_window, capacity_source):
+    def from_provider(cls, provider, context_window, capacity_source, input_tokens=8192):
         result = cls(getattr(provider, 'model_name', None), context_window,
-                     getattr(provider, 'max_tokens', None), capacity_source)
+                     getattr(provider, 'max_tokens', None), capacity_source, input_tokens)
         result.input_limit()
         return result
 
@@ -55,9 +57,10 @@ class ContextLimits:
         if (not isinstance(self.model, str) or not self.model.strip()
                 or type(self.context_window) is not int or type(self.response_tokens) is not int
                 or not 0 < self.response_tokens < self.context_window
+                or type(self.input_tokens) is not int or self.input_tokens <= 0
                 or not isinstance(self.capacity_source, str) or not self.capacity_source.strip()):
             raise ContextError('context_limits_unverified')
-        return min(8192, self.context_window - self.response_tokens)
+        return min(self.input_tokens, self.context_window - self.response_tokens)
 
 
 def estimate(request):
@@ -264,6 +267,8 @@ class ContextBuilder:
         def fits():
             return estimate(request()) <= ceiling
         if not fits():
+            logging.getLogger(__name__).warning('Mia context budget exceeded (estimated=%d limit=%d tools=%d)',
+                estimate(request()), ceiling, len(inputs['tools']))
             raise ContextError('context_mandatory_over_budget')
         data['role_data'] = inputs['role']
         if not fits():

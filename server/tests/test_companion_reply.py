@@ -123,6 +123,21 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
             await reply.prepare(self.conn, [], 0)
         self.assertEqual(self.provider.calls, [])
 
+    async def test_input_budget_only_comes_from_bound_server_profile_and_changes_invalidate_turn(self):
+        self.conn.config = {'input_tokens': 24576, 'context_window': 32768}
+        first = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(first.bundle.limits.input_limit(), 8192)
+        self.write_profile(input_tokens=24576, context_window=32768)
+        with self.assertRaisesRegex(ContextError, 'context_limits_changed'):
+            await reply.validate(self.conn, first)
+        second = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(second.bundle.limits.input_limit(), 24576)
+        for value in (True, None, 0, '24576'):
+            self.write_profile(input_tokens=value)
+            with self.subTest(value=value), self.assertRaisesRegex(ContextError, 'limits_unverified'):
+                await reply.prepare(self.conn, [], 0)
+        self.assertEqual(self.provider.calls, [])
+
     async def test_ten_parallel_and_multistep_continuations_keep_facts_without_reexecuting_tools(self):
         fact = await self.fact()
         first = await reply.prepare(self.conn, self.tools, 0)
