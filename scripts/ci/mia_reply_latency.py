@@ -211,6 +211,13 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
     for scope, size in zip(scopes, (1000, 10000, 32)):
         await asyncio.to_thread(populate, worker.jobs.store, scope, size, 'dense', fixture, vectors)
     report['capacity_per_owner'] = dict(zip((scope.owner for scope in scopes), (1000, 10000, 32)))
+    if os.environ['MIA_P23_MODE'] == 'reply-stages-replay':
+        # The real-pair mode warms this index before ABBA. Its zero-remote
+        # replay needs explicit fixed warm-up, rather than a cold first arm.
+        for _ in range(5):
+            await index.retrieve(scopes[1], worker.authorization, fixture['queries'][0])
+        report['controlled_warmup_reads'] = 5
+        report['controlled_warmup_scope'] = 'Fixed same-query retrieval only, no model requests or selected timing samples'
     report['first_sentence_cases_scope'] = 'Sequential paired replies; real original Worker drains each admitted turn; not two-foreground fairness'
     transport = AuthManager('synthetic-p23-latency-transport')
 
