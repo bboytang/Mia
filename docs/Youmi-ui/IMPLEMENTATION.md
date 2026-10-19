@@ -47,7 +47,7 @@ nine character cells plus delete / `aA#` (next bank) / confirm; eleven banks cov
 all 95 printable ASCII characters including space, quotes and backslash. WPA
 passphrases are 8–63 characters or 64 hexadecimal digits. Scanned UTF-8 SSIDs are
 preserved, bounded at 32 bytes. Enterprise/WEP/WPA3-only networks are rejected
-because the existing build does not enable those modes. Existing browser provisioning
+because the existing build does not enable those modes. Hidden open networks can be submitted with an empty password. Existing browser provisioning
 remains available for other credential/SSID input needs.
 
 Wi-Fi UI deliberately uses the existing esp-wifi-connect 3.3.1 localhost HTTP
@@ -57,7 +57,7 @@ It does not interfere with the driver's scan-result ownership. The existing AP
 handler validates credentials and saves them. The existing `WifiBoard` takes over
 station reconnection after config exit. Only its real connected event for the
 requested SSID displays success. Wrong passwords/HTTP errors/timeouts display an
-error. No success screen is entered just because credentials were submitted.
+error. Cancelling back out of settings restores a previously active station via the existing config exit event. No success screen is entered just because credentials were submitted.
 
 The OTA menu checks the existing discovery service, then calls the existing
 `Application::UpgradeFirmware`. Signed header/board/version/sequence/layout/assets
@@ -86,7 +86,7 @@ a full output frame to write PPM files. Fixture time, network names, battery and
 percentage are explicit in the preview executable; none are firmware defaults.
 All 12 native-size comparisons and source hashes are in `verification/`.
 The reference emotion montage is a gallery/preview target, not six simultaneous
-runtime emotions. The "display settings" menu opens this gallery.
+runtime emotions. The "display settings" menu controls the real backlight in 10% steps; OK from that page opens this gallery.
 
 Current visual result is an adaptation, not pixel-identical: device bezel/cropped
 borders, starfield and simulated glow are omitted; eyes use concentric primitives;

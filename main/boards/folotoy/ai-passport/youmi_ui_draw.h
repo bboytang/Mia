@@ -80,6 +80,8 @@ public:
     }
     void Header(const Model& m) {
         Text(16, 10, 62, m.clock, 0xE8EDFF, false);
+        if (m.muted)
+            Text(150, 10, 20, "M", 0x88A8CB);
         Wifi(185, 7, m.connected ? 0xE8EDFF : 0x455269);
         Box(211, 13, 23, 11, 0, 2, 0xCED6ED, 1);
         Box(234, 16, 2, 5, 0xCED6ED, 1);
@@ -340,6 +342,18 @@ public:
                     std::snprintf(pct, sizeof(pct), "%d%%", m.progress);
                     Text(186, 286, 50, pct);
                 }
+                break;
+            }
+            case Page::DisplaySettings: {
+                Title("显示设置");
+                char brightness[32];
+                std::snprintf(brightness, sizeof(brightness), "亮度 %d%%", m.brightness);
+                Text(20, 110, 200, brightness);
+                Box(30, 151, 180, 8, 0x12213A, 4);
+                Box(30, 151, std::max(1, 180 * m.brightness / 100), 8, 0x71CEFF, 4);
+                Text(10, 211, 220, "上 / 下调整亮度", 0xA1C9E8);
+                Text(10, 241, 220, "确认预览表情", 0xA1C9E8);
+                Text(10, 285, 220, "长按确认返回", 0xA1C9E8);
                 break;
             }
             case Page::Info:

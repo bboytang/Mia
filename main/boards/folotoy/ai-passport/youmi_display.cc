@@ -230,7 +230,8 @@ void YoumiDisplay::SetStatus(const char* status) {
         pending_.activity = !std::strcmp(status, Lang::Strings::LISTENING)  ? Activity::Listening
                             : !std::strcmp(status, Lang::Strings::SPEAKING) ? Activity::Speaking
                                                                             : Activity::Idle;
-        if (pending_.activity != Activity::Idle || pending_.page == Page::Boot)
+        if (pending_.activity != Activity::Idle || pending_.page == Page::Boot ||
+            pending_.page == Page::Error || pending_.page == Page::Info)
             pending_.page = Page::Face;
     } else if (pending_.page == Page::Boot) {
         Copy(pending_.text, status);
@@ -240,17 +241,7 @@ void YoumiDisplay::SetStatus(const char* status) {
 void YoumiDisplay::SetChatMessage(const char* role, const char* content) {
     const auto text = mia_text::Simplify(content);
     std::lock_guard<std::mutex> lock(mutex_);
-    Copy(pending_.text, text.c_str());
-    if (role && !std::strcmp(role, "user") && content && *content) {
-        pending_.activity = Activity::Thinking;
-        pending_.page = Page::Face;
-    }
-    if (pending_.page == Page::Ota && content) {
-        char* end = nullptr;
-        const long progress = std::strtol(content, &end, 10);
-        if (end != content && *end == '%' && progress >= 0 && progress <= 100)
-            pending_.progress = int(progress);
-    }
+    ApplyMessage(pending_, role, text.c_str());
     dirty_ = true;
 }
 void YoumiDisplay::ClearChatMessages() {
@@ -290,7 +281,7 @@ void YoumiDisplay::UpdateStatusBar(bool) {
                                 app.GetDeviceState() == kDeviceStateNotifying
                             ? !app.GetAudioService().IsPlaybackIdle()
                             : app.IsVoiceDetected();
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::unique_lock<std::mutex> lock(mutex_);
     char clock[6] = "--:--";
     if (local.tm_year >= 125)
         std::strftime(clock, sizeof(clock), "%H:%M", &local);
@@ -301,20 +292,28 @@ void YoumiDisplay::UpdateStatusBar(bool) {
     pending_.battery = battery;
     pending_.charging = charging;
     pending_.audio_active = active;
+    auto codec = board.GetAudioCodec();
+    const bool muted = codec && codec->output_volume() == 0;
+    if (pending_.muted != muted)
+        dirty_ = true;
+    pending_.muted = muted;
+    const bool low = battery == 0 && discharging;
+    const bool announce =
+        low && !low_battery_warned_ && app.GetDeviceState() != kDeviceStateUpgrading;
+    low_battery_warned_ = low;
+    if (announce) {
+        Copy(pending_.notice, "电量低，请充电");
+        notice_until_ = lv_tick_get() + 8000;
+        dirty_ = true;
+    }
+    lock.unlock();
+    if (announce)
+        app.Schedule([&app]() { app.PlaySound(Lang::Sounds::OGG_LOW_BATTERY); });
 }
 void YoumiDisplay::NetworkChanged(bool connected, const char* ssid, bool config_mode) {
     std::lock_guard<std::mutex> lock(mutex_);
-    pending_.connected = connected;
-    if (connected && pending_.page == Page::Connecting && !std::strcmp(pending_.ssid, ssid)) {
-        pending_.page = Page::Success;
-        pending_.busy = false;
+    if (ApplyConnection(pending_, connected, ssid, config_mode))
         restore_station_ = false;
-        Erase(pending_.password, sizeof(pending_.password));
-    } else if (connected && pending_.activity == Activity::Offline) {
-        pending_.activity = Activity::Idle;
-    } else if (!connected && !config_mode && pending_.page == Page::Face) {
-        pending_.activity = Activity::Offline;
-    }
     dirty_ = true;
 }
 void YoumiDisplay::Fail(const char* message) {
@@ -376,6 +375,17 @@ bool YoumiDisplay::HandleKey(Key key) {
         }
         return true;
     }
+    if (m.page == Page::DisplaySettings) {
+        if (key == Key::Up || key == Key::Down) {
+            m.brightness = std::clamp(m.brightness + (key == Key::Up ? 10 : -10), 10, 100);
+            const int brightness = m.brightness;
+            lock.unlock();
+            if (auto backlight = Board::GetInstance().GetBacklight())
+                backlight->SetBrightness(brightness, true);
+        } else if (key == Key::Ok)
+            m.page = Page::Emotions;
+        return true;
+    }
     const int count = m.page == Page::Settings   ? 6
                       : m.page == Page::Wifi     ? m.network_count + 1
                       : m.page == Page::Password ? 12
@@ -401,9 +411,11 @@ bool YoumiDisplay::HandleKey(Key key) {
                 lock.unlock();
                 StartWork(Work::Restore);
             }
-        } else if (selected == 2)
-            m.page = Page::Emotions;
-        else {
+        } else if (selected == 2) {
+            m.page = Page::DisplaySettings;
+            if (auto backlight = Board::GetInstance().GetBacklight())
+                m.brightness = backlight->brightness();
+        } else {
             m.page = Page::Info;
             if (selected == 1)
                 std::snprintf(m.text, sizeof(m.text),

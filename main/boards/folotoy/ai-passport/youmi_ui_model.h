@@ -4,6 +4,7 @@
 #include <array>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 #include "mia_face.h"
@@ -20,7 +21,8 @@ enum class Page {
     Success,
     Ota,
     Info,
-    Error
+    Error,
+    DisplaySettings
 };
 enum class Activity { Idle, Listening, Thinking, Speaking, Offline };
 enum class Key { Up, Down, Ok, Back };
@@ -43,9 +45,11 @@ struct Model {
     int selected = 0;
     int bank = 0;
     int battery = -1;
+    int brightness = 100;
     int progress = -1;
     bool connected = false;
     bool charging = false;
+    bool muted = false;
     bool editing_ssid = false;
     bool allow_open = false;
     bool audio_active = false;
@@ -69,9 +73,57 @@ inline void Copy(char (&to)[N], const char* from) {
         }
     }
 }
+// Business messages and network events share these transitions in firmware and host tests.
+inline void ApplyMessage(Model& m, const char* role, const char* content) {
+    Copy(m.text, content);
+    if (role && !std::strcmp(role, "system") && content && *content &&
+        (m.page == Page::Boot || (m.page == Page::Face && m.activity == Activity::Idle)))
+        m.page = Page::Info;
+    if (role && !std::strcmp(role, "user") && content && *content) {
+        m.activity = Activity::Thinking;
+        m.page = Page::Face;
+    }
+    if (m.page == Page::Ota && content) {
+        char* end = nullptr;
+        const long progress = std::strtol(content, &end, 10);
+        if (end != content && *end == '%' && progress >= 0 && progress <= 100)
+            m.progress = int(progress);
+    }
+}
+inline bool ApplyConnection(Model& m, bool connected, const char* ssid, bool config_mode) {
+    m.connected = connected;
+    if (connected && m.page == Page::Connecting && ssid && !std::strcmp(m.ssid, ssid)) {
+        m.page = Page::Success;
+        m.busy = false;
+        std::fill(std::begin(m.password), std::end(m.password), 0);
+        return true;
+    }
+    if (connected && m.activity == Activity::Offline)
+        m.activity = Activity::Idle;
+    else if (!connected && !config_mode && m.page == Page::Face)
+        m.activity = Activity::Offline;
+    return false;
+}
 inline char Candidate(int bank, int cell) {
-    int value = 32 + bank * 9 + cell;
-    return cell >= 0 && cell < 9 && value <= 126 ? char(value) : 0;
+    if (bank < 0 || bank > 10 || cell < 0 || cell >= 9)
+        return 0;
+    const int index = bank * 9 + cell;
+    if (index < 9)
+        return char('1' + index);
+    if (index == 9)
+        return '0';
+    if (index < 36)
+        return char('a' + index - 10);
+    if (index < 62)
+        return char('A' + index - 36);
+    const int symbol = index - 62;
+    if (symbol < 16)
+        return char(32 + symbol);
+    if (symbol < 23)
+        return char(58 + symbol - 16);
+    if (symbol < 29)
+        return char(91 + symbol - 23);
+    return symbol < 33 ? char(123 + symbol - 29) : 0;
 }
 inline bool ValidPassword(const char* password) {
     const size_t n = std::strlen(password);

@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
         frame.progress = 68;
         if (i == 8) {
             Copy(frame.password, "fixture");
-            frame.bank = 5;
+            frame.bank = 0;
             frame.selected = 11;
         } else
             frame.selected = 0;
@@ -91,20 +91,36 @@ int main(int argc, char** argv) {
               << ",\"lv_peak_bytes\":" << m.max_used
               << ",\"lv_largest_bytes\":" << m.free_biggest_size << '}';
     }
-    stats << "]}\n";
+    stats << "]";
+    int animation_frames = 0;
     // Exercise blink, gaze and all three speaking mouths with the exact firmware renderer.
     for (auto mood : {mia_face::Mood::Neutral, mia_face::Mood::Happy, mia_face::Mood::Sad,
                       mia_face::Mood::Angry, mia_face::Mood::Surprised, mia_face::Mood::Confused,
                       mia_face::Mood::Loving}) {
         frame.page = Page::Face;
         frame.mood = mood;
-        for (uint32_t tick = 0; tick < 4200; tick += 80) {
-            frame.tick = tick;
-            lv_area_t face{20, 73, 219, 179};
-            lv_obj_invalidate_area(scene, &face);
-            lv_refr_now(display);
+        for (auto activity :
+             {Activity::Idle, Activity::Listening, Activity::Thinking, Activity::Speaking}) {
+            frame.activity = activity;
+            for (uint32_t tick = 0; tick < 4200; tick += 80) {
+                frame.tick = tick;
+                lv_area_t face{20, 73, 219, 179};
+                lv_obj_invalidate_area(scene, &face);
+                lv_refr_now(display);
+                ++animation_frames;
+            }
         }
     }
+    for (auto page : {Page::Info, Page::Error, Page::DisplaySettings}) {
+        frame.page = page;
+        Copy(frame.text, "授权码 042617");
+        lv_obj_invalidate(scene);
+        lv_refr_now(display);
+    }
+    lv_mem_monitor_t end{};
+    lv_mem_monitor(&end);
+    stats << ",\"animation_frames\":" << animation_frames
+          << ",\"animation_peak_bytes\":" << end.max_used << "}\n";
     std::cout << "12 RGB565 LVGL screenshots; 32KB pool animation stress passed. Host only.\n";
     lv_deinit();
 }

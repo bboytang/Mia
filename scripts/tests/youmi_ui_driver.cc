@@ -31,4 +31,26 @@ int main() {
     Copy(ssid, std::string(32, 's').c_str());
     assert(std::strlen(ssid) == 32);
     assert(sizeof(Model) < 2048);
+    Model model;
+    ApplyMessage(model, "system", "授权码 042617");
+    assert(model.page == Page::Info && std::string(model.text).find("042617") != std::string::npos);
+    model.page = Page::Face;
+    ApplyMessage(model, "user", "你好");
+    assert(model.activity == Activity::Thinking);
+    model.page = Page::Ota;
+    ApplyMessage(model, "system", "68%");
+    assert(model.progress == 68 && model.page == Page::Ota);
+    ApplyMessage(model, "system", "100%");
+    assert(model.progress == 100 && model.page == Page::Ota);  // Downloaded is not installed.
+    ApplyMessage(model, "system", "999%");
+    assert(model.progress == 100);
+    model.page = Page::Connecting;
+    Copy(model.ssid, "actual-network");
+    Copy(model.password, "private-pass");
+    assert(!ApplyConnection(model, false, "actual-network", true));
+    assert(model.page == Page::Connecting);
+    assert(!ApplyConnection(model, true, "different-network", false));
+    assert(model.page == Page::Connecting);
+    assert(ApplyConnection(model, true, "actual-network", false));
+    assert(model.page == Page::Success && !model.password[0]);
 }

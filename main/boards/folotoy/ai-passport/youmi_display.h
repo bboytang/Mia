@@ -50,4 +50,5 @@ private:
     int64_t refresh_start_us_ = 0;
     bool dirty_ = true;
     bool restore_station_ = false;
+    bool low_battery_warned_ = false;
 };

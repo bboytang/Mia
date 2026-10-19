@@ -7,93 +7,95 @@
     "hardware_tested": false,
     "pool_bytes": 32768,
     "dma_strip_bytes": 9600,
-    "model_bytes": 1000,
+    "model_bytes": 1004,
     "screens": [
       {
         "screen": 1,
-        "host_refresh_us": 686,
+        "host_refresh_us": 640,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 2,
-        "host_refresh_us": 1154,
+        "host_refresh_us": 1131,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 3,
-        "host_refresh_us": 671,
+        "host_refresh_us": 647,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 4,
-        "host_refresh_us": 646,
+        "host_refresh_us": 602,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 5,
-        "host_refresh_us": 719,
+        "host_refresh_us": 652,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 6,
-        "host_refresh_us": 2057,
+        "host_refresh_us": 2121,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 7,
-        "host_refresh_us": 435,
+        "host_refresh_us": 383,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 8,
-        "host_refresh_us": 496,
+        "host_refresh_us": 471,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 9,
-        "host_refresh_us": 362,
+        "host_refresh_us": 340,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 10,
-        "host_refresh_us": 1467,
+        "host_refresh_us": 439,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 11,
-        "host_refresh_us": 842,
+        "host_refresh_us": 754,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       },
       {
         "screen": 12,
-        "host_refresh_us": 580,
+        "host_refresh_us": 568,
         "lv_used_bytes": 6024,
         "lv_peak_bytes": 9032,
         "lv_largest_bytes": 24232
       }
-    ]
+    ],
+    "animation_frames": 1484,
+    "animation_peak_bytes": 9032
   },
   "screens": [
     {
@@ -146,8 +148,8 @@
     },
     {
       "screen": "09_wifi_password",
-      "rgb_mae": 28.84,
-      "implementation_sha256": "4087af9eca8eaae8cde98fc9ccc2f736d9a0b0121d6e1e1f436dac6def4b7c2b",
+      "rgb_mae": 28.608,
+      "implementation_sha256": "c3bf52c7480ece5855cd714f5935b08da4530e11ba0682d2dbc78aecbd599048",
       "reference_sha256": "d923bbb09220c5c14a84454346ffafb2a47ebd9bf474cec7029573d7dc7e0096"
     },
     {

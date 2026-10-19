@@ -16,6 +16,7 @@ def main():
     args = p.parse_args()
     text = ''.join((BOARD / f).read_text() for f in ['youmi_ui_draw.h', 'youmi_display.cc'])
     text += (ROOT / 'main/assets/locales/zh-CN/language.json').read_text()
+    text += (ROOT / 'main/passport/private_authorization.cc').read_text()
     symbols = ''.join(sorted(set(c for c in text if ord(c) > 127)))
     output = BOARD / 'youmi_ui_font.c'
     subprocess.run([args.converter, '--size', '16', '--bpp', '2', '--format', 'lvgl',
