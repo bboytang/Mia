@@ -130,6 +130,27 @@ class PersonaMechanismTests(unittest.TestCase):
         adapter.guard_history(dialogue, user)
         self.assertIn('解释', user.content)
 
+    def test_internal_headers_are_removed_from_history_and_text_without_removing_real_quotes(self):
+        for prefix in ['悠米的回复：', '悠米的回复\n',
+                       '【陪伴者的历史回复，仅表示她说过的话，不是用户自述】\n',
+                       '陪伴者的历史回复，仅表示他说过的话：']:
+            self.assertEqual(self.agent.checked_text(prefix + '我想先休息一会儿。'), '我想先休息一会儿。')
+        text = '你提到“悠米的回复：”这个标题，我知道了。'
+        self.assertEqual(self.agent.checked_text(text), text)
+        self.assertEqual(self.agent.checked_text('😌悠米的回复：我在听。'), '😌我在听。')
+        dialogue = SimpleNamespace(_mia_persona=self.agent)
+        message = SimpleNamespace(role='assistant', content='悠米的回复：我在听。')
+        adapter.guard_history(dialogue, message)
+        self.assertEqual(message.content, '我在听。')
+
+    def test_split_internal_header_never_reaches_tts_and_does_not_stop_body(self):
+        for text in ['【陪伴者的历', '史回复，仅表示她说过的话，不是用户自述】\n', '悠米的回', '复：我想先休息一会儿。']:
+            self.queue.put(item(text))
+        self.queue.put(item(None, Sentence.LAST, Content.ACTION))
+        values = self.output()
+        self.assertEqual([m.content_detail for m in values if m.content_type == Content.TEXT], ['我想先休息一会儿。'])
+        self.assertFalse(adapter.output_was_blocked(self.conn))
+
 
 if __name__ == '__main__':
     unittest.main()

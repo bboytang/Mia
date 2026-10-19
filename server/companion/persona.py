@@ -22,6 +22,22 @@ CORE = """你的名字是 Mia（米娅），与用户持续相处的陪伴者。
 SAFE_REPLY = "😌我在，会认真陪着你。"
 LONG_REPLY = "😌这段内容过长，请把问题分成几部分。"
 BOUNDARY = re.compile(r'[。！？!?；;\n]|(?<!\d)\.(?!\d)')
+INTERNAL_PREFIX = re.compile(
+    r'^\s*([😌🙂🤔😲🙄😍😔😜😤]*\s*)(?:'
+    r'【(?:Mia|米娅|悠米|陪伴者)的历史回复[^\n】]{0,96}】\s*|'
+    r'(?:Mia|米娅|悠米|陪伴者)的回复\s*(?:[:：]\s*|\n)|'
+    r'(?:Mia|米娅|悠米|陪伴者)的历史回复[，,]\s*仅表示(?:她|他|它|Mia|米娅|悠米)说过的话'
+    r'(?:[，,]不是用户自述)?[。:：\s]*)')
+
+
+def strip_internal_prefix(text):
+    """Remove known leaked presentation headers, never quotations in the body."""
+    for _ in range(4):
+        cleaned = INTERNAL_PREFIX.sub(r'\1', text, count=1)
+        if cleaned == text:
+            break
+        text = cleaned
+    return text
 
 
 @dataclass(frozen=True)
@@ -52,6 +68,7 @@ class PersonaGuardrail:
         return InputDecision(bool(reasons), bool(blocked), reasons)
 
     def inspect_output(self, text):
+        text = strip_internal_prefix(text or '')
         value = unicodedata.normalize('NFKC', text or '')
         for index, pattern in enumerate(self._forbidden):
             for match in pattern.finditer(value):
@@ -110,6 +127,8 @@ class GuardedTTSQueue:
         if not text:
             return
         checked, replaced = self._persona.guardrail.inspect_output(text)
+        if not checked.strip():
+            return
         item = copy.copy(message)
         item.sentence_type = type(message.sentence_type).MIDDLE
         item.content_type = type(message.content_type).TEXT

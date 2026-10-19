@@ -82,6 +82,18 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(character.active(self.store, self.scope.owner), character.YOUMI_V1)
         self.assertEqual(affect.state(self.store, self.scope.owner)['feeling'], 'steady')
 
+    async def test_active_character_uses_native_speaker_roles_without_internal_history_headers(self):
+        self.save()
+        history = [{'role': 'user', 'content': '你喜欢什么？'},
+            {'role': 'assistant', 'content': '【陪伴者的历史回复，仅表示她说过的话，不是用户自述】\n悠米的回复：我喜欢画画。'}]
+        bundle = await self.build(query='那我呢？', history=history)
+        messages = bundle.request()['messages']
+        self.assertEqual(messages[-2], {'role': 'assistant', 'content': '我喜欢画画。'})
+        self.assertNotIn('的历史回复', bundle.request_json)
+        self.assertIn('历史assistant回复', messages[0]['content'])
+        self.assertIn('默认直接接话，不加称谓', messages[0]['content'])
+        self.assertEqual(self.store.list_memories(self.scope.owner), [])
+
     async def test_new_anger_is_not_overridden_by_residual_positive_valence(self):
         self.save();features.update(self.store, self.scope.owner, {'companion_emotion': True})
         warm = dict(affect.state(self.store, self.scope.owner), valence=.7, feeling='warm')
