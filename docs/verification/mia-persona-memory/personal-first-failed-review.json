@@ -1,0 +1,19 @@
+{
+  "sha": "2d2c1bf41d1683bb49c44e4794270d23e47d2dbd",
+  "run": "https://github.com/bboytang/Mia/actions/runs/39195182060",
+  "passed": false,
+  "sdk_calls": 3,
+  "extraction_sdk_calls": 0,
+  "reason": "CI observer replaced reviewed response_with_functions; V2 correctly rejected it before send. Source job retry_wait/attempt0/tool_contract, ledger empty. Identity and chat returned guarded TTS text.",
+  "fix": "Observe original SDK streams without overriding extraction Provider methods; deterministic real SDK + MockTransport regression added.",
+  "artifacts": [
+    {
+      "file": "personal-first-failed-results.json.gz",
+      "raw_sha256": "b5525febd6dfcf02eb8548a754679514f20e4b0c5e15eebd883f03415d02254d"
+    },
+    {
+      "file": "personal-first-failed-state.sqlite3.gz",
+      "raw_sha256": "07c2ca3553ef1202ace25b1ba3ab9b704470ca45f78301b17d47f89c772fe2b7"
+    }
+  ]
+}
