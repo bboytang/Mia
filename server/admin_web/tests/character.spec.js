@@ -41,7 +41,7 @@ test('baseline is an explicit owner draft, edits save to backend and survive reo
   await dialog.getByRole('switch', { name: '人格成长', exact: true }).click();
   await expect(dialog.getByRole('textbox', { name: '亲昵称呼', exact: true })).toHaveValue('哥哥呀');
   await dialog.getByRole('button', { name: '保存性格与情绪基线' }).click();
-  await expect(page.locator('.el-message--success')).toContainText('已保存');
+  await expect(page.locator('.el-message--success').filter({ hasText: '性格与情绪基线已保存' })).toBeVisible();
   expect(state.character.values.address).toBe('哥哥呀');
   expect(state.character.enabled).toBe(true);
   expect(state.emotion_tracking.enabled).toBe(0);
