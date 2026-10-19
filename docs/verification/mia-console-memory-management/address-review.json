@@ -1,0 +1,11 @@
+{
+  "advertised_before": [
+    "ws://43.143.230.174:8000/xiaozhi/v1/"
+  ],
+  "advertised_after": [
+    "wss://43.143.230.174:8000/xiaozhi/v1/"
+  ],
+  "updated_using_existing_parameter_api": true,
+  "database_and_cache_readback": true,
+  "new_login_tokens_created": false
+}

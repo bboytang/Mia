@@ -1,0 +1,16 @@
+{
+  "commit": "f9423397de245a68234d0c3b7e5deacea1d9ba9e",
+  "public_address": "wss://43.143.230.174:8000/xiaozhi/v1/",
+  "actual_java_config_refresh_acknowledged": true,
+  "memory_list_via_existing_console_login": true,
+  "listed_count": 47,
+  "total": 47,
+  "memory_delete_production_calls": 0,
+  "memory_data_unchanged": true,
+  "settings_unchanged": true,
+  "mia_emotion_enabled": true,
+  "user_mood_consent_preserved": 1,
+  "role_model_voice_unchanged": true,
+  "new_backups": false,
+  "new_login_tokens_created": false
+}
