@@ -3,6 +3,7 @@
 #include "application.h"
 #include "board.h"
 #include "display.h"
+#include "settings.h"
 #include "system_info.h"
 
 #include <esp_crt_bundle.h>
@@ -27,6 +28,7 @@ using Json = std::unique_ptr<cJSON, decltype(&cJSON_Delete)>;
 
 struct Response {
     std::string credential;
+    std::string pending_code;
     bool denied = false;
 };
 
@@ -41,6 +43,8 @@ Response Request(bool renew, const std::string& proof) {
     Json body(cJSON_CreateObject(), cJSON_Delete);
     if (!body)
         return {};
+    if (!renew)
+        cJSON_AddBoolToObject(body.get(), "hardware_pairing", true);
     cJSON_AddStringToObject(body.get(), "device_id", device.c_str());
     cJSON_AddStringToObject(body.get(), "client_id", client.c_str());
     cJSON_AddStringToObject(body.get(), renew ? "private_credential" : "authorization_code",
@@ -93,6 +97,11 @@ Response Request(bool renew, const std::string& proof) {
     if (code->valuedouble != 0)
         return {.denied = true};
     const auto* data = cJSON_GetObjectItemCaseSensitive(root.get(), "data");
+    const auto* pending = cJSON_GetObjectItemCaseSensitive(data, "pending_code");
+    if (cJSON_IsString(pending) && pending->valuestring &&
+        IsHardwareDisplayCode(pending->valuestring) && TextEquals(data, "device_id", device) &&
+        TextEquals(data, "client_id", client))
+        return {.pending_code = pending->valuestring};
     const auto* scope = cJSON_GetObjectItemCaseSensitive(data, "scope");
     const auto* credential = cJSON_GetObjectItemCaseSensitive(data, "private_credential");
     if (!cJSON_IsString(credential) || !credential->valuestring ||
@@ -108,8 +117,10 @@ bool Store(const std::string& credential) {
         nvs_open("mia_private", NVS_READWRITE, &handle) != ESP_OK)
         return false;
     auto error = nvs_set_str(handle, "credential", credential.c_str());
-    if (error == ESP_OK)
+    if (error == ESP_OK) {
+        nvs_erase_key(handle, "pending");
         error = nvs_commit(handle);
+    }
     nvs_close(handle);
     return error == ESP_OK;
 }
@@ -151,21 +162,35 @@ void EnsurePrivateAuthorization() {
         if (!renewal.denied)
             return;  // Keep the prior credential on transport failure; no insecure fallback.
     }
-    std::array<unsigned char, 16> bytes;
-    esp_fill_random(bytes.data(), bytes.size());
-    constexpr char hex[] = "0123456789abcdef";
     std::string code;
-    for (auto byte : bytes) {
-        code += hex[byte >> 4];
-        code += hex[byte & 15];
+    {
+        // Keep the device-only proof across a restart during the ten-minute flow.
+        Settings settings("mia_private", true);
+        code = settings.GetString("pending");
+        bool valid = code.size() == 32;
+        for (unsigned char ch : code)
+            valid = valid && ((ch >= 'a' && ch <= 'f') || (ch >= '0' && ch <= '9'));
+        if (!valid) {
+            std::array<unsigned char, 16> bytes;
+            esp_fill_random(bytes.data(), bytes.size());
+            constexpr char hex[] = "0123456789abcdef";
+            code.clear();
+            for (auto byte : bytes) {
+                code += hex[byte >> 4];
+                code += hex[byte & 15];
+            }
+            settings.SetString("pending", code);
+        }
     }
-    std::string message = "后台点硬件授权，输入：\n";
-    for (size_t i = 0; i < code.size(); i += 8)
-        message += code.substr(i, 8) + "\n";
-    Show(message);
+    Show("正在连接硬件授权服务");
+    std::string displayed;
     const auto deadline = esp_timer_get_time() + 600000000;
     while (esp_timer_get_time() < deadline) {
         const auto result = Request(false, code);
+        if (!result.pending_code.empty() && result.pending_code != displayed) {
+            displayed = result.pending_code;
+            Show("在后台点硬件授权\n" + displayed);
+        }
         if (!result.credential.empty()) {
             if (Store(result.credential))
                 Show("硬件授权已完成");

@@ -19,6 +19,16 @@ inline bool IsPrivateCredential(std::string_view value) {
     return true;
 }
 
+inline bool IsHardwareDisplayCode(std::string_view value) {
+    if (value.size() != 6)
+        return false;
+    for (unsigned char ch : value) {
+        if (ch < '0' || ch > '9')
+            return false;
+    }
+    return true;
+}
+
 // nullopt means not enrolled; an empty value means invalid/unreadable enrollment.
 // Invalid enrollment must not cause a downgrade to the old unencrypted transport.
 std::optional<std::string> ReadPrivateCredential();

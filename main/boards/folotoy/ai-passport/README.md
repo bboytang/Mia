@@ -345,3 +345,15 @@ signed OTA and physical owner confirmation second; full private memory backend
 cutover after grant issuance. Confirmed hardware enrollment is not inferred from
 a build, an OTA HTTP request, a MAC address, or an earlier voice connection.
 Actual C3 TLS, screen readability, microphone and speaker remain device checks.
+
+### Mia 1.0.3: six-digit screen code
+
+Owner device testing found the 1.0.2 32-character code was not fully readable on
+the screen. Version 1.0.3 shows six decimal digits (including leading zeroes).
+The device retains a separate random 128-bit proof in its own NVS and sends it
+only over verified TLS. The six digits approve the one pending request on the
+selected device; they cannot be exchanged for a credential. The existing manager
+uses one expiring Redis record, current binding/credential versions and client
+identity, with its original rate limits. No task schema or user account changes.
+The proof survives a restart during enrollment; successful credential storage
+clears it. Ten-minute expiration, revocation and owner checks remain.

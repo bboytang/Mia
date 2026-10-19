@@ -44,6 +44,12 @@ int main() {
     using mia::passport::IsDiscoveryEndpoint;
     using mia::passport::IsVoiceEndpoint;
     using mia::passport::IsPrivateCredential;
+    using mia::passport::IsHardwareDisplayCode;
+    assert(IsHardwareDisplayCode("042617"));
+    assert(!IsHardwareDisplayCode("42617"));
+    assert(!IsHardwareDisplayCode("0426170"));
+    assert(!IsHardwareDisplayCode("04261a"));
+    assert(!IsHardwareDisplayCode("04261\n"));
     assert(IsPrivateCredential(std::string(43, 'a')));
     assert(IsPrivateCredential(std::string(41, 'Z') + "-_"));
     for (const auto& invalid : {std::string(), std::string(42, 'a'), std::string(44, 'a'),
