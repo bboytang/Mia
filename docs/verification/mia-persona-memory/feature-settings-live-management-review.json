@@ -1,0 +1,45 @@
+{
+  "kind": "live_manager_proof_and_backend_settings_round_trip_with_actual_authorized_scopes",
+  "before": {
+    "sha256": "4c06bcf1953f08c11c36b6ad4c078406361d97473d212f5b669164ffdaf266ad",
+    "facts": 47,
+    "vectors": 47,
+    "integrity": "ok",
+    "schema": 5,
+    "uncompleted_native": 0
+  },
+  "after": {
+    "sha256": "4c06bcf1953f08c11c36b6ad4c078406361d97473d212f5b669164ffdaf266ad",
+    "facts": 47,
+    "vectors": 47,
+    "integrity": "ok",
+    "schema": 5,
+    "uncompleted_native": 0
+  },
+  "counts": {
+    "memories": 47,
+    "traits": 0,
+    "events": 0
+  },
+  "settings": {
+    "memory_recall": true,
+    "personality_growth": true,
+    "interaction_events": true
+  },
+  "paused": false,
+  "emotion_tracking_enabled": 0,
+  "authorized_device_scope_checks": [
+    {
+      "device_hash": "2285c646b169dc4b",
+      "owner_hash": "3c222265ee11e50b"
+    }
+  ],
+  "original_settings_restored": true,
+  "provider_calls": 0,
+  "asr_tts_calls": 0,
+  "physical_audio_verified": false,
+  "new_backups": false,
+  "role_model_voice_unchanged": true,
+  "backend_code_sha": "0a93dfb7a59cae8c9c7376a5064664fbf70ce144",
+  "frontend_code_sha": "66d4290be6037afe5cc597219c92e2febaafb843"
+}

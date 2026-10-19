@@ -37,3 +37,21 @@
 首轮后台浏览器验证 `d5eaacc` / [39250879683](https://github.com/bboytang/Mia/actions/runs/39250879683) 有 4 个失败：Element UI 关闭状态没有生成 `aria-checked=false`，四浏览器的同一断言失败；失败保存、心情授权与角色不自动保存的用例已通过。保留原失败，不降低断言，界面改为显式提供字符串形式的开关状态。后端候选 `0a93dfb` 与后续仅 UI 修正的提交分别记录验证和制品来源，不混称同一版本。
 
 `3191a00` / [39251901800](https://github.com/bboytang/Mia/actions/runs/39251901800) 的初始关闭状态已正确，但四浏览器在切换后仍被 Element UI 内部更新移除了属性，同一测试后续断言失败。改用原生按钮承载 switch 语义和明确的字符串状态，保留 44px 触控区域、键盘操作及原服务器确认后更新的行为；原断言保持，不重复同源码取绿。
+
+## 最终验证与制品来源
+
+后端 `0a93dfb7a59cae8c9c7376a5064664fbf70ce144`：GitHub [375 项服务测试](https://github.com/bboytang/Mia/actions/runs/39251516362)、[179 项身份/权限测试](https://github.com/bboytang/Mia/actions/runs/39251516038)、[manager 构建](https://github.com/bboytang/Mia/actions/runs/39251516234)、[真实 BGE/提取/上下文](https://github.com/bboytang/Mia/actions/runs/39251516502) 均 success。
+
+前端 `66d4290be6037afe5cc597219c92e2febaafb843`：[后台构建及回归](https://github.com/bboytang/Mia/actions/runs/39253063975) success，含全部 80 项浏览器测试；[服务回归](https://github.com/bboytang/Mia/actions/runs/39253063997) success。此版本与后端制品版本之间的 `server/companion` 源码无差异，后续仅 UI 和文档变化；不把不同制品说成同 SHA。
+
+语音候选镜像以原生产镜像为基础，仅替换 27 个已核对源码文件，隔离启动通过 V5 和运行导入检查，不挂载生产数据、不请求供应商。管理 JAR 从实际运行版本添加 CI 构建的新管理 Controller，所有原 ZIP 项内容保持，原空 `META-INF/BOOT.SF` 标记保留；不以全量上游 JAR 覆盖现有生产定制。网页使用通过上述 CI 的 442 个静态文件，保留旧 hash 资源供已打开页面使用。
+
+## 已部署与线上复核
+
+2026-10-19 已实际切换语音镜像 `mia-xiaozhi-server:settings-0a93dfb` 和后台镜像 `mia-xiaozhi-web:settings-66d4290`。HTTPS 200、manager 就绪、语音 TLS 1.3；两容器运行、重启次数 0、无 OOM。实际安装 27 个后端文件、442 个新网页文件及管理 JAR 的 hash 全匹配制品。保留原 Compose 叠加顺序及旧静态资源，未新增数据备份。
+
+SQLite V4→V5 后 integrity=ok；47 条事实/47 个向量及原事实、来源、特点、检查点、向量、事件、观察数据的联合指纹完全不变，未结束原生请求及活动提取任务均为 0。真实服务器管理接口完成所有者证明，实际关闭检索→用当前有效授权 Scope 构建上下文验证 facts/traits/events 为空→恢复原设置。没有调用模型、ASR 或 TTS。当前只查到 1 个有效已授权设备 Scope；不冒称硬件与 iPhone 双实机均已验收。独立连接、不同设备 Scope 共用 owner 的双设备行为有自动测试证据，iPhone 取得有效原有授权后使用同一后端设置。
+
+管理入口：原后台智能体卡片 → **Mia 功能管理**。五项设置均保存在后端，范围为同一用户的同一智能体，对其全部已授权绑定设备生效，独立智能体之间隔离。当前自动保存开启、长期记忆使用/人格成长/互动事件开启，用户长期心情追踪保持关闭；没有替用户新增授权。关闭使用不删旧数据，角色仍由用户从原角色页自行编辑保存。生产角色、模型、音色及固件 1.0.3 均保持不变。
+
+线上证据：[部署复核](verification/mia-persona-memory/feature-settings-deployment-review.json)、[真实管理/设备 Scope 往返](verification/mia-persona-memory/feature-settings-live-management-review.json)、[安装制品 hash](verification/mia-persona-memory/feature-settings-runtime-assets-review.json)、[管理 JAR 最小增量](verification/mia-persona-memory/feature-settings-manager-build-review.json)。上线后的实机播放/双端同步听感尚未验证；本次不宣称达到路遥视频表现，也不宣称已实现持续内在情绪或动态 TTS 情绪。

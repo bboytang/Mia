@@ -1,0 +1,42 @@
+{
+  "backend_code_sha": "0a93dfb7a59cae8c9c7376a5064664fbf70ce144",
+  "frontend_code_sha": "66d4290be6037afe5cc597219c92e2febaafb843",
+  "voice_image": "mia-xiaozhi-server:settings-0a93dfb",
+  "web_image": "mia-xiaozhi-web:settings-66d4290",
+  "before": {
+    "facts": 47,
+    "vectors": 47,
+    "integrity": "ok",
+    "schema": 4,
+    "uncompleted_native": 0,
+    "active_jobs": 0,
+    "fact_data_sha256": "4c06bcf1953f08c11c36b6ad4c078406361d97473d212f5b669164ffdaf266ad"
+  },
+  "after": {
+    "facts": 47,
+    "vectors": 47,
+    "integrity": "ok",
+    "schema": 5,
+    "uncompleted_native": 0,
+    "active_jobs": 0,
+    "fact_data_sha256": "4c06bcf1953f08c11c36b6ad4c078406361d97473d212f5b669164ffdaf266ad"
+  },
+  "https_status": 200,
+  "manager_ready": true,
+  "voice_tls": "TLSv1.3",
+  "new_backups": false,
+  "firmware_unchanged": "1.0.3",
+  "original_compose_overrides_preserved": true,
+  "services": {
+    "xiaozhi-esp32-server": {
+      "running": true,
+      "restart_count": 0,
+      "oom_killed": false
+    },
+    "xiaozhi-esp32-server-web": {
+      "running": true,
+      "restart_count": 0,
+      "oom_killed": false
+    }
+  }
+}

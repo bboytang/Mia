@@ -1,5 +1,7 @@
 # Mia 个人测试版本
 
+**最新部署（2026-10-19）：后台功能管理已上线。** 后端 `0a93dfb`、网页 `66d4290`，原后台智能体卡片 →「Mia 功能管理」。自动保存、长期记忆使用、人格成长、互动事件及用户长期心情追踪均由后端统一管理，同一智能体的全部已授权绑定设备共用；角色由用户自行编辑，未补写。当前 GLM/音色/角色/固件保持；心情追踪仍关闭。375 项服务、179 项权限、真实 BGE、manager 构建及 80 项浏览器测试通过。线上 27 个后端文件/442 个网页文件/JAR hash 匹配，V5 完整性正常、47 事实/47 向量指纹不变；真实管理接口及 1 个实际有效设备 Scope 的关闭/恢复验证通过。双设备隔离连接测试通过，双实机音频仍未验收。精确 SHA、CI 链接和线上证据见[部署收口](mia-persona-deployment.md)。以下旧部署状态为历史记录，以本段为准。
+
 2026-10-19。优先一个人的日常使用，保留现有SQLite、BGE、GLM和安全校验。原P23多人压力与首句指标仍按历史结果记录，本版本不宣称P23通过。
 
 当前已部署 `aebec000d864160963e01b0be9fcf9ff7dcab8b9`。四项同SHA CI均通过：[367项服务测试](https://github.com/bboytang/Mia/actions/runs/39208658664)、[175项身份测试](https://github.com/bboytang/Mia/actions/runs/39208658659)、[manager](https://github.com/bboytang/Mia/actions/runs/39208658655)、[真实BGE/提取/上下文](https://github.com/bboytang/Mia/actions/runs/39208658619)。22个线上文件hash匹配，HTTPS/WSS就绪，更新前后47事实/47向量、完整性正常，无新增备份或数据改写。
