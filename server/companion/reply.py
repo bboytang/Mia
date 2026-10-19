@@ -249,6 +249,7 @@ async def finish_affect(conn):
         return False
     turn, proposal = pending
     await validate(conn, turn)
+    await conn._mia_authorization.require(turn.bundle.scope, 'memory:write')
     inputs = json.loads(turn.bundle.inputs_json)
     if not inputs.get('session_id'):
         return False

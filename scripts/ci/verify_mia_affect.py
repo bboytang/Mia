@@ -41,7 +41,7 @@ async def evaluate():
     report = {'code_sha': os.environ.get('GITHUB_SHA'), 'kind': 'persistent_mia_affect_real_GLM_synthetic_context',
               'passed': False, 'cases': [], 'maximum_requests': 9, 'sdk_calls': 0,
               'implicit_retries': 0, 'production_data_used': False, 'asr_tts_calls': 0,
-              'role_written': False, 'physical_audio_verified': False}
+              'role_written': False, 'physical_audio_verified': False, 'provider_max_tokens': 2048, 'thinking': 'disabled_as_in_existing_provider'}
     client, sends = None, []
     def sent(request):
         sends.append(1)
@@ -61,7 +61,7 @@ async def evaluate():
                 0, 1, datetime.now(timezone.utc) + timedelta(days=1), frozenset({'memory:read', 'memory:write', 'memory:manage'}))
             auth = AuthorizedFixture()
             features.update(store, scope.owner, {'memory_recall': False, 'companion_emotion': True})
-            limits = ContextLimits(model, 32768, 640, 'Existing GLM profile; isolated nine-case evaluation', 24576)
+            limits = ContextLimits(model, 32768, 2048, 'Existing GLM profile; isolated nine-case evaluation', 24576)
             cases = [
                 ('direct_hurt', 'Mia，你说话真烦，我现在一点也不想听你说。', {'hurt', 'guarded'}),
                 ('residual_next_session', '那你现在想怎么和我说话？', {'steady'}),
@@ -89,11 +89,12 @@ async def evaluate():
                 report['sdk_calls'] += 1
                 spoken = ''
                 raw = ''
-                parse_error = None
+                parse_error, finish_reason = None, None
                 with client.chat.completions.create(model=model, messages=request['messages'],
-                        max_tokens=640, temperature=.1, stream=True) as stream:
+                        max_tokens=2048, extra_body={'thinking': {'type': 'disabled'}}, stream=True) as stream:
                     for chunk in stream:
                         if not chunk.choices:continue
+                        finish_reason = chunk.choices[0].finish_reason or finish_reason
                         text = chunk.choices[0].delta.content or ''
                         raw += text
                         if parse_error is None:
@@ -105,13 +106,13 @@ async def evaluate():
                              and not PersonaGuardrail().inspect_output(spoken)[1])
                 await builder.validate(bundle, auth)
                 with store.lock, store.db:
-                    committed = affect.commit(store, scope.owner, 'new-session-' + str(number), 'turn-' + str(number),
+                    committed = bool(spoken.strip()) and affect.commit(store, scope.owner, 'new-session-' + str(number), 'turn-' + str(number),
                         query, parser.proposal, before['version'])
                 after = affect.state(store, scope.owner)
                 report['cases'].append({'name': name, 'query': query, 'before': before,
                     'appraisal': parser.proposal, 'raw_response': raw, 'spoken_response': spoken,
                     'after': after, 'committed': committed, 'passed': valid and committed,
-                    'elapsed_ms': round((time.monotonic() - started) * 1000, 2)})
+                    'finish_reason': finish_reason, 'elapsed_ms': round((time.monotonic() - started) * 1000, 2)})
                 now[0] += 30
             report['restart_and_device_continuity'] = report['cases'][1]['before']['version'] == 1 and report['cases'][1]['before']['tension'] > 0
             report['repair_gradual'] = 0 < report['cases'][2]['after']['tension'] < report['cases'][1]['after']['tension']
@@ -126,6 +127,7 @@ async def evaluate():
         report['error_type'] = type(error).__name__
         report['failed_case'] = locals().get('name')
         report['failed_raw_response'] = locals().get('raw', '')
+        report['failed_finish_reason'] = locals().get('finish_reason')
     finally:
         if client:client.close()
         report['http_sends'] = len(sends)

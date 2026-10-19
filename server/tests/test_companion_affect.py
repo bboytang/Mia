@@ -191,6 +191,13 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         self.auth.active = False
         with self.assertRaises(PrivateAuthorizationRequired):await reply.finish_affect(self.conn)
         self.auth.active = True
+        previous_scope = self.conn._mia_scope
+        self.conn._mia_scope = replace(self.scope, permissions=frozenset({'memory:read'}))
+        turn, proposal = self.conn._mia_affect_pending
+        turn = replace(turn, bundle=replace(turn.bundle, scope=self.conn._mia_scope))
+        self.conn._mia_affect_pending = (turn, proposal)
+        with self.assertRaises(PrivateAuthorizationRequired):await reply.finish_affect(self.conn)
+        self.conn._mia_scope = previous_scope
         affect.reset(self.store, self.scope.owner)
         with self.assertRaises(ContextError):await reply.finish_affect(self.conn)
         with self.assertRaises(ContextError):await self.run_reply(['<mia-affect>{bad}</mia-affect>不播'])
