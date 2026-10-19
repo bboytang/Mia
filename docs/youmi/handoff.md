@@ -1,5 +1,7 @@
 # Youmi 人格与长期记忆：当前交接
 
+2026-10-19 OTA 最新：用户授权发布带新 UI 的 1.0.5，源码 `41a030fb9287bdfc6d8b134b8f3849bd3ac30c98`（`feature/youmi-passport-ui`），sequence=6。128 主机测试、五构建、原生 UI 截图及真实包四组 A/B 主机模拟通过；签名公钥、分区与资源保持，发现校验匹配服务器现有 WSS。已发布 GitHub 并登记原 OTA 后台，服务端签名及实际 HTTP 下载哈希通过，旧版本保留、自动更新保持开启。发布时设备上报 1.0.4，本版实机安装/语音共存/运行内存与帧率未验收。重启检查更新；[发布与验证证据](../verification/youmi-firmware/ota-1.0.5.json)。
+
 2026-10-19 OTA 发现兼容修复：用户重启后出现错误，设备实际仍为1.0.3。原发现响应已改为WSS，而旧固件仍固定验证原WS提示，因此在下载前拒绝。源码 `c1f03ce` 已通过405后端/188 Java（新增7项兼容）测试，并仅替换生产 `OTAController.class`；其他JAR条目、前端、语音容器及WSS参数保持，TLS1.3/HTTPS200。1.0.3/1.0.4专用发现提示兼容，私有语音继续WSS与原授权。已请用户重启再检查，尚不宣称1.0.4实机安装通过。[部署与测试记录](../verification/youmi-firmware/ota-1.0.4.json)。
 
 2026-10-19 OTA：用户授权发布 Youmi AI Passport 1.0.4，固件源码 `e967eae73a6678be2306bc703e508ad177cf4037`（独立 `feature/mia-passport-youmi-ota` 分支）。[126 主机测试及五构建](https://github.com/bboytang/Youmi/actions/runs/39319658708)通过，原签名序列5及分区/资源一致性、实际包A/B模拟和生产下载哈希已核对，旧包保留。已登记原OTA后台，自动更新开启；发布时设备仍上报1.0.3，安装与实机音频未确认。[发布记录](../verification/youmi-firmware/ota-1.0.4.json)。
