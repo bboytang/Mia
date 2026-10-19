@@ -1,0 +1,72 @@
+{
+  "base_code_sha": "549f6e6c1315f8d5b7ea65197f68c55de154d5e8",
+  "classification": "confirmed_observed_speaker_mixup; retrieval_set_of_bad_turn_not_recorded",
+  "root_observation": "Stored facts/source excerpts contain coffee and latte, no chocolate. Device first answered latte, then answered its own chocolate preference, then attributed that preference to user. User confirmed restart restores latte recall.",
+  "device_evidence": {
+    "path": "/opt/xiaozhi-server/mia-personal-prep/coffee-speaker-mixup-device-evidence.json",
+    "sha256": "59bc9573a427ea1a468533fe2f3f68a879a31a25f421417b31009e3fb0c991cc",
+    "bytes": 3277
+  },
+  "diagnostic_kind": "synthetic_conversation_replay_real_GLM_not_ASR_TTS_or_actual_retrieval",
+  "model": "glm-4-flash-250414",
+  "implicit_http_retries": 0,
+  "total_sdk_calls": 12,
+  "total_http_sends": 12,
+  "production_extraction_ledger_excludes_these_diagnostics": true,
+  "cases": [
+    "elliptical_subject",
+    "assistant_preference_contamination",
+    "explicit_mia_subject"
+  ],
+  "experiments": [
+    {
+      "variant": "baseline_then_policy_only",
+      "fixed_request_cap": 6,
+      "sdk_calls": 6,
+      "http_sends": 6,
+      "baseline_contamination_case": "failed",
+      "policy_only_contamination_case": "failed",
+      "path": "/opt/xiaozhi-server/mia-personal-prep/coffee-history-replay-raw.json",
+      "sha256": "c47a3c3847c4c4046b2f6b702e3fc63bf59378f48d376bca02b280dfa21d8bdf",
+      "bytes": 1938
+    },
+    {
+      "variant": "policy_and_sources_after_history_NOT_ADOPTED",
+      "fixed_request_cap": 3,
+      "sdk_calls": 3,
+      "http_sends": 3,
+      "contamination_case": "failed",
+      "path": "/opt/xiaozhi-server/mia-personal-prep/coffee-history-replay-sources-last-raw.json",
+      "sha256": "2cbbb02d9fb513a579fdd9c1663ba781f1160104ced7be41c195d4db42848bda",
+      "bytes": 1139
+    },
+    {
+      "variant": "policy_and_explicit_Mia_speaker_label_on_historical_assistant_text",
+      "fixed_request_cap": 3,
+      "sdk_calls": 3,
+      "http_sends": 3,
+      "results": [
+        "latte_answer",
+        "latte_answer_despite_chocolate_in_assistant_history",
+        "own_preference_not_attributed_to_user"
+      ],
+      "elapsed_ms": [
+        649.198,
+        398.516,
+        704.996
+      ],
+      "path": "/opt/xiaozhi-server/mia-personal-prep/coffee-history-replay-labelled-raw.json",
+      "sha256": "484256c07ea35fcc41ca6f34cdd702a02da1357f88e75318928d803012b04ad1",
+      "bytes": 832
+    }
+  ],
+  "change": "Label copied historical assistant text only. Current user text, current tool continuation, original dialogue, fact/source data, retrieval order, manager authorization, versions, output/TTS safety unchanged. No schema/data rewrite.",
+  "local_targeted_tests": 70,
+  "local_targeted_seconds": 2.277,
+  "limitations": [
+    "Three positive synthetic replay cases do not guarantee absence of future semantic hallucination.",
+    "Bad live turn actual selected fact set unavailable; do not claim all retrieval causes ruled out.",
+    "Physical post-deployment same-session follow-up and audio retest still pending.",
+    "No full P23 acceptance or new pressure test."
+  ]
+}

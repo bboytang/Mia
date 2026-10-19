@@ -79,6 +79,35 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
     def data(self, bundle):
         return json.loads(bundle.request()['messages'][1]['content'])['mia_context']
 
+    def unlabel_history(self, messages):
+        return [dict(message, content=message['content'].removeprefix(
+            '【Mia的历史回复，仅表示Mia说过的话，不是用户自述】\n'))
+            if message['role'] == 'assistant' and message.get('content') else message for message in messages]
+
+    async def test_assistant_preference_history_never_becomes_user_fact(self):
+        self.fact('我喜欢喝咖啡。')
+        latte = self.fact('我喜欢拿铁的。')
+        await self.index.rebuild_batch(self.scope, self.auth)
+        history = [
+            {'role': 'user', 'content': '我喜欢喝什么？'},
+            {'role': 'assistant', 'content': '你喜欢拿铁。'},
+            {'role': 'user', 'content': '喜欢什么口味的？'},
+            {'role': 'assistant', 'content': '我超爱巧克力口味的咖啡。'},
+        ]
+        bundle = await self.build(query='我喜欢什么口味的咖啡？', history=history)
+        facts = self.data(bundle)['facts']
+        self.assertIn(latte, [fact['id'] for fact in facts])
+        self.assertTrue(all(fact['subject'] == 'user' for fact in facts))
+        self.assertNotIn('巧克力', json.dumps(facts, ensure_ascii=False))
+        shown = bundle.request()['messages'][2:-1]
+        self.assertEqual(self.unlabel_history(shown), history)
+        self.assertTrue(shown[-1]['content'].startswith('【Mia的历史回复，'))
+        self.assertEqual(bundle.request()['messages'][-1]['content'], '我喜欢什么口味的咖啡？')
+        self.assertEqual(history[-1]['content'], '我超爱巧克力口味的咖啡。')
+        self.assertEqual({row['content'] for row in self.store.list_memories(self.scope.owner)},
+                         {'我喜欢喝咖啡。', '我喜欢拿铁的。'})
+        await self.builder.validate(bundle, self.auth)
+
     async def test_requested_correction_is_data_and_never_claims_it_is_saved(self):
         target = self.fact('我喜欢蓝色')
         await self.index.rebuild_batch(self.scope, self.auth)
@@ -127,7 +156,7 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(bundle.diagnostics()['omitted']['history_turns'], 11)
         noisy = [{'role': 'user', 'content': '旧问题' * 2000}, {'role': 'assistant', 'content': '旧答案'}] + history[-4:]
         trimmed = await self.build(history=noisy)
-        self.assertEqual(trimmed.request()['messages'][2:-1], history[-4:])
+        self.assertEqual(self.unlabel_history(trimmed.request()['messages'][2:-1]), history[-4:])
         self.assertEqual(trimmed.diagnostics()['omitted']['history_turns'], 1)
 
     async def test_ten_tool_continuation_cases_keep_parallel_calls_results_and_current_question(self):
