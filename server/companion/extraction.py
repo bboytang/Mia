@@ -2,11 +2,13 @@
 
 import json
 import re
+import sys
 import unicodedata
 
 from .memory import MemoryError, SECRET, SENSITIVE, _safe_text, parse_extraction, trait_supported
 from .persona import PersonaGuardrail
 from .model_requests import model_requests
+from .proposal import ExtractionError, ProviderError
 
 
 INSTRUCTIONS = '''Extract only useful durable information from actual USER excerpts.
@@ -214,16 +216,16 @@ def source_supported(source, quote, *, allow_transient=False):
 def decode(value):
     if isinstance(value, str):
         if len(value) > 24000:
-            raise MemoryError('invalid_input', 'Extraction is too large')
+            raise ExtractionError('parse', 'Extraction is too large')
         # A streamed function argument may contain only the closing Markdown
         # fence. Decode the entire original JSON body; never repair its values.
         fenced = re.fullmatch(r'(?:```(?:json)?\s*\n)?(.*?)\n```', value.strip(), re.S | re.I)
         try:
             value = json.loads(fenced[1] if fenced else value)
         except (ValueError, RecursionError):
-            raise MemoryError('invalid_input', 'Invalid extraction JSON') from None
+            raise ExtractionError('parse', 'Invalid extraction JSON; return one complete JSON object, not empty text or prose') from None
     if not isinstance(value, dict) or set(value) - {'memories', 'trait', 'observations'}:
-        raise MemoryError('invalid_input', 'Invalid extraction object')
+        raise ExtractionError('field_schema', 'Invalid extraction object')
     return value
 
 
@@ -351,8 +353,35 @@ def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive)
 
 
 def validate_output(value, sources, context):
+    try:
+        return _validate_output(value, sources, context)
+    except ExtractionError:
+        raise
+    except MemoryError as error:
+        # Source/evidence rules remain authoritative. No original model value
+        # is coerced, truncated or included in the error message.
+        diagnosed = ExtractionError('source_semantic', str(error), code=error.code)
+        diagnosed.rejected_clues = getattr(error, 'rejected_clues', {})
+        raise diagnosed from None
+
+
+def _field_text(value, maximum, label):
+    try:
+        return _safe_text(value, maximum, label)
+    except MemoryError as error:
+        if error.code == 'credentials_forbidden':
+            raise
+        raise ExtractionError('field_schema', str(error), code=error.code) from None
+
+
+def _validate_output(value, sources, context):
     raw = decode(value)
-    basic = parse_extraction(raw)
+    try:
+        basic = parse_extraction(raw)
+    except MemoryError as error:
+        if error.code == 'credentials_forbidden':
+            raise
+        raise ExtractionError('field_schema', str(error), code=error.code) from None
     known = {row['id']: row for row in context}
     result = {'_schema': 1, 'memories': [], 'trait': None}
     if not isinstance(sources, list) or any(not isinstance(text, str) or SECRET.search(normalize(text)) for text in sources):
@@ -361,12 +390,12 @@ def validate_output(value, sources, context):
         index = clean['source_index']
         if index >= len(sources):
             raise MemoryError('invalid_input', 'Source index does not exist')
-        quote = normalize(_safe_text(proposed.get('source_quote'), 512, 'source quotation'))
+        quote = normalize(_field_text(proposed.get('source_quote'), 512, 'source quotation'))
         kind, value, subject = (proposed.get(key) for key in ('kind', 'value', 'subject'))
         if (not isinstance(kind, str) or kind not in {'explicit', 'inferred'}
                 or not isinstance(value, str) or value not in {'durable', 'transient'}
                 or not isinstance(subject, str) or subject not in {'user', 'other'}):
-            raise MemoryError('invalid_input', 'Invalid proposal classification')
+            raise ExtractionError('field_schema', 'Invalid proposal classification')
         if quote not in normalize(sources[index]):
             raise MemoryError('invalid_input', 'Source quotation does not exist')
         if value == 'transient' or not source_supported(sources[index], quote):
@@ -394,11 +423,11 @@ def validate_output(value, sources, context):
         for key in ('entities', 'keywords', 'trigger_terms'):
             terms = proposed.get(key, [])
             if not isinstance(terms, list):
-                raise MemoryError('invalid_input', key + ' must be an array of at most 8 extraction clues')
+                raise ExtractionError('field_schema', key + ' must be an array of at most 8 extraction clues')
             if len(terms) > 8:
-                raise MemoryError('invalid_input', key + ' has ' + str(len(terms)) +
+                raise ExtractionError('field_schema', key + ' has ' + str(len(terms)) +
                                   ' extraction clues; at most 8 are allowed')
-            terms = list(dict.fromkeys(_safe_text(term, 32, 'clue') for term in terms))
+            terms = list(dict.fromkeys(_field_text(term, 32, 'clue') for term in terms))
             rejected = [term for term in terms if term not in quote]
             if rejected:
                 error = MemoryError('invalid_input', key + ' clue must occur as a contiguous literal substring '
@@ -408,15 +437,16 @@ def validate_output(value, sources, context):
             record[key] = terms
         importance = 'importance_weight' in proposed or 'importance_evidence' in proposed
         if importance and ('emotional_weight' in proposed or 'emotional_evidence' in proposed):
-            raise MemoryError('invalid_input', 'Ambiguous importance fields')
+            raise ExtractionError('field_schema', 'Ambiguous importance fields')
         prefix = 'importance' if importance else 'emotional'
         weight = proposed.get(prefix + '_weight')
         evidence = proposed.get(prefix + '_evidence')
         if weight is None and kind == 'explicit' and explicit_self_importance(quote):
             raise MemoryError('invalid_input', 'Missing source-stated importance: model must supply its score and affirmative literal evidence')
         if weight is not None:
-            if (type(weight) not in (int, float) or not 0 <= weight <= 1 or not isinstance(evidence, str)
-                    or not evidence or evidence not in quote or not affirmative_importance_evidence(quote, evidence)):
+            if type(weight) not in (int, float) or not 0 <= weight <= 1 or not isinstance(evidence, str):
+                raise ExtractionError('field_schema', 'Unsupported emotional importance')
+            if not evidence or evidence not in quote or not affirmative_importance_evidence(quote, evidence):
                 raise MemoryError('invalid_input', 'Unsupported emotional importance')
         record['emotional_weight'] = weight
         record['emotional_evidence'] = evidence if weight is not None else None
@@ -424,11 +454,11 @@ def validate_output(value, sources, context):
             record['anchor'] = anchor
         relations = proposed.get('relations', [])
         if not isinstance(relations, list) or len(relations) > 4:
-            raise MemoryError('invalid_input', 'Invalid relation count')
+            raise ExtractionError('field_schema', 'Invalid relation count')
         record['relations'] = []
         for relation in relations:
             if not isinstance(relation, dict):
-                raise MemoryError('invalid_input', 'Invalid relation')
+                raise ExtractionError('field_schema', 'Invalid relation')
             target_id = relation.get('target_id')
             target = known.get(target_id) if isinstance(target_id, str) else None
             term = relation.get('anchor')
@@ -453,7 +483,7 @@ def validate_output(value, sources, context):
         grounded = []
         for item in quotes:
             if not isinstance(item, dict):
-                raise MemoryError('invalid_input', 'Invalid trait evidence')
+                raise ExtractionError('field_schema', 'Invalid trait evidence')
             fact_id = item.get('id')
             fact = known.get(fact_id) if isinstance(fact_id, str) else None
             quote = item.get('quote')
@@ -524,7 +554,10 @@ class LLMMemoryExtractor:
                 return change
         if not any(source_supported(source, None, allow_transient=bool(tracking['enabled'])) for source in sources):
             return {'memories': [], 'trait': None}
-        provider = self.factory()
+        try:
+            provider = self.factory()
+        except Exception:
+            raise ProviderError() from None
         lease = None
         try:
             natural = len(sources) == 1 and natural_change_requested(sources[0], context)
@@ -544,7 +577,7 @@ class LLMMemoryExtractor:
             capabilities = provider_capabilities(provider)
             function_capable = capabilities['native_tools']
             if not function_capable and not capabilities['plain_json']:
-                raise MemoryError('invalid_input', 'Provider has no reviewed extraction contract')
+                raise ExtractionError('tool_contract', 'Provider has no reviewed extraction contract')
             if function_capable:
                 from .proposal import instructions
                 base = instructions(natural=natural, growth=growth, significance=significance)
@@ -573,8 +606,12 @@ class LLMMemoryExtractor:
             if feedback:
                 payload['validation_feedback'] = feedback
             cancellation = getattr(context, 'request_cancelled', None)
+            if hasattr(context, 'model_request_phase'):
+                context.model_request_phase = 'queued'
             lease = model_requests.acquire(foreground=False,
                 cancelled=cancellation.is_set if cancellation is not None else lambda: False)
+            if hasattr(context, 'model_request_phase'):
+                context.model_request_phase = 'active'
             if function_capable:
                 from .proposal import NAME, read_stream, tool_definition
                 whole = len(sources) == 1 and source_supported(sources[0], payload['user_excerpts'][0])
@@ -589,16 +626,30 @@ class LLMMemoryExtractor:
                     'evidence supports it, otherwise omit it; do not invent empty traits. This optional-field form replaces null placeholders, '
                     'not the original evidence or permission rules. Do not invent properties omitted from the schema; '
                     'absent relations mean no proposed relationship, not permission to invent an ID.')
-                return read_stream(provider.response_with_functions('',
-                    [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
-                    functions=[tool]))
-            return provider.response_no_stream(instruction,
-                json.dumps(payload, ensure_ascii=False))
+                try:
+                    return read_stream(provider.response_with_functions('',
+                        [{'role': 'system', 'content': instruction}, {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
+                        functions=[tool]))
+                except MemoryError:
+                    raise
+                except Exception:
+                    raise ProviderError() from None
+            try:
+                return provider.response_no_stream(instruction, json.dumps(payload, ensure_ascii=False))
+            except MemoryError:
+                raise
+            except Exception:
+                raise ProviderError() from None
         finally:
             client = getattr(provider, 'client', None)
+            failed = sys.exc_info()[0] is not None
             try:
                 if client is not None and hasattr(client, 'close'):
-                    client.close()
+                    try:
+                        client.close()
+                    except Exception:
+                        if not failed:
+                            raise ProviderError() from None
             finally:
                 if lease is not None:
                     lease.release()

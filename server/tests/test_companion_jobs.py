@@ -100,6 +100,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
                 await self.worker.run_once()
                 self.assertEqual(self.row(admitted)['state'], 'retry_wait')
                 self.assertEqual(self.row(admitted)['attempts'], 1)
+                self.assertEqual(self.row(admitted)['error_category'], 'model_queue_timeout')
             finally:
                 for lease in leases:
                     lease.release()
@@ -125,9 +126,10 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.worker.extraction_timeout = .03
         with patch('server.companion.extraction.model_requests', gate):
             try:
-                await self.worker.submit(self.event())
+                admitted = await self.worker.submit(self.event())
                 await self.worker.run_once()
                 self.assertEqual(gate.snapshot()['active'], 1)
+                self.assertEqual(self.row(admitted)['error_category'], 'timeout')
                 provider.client.close.assert_not_called()
             finally:
                 release.set()
@@ -216,7 +218,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.output = 'not json'
         result = await self.worker.submit(self.event())
         await self.worker.run_once()
-        self.assertEqual(self.row(result)['error_category'], 'invalid_output')
+        self.assertEqual(self.row(result)['error_category'], 'parse')
         self.now[0] += 2
         await self.worker.run_once()
         self.assertEqual(self.row(result)['state'], 'failed')
@@ -230,7 +232,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.output['memories'][0]['source_index'] = 1
         result = await self.worker.submit(self.event())
         await self.worker.run_once()
-        self.assertEqual(self.row(result)['error_category'], 'invalid_output')
+        self.assertEqual(self.row(result)['error_category'], 'source_semantic')
         self.assertEqual(self.store.list_memories(self.scope.owner), [])
 
     async def test_real_validation_feedback_is_task_local_and_keeps_two_attempt_limit(self):
@@ -279,6 +281,75 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
         self.assertEqual(len(self.store.list_memories(self.peer.owner)), 1)
         self.assertNotIn(own['id'], self.worker.validation_feedback)
+
+    async def test_native_tool_and_parse_failures_get_feedback_before_exactly_one_retry(self):
+        from server.companion.proposal import NAME
+        for category in ('tool_contract', 'parse'):
+            with self.subTest(category=category):
+                payloads = []
+                output = json.dumps(self.output)
+                class Provider:
+                    def response_with_functions(self, session, messages, functions):
+                        payloads.append(json.loads(messages[1]['content']))
+                        if len(payloads) == 1 and category == 'parse':
+                            yield 'not JSON', None
+                        else:
+                            name = 'wrong_function' if len(payloads) == 1 else NAME
+                            yield None, [SimpleNamespace(index=0, id='one',
+                                function=SimpleNamespace(name=name, arguments=output))]
+                async def resolve(scope):
+                    return LLMMemoryExtractor(Provider)
+                self.worker.resolve = resolve
+                with patch('server.companion.proposal.provider_capabilities', return_value={'native_tools': True}):
+                    admitted = await self.worker.submit(self.event(category))
+                    await self.worker.run_once()
+                    self.assertEqual(self.row(admitted)['error_category'], category)
+                    self.assertEqual(self.row(admitted)['attempts'], 1)
+                    self.assertNotIn('validation_feedback', payloads[0])
+                    self.now[0] += 2
+                    await self.worker.run_once()
+                self.assertEqual(payloads[1]['validation_feedback']['category'], category)
+                self.assertEqual(payloads[1]['user_excerpts'], ['我喜欢蓝色'])
+                self.assertEqual(len(payloads), 2)
+                self.assertEqual((self.row(admitted)['state'], self.row(admitted)['attempts']), ('committed', 2))
+                self.assertEqual(self.row(admitted)['deadline'] - self.row(admitted)['created_at'], 120)
+                self.assertNotIn(admitted['id'], self.worker.validation_feedback)
+
+    async def test_typed_gate_errors_keep_their_category_and_original_attempt_semantics(self):
+        from server.companion.model_requests import ModelQueueError
+        for reason, category in [('model_request_queue_full', 'model_queue_full'),
+                ('model_request_cancelled', 'cancelled'), ('model_request_queue_timeout', 'model_queue_timeout')]:
+            with self.subTest(reason=reason):
+                def extract(sources, context):
+                    raise ModelQueueError(reason)
+                async def resolve(scope):
+                    return extract
+                self.worker.resolve = resolve
+                admitted = await self.worker.submit(self.event(reason))
+                await self.worker.run_once()
+                row = self.row(admitted)
+                self.assertEqual((row['state'], row['attempts'], row['error_category']), ('retry_wait', 1, category))
+                self.assertNotIn(admitted['id'], self.worker.validation_feedback)
+
+    async def test_provider_failure_is_not_model_feedback_and_keeps_two_attempt_boundary(self):
+        calls = []
+        class Provider:
+            def response_no_stream(self, *args):
+                calls.append(True)
+                raise RuntimeError('sk-synthetic-private-body')
+        async def resolve(scope):
+            return LLMMemoryExtractor(Provider)
+        self.worker.resolve = resolve
+        admitted = await self.worker.submit(self.event('provider-error'))
+        await self.worker.run_once()
+        self.assertEqual(self.row(admitted)['error_category'], 'provider')
+        self.assertNotIn(admitted['id'], self.worker.validation_feedback)
+        self.now[0] += 2
+        await self.worker.run_once()
+        self.assertEqual((self.row(admitted)['state'], self.row(admitted)['attempts']), ('failed', 2))
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(self.row(admitted)['source_payload'], '{}')
+        self.assertEqual(self.store.list_memories(self.scope.owner), [])
 
     async def test_delete_clear_pause_edit_and_reset_cancel_without_resurrection(self):
         for action in ('delete', 'clear', 'pause', 'update', 'reset_personality'):

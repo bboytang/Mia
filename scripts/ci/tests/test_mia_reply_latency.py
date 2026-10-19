@@ -20,6 +20,25 @@ spec.loader.exec_module(latency)
 
 
 class EmptyMemoryBaselineTests(unittest.TestCase):
+    def test_frozen_report_corrected_stages_preserve_all_six_total_p95_values(self):
+        directory = Path(__file__).resolve().parents[1]
+        timing_spec = importlib.util.spec_from_file_location('mia_tts_timing', directory / 'mia_tts_timing.py')
+        timing = importlib.util.module_from_spec(timing_spec)
+        timing_spec.loader.exec_module(timing)
+        with patch.dict(sys.modules, {'mia_tts_timing': timing}):
+            spec = importlib.util.spec_from_file_location('stage_review', directory / 'review_mia_reply_stages.py')
+            review = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(review)
+        root = directory.parents[1] / 'docs/verification/mia-persona-memory'
+        result = review.review(root / 'performance-auth-once-latency-child.json.gz')
+        original = json.loads((root / 'performance-auth-once-latency-review.json').read_text())
+        self.assertEqual(len(result['pairs']), 36)
+        for corrected, frozen in zip(result['groups'], original['query_verdicts']):
+            self.assertAlmostEqual(corrected['total_delta_p95_ms'], frozen['delta_p95_ms'], places=6)
+        worst = result['groups'][3]['worst_pair']
+        for key, expected in zip(worst['delta'], (322.904883, 437.91558, 174.669288)):
+            self.assertAlmostEqual(worst['delta'][key], expected, places=5)
+
     def test_sdk_observer_first_content_is_relative_to_case_not_sdk(self):
         spec = importlib.util.spec_from_file_location('mia_tts_timing',
             Path(__file__).resolve().parents[1] / 'mia_tts_timing.py')

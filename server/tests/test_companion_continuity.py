@@ -190,7 +190,7 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_default_off_cannot_persist_observations_and_no_unreviewed_history_is_aggregated(self):
         admitted = await self.observe('off')
-        self.assertEqual(self.jobs.current(admitted)['error_category'], 'invalid_output')
+        self.assertEqual(self.jobs.current(admitted)['error_category'], 'source_semantic')
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_observations').fetchone()[0], 0)
         self.assertEqual(emotions.trend(self.store, self.scope.owner), {'status': 'disabled'})
 

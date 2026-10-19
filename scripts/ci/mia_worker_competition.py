@@ -41,6 +41,7 @@ def observe_validation_failures(worker, report, lock, persist):
                 assert binding['job_id'] == native['job_id'] and binding['attempt'] == native['attempt']
                 encoded = json.dumps(value, ensure_ascii=False).encode()
                 failure = dict(binding, error_code=error.code, error_message=str(error),
+                    error_category=getattr(error, 'category', 'invalid_output'),
                     rejected_clues=getattr(error, 'rejected_clues', {}),
                     original_output_sha256=hashlib.sha256(encoded).hexdigest(),
                     original_output_capture_truncated=len(encoded) > 131072)

@@ -13,6 +13,8 @@ from .memory import MemoryError, _safe_text
 from .extraction import context_for, validate_output
 from .embedding import EmbeddingUnavailable
 from .semantic import SemanticMemoryIndex
+from .proposal import validation_feedback
+from .model_requests import ModelQueueError
 
 
 ACTIVE = ('pending', 'extracting', 'validated', 'retry_wait')
@@ -222,24 +224,22 @@ class MemoryWorker:
                     return False
                 await asyncio.to_thread(self.jobs.update, job, 'extracting', attempt=True)
                 context.request_cancelled = threading.Event()
+                context.model_request_phase = 'preparing'
                 try:
                     output = await self.lane.call(lambda: extract([json.loads(job['source_payload'])['text']], context),
                         min(self.extraction_timeout, max(0.001, job['deadline'] - self.jobs.store.clock())))
+                except ModelQueueError:
+                    raise
                 except asyncio.TimeoutError:
+                    context.request_cancelled.set()
+                    if context.model_request_phase == 'queued':
+                        raise ModelQueueError('model_request_queue_timeout') from None
                     raise TimeoutError('extraction_timeout') from None
                 finally:
                     # A cancelled/deadline-expired native waiter must never start
                     # a fresh model request when a slot becomes available later.
                     context.request_cancelled.set()
-                try:
-                    validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
-                except MemoryError as error:
-                    if error.code == 'invalid_input' and job['attempts'] + 1 < 2:
-                        # Server validation messages only; never provider errors,
-                        # raw model text, extra sources or output repair.
-                        self.validation_feedback[job['id']] = {'message': str(error)[:512],
-                            'rejected_clues': getattr(error, 'rejected_clues', {})}
-                    raise
+                validated = validate_output(output, [json.loads(job['source_payload'])['text']], context)
                 self.validation_feedback.pop(job['id'], None)
                 result = json.dumps(validated, ensure_ascii=False)
                 self.results[job['id']] = result
@@ -275,13 +275,18 @@ class MemoryWorker:
                 self.results.pop(job['id'], None)
                 return True
             current = await asyncio.to_thread(self.jobs.current, job)
+            feedback = validation_feedback(error)
+            if current['attempts'] < 2 and feedback is not None:
+                self.validation_feedback[job['id']] = feedback
+            else:
+                self.validation_feedback.pop(job['id'], None)
             await asyncio.to_thread(self.jobs.update, job, 'failed' if current['attempts'] >= 2 else 'retry_wait',
-                                    error='invalid_output')
+                                    error=getattr(error, 'category', 'invalid_output'))
         except Exception as error:
             current = await asyncio.to_thread(self.jobs.current, job)
             category = ('database' if isinstance(error, sqlite3.Error) else
                         'embedding' if isinstance(error, EmbeddingUnavailable) else
-                        'timeout' if isinstance(error, TimeoutError) else 'model')
+                        getattr(error, 'category', 'timeout' if isinstance(error, TimeoutError) else 'model'))
             terminal = result is None and current['attempts'] >= 2
             await asyncio.to_thread(self.jobs.update, job, 'failed' if terminal else 'retry_wait',
                                     result=result, error=category)

@@ -3,10 +3,41 @@
 import unicodedata
 import sys
 
-from .memory import CATEGORIES, MemoryError
+from .memory import CATEGORIES, MemoryError, SECRET
 
 
 NAME = 'mia_memory_proposal'
+
+
+class ExtractionError(MemoryError):
+    """Server validation diagnosis; never a Provider body or a repaired value."""
+    def __init__(self, category, message, *, code='invalid_input'):
+        super().__init__(code, message)
+        self.category = category
+
+
+class ProviderError(RuntimeError):
+    category = 'provider'
+
+    def __init__(self):
+        super().__init__('Extraction Provider request failed')
+
+
+def validation_feedback(error):
+    if (not isinstance(error, ExtractionError) or error.code != 'invalid_input'
+            or error.category not in {'parse', 'tool_contract', 'field_schema', 'source_semantic'}):
+        return None
+    message = str(error)[:512]
+    if SECRET.search(unicodedata.normalize('NFKC', message)):
+        message = 'Proposal rejected; return a new source-grounded proposal satisfying the original rules'
+    clues = {}
+    for key, values in getattr(error, 'rejected_clues', {}).items():
+        if (key in {'entities', 'keywords', 'trigger_terms', 'reconciliation.anchor'}
+                and isinstance(values, list) and len(values) <= 8
+                and all(isinstance(v, str) and 1 <= len(v) <= 32
+                    and not SECRET.search(unicodedata.normalize('NFKC', v)) for v in values)):
+            clues[key] = list(values)
+    return {'category': error.category, 'message': message, 'rejected_clues': clues}
 
 
 def provider_capabilities(provider):
@@ -159,22 +190,27 @@ def read_stream(stream):
     seen = False
     try:
         for content, calls in stream:
+            if content is not None and not isinstance(content, str):
+                raise ExtractionError('tool_contract', 'Invalid extraction content delta type')
             text += content or ''
             for call in calls or []:
                 seen = True
                 if call.index != 0 or (identity and call.id and call.id != identity):
-                    raise MemoryError('invalid_input', 'Ambiguous extraction function calls')
+                    raise ExtractionError('tool_contract', 'Ambiguous extraction function calls; submit exactly one mia_memory_proposal call')
                 identity = call.id or identity
                 function = call.function
+                if function and any(v is not None and not isinstance(v, str)
+                        for v in (function.name, function.arguments)):
+                    raise ExtractionError('tool_contract', 'Invalid extraction function delta type')
                 name += (function.name or '') if function else ''
                 arguments += (function.arguments or '') if function else ''
             if len(text) + len(arguments) > 32768 or len(name) > 64:
-                raise MemoryError('invalid_input', 'Extraction proposal exceeds bound')
+                raise ExtractionError('tool_contract', 'Extraction proposal exceeds bound')
         if seen:
             # Some Providers emit a lone Markdown fence beside a tool call.
             # It carries no proposal text; keep arguments and all other guards.
             if name != NAME or not arguments or text.strip() not in ('', '```'):
-                raise MemoryError('invalid_input', 'Invalid extraction function proposal')
+                raise ExtractionError('tool_contract', 'Invalid extraction function proposal; submit exactly one mia_memory_proposal call without explanatory text')
             return arguments
         return text  # Existing providers may stream plain JSON instead of a tool.
     finally:

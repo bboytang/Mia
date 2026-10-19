@@ -6,6 +6,7 @@ import json
 import re
 
 from .memory import MemoryError, SECRET, _text
+from .proposal import ExtractionError
 
 
 DAY = 86400
@@ -35,20 +36,20 @@ def consent(store, owner):
 def validate_observations(raw, sources, tracking):
     from .extraction import normalize, source_supported
     if not isinstance(raw, list) or len(raw) > 1:
-        raise MemoryError('invalid_input', 'At most one observation per user message')
+        raise ExtractionError('field_schema', 'At most one observation per user message')
     if raw and not tracking['enabled']:
         raise MemoryError('invalid_input', 'Emotion tracking is disabled')
     result = []
     for item in raw:
         if not isinstance(item, dict):
-            raise MemoryError('invalid_input', 'Invalid observation')
+            raise ExtractionError('field_schema', 'Invalid observation')
         index, kind, tendency, confidence = (item.get(k) for k in ('source_index', 'source_kind', 'tendency', 'confidence'))
         quote = item.get('source_quote')
         if (type(index) is not int or not 0 <= index < len(sources) or not isinstance(kind, str) or kind not in KINDS
                 or not isinstance(tendency, str) or tendency not in TENDENCIES
                 or type(confidence) not in (int, float) or not 0.5 <= confidence <= 1
                 or item.get('subject') != 'user' or not isinstance(quote, str) or not 1 <= len(quote) <= 512):
-            raise MemoryError('invalid_input', 'Invalid observation classification')
+            raise ExtractionError('field_schema', 'Invalid observation classification')
         quote = normalize(quote)
         if (quote not in normalize(sources[index]) or not source_supported(sources[index], quote, allow_transient=True)
                 or not re.match(r'^(?:(?:最近|今天|现在|这些天|这几天|这周|这阵子)[,， ]*)?我', quote)

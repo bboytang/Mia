@@ -145,7 +145,7 @@ async def evaluate(args, report):
                     assert json.loads(task['validated_result']) == {'confirmation_required': True}
                 details.update(source_type=source['source_type'], confirmation_origin=source['confirmation_origin'], indexed=bool(indexed))
             if row['expected'] == 'invalid':
-                assert task['error_category'] == 'invalid_output' and task['attempts'] == 2
+                assert task['error_category'] == 'source_semantic' and task['attempts'] == 2
             assert task['source_payload'] == '{}'
             report['cases'].append(details)
         assert store.db.execute('SELECT COUNT(*) FROM mia_associations').fetchone()[0] == 1

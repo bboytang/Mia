@@ -5,6 +5,14 @@ import threading
 import time
 
 
+class ModelQueueError(TimeoutError):
+    def __init__(self, reason):
+        super().__init__(reason)
+        self.category = {'model_request_cancelled': 'cancelled',
+            'model_request_queue_full': 'model_queue_full',
+            'model_request_queue_timeout': 'model_queue_timeout'}[reason]
+
+
 class Lease:
     def __init__(self, gate):
         self.gate = gate
@@ -42,12 +50,12 @@ class ModelRequestGate:
         queue = self.foreground if foreground else self.background
         with self.condition:
             if len(self.foreground) + len(self.background) >= 128:
-                raise TimeoutError('model_request_queue_full')
+                raise ModelQueueError('model_request_queue_full')
             queue.append(ticket)
             try:
                 while True:
                     if cancelled():
-                        raise TimeoutError('model_request_cancelled')
+                        raise ModelQueueError('model_request_cancelled')
                     preferred = self.foreground if self.foreground else self.background
                     if self.active < 2 and preferred is queue and queue[0] is ticket:
                         queue.popleft()
@@ -56,7 +64,7 @@ class ModelRequestGate:
                         return Lease(self)
                     remaining = deadline - time.monotonic()
                     if remaining <= 0:
-                        raise TimeoutError('model_request_queue_timeout')
+                        raise ModelQueueError('model_request_queue_timeout')
                     self.condition.wait(min(.05, remaining))
             finally:
                 if ticket in queue:
