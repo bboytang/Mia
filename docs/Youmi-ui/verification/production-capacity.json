@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "status": "development-only-not-approved-for-flashing",
+  "idf_version": "v6.1",
+  "application": {
+    "bytes": 2363392,
+    "capacity_bytes": 3145728,
+    "usage_percent": 75.13,
+    "remaining_bytes": 782336,
+    "sha256": "e3d94c9d69ed3c79542b5da38149e44422b0728a78f47e9f36f022da9df8dde3"
+  },
+  "assets": {
+    "bytes": 307037,
+    "capacity_bytes": 655360,
+    "usage_percent": 46.85,
+    "remaining_bytes": 348323,
+    "sha256": "6c106c6084b23c0d7d2338b33c465915dcd71152cd9cbbf9b579822404d93105"
+  },
+  "partitions": [
+    {
+      "label": "nvs",
+      "type": 1,
+      "subtype": 2,
+      "offset": 36864,
+      "size": 24576,
+      "flags": 0
+    },
+    {
+      "label": "phy_init",
+      "type": 1,
+      "subtype": 1,
+      "offset": 61440,
+      "size": 4096,
+      "flags": 0
+    },
+    {
+      "label": "otadata",
+      "type": 1,
+      "subtype": 0,
+      "offset": 65536,
+      "size": 8192,
+      "flags": 0
+    },
+    {
+      "label": "ota_0",
+      "type": 0,
+      "subtype": 16,
+      "offset": 131072,
+      "size": 3145728,
+      "flags": 0
+    },
+    {
+      "label": "cardid",
+      "type": 1,
+      "subtype": 2,
+      "offset": 3497984,
+      "size": 16384,
+      "flags": 2
+    },
+    {
+      "label": "ota_1",
+      "type": 0,
+      "subtype": 17,
+      "offset": 3538944,
+      "size": 3145728,
+      "flags": 0
+    },
+    {
+      "label": "assets",
+      "type": 1,
+      "subtype": 130,
+      "offset": 6684672,
+      "size": 655360,
+      "flags": 0
+    },
+    {
+      "label": "recovery",
+      "type": 0,
+      "subtype": 32,
+      "offset": 7340032,
+      "size": 1048576,
+      "flags": 0
+    }
+  ],
+  "signature_included": false,
+  "hardware_verified": false,
+  "board_type": "mia-ai-passport",
+  "signed_ota_format": "MIAOTA1-prefix-v1",
+  "release_blockers": [
+    "Device partition table and security review; first-flash owner confirmation",
+    "Physical audio, display, provisioning, forward OTA and rollback verification"
+  ]
+}

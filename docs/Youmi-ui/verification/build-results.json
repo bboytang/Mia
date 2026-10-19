@@ -1,0 +1,50 @@
+{
+  "recorded_at": "2026-10-19T21:23:53.657402+00:00",
+  "tested_code_commit": "f19a144ddb69286122305993755fbd8fc192abf1",
+  "ci_url": "https://github.com/bboytang/Youmi/actions/runs/39326192375",
+  "ci_conclusion": "success",
+  "host_tests": 127,
+  "firmware_variants_passed": [
+    "mia-ai-passport",
+    "mia-ai-passport-dev",
+    "ai-passport",
+    "xmini-c3",
+    "atom-echos3r"
+  ],
+  "native_ci_screenshots_match_committed_pixels": 12,
+  "baseline_firmware_commit": "e967eae73a6678be2306bc703e508ad177cf4037",
+  "binary_compatibility": {
+    "partition_table/partition-table.bin": {
+      "unchanged": true,
+      "bytes": 3072,
+      "sha256": "03d556919341619a31803fb94a30f85c3203ecfd559fab2c1e979c90dfc456bf"
+    },
+    "generated_assets.bin": {
+      "unchanged": true,
+      "bytes": 307037,
+      "sha256": "6c106c6084b23c0d7d2338b33c465915dcd71152cd9cbbf9b579822404d93105"
+    }
+  },
+  "baseline_application_bytes": 2324896,
+  "production_application_bytes": 2363392,
+  "application_flash_increase_bytes": 38496,
+  "application_slot_remaining_bytes": 782336,
+  "static_dram_bytes_including_ram_code": 109756,
+  "static_rtc_slow_bytes": 96,
+  "static_ram_is_not_runtime_free_heap": true,
+  "hardware_tested": false,
+  "runtime_unmeasured": [
+    "incremental_ui_heap",
+    "free_heap",
+    "largest_contiguous_free_heap",
+    "task_cpu_occupancy",
+    "physical_refresh_duration",
+    "actual_fps",
+    "voice_coexistence",
+    "physical_wifi_provisioning",
+    "physical_ota_and_rollback"
+  ],
+  "flashed": false,
+  "ota_published": false,
+  "partitions_changed": false
+}

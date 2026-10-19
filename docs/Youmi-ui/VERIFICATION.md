@@ -36,3 +36,35 @@ Run the firmware CI for the exact final source commit. Its capacity reports and
 build logs are the source for image size, assets capacity and static RAM. Runtime
 free heap, maximum contiguous heap, task occupancy, refresh duration and voice
 coexistence cannot be accepted until measured on the actual development board.
+
+## Final build evidence (2026-10-19)
+
+Tested code `f19a144ddb69286122305993755fbd8fc192abf1`:
+[CI 39326192375](https://github.com/bboytang/Youmi/actions/runs/39326192375) is
+successful: 127 host tests, all five firmware variants, native UI screenshots and
+the existing Android inspection checks. Downloaded CI captures match all twelve
+committed implementation PNGs pixel for pixel. This verifies reproducibility,
+not pixel equivalence to the artwork.
+
+| Production `mia-ai-passport` measurement | Result |
+| --- | --- |
+| Application image / A/B slot | 2,363,392 / 3,145,728 bytes (75.13%) |
+| Free application slot capacity | 782,336 bytes |
+| Flash increase over release 1.0.4 | 38,496 bytes |
+| Resources / assets partition | 307,037 / 655,360 bytes |
+| Static DRAM, including resident code | 109,756 bytes |
+| Static RTC SLOW | 96 bytes |
+| Actual device free heap / largest block / UI incremental heap | Not measured |
+| Actual task CPU occupancy / FPS / refresh duration / voice coexistence | Not measured |
+
+The production partition-table binary and generated asset bytes exactly match
+release `e967eae`. Do not use the development variant's asset hash for this
+comparison: its board name intentionally differs. No source file in the audio,
+protocol, application, signed-update or partition implementation changed.
+
+See [raw IDF size output](verification/firmware-size.txt),
+[structured sizes](verification/firmware-size.json),
+[production capacity](verification/production-capacity.json) and
+[validation provenance](verification/build-results.json).
+These final evidence files document the tested code commit; they make no new
+firmware changes. No device was flashed and no OTA was published.
