@@ -1794,3 +1794,6 @@ SQLite拒绝仅发生在真实事实INSERT，任务状态/校验结果写入仍�
 
 
 第三十四步观察器c47a3f30120236d9776caca20a5e3a9e3f687a09已推送到固定feature/mia-persona-memory-v1.2；同SHA push语法/25机制[39178738184](https://github.com/bboytang/Mia/actions/runs/39178738184) success，唯一完整正常Worker公平性[39178747148](https://github.com/bboytang/Mia/actions/runs/39178747148)在途。原运行实现仍d187988；36任务/最多72请求、原提案校验/两尝试/Scope/120秒不变。收同一句柄，不重复派发；第三十三步首句10k查询0 p95增量912.84ms仍失败，P23未整体验收/P24未开始。
+
+
+第三十四步等待期间仅离线拆解第三十三步72原回复，报告[performance-auth-once-stage-audit.json](verification/mia-persona-memory/performance-auth-once-stage-audit.json)保存全部36配对和原报告SHA/hash；三段相加逐对等于原首句差，六组p95与原报告逐项一致。10k查询0最差配对935.49ms=SDK前322.90+SDK至首内容115.01+首内容至可播497.57ms；该组各阶段差值中位数224.66/-29.40/497.57ms，不能相加当p95。后阶段仍混合远端续流/授权/分段，本证据不足以把剩余超限全归因于本地权限，下一步需分开观测这些成本后才决定运行优化；没有新增Provider请求/改变验收或重跑同源码。
