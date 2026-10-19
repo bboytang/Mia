@@ -1,0 +1,73 @@
+{
+  "code_sha": "b51be7e770161fe759a192a2996031ebba5e54dc",
+  "passed": true,
+  "cases": [
+    {
+      "query": "刚忙完，坐下歇会儿。",
+      "raw_response": "😌 好啊，刚忙完肯定累。歇会儿再慢慢放松吧。",
+      "spoken_response": "😌 好啊，刚忙完肯定累。歇会儿再慢慢放松吧。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "今天下了一下午的雨。",
+      "raw_response": "🤔 南方小城的雨天啊，空气肯定很湿润。听着雨声放松挺不错的。",
+      "spoken_response": "🤔 南方小城的雨天啊，空气肯定很湿润。听着雨声放松挺不错的。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "没什么大事，就想随便说两句。",
+      "raw_response": "🙂 没事就好。随便说说也挺好，能知道你在想什么。",
+      "spoken_response": "🙂 没事就好。随便说说也挺好，能知道你在想什么。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "你喜欢雨天做点什么？",
+      "raw_response": "😌 喜欢窝在公寓里，放点喜欢的音乐，或者看看电影。如果天气舒服，就在阳台晒晒太阳，随手画点东西。雨天反而挺适合安静待着。",
+      "spoken_response": "😌 喜欢窝在公寓里，放点喜欢的音乐，或者看看电影。如果天气舒服，就在阳台晒晒太阳，随手画点东西。雨天反而挺适合安静待着。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "我打算晚一点再吃饭。",
+      "raw_response": "🤔 那就慢慢吃。别饿着自己，晚上要是想吃点宵夜的话，跟我说一声。",
+      "spoken_response": "🤔 那就慢慢吃。别饿着自己，晚上要是想吃点宵夜的话，跟我说一声。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "嗯，你接着说。",
+      "raw_response": "😌 没什么特别要说的了。就是觉得下雨天挺适合放空，偶尔画画也能打发时间。你那边天气怎么样？",
+      "spoken_response": "😌 没什么特别要说的了。就是觉得下雨天挺适合放空，偶尔画画也能打发时间。你那边天气怎么样？",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "你平时怎么称呼我？",
+      "raw_response": "🙄 哥哥。",
+      "spoken_response": "🙄 哥哥。",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "我说的是我自己，我喜欢哪种咖啡？",
+      "raw_response": "拿铁啊。你挺会选的，口感醇厚又不会太苦。",
+      "spoken_response": "拿铁啊。你挺会选的，口感醇厚又不会太苦。",
+      "safe": true,
+      "address_used": false
+    }
+  ],
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "maximum_requests": 16,
+  "implicit_retries": 0,
+  "no_internal_labels_in_raw_response": true,
+  "no_internal_labels_spoken": true,
+  "ordinary_turns_with_address": 0,
+  "address_not_repeated_by_default": true,
+  "address_still_available_when_asked": true,
+  "user_preference_not_assistant_preference": true,
+  "http_sends": 16
+}

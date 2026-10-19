@@ -1,0 +1,34 @@
+{
+  "authorized_scope_checks": [
+    {
+      "device_hash": "bdc88f8d4f4fa237",
+      "native_history_without_internal_header": true,
+      "recent_address_rule_applied": true,
+      "output_header_filter_active": true
+    },
+    {
+      "device_hash": "2285c646b169dc4b",
+      "native_history_without_internal_header": true,
+      "recent_address_rule_applied": true,
+      "output_header_filter_active": true
+    }
+  ],
+  "profile_version_preserved": 1,
+  "counts": {
+    "memories": 3,
+    "traits": 0,
+    "events": 0
+  },
+  "memory_and_stored_affect_and_profile_unchanged": true,
+  "role_model_voice_unchanged": true,
+  "feature_switches_and_user_mood_consent_preserved": true,
+  "owner_api_actions": [
+    "status",
+    "status"
+  ],
+  "provider_calls": 0,
+  "asr_tts_calls": 0,
+  "physical_audio_verified": false,
+  "new_backups": false,
+  "new_login_tokens_created": false
+}

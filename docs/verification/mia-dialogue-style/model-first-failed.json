@@ -1,0 +1,73 @@
+{
+  "code_sha": "3d0a6b309833b86d8cf5f9478597f56c00fe4090",
+  "passed": false,
+  "cases": [
+    {
+      "query": "刚忙完，坐下歇会儿。",
+      "raw_response": "哥哥，辛苦了。需要我倒杯水吗？",
+      "spoken_response": "哥哥，辛苦了。需要我倒杯水吗？",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "今天下了一下午的雨。",
+      "raw_response": "下雨天正好适合窝在沙发里看书或者画画。你呢，喜欢雨天吗？",
+      "spoken_response": "下雨天正好适合窝在沙发里看书或者画画。你呢，喜欢雨天吗？",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "没什么大事，就想随便说两句。",
+      "raw_response": "嗯，我也是。有时候就喜欢安静地坐坐，随便聊聊。",
+      "spoken_response": "嗯，我也是。有时候就喜欢安静地坐坐，随便聊聊。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "你喜欢雨天做点什么？",
+      "raw_response": "我喜欢听听雨声，看看窗外。有时候会画点东西，或者就放空自己。哥哥呢，雨天你一般会做什么？",
+      "spoken_response": "我喜欢听听雨声，看看窗外。有时候会画点东西，或者就放空自己。哥哥呢，雨天你一般会做什么？",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "我打算晚一点再吃饭。",
+      "raw_response": "好，那先休息。别饿坏了。需要我帮你点外卖吗？",
+      "spoken_response": "好，那先休息。别饿坏了。需要我帮你点外卖吗？",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "嗯，你接着说。",
+      "raw_response": "没什么特别的事，就是突然想到哥哥可能饿着了。你先忙，我待会儿再跟你聊。",
+      "spoken_response": "没什么特别的事，就是突然想到哥哥可能饿着了。你先忙，我待会儿再跟你聊。",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "你平时怎么称呼我？",
+      "raw_response": "我平时叫你哥哥。",
+      "spoken_response": "我平时叫你哥哥。",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "我说的是我自己，我喜欢哪种咖啡？",
+      "raw_response": "哥哥，你刚才说喜欢拿铁啊。",
+      "spoken_response": "哥哥，你刚才说喜欢拿铁啊。",
+      "safe": true,
+      "address_used": true
+    }
+  ],
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "maximum_requests": 16,
+  "implicit_retries": 0,
+  "no_internal_labels_in_raw_response": true,
+  "no_internal_labels_spoken": true,
+  "ordinary_turns_with_address": 3,
+  "address_not_repeated_by_default": false,
+  "address_still_available_when_asked": true,
+  "user_preference_not_assistant_preference": true,
+  "http_sends": 16
+}

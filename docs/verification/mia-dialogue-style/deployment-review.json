@@ -1,0 +1,37 @@
+{
+  "source_commit": "b51be7e770161fe759a192a2996031ebba5e54dc",
+  "voice_image": "mia-xiaozhi-server:dialogue-b51be7e",
+  "web_image_unchanged": "mia-xiaozhi-web:youmi-caf3a95",
+  "before": {
+    "schema": 7,
+    "integrity": "ok",
+    "counts": {
+      "memories": 3,
+      "mia_vectors": 3,
+      "mia_companion_profile": 1,
+      "mia_affect_state": 1
+    },
+    "data_sha256": "a2ff1f4b5be31a199da55db0d45b338685775d97eeac1f6c0b5a4bc6868a84a3",
+    "active_jobs": 0,
+    "uncompleted_native": 0
+  },
+  "after": {
+    "schema": 7,
+    "integrity": "ok",
+    "counts": {
+      "memories": 3,
+      "mia_vectors": 3,
+      "mia_companion_profile": 1,
+      "mia_affect_state": 1
+    },
+    "data_sha256": "a2ff1f4b5be31a199da55db0d45b338685775d97eeac1f6c0b5a4bc6868a84a3",
+    "active_jobs": 0,
+    "uncompleted_native": 0
+  },
+  "runtime_files_verified": 32,
+  "https_ready": true,
+  "wss_tls": "TLSv1.3",
+  "new_backups": false,
+  "profile_and_role_not_rewritten": true,
+  "model_and_voice_not_changed": true
+}

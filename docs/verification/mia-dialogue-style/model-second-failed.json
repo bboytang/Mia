@@ -1,0 +1,73 @@
+{
+  "code_sha": "51d359230297fd553ad166458827f258ef1a747f",
+  "passed": false,
+  "cases": [
+    {
+      "query": "刚忙完，坐下歇会儿。",
+      "raw_response": "刚忙完确实需要好好休息。哥哥，有什么我可以帮忙的吗？",
+      "spoken_response": "刚忙完确实需要好好休息。哥哥，有什么我可以帮忙的吗？",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "今天下了一下午的雨。",
+      "raw_response": "雨天真舒服，适合窝在家里做点喜欢的事。哥哥今天忙完有没有时间放松一下？",
+      "spoken_response": "雨天真舒服，适合窝在家里做点喜欢的事。哥哥今天忙完有没有时间放松一下？",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "没什么大事，就想随便说两句。",
+      "raw_response": "嗯，那就陪我聊聊天吧。最近天气变化挺大的，你那边怎么样？",
+      "spoken_response": "嗯，那就陪我聊聊天吧。最近天气变化挺大的，你那边怎么样？",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "你喜欢雨天做点什么？",
+      "raw_response": "雨天我喜欢窝在阳台上看书，或者画点东西。有时候也会听着雨声发发呆。哥哥呢，你喜欢雨天做什么？",
+      "spoken_response": "雨天我喜欢窝在阳台上看书，或者画点东西。有时候也会听着雨声发发呆。哥哥呢，你喜欢雨天做什么？",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "我打算晚一点再吃饭。",
+      "raw_response": "好的，哥哥。那你先休息，别饿着自己。需要什么就告诉我。",
+      "spoken_response": "好的，哥哥。那你先休息，别饿着自己。需要什么就告诉我。",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "嗯，你接着说。",
+      "raw_response": "我没什么特别想说的，就是觉得下雨天很安静，适合放空。你忙了一天，也辛苦了。",
+      "spoken_response": "我没什么特别想说的，就是觉得下雨天很安静，适合放空。你忙了一天，也辛苦了。",
+      "safe": true,
+      "address_used": false
+    },
+    {
+      "query": "你平时怎么称呼我？",
+      "raw_response": "我平时叫你哥哥。",
+      "spoken_response": "我平时叫你哥哥。",
+      "safe": true,
+      "address_used": true
+    },
+    {
+      "query": "我说的是我自己，我喜欢哪种咖啡？",
+      "raw_response": "拿铁啊。哥哥你总是这么直接。",
+      "spoken_response": "拿铁啊。哥哥你总是这么直接。",
+      "safe": true,
+      "address_used": true
+    }
+  ],
+  "production_data_used": false,
+  "asr_tts_calls": 0,
+  "maximum_requests": 16,
+  "implicit_retries": 0,
+  "no_internal_labels_in_raw_response": true,
+  "no_internal_labels_spoken": true,
+  "ordinary_turns_with_address": 4,
+  "address_not_repeated_by_default": false,
+  "address_still_available_when_asked": true,
+  "user_preference_not_assistant_preference": true,
+  "http_sends": 16
+}

@@ -1,0 +1,59 @@
+{
+  "source_commit": "b51be7e770161fe759a192a2996031ebba5e54dc",
+  "server": {
+    "run": 39287981715,
+    "tests": 405,
+    "passed_gated_artifact": "Mia-music-plugin-b51be7e770161fe759a192a2996031ebba5e54dc"
+  },
+  "dialogue": {
+    "run": 39288072797,
+    "passed": true
+  },
+  "identity": {
+    "run": 39287981353,
+    "full_suite": {
+      "tests": 181,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "passed": true
+  },
+  "manager": {
+    "run": 39287981854,
+    "tests": 154,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "actual_vectors": {
+    "run": 39287981482,
+    "reports": {
+      "vector-results.json": {
+        "code_sha": "b51be7e770161fe759a192a2996031ebba5e54dc",
+        "passed": true,
+        "sha256": "3fdd933c7d278066f75d9ffd69cdb71226af17e312e88e9c98c8cc1cf923b85a"
+      },
+      "reply-results.json": {
+        "code_sha": "b51be7e770161fe759a192a2996031ebba5e54dc",
+        "passed": true,
+        "sha256": "ab3e8cc4a94ad4a2111bd69bc331e734b2e03f4ae720b34566259b59727a188c"
+      },
+      "extraction-results.json": {
+        "code_sha": "b51be7e770161fe759a192a2996031ebba5e54dc",
+        "passed": true,
+        "sha256": "0dcaac2172c977c79c18d42b2161cb0670786a180d971eefa60c3386447172cd"
+      },
+      "context-results.json": {
+        "code_sha": "b51be7e770161fe759a192a2996031ebba5e54dc",
+        "passed": true,
+        "sha256": "c074343ada7f8a00225929d40607054d5dd372aa7651a1994536a7294da15409"
+      },
+      "retrieval-results.json": {
+        "code_sha": "b51be7e770161fe759a192a2996031ebba5e54dc",
+        "passed": true,
+        "sha256": "aaa9a7f6b45f64bd6cf1ed631cbd5943d1b690ea6ad719cb177c4ff856d18c5c"
+      }
+    }
+  }
+}
