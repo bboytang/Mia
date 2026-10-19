@@ -75,6 +75,15 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(character.active(self.store, self.scope.owner), character.YOUMI_V1)
         self.assertEqual(affect.state(self.store, self.scope.owner)['feeling'], 'steady')
 
+    async def test_new_anger_is_not_overridden_by_residual_positive_valence(self):
+        self.save();features.update(self.store, self.scope.owner, {'companion_emotion': True})
+        warm = dict(affect.state(self.store, self.scope.owner), valence=.7, feeling='warm')
+        mixed = affect.transition(warm, {'feeling': 'angry', 'intensity': 1})
+        self.assertGreater(mixed['valence'], 0)
+        self.assertEqual(mixed['feeling'], 'angry')
+        self.assertIn('生气或委屈余波', affect.guidance(mixed))
+        self.assertNotIn('感到温暖', affect.guidance(mixed))
+
     async def test_profile_edit_or_disable_invalidates_open_reply_and_stale_admin_save_is_rejected(self):
         self.save();old = await self.build()
         self.save(dict(character.YOUMI_V1, address='哥哥呀'))

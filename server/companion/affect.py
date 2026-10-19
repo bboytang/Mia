@@ -146,7 +146,8 @@ def reset(store, owner):
 
 def guidance(current):
     """Only reviewed server state selects instructions; no user text enters here."""
-    if current.get('character') and current['tension'] >= .08 and current['valence'] < 0:
+    if (current.get('character') and current['tension'] >= .08
+            and (current['valence'] < 0 or current['feeling'] in {'angry', 'hurt', 'guarded', 'repair'})):
         return ('\n当前是她自己的生气或委屈余波，尚未完全平复。按基线的小脾气强度表达立场，针对真实冲突说清介意什么；'
                 '普通追问不清零，不必马上撒娇或问有什么可以帮忙。道歉可以逐渐缓和，仍可保留合理诉求。'
                 '粗口仅在基线允许且情境真实时偶尔使用，不强迫输出，不借情绪羞辱或操纵。没有可靠冲突来源时不编造前因。\n')
