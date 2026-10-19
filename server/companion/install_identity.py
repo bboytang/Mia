@@ -17,7 +17,9 @@ MASTER = 'main/manager-api/src/main/resources/db/changelog/db.changelog-master.y
 CONFIG = 'main/manager-api/src/main/java/xiaozhi/modules/config/controller/ConfigController.java'
 AGENT_DTO = 'main/manager-api/src/main/java/xiaozhi/modules/config/dto/AgentModelsDTO.java'
 WORDS_DTO = 'main/manager-api/src/main/java/xiaozhi/modules/config/dto/CorrectWordsDTO.java'
+OTA = 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/OTAController.java'
 PREIMAGES = {
+    OTA: '6f52858f443f91554cf74b64e718c11d5671adf930226633bae9d38eaef52c29',
     TARGET: '26f5d6acbc8680232da1d8f2d8b5ad43eeaee04d4c35323f7c0f31505ce76743',
     SHIRO: '7ee4c8d5c1e53ededc107ddb92e4593aa61d88a398fc05fac5c4bf6b9809eae5',
     DAO: '0b348fdc6079c68119d547e8a95dc9f996d25a3490815888bfec2566bfcc9e1d',
@@ -134,6 +136,22 @@ def private_config_guards(original):
                         '        List<String> list = configService.getCorrectWords(dto.getMacAddress());')
 
 
+def passport_discovery(original):
+    return replace_once(original,
+        '        return createResponse(deviceService.checkDeviceActive(deviceId, clientId, deviceReportReqDTO));',
+        '        DeviceReportRespDTO response = deviceService.checkDeviceActive(deviceId, clientId, deviceReportReqDTO);\n'
+        '        // Installed Passport firmware pins its discovery hint independently of private WSS.\n'
+        '        if (deviceReportReqDTO.getBoard() != null && deviceReportReqDTO.getApplication() != null\n'
+        '                && "mia-ai-passport".equals(deviceReportReqDTO.getBoard().getType())\n'
+        '                && java.util.Set.of("1.0.3", "1.0.4").contains(\n'
+        '                        String.valueOf(deviceReportReqDTO.getApplication().getVersion()))\n'
+        '                && response.getWebsocket() != null\n'
+        '                && "wss://43.143.230.174:8000/xiaozhi/v1/".equals(response.getWebsocket().getUrl())) {\n'
+        '            response.getWebsocket().setUrl("ws://43.143.230.174:8000/xiaozhi/v1/");\n'
+        '        }\n'
+        '        return createResponse(response);')
+
+
 def build_changes(root):
     originals = {}
     for name, digest in PREIMAGES.items():
@@ -142,6 +160,7 @@ def build_changes(root):
             raise ValueError(f'Refusing unreviewed source: {name}; requires fixed manager baseline')
         originals[name] = original
     changed = {
+        OTA: passport_discovery(originals[OTA]),
         TARGET: binding_guards(originals[TARGET]),
         SHIRO: replace_once(originals[SHIRO], '        filterMap.put("/**", "oauth2");',
                             '        filterMap.put("/device/mia-auth/exchange", "anon");\n'
