@@ -1,0 +1,1003 @@
+{
+  "source_sha": "d1879881a808b479b66307ff11acdd111b179452",
+  "source_file": "performance-auth-once-latency-child.json.gz",
+  "source_sha256": "c2a10c7aacf79e545132a17d610ea6fa0d476ccb399a68bc99f0e77b2a59f4f9",
+  "source_raw_sha256": "32e4f254589ebd59e39fd354e968d368ed5d9d3e57a74bd20e3554b61509fee0",
+  "scope": "Corrected offline attribution only; no new requests or changed total latency/verdict.",
+  "timing_origins": "v2 first-content is SDK-relative; SDK-start/TTS-ready are case-relative.",
+  "limitations": "SDK interval includes remote, transport, consumer and observer cost; component percentiles do not add.",
+  "pairs": [
+    {
+      "case": "0-0-0",
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": true,
+      "baseline": {
+        "pre_sdk_ms": 1.4047839999875578,
+        "sdk_to_first_content_ms": 982.9452890000425,
+        "after_first_content_ms": 271.0934629999997
+      },
+      "memory": {
+        "pre_sdk_ms": 233.44302999998945,
+        "sdk_to_first_content_ms": 663.7468299999796,
+        "after_first_content_ms": 463.9487730000269
+      },
+      "delta": {
+        "pre_sdk_ms": 232.0382460000019,
+        "sdk_to_first_content_ms": -319.19845900006294,
+        "after_first_content_ms": 192.8553100000272
+      },
+      "first_sentence_delta_ms": 105.69509699996615
+    },
+    {
+      "case": "0-0-1",
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 130.8626880000361,
+        "sdk_to_first_content_ms": 721.0497240000109,
+        "after_first_content_ms": 415.48845199997686
+      },
+      "baseline": {
+        "pre_sdk_ms": 1.7136540000137757,
+        "sdk_to_first_content_ms": 667.4571369999853,
+        "after_first_content_ms": 249.43263000000115
+      },
+      "delta": {
+        "pre_sdk_ms": 129.1490340000223,
+        "sdk_to_first_content_ms": 53.59258700002556,
+        "after_first_content_ms": 166.0558219999757
+      },
+      "first_sentence_delta_ms": 348.7974430000236
+    },
+    {
+      "case": "0-0-2",
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 1.7172710000750158,
+        "sdk_to_first_content_ms": 1009.3773569999485,
+        "after_first_content_ms": 192.457705000038
+      },
+      "memory": {
+        "pre_sdk_ms": 112.90431000008994,
+        "sdk_to_first_content_ms": 748.1884569999693,
+        "after_first_content_ms": 242.5687969999899
+      },
+      "delta": {
+        "pre_sdk_ms": 111.18703900001492,
+        "sdk_to_first_content_ms": -261.1888999999792,
+        "after_first_content_ms": 50.111091999951896
+      },
+      "first_sentence_delta_ms": -99.89076900001237
+    },
+    {
+      "case": "0-0-3",
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 117.90331800000331,
+        "sdk_to_first_content_ms": 733.5749690000739,
+        "after_first_content_ms": 708.6938179999152
+      },
+      "baseline": {
+        "pre_sdk_ms": 2.289358999973956,
+        "sdk_to_first_content_ms": 743.4693220000099,
+        "after_first_content_ms": 202.1712530000741
+      },
+      "delta": {
+        "pre_sdk_ms": 115.61395900002935,
+        "sdk_to_first_content_ms": -9.894352999936018,
+        "after_first_content_ms": 506.52256499984105
+      },
+      "first_sentence_delta_ms": 612.2421709999344
+    },
+    {
+      "case": "0-0-4",
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 2.547406999951818,
+        "sdk_to_first_content_ms": 1039.8716890000514,
+        "after_first_content_ms": 205.42809300002318
+      },
+      "memory": {
+        "pre_sdk_ms": 98.30099900000278,
+        "sdk_to_first_content_ms": 718.4023519999982,
+        "after_first_content_ms": 293.9438009999549
+      },
+      "delta": {
+        "pre_sdk_ms": 95.75359200005096,
+        "sdk_to_first_content_ms": -321.4693370000532,
+        "after_first_content_ms": 88.51570799993169
+      },
+      "first_sentence_delta_ms": -137.20003700007055
+    },
+    {
+      "case": "0-0-5",
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 95.1526769999873,
+        "sdk_to_first_content_ms": 896.6202509999448,
+        "after_first_content_ms": 461.5147760000582
+      },
+      "baseline": {
+        "pre_sdk_ms": 2.7937610000208224,
+        "sdk_to_first_content_ms": 702.2818699999789,
+        "after_first_content_ms": 299.624601000005
+      },
+      "delta": {
+        "pre_sdk_ms": 92.35891599996648,
+        "sdk_to_first_content_ms": 194.33838099996592,
+        "after_first_content_ms": 161.8901750000532
+      },
+      "first_sentence_delta_ms": 448.5874719999856
+    },
+    {
+      "case": "0-1-0",
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": true,
+      "baseline": {
+        "pre_sdk_ms": 3.5528679999288215,
+        "sdk_to_first_content_ms": 829.958902000044,
+        "after_first_content_ms": 427.60541500001636
+      },
+      "memory": {
+        "pre_sdk_ms": 100.96511999995528,
+        "sdk_to_first_content_ms": 718.8949230001072,
+        "after_first_content_ms": 260.05263899992315
+      },
+      "delta": {
+        "pre_sdk_ms": 97.41225200002646,
+        "sdk_to_first_content_ms": -111.06397899993681,
+        "after_first_content_ms": -167.55277600009322
+      },
+      "first_sentence_delta_ms": -181.20450300000357
+    },
+    {
+      "case": "0-1-1",
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 92.33279499994751,
+        "sdk_to_first_content_ms": 835.3874400000905,
+        "after_first_content_ms": 180.88514399994438
+      },
+      "baseline": {
+        "pre_sdk_ms": 3.4739740000304664,
+        "sdk_to_first_content_ms": 947.6404569999204,
+        "after_first_content_ms": 483.4475979999979
+      },
+      "delta": {
+        "pre_sdk_ms": 88.85882099991704,
+        "sdk_to_first_content_ms": -112.25301699982992,
+        "after_first_content_ms": -302.56245400005355
+      },
+      "first_sentence_delta_ms": -325.95664999996643
+    },
+    {
+      "case": "0-1-2",
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 3.474273999927391,
+        "sdk_to_first_content_ms": 655.6808690000935,
+        "after_first_content_ms": 257.9889909999338
+      },
+      "memory": {
+        "pre_sdk_ms": 92.80113900001652,
+        "sdk_to_first_content_ms": 804.8582190000388,
+        "after_first_content_ms": 154.5656580000241
+      },
+      "delta": {
+        "pre_sdk_ms": 89.32686500008913,
+        "sdk_to_first_content_ms": 149.17734999994536,
+        "after_first_content_ms": -103.42333299990969
+      },
+      "first_sentence_delta_ms": 135.0808820001248
+    },
+    {
+      "case": "0-1-3",
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 96.84975100003612,
+        "sdk_to_first_content_ms": 817.0623129999512,
+        "after_first_content_ms": 139.53306400003385
+      },
+      "baseline": {
+        "pre_sdk_ms": 5.523014999994302,
+        "sdk_to_first_content_ms": 719.7369600000911,
+        "after_first_content_ms": 381.1910539999417
+      },
+      "delta": {
+        "pre_sdk_ms": 91.32673600004182,
+        "sdk_to_first_content_ms": 97.32535299986012,
+        "after_first_content_ms": -241.65798999990784
+      },
+      "first_sentence_delta_ms": -53.005901000005906
+    },
+    {
+      "case": "0-1-4",
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 3.7971019999076816,
+        "sdk_to_first_content_ms": 644.0983510000251,
+        "after_first_content_ms": 310.4329590000816
+      },
+      "memory": {
+        "pre_sdk_ms": 94.93240499989497,
+        "sdk_to_first_content_ms": 715.0448320001033,
+        "after_first_content_ms": 183.20754100000158
+      },
+      "delta": {
+        "pre_sdk_ms": 91.13530299998729,
+        "sdk_to_first_content_ms": 70.94648100007817,
+        "after_first_content_ms": -127.22541800008003
+      },
+      "first_sentence_delta_ms": 34.85636599998543
+    },
+    {
+      "case": "0-1-5",
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 96.73557799999344,
+        "sdk_to_first_content_ms": 741.0418010000512,
+        "after_first_content_ms": 252.92280899998332
+      },
+      "baseline": {
+        "pre_sdk_ms": 4.443094999942332,
+        "sdk_to_first_content_ms": 770.2674060000163,
+        "after_first_content_ms": 556.6249160000325
+      },
+      "delta": {
+        "pre_sdk_ms": 92.2924830000511,
+        "sdk_to_first_content_ms": -29.22560499996507,
+        "after_first_content_ms": -303.7021070000492
+      },
+      "first_sentence_delta_ms": -240.63522899996315
+    },
+    {
+      "case": "0-2-0",
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": true,
+      "baseline": {
+        "pre_sdk_ms": 4.541959999983192,
+        "sdk_to_first_content_ms": 898.2997179999757,
+        "after_first_content_ms": 433.285877000003
+      },
+      "memory": {
+        "pre_sdk_ms": 85.22909499993148,
+        "sdk_to_first_content_ms": 747.3038340000357,
+        "after_first_content_ms": 167.88343899997926
+      },
+      "delta": {
+        "pre_sdk_ms": 80.68713499994828,
+        "sdk_to_first_content_ms": -150.9958839999399,
+        "after_first_content_ms": -265.4024380000237
+      },
+      "first_sentence_delta_ms": -335.71118700001534
+    },
+    {
+      "case": "0-2-1",
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 100.80288400001791,
+        "sdk_to_first_content_ms": 729.5623400000295,
+        "after_first_content_ms": 212.00949899991883
+      },
+      "baseline": {
+        "pre_sdk_ms": 6.814942999994855,
+        "sdk_to_first_content_ms": 894.4697960000667,
+        "after_first_content_ms": 358.4325690000014
+      },
+      "delta": {
+        "pre_sdk_ms": 93.98794100002306,
+        "sdk_to_first_content_ms": -164.9074560000372,
+        "after_first_content_ms": -146.4230700000826
+      },
+      "first_sentence_delta_ms": -217.34258500009673
+    },
+    {
+      "case": "0-2-2",
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 4.723268000020653,
+        "sdk_to_first_content_ms": 754.5680659999334,
+        "after_first_content_ms": 371.48566300004404
+      },
+      "memory": {
+        "pre_sdk_ms": 85.70216399994024,
+        "sdk_to_first_content_ms": 736.9830260000754,
+        "after_first_content_ms": 655.9343530000206
+      },
+      "delta": {
+        "pre_sdk_ms": 80.97889599991959,
+        "sdk_to_first_content_ms": -17.585039999858054,
+        "after_first_content_ms": 284.4486899999765
+      },
+      "first_sentence_delta_ms": 347.84254600003806
+    },
+    {
+      "case": "0-2-3",
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 91.93767199997183,
+        "sdk_to_first_content_ms": 727.3101289999886,
+        "after_first_content_ms": 173.4304730000531
+      },
+      "baseline": {
+        "pre_sdk_ms": 5.282245000103103,
+        "sdk_to_first_content_ms": 1209.614409999972,
+        "after_first_content_ms": 60.63769200000024
+      },
+      "delta": {
+        "pre_sdk_ms": 86.65542699986872,
+        "sdk_to_first_content_ms": -482.30428099998335,
+        "after_first_content_ms": 112.79278100005286
+      },
+      "first_sentence_delta_ms": -282.85607300006177
+    },
+    {
+      "case": "0-2-4",
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 5.245615000035286,
+        "sdk_to_first_content_ms": 775.9700730000532,
+        "after_first_content_ms": 374.1344699999445
+      },
+      "memory": {
+        "pre_sdk_ms": 93.11821599999348,
+        "sdk_to_first_content_ms": 741.3791629999196,
+        "after_first_content_ms": 614.9440400000685
+      },
+      "delta": {
+        "pre_sdk_ms": 87.8726009999582,
+        "sdk_to_first_content_ms": -34.59091000013359,
+        "after_first_content_ms": 240.80957000012404
+      },
+      "first_sentence_delta_ms": 294.09126099994864
+    },
+    {
+      "case": "0-2-5",
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 107.24297500007651,
+        "sdk_to_first_content_ms": 669.3212839999205,
+        "after_first_content_ms": 225.98693300005834
+      },
+      "baseline": {
+        "pre_sdk_ms": 5.5363010000064605,
+        "sdk_to_first_content_ms": 873.5931280000386,
+        "after_first_content_ms": 370.6465349999917
+      },
+      "delta": {
+        "pre_sdk_ms": 101.70667400007005,
+        "sdk_to_first_content_ms": -204.2718440001181,
+        "after_first_content_ms": -144.65960199993333
+      },
+      "first_sentence_delta_ms": -247.22477199998139
+    },
+    {
+      "case": "1-0-0",
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": true,
+      "baseline": {
+        "pre_sdk_ms": 5.756459999929575,
+        "sdk_to_first_content_ms": 665.9464049999997,
+        "after_first_content_ms": 273.3986030000324
+      },
+      "memory": {
+        "pre_sdk_ms": 1183.2954980000068,
+        "sdk_to_first_content_ms": 958.6468909999439,
+        "after_first_content_ms": 229.46459900003902
+      },
+      "delta": {
+        "pre_sdk_ms": 1177.5390380000772,
+        "sdk_to_first_content_ms": 292.70048599994425,
+        "after_first_content_ms": -43.934003999993365
+      },
+      "first_sentence_delta_ms": 1426.305520000028
+    },
+    {
+      "case": "1-0-1",
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 231.36634399998002,
+        "sdk_to_first_content_ms": 839.966845000049,
+        "after_first_content_ms": 769.7687639999913
+      },
+      "baseline": {
+        "pre_sdk_ms": 6.706066999981886,
+        "sdk_to_first_content_ms": 664.2341660000284,
+        "after_first_content_ms": 347.9165119999834
+      },
+      "delta": {
+        "pre_sdk_ms": 224.66027699999813,
+        "sdk_to_first_content_ms": 175.73267900002065,
+        "after_first_content_ms": 421.85225200000787
+      },
+      "first_sentence_delta_ms": 822.2452080000267
+    },
+    {
+      "case": "1-0-2",
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 6.496671000036258,
+        "sdk_to_first_content_ms": 583.3201919999738,
+        "after_first_content_ms": 288.8489030000301
+      },
+      "memory": {
+        "pre_sdk_ms": 224.78062799996223,
+        "sdk_to_first_content_ms": 772.2005680000166,
+        "after_first_content_ms": 265.8983129999797
+      },
+      "delta": {
+        "pre_sdk_ms": 218.28395699992598,
+        "sdk_to_first_content_ms": 188.88037600004282,
+        "after_first_content_ms": -22.950590000050397
+      },
+      "first_sentence_delta_ms": 384.2137429999184
+    },
+    {
+      "case": "1-0-3",
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 232.15356299999712,
+        "sdk_to_first_content_ms": 1126.7249700000548,
+        "after_first_content_ms": 270.5847720000065
+      },
+      "baseline": {
+        "pre_sdk_ms": 8.29633700004706,
+        "sdk_to_first_content_ms": 742.0332859999235,
+        "after_first_content_ms": 196.27446700008022
+      },
+      "delta": {
+        "pre_sdk_ms": 223.85722599995006,
+        "sdk_to_first_content_ms": 384.6916840001313,
+        "after_first_content_ms": 74.3103049999263
+      },
+      "first_sentence_delta_ms": 682.8592150000077
+    },
+    {
+      "case": "1-0-4",
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 8.062252999934572,
+        "sdk_to_first_content_ms": 668.5769350000328,
+        "after_first_content_ms": 201.81325999999444
+      },
+      "memory": {
+        "pre_sdk_ms": 330.9671360000266,
+        "sdk_to_first_content_ms": 1106.4925150000136,
+        "after_first_content_ms": 376.4825480000127
+      },
+      "delta": {
+        "pre_sdk_ms": 322.904883000092,
+        "sdk_to_first_content_ms": 437.91557999998076,
+        "after_first_content_ms": 174.66928800001824
+      },
+      "first_sentence_delta_ms": 935.489751000091
+    },
+    {
+      "case": "1-0-5",
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 236.19053100003384,
+        "sdk_to_first_content_ms": 852.4780599999531,
+        "after_first_content_ms": 713.6093279999614
+      },
+      "baseline": {
+        "pre_sdk_ms": 10.647873999914736,
+        "sdk_to_first_content_ms": 695.7164640000428,
+        "after_first_content_ms": 277.29103000001487
+      },
+      "delta": {
+        "pre_sdk_ms": 225.5426570001191,
+        "sdk_to_first_content_ms": 156.76159599991024,
+        "after_first_content_ms": 436.3182979999465
+      },
+      "first_sentence_delta_ms": 818.6225509999758
+    },
+    {
+      "case": "1-1-0",
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": true,
+      "baseline": {
+        "pre_sdk_ms": 8.505558000024394,
+        "sdk_to_first_content_ms": 900.2241439999352,
+        "after_first_content_ms": 438.77223100002993
+      },
+      "memory": {
+        "pre_sdk_ms": 232.20586499996898,
+        "sdk_to_first_content_ms": 1042.6328790000525,
+        "after_first_content_ms": 169.2550159999655
+      },
+      "delta": {
+        "pre_sdk_ms": 223.7003069999446,
+        "sdk_to_first_content_ms": 142.4087350001173,
+        "after_first_content_ms": -269.5172150000644
+      },
+      "first_sentence_delta_ms": 96.59182699999747
+    },
+    {
+      "case": "1-1-1",
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 219.89346300006218,
+        "sdk_to_first_content_ms": 725.8100829999421,
+        "after_first_content_ms": 272.42648900005406
+      },
+      "baseline": {
+        "pre_sdk_ms": 8.814830000005713,
+        "sdk_to_first_content_ms": 1047.310889000073,
+        "after_first_content_ms": 460.7006429999956
+      },
+      "delta": {
+        "pre_sdk_ms": 211.07863300005647,
+        "sdk_to_first_content_ms": -321.500806000131,
+        "after_first_content_ms": -188.27415399994152
+      },
+      "first_sentence_delta_ms": -298.696327000016
+    },
+    {
+      "case": "1-1-2",
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 9.02480500008096,
+        "sdk_to_first_content_ms": 639.423340999997,
+        "after_first_content_ms": 244.82625499990718
+      },
+      "memory": {
+        "pre_sdk_ms": 255.16526800004158,
+        "sdk_to_first_content_ms": 720.1906430000236,
+        "after_first_content_ms": 172.64230299997507
+      },
+      "delta": {
+        "pre_sdk_ms": 246.14046299996062,
+        "sdk_to_first_content_ms": 80.76730200002658,
+        "after_first_content_ms": -72.1839519999321
+      },
+      "first_sentence_delta_ms": 254.7238130000551
+    },
+    {
+      "case": "1-1-3",
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 332.7057879999984,
+        "sdk_to_first_content_ms": 1099.0757060000078,
+        "after_first_content_ms": 352.76646199997685
+      },
+      "baseline": {
+        "pre_sdk_ms": 10.332171000072776,
+        "sdk_to_first_content_ms": 1076.4284150000094,
+        "after_first_content_ms": 414.7384770000144
+      },
+      "delta": {
+        "pre_sdk_ms": 322.3736169999256,
+        "sdk_to_first_content_ms": 22.647290999998404,
+        "after_first_content_ms": -61.97201500003757
+      },
+      "first_sentence_delta_ms": 283.04889299988645
+    },
+    {
+      "case": "1-1-4",
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 9.72934800006442,
+        "sdk_to_first_content_ms": 648.0339469999308,
+        "after_first_content_ms": 324.115478000067
+      },
+      "memory": {
+        "pre_sdk_ms": 259.9348310000096,
+        "sdk_to_first_content_ms": 763.4008649999942,
+        "after_first_content_ms": 175.40851900002963
+      },
+      "delta": {
+        "pre_sdk_ms": 250.20548299994516,
+        "sdk_to_first_content_ms": 115.36691800006338,
+        "after_first_content_ms": -148.7069590000374
+      },
+      "first_sentence_delta_ms": 216.86544199997115
+    },
+    {
+      "case": "1-1-5",
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 226.55853600008413,
+        "sdk_to_first_content_ms": 742.2002399999883,
+        "after_first_content_ms": 133.25001700002304
+      },
+      "baseline": {
+        "pre_sdk_ms": 10.22739100005765,
+        "sdk_to_first_content_ms": 989.6594339999183,
+        "after_first_content_ms": 964.2190440000604
+      },
+      "delta": {
+        "pre_sdk_ms": 216.33114500002648,
+        "sdk_to_first_content_ms": -247.45919399993,
+        "after_first_content_ms": -830.9690270000374
+      },
+      "first_sentence_delta_ms": -862.0970759999409
+    },
+    {
+      "case": "1-2-0",
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": true,
+      "baseline": {
+        "pre_sdk_ms": 9.983180999938668,
+        "sdk_to_first_content_ms": 651.7169580000655,
+        "after_first_content_ms": 56.87189699995088
+      },
+      "memory": {
+        "pre_sdk_ms": 226.35856300007617,
+        "sdk_to_first_content_ms": 759.7679550000294,
+        "after_first_content_ms": 167.32673999990766
+      },
+      "delta": {
+        "pre_sdk_ms": 216.3753820001375,
+        "sdk_to_first_content_ms": 108.0509969999639,
+        "after_first_content_ms": 110.45484299995678
+      },
+      "first_sentence_delta_ms": 434.8812220000582
+    },
+    {
+      "case": "1-2-1",
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 238.6565399999654,
+        "sdk_to_first_content_ms": 1005.7313720000138,
+        "after_first_content_ms": 392.1235999999908
+      },
+      "baseline": {
+        "pre_sdk_ms": 11.195017999966694,
+        "sdk_to_first_content_ms": 825.8523649999461,
+        "after_first_content_ms": 370.8184390000042
+      },
+      "delta": {
+        "pre_sdk_ms": 227.4615219999987,
+        "sdk_to_first_content_ms": 179.87900700006776,
+        "after_first_content_ms": 21.305160999986583
+      },
+      "first_sentence_delta_ms": 428.64569000005304
+    },
+    {
+      "case": "1-2-2",
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 10.720768000055614,
+        "sdk_to_first_content_ms": 978.3913339999799,
+        "after_first_content_ms": 515.6411089999438
+      },
+      "memory": {
+        "pre_sdk_ms": 347.8364159999501,
+        "sdk_to_first_content_ms": 717.219890000024,
+        "after_first_content_ms": 164.6950570000172
+      },
+      "delta": {
+        "pre_sdk_ms": 337.11564799989446,
+        "sdk_to_first_content_ms": -261.17144399995595,
+        "after_first_content_ms": -350.94605199992657
+      },
+      "first_sentence_delta_ms": -275.00184799998806
+    },
+    {
+      "case": "1-2-3",
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 239.39222000001337,
+        "sdk_to_first_content_ms": 786.1055719999968,
+        "after_first_content_ms": 160.55087099994125
+      },
+      "baseline": {
+        "pre_sdk_ms": 11.639447999982622,
+        "sdk_to_first_content_ms": 1021.5131360000669,
+        "after_first_content_ms": 59.42274300002737
+      },
+      "delta": {
+        "pre_sdk_ms": 227.75277200003075,
+        "sdk_to_first_content_ms": -235.40756400007012,
+        "after_first_content_ms": 101.12812799991389
+      },
+      "first_sentence_delta_ms": 93.47333599987451
+    },
+    {
+      "case": "1-2-4",
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "baseline": {
+        "pre_sdk_ms": 11.424784000041655,
+        "sdk_to_first_content_ms": 713.5922549999805,
+        "after_first_content_ms": 464.18757200001437
+      },
+      "memory": {
+        "pre_sdk_ms": 223.6868710000408,
+        "sdk_to_first_content_ms": 756.38742000001,
+        "after_first_content_ms": 166.03386999997838
+      },
+      "delta": {
+        "pre_sdk_ms": 212.26208699999916,
+        "sdk_to_first_content_ms": 42.795165000029556,
+        "after_first_content_ms": -298.153702000036
+      },
+      "first_sentence_delta_ms": -43.09645000000728
+    },
+    {
+      "case": "1-2-5",
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "warm": false,
+      "memory": {
+        "pre_sdk_ms": 237.60905699998602,
+        "sdk_to_first_content_ms": 735.2736320000304,
+        "after_first_content_ms": 164.062432000037
+      },
+      "baseline": {
+        "pre_sdk_ms": 12.36761600000591,
+        "sdk_to_first_content_ms": 1163.12196399997,
+        "after_first_content_ms": 452.3001169999361
+      },
+      "delta": {
+        "pre_sdk_ms": 225.2414409999801,
+        "sdk_to_first_content_ms": -427.84833199993955,
+        "after_first_content_ms": -288.2376849998991
+      },
+      "first_sentence_delta_ms": -490.84457599985853
+    }
+  ],
+  "groups": [
+    {
+      "capacity": 1000,
+      "query": "我去湖边散步应该准备什么？",
+      "count": 5,
+      "total_delta_p95_ms": 579.5112311999446,
+      "component_delta_p50_ms": {
+        "pre_sdk_ms": 111.18703900001492,
+        "sdk_to_first_content_ms": -9.894352999936018,
+        "after_first_content_ms": 161.8901750000532
+      },
+      "worst_pair": {
+        "case": "0-0-3",
+        "capacity": 1000,
+        "query": "我去湖边散步应该准备什么？",
+        "warm": false,
+        "memory": {
+          "pre_sdk_ms": 117.90331800000331,
+          "sdk_to_first_content_ms": 733.5749690000739,
+          "after_first_content_ms": 708.6938179999152
+        },
+        "baseline": {
+          "pre_sdk_ms": 2.289358999973956,
+          "sdk_to_first_content_ms": 743.4693220000099,
+          "after_first_content_ms": 202.1712530000741
+        },
+        "delta": {
+          "pre_sdk_ms": 115.61395900002935,
+          "sdk_to_first_content_ms": -9.894352999936018,
+          "after_first_content_ms": 506.52256499984105
+        },
+        "first_sentence_delta_ms": 612.2421709999344
+      }
+    },
+    {
+      "capacity": 1000,
+      "query": "周三的钢琴练习有什么安排？",
+      "count": 5,
+      "total_delta_p95_ms": 115.03597880009693,
+      "component_delta_p50_ms": {
+        "pre_sdk_ms": 91.13530299998729,
+        "sdk_to_first_content_ms": 70.94648100007817,
+        "after_first_content_ms": -241.65798999990784
+      },
+      "worst_pair": {
+        "case": "0-1-2",
+        "capacity": 1000,
+        "query": "周三的钢琴练习有什么安排？",
+        "warm": false,
+        "baseline": {
+          "pre_sdk_ms": 3.474273999927391,
+          "sdk_to_first_content_ms": 655.6808690000935,
+          "after_first_content_ms": 257.9889909999338
+        },
+        "memory": {
+          "pre_sdk_ms": 92.80113900001652,
+          "sdk_to_first_content_ms": 804.8582190000388,
+          "after_first_content_ms": 154.5656580000241
+        },
+        "delta": {
+          "pre_sdk_ms": 89.32686500008913,
+          "sdk_to_first_content_ms": 149.17734999994536,
+          "after_first_content_ms": -103.42333299990969
+        },
+        "first_sentence_delta_ms": 135.0808820001248
+      }
+    },
+    {
+      "capacity": 1000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "count": 5,
+      "total_delta_p95_ms": 337.0922890000202,
+      "component_delta_p50_ms": {
+        "pre_sdk_ms": 87.8726009999582,
+        "sdk_to_first_content_ms": -164.9074560000372,
+        "after_first_content_ms": 112.79278100005286
+      },
+      "worst_pair": {
+        "case": "0-2-2",
+        "capacity": 1000,
+        "query": "我平时怎样照顾阳台上的植物？",
+        "warm": false,
+        "baseline": {
+          "pre_sdk_ms": 4.723268000020653,
+          "sdk_to_first_content_ms": 754.5680659999334,
+          "after_first_content_ms": 371.48566300004404
+        },
+        "memory": {
+          "pre_sdk_ms": 85.70216399994024,
+          "sdk_to_first_content_ms": 736.9830260000754,
+          "after_first_content_ms": 655.9343530000206
+        },
+        "delta": {
+          "pre_sdk_ms": 80.97889599991959,
+          "sdk_to_first_content_ms": -17.585039999858054,
+          "after_first_content_ms": 284.4486899999765
+        },
+        "first_sentence_delta_ms": 347.84254600003806
+      }
+    },
+    {
+      "capacity": 10000,
+      "query": "我去湖边散步应该准备什么？",
+      "count": 5,
+      "total_delta_p95_ms": 912.8408424000781,
+      "component_delta_p50_ms": {
+        "pre_sdk_ms": 224.66027699999813,
+        "sdk_to_first_content_ms": 188.88037600004282,
+        "after_first_content_ms": 174.66928800001824
+      },
+      "worst_pair": {
+        "case": "1-0-4",
+        "capacity": 10000,
+        "query": "我去湖边散步应该准备什么？",
+        "warm": false,
+        "baseline": {
+          "pre_sdk_ms": 8.062252999934572,
+          "sdk_to_first_content_ms": 668.5769350000328,
+          "after_first_content_ms": 201.81325999999444
+        },
+        "memory": {
+          "pre_sdk_ms": 330.9671360000266,
+          "sdk_to_first_content_ms": 1106.4925150000136,
+          "after_first_content_ms": 376.4825480000127
+        },
+        "delta": {
+          "pre_sdk_ms": 322.904883000092,
+          "sdk_to_first_content_ms": 437.91557999998076,
+          "after_first_content_ms": 174.66928800001824
+        },
+        "first_sentence_delta_ms": 935.489751000091
+      }
+    },
+    {
+      "capacity": 10000,
+      "query": "周三的钢琴练习有什么安排？",
+      "count": 5,
+      "total_delta_p95_ms": 277.3838769999202,
+      "component_delta_p50_ms": {
+        "pre_sdk_ms": 246.14046299996062,
+        "sdk_to_first_content_ms": 22.647290999998404,
+        "after_first_content_ms": -148.7069590000374
+      },
+      "worst_pair": {
+        "case": "1-1-3",
+        "capacity": 10000,
+        "query": "周三的钢琴练习有什么安排？",
+        "warm": false,
+        "memory": {
+          "pre_sdk_ms": 332.7057879999984,
+          "sdk_to_first_content_ms": 1099.0757060000078,
+          "after_first_content_ms": 352.76646199997685
+        },
+        "baseline": {
+          "pre_sdk_ms": 10.332171000072776,
+          "sdk_to_first_content_ms": 1076.4284150000094,
+          "after_first_content_ms": 414.7384770000144
+        },
+        "delta": {
+          "pre_sdk_ms": 322.3736169999256,
+          "sdk_to_first_content_ms": 22.647290999998404,
+          "after_first_content_ms": -61.97201500003757
+        },
+        "first_sentence_delta_ms": 283.04889299988645
+      }
+    },
+    {
+      "capacity": 10000,
+      "query": "我平时怎样照顾阳台上的植物？",
+      "count": 5,
+      "total_delta_p95_ms": 361.6112192000174,
+      "component_delta_p50_ms": {
+        "pre_sdk_ms": 227.4615219999987,
+        "sdk_to_first_content_ms": -235.40756400007012,
+        "after_first_content_ms": -288.2376849998991
+      },
+      "worst_pair": {
+        "case": "1-2-1",
+        "capacity": 10000,
+        "query": "我平时怎样照顾阳台上的植物？",
+        "warm": false,
+        "memory": {
+          "pre_sdk_ms": 238.6565399999654,
+          "sdk_to_first_content_ms": 1005.7313720000138,
+          "after_first_content_ms": 392.1235999999908
+        },
+        "baseline": {
+          "pre_sdk_ms": 11.195017999966694,
+          "sdk_to_first_content_ms": 825.8523649999461,
+          "after_first_content_ms": 370.8184390000042
+        },
+        "delta": {
+          "pre_sdk_ms": 227.4615219999987,
+          "sdk_to_first_content_ms": 179.87900700006776,
+          "after_first_content_ms": 21.305160999986583
+        },
+        "first_sentence_delta_ms": 428.64569000005304
+      }
+    }
+  ]
+}

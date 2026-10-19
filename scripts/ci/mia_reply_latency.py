@@ -33,6 +33,7 @@ def empty_memory_request(builder, scope, limits, query, role, session):
 def observe_provider(configuration, purpose, report, lock, persist, factory):
     import httpx
     from mia_model_comparison import safe_provider_error
+    from mia_tts_timing import case_elapsed_ms
 
     assert configuration['model_name'] == MODEL
     assert configuration['api_key'] == os.environ['MIA_TEST_LLM_API_KEY']
@@ -61,7 +62,7 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                 report.setdefault('extraction_streams', []).append(capture.entry)
             if sample is not None:
                 assert 'sdk_start_ms' not in sample, 'Expected a single real reply request'
-                sample['sdk_start_ms'] = (started - sample['started']) * 1000
+                sample['sdk_start_ms'] = case_elapsed_ms(sample, started)
                 messages = kwargs['messages']
                 data = json.loads(messages[1]['content'])['mia_context']
                 sample['sdk_request'] = {'model': kwargs['model'], 'max_tokens': kwargs['max_tokens'],
@@ -92,7 +93,7 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                                 capture.append(chunk)
                             if sample is not None and 'sdk_first_content_ms' not in sample:
                                 if any(getattr(choice.delta, 'content', None) for choice in chunk.choices):
-                                    sample['sdk_first_content_ms'] = (time.perf_counter() - started) * 1000
+                                    sample['sdk_first_content_ms'] = case_elapsed_ms(sample)
                         yield chunk
                 except Exception as error:
                     with lock:
@@ -145,7 +146,7 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
         fixture_kind='Numbered synthetic capacity rows repeat actual BGE seed vectors; no claim of model-extracted bulk facts or semantic quality',
         timing_revision=TIMING_REVISION,
         timing_stage='First nonempty text after original TTS consumer segmentation and text preprocessing; no waveform/audio timing',
-        sdk_timing_scope='SDK start to first content includes remote compute and transport, not pure network time; pre-SDK interval includes context/permission overhead',
+        sdk_timing_scope='All *_ms timestamps use case start; SDK interval is first-content minus SDK-start. Includes remote compute, transport and consumer/observer overhead, not pure network time',
         baseline_scope='Same Provider/core/role with original empty context assembly and phrase guard; no retrieval/context validation/jobs')
     report['tts_stage_mechanism'] = await verify_original_text_stage(server.logger)
 
@@ -209,7 +210,9 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
             adapter.attach_output_guard(conn)
             conn.server = server
             provider._p23_sample = sample
-            sample.update(scope_owner=scope.owner, capacity=report['capacity_per_owner'][scope.owner], started=time.perf_counter())
+            started = time.perf_counter()
+            sample.update(scope_owner=scope.owner, capacity=report['capacity_per_owner'][scope.owner],
+                started=started, case_start_monotonic_seconds=started, case_start_ms=0.0)
             with lock:
                 report['cases'].append(sample)
                 persist(report)
@@ -260,6 +263,8 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
                 sample['output_replacement'] = getattr(conn, '_mia_output_replacement', None)
                 assert not sample['output_replacement'] and 'first_sentence_ms' in sample and 'sdk_first_content_ms' in sample
                 sample['total_case_ms'] = (time.perf_counter() - sample['started']) * 1000
+                from mia_tts_timing import stage_durations
+                sample['stages'] = stage_durations(sample)
                 sample.pop('started')
                 persist(report)
             await conn._mia_authorization.require(scope, 'memory:read')

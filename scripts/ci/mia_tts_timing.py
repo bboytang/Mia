@@ -10,7 +10,27 @@ import time
 from types import SimpleNamespace
 
 
-TIMING_REVISION = 'P23-speech-ready-v2'
+TIMING_REVISION = 'P23-speech-ready-v3-case-origin'
+
+
+def case_elapsed_ms(sample, now=None):
+    return ((time.perf_counter() if now is None else now) - sample['started']) * 1000
+
+
+def stage_durations(sample):
+    """Read v2's SDK-relative first-content field explicitly; v3 is case-relative."""
+    revision = sample['timing_revision']
+    sdk = sample['sdk_start_ms']
+    first = sample['sdk_first_content_ms']
+    if revision == 'P23-speech-ready-v2':
+        first += sdk
+    elif revision != TIMING_REVISION:
+        raise ValueError('Unknown first-sentence timing origin')
+    ready = sample['first_sentence_ms']
+    if not 0 <= sdk <= first <= ready:
+        raise ValueError('Non-monotonic first-sentence timestamps')
+    return {'pre_sdk_ms': sdk, 'sdk_to_first_content_ms': first - sdk,
+        'after_first_content_ms': ready - first}
 
 
 class RecordingQueue(Queue):
@@ -22,7 +42,7 @@ class RecordingQueue(Queue):
     def put(self, item, block=True, timeout=None):
         with self.lock:
             if self.recording:
-                elapsed = (time.perf_counter() - self.sample['started']) * 1000
+                elapsed = case_elapsed_ms(self.sample)
                 self.sample['queued_frames'].append({'at_ms': elapsed,
                     'sentence_type': item.sentence_type.name, 'content_type': item.content_type.name,
                     'text': item.content_detail})
@@ -50,7 +70,7 @@ def make_probe(conn, sample, lock, config):
         def _get_segment_text(self):
             result = super()._get_segment_text()
             with lock:
-                sample['segment_checks'].append({'at_ms': (time.perf_counter() - sample['started']) * 1000,
+                sample['segment_checks'].append({'at_ms': case_elapsed_ms(sample),
                     'text': result})
             self.segment_seen.set()
             return result
@@ -68,7 +88,7 @@ def make_probe(conn, sample, lock, config):
             if self._correct_words_pattern:
                 cleaned = self._correct_words_pattern.sub(lambda match: self.correct_words[match.group(0)], cleaned)
             with lock:
-                elapsed = (time.perf_counter() - sample['started']) * 1000
+                elapsed = case_elapsed_ms(sample)
                 sample['speech_ready_segments'].append({'at_ms': elapsed, 'segment': text, 'tts_text': cleaned})
                 if cleaned.strip() and 'first_sentence_ms' not in sample:
                     sample.update(first_sentence_ms=elapsed, first_sentence=cleaned)

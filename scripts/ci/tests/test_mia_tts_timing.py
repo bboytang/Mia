@@ -13,6 +13,23 @@ spec.loader.exec_module(timing)
 
 
 class CheckedTextTimestampTests(unittest.TestCase):
+    def test_nonzero_sdk_offset_uses_one_case_origin_and_legacy_is_explicit(self):
+        sample = {'started': 100.0, 'timing_revision': timing.TIMING_REVISION}
+        sample['sdk_start_ms'] = timing.case_elapsed_ms(sample, 100.25)
+        sample['sdk_first_content_ms'] = timing.case_elapsed_ms(sample, 100.9)
+        sample['first_sentence_ms'] = timing.case_elapsed_ms(sample, 101.1)
+        stages = timing.stage_durations(sample)
+        for key, value in zip(stages, (250, 650, 200)):
+            self.assertAlmostEqual(stages[key], value)
+        self.assertAlmostEqual(sum(stages.values()), sample['first_sentence_ms'])
+        legacy = dict(sample, timing_revision='P23-speech-ready-v2', sdk_first_content_ms=650)
+        for key, value in timing.stage_durations(legacy).items():
+            self.assertAlmostEqual(value, stages[key])
+        with self.assertRaises(ValueError):
+            timing.stage_durations(dict(sample, timing_revision='unknown'))
+        with self.assertRaises(ValueError):
+            timing.stage_durations(dict(sample, sdk_first_content_ms=200))
+
     def test_emoji_text_queue_frame_does_not_claim_speech_ready(self):
         sample = {'started': time.perf_counter()}
         queue = timing.RecordingQueue(sample, threading.RLock())
