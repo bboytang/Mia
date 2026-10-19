@@ -55,3 +55,28 @@ R5前台持续活动导致后台饥饿、排队占用尝试/期限；R6重复授
 3. R7：已证实安全输出按完整句边界释放、TTS可按逗号分段；实际延迟贡献证据不足。先设计保持整段事实与授权检查的缓冲/分段方案并评估取消语义，不能直接提前放出未校验文本。
 
 顺序为R5设计评审与可控调度 → R6/R7阶段证据 → 获批最小实现与聚焦回归 → 再申请固定模型、2CPU/2GiB/swap0、冻结完整公平性/首句验收。已有容量通过结论保留，正式首句912.84ms失败与正常成功p95缺失未解决；本批完成后停止，等待用户批准，不自动执行第三十六步或P24。
+
+## 最终收证：第一批完成并停止
+
+以下是最终状态，覆盖上文逐步记录中的“待CI”。批准基线到最终代码仅四个提交，一次代码推送，无手动dispatch或重跑。统一回归代码SHA：`b24ebf649d53a1435f27c204072fa1f3b7c6cdd2`。后续收证提交仅改文档/新增证据，不能把它冒充已经执行代码CI的SHA。
+
+| 修正 | 根因与范围（已证实） | 精确提交 / 源码diff | 同SHA验证 |
+| --- | --- | --- | --- |
+| R1 | 高：case/SDK原点混用误导阶段归因；原首句总指标不变 | [dea0f7d73794c4c6e3cfcfc2bb62e8def9dedbb4](https://github.com/bboytang/Mia/commit/dea0f7d73794c4c6e3cfcfc2bb62e8def9dedbb4)，mia_reply_latency/mia_tts_timing及只读归因工具 | [28项观测机制](https://github.com/bboytang/Mia/actions/runs/39184651346) success；原72回复离线归因/总p95不变 |
+| R2 | 高：普通分支数据库序列化元数据与模型数组形状冲突；所有分支统一最小来源投影 | [96faa87deb16ed90d4695018efda6aca85dec7e2](https://github.com/bboytang/Mia/commit/96faa87deb16ed90d4695018efda6aca85dec7e2)，extraction.project_context | [服务318项](https://github.com/bboytang/Mia/actions/runs/39184651325)、[安装/BGE/SDK](https://github.com/bboytang/Mia/actions/runs/39184651374) success |
+| R3 | 中：默认继承文本回退被当原生工具能力；改成固定已复核适配器绑定方法契约 | [fa0c1e36147f2fd6821ff89b4f00fd8151e7c696](https://github.com/bboytang/Mia/commit/fa0c1e36147f2fd6821ff89b4f00fd8151e7c696)，proposal.provider_capabilities/extraction选择 | 同上318项与安装SDK回归；[提取语法](https://github.com/bboytang/Mia/actions/runs/39184651378) success；既有真实参数证据单独保留 |
+| R4 | 高：原生协议失败不进入原反馈路径、不同错误共用类别；现在安全分类并给第二次有效反馈 | [b24ebf649d53a1435f27c204072fa1f3b7c6cdd2](https://github.com/bboytang/Mia/commit/b24ebf649d53a1435f27c204072fa1f3b7c6cdd2)，proposal/extraction/jobs/model_requests及情绪形状诊断 | 同上服务/安装SDK/28机制success；56原输出重放和哈希不变 |
+
+其余必要回归：[身份授权173项](https://github.com/bboytang/Mia/actions/runs/39184651480)、[Java manager 150+4项](https://github.com/bboytang/Mia/actions/runs/39184651369)均success。上述六项均为同一代码SHA的push自动作业。共享性能和提取Provider工作流只有语法/机制步骤，真实模型及完整性能步骤均skipped。
+
+日志、步骤终态、时间、原文/压缩哈希索引见[performance-r1-r4-ci-review.json](verification/mia-persona-memory/performance-r1-r4-ci-review.json)，同目录新增六份`performance-r1-r4-*-ci.log.gz`和五份`performance-r1-r4-vectors-*.json.gz`。五报告均passed且code_sha准确；真实BGE/SQLite/安装上游SDK在2CPU/2GiB、network=none的隔离容器执行。提取报告明确model_outputs=synthetic_controlled_fixture、chat_provider_calls=0：16次为MockTransport SDK往返，返回受控JSON文本；原生函数delta重组/错误反馈另由定向单元测试验证，不伪称本轮调用glm或证明完整真实提取稳定性。
+
+## 兼容性、保留模块与证据边界
+
+- 长期记忆：可信原始context、来源ID/原句/关联证据、Scope/版本/删除复核、敏感确认、错误事实拒绝、事实/向量原子提交和数据库重试复用均保留；无需重构或迁移。新模型输入的生产成功率改善仍证据不足。
+- 人格/情绪：只细分三处形状诊断类别；核心人格、情绪授权、来源与关闭行为保持，现有相关回归通过；不把模拟七日趋势当用户七日验收。
+- iOS/Mia硬件：未改Swift/C++、协议或固件。仓库iOS MiaMemoryTask不解码error_category；未发现对旧诊断值的枚举依赖。未执行本轮真机验证，不能据服务器CI宣称硬件或完整端到端体验已通过。
+- 现有数据库/小智服务端：schema.sql与批准基线hash一致，未改迁移、索引、生产配置或manager实现。error_category沿用既有TEXT/API字段，旧行保留；外部未知消费者若枚举旧值仍需兼容核对。固定上游适配器升级后须复核能力白名单；当前不启用function选择/strict。
+- 资源/调度：并发槽、队列上限、尝试位置和任务120秒保持；R5饥饿/排队尝试与重启反馈问题未解决。原已通过容量保持通过；本轮不新增容量/首句/完整公平性结论。
+
+当前保留`.private/`、`tools/`，无未提交源码；原始失败证据无覆盖。P23整体未验收，P24未开始，未部署。至此停止，下一批仅建议，等待用户再次批准。
