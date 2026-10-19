@@ -36,7 +36,7 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(request.await_count, 3)
             self.assertEqual(factory.call_count, 1)
             self.assertTrue(all(call.args[0] is session for call in request.call_args_list))
-            await auth.close_connection(SimpleNamespace(_mia_authorization=authorization))
+            await auth.close_connection(SimpleNamespace(_youmi_authorization=authorization))
             await authorization.close()
             session.aclose.assert_awaited_once()
             with self.assertRaises(auth.PrivateAuthorizationRequired):
@@ -141,13 +141,13 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
         data = scope_data()
         authorization = auth.PrivateAuthorization(config, connection_loop=asyncio.get_running_loop())
         await authorization.close()
-        conn = SimpleNamespace(config=config, _mia_scope=auth._manager_scope(data),
-                               _mia_authorization=authorization, session_id='session-one')
+        conn = SimpleNamespace(config=config, _youmi_scope=auth._manager_scope(data),
+                               _youmi_authorization=authorization, session_id='session-one')
         with patch.object(auth.PrivateAuthorization, '_request', new_callable=AsyncMock,
                           side_effect=[data, True]) as request:
             self.assertTrue(await auth.save_chat_title(conn))
             self.assertEqual(request.await_count, 2)
-            self.assertEqual(request.call_args.args, ('/agent/chat-title/session-one/generate', conn._mia_scope.snapshot()))
+            self.assertEqual(request.call_args.args, ('/agent/chat-title/session-one/generate', conn._youmi_scope.snapshot()))
         with patch.object(auth.PrivateAuthorization, '_request', new_callable=AsyncMock,
                           return_value=dict(data, credential_version=2)) as request:
             with self.assertRaises(auth.PrivateAuthorizationRequired):
@@ -253,17 +253,17 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
                 await auth.load_private_config(conn)
             request.assert_not_awaited()
         self.assertNotIn("mia-private-credential", conn.headers)
-        self.assertIsNone(conn._mia_scope)
-        self.assertIsNone(conn._mia_owner)
+        self.assertIsNone(conn._youmi_scope)
+        self.assertIsNone(conn._youmi_owner)
 
     async def test_revoked_output_stops_audio_and_does_not_repeat_authorization_notifications(self):
         conn = SimpleNamespace(read_config_from_api=True, session_id="fixture", client_abort=False,
-                               websocket=SimpleNamespace(send=AsyncMock()), _mia_scope=auth._manager_scope(scope_data()),
-                               _mia_authorization=SimpleNamespace(require=AsyncMock(side_effect=auth.PrivateAuthorizationRequired())))
+                               websocket=SimpleNamespace(send=AsyncMock()), _youmi_scope=auth._manager_scope(scope_data()),
+                               _youmi_authorization=SimpleNamespace(require=AsyncMock(side_effect=auth.PrivateAuthorizationRequired())))
         self.assertFalse(await auth.allow_output(conn))
         self.assertFalse(await auth.allow_output(conn))
         self.assertTrue(conn.client_abort)
-        self.assertTrue(conn._mia_authorization_required)
+        self.assertTrue(conn._youmi_authorization_required)
         conn.websocket.send.assert_awaited_once()
         self.assertEqual(json.loads(conn.websocket.send.call_args.args[0])["message"], "请用智控台授权码完成授权")
         conn.func_handler = SimpleNamespace(handle_llm_function_call=AsyncMock())
@@ -278,8 +278,8 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
     async def test_report_preserves_payload_and_only_sends_verified_snapshot(self):
         scope = auth._manager_scope(scope_data())
         authorization = SimpleNamespace(require=AsyncMock(return_value=scope), _request=AsyncMock(return_value=True))
-        conn = SimpleNamespace(read_config_from_api=True, _mia_scope=scope,
-                               _mia_authorization=authorization, session_id="session-one")
+        conn = SimpleNamespace(read_config_from_api=True, _youmi_scope=scope,
+                               _youmi_authorization=authorization, session_id="session-one")
         self.assertTrue(await auth.report_chat(conn, scope.device_id, conn.session_id, 1, "合成测试", b"audio", 123))
         endpoint, body = authorization._request.call_args.args
         self.assertEqual(endpoint, "/agent/chat-history/report")

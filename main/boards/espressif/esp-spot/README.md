@@ -31,7 +31,7 @@ idf.py menuconfig
 
 分别配置如下选项：
 
-- `Xiaozhi Assistant` → `Board Type` → 选择 `ESP-Spot-S3` / `ESP-Spot-C5`
+- `Youmi Assistant` → `Board Type` → 选择 `ESP-Spot-S3` / `ESP-Spot-C5`
 
 按 `S` 保存，按 `Q` 退出。
 
@@ -53,7 +53,7 @@ idf.py flash
 > 1. 打开前盖；
 > 2. 拔出带有模组的 PCB 板；
 > 3. 按住 <kbd>BOOT</kbd> 同时插回 PCB 版，注意不要颠倒；
-> 
+>
 > 此时， ESP-Spot 应当已进入下载模式。在烧录完成后，可能需要重新插拔 PCB 板。
 
 ## 低功耗

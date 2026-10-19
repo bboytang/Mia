@@ -4,7 +4,7 @@
 #include <driver/gpio.h>
 
 // ============================================================================
-// FoloToy AI Passport board definition for XiaoZhi.
+// FoloToy AI Passport board definition for Youmi.
 //
 // Hardware facts come from the ai-passport repository BSP
 // (components/bsp/include/bsp_pins.h + hardware development guide):

@@ -13,7 +13,7 @@ class ServerControlTests(unittest.IsolatedAsyncioTestCase):
         module = SimpleNamespace(ServerTextMessageHandler=lambda: SimpleNamespace(handle=handler))
         websocket = SimpleNamespace(send=AsyncMock(), transport=SimpleNamespace(get_extra_info=lambda _: object()))
         conn = SimpleNamespace(config={'manager-api': {'secret': 'server-secret'}}, websocket=websocket,
-                               read_config_from_api=True, _mia_authorization_required=True)
+                               read_config_from_api=True, _youmi_authorization_required=True)
         def command(secret='server-secret', action='update_config'):
             return json.dumps({'type': 'server', 'action': action, 'content': {'secret': secret}})
         with patch.dict(sys.modules, {'core.handle.textHandler.serverMessageHandler': module}):

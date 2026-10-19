@@ -4,7 +4,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from scripts.ci import mia_model_comparison as comparison
+from scripts.ci import youmi_model_comparison as comparison
 
 
 class ModelComparisonTests(unittest.TestCase):

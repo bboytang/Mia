@@ -1,0 +1,69 @@
+name: Compare Youmi Chinese memory embeddings
+on:
+  push:
+    paths:
+      - 'scripts/ci/*mia*embedding*'
+      - 'scripts/ci/youmi-embedding-runtime.Dockerfile'
+      - 'server/tests/fixtures/persona_memory_retrieval_zh*.json'
+      - '.github/workflows/youmi-memory-embedding.yml'
+  pull_request:
+    paths:
+      - 'scripts/ci/*mia*embedding*'
+      - 'scripts/ci/youmi-embedding-runtime.Dockerfile'
+      - 'server/tests/fixtures/persona_memory_retrieval_zh*.json'
+      - '.github/workflows/youmi-memory-embedding.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: bge-small-zh
+            model: BAAI/bge-small-zh-v1.5
+            revision: 7999e1d3359715c523056ef9478215996d62a620
+          - name: bge-base-zh
+            model: BAAI/bge-base-zh-v1.5
+            revision: f03589ceff5aac7111bd60cfc7d497ca17ecac65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install export dependencies (not inference resource measurement)
+        run: |
+          python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
+      - name: Export pinned model and U8U8 variant
+        run: |
+          python scripts/ci/prepare_youmi_embedding.py --model '${{ matrix.model }}' --revision '${{ matrix.revision }}' --output "$RUNNER_TEMP/mia-embedding-model"
+      - name: Build isolated inference runtime
+        run: |
+          mkdir -p "$RUNNER_TEMP/mia-embedding-results"
+          docker pull python:3.10-slim
+          youmi_runtime_base=$(docker image inspect python:3.10-slim --format '{{index .RepoDigests 0}}')
+          docker build --build-arg PYTHON_RUNTIME="$youmi_runtime_base" -f scripts/ci/youmi-embedding-runtime.Dockerfile -t mia-embedding-experiment .
+          docker image inspect mia-embedding-experiment --format '{{.Id}}' > "$RUNNER_TEMP/mia-embedding-results/runtime-image-id.txt"
+          docker image inspect python:3.10-slim --format '{{json .RepoDigests}}' > "$RUNNER_TEMP/mia-embedding-results/base-image-digests.json"
+      - name: Measure new U8U8 candidate on 2 CPUs and 2 GiB
+        run: |
+          for variant in model-uint8.onnx; do
+            docker run --rm --cpus 2 --memory 2g --memory-swap 2g --network none \
+              -e GITHUB_SHA="$GITHUB_SHA" \
+              -v "$GITHUB_WORKSPACE:/experiment:ro" \
+              -v "$RUNNER_TEMP/mia-embedding-model:/model:ro" \
+              -v "$RUNNER_TEMP/mia-embedding-results:/results" \
+              mia-embedding-experiment --model-dir /model --variant "$variant" \
+              --dataset /experiment/server/tests/fixtures/persona_memory_retrieval_zh_v5.json \
+              --output "/results/${variant}.json"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Youmi-embedding-${{ matrix.name }}-${{ github.sha }}
+          path: ${{ runner.temp }}/mia-embedding-results
+          if-no-files-found: warn

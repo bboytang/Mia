@@ -100,6 +100,6 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: xiaozhi_${{ matrix.ci_name || matrix.full_name }}_${{ github.sha }}
+          name: youmi_${{ matrix.ci_name || matrix.full_name }}_${{ github.sha }}
           path: build/merged-binary.bin
           if-no-files-found: error

@@ -199,12 +199,12 @@ WebSocket text frames carry JSON. The most common `"type"` values and their sema
        "session_id": "xxx",
        "type": "listen",
        "state": "detect",
-       "text": "Hi XiaoZhi"
+       "text": "Hi Youmi"
      }
      ```
 
 5. **MCP**
-   - The recommended channel for IoT control. Device capability discovery and tool invocation all flow through `type: "mcp"` messages whose `payload` is JSON-RPC 2.0 (see [MCP protocol document](./mcp-protocol.md)).
+   - The recommended channel for IoT control. Device capability discovery and tool invocation all flow through `type: "mcp"` messages whose `payload` is JSON-RPC 2.0 (see [MCP protocol document](mcp-protocol.md)).
    - Device-to-server response example:
      ```json
      {
@@ -441,7 +441,7 @@ stateDiagram
 5. **IoT control via MCP**
    - All IoT capability discovery and control flows through MCP (`type: "mcp"`). The legacy `type: "iot"` protocol is deprecated.
    - MCP works over both WebSocket and MQTT, giving better standardization and extensibility.
-   - See [MCP protocol document](./mcp-protocol.md) and [MCP IoT control usage](./mcp-usage.md) for details.
+   - See [MCP protocol document](mcp-protocol.md) and [MCP IoT control usage](mcp-usage.md) for details.
 
 6. **Malformed JSON**
    - When a required field such as `type` is missing, the device logs `ESP_LOGE(TAG, "Missing message type, data: %s", data);` and ignores the message.

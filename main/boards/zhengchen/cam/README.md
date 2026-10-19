@@ -1,17 +1,17 @@
 # 产品相关介绍网址
 
 ## 简介
-征辰科技 AI camera是小智AI的魔改项目，做了大量创新和优化。
+征辰科技 AI camera是YoumiAI的魔改项目，做了大量创新和优化。
 
 ## 合并版
-合并版代码在小智AI主项目中维护，跟随主项目的一起版本更新，便于用户自行扩展和第三方固件扩展。支持语音唤醒、语音打断、OTA等功能。
+合并版代码在YoumiAI主项目中维护，跟随主项目的一起版本更新，便于用户自行扩展和第三方固件扩展。支持语音唤醒、语音打断、OTA等功能。
 
 ## 魔改版
 魔改版由于底层改动太大，代码单独维护，定期合并主项目代码。
 
 https://e.tb.cn/h.6Gl2LC7rsrswQZp?tk=qFuaV9hzh0k CZ356
 ```
-【淘宝】 「小智AI带摄像头支持识物双麦克风打断 ESP32S3N16R8开发板表情包」
+【淘宝】 「YoumiAI带摄像头支持识物双麦克风打断 ESP32S3N16R8开发板表情包」
 https://e.tb.cn/h.hBc8Gcx9cUluJJO?tk=YW5C4LPixKg
 
 
@@ -43,7 +43,7 @@ self.screen.set_brightness
 self.screen.set_theme
 self.gif.set_gif_mode
 self.display.set_mode
-self.camera.take_photo       
+self.camera.take_photo
 self.AEC.set_mode
 self.AEC.get_mode
 self.res.esp_restart

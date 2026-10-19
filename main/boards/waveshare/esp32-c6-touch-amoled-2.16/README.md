@@ -13,7 +13,7 @@ git clone https://github.com/78/xiaozhi-esp32.git
 **进入工程**
 
 ```bash
-cd xiaozhi-esp32
+cd youmi-esp32
 ```
 
 **配置编译目标为 ESP32C6**
@@ -31,7 +31,7 @@ idf.py menuconfig
 **选择板子**
 
 ```bash
-Xiaozhi Assistant -> Board Type -> Waveshare ESP32-C6-Touch-AMOLED-2.16
+Youmi Assistant -> Board Type -> Waveshare ESP32-C6-Touch-AMOLED-2.16
 ```
 
 **编译**

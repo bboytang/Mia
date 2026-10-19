@@ -1,5 +1,5 @@
-# jiuchuan-xiaozhi-sound
-九川科技小智AI音箱
+# jiuchuan-youmi-sound
+九川科技YoumiAI音箱
 
 ## 🛠️ 编译指南
 **开发环境**：ESP-IDF v5.4.1

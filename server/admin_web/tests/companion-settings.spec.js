@@ -33,8 +33,8 @@ async function setup(page) {
     await route.fulfill({ json: { code: 0, data: state } });
   });
   await page.goto('https://mia-fixture.invalid/#/home');
-  await page.getByRole('button', { name: 'Mia 功能管理', exact: true }).first().click();
-  const dialog = page.locator('.el-dialog').filter({ hasText: 'Mia 功能管理' });
+  await page.getByRole('button', { name: 'Youmi 功能管理', exact: true }).first().click();
+  const dialog = page.locator('.el-dialog').filter({ hasText: 'Youmi 功能管理' });
   await expect(dialog.getByRole('switch', { name: '自动保存记忆', exact: true })).toHaveAttribute('aria-checked', 'true');
   return { state, requests, backend, dialog };
 }
@@ -47,7 +47,7 @@ test('console switches read server state, save with login, and survive reopening
   await dialog.getByRole('switch', { name: '人格成长', exact: true }).click();
   await expect(dialog.getByRole('switch', { name: '人格成长', exact: true })).toHaveAttribute('aria-checked', 'false');
   await dialog.getByRole('button', { name: '关闭', exact: true }).click();
-  await page.getByRole('button', { name: 'Mia 功能管理', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Youmi 功能管理', exact: true }).first().click();
   await expect(dialog.getByRole('switch', { name: '人格成长', exact: true })).toHaveAttribute('aria-checked', 'false');
   expect(requests.filter(item => item.command.action !== 'status')).toEqual([
     { command: { action: 'set_feature_settings', features: { personality_growth: false } }, authorization: 'Bearer synthetic-test-token' }
@@ -79,20 +79,20 @@ test('long-term user mood requires explicit consent and role editing never autos
 });
 
 
-test('Mia emotion has its own server switch, visible state and confirmed reset', async ({ page }) => {
+test('Youmi emotion has its own server switch, visible state and confirmed reset', async ({ page }) => {
   const { dialog, requests, state } = await setup(page);
-  await dialog.getByRole('switch', { name: 'Mia 的持续情绪', exact: true }).click();
-  await expect(dialog.getByRole('switch', { name: 'Mia 的持续情绪', exact: true })).toHaveAttribute('aria-checked', 'true');
+  await dialog.getByRole('switch', { name: 'Youmi 的持续情绪', exact: true }).click();
+  await expect(dialog.getByRole('switch', { name: 'Youmi 的持续情绪', exact: true })).toHaveAttribute('aria-checked', 'true');
   expect(state.emotion_tracking.enabled).toBe(0);
   state.mia_emotion.label = '难过';
   await dialog.getByRole('button', { name: '刷新', exact: true }).click();
-  await expect(dialog).toContainText('Mia 当前情绪：难过');
-  await dialog.getByRole('button', { name: '重置 Mia 情绪', exact: true }).click();
+  await expect(dialog).toContainText('Youmi 当前情绪：难过');
+  await dialog.getByRole('button', { name: '重置 Youmi 情绪', exact: true }).click();
   await page.locator('.el-message-box').getByRole('button', { name: '取消', exact: true }).click();
   expect(requests.some(item => item.command.action === 'reset_mia_emotion')).toBe(false);
-  await dialog.getByRole('button', { name: '重置 Mia 情绪', exact: true }).click();
+  await dialog.getByRole('button', { name: '重置 Youmi 情绪', exact: true }).click();
   await page.locator('.el-message-box').getByRole('button', { name: '确定', exact: true }).click();
-  await expect(dialog).toContainText('Mia 当前情绪：平静');
+  await expect(dialog).toContainText('Youmi 当前情绪：平静');
   expect(requests.filter(item => item.command.action !== 'status').map(item => item.command)).toEqual([
     { action: 'set_feature_settings', features: { companion_emotion: true } }, { action: 'reset_mia_emotion' }
   ]);

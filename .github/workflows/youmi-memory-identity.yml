@@ -1,0 +1,187 @@
+name: Verify Youmi binding authorization
+on:
+  push:
+    paths:
+      - 'server/companion/install_identity.py'
+      - 'server/companion/manager_chat_guards.py'
+      - 'server/companion/manager_tests/YoumiBindingAuthorizationTest.java'
+      - 'server/companion/manager_identity/**'
+      - 'server/companion/manager_tests/YoumiPrivate*.java'
+      - 'server/companion/manager_tests/sensitive-data-expectation.patch'
+      - 'scripts/ci/verify_youmi_binding_reports.py'
+      - 'scripts/ci/verify_youmi_scope_integration.py'
+      - 'server/companion/authorization.py'
+      - 'server/companion/persona.py'
+      - 'server/companion/embedding.py'
+      - 'server/companion/semantic.py'
+      - 'server/companion/retrieval.py'
+      - 'server/companion/context.py'
+      - 'server/companion/reply.py'
+      - 'server/companion/jobs.py'
+      - 'server/companion/request_accounting.py'
+      - 'server/companion/model_requests.py'
+      - 'server/companion/schema-v4.sql'
+      - 'server/companion/schema-v5.sql'
+      - 'server/companion/features.py'
+      - 'server/companion/affect.py'
+      - 'server/companion/management.py'
+      - 'server/companion/extraction.py'
+      - 'server/companion/events.py'
+      - 'server/companion/emotions.py'
+      - 'server/companion/schema-v3.sql'
+      - 'server/companion/schema-v2.sql'
+      - 'server/companion/youmi_adapter.py'
+      - 'server/companion/memory.py'
+      - 'server/companion/schema.*'
+      - 'server/companion/install_youmi.py'
+      - '.github/workflows/youmi-memory-identity.yml'
+  pull_request:
+    paths:
+      - 'server/companion/install_identity.py'
+      - 'server/companion/manager_chat_guards.py'
+      - 'server/companion/manager_tests/YoumiBindingAuthorizationTest.java'
+      - 'server/companion/manager_identity/**'
+      - 'server/companion/manager_tests/YoumiPrivate*.java'
+      - 'server/companion/manager_tests/sensitive-data-expectation.patch'
+      - 'scripts/ci/verify_youmi_binding_reports.py'
+      - 'scripts/ci/verify_youmi_scope_integration.py'
+      - 'server/companion/authorization.py'
+      - 'server/companion/persona.py'
+      - 'server/companion/embedding.py'
+      - 'server/companion/semantic.py'
+      - 'server/companion/retrieval.py'
+      - 'server/companion/context.py'
+      - 'server/companion/reply.py'
+      - 'server/companion/jobs.py'
+      - 'server/companion/request_accounting.py'
+      - 'server/companion/model_requests.py'
+      - 'server/companion/schema-v4.sql'
+      - 'server/companion/schema-v5.sql'
+      - 'server/companion/features.py'
+      - 'server/companion/affect.py'
+      - 'server/companion/management.py'
+      - 'server/companion/extraction.py'
+      - 'server/companion/events.py'
+      - 'server/companion/emotions.py'
+      - 'server/companion/schema-v3.sql'
+      - 'server/companion/schema-v2.sql'
+      - 'server/companion/youmi_adapter.py'
+      - 'server/companion/memory.py'
+      - 'server/companion/schema.*'
+      - 'server/companion/install_youmi.py'
+      - '.github/workflows/youmi-memory-identity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SPRING_DATASOURCE_DRUID_PASSWORD: mia-ci-only
+      SPRING_DATASOURCE_DRUID_URL: jdbc:mysql://127.0.0.1:3306/youmi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
+      MIA_SCOPE_INTEGRATION_SCRIPT: ${{ github.workspace }}/scripts/ci/verify_youmi_scope_integration.py
+      MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: mia-ci-only
+          MYSQL_DATABASE: youmi_esp32_server
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pyoumi-ci-only"
+          --health-interval=10s --health-timeout=5s --health-retries=12
+      redis:
+        image: redis:8
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s --health-timeout=3s --health-retries=12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: upstream/main/manager-api/pom.xml
+      - name: Install existing manager client dependency for real Python Scope integration
+        run: python -m pip install httpx==0.28.1 websockets==14.2 numpy==1.26.4
+      - name: Prepare isolated TLS certificates and explicit test trust
+        env:
+          MIA_SCOPE_KEYSTORE: file:${{ runner.temp }}/mia-test-tls/server.p12
+          MIA_SCOPE_CA: ${{ runner.temp }}/mia-test-tls/ca.pem
+          MIA_TLS_CERT_FILE: ${{ runner.temp }}/mia-test-tls/server.pem
+          MIA_TLS_KEY_FILE: ${{ runner.temp }}/mia-test-tls/server.key
+        run: |
+          mkdir -p "$RUNNER_TEMP/mia-test-tls"
+          openssl req -x509 -newkey rsa:2048 -nodes -days 2 \
+            -keyout "$RUNNER_TEMP/mia-test-tls/ca.key" -out "$MIA_SCOPE_CA" \
+            -subj '/CN=Youmi isolated test CA' -addext 'basicConstraints=critical,CA:TRUE' 2>/dev/null
+          openssl req -newkey rsa:2048 -nodes -keyout "$MIA_TLS_KEY_FILE" \
+            -out "$RUNNER_TEMP/mia-test-tls/server.csr" -subj '/CN=localhost' 2>/dev/null
+          python - <<'PY'
+          import certifi, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'mia-test-tls'
+          with Path(os.environ['GITHUB_ENV']).open('a') as environment:
+              for name in ['MIA_SCOPE_KEYSTORE', 'MIA_SCOPE_CA', 'MIA_TLS_CERT_FILE', 'MIA_TLS_KEY_FILE']:
+                  environment.write(name + '=' + os.environ[name] + '\n')
+          (root / 'server.ext').write_text('subjectAltName=DNS:localhost,IP:127.0.0.1\nextendedKeyUsage=serverAuth\n')
+          with Path(certifi.where()).open('ab') as trust:
+              trust.write(b'\n' + Path(os.environ['MIA_SCOPE_CA']).read_bytes())
+          PY
+          openssl x509 -req -days 2 -in "$RUNNER_TEMP/mia-test-tls/server.csr" \
+            -CA "$MIA_SCOPE_CA" -CAkey "$RUNNER_TEMP/mia-test-tls/ca.key" -CAcreateserial \
+            -extfile "$RUNNER_TEMP/mia-test-tls/server.ext" -out "$MIA_TLS_CERT_FILE"
+          openssl pkcs12 -export -out "$RUNNER_TEMP/mia-test-tls/server.p12" \
+            -inkey "$MIA_TLS_KEY_FILE" -in "$MIA_TLS_CERT_FILE" -certfile "$MIA_SCOPE_CA" -passout pass:mia-ci-only
+          sudo "$JAVA_HOME/bin/keytool" -importcert -noprompt -alias mia-isolated-ci \
+            -file "$MIA_SCOPE_CA" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
+      - name: Reconstruct existing Youmi and necessary binding patch
+        id: prepare
+        run: |
+          mkdir -p "$RUNNER_TEMP/mia-binding-results"
+          python -m server.companion.install_youmi upstream --apply
+          python -m server.companion.install_identity upstream --check > "$RUNNER_TEMP/mia-binding-results/binding.patch"
+          python -m server.companion.install_identity upstream --apply
+          git -C upstream apply --check "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
+          git -C upstream apply "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
+          cp server/companion/manager_tests/YoumiBindingAuthorizationTest.java upstream/main/manager-api/src/test/java/xiaozhi/modules/device/
+          cp server/companion/manager_tests/YoumiPrivate*.java upstream/main/manager-api/src/test/java/xiaozhi/modules/device/
+      - name: Run full Java suite including real binding acceptance
+        working-directory: upstream/main/manager-api
+        run: mvn --batch-mode -DskipTests=false -DfailIfNoTests=true test
+      - name: Verify binding behavior and narrow class scope
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          python scripts/ci/verify_youmi_binding_reports.py \
+            --reports upstream/main/manager-api/target/surefire-reports \
+            --classes upstream/main/manager-api/target/classes \
+            --baseline docs/verification/mia-persona-memory/manager-baseline-20261014.json \
+            --output "$RUNNER_TEMP/mia-binding-results/binding-results.json"
+      - name: Build manager JAR
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        working-directory: upstream/main/manager-api
+        run: mvn --batch-mode -DskipTests=true package
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Youmi-binding-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/mia-binding-results
+            upstream/main/manager-api/target/surefire-reports
+            upstream/main/manager-api/target/youmi-esp32-api.jar
+          if-no-files-found: warn

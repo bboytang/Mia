@@ -7,7 +7,7 @@ import hashlib
 from pathlib import Path
 import shutil
 
-from .install_xiaozhi import replace_once
+from .install_youmi import replace_once
 
 
 EXPECTED = "44ca0310de83e943b48bf1dbf0e0c22715fc7562e387ddd5457383bc061f204b"

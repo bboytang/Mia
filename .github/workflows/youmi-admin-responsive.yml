@@ -1,0 +1,111 @@
+name: Build and test responsive Youmi admin
+
+on:
+  push:
+    paths:
+      - 'server/admin_web/**'
+      - '.github/workflows/youmi-admin-responsive.yml'
+  pull_request:
+    paths:
+      - 'server/admin_web/**'
+      - '.github/workflows/youmi-admin-responsive.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+          cache-dependency-path: upstream/main/manager-web/package-lock.json
+      - name: Install unchanged frontend dependencies
+        working-directory: upstream/main/manager-web
+        run: npm ci --no-audit --no-fund
+      - name: Reproduce the original Docker frontend build directory
+        run: |
+          sudo mkdir -p /app
+          sudo chown "$(id -u):$(id -g)" /app
+          cp -a upstream/main/manager-web/. /app/
+          git -C /app apply --unidiff-zero -p3 "$GITHUB_WORKSPACE/server/admin_web/production-dialogs.patch"
+      - name: Build original frontend for production comparison
+        working-directory: /app
+        env:
+          VUE_APP_USE_CDN: 'false'
+        run: |
+          npm run build
+          mkdir -p "$GITHUB_WORKSPACE/admin-artifacts/baseline"
+          cp -a dist/index.html dist/css dist/js "$GITHUB_WORKSPACE/admin-artifacts/baseline/"
+          (cd dist && find css js -type f ! -name '*.gz' ! -name '*.LICENSE.txt' -exec sha256sum {} \;) > "$GITHUB_WORKSPACE/admin-artifacts/baseline/static.sha256"
+      - name: Compare original static files with production snapshot
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def read(path):
+              return dict(line.strip().split(maxsplit=1)[::-1] for line in Path(path).read_text().splitlines())
+          production = read('server/admin_web/production-static.sha256')
+          baseline = read('admin-artifacts/baseline/static.sha256')
+          matches = sum(baseline.get(path) == digest for path, digest in production.items())
+          report = f'Original build matches {matches}/{len(production)} production JS/CSS files.\n'
+          Path('admin-artifacts/baseline/comparison.txt').write_text(report)
+          print(report)
+          PY
+      - name: Check and apply source patch
+        run: |
+          python3 server/admin_web/apply.py upstream --apply
+          cp -a upstream/main/manager-web/src/. /app/src/
+          cp upstream/main/manager-web/public/index.html /app/public/index.html
+      - name: Inspect reconstructed desktop build
+        run: |
+          npm ci --no-audit --no-fund --prefix server/admin_web/tests
+          MIA_ANALYSIS_PACKAGE="$GITHUB_WORKSPACE/server/admin_web/tests/package.json" node server/admin_web/compare_builds.cjs --compare server/admin_web/production-build.json admin-artifacts/baseline > admin-artifacts/baseline/semantic-comparison.json
+      - name: Run existing frontend regressions
+        working-directory: /app
+        run: |
+          npm test
+          npm run test:snapshot
+      - name: Build responsive frontend
+        working-directory: /app
+        env:
+          VUE_APP_USE_CDN: 'false'
+        run: npm run build
+      - name: Prepare reviewable source and static artifacts
+        run: |
+          mkdir -p admin-artifacts/responsive
+          cp -a /app/dist/. admin-artifacts/responsive/
+          tar --exclude=node_modules --exclude=dist --exclude=.webpack_cache -czf admin-artifacts/manager-web-source.tar.gz -C upstream main/manager-web
+          cp server/admin_web/README.md admin-artifacts/
+          printf '%s\n' "$GITHUB_SHA" > admin-artifacts/MIA_COMMIT
+          (cd admin-artifacts/responsive && find . -type f -exec sha256sum {} \;) > admin-artifacts/responsive.sha256
+      - name: Install browser test dependencies
+        working-directory: server/admin_web/tests
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium webkit firefox
+      - name: Test every route and responsive interactions
+        working-directory: server/admin_web/tests
+        env:
+          MIA_ADMIN_DIST: /app/dist
+        run: npm test
+      - name: Upload source, build and regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Youmi-responsive-admin-${{ github.sha }}
+          path: |
+            admin-artifacts/
+            server/admin_web/tests/playwright-report/
+            server/admin_web/tests/test-results/
+            server/admin_web/tests/results.json
+          retention-days: 14

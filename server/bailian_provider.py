@@ -59,7 +59,7 @@ class BailianProvider:
         response = await self.client.post(
             self.chat_url, headers=self.headers,
             json={"model": self.chat_model, "messages": [
-                {"role": "system", "content": "你是 Mia，亲切、简洁的中文语音伙伴。回答适合直接朗读，通常不超过两句话。"},
+                {"role": "system", "content": "你是 Youmi，亲切、简洁的中文语音伙伴。回答适合直接朗读，通常不超过两句话。"},
                 {"role": "user", "content": user_text},
             ], "max_tokens": 180},
         )

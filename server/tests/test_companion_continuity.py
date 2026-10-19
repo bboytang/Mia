@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from server.tests import test_companion_extraction as fixture
 from server.companion import emotions
-from server.companion import xiaozhi_adapter as mia
+from server.companion import youmi_adapter as youmi
 from server.companion.context import ContextBuilder, ContextError, ContextLimits
 from server.companion.jobs import JobStore, MemoryWorker, TurnCompleted
 from server.companion.memory import MemoryError, MemoryStore
@@ -55,7 +55,7 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
     async def test_pending_event_does_not_influence_as_a_past_interaction(self):
         await self.seed()
         pending = await self.bundle()
-        shown = json.loads(pending.request()['messages'][1]['content'])['mia_context']['events'][0]
+        shown = json.loads(pending.request()['messages'][1]['content'])['youmi_context']['events'][0]
         self.assertEqual(shown['state'], 'pending')
         self.assertNotIn('influence', shown)
         self.assertNotIn('assistant_evidence', shown)
@@ -66,7 +66,7 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         actual = '😌记得，你喜欢蓝色。'
         self.assertEqual(await self.builder.complete(pending, self.policy, actual), [shown['id']])
         next_turn = await self.bundle(turn='later', session='other-session')
-        active = json.loads(next_turn.request()['messages'][1]['content'])['mia_context']['events'][0]
+        active = json.loads(next_turn.request()['messages'][1]['content'])['youmi_context']['events'][0]
         self.assertEqual(active['id'], shown['id'])
         self.assertEqual(active['state'], 'active')
         self.assertEqual(active['user_evidence'], '你还记得我喜欢蓝色吗')
@@ -159,17 +159,17 @@ class ContinuityTests(unittest.IsolatedAsyncioTestCase):
         async def send(message):
             sent.append(json.loads(message))
         conn = SimpleNamespace(loop=asyncio.get_running_loop(), session_id='new-session', sentence_id='event',
-            read_config_from_api=True, _mia_scope=self.scope, _mia_authorization=self.policy,
-            _mia_memory=mia.MiaMemoryProvider(self.store, self.scope.owner, None, 'new-session', self.scope, self.policy),
-            dialogue=SimpleNamespace(dialogue=[]), server=SimpleNamespace(_mia_worker=self.worker),
+            read_config_from_api=True, _youmi_scope=self.scope, _youmi_authorization=self.policy,
+            _youmi_memory=youmi.YoumiMemoryProvider(self.store, self.scope.owner, None, 'new-session', self.scope, self.policy),
+            dialogue=SimpleNamespace(dialogue=[]), server=SimpleNamespace(_youmi_worker=self.worker),
             websocket=SimpleNamespace(send=send), client_abort=False)
-        @mia.completed_chat
+        @youmi.completed_chat
         def chat(conn, query, depth=0):
-            mia.begin_turn(conn, query)
-            conn._mia_context_turn = SimpleNamespace(builder=self.builder, bundle=bundle)
-            mia.guard_history(conn.dialogue, SimpleNamespace(role='assistant', content='😌你喜欢蓝色。'))
+            youmi.begin_turn(conn, query)
+            conn._youmi_context_turn = SimpleNamespace(builder=self.builder, bundle=bundle)
+            youmi.guard_history(conn.dialogue, SimpleNamespace(role='assistant', content='😌你喜欢蓝色。'))
         await asyncio.to_thread(chat, conn, '你还记得我喜欢蓝色吗')
-        self.assertTrue(conn._mia_event_status['activated'])
+        self.assertTrue(conn._youmi_event_status['activated'])
         self.assertEqual(self.worker.foreground, 0)
         self.assertTrue(sent[-1]['accepted'])
 

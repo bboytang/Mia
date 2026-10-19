@@ -1,0 +1,60 @@
+name: Verify official Youmi backend fixes
+on:
+  push:
+    paths: ['server/upstream_fixes/**', '.github/workflows/youmi-upstream-fixes.yml']
+  pull_request:
+    paths: ['server/upstream_fixes/**', '.github/workflows/youmi-upstream-fixes.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: baseline
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 27399a2fb64b5910196f438a256ce0a9f868481f
+          path: official
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Verify and apply only audited files
+        run: |
+          python server/upstream_fixes/apply.py baseline
+          python server/upstream_fixes/apply.py baseline --apply
+          cp -a official/main/xiaozhi-server/tests baseline/main/xiaozhi-server/
+          MIA_AUDIO_SOURCE="$GITHUB_WORKSPACE/baseline/main/xiaozhi-server/core/handle/receiveAudioHandle.py" python server/upstream_fixes/test_receive_audio.py -v
+      - name: Install official runtime and test dependencies
+        working-directory: baseline/main/xiaozhi-server
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libopus0 ffmpeg
+          python -m pip install torch==2.2.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r "$GITHUB_WORKSPACE/official/main/xiaozhi-server/requirements.txt"
+          python -m pip install pytest pytest-asyncio freezegun
+      - name: Official lifecycle, ASR and TTS regressions without live APIs
+        working-directory: baseline/main/xiaozhi-server
+        env:
+          RUN_LIVE_API_TESTS: '0'
+        run: |
+          mkdir -p data
+          printf '{}\n' > data/.config.yaml
+          python -B tests/test_manage_api_client_lifecycle.py -v
+          python -m pytest tests/core/providers/asr/test_lang_tag_filter.py tests/core/providers/tts/test_quote_safe_segment.py -q
+          python -m compileall -q config/manage_api_client.py core/handle/receiveAudioHandle.py core/providers/asr/utils.py core/providers/tts/base.py core/providers/tts/edge.py
+          python -c "import edge_tts; import core.providers.tts.edge; assert edge_tts.communicate.WSS_URL.startswith('wss://api.msedgeservices.com/')"
+      - name: Package verified source fixes
+        run: tar -czf official-fixes.tar.gz -C baseline main/xiaozhi-server/config/manage_api_client.py main/xiaozhi-server/core/handle/receiveAudioHandle.py main/xiaozhi-server/core/providers/asr/utils.py main/xiaozhi-server/core/providers/tts/base.py main/xiaozhi-server/core/providers/tts/edge.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Youmi-official-fixes-${{ github.sha }}
+          path: official-fixes.tar.gz
+          if-no-files-found: error

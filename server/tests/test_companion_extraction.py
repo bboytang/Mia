@@ -472,7 +472,7 @@ class ExtractionPipelineTests(unittest.IsolatedAsyncioTestCase):
             ids.append(result['memories'][0])
         self.source = '我喜欢观云时画图'
         first = {'memories': [proposal(self.source)], 'trait': {
-            'name': '观云回应', 'description': 'Mia围绕观云话题不提供诊断', 'anchor': '观云',
+            'name': '观云回应', 'description': 'Youmi围绕观云话题不提供诊断', 'anchor': '观云',
             'evidence_ids': ids, 'evidence_quotes': [{'id': identifier, 'quote': text}
                 for identifier, text in zip(ids, texts)]}}
         before = json.dumps(first)
@@ -494,7 +494,7 @@ class ExtractionPipelineTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.store.list_memories(self.scope.owner)), 3)
         self.assertEqual(json.dumps(first), before)
         second = json.loads(before)
-        second['trait']['description'] = 'Mia围绕观云话题询问云层变化与草图细节'
+        second['trait']['description'] = 'Youmi围绕观云话题询问云层变化与草图细节'
         self.output = second  # A separate controlled provider result, no repair of first.
         with self.store.db:
             self.store.db.execute('UPDATE mia_jobs SET next_attempt_at=0 WHERE id=?', (admitted['id'],))

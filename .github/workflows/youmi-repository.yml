@@ -1,0 +1,58 @@
+name: Verify Youmi repository
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/youmi-repository.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/youmi-repository.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  tooling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install httpx==0.28.1
+      - run: python -m unittest discover -s scripts/tests -v
+      - run: python -m unittest discover -s docker/firmware-builder -v
+      - run: python -m unittest discover -s scripts/ci/tests -v
+      - run: python -m unittest discover -s scripts/video_tests -v
+  firmware:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - board: alientek/atk-dnesp32s3-box0
+            variant: atk-dnesp32s3-box0
+          - board: waveshare/esp32-s3-rgb-matrix
+            variant: esp32-s3-rgb-matrix
+          - board: kevin/c3
+            variant: kevin-c3
+          - board: espressif/esp32-p4-function-ev-board
+            variant: esp32-p4-function-ev-board
+    container:
+      image: espressif/idf:v6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build firmware
+        shell: bash
+        env:
+          BOARD: ${{ matrix.board }}
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          source "$IDF_PATH/export.sh"
+          python scripts/build.py "$BOARD" --name "$VARIANT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Youmi-firmware-${{ matrix.variant }}-${{ github.sha }}
+          path: build/merged-binary.bin
+          if-no-files-found: error

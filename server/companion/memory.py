@@ -37,7 +37,7 @@ Return JSON {"memories":[{"category":"fact|preference|goal|experience|agreement"
 user excerpts. A trait needs evidence from at least three distinct sessions and excerpts;
 propose at most one small change. Return trait:null without adequate evidence. Do not invent
 lived experiences, claim feelings are human subjective experiences, infer dependency or
-intimacy scores, or copy every user preference into Mia's identity. Maximum 16 memories,
+intimacy scores, or copy every user preference into Youmi's identity. Maximum 16 memories,
 512 characters per memory and source excerpt. Return only JSON, without Markdown or prose.
 Never include full conversations.
 """

@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, patch
 
 import numpy as np
 
-from server.companion import reply, xiaozhi_adapter as mia
+from server.companion import reply, youmi_adapter as youmi
 from server.companion.authorization import AuthenticatedScope, PrivateAuthorizationRequired, execute_tool
 from server.companion.context import ContextBuilder, ContextError
 from server.companion.embedding import DIMENSION, MODEL_KEY, REVISION, EmbeddingUnavailable
@@ -72,9 +72,9 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
         self.scope = AuthenticatedScope('user:1:agent:a', 1, 1, 'a', 'mia', 'device', 'client', 0, 1,
             datetime.now(timezone.utc) + timedelta(days=1), frozenset({'memory:read', 'memory:write', 'memory:manage'}))
         self.index = SemanticMemoryIndex(self.store, UnitEncoder())
-        self.conn = SimpleNamespace(_mia_scope=self.scope, _mia_authorization=self.auth, read_config_from_api=True,
-            _mia_context_builder=ContextBuilder(self.index), llm=self.provider, session_id='session', sentence_id='turn',
-            _mia_role_data='中文简短', dialogue=SimpleNamespace(dialogue=[dto('user', '我喜欢什么？', marker='user-1')]))
+        self.conn = SimpleNamespace(_youmi_scope=self.scope, _youmi_authorization=self.auth, read_config_from_api=True,
+            _youmi_context_builder=ContextBuilder(self.index), llm=self.provider, session_id='session', sentence_id='turn',
+            _youmi_role_data='中文简短', dialogue=SimpleNamespace(dialogue=[dto('user', '我喜欢什么？', marker='user-1')]))
         self.profile = Path(self.temp.name) / 'profile.json'
         self.write_profile()
         self.env = patch.dict(os.environ, {'MIA_CONTEXT_PROFILE_FILE': str(self.profile)})
@@ -176,7 +176,7 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
     async def test_new_turn_drops_model_history_when_any_snapshot_component_changes(self):
         await reply.prepare(self.conn, [], 0)
         self.conn.dialogue.dialogue.append(dto('assistant', 'OLD_MODEL_PRIVATE'))
-        mia.begin_turn(self.conn, '新问题')
+        youmi.begin_turn(self.conn, '新问题')
         self.conn.dialogue.dialogue.append(dto('user', '新问题', marker='user-2'))
         self.store.reset_personality(self.scope.owner)
         turn = await reply.prepare(self.conn, [], 0)
@@ -185,7 +185,7 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
     async def test_unchanged_snapshot_retains_existing_display_history_without_mutation(self):
         await reply.prepare(self.conn, [], 0)
         self.conn.dialogue.dialogue.append(dto('assistant', '上一轮回答'))
-        mia.begin_turn(self.conn, '下一轮问题')
+        youmi.begin_turn(self.conn, '下一轮问题')
         self.conn.dialogue.dialogue.extend([dto('user', '临时示例', temporary=True),
                                            dto('user', '下一轮问题', marker='user-2')])
         before = repr(self.conn.dialogue.dialogue)
@@ -244,8 +244,8 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
     async def test_scope_or_authorization_changed_during_await_cannot_deliver_old_context(self):
         turn = await reply.prepare(self.conn, [], 0)
         original = self.auth.require
-        for name, value in (('_mia_scope', None), ('_mia_authorization', Policy())):
-            self.conn._mia_scope, self.conn._mia_authorization = self.scope, self.auth
+        for name, value in (('_youmi_scope', None), ('_youmi_authorization', Policy())):
+            self.conn._youmi_scope, self.conn._youmi_authorization = self.scope, self.auth
             async def require(scope, permission):
                 await original(scope, permission)
                 setattr(self.conn, name, value)
@@ -271,7 +271,7 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(calls), 1)
 
     async def test_database_outage_stops_before_reverting_to_a_different_character(self):
-        self.conn._mia_context_builder = reply.builder_for(None)
+        self.conn._youmi_context_builder = reply.builder_for(None)
         self.conn.dialogue.dialogue.insert(0, dto('user', 'OLD_PRIVATE'))
         with self.assertRaisesRegex(ContextError, 'character_unavailable'):
             await reply.prepare(self.conn, [], 0)
@@ -281,10 +281,10 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_role_capture_is_idempotent_and_keeps_memory_out_of_style(self):
         self.conn.prompt = '中文< memory>保留普通文本</ memory><memory>STALE_FACT</memory>'
-        prompt = mia.compose_persona(self.conn, self.conn.prompt)
-        mia.compose_persona(self.conn, prompt)
-        self.assertNotIn('STALE_FACT', self.conn._mia_role_data)
-        self.assertNotIn('你的名字是 Mia', self.conn._mia_role_data)
+        prompt = youmi.compose_persona(self.conn, self.conn.prompt)
+        youmi.compose_persona(self.conn, prompt)
+        self.assertNotIn('STALE_FACT', self.conn._youmi_role_data)
+        self.assertNotIn('你的名字是 Youmi', self.conn._youmi_role_data)
 
 
 if __name__ == '__main__':

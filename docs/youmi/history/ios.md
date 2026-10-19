@@ -1,0 +1,92 @@
+# Youmi iOS
+
+## 个性化皮肤与声音快捷指令诊断（2026-10-13）
+
+[下载蓝金星环测试 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-cb07db038e4d/Mia-unsigned.ipa)，约10.8MB，需同时重签App与灵动岛扩展。设置新增「个性化皮肤」，玻璃流体/蓝金星环可切换并保留选择。新球体有眨眼、音量嘴形、上下左右摇摆、麦克风音量耳环响应和流动荧光粒子；后台暂停时间动画，支持减少动态效果。
+
+源码cb07db0的[iOS CI](https://github.com/bboytang/Mia/actions/runs/38447444188)最终完整复核通过91单元/5UI、模拟器/设备/扩展编译、打包与两尺寸截图录屏。初次皮肤UI标识失败已修正；同代码第一次复核有原有UI测试启动进程ID超时，第二次复核通过。实际语音动效幅度和长期发热耗电仍需真机验收。[实际首页](../../design/mia-holographic-home-cb07db0.jpg)、[第二尺寸](../../design/mia-holographic-home-cb07db0-secondary.jpg)、[素材及生成提示词](../../design/mia-holographic-assets.md)。
+
+完全退出后声音快捷指令仍由系统识别。本版记录后台开始动作次数/最近时间，重复调用不会重新启动已开始或正在连接的对话；不能调整iOS识别阈值或承诺消除首次误识别。设置中的声音唤醒指引新增重新训练独特长口令和检查其他自动化的步骤。未新增常驻识别引擎，未更新生产服务器或清除绑定、记忆。
+
+## 后台直接唤醒入口与表情修复（2026-10-13；真机待验）
+
+[下载测试 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-e46c1d098c96/Mia-unsigned.ipa)，7,488,973字节，需同时重签 App 和 `YoumiActivity.appex`。源码 e46c1d0 的 [iOS CI](https://github.com/bboytang/Mia/actions/runs/38417464788) 通过86单元/4UI、两种编译、扩展/快捷动作打包及两尺寸截图；[服务端CI](https://github.com/bboytang/Mia/actions/runs/38417464718)83项通过。发布回下载与CI产物逐字节相同。
+
+开始动作保持后台执行，移除自动切前台回退，首开/回前台刷新快捷动作。辅助功能列表没有 Youmi 时，先在快捷指令 App 保存只含「开始与 Youmi 聊天」动作的快捷指令，再选它训练系统口令；若快捷指令 App 也没有动作，需继续定位。后台待机、结束后再次呼叫、解锁后呼叫和系统麦克风交接尚未真机验收，不把编译成功当作唤醒成功。
+
+表情增强眼形、嘴形、眉形、注视和眨眼；[实际首页](../../design/mia-companion-home-e46c1d0.jpg)、[第二尺寸](../../design/mia-companion-home-e46c1d0-secondary.jpg)。八情绪的语境准确性仍待真机观察。自然「请记住……」服务端补丁已通过回归但尚未部署；生产仍使用40c715d，本次没有更新服务器。
+
+## 情绪伙伴升级（2026-10-13；预览IPA已验证交付，生产记忆/真机待验）
+
+[直接下载预览IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-0d9a7cf43a91/Mia-unsigned.ipa)，约7.5MB，需重签App和Widget。代码0d9a7cf的85单测、4UI、两种编译与扩展打包[CI通过](https://github.com/bboytang/Mia/actions/runs/38395441414)，服务端修复40c715d的81项[CI通过](https://github.com/bboytang/Mia/actions/runs/38401621395)。生产记忆已部署并联调，真机长期记忆效果仍待验。
+
+首页改为原创玻璃流体小球、八种动态表情与深色背景，取消启动视频、人物和字幕。首次进入待呼叫，不自动录音或发现设备；点小球开始/结束。系统声音快捷指令可调用后台录音动作，另有打开 App 的回退动作；待呼叫期间只有系统口令监听可能使用麦克风。
+
+新增 Live Activity/灵动岛扩展，IPA 重签必须同时保留并签名 `PlugIns/YoumiActivity.appex`。锁屏停止使用公开保护数据事件，不能保证精确锁屏时机；后台启动、系统音频交接、发热耗电和扩展重签须真机验收。
+
+设置提供声音唤醒指引和记忆/成长管理。管理请求只在现有设备认证后的 WebSocket 内发送，无需启动麦克风。声音唤醒必须在系统中添加动作并训练口令；动作列表没有 Youmi 时，先在快捷指令 App 保存只含「开始与 Youmi 聊天」操作的「呼叫 Youmi」。当前验收要求是后台直接开聊，不接受打开 App 替代；开始动作失败时不再自动切前台。新版原生验证结果见上节，后台唤醒仍待真机验证。
+
+[批准方案](companion-plan.md)、[实施计划](companion-implementation.md)、[逐步工作记录](companion-worklog.md)、[交接](companion-handoff.md)。以下为旧版本历史。
+
+## 按播放显示整句字幕（2026-10-13）
+
+[直接下载字幕修复 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-b9e534672920/Mia-unsigned.ipa)，约 14 MB，需自行重签覆盖升级。发布 CI 已回下载比对，文件与通过测试的构建产物一致。
+
+用户真机已确认语音对话和开口打断正常，现修复字幕延迟与跨轮残留。按用户选择改为当前句首个约 60 ms 音频包实际播放完成时显示完整句，下一句播放后再换文字。提前收到的文字只排队，新 STT/打断/断开清除旧字幕与旧播放映射；不再用固定字速或在 TTS stop 时补显示文字。[完整 CI](https://github.com/bboytang/Mia/actions/runs/38335899635) 通过 78 单元/4 UI 测试及两种编译；真机字幕时延仍待确认。
+
+## 绑定检查与音频恢复（2026-10-13）
+
+[直接下载本次修复的 IPA](https://github.com/bboytang/Mia/releases/download/mia-ios-c3a6080172b3/Mia-unsigned.ipa)，约 14 MB，无需下载截图/录屏 ZIP。它未签名，需自行重签；建议沿用原签名与 Bundle ID 覆盖升级以保留设备绑定。单独 IPA 发布工作流只取已成功的构建，核对 SHA-256 并回下载比对；没有将安装包提交进 Git。
+
+绑定检查会清除旧错误；检查成功关闭设置后可自动继续对话，明确结束后仍保持关闭。音频配置变化在现有引擎内恢复，保留当前 WebSocket 和认证，正常恢复不弹“连接出错”；实际恢复失败会停止并提示。前一版真机仍有恢复循环，本版 [CI](https://github.com/bboytang/Mia/actions/runs/38332993004) 通过 74 单元/4 UI 测试与两种编译；真机效果仍待安装反馈。
+
+## 自动对话无响应诊断
+
+修复构建 `5b05979` 的 [CI](https://github.com/bboytang/Mia/actions/runs/38319552307) 已通过 71 单元/3 UI 测试、模拟器和设备编译及打包。[新 IPA](https://github.com/bboytang/Mia/actions/runs/38319552307/artifacts/11779066442) 需重签；安装后说话时检查流光反馈和自动回答，如仍无响应请回传下述诊断数值。
+
+已补充音频引擎被系统重新配置停止后的自动恢复，以及按实际音频帧格式更新转换器；转换异常不再静默丢弃。iPhone 实际采集效果仍待新版安装反馈。
+
+新版已修复自动重连只连接、不恢复聆听的问题。设置中“对话状态、采集音频帧、上传音频帧、输入峰值”用于核对录音及上传；只含计数和音量，不含录音、语音文本或凭据。用户反馈的打开即聊无响应仍需真机确认，不能把本次重连修复视为全部根因已解决。
+
+## 自动连续对话（2026-10-12；CI 已通过，真机待验）
+
+启动动画结束后，已绑定设备在前台自动请求麦克风并开始聆听；不再每句点击开始/发送。说完由Youmi `auto` 模式判断结束，Youmi 音频实际播放完后继续聆听；Youmi 说话/思考时开口可以触发本地打断并继续说话。流光球用于结束/重新开启整段对话；明确结束后，本次 App 会话不会被前台回调重新开启麦克风。未绑定设备会自动打开激活设置；首次绑定后可轻触流光球开启。后台与音频中断停止采集。[CI](https://github.com/bboytang/Mia/actions/runs/38314950163) 的 67 项单测、3 项 UI 测试和设备编译/打包已通过。[下载新版未签名 IPA](https://github.com/bboytang/Mia/actions/runs/38314950163/artifacts/11776614004)，自行重签安装。需要真机验证外放回声、开口打断和首字完整性。自定义后台唤醒词暂未实现，见[评估](../ios/voice-wakeup-assessment.md)。
+
+
+## 当前接入：自建Youmi 0.9.7
+
+按用户要求暂不使用账号 UI，设置改为可配置 OTA / WebSocket 和设备绑定。Youmi 先请求 OTA 获取本机设备令牌，未激活时显示验证码，用户在智控台将设备关联智能体；激活后才建立 hello/session_id 和打开麦克风。不会把旧账号令牌发给Youmi。WS 配置是实际目标，OTA 用于核对主机和安全级别；HTTPS/WSS 正常验证证书，当前 IP 的明文例外只用于用户选定的自建服务器。
+
+[协议、文件改动、激活步骤与测试记录](../ios/integration.md)。旧账号说明是历史回滚参考，当前界面不提供注册/登录；代码和钥匙串数据保留。当前 GitHub 编译和新增 XCTest 尚待核对，真实服务器已通过绑定及 hello，但测试录音上传后尚无 STT/TTS，真机端到端未通过。
+
+`ios/project.yml` 是 XcodeGen 工程定义。GitHub Actions 的 `Build iOS App` 工作流在 macOS runner 上生成 Xcode 工程，并分别编译模拟器和未签名的真机应用。
+
+工作流上传 `Youmi-unsigned.ipa`、`Youmi.app` 和 SHA-256 校验文件。IPA **没有 Apple 签名，不能直接安装**；使用你自己的签名方式重签后才能安装到 iPhone。无需在仓库中保存签名证书或服务器密钥。
+
+当前已加入Youmi WebSocket 版本 1、Opus 编解码、麦克风采集与播放管线，以及仅展示 Youmi 回答的字幕时间线。首页已按用户批准改用原半身 Youmi 与星雾背景、无图标流光球；正式 Live2D 仍需分层绑定模型。默认服务端地址为 `wss://8kraw.cloud/xiaozhi/v1/`。已按[用户名＋密码方案](account-access-plan.md)接入注册、登录和退出；新安装轻触流光球即可登录或注册，无需复制网关令牌。服务器已通过真实合成语音回合，但外部 TLS 与 iPhone 联调尚未通过。
+
+账号会话保存在本机钥匙串，绑定服务端来源，有效期 30 天；密码不保存。网络/TLS 错误保留原登录，明确的“未授权”才使会话失效。退出先断开语音并清除本机登录；撤销失败会提示，稍后可重新登录或请管理员重置密码以撤销全部会话。旧版已有令牌的安装只在首次升级迁移为维护模式；登录或退出后不会自动退回共享令牌。管理员仍可在“设置 → 高级维护”手动选择维护令牌并更改服务端。完整进度、系统方案、验收标准和后续实施顺序见[项目路线图](../ios/ios-roadmap.md)。
+
+## 静音启动动画
+
+2026-10-05 用户取消启动音效，选择[新版星雾静音视频](../../design/launch/mia-starmist-preview-silent.mp4)推送。已原样放入 `ios/YoumiApp/YoumiLaunch.mp4`：H.264、768×1376、24 fps、5.167 秒、124 帧、无音轨。此前声音预览仅保留制作历史，不打包到 App。
+
+播放器通过本地静音 MP4 覆盖在同一首页实例上，冷启动播放一次；支持跳过、Reduce Motion、后台停止、失败回退和 7 秒上限，最后 0.25 秒按媒体播放时间淡出。它不发起联网、麦克风权限或音频会话，继续保持 `isMuted=true`。由现有 XcodeGen 资源规则打包；CI 额外核对真机 App 内资源与源文件字节完全一致。
+
+播放测试使用测试包内的 `YoumiLaunchFixture.mp4`：16×16、2 秒、48 帧、无音轨的黑色视频，只验证 AVPlayer 生命周期和回退。CI 将上传两台模拟器的实际启动录屏与首页截图。Swift/Xcode 在本地 Linux 环境不可用，[静音版 CI](https://github.com/bboytang/Mia/actions/runs/37250809373)（代码 `13dd7ce`）通过 49 项单元测试、2 项 UI 测试、模拟器与未签名真机编译、资源一致性检查；IPA 已上传。已下载核对 App 视频与源文件一致，并抽查 16 Pro/SE 实际录屏均有粒子、Youmi 与回到首页。主录屏 177.15 秒、542 帧，SE 22.83 秒、443 帧，均无音轨；时长包含模拟器启动等待，不代表真机速度。结尾角色/流光球与原生布局有位置及尺度变化，未宣称像素级无缝；真机流畅度和衔接待验。
+
+## 半身星雾首页（2026-10-04）
+
+用户最终恢复原半身形象，并批准星雾背景、取消左上文字、保留设置及字幕、用无图标流光球替换旧麦克风圆钮与柱状波形。`YoumiPortrait` 与 `StarMistBackground` 分层展示，前景星雾和渐隐覆盖人物下沿；`YoumiFullBody` 和城市资产保留历史。
+
+流光使用原生 `TimelineView`/`Canvas`，上限 24 fps，后台暂停；Reduce Motion 时几何静止但亮度仍能反馈声音。录音输入每 60 ms PCM 帧计算 RMS，Youmi 回答继续复用原播放音量；停止录音或断开时归零，旧播放回调不覆盖新聆听反馈。字幕推进和录音/Opus协议保持，点击仍可开始、结束及打断。新增 3 项 PCM 能量测试；构建 `305a45d` 的 [CI](https://github.com/bboytang/Mia/actions/runs/37213166341)通过模拟器与未签名真机编译、全部 35 项 XCTest，已核对 [16 Pro/SE 首页缩略截图](../../design/README.md)。真实语音流光反馈与真机音量灵敏度待验。
+
+新半身末帧与从下沿向上凝形的提示词已同步；用户已取消音效并选择静音版接入，视频没有音轨，播放器仍静音。此次没有创建新收费任务；两尺寸录屏已确认播放并回到首页，实际布局不是像素级无缝；真机流畅度仍待验。
+
+## 账号验证
+
+CI 新增账户 API、原生 Keychain、断网/取消/写入失败及来源隔离测试，并通过原生 UI 测试验证首页入口、注册切换、设置默认隐藏令牌。UI 测试不输入真实密码或调用云服务；截图保存在测试结果包中。当前构建结果以 GitHub Actions 为准，VPS 账号部署及真机验收状态见 handoff。备案阻塞解除后，首次安装请注册账号，再测试中文问答、字幕、声音、打断和退出后不能继续使用原会话。
+
+模拟器 CI 使用专属模拟器 application identifier 和临时 ad hoc 签名以测试真实 Keychain；真机产物继续不签名，安装时需由用户的签名工具生成正确的应用/钥匙串权限。模拟器标识不用于真机配置。
+
+账号版构建 `abe1ae4` 的 [成功 CI 与 IPA](https://github.com/bboytang/Mia/actions/runs/37246486540)通过 49 项单元测试、2 项 UI 测试和模拟器/未签名真机编译。VPS 账号接口已经部署并通过本机 HTTP/HTTPS/WSS 验证；真实 iPhone 注册和语音待公网 TLS 恢复。页面与两尺寸首页截图见 [验证图](../../design/README.md)。

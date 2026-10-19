@@ -8,7 +8,7 @@ fi
 
 repo_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 if [[ ! -f "$repo_dir/server/requirements.txt" ]]; then
-  echo '请从 Mia 仓库中运行此脚本。' >&2
+  echo '请从 Youmi 仓库中运行此脚本。' >&2
   exit 1
 fi
 
@@ -47,7 +47,7 @@ for setting in \
   fi
 done
 chmod 600 /etc/mia/gateway.env
-install -m 644 "$repo_dir/server/deploy/mia-gateway.service.example" /etc/systemd/system/mia-gateway.service
+install -m 644 "$repo_dir/server/deploy/youmi-gateway.service.example" /etc/systemd/system/mia-gateway.service
 systemctl daemon-reload
 systemctl enable mia-gateway
 

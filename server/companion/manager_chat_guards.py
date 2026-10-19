@@ -1,6 +1,6 @@
 """Necessary authorization hooks for the existing manager chat services."""
 
-from .install_xiaozhi import replace_once
+from .install_youmi import replace_once
 
 BASE = 'main/manager-api/src/main/java/xiaozhi/modules/agent/'
 HISTORY = BASE + 'controller/AgentChatHistoryController.java'
@@ -17,23 +17,23 @@ PREIMAGES = {
     INTERFACE: '20dd65f4b6efb8771d3853d49870ab92ddc11de4cc6ee40555a5540285171d8f',
     SUMMARY: '1d690790d2c8153cc385ded3d6f814389cc4d43560ce8d768a48c748e361f179',
 }
-CHAT_AUTH = 'xiaozhi.modules.device.service.impl.MiaChatAuthorizationService'
+CHAT_AUTH = 'xiaozhi.modules.device.service.impl.YoumiChatAuthorizationService'
 
 
 def field(text, anchor):
     return replace_once(text, anchor, anchor + '\n'
                         '    @jakarta.annotation.Resource\n'
-                        f'    private {CHAT_AUTH} miaChatAuthorization;\n')
+                        f'    private {CHAT_AUTH} youmiChatAuthorization;\n')
 
 
 def history(text):
     text = field(text, '    private final RedisUtils redisUtils;')
     return replace_once(text, '        Boolean result = agentChatHistoryBizService.report(request);',
                         '        Map<String, Object> snapshot = request.getMiaScope();\n'
-                        '        Map<String, Object> scope = miaChatAuthorization.require(snapshot, request.getSessionId(), true);\n'
+                        '        Map<String, Object> scope = youmiChatAuthorization.require(snapshot, request.getSessionId(), true);\n'
                         '        if (!scope.get("device_id").equals(request.getMacAddress())) {\n'
                         '            throw new RenException(ErrorCode.NO_PERMISSION);\n        }\n'
-                        '        Boolean result = miaChatAuthorization.write(snapshot, request.getSessionId(), true,\n'
+                        '        Boolean result = youmiChatAuthorization.write(snapshot, request.getSessionId(), true,\n'
                         '                () -> agentChatHistoryBizService.report(request));')
 
 
@@ -46,11 +46,11 @@ def report(text):
 def biz(text):
     text = field(text, '    private final DeviceService deviceService;')
     return replace_once(text, '        Integer chatHistoryConf = agentEntity.getChatHistoryConf();',
-                        '        var scope = miaChatAuthorization.require(report.getMiaScope(), report.getSessionId(), true);\n'
+                        '        var scope = youmiChatAuthorization.require(report.getMiaScope(), report.getSessionId(), true);\n'
                         '        if (!scope.get("agent_id").equals(agentEntity.getId())\n'
                         '                || !scope.get("user_id").equals(agentEntity.getUserId())) {\n'
-                        '            throw new xiaozhi.common.exception.RenException(\n'
-                        '                    xiaozhi.common.exception.ErrorCode.NO_PERMISSION);\n        }\n'
+                        '            throw new youmi.common.exception.RenException(\n'
+                        '                    youmi.common.exception.ErrorCode.NO_PERMISSION);\n        }\n'
                         '        Integer chatHistoryConf = agentEntity.getChatHistoryConf();')
 
 
@@ -70,7 +70,7 @@ def controller(text):
                             f'    public Result<Void> generateAndSaveChat{action}(@PathVariable String sessionId,\n'
                             '            @RequestBody Map<String, Object> body) {\n'
                             '        Map<String, Object> snapshot = Map.copyOf(body);\n'
-                            '        miaChatAuthorization.require(snapshot, sessionId, false);')
+                            '        youmiChatAuthorization.require(snapshot, sessionId, false);')
         text = replace_once(text, f'agentChatSummaryService.generateAndSaveChat{action}(sessionId);',
                             f'agentChatSummaryService.generateAndSaveChat{action}(sessionId, snapshot);')
     return text
@@ -98,12 +98,12 @@ def summary(text):
                         '                log.info("未找到与会话 {} 关联的设备", sessionId);\n'
                         '                return false;\n            }\n\n'
                         '            String agentId = device.getAgentId();',
-                        '            Map<String, Object> scope = miaChatAuthorization.require(snapshot, sessionId, false);\n'
+                        '            Map<String, Object> scope = youmiChatAuthorization.require(snapshot, sessionId, false);\n'
                         '            String agentId = (String) scope.get("agent_id");')
     text = replace_once(text, '                    agentService.updateAgentById(agentId, new AgentUpdateDTO() {\n'
                         '                        {\n                            setSummaryMemory(summaryDTO.getSummary());\n'
                         '                        }\n                    }, false);',
-                        '                    miaChatAuthorization.write(snapshot, sessionId, false, () -> {\n'
+                        '                    youmiChatAuthorization.write(snapshot, sessionId, false, () -> {\n'
                         '                        agentService.updateAgentById(agentId, new AgentUpdateDTO() {\n'
                         '                            { setSummaryMemory(summaryDTO.getSummary()); }\n'
                         '                        }, false);\n                        return true;\n                    });')
@@ -111,18 +111,18 @@ def summary(text):
                         '    public boolean generateAndSaveChatTitle(String sessionId, Map<String, Object> snapshot) {')
     text = replace_once(text, '            // 自动获取agentId\n'
                         '            String agentId = findAgentIdBySessionId(sessionId);',
-                        '            Map<String, Object> scope = miaChatAuthorization.require(snapshot, sessionId, false);\n'
+                        '            Map<String, Object> scope = youmiChatAuthorization.require(snapshot, sessionId, false);\n'
                         '            String agentId = (String) scope.get("agent_id");')
     text = replace_once(text, '                agentChatTitleService.saveOrUpdateTitle(sessionId, title);',
-                        '                miaChatAuthorization.write(snapshot, sessionId, false, () -> {\n'
+                        '                youmiChatAuthorization.write(snapshot, sessionId, false, () -> {\n'
                         '                    agentChatTitleService.saveOrUpdateTitle(sessionId, title);\n'
                         '                    return true;\n                });')
     # Recheck immediately before either LLM, not only at dispatch or persistence.
     text = replace_once(text, '                AgentChatSummaryDTO summaryDTO = generateChatSummary(sessionId);',
-                        '                miaChatAuthorization.require(snapshot, sessionId, false);\n'
+                        '                youmiChatAuthorization.require(snapshot, sessionId, false);\n'
                         '                AgentChatSummaryDTO summaryDTO = generateChatSummary(sessionId);')
     return replace_once(text, '            String title = llmService.generateTitle(conversation.toString(), slmModelId);',
-                        '            miaChatAuthorization.require(snapshot, sessionId, false);\n'
+                        '            youmiChatAuthorization.require(snapshot, sessionId, false);\n'
                         '            String title = llmService.generateTitle(conversation.toString(), slmModelId);')
 
 

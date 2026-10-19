@@ -10,8 +10,8 @@ from websockets.asyncio.server import serve
 from server.account_http import create_app
 from server.account_store import AccountStore
 from server.deploy.check_accounts import check
-from server.tests.test_xiaozhi_gateway import FakeProvider
-from server.xiaozhi_gateway import MiaGateway
+from server.tests.test_youmi_gateway import FakeProvider
+from server.youmi_gateway import YoumiGateway
 
 
 class AccountCheckTests(unittest.IsolatedAsyncioTestCase):
@@ -21,7 +21,7 @@ class AccountCheckTests(unittest.IsolatedAsyncioTestCase):
             store = AccountStore(database)
             existing = await store.register("existing_friend", "a long existing password")
             provider = FakeProvider()
-            gateway = MiaGateway("maintenance-test", lambda: provider, accounts=store)
+            gateway = YoumiGateway("maintenance-test", lambda: provider, accounts=store)
             runner = web.AppRunner(create_app(store), access_log=None)
             await runner.setup()
             site = web.TCPSite(runner, "127.0.0.1", 0)

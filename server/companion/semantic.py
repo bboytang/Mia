@@ -37,13 +37,13 @@ class SemanticMemoryIndex:
         from .retrieval import FeatureCache
         with store.lock:
             self._database_uri = Path(store.db.execute('PRAGMA database_list').fetchone()['file']).as_uri() + '?mode=ro'
-            if not hasattr(store, '_mia_retrieval_features'):
-                store._mia_retrieval_features = FeatureCache()
-            self._features = store._mia_retrieval_features
-            if not hasattr(store, '_mia_retrieval_activity'):
-                store._mia_retrieval_activity = {'foreground': 0, 'idle': asyncio.Event()}
-                store._mia_retrieval_activity['idle'].set()
-            self._activity = store._mia_retrieval_activity
+            if not hasattr(store, '_youmi_retrieval_features'):
+                store._youmi_retrieval_features = FeatureCache()
+            self._features = store._youmi_retrieval_features
+            if not hasattr(store, '_youmi_retrieval_activity'):
+                store._youmi_retrieval_activity = {'foreground': 0, 'idle': asyncio.Event()}
+                store._youmi_retrieval_activity['idle'].set()
+            self._activity = store._youmi_retrieval_activity
 
     async def _require(self, scope, authorization, permission):
         if not isinstance(scope, AuthenticatedScope) or scope.persona_id != 'mia':

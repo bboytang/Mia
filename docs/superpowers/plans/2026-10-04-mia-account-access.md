@@ -1,4 +1,4 @@
-# Mia Account Access Implementation Plan
+# Youmi Account Access Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
@@ -8,14 +8,14 @@
 
 **Tech Stack:** Python 3.12, sqlite3, hashlib.scrypt, aiohttp==3.14.3, websockets==16.0; iOS 17+, SwiftUI, URLSession, Keychain.
 
-**Spec:** `docs/mia-account-access-plan.md` (approved 2026-10-04).
+**Spec:** `docs/youmi/history/account-access-plan.md` (approved 2026-10-04).
 
 ## Global Constraints
 
 - Work in the existing clean `feature/mia-ios-bootstrap` checkout, as requested by the user; preserve unrelated firmware and selected half-body UI.
-- Python/pip/tests use `/root/projects/Mia/.venv/bin/python`; VPS uses `/opt/mia/.venv/bin/python`.
+- Python/pip/tests use `/root/projects/Youmi/.venv/bin/python`; VPS uses `/opt/mia/.venv/bin/python`.
 - No new cloud calls for automated tests; no API Keys, passwords or issued sessions in Git or logs.
-- Do not change Opus, Xiaozhi messages, Providers, caption timing or microphone interaction.
+- Do not change Opus, Youmi messages, Providers, caption timing or microphone interaction.
 - Username: NFKC/casefold, 3–32 letters/numbers/underscore including Chinese; password: 15–128 characters, preserve spaces.
 - scrypt N=2^15, r=8, p=3, random 16-byte salt, 32-byte digest, 64 MiB maxmem; at most 2 actual hash jobs.
 - Session: random 32-byte token, only SHA-256 persisted, 30 days, at most 5 sessions per account.
@@ -50,7 +50,7 @@
 - Normalize username before uniqueness and rate limiting; limits 20 attempts/IP/minute and 10/username/minute before scrypt, bounded to 4096 active buckets. Trust `X-Mia-Client-IP` only from loopback; Caddy overwrites it.
 
 - [x] Write real temporary SQLite tests: registration/login, NFKC duplicate, distinct salts, invalid inputs, no plaintext credentials, persistence, expiry/revoke, maximum users and five sessions, concurrent registrations and UTC daily debit, administrator reset invalidates sessions. Expected credential lifetime is 2,592,000 seconds; wrong/unknown login returns the same 401 code.
-- [x] Run `/root/projects/Mia/.venv/bin/python -m unittest server.tests.test_accounts -v`; expected missing implementation failure before adding code.
+- [x] Run `/root/projects/Youmi/.venv/bin/python -m unittest server.tests.test_accounts -v`; expected missing implementation failure before adding code.
 - [x] Implement store with SQL transactions/constraints and bounded asynchronous scrypt. Exercise cancellation using a controlled slow hash and assert the third job remains rejected until the first two finish.
 - [x] Add aiohttp dependency to the project venv and create HTTP tests using real TestServer/TestClient: register→login→logout; invalid JSON/type/oversize; duplicate/unauthorized/uniform errors; rate limit before hashing; spoofed IP header cannot be trusted from a remote peer; no-store and generic errors.
 - [x] Run HTTP tests before creating routes, confirm failure; implement routes, safe errors and limiter. Add hidden-password admin CLI without printing credentials.
@@ -59,17 +59,17 @@
 ### Task 2: Account sessions on the unchanged voice gateway
 
 **Files:**
-- Modify `server/xiaozhi_gateway.py`.
-- Extend `server/tests/test_xiaozhi_gateway.py`.
+- Modify `server/youmi_gateway.py`.
+- Extend `server/tests/test_youmi_gateway.py`.
 
 **Interfaces:**
 - Consume Task 1 `AccountStore.authenticate`, `consume_round`, `create_app`.
-- `MiaGateway(token, provider_factory=VolcengineProvider, accounts=None, max_concurrent_rounds=2)` preserves old constructor callers.
+- `YoumiGateway(token, provider_factory=VolcengineProvider, accounts=None, max_concurrent_rounds=2)` preserves old constructor callers.
 - `MIA_ACCOUNTS_ENABLED=1` enables store/HTTP; `0` disables account access and preserves maintenance rollback. `MIA_ACCOUNT_DB`, `MIA_MAX_ACCOUNTS`, `MIA_DAILY_ROUNDS`, `MIA_MAX_CONCURRENT_ROUNDS` configure approved defaults.
 - Account token and old shared token both use original Authorization header; account session revalidated before cloud calls. Unauthorized closes 1008 with `未授权`.
 - Empty recording returns original error before debit. Busy rejection never debits. Started failures/interruptions remain charged; global slot always released.
 
-- [x] Add real WebSocket tests for account recording→ASR→LLM→TTS/Mia-only subtitle, revoked/expired tokens at handshake and on open sockets, wrong tokens, quota persistence, busy rejection, abort and Provider exceptions releasing slots; preserve original tests unchanged.
+- [x] Add real WebSocket tests for account recording→ASR→LLM→TTS/Youmi-only subtitle, revoked/expired tokens at handshake and on open sockets, wrong tokens, quota persistence, busy rejection, abort and Provider exceptions releasing slots; preserve original tests unchanged.
 - [x] Run gateway suite, confirm new behavior fails against existing code.
 - [x] Implement narrow auth/round checks and loopback HTTP lifecycle; provider code unchanged. Bind HTTP only to 127.0.0.1; cleanup runner, hash executor and DB at shutdown.
 - [x] Run all service tests, expected green, inspect diff and commit/push gateway stage with progress evidence.
@@ -77,18 +77,18 @@
 ### Task 3: iOS registration/login and stored account sessions
 
 **Files:**
-- Create `ios/MiaApp/MiaAccountAccess.swift`, `ios/MiaApp/MiaAccountView.swift`.
-- Modify `ios/MiaApp/ContentView.swift`, `MiaTokenStore.swift`, `MiaWebSocketTransport.swift`, `MiaVoiceSession.swift`.
-- Create `ios/MiaTests/MiaAccountAccessTests.swift`; extend transport tests as necessary.
+- Create `ios/YoumiApp/YoumiAccountAccess.swift`, `ios/YoumiApp/YoumiAccountView.swift`.
+- Modify `ios/YoumiApp/ContentView.swift`, `YoumiTokenStore.swift`, `YoumiWebSocketTransport.swift`, `YoumiVoiceSession.swift`.
+- Create `ios/YoumiTests/YoumiAccountAccessTests.swift`; extend transport tests as necessary.
 
 **Interfaces:**
-- `MiaAccountCredential: Codable, Equatable` holds username/token/expiresAt/origin; `usable(endpoint:now:)` validates origin/lifetime.
-- `MiaAccountAPI(session: URLSession = .shared)` builds same-host HTTPS requests from WSS, rejects userinfo/fragments, uses timeout and reload/no-store policy, disables redirects; accepts only complete valid credential responses with a future expiry and opaque non-whitespace token.
-- `MiaAccountAccess: ObservableObject` owns registration/login, origin-bound credentials, local invalidation and logout; storage operations injected as narrow closures for failure tests, defaulting to real Keychain.
+- `YoumiAccountCredential: Codable, Equatable` holds username/token/expiresAt/origin; `usable(endpoint:now:)` validates origin/lifetime.
+- `YoumiAccountAPI(session: URLSession = .shared)` builds same-host HTTPS requests from WSS, rejects userinfo/fragments, uses timeout and reload/no-store policy, disables redirects; accepts only complete valid credential responses with a future expiry and opaque non-whitespace token.
+- `YoumiAccountAccess: ObservableObject` owns registration/login, origin-bound credentials, local invalidation and logout; storage operations injected as narrow closures for failure tests, defaulting to real Keychain.
 - Keychain update uses SecItemUpdate then add if absent, never delete-before-save. Password is never persisted. Credential stored separately from legacy token.
-- `MiaAccountView` login/registration sheet clears password on dismiss/success, allows cancellation, shows Chinese validation/errors.
+- `YoumiAccountView` login/registration sheet clears password on dismiss/success, allows cancellation, shows Chinese validation/errors.
 - Account login disables explicit persisted maintenance mode. New installs use account mode; one-time migration permits existing old-token installations to continue maintenance. Logout never automatically enables maintenance.
-- `MiaConnectionError.unauthorized` only for a definitive WebSocket policy close reason `未授权`; VoiceSession publishes auth rejection while preserving other error behavior.
+- `YoumiConnectionError.unauthorized` only for a definitive WebSocket policy close reason `未授权`; VoiceSession publishes auth rejection while preserving other error behavior.
 
 - [x] Add tests with URLProtocol transport fixtures for exact endpoint/JSON/headers, response validation, no cross-origin redirect, unknown expiry, malformed payload, HTTP 401/429 and TLS distinction.
 - [x] Add state tests: cancellation and failed save retain old credentials, wrong origin never usable, definite rejection clears, network failure retains, logout captures token before clearing/disconnect and offline failure never restores login/legacy mode. Use fake storage only for controlled failures; verify real Keychain round trip and update.
@@ -101,7 +101,7 @@
 
 **Files:**
 - Modify `server/deploy/install-ubuntu.sh`, `mia-gateway.service.example`, `Caddyfile.example`.
-- Create `server/deploy/check_accounts.py`; update `server/README.md`, `ios/README.md`, `docs/mia-ios-handoff.md`, `docs/mia-ios-roadmap.md`, account spec status.
+- Create `server/deploy/check_accounts.py`; update `server/README.md`, `ios/README.md`, `docs/youmi/ios/ios-handoff.md`, `docs/youmi/ios/ios-roadmap.md`, account spec status.
 
 **Interfaces:**
 - systemd StateDirectory=mia, StateDirectoryMode=0700, UMask=0077; installer retains keys, old token and DB, adds approved account env defaults only if absent.

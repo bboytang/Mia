@@ -30,7 +30,7 @@ SAFE_REPORTED_IDENTIFIER = re.compile(r"^[a-z0-9][a-z0-9.-]*$")
 SAFE_JOB_ID = re.compile(r"^[a-z0-9][a-z0-9.-]*$")
 SAFE_WAKE_WORD = re.compile(r"^(?:disabled|nihaoxiaozhi|wn9[sl]?_[a-z0-9_]+)$")
 ARTIFACTS = {
-    "ota": Path("build/xiaozhi.bin"),
+    "ota": Path("build/youmi.bin"),
     "full": Path("build/merged-binary.bin"),
 }
 UPLOAD_MAX_ATTEMPTS = 4
@@ -65,7 +65,7 @@ def upload_config() -> dict[str, str] | None:
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(
         description=(
-            "Build one XiaoZhi firmware board configuration. Arguments may also "
+            "Build one Youmi firmware board configuration. Arguments may also "
             "be supplied through FIRMWARE_BOARD_DIR, FIRMWARE_BOARD_NAME, "
             "FIRMWARE_LANGUAGE, FIRMWARE_WAKE_WORD, and "
             "FIRMWARE_BUILD_OPTIONS."

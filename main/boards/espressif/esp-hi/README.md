@@ -12,7 +12,7 @@ ESP-Hi 是 ESP Friends 开源的一款基于 ESP32C3 的超**低成本** AI 对�
 
 ## WebUI
 
-ESP-Hi x 小智内置了一个控制身体运动的 WebUI，请将手机与 ESP-Hi 连接到同一个 Wi-Fi 下，手机访问 `http://esp-hi.local/` 以使用。
+ESP-Hi x Youmi内置了一个控制身体运动的 WebUI，请将手机与 ESP-Hi 连接到同一个 Wi-Fi 下，手机访问 `http://esp-hi.local/` 以使用。
 
 如需禁用，请取消 `ESP_HI_WEB_CONTROL_ENABLED`，即取消勾选 `Component config` → `Servo Dog Configuration` → `Web Control` → `Enable ESP-HI Web Control`。
 
@@ -43,7 +43,7 @@ idf.py flash
 >
 > 1. 断开 ESP-Hi 的电源，只留头部，不要连接身体。
 > 2. 按住 ESP-Hi 的按钮并连接电脑。
-> 
+>
 > 此时，ESP-Hi (ESP32C3) 应当处于烧录模式，可以使用电脑烧录程序。烧录完成后，可能需要重新插拔电源。
 >
 > **查看 log**

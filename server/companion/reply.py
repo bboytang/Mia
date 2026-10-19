@@ -102,11 +102,11 @@ class ReplyTurn:
 
 
 async def validate(conn, turn=None):
-    authorization = getattr(conn, '_mia_authorization', None)
+    authorization = getattr(conn, '_youmi_authorization', None)
     if authorization is None:
         raise PrivateAuthorizationRequired()
-    turn = turn or getattr(conn, '_mia_context_turn', None)
-    if turn is None or turn.bundle.scope != getattr(conn, '_mia_scope', None):
+    turn = turn or getattr(conn, '_youmi_context_turn', None)
+    if turn is None or turn.bundle.scope != getattr(conn, '_youmi_scope', None):
         raise ContextError('context_turn_unavailable')
     limits = await asyncio.to_thread(provider_limits, conn.llm)
     if limits != turn.bundle.limits:
@@ -114,8 +114,8 @@ async def validate(conn, turn=None):
     # Context validation already checks current manager permission for this
     # exact Scope. Do it once per delivery, without caching across deltas.
     await turn.builder.validate(turn.bundle, authorization)
-    if (turn.bundle.scope != getattr(conn, '_mia_scope', None)
-            or authorization is not getattr(conn, '_mia_authorization', None)):
+    if (turn.bundle.scope != getattr(conn, '_youmi_scope', None)
+            or authorization is not getattr(conn, '_youmi_authorization', None)):
         raise ContextError('context_turn_unavailable')
     return turn
 
@@ -123,9 +123,9 @@ async def validate(conn, turn=None):
 async def prepare(conn, functions, depth):
     await require_connection(conn)
     limits = await asyncio.to_thread(provider_limits, conn.llm)
-    builder = conn._mia_context_builder
+    builder = conn._youmi_context_builder
     rows = actual_messages(conn.dialogue)
-    turn = getattr(conn, '_mia_context_turn', None)
+    turn = getattr(conn, '_youmi_context_turn', None)
     tools = functions or []
     if depth == 0:
         if not rows or rows[-1][1]['role'] != 'user':
@@ -135,7 +135,7 @@ async def prepare(conn, functions, depth):
         history = [value for _, value in rows[:-1]]
         # History may contain old model-derived facts. Only keep it when the
         # last generation's full snapshot can still be proved current.
-        previous = getattr(conn, '_mia_previous_context', None)
+        previous = getattr(conn, '_youmi_previous_context', None)
         if previous is None:
             history = []
         else:
@@ -143,8 +143,8 @@ async def prepare(conn, functions, depth):
                 await validate(conn, previous)
             except ContextError:
                 history = []
-        bundle = await builder.build(conn._mia_scope, conn._mia_authorization, conn.sentence_id, query,
-            limits=limits, history=history, role=getattr(conn, '_mia_role_data', ''), tools=tools, session_id=conn.session_id)
+        bundle = await builder.build(conn._youmi_scope, conn._youmi_authorization, conn.sentence_id, query,
+            limits=limits, history=history, role=getattr(conn, '_youmi_role_data', ''), tools=tools, session_id=conn.session_id)
         consumed = [current]
     else:
         if turn is None:
@@ -157,8 +157,8 @@ async def prepare(conn, functions, depth):
                 raise
             # Re-query current facts, discard ALL old model/tool-derived data.
             # Already executed side effects are never replayed on a rebuild.
-            bundle = await builder.build(conn._mia_scope, conn._mia_authorization, conn.sentence_id, query,
-                limits=limits, role=getattr(conn, '_mia_role_data', ''), tools=[],
+            bundle = await builder.build(conn._youmi_scope, conn._youmi_authorization, conn.sentence_id, query,
+                limits=limits, role=getattr(conn, '_youmi_role_data', ''), tools=[],
                 scene='上下文已变化；旧工具结果已失效，本轮不再执行工具。需要新的工具操作时请用户重新发起。', session_id=conn.session_id)
             consumed = []
             marker = None
@@ -170,13 +170,13 @@ async def prepare(conn, functions, depth):
             consumed = json.loads(turn.consumed_json)
             if current[:len(consumed)] != consumed or not current[len(consumed):]:
                 raise ContextError('context_turn_modified')
-            bundle = await builder.continue_turn(turn.bundle, conn._mia_authorization,
+            bundle = await builder.continue_turn(turn.bundle, conn._youmi_authorization,
                 current[len(consumed):], tools=tools)
             consumed = current
     result = ReplyTurn(builder, bundle, marker, packed(consumed))
     await validate(conn, result)
-    conn._mia_context_turn = result
-    conn._mia_context_status = {'status': 'ready', 'turn_id': bundle.turn_id, **bundle.diagnostics()}
+    conn._youmi_context_turn = result
+    conn._youmi_context_status = {'status': 'ready', 'turn_id': bundle.turn_id, **bundle.diagnostics()}
     return result
 
 
@@ -201,35 +201,35 @@ def response(conn, functions, depth):
         try:
             wait(conn, validate(conn, active))
             inputs = json.loads(active.bundle.inputs_json)
-            if inputs.get('mia_affect') and depth == 0:
+            if inputs.get('youmi_affect') and depth == 0:
                 from .affect import CONTROL, CONTROL_REPLY, request_appraisal, parse_appraisal
-                conn._mia_affect_pending = None
+                conn._youmi_affect_pending = None
                 if CONTROL.search(inputs['query']):
                     yield CONTROL_REPLY if functions is None else (CONTROL_REPLY, None)
                     return
                 proposal = None
                 try:
-                    proposal = parse_appraisal(request_appraisal(conn.llm, inputs['query'], inputs['mia_affect']), inputs['query'])
+                    proposal = parse_appraisal(request_appraisal(conn.llm, inputs['query'], inputs['youmi_affect']), inputs['query'])
                 except Exception as error:
-                    logging.getLogger(__name__).warning('Mia affect appraisal retained previous state (%s)', type(error).__name__)
+                    logging.getLogger(__name__).warning('Youmi affect appraisal retained previous state (%s)', type(error).__name__)
                 wait(conn, validate(conn, active))
-                if getattr(conn, '_mia_context_turn', None) is not active:
+                if getattr(conn, '_youmi_context_turn', None) is not active:
                     raise ContextError('context_turn_superseded')
                 if proposal:
-                    bundle = wait(conn, active.builder.with_affect(active.bundle, conn._mia_authorization, proposal))
-                    if getattr(conn, '_mia_context_turn', None) is not active:
+                    bundle = wait(conn, active.builder.with_affect(active.bundle, conn._youmi_authorization, proposal))
+                    if getattr(conn, '_youmi_context_turn', None) is not active:
                         raise ContextError('context_turn_superseded')
                     active = replace(active, bundle=bundle)
-                    conn._mia_context_turn = active
-                    conn._mia_context_status = {'status': 'ready', 'turn_id': bundle.turn_id, **bundle.diagnostics()}
-                    conn._mia_affect_pending = (active, proposal)
+                    conn._youmi_context_turn = active
+                    conn._youmi_context_status = {'status': 'ready', 'turn_id': bundle.turn_id, **bundle.diagnostics()}
+                    conn._youmi_affect_pending = (active, proposal)
             request = active.bundle.request()
             tools = request.get('tools')
             stream = (conn.llm.response_with_functions(conn.session_id, request['messages'], functions=tools,
                 max_tokens=request['max_tokens']) if tools else
                 conn.llm.response(conn.session_id, request['messages'], max_tokens=request['max_tokens']))
             for delta in stream:
-                if getattr(conn, '_mia_context_turn', None) is not active:
+                if getattr(conn, '_youmi_context_turn', None) is not active:
                     raise ContextError('context_turn_superseded')
                 if getattr(conn, 'client_abort', False):
                     return
@@ -246,12 +246,12 @@ def response(conn, functions, depth):
 
 
 async def finish_affect(conn):
-    pending = getattr(conn, '_mia_affect_pending', None)
-    if not pending or getattr(getattr(conn, '_mia_memory', None), 'suppressed', False):
+    pending = getattr(conn, '_youmi_affect_pending', None)
+    if not pending or getattr(getattr(conn, '_youmi_memory', None), 'suppressed', False):
         return False
     turn, proposal = pending
     await validate(conn, turn)
-    await conn._mia_authorization.require(turn.bundle.scope, 'memory:write')
+    await conn._youmi_authorization.require(turn.bundle.scope, 'memory:write')
     inputs = json.loads(turn.bundle.inputs_json)
     if not inputs.get('session_id'):
         return False
@@ -263,5 +263,5 @@ async def finish_affect(conn):
             if turn.builder._versions(turn.bundle.scope) != turn.bundle.snapshot:
                 raise ContextError('context_changed')
             return commit(store, turn.bundle.scope.owner, inputs['session_id'], turn.bundle.turn_id,
-                          inputs['query'], proposal, inputs['mia_affect']['version'])
+                          inputs['query'], proposal, inputs['youmi_affect']['version'])
     return await asyncio.to_thread(finish)

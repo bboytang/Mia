@@ -1,4 +1,4 @@
-menu "Xiaozhi Assistant"
+menu "Youmi Assistant"
 
 config OTA_URL
     string "Default OTA URL"
@@ -615,7 +615,7 @@ choice BOARD_TYPE
         bool "XOrigin AiPi-Lite"
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_YUNLIAO_S3
-        bool "Yunliao S3 (小智云聊)"
+        bool "Yunliao S3 (Youmi云聊)"
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_ZECTRIX_S3_EPAPER_4_2
         bool "Zectrix S3 ePaper 4.2"
@@ -855,7 +855,7 @@ choice DISPLAY_STYLE
     prompt "Select display style"
     default USE_DEFAULT_MESSAGE_STYLE
     help
-        Select display style for Xiaozhi device
+        Select display style for Youmi device
 
     config USE_DEFAULT_MESSAGE_STYLE
         bool "Enable default message style"

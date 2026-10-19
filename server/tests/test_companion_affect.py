@@ -1,4 +1,4 @@
-"""Persistent Mia affect mechanisms; synthetic appraisals are not model evidence."""
+"""Persistent Youmi affect mechanisms; synthetic appraisals are not model evidence."""
 
 import asyncio
 from dataclasses import replace
@@ -10,7 +10,7 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from server.companion import affect, features, reply, xiaozhi_adapter as mia
+from server.companion import affect, features, reply, youmi_adapter as youmi
 from server.companion.authorization import PrivateAuthorizationRequired
 from server.companion.context import ContextBuilder, ContextError
 from server.companion.memory import MemoryStore
@@ -39,7 +39,7 @@ class AffectStateTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(state['features']['companion_emotion'])
         self.assertEqual(state['mia_emotion']['subject'], 'mia')
         self.assertEqual(state['emotion_tracking']['enabled'], 0)
-        self.assertNotIn('mia_affect', self.data(await self.build()))
+        self.assertNotIn('youmi_affect', self.data(await self.build()))
         self.assertFalse(self.commit())
         self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM mia_affect_state').fetchone()[0], 0)
 
@@ -64,8 +64,8 @@ class AffectStateTests(unittest.IsolatedAsyncioTestCase):
             phone_scope = replace(self.scope, device_id='iphone', client_id='ios')
             builder = ContextBuilder(SemanticMemoryIndex(phone, self.encoder))
             bundle = await builder.build(phone_scope, self.auth, 'phone', '你好', limits=self.limits)
-            self.assertEqual(self.data(bundle)['mia_affect'], repaired)
-            self.assertNotIn('mia_affect', self.data(await self.builder.build(
+            self.assertEqual(self.data(bundle)['youmi_affect'], repaired)
+            self.assertNotIn('youmi_affect', self.data(await self.builder.build(
                 replace(self.scope, owner='user:2:agent:b', user_id=2, agent_id='b'), self.auth,
                 'other', '你好', limits=self.limits)))
             now[0] += 7200
@@ -83,7 +83,7 @@ class AffectStateTests(unittest.IsolatedAsyncioTestCase):
         old = await self.build()
         features.update(self.store, self.scope.owner, {'companion_emotion': False})
         with self.assertRaises(ContextError):await self.builder.validate(old, self.auth)
-        self.assertNotIn('mia_affect', self.data(await self.build()))
+        self.assertNotIn('youmi_affect', self.data(await self.build()))
         self.assertFalse(self.commit(turn='off'))
         features.update(self.store, self.scope.owner, {'companion_emotion': True})
         old = await self.build()
@@ -177,16 +177,16 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.appraisal_requests[0]['max_tokens'], 256)
         self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
         from types import SimpleNamespace
-        self.conn._mia_memory = SimpleNamespace(suppressed=True)
+        self.conn._youmi_memory = SimpleNamespace(suppressed=True)
         self.assertFalse(await reply.finish_affect(self.conn))
-        self.conn._mia_memory.suppressed = False
+        self.conn._youmi_memory.suppressed = False
         self.assertTrue(await reply.finish_affect(self.conn))
         self.assertFalse(await reply.finish_affect(self.conn))
         state = affect.state(self.store, self.scope.owner)
         self.assertEqual(state['feeling'], 'hurt')
         await reply.validate(self.conn)
         # Ordinary affect updates don't throw away local history or cancel memory jobs.
-        self.assertIn('mia_affect', self.conn._mia_context_turn.bundle.request()['messages'][1]['content'])
+        self.assertIn('youmi_affect', self.conn._youmi_context_turn.bundle.request()['messages'][1]['content'])
 
     async def test_missing_appraisal_preserves_spoken_reply_without_inventing_a_transition(self):
         self.appraisal_raw = 'invalid JSON'
@@ -224,13 +224,13 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         self.auth.active = False
         with self.assertRaises(PrivateAuthorizationRequired):await reply.finish_affect(self.conn)
         self.auth.active = True
-        previous_scope = self.conn._mia_scope
-        self.conn._mia_scope = replace(self.scope, permissions=frozenset({'memory:read'}))
-        turn, proposal = self.conn._mia_affect_pending
-        turn = replace(turn, bundle=replace(turn.bundle, scope=self.conn._mia_scope))
-        self.conn._mia_affect_pending = (turn, proposal)
+        previous_scope = self.conn._youmi_scope
+        self.conn._youmi_scope = replace(self.scope, permissions=frozenset({'memory:read'}))
+        turn, proposal = self.conn._youmi_affect_pending
+        turn = replace(turn, bundle=replace(turn.bundle, scope=self.conn._youmi_scope))
+        self.conn._youmi_affect_pending = (turn, proposal)
         with self.assertRaises(PrivateAuthorizationRequired):await reply.finish_affect(self.conn)
-        self.conn._mia_scope = previous_scope
+        self.conn._youmi_scope = previous_scope
         affect.reset(self.store, self.scope.owner)
         with self.assertRaises(ContextError):await reply.finish_affect(self.conn)
         self.appraisal_raw = 'bad JSON'
@@ -254,17 +254,17 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
             self.conn.client_abort = False
             self.conn.sentence_id = mode
             self.conn.dialogue.dialogue = [reply_fixture.dto('user', '你真烦', marker=mode)]
-            @mia.completed_chat
+            @youmi.completed_chat
             def chat(conn, query, depth=0):
-                mia.begin_turn(conn, query)
+                youmi.begin_turn(conn, query)
                 spoken = ''.join(reply.response(conn, None, depth))
-                mia.guard_history(conn.dialogue, reply_fixture.dto('assistant', spoken))
+                youmi.guard_history(conn.dialogue, reply_fixture.dto('assistant', spoken))
                 if mode == 'interrupted':conn.client_abort = True
-                if mode == 'limited':mia.incomplete_turn()
+                if mode == 'limited':youmi.incomplete_turn()
             with patch('server.companion.authorization.allow_output', new=AsyncMock(return_value=False)):
                 await asyncio.to_thread(chat, self.conn, '你真烦')
             self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 1 if mode == 'complete' else 0)
-            self.assertIsNone(self.conn._mia_job_status)
+            self.assertIsNone(self.conn._youmi_job_status)
 
 
 class AffectManagementTests(unittest.IsolatedAsyncioTestCase):

@@ -13,8 +13,8 @@ class AccountDeploymentTests(unittest.TestCase):
             server = root / "repo/server"
             (server / "deploy").mkdir(parents=True)
             (server / "requirements.txt").write_text("")
-            (server / "deploy/mia-gateway.service.example").write_text(
-                (source / "deploy/mia-gateway.service.example").read_text())
+            (server / "deploy/youmi-gateway.service.example").write_text(
+                (source / "deploy/youmi-gateway.service.example").read_text())
             script = (source / "deploy/install-ubuntu.sh").read_text()
             for target in ("/opt/mia", "/etc/mia", "/etc/systemd/system", "/var/lib/mia"):
                 script = script.replace(target, str(root) + target)

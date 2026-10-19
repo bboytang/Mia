@@ -215,7 +215,7 @@ The MCP server on the device maintains two kinds of tools:
 
 The backend opts in to user-only tools by sending `tools/list` with `params.withUserTools = true`. Typical usage: a companion app screen that exposes these actions to the end user.
 
-See [MCP IoT control usage](./mcp-usage.md) for how to register either kind of tool on the device side.
+See [MCP IoT control usage](mcp-usage.md) for how to register either kind of tool on the device side.
 
 ## Sequence Diagram
 

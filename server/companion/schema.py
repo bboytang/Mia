@@ -24,12 +24,12 @@ def _statements(source):
             yield pending
             pending = ''
     if pending.strip():
-        raise ValueError('Incomplete Mia schema statement')
+        raise ValueError('Incomplete Youmi schema statement')
 
 
 def migrate(db):
     if db.in_transaction:
-        raise ValueError('Mia schema migration requires its own transaction')
+        raise ValueError('Youmi schema migration requires its own transaction')
     migrations = [Path(__file__).with_name(name).read_text(encoding='utf-8')
                   for name in ('schema.sql', 'schema-v2.sql', 'schema-v3.sql', 'schema-v4.sql', 'schema-v5.sql', 'schema-v6.sql', 'schema-v7.sql')]
     digests = [hashlib.sha256(sql.encode()).hexdigest() for sql in migrations]
@@ -45,11 +45,11 @@ def migrate(db):
             if (not 1 <= len(rows) <= len(migrations)
                     or [(row[0], row[1]) for row in rows] != list(enumerate(digests[:len(rows)], 1))
                     or rows[-1][2] != _schema_checksum(db)):
-                raise ValueError('Unreviewed Mia schema version or checksum')
+                raise ValueError('Unreviewed Youmi schema version or checksum')
             applied = len(rows)
         else:
             if db.execute("SELECT 1 FROM sqlite_master WHERE name GLOB 'mia_*' LIMIT 1").fetchone():
-                raise ValueError('Unversioned Mia schema objects; refusing to overwrite')
+                raise ValueError('Unversioned Youmi schema objects; refusing to overwrite')
             db.execute('CREATE TABLE mia_schema_migrations(version INTEGER PRIMARY KEY,checksum TEXT NOT NULL,schema_checksum TEXT NOT NULL,applied_at INTEGER NOT NULL)')
             applied = 0
         # executescript() implicitly commits; execute complete DDL statements instead.

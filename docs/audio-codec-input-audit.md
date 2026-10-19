@@ -87,155 +87,155 @@ Box Lite 的共享参考缓冲及读写位置没有并发保护，采集错误�
 
 | 板级目录 | codec → 声明格式 |
 |---|---|
-| [alientek/atk-dnesp32s3](../main/boards/alientek/atk-dnesp32s3/) | `Es8388AudioCodec` → M |
-| [alientek/atk-dnesp32s3-box](../main/boards/alientek/atk-dnesp32s3-box/) | `ATK_NoAudioCodecDuplex` → M<br>`Es8311AudioCodec` → M |
-| [alientek/atk-dnesp32s3-box0](../main/boards/alientek/atk-dnesp32s3-box0/) | `Es8311AudioCodec` → M |
-| [alientek/atk-dnesp32s3-box2-4g](../main/boards/alientek/atk-dnesp32s3-box2-4g/) | `Es8389AudioCodec` → M |
-| [alientek/atk-dnesp32s3-box2-wifi](../main/boards/alientek/atk-dnesp32s3-box2-wifi/) | `Es8389AudioCodec` → M |
-| [alientek/atk-dnesp32s3-box3](../main/boards/alientek/atk-dnesp32s3-box3/) | `BoxAudioCodec` → MR |
-| [alientek/atk-dnesp32s3m-4g](../main/boards/alientek/atk-dnesp32s3m-4g/) | `Es8388AudioCodec` → M |
-| [alientek/atk-dnesp32s3m-wifi](../main/boards/alientek/atk-dnesp32s3m-wifi/) | `Es8388AudioCodec` → M |
-| [bread-compact-esp32](../main/boards/bread-compact-esp32/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [bread-compact-esp32-lcd](../main/boards/bread-compact-esp32-lcd/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [bread-compact-ml307](../main/boards/bread-compact-ml307/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [bread-compact-nt26](../main/boards/bread-compact-nt26/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [bread-compact-wifi](../main/boards/bread-compact-wifi/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [bread-compact-wifi-lcd](../main/boards/bread-compact-wifi-lcd/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [bread-compact-wifi-s3cam](../main/boards/bread-compact-wifi-s3cam/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [dfrobot/df-k10](../main/boards/dfrobot/df-k10/) | `K10AudioCodec` → MR |
-| [dfrobot/df-s3-ai-cam](../main/boards/dfrobot/df-s3-ai-cam/) | `NoAudioCodecSimplexPdm` → M |
-| [doit-s3-aibox](../main/boards/doit-s3-aibox/) | `NoAudioCodecSimplexPdm` → M |
-| [du-chatx](../main/boards/du-chatx/) | `NoAudioCodecSimplex` → M |
-| [electron-bot](../main/boards/electron-bot/) | `NoAudioCodecSimplex` → M |
-| [espressif/esp-hi](../main/boards/espressif/esp-hi/) | `AdcPdmAudioCodec` → M |
-| [espressif/esp-sensairshuttle](../main/boards/espressif/esp-sensairshuttle/) | `AdcPdmAudioCodec` → M |
-| [espressif/esp-sparkbot](../main/boards/espressif/esp-sparkbot/) | `SparkBotEs8311AudioCodec` → M |
-| [espressif/esp-spot](../main/boards/espressif/esp-spot/) | `Es8311AudioCodec` → M |
-| [espressif/esp-vocat](../main/boards/espressif/esp-vocat/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-p4-function-ev-board](../main/boards/espressif/esp32-p4-function-ev-board/) | `Es8311AudioCodec` → M |
-| [espressif/esp32-s3-box](../main/boards/espressif/esp32-s3-box/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-s3-box-3](../main/boards/espressif/esp32-s3-box-3/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-s3-box-lite](../main/boards/espressif/esp32-s3-box-lite/) | `BoxAudioCodecLite` → MMR / MM（随音频处理开关） |
-| [espressif/esp32-s3-korvo-2-v3.0](../main/boards/espressif/esp32-s3-korvo-2-v3.0/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-s3-korvo-2-v3.0-rndis](../main/boards/espressif/esp32-s3-korvo-2-v3.0-rndis/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-s3-lcd-ev-board](../main/boards/espressif/esp32-s3-lcd-ev-board/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-s3-lcd-ev-board-2](../main/boards/espressif/esp32-s3-lcd-ev-board-2/) | `BoxAudioCodec` → MR |
-| [espressif/esp32-s31-function-coreboard-1](../main/boards/espressif/esp32-s31-function-coreboard-1/) | `Es8311AudioCodec` → M |
-| [espressif/esp32-s31-korvo-1](../main/boards/espressif/esp32-s31-korvo-1/) | `Es8389AudioCodec` → MM |
-| [folotoy/ai-passport](../main/boards/folotoy/ai-passport/) | `Es8311AudioCodec` → M |
-| [freenove-esp32s3-display-2.8-lcd](../main/boards/freenove-esp32s3-display-2.8-lcd/) | `Es8311AudioCodec` → M |
-| [genjutech-s3-1.54tft](../main/boards/genjutech-s3-1.54tft/) | `SparkBotEs8311AudioCodec` → M |
-| [hu-087](../main/boards/hu-087/) | `NoAudioCodecSimplex` → M |
-| [jiuchuan-s3](../main/boards/jiuchuan-s3/) | `Es8311AudioCodec` → M |
-| [kevin/box-2](../main/boards/kevin/box-2/) | `BoxAudioCodec` → MR |
-| [kevin/c3](../main/boards/kevin/c3/) | `Es8311AudioCodec` → M |
-| [kevin/sp-v3-dev](../main/boards/kevin/sp-v3-dev/) | `NoAudioCodecSimplex` → M |
-| [kevin/sp-v4-dev](../main/boards/kevin/sp-v4-dev/) | `Es8311AudioCodec` → M |
-| [kevin/yuying-313lcd](../main/boards/kevin/yuying-313lcd/) | `Es8311AudioCodec` → M |
-| [labplus/ledong-v2](../main/boards/labplus/ledong-v2/) | `Es8388AudioCodec` → M |
-| [labplus/mpython-v3](../main/boards/labplus/mpython-v3/) | `Es8388AudioCodec` → M |
-| [lcdwiki-es3c35p](../main/boards/lcdwiki-es3c35p/) | `Es8311AudioCodec` → M |
-| [lceda-course-examples/eda-robot-pro](../main/boards/lceda-course-examples/eda-robot-pro/) | `NoAudioCodecSimplex` → M |
-| [lceda-course-examples/eda-super-bear](../main/boards/lceda-course-examples/eda-super-bear/) | `NoAudioCodecSimplex` → M |
-| [lceda-course-examples/eda-tv-pro](../main/boards/lceda-course-examples/eda-tv-pro/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [lckfb/szpi-esp32c3](../main/boards/lckfb/szpi-esp32c3/) | `Es8311AudioCodec` → M |
-| [lckfb/szpi-esp32s3](../main/boards/lckfb/szpi-esp32s3/) | `CustomAudioCodec` → MR |
-| [lilygo/t-cameraplus-s3](../main/boards/lilygo/t-cameraplus-s3/) | `Tcamerapluss3AudioCodec` → MR†（V1.0/V1.1）/ M（V1.2） |
-| [lilygo/t-circle-s3](../main/boards/lilygo/t-circle-s3/) | `Tcircles3AudioCodec` → MR† |
-| [lilygo/t-display-p4](../main/boards/lilygo/t-display-p4/) | `Es8311AudioCodec` → M |
-| [lilygo/t-display-s3-pro-mvsrlora](../main/boards/lilygo/t-display-s3-pro-mvsrlora/) | `Tdisplays3promvsrloraAudioCodec` → MR† |
-| [m5stack/atom-echos3r](../main/boards/m5stack/atom-echos3r/) | `Es8311AudioCodec` → M |
-| [m5stack/atommatrix-echo-base](../main/boards/m5stack/atommatrix-echo-base/) | `Es8311AudioCodec` → M |
-| [m5stack/atoms3-echo-base](../main/boards/m5stack/atoms3-echo-base/) | `Es8311AudioCodec` → M |
-| [m5stack/atoms3r-cam-m12-echo-base](../main/boards/m5stack/atoms3r-cam-m12-echo-base/) | `Es8311AudioCodec` → M |
-| [m5stack/atoms3r-echo-base](../main/boards/m5stack/atoms3r-echo-base/) | `Es8311AudioCodec` → M |
-| [m5stack/atoms3r-echo-pyramid](../main/boards/m5stack/atoms3r-echo-pyramid/) | `PyramidAudioCodec` → MR |
-| [m5stack/cardputer-adv](../main/boards/m5stack/cardputer-adv/) | `CardputerAdvEs8311` → M |
-| [m5stack/core-s3](../main/boards/m5stack/core-s3/) | `CoreS3AudioCodec` → M |
-| [m5stack/corep4](../main/boards/m5stack/corep4/) | `BoxAudioCodec` → MR |
-| [m5stack/stick-s3](../main/boards/m5stack/stick-s3/) | `Sticks3AudioCodec` → M |
-| [m5stack/stopwatch](../main/boards/m5stack/stopwatch/) | `Es8311AudioCodec` → M |
-| [m5stack/tab5](../main/boards/m5stack/tab5/) | `Tab5AudioCodec` → MR |
-| [magiclick/2p4](../main/boards/magiclick/2p4/) | `Es8311AudioCodec` → M |
-| [magiclick/2p5](../main/boards/magiclick/2p5/) | `Es8311AudioCodec` → M |
-| [magiclick/c3](../main/boards/magiclick/c3/) | `Es8311AudioCodec` → M |
-| [magiclick/c3-v2](../main/boards/magiclick/c3-v2/) | `Es8311AudioCodec` → M |
-| [maza-ai/esp32-s3](../main/boards/maza-ai/esp32-s3/) | `Es8311AudioCodec` → M |
-| [maza-ai/esp32-s31](../main/boards/maza-ai/esp32-s31/) | `Es8311AudioCodec` → M |
-| [minsi-k08-dual](../main/boards/minsi-k08-dual/) | `NoAudioCodecSimplex` → M |
-| [mixgo-nova](../main/boards/mixgo-nova/) | `Es8374AudioCodec` → M |
-| [movecall/cuican-esp32s3](../main/boards/movecall/cuican-esp32s3/) | `Es8311AudioCodec` → M |
-| [movecall/moji-esp32s3](../main/boards/movecall/moji-esp32s3/) | `Es8311AudioCodec` → M |
-| [movecall/moji2-esp32c5](../main/boards/movecall/moji2-esp32c5/) | `Es8311AudioCodec` → M |
-| [nologo/xingzhi-abs-2.0](../main/boards/nologo/xingzhi-abs-2.0/) | `Es8311AudioCodec` → M |
-| [nologo/xingzhi-cube-0.85tft-ml307](../main/boards/nologo/xingzhi-cube-0.85tft-ml307/) | `NoAudioCodecSimplex` → M |
-| [nologo/xingzhi-cube-0.85tft-wifi](../main/boards/nologo/xingzhi-cube-0.85tft-wifi/) | `NoAudioCodecSimplex` → M |
-| [nologo/xingzhi-cube-0.96oled-ml307](../main/boards/nologo/xingzhi-cube-0.96oled-ml307/) | `NoAudioCodecSimplex` → M |
-| [nologo/xingzhi-cube-0.96oled-wifi](../main/boards/nologo/xingzhi-cube-0.96oled-wifi/) | `NoAudioCodecSimplex` → M |
-| [nologo/xingzhi-cube-1.54tft-ml307](../main/boards/nologo/xingzhi-cube-1.54tft-ml307/) | `NoAudioCodecSimplex` → M |
-| [nologo/xingzhi-cube-1.54tft-wifi](../main/boards/nologo/xingzhi-cube-1.54tft-wifi/) | `NoAudioCodecSimplex` → M |
-| [nologo/xingzhi-metal-1.54-wifi](../main/boards/nologo/xingzhi-metal-1.54-wifi/) | `Es8311AudioCodec` → M |
-| [nulllab-ai-vox-v3](../main/boards/nulllab-ai-vox-v3/) | `AIVOX3AudioCodec` → MR / M（随设备 AEC 开关） |
-| [otto-robot](../main/boards/otto-robot/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [quandong-s3-dev](../main/boards/quandong-s3-dev/) | `Es8311AudioCodec` → M |
-| [rymcu/bigsmart](../main/boards/rymcu/bigsmart/) | `CustomAudioCodec` → MR |
-| [sensecap-watcher](../main/boards/sensecap-watcher/) | `SensecapAudioCodec` → M |
-| [spotpear/sp-esp32-s3-1.28-box](../main/boards/spotpear/sp-esp32-s3-1.28-box/) | `Es8311AudioCodec` → M |
-| [spotpear/sp-esp32-s3-1.54-muma](../main/boards/spotpear/sp-esp32-s3-1.54-muma/) | `Es8311AudioCodec` → M |
-| [surfer-c3-1.14tft](../main/boards/surfer-c3-1.14tft/) | `Es8311AudioCodec` → M |
-| [taiji-pi-s3](../main/boards/taiji-pi-s3/) | `NoAudioCodecSimplex` → M<br>`NoAudioCodecSimplexPdm` → M |
-| [waveshare/esp32-c5-touch-lcd-1.69](../main/boards/waveshare/esp32-c5-touch-lcd-1.69/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-c6-epaper-1.54](../main/boards/waveshare/esp32-c6-epaper-1.54/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-c6-lcd-0.85](../main/boards/waveshare/esp32-c6-lcd-0.85/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-c6-lcd-1.69](../main/boards/waveshare/esp32-c6-lcd-1.69/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-c6-touch-amoled-1.32](../main/boards/waveshare/esp32-c6-touch-amoled-1.32/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-c6-touch-amoled-1.43](../main/boards/waveshare/esp32-c6-touch-amoled-1.43/) | `BoxAudioCodec` → M |
-| [waveshare/esp32-c6-touch-amoled-1.8](../main/boards/waveshare/esp32-c6-touch-amoled-1.8/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-c6-touch-amoled-2.06](../main/boards/waveshare/esp32-c6-touch-amoled-2.06/) | `BoxAudioCodec` → M |
-| [waveshare/esp32-c6-touch-amoled-2.16](../main/boards/waveshare/esp32-c6-touch-amoled-2.16/) | `BoxAudioCodec` → M |
-| [waveshare/esp32-c6-touch-lcd-1.54](../main/boards/waveshare/esp32-c6-touch-lcd-1.54/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-c6-touch-lcd-1.83](../main/boards/waveshare/esp32-c6-touch-lcd-1.83/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-p4-nano](../main/boards/waveshare/esp32-p4-nano/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-p4-wifi6-touch-lcd](../main/boards/waveshare/esp32-p4-wifi6-touch-lcd/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-p4-wifi6-touch-lcd-3.5](../main/boards/waveshare/esp32-p4-wifi6-touch-lcd-3.5/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-audio-board](../main/boards/waveshare/esp32-s3-audio-board/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-cam](../main/boards/waveshare/esp32-s3-cam/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-epaper-1.54](../main/boards/waveshare/esp32-s3-epaper-1.54/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-epaper-3.97](../main/boards/waveshare/esp32-s3-epaper-3.97/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-lcd-0.85](../main/boards/waveshare/esp32-s3-lcd-0.85/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-rgb-matrix](../main/boards/waveshare/esp32-s3-rgb-matrix/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-rlcd-4.2](../main/boards/waveshare/esp32-s3-rlcd-4.2/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-amoled-1.32](../main/boards/waveshare/esp32-s3-touch-amoled-1.32/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-touch-amoled-1.43c](../main/boards/waveshare/esp32-s3-touch-amoled-1.43c/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-amoled-1.75](../main/boards/waveshare/esp32-s3-touch-amoled-1.75/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-amoled-1.8](../main/boards/waveshare/esp32-s3-touch-amoled-1.8/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-touch-amoled-1.8-v2](../main/boards/waveshare/esp32-s3-touch-amoled-1.8-v2/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-touch-amoled-2.06](../main/boards/waveshare/esp32-s3-touch-amoled-2.06/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-amoled-2.16](../main/boards/waveshare/esp32-s3-touch-amoled-2.16/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-1.46](../main/boards/waveshare/esp32-s3-touch-lcd-1.46/) | `NoAudioCodecSimplex` → M |
-| [waveshare/esp32-s3-touch-lcd-1.54](../main/boards/waveshare/esp32-s3-touch-lcd-1.54/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-1.83](../main/boards/waveshare/esp32-s3-touch-lcd-1.83/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-1.85](../main/boards/waveshare/esp32-s3-touch-lcd-1.85/) | `NoAudioCodecSimplex` → M |
-| [waveshare/esp32-s3-touch-lcd-1.85b](../main/boards/waveshare/esp32-s3-touch-lcd-1.85b/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-1.85c](../main/boards/waveshare/esp32-s3-touch-lcd-1.85c/) | `BoxAudioCodec` → MR<br>`NoAudioCodecSimplex` → M |
-| [waveshare/esp32-s3-touch-lcd-3.49](../main/boards/waveshare/esp32-s3-touch-lcd-3.49/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-3.49-v2](../main/boards/waveshare/esp32-s3-touch-lcd-3.49-v2/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-3.5](../main/boards/waveshare/esp32-s3-touch-lcd-3.5/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-touch-lcd-3.5b](../main/boards/waveshare/esp32-s3-touch-lcd-3.5b/) | `Es8311AudioCodec` → M |
-| [waveshare/esp32-s3-touch-lcd-4.3c](../main/boards/waveshare/esp32-s3-touch-lcd-4.3c/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-4b](../main/boards/waveshare/esp32-s3-touch-lcd-4b/) | `BoxAudioCodec` → MR |
-| [waveshare/esp32-s3-touch-lcd-7c](../main/boards/waveshare/esp32-s3-touch-lcd-7c/) | `WaveshareAudioCodec` → MR |
-| [waveshare/esp32-touch-lcd-3.5](../main/boards/waveshare/esp32-touch-lcd-3.5/) | `Es8311AudioCodec` → M |
-| [wdmomo/esp32-cgc](../main/boards/wdmomo/esp32-cgc/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [wdmomo/esp32-cgc-144](../main/boards/wdmomo/esp32-cgc-144/) | `NoAudioCodecSimplex` → M |
-| [wk-esp32s3-dev](../main/boards/wk-esp32s3-dev/) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
-| [xmini/c3](../main/boards/xmini/c3/) | `Es8311AudioCodec` → M |
-| [xmini/c3-4g](../main/boards/xmini/c3-4g/) | `Es8311AudioCodec` → M |
-| [xmini/c3-v3](../main/boards/xmini/c3-v3/) | `Es8311AudioCodec` → M |
-| [xorigin/aipi-lite](../main/boards/xorigin/aipi-lite/) | `Es8311AudioCodec` → M |
-| [yunliao-s3](../main/boards/yunliao-s3/) | `Es8388AudioCodec` → MR |
-| [zectrix/zectrix-s3-epaper-4.2](../main/boards/zectrix/zectrix-s3-epaper-4.2/) | `Es8311AudioCodec` → M |
-| [zhengchen/1.54tft-ml307](../main/boards/zhengchen/1.54tft-ml307/) | `NoAudioCodecSimplex` → M |
-| [zhengchen/1.54tft-wifi](../main/boards/zhengchen/1.54tft-wifi/) | `NoAudioCodecSimplex` → M |
-| [zhengchen/cam](../main/boards/zhengchen/cam/) | `CustomAudioCodec` → MR |
-| [zhengchen/cam-ml307](../main/boards/zhengchen/cam-ml307/) | `CustomAudioCodec` → MR |
+| [alientek/atk-dnesp32s3](../main/boards/alientek/atk-dnesp32s3) | `Es8388AudioCodec` → M |
+| [alientek/atk-dnesp32s3-box](../main/boards/alientek/atk-dnesp32s3-box) | `ATK_NoAudioCodecDuplex` → M<br>`Es8311AudioCodec` → M |
+| [alientek/atk-dnesp32s3-box0](../main/boards/alientek/atk-dnesp32s3-box0) | `Es8311AudioCodec` → M |
+| [alientek/atk-dnesp32s3-box2-4g](../main/boards/alientek/atk-dnesp32s3-box2-4g) | `Es8389AudioCodec` → M |
+| [alientek/atk-dnesp32s3-box2-wifi](../main/boards/alientek/atk-dnesp32s3-box2-wifi) | `Es8389AudioCodec` → M |
+| [alientek/atk-dnesp32s3-box3](../main/boards/alientek/atk-dnesp32s3-box3) | `BoxAudioCodec` → MR |
+| [alientek/atk-dnesp32s3m-4g](../main/boards/alientek/atk-dnesp32s3m-4g) | `Es8388AudioCodec` → M |
+| [alientek/atk-dnesp32s3m-wifi](../main/boards/alientek/atk-dnesp32s3m-wifi) | `Es8388AudioCodec` → M |
+| [bread-compact-esp32](../main/boards/bread-compact-esp32) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [bread-compact-esp32-lcd](../main/boards/bread-compact-esp32-lcd) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [bread-compact-ml307](../main/boards/bread-compact-ml307) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [bread-compact-nt26](../main/boards/bread-compact-nt26) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [bread-compact-wifi](../main/boards/bread-compact-wifi) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [bread-compact-wifi-lcd](../main/boards/bread-compact-wifi-lcd) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [bread-compact-wifi-s3cam](../main/boards/bread-compact-wifi-s3cam) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [dfrobot/df-k10](../main/boards/dfrobot/df-k10) | `K10AudioCodec` → MR |
+| [dfrobot/df-s3-ai-cam](../main/boards/dfrobot/df-s3-ai-cam) | `NoAudioCodecSimplexPdm` → M |
+| [doit-s3-aibox](../main/boards/doit-s3-aibox) | `NoAudioCodecSimplexPdm` → M |
+| [du-chatx](../main/boards/du-chatx) | `NoAudioCodecSimplex` → M |
+| [electron-bot](../main/boards/electron-bot) | `NoAudioCodecSimplex` → M |
+| [espressif/esp-hi](../main/boards/espressif/esp-hi) | `AdcPdmAudioCodec` → M |
+| [espressif/esp-sensairshuttle](../main/boards/espressif/esp-sensairshuttle) | `AdcPdmAudioCodec` → M |
+| [espressif/esp-sparkbot](../main/boards/espressif/esp-sparkbot) | `SparkBotEs8311AudioCodec` → M |
+| [espressif/esp-spot](../main/boards/espressif/esp-spot) | `Es8311AudioCodec` → M |
+| [espressif/esp-vocat](../main/boards/espressif/esp-vocat) | `BoxAudioCodec` → MR |
+| [espressif/esp32-p4-function-ev-board](../main/boards/espressif/esp32-p4-function-ev-board) | `Es8311AudioCodec` → M |
+| [espressif/esp32-s3-box](../main/boards/espressif/esp32-s3-box) | `BoxAudioCodec` → MR |
+| [espressif/esp32-s3-box-3](../main/boards/espressif/esp32-s3-box-3) | `BoxAudioCodec` → MR |
+| [espressif/esp32-s3-box-lite](../main/boards/espressif/esp32-s3-box-lite) | `BoxAudioCodecLite` → MMR / MM（随音频处理开关） |
+| [espressif/esp32-s3-korvo-2-v3.0](../main/boards/espressif/esp32-s3-korvo-2-v3.0) | `BoxAudioCodec` → MR |
+| [espressif/esp32-s3-korvo-2-v3.0-rndis](../main/boards/espressif/esp32-s3-korvo-2-v3.0-rndis) | `BoxAudioCodec` → MR |
+| [espressif/esp32-s3-lcd-ev-board](../main/boards/espressif/esp32-s3-lcd-ev-board) | `BoxAudioCodec` → MR |
+| [espressif/esp32-s3-lcd-ev-board-2](../main/boards/espressif/esp32-s3-lcd-ev-board-2) | `BoxAudioCodec` → MR |
+| [espressif/esp32-s31-function-coreboard-1](../main/boards/espressif/esp32-s31-function-coreboard-1) | `Es8311AudioCodec` → M |
+| [espressif/esp32-s31-korvo-1](../main/boards/espressif/esp32-s31-korvo-1) | `Es8389AudioCodec` → MM |
+| [folotoy/ai-passport](../main/boards/folotoy/ai-passport) | `Es8311AudioCodec` → M |
+| [freenove-esp32s3-display-2.8-lcd](../main/boards/freenove-esp32s3-display-2.8-lcd) | `Es8311AudioCodec` → M |
+| [genjutech-s3-1.54tft](../main/boards/genjutech-s3-1.54tft) | `SparkBotEs8311AudioCodec` → M |
+| [hu-087](../main/boards/hu-087) | `NoAudioCodecSimplex` → M |
+| [jiuchuan-s3](../main/boards/jiuchuan-s3) | `Es8311AudioCodec` → M |
+| [kevin/box-2](../main/boards/kevin/box-2) | `BoxAudioCodec` → MR |
+| [kevin/c3](../main/boards/kevin/c3) | `Es8311AudioCodec` → M |
+| [kevin/sp-v3-dev](../main/boards/kevin/sp-v3-dev) | `NoAudioCodecSimplex` → M |
+| [kevin/sp-v4-dev](../main/boards/kevin/sp-v4-dev) | `Es8311AudioCodec` → M |
+| [kevin/yuying-313lcd](../main/boards/kevin/yuying-313lcd) | `Es8311AudioCodec` → M |
+| [labplus/ledong-v2](../main/boards/labplus/ledong-v2) | `Es8388AudioCodec` → M |
+| [labplus/mpython-v3](../main/boards/labplus/mpython-v3) | `Es8388AudioCodec` → M |
+| [lcdwiki-es3c35p](../main/boards/lcdwiki-es3c35p) | `Es8311AudioCodec` → M |
+| [lceda-course-examples/eda-robot-pro](../main/boards/lceda-course-examples/eda-robot-pro) | `NoAudioCodecSimplex` → M |
+| [lceda-course-examples/eda-super-bear](../main/boards/lceda-course-examples/eda-super-bear) | `NoAudioCodecSimplex` → M |
+| [lceda-course-examples/eda-tv-pro](../main/boards/lceda-course-examples/eda-tv-pro) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [lckfb/szpi-esp32c3](../main/boards/lckfb/szpi-esp32c3) | `Es8311AudioCodec` → M |
+| [lckfb/szpi-esp32s3](../main/boards/lckfb/szpi-esp32s3) | `CustomAudioCodec` → MR |
+| [lilygo/t-cameraplus-s3](../main/boards/lilygo/t-cameraplus-s3) | `Tcamerapluss3AudioCodec` → MR†（V1.0/V1.1）/ M（V1.2） |
+| [lilygo/t-circle-s3](../main/boards/lilygo/t-circle-s3) | `Tcircles3AudioCodec` → MR† |
+| [lilygo/t-display-p4](../main/boards/lilygo/t-display-p4) | `Es8311AudioCodec` → M |
+| [lilygo/t-display-s3-pro-mvsrlora](../main/boards/lilygo/t-display-s3-pro-mvsrlora) | `Tdisplays3promvsrloraAudioCodec` → MR† |
+| [m5stack/atom-echos3r](../main/boards/m5stack/atom-echos3r) | `Es8311AudioCodec` → M |
+| [m5stack/atommatrix-echo-base](../main/boards/m5stack/atommatrix-echo-base) | `Es8311AudioCodec` → M |
+| [m5stack/atoms3-echo-base](../main/boards/m5stack/atoms3-echo-base) | `Es8311AudioCodec` → M |
+| [m5stack/atoms3r-cam-m12-echo-base](../main/boards/m5stack/atoms3r-cam-m12-echo-base) | `Es8311AudioCodec` → M |
+| [m5stack/atoms3r-echo-base](../main/boards/m5stack/atoms3r-echo-base) | `Es8311AudioCodec` → M |
+| [m5stack/atoms3r-echo-pyramid](../main/boards/m5stack/atoms3r-echo-pyramid) | `PyramidAudioCodec` → MR |
+| [m5stack/cardputer-adv](../main/boards/m5stack/cardputer-adv) | `CardputerAdvEs8311` → M |
+| [m5stack/core-s3](../main/boards/m5stack/core-s3) | `CoreS3AudioCodec` → M |
+| [m5stack/corep4](../main/boards/m5stack/corep4) | `BoxAudioCodec` → MR |
+| [m5stack/stick-s3](../main/boards/m5stack/stick-s3) | `Sticks3AudioCodec` → M |
+| [m5stack/stopwatch](../main/boards/m5stack/stopwatch) | `Es8311AudioCodec` → M |
+| [m5stack/tab5](../main/boards/m5stack/tab5) | `Tab5AudioCodec` → MR |
+| [magiclick/2p4](../main/boards/magiclick/2p4) | `Es8311AudioCodec` → M |
+| [magiclick/2p5](../main/boards/magiclick/2p5) | `Es8311AudioCodec` → M |
+| [magiclick/c3](../main/boards/magiclick/c3) | `Es8311AudioCodec` → M |
+| [magiclick/c3-v2](../main/boards/magiclick/c3-v2) | `Es8311AudioCodec` → M |
+| [maza-ai/esp32-s3](../main/boards/maza-ai/esp32-s3) | `Es8311AudioCodec` → M |
+| [maza-ai/esp32-s31](../main/boards/maza-ai/esp32-s31) | `Es8311AudioCodec` → M |
+| [minsi-k08-dual](../main/boards/minsi-k08-dual) | `NoAudioCodecSimplex` → M |
+| [mixgo-nova](../main/boards/mixgo-nova) | `Es8374AudioCodec` → M |
+| [movecall/cuican-esp32s3](../main/boards/movecall/cuican-esp32s3) | `Es8311AudioCodec` → M |
+| [movecall/moji-esp32s3](../main/boards/movecall/moji-esp32s3) | `Es8311AudioCodec` → M |
+| [movecall/moji2-esp32c5](../main/boards/movecall/moji2-esp32c5) | `Es8311AudioCodec` → M |
+| [nologo/xingzhi-abs-2.0](../main/boards/nologo/xingzhi-abs-2.0) | `Es8311AudioCodec` → M |
+| [nologo/xingzhi-cube-0.85tft-ml307](../main/boards/nologo/xingzhi-cube-0.85tft-ml307) | `NoAudioCodecSimplex` → M |
+| [nologo/xingzhi-cube-0.85tft-wifi](../main/boards/nologo/xingzhi-cube-0.85tft-wifi) | `NoAudioCodecSimplex` → M |
+| [nologo/xingzhi-cube-0.96oled-ml307](../main/boards/nologo/xingzhi-cube-0.96oled-ml307) | `NoAudioCodecSimplex` → M |
+| [nologo/xingzhi-cube-0.96oled-wifi](../main/boards/nologo/xingzhi-cube-0.96oled-wifi) | `NoAudioCodecSimplex` → M |
+| [nologo/xingzhi-cube-1.54tft-ml307](../main/boards/nologo/xingzhi-cube-1.54tft-ml307) | `NoAudioCodecSimplex` → M |
+| [nologo/xingzhi-cube-1.54tft-wifi](../main/boards/nologo/xingzhi-cube-1.54tft-wifi) | `NoAudioCodecSimplex` → M |
+| [nologo/xingzhi-metal-1.54-wifi](../main/boards/nologo/xingzhi-metal-1.54-wifi) | `Es8311AudioCodec` → M |
+| [nulllab-ai-vox-v3](../main/boards/nulllab-ai-vox-v3) | `AIVOX3AudioCodec` → MR / M（随设备 AEC 开关） |
+| [otto-robot](../main/boards/otto-robot) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [quandong-s3-dev](../main/boards/quandong-s3-dev) | `Es8311AudioCodec` → M |
+| [rymcu/bigsmart](../main/boards/rymcu/bigsmart) | `CustomAudioCodec` → MR |
+| [sensecap-watcher](../main/boards/sensecap-watcher) | `SensecapAudioCodec` → M |
+| [spotpear/sp-esp32-s3-1.28-box](../main/boards/spotpear/sp-esp32-s3-1.28-box) | `Es8311AudioCodec` → M |
+| [spotpear/sp-esp32-s3-1.54-muma](../main/boards/spotpear/sp-esp32-s3-1.54-muma) | `Es8311AudioCodec` → M |
+| [surfer-c3-1.14tft](../main/boards/surfer-c3-1.14tft) | `Es8311AudioCodec` → M |
+| [taiji-pi-s3](../main/boards/taiji-pi-s3) | `NoAudioCodecSimplex` → M<br>`NoAudioCodecSimplexPdm` → M |
+| [waveshare/esp32-c5-touch-lcd-1.69](../main/boards/waveshare/esp32-c5-touch-lcd-1.69) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-c6-epaper-1.54](../main/boards/waveshare/esp32-c6-epaper-1.54) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-c6-lcd-0.85](../main/boards/waveshare/esp32-c6-lcd-0.85) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-c6-lcd-1.69](../main/boards/waveshare/esp32-c6-lcd-1.69) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-c6-touch-amoled-1.32](../main/boards/waveshare/esp32-c6-touch-amoled-1.32) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-c6-touch-amoled-1.43](../main/boards/waveshare/esp32-c6-touch-amoled-1.43) | `BoxAudioCodec` → M |
+| [waveshare/esp32-c6-touch-amoled-1.8](../main/boards/waveshare/esp32-c6-touch-amoled-1.8) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-c6-touch-amoled-2.06](../main/boards/waveshare/esp32-c6-touch-amoled-2.06) | `BoxAudioCodec` → M |
+| [waveshare/esp32-c6-touch-amoled-2.16](../main/boards/waveshare/esp32-c6-touch-amoled-2.16) | `BoxAudioCodec` → M |
+| [waveshare/esp32-c6-touch-lcd-1.54](../main/boards/waveshare/esp32-c6-touch-lcd-1.54) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-c6-touch-lcd-1.83](../main/boards/waveshare/esp32-c6-touch-lcd-1.83) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-p4-nano](../main/boards/waveshare/esp32-p4-nano) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-p4-wifi6-touch-lcd](../main/boards/waveshare/esp32-p4-wifi6-touch-lcd) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-p4-wifi6-touch-lcd-3.5](../main/boards/waveshare/esp32-p4-wifi6-touch-lcd-3.5) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-audio-board](../main/boards/waveshare/esp32-s3-audio-board) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-cam](../main/boards/waveshare/esp32-s3-cam) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-epaper-1.54](../main/boards/waveshare/esp32-s3-epaper-1.54) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-epaper-3.97](../main/boards/waveshare/esp32-s3-epaper-3.97) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-lcd-0.85](../main/boards/waveshare/esp32-s3-lcd-0.85) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-rgb-matrix](../main/boards/waveshare/esp32-s3-rgb-matrix) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-rlcd-4.2](../main/boards/waveshare/esp32-s3-rlcd-4.2) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-amoled-1.32](../main/boards/waveshare/esp32-s3-touch-amoled-1.32) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-touch-amoled-1.43c](../main/boards/waveshare/esp32-s3-touch-amoled-1.43c) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-amoled-1.75](../main/boards/waveshare/esp32-s3-touch-amoled-1.75) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-amoled-1.8](../main/boards/waveshare/esp32-s3-touch-amoled-1.8) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-touch-amoled-1.8-v2](../main/boards/waveshare/esp32-s3-touch-amoled-1.8-v2) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-touch-amoled-2.06](../main/boards/waveshare/esp32-s3-touch-amoled-2.06) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-amoled-2.16](../main/boards/waveshare/esp32-s3-touch-amoled-2.16) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-1.46](../main/boards/waveshare/esp32-s3-touch-lcd-1.46) | `NoAudioCodecSimplex` → M |
+| [waveshare/esp32-s3-touch-lcd-1.54](../main/boards/waveshare/esp32-s3-touch-lcd-1.54) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-1.83](../main/boards/waveshare/esp32-s3-touch-lcd-1.83) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-1.85](../main/boards/waveshare/esp32-s3-touch-lcd-1.85) | `NoAudioCodecSimplex` → M |
+| [waveshare/esp32-s3-touch-lcd-1.85b](../main/boards/waveshare/esp32-s3-touch-lcd-1.85b) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-1.85c](../main/boards/waveshare/esp32-s3-touch-lcd-1.85c) | `BoxAudioCodec` → MR<br>`NoAudioCodecSimplex` → M |
+| [waveshare/esp32-s3-touch-lcd-3.49](../main/boards/waveshare/esp32-s3-touch-lcd-3.49) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-3.49-v2](../main/boards/waveshare/esp32-s3-touch-lcd-3.49-v2) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-3.5](../main/boards/waveshare/esp32-s3-touch-lcd-3.5) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-touch-lcd-3.5b](../main/boards/waveshare/esp32-s3-touch-lcd-3.5b) | `Es8311AudioCodec` → M |
+| [waveshare/esp32-s3-touch-lcd-4.3c](../main/boards/waveshare/esp32-s3-touch-lcd-4.3c) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-4b](../main/boards/waveshare/esp32-s3-touch-lcd-4b) | `BoxAudioCodec` → MR |
+| [waveshare/esp32-s3-touch-lcd-7c](../main/boards/waveshare/esp32-s3-touch-lcd-7c) | `WaveshareAudioCodec` → MR |
+| [waveshare/esp32-touch-lcd-3.5](../main/boards/waveshare/esp32-touch-lcd-3.5) | `Es8311AudioCodec` → M |
+| [wdmomo/esp32-cgc](../main/boards/wdmomo/esp32-cgc) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [wdmomo/esp32-cgc-144](../main/boards/wdmomo/esp32-cgc-144) | `NoAudioCodecSimplex` → M |
+| [wk-esp32s3-dev](../main/boards/wk-esp32s3-dev) | `NoAudioCodecDuplex` → M<br>`NoAudioCodecSimplex` → M |
+| [xmini/c3](../main/boards/xmini/c3) | `Es8311AudioCodec` → M |
+| [xmini/c3-4g](../main/boards/xmini/c3-4g) | `Es8311AudioCodec` → M |
+| [xmini/c3-v3](../main/boards/xmini/c3-v3) | `Es8311AudioCodec` → M |
+| [xorigin/aipi-lite](../main/boards/xorigin/aipi-lite) | `Es8311AudioCodec` → M |
+| [yunliao-s3](../main/boards/yunliao-s3) | `Es8388AudioCodec` → MR |
+| [zectrix/zectrix-s3-epaper-4.2](../main/boards/zectrix/zectrix-s3-epaper-4.2) | `Es8311AudioCodec` → M |
+| [zhengchen/1.54tft-ml307](../main/boards/zhengchen/1.54tft-ml307) | `NoAudioCodecSimplex` → M |
+| [zhengchen/1.54tft-wifi](../main/boards/zhengchen/1.54tft-wifi) | `NoAudioCodecSimplex` → M |
+| [zhengchen/cam](../main/boards/zhengchen/cam) | `CustomAudioCodec` → MR |
+| [zhengchen/cam-ml307](../main/boards/zhengchen/cam-ml307) | `CustomAudioCodec` → MR |

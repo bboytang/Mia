@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from scripts.ci.mia_behavior_runtime import observe_hold
+from scripts.ci.youmi_behavior_runtime import observe_hold
 from server.companion import extraction
 from server.companion.memory import MemoryError
 

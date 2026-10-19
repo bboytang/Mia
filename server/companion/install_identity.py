@@ -6,7 +6,7 @@ import hashlib
 from pathlib import Path
 import shutil
 
-from .install_xiaozhi import replace_once
+from .install_youmi import replace_once
 from . import manager_chat_guards
 
 
@@ -27,11 +27,11 @@ PREIMAGES = {
     WORDS_DTO: '8e773a8f4e4d9b81177d888386f430ea65facc0777ba17d906f567d2ea8aaf2d',
 }
 PAYLOADS = {
-    'MiaCompanionManagementController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/MiaCompanionManagementController.java',
-    'MiaDeviceAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/MiaDeviceAuthorizationService.java',
-    'MiaDeviceAuthorizationController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/MiaDeviceAuthorizationController.java',
+    'YoumiCompanionManagementController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/YoumiCompanionManagementController.java',
+    'YoumiDeviceAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/YoumiDeviceAuthorizationService.java',
+    'YoumiDeviceAuthorizationController.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/controller/YoumiDeviceAuthorizationController.java',
     '202610141825.sql': 'main/manager-api/src/main/resources/db/changelog/202610141825.sql',
-    'MiaChatAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/MiaChatAuthorizationService.java',
+    'YoumiChatAuthorizationService.java': 'main/manager-api/src/main/java/xiaozhi/modules/device/service/impl/YoumiChatAuthorizationService.java',
 }
 PREIMAGES.update(manager_chat_guards.PREIMAGES)
 
@@ -46,24 +46,24 @@ def binding_guards(original):
                         'import jakarta.annotation.Resource;\n'
                         'import xiaozhi.modules.agent.service.AgentService;')
     text = replace_once(text, '    private final DeviceDao deviceDao;',
-                        '    @Lazy\n    @Resource\n    private AgentService miaAgentService;\n\n'
+                        '    @Lazy\n    @Resource\n    private AgentService youmiAgentService;\n\n'
                         '    private final DeviceDao deviceDao;')
     text = replace_once(text, '    @Override\n    public Boolean deviceActivation(String agentId, String activationCode) {',
-                        '    private void requireMiaAgentPermission(String agentId, Long userId) {\n'
+                        '    private void requireYoumiAgentPermission(String agentId, Long userId) {\n'
                         '        if (userId == null) {\n'
                         '            throw new RenException(ErrorCode.USER_NOT_LOGIN);\n'
                         '        }\n'
-                        '        if (!miaAgentService.checkAgentPermission(agentId, userId)) {\n'
+                        '        if (!youmiAgentService.checkAgentPermission(agentId, userId)) {\n'
                         '            throw new RenException(ErrorCode.NO_PERMISSION);\n'
                         '        }\n'
                         '    }\n\n'
                         '    @Override\n    @Transactional(rollbackFor = Exception.class)\n'
                         '    public Boolean deviceActivation(String agentId, String activationCode) {\n'
-                        '        requireMiaAgentPermission(agentId, SecurityUser.getUser().getId());')
+                        '        requireYoumiAgentPermission(agentId, SecurityUser.getUser().getId());')
     text = replace_once(text, '    public void manualAddDevice(Long userId, DeviceManualAddDTO dto) {',
                         '    @Transactional(rollbackFor = Exception.class)\n'
                         '    public void manualAddDevice(Long userId, DeviceManualAddDTO dto) {\n'
-                        '        requireMiaAgentPermission(dto.getAgentId(), userId);')
+                        '        requireYoumiAgentPermission(dto.getAgentId(), userId);')
     text = replace_once(text, '    public void unbindDevice(Long userId, String deviceId) {',
                         '    @Transactional(rollbackFor = Exception.class)\n'
                         '    public void unbindDevice(Long userId, String deviceId) {')
@@ -72,19 +72,19 @@ def binding_guards(original):
                         '            throw new RenException(ErrorCode.NO_PERMISSION);\n'
                         '        }\n'
                         '        String macAddress = device.getMacAddress();\n')
-    text = replace_once(text, '    private AgentService miaAgentService;\n',
-                        '    private AgentService miaAgentService;\n\n'
-                        '    @Lazy\n    @Resource\n    private MiaDeviceAuthorizationService miaPrivateGrants;\n')
+    text = replace_once(text, '    private AgentService youmiAgentService;\n',
+                        '    private AgentService youmiAgentService;\n\n'
+                        '    @Lazy\n    @Resource\n    private YoumiDeviceAuthorizationService youmiPrivateGrants;\n')
     text = replace_once(text, '        deviceDao.insert(deviceEntity);\n',
-                        '        deviceDao.insert(deviceEntity);\n        miaPrivateGrants.bindingChanged(deviceId);\n')
+                        '        deviceDao.insert(deviceEntity);\n        youmiPrivateGrants.bindingChanged(deviceId);\n')
     text = replace_once(text, '        baseDao.insert(entity);\n',
-                        '        baseDao.insert(entity);\n        miaPrivateGrants.bindingChanged(entity.getId());\n')
+                        '        baseDao.insert(entity);\n        youmiPrivateGrants.bindingChanged(entity.getId());\n')
     text = replace_once(text, '        // 先查询设备信息，获取agentId和macAddress\n'
                         '        DeviceEntity device = baseDao.selectById(deviceId);\n',
                         '        // 先查询设备信息，获取agentId和macAddress\n'
                         '        DeviceEntity device = deviceDao.selectBindingForUpdate(deviceId);\n')
     text = replace_once(text, '        baseDao.delete(wrapper);\n\n        // 删除设备相关的通讯录权限记录',
-                        '        baseDao.delete(wrapper);\n        miaPrivateGrants.bindingChanged(deviceId);\n\n'
+                        '        baseDao.delete(wrapper);\n        youmiPrivateGrants.bindingChanged(deviceId);\n\n'
                         '        // 删除设备相关的通讯录权限记录')
     text = replace_once(text,
                         '    public void deleteByUserId(Long userId) {\n'
@@ -94,12 +94,12 @@ def binding_guards(original):
                         '    public void deleteByUserId(Long userId) {\n'
                         '        UpdateWrapper<DeviceEntity> wrapper = new UpdateWrapper<>();\n'
                         '        wrapper.eq("user_id", userId);\n        baseDao.delete(wrapper);\n'
-                        '        miaPrivateGrants.userDeleted(userId);\n    }')
+                        '        youmiPrivateGrants.userDeleted(userId);\n    }')
     text = replace_once(text, '    public void deleteByAgentId(String agentId) {',
                         '    @Transactional(rollbackFor = Exception.class)\n'
                         '    public void deleteByAgentId(String agentId) {')
     return replace_once(text, '        baseDao.delete(wrapper);\n\n        // 批量删除这些设备相关的所有通讯录权限记录',
-                        '        baseDao.delete(wrapper);\n        miaPrivateGrants.agentDeleted(agentId);\n\n'
+                        '        baseDao.delete(wrapper);\n        youmiPrivateGrants.agentDeleted(agentId);\n\n'
                         '        // 批量删除这些设备相关的所有通讯录权限记录')
 
 
@@ -107,16 +107,16 @@ def private_config_guards(original):
     text = replace_once(original, 'import java.util.List;',
                         'import java.util.List;\nimport java.util.Map;\n'
                         'import org.springframework.transaction.annotation.Transactional;\n'
-                        'import xiaozhi.common.exception.ErrorCode;\n'
-                        'import xiaozhi.common.exception.RenException;\n'
-                        'import xiaozhi.modules.device.service.impl.MiaDeviceAuthorizationService;')
+                        'import youmi.common.exception.ErrorCode;\n'
+                        'import youmi.common.exception.RenException;\n'
+                        'import xiaozhi.modules.device.service.impl.YoumiDeviceAuthorizationService;')
     text = replace_once(text, '    private final ConfigService configService;',
                         '    private final ConfigService configService;\n'
-                        '    private final MiaDeviceAuthorizationService miaPrivateGrants;')
+                        '    private final YoumiDeviceAuthorizationService youmiPrivateGrants;')
     text = replace_once(text, '    public Result<Object> getAgentModels(',
                         '    @Transactional(rollbackFor = Exception.class)\n    public Result<Object> getAgentModels(')
     text = replace_once(text, '        Object models = configService.getAgentModels(dto.getMacAddress(), dto.getSelectedModule());',
-                        '        Map<String, Object> scope = miaPrivateGrants.requirePrivateConfiguration(\n'
+                        '        Map<String, Object> scope = youmiPrivateGrants.requirePrivateConfiguration(\n'
                         '                dto.getMacAddress(), dto.getClientId(), dto.getPrivateCredential());\n'
                         '        Object models = configService.getAgentModels(dto.getMacAddress(), dto.getSelectedModule());\n'
                         '        if (!(models instanceof Map<?, ?> data) || !scope.get("owner").equals(data.get("mia_owner"))) {\n'
@@ -129,7 +129,7 @@ def private_config_guards(original):
     text = replace_once(text, '    public Result<Object> getCorrectWords(',
                         '    @Transactional(rollbackFor = Exception.class)\n    public Result<Object> getCorrectWords(')
     return replace_once(text, '        List<String> list = configService.getCorrectWords(dto.getMacAddress());',
-                        '        miaPrivateGrants.requirePrivateConfiguration(\n'
+                        '        youmiPrivateGrants.requirePrivateConfiguration(\n'
                         '                dto.getMacAddress(), dto.getClientId(), dto.getPrivateCredential());\n'
                         '        List<String> list = configService.getCorrectWords(dto.getMacAddress());')
 

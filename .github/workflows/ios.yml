@@ -39,16 +39,16 @@ jobs:
       - name: Build simulator app
         working-directory: ios
         run: |
-          xcodebuild -project Mia.xcodeproj -scheme Mia -configuration Debug \
+          xcodebuild -project Youmi.xcodeproj -scheme Youmi -configuration Debug \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath "$RUNNER_TEMP/mia-simulator" \
             CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- build
 
-      - name: Start loopback Xiaozhi protocol fixture
+      - name: Start loopback Youmi protocol fixture
         run: |
           python3 -m venv "$RUNNER_TEMP/mia-protocol-tests"
           "$RUNNER_TEMP/mia-protocol-tests/bin/python" -m pip install websockets==16.0
-          "$RUNNER_TEMP/mia-protocol-tests/bin/python" ios/TestsSupport/xiaozhi_fixture.py > "$RUNNER_TEMP/mia-fixture.log" 2>&1 &
+          "$RUNNER_TEMP/mia-protocol-tests/bin/python" ios/TestsSupport/youmi_fixture.py > "$RUNNER_TEMP/mia-fixture.log" 2>&1 &
           if ! python3 - <<'PY'
           import time, urllib.request
           opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -61,14 +61,14 @@ jobs:
               except OSError:
                   time.sleep(.2)
           else:
-              raise SystemExit("Loopback Xiaozhi fixture did not become ready")
+              raise SystemExit("Loopback Youmi fixture did not become ready")
           PY
           then
             cat "$RUNNER_TEMP/mia-fixture.log"
             exit 1
           fi
 
-      - name: Run iOS unit and Xiaozhi UI tests
+      - name: Run iOS unit and Youmi UI tests
         working-directory: ios
         env:
           MIA_MEMORY_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.memory_only || false }}
@@ -79,12 +79,12 @@ jobs:
           print(next(device["udid"] for runtime in devices.values()
                      for device in runtime if "iPhone" in device["name"]))
           ')
-          mia_test_options=()
+          youmi_test_options=()
           if [[ "$MIA_MEMORY_ONLY" == "true" ]]; then
-            mia_test_options=(-only-testing:MiaUITests/MiaXiaozhiFlowTests/testMemoryPageOffersExplicitOptInWithoutStartingConversation)
+            youmi_test_options=(-only-testing:YoumiUITests/YoumiFlowTests/testMemoryPageOffersExplicitOptInWithoutStartingConversation)
           fi
-          xcodebuild -project Mia.xcodeproj -scheme Mia -configuration Debug \
-            "${mia_test_options[@]}" \
+          xcodebuild -project Youmi.xcodeproj -scheme Youmi -configuration Debug \
+            "${youmi_test_options[@]}" \
             -destination "platform=iOS Simulator,id=$simulator_id" \
             -derivedDataPath "$RUNNER_TEMP/mia-tests" \
             -resultBundlePath "$RUNNER_TEMP/mia-account-tests.xcresult" \
@@ -102,7 +102,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Mia-iOS-tests-${{ github.sha }}-${{ github.run_id }}
+          name: Youmi-iOS-tests-${{ github.sha }}-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/mia-account-tests.xcresult
             ${{ runner.temp }}/mia-fixture.log
@@ -112,7 +112,7 @@ jobs:
       - name: Build unsigned device app
         working-directory: ios
         run: |
-          xcodebuild -project Mia.xcodeproj -scheme Mia -configuration Release \
+          xcodebuild -project Youmi.xcodeproj -scheme Youmi -configuration Release \
             -sdk iphoneos -destination 'generic/platform=iOS' \
             -derivedDataPath "$RUNNER_TEMP/mia-device" \
             CODE_SIGNING_ALLOWED=NO build
@@ -120,32 +120,32 @@ jobs:
       - name: Package unsigned artifacts
         run: |
           set -euo pipefail
-          app="$RUNNER_TEMP/mia-device/Build/Products/Release-iphoneos/Mia.app"
+          app="$RUNNER_TEMP/mia-device/Build/Products/Release-iphoneos/Youmi.app"
           test -d "$app"
-          extension="$app/PlugIns/MiaActivity.appex"
+          extension="$app/PlugIns/YoumiActivity.appex"
           test -d "$extension"
-          test -s "$extension/MiaActivity"
-          test ! -e "$app/MiaLaunch.mp4"
+          test -s "$extension/YoumiActivity"
+          test ! -e "$app/YoumiLaunch.mp4"
           python3 - "$app" <<'PY'
           import json, pathlib, sys
           metadata = pathlib.Path(sys.argv[1]) / "Metadata.appintents" / "extract.actionsdata"
           data = json.loads(metadata.read_text())
           expected = {"StartMiaConversationIntent", "EndMiaConversationIntent", "OpenMiaConversationIntent"}
-          assert expected <= data["actions"].keys(), "Missing Mia conversation actions"
-          assert expected <= {item["actionIdentifier"] for item in data["autoShortcuts"]}, "Missing Mia shortcuts"
-          assert all(data["actions"][name]["isDiscoverable"] for name in expected), "Hidden Mia action"
+          assert expected <= data["actions"].keys(), "Missing Youmi conversation actions"
+          assert expected <= {item["actionIdentifier"] for item in data["autoShortcuts"]}, "Missing Youmi shortcuts"
+          assert all(data["actions"][name]["isDiscoverable"] for name in expected), "Hidden Youmi action"
           start = data["actions"]["StartMiaConversationIntent"]
-          assert not start["openAppWhenRun"], "Mia background start must not open the app"
-          assert "com.apple.link.systemProtocol.ForegroundContinuable" not in start["systemProtocols"], "Mia start must not request foreground fallback"
-          print("Mia start/end/open actions and shortcuts are packaged and discoverable")
+          assert not start["openAppWhenRun"], "Youmi background start must not open the app"
+          assert "com.apple.link.systemProtocol.ForegroundContinuable" not in start["systemProtocols"], "Youmi start must not request foreground fallback"
+          print("Youmi start/end/open actions and shortcuts are packaged and discoverable")
           PY
           /usr/libexec/PlistBuddy -c 'Print :NSSupportsLiveActivities' "$app/Info.plist" | grep -qx true
           /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$extension/Info.plist" | grep -qx com.apple.widgetkit-extension
           mkdir -p "$RUNNER_TEMP/mia-artifacts/Payload"
-          cp -R "$app" "$RUNNER_TEMP/mia-artifacts/Payload/Mia.app"
+          cp -R "$app" "$RUNNER_TEMP/mia-artifacts/Payload/Youmi.app"
           cd "$RUNNER_TEMP/mia-artifacts"
-          zip -qr Mia-unsigned.ipa Payload
-          shasum -a 256 Mia-unsigned.ipa > SHA256SUMS
+          zip -qr Youmi-unsigned.ipa Payload
+          shasum -a 256 Youmi-unsigned.ipa > SHA256SUMS
 
       - name: Capture home screens and orb preview
         run: |
@@ -164,38 +164,38 @@ jobs:
           for simulator_id in $simulator_ids; do
             xcrun simctl boot "$simulator_id" || true
             xcrun simctl bootstatus "$simulator_id" -b
-            xcrun simctl install "$simulator_id" "$RUNNER_TEMP/mia-simulator/Build/Products/Debug-iphonesimulator/Mia.app"
-            mia_record_log="$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.log"
+            xcrun simctl install "$simulator_id" "$RUNNER_TEMP/mia-simulator/Build/Products/Debug-iphonesimulator/Youmi.app"
+            youmi_record_log="$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.log"
             xcrun simctl io "$simulator_id" recordVideo --codec h264 --mask ignored \
-              "$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.mp4" > "$mia_record_log" 2>&1 &
-            mia_record_pid=$!
-            trap 'kill -TERM "$mia_record_pid" 2>/dev/null || true; cat "$mia_record_log"' EXIT
-            mia_record_deadline=$((SECONDS + 120))
+              "$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.mp4" > "$youmi_record_log" 2>&1 &
+            youmi_record_pid=$!
+            trap 'kill -TERM "$youmi_record_pid" 2>/dev/null || true; cat "$youmi_record_log"' EXIT
+            youmi_record_deadline=$((SECONDS + 120))
             while true; do
-              if ! kill -0 "$mia_record_pid" 2>/dev/null; then
+              if ! kill -0 "$youmi_record_pid" 2>/dev/null; then
                 echo "Recorder exited before recording started for $simulator_id" >&2
                 exit 1
               fi
-              if grep -Fq "Recording started" "$mia_record_log"; then
-                printf 'Observed "Recording started" for %s; launching Mia.\n' "$simulator_id"
+              if grep -Fq "Recording started" "$youmi_record_log"; then
+                printf 'Observed "Recording started" for %s; launching Youmi.\n' "$simulator_id"
                 break
               fi
-              if (( SECONDS >= mia_record_deadline )); then
+              if (( SECONDS >= youmi_record_deadline )); then
                 echo "Timed out after 120 seconds waiting for recording to start for $simulator_id" >&2
                 exit 1
               fi
               sleep 0.1
             done
-            xcrun simctl launch "$simulator_id" com.bboytang.mia -MiaDisableAutomaticConversation -mia.appearance.skin holographic
+            xcrun simctl launch "$simulator_id" com.bboytang.mia -YoumiDisableAutomaticConversation -mia.appearance.skin holographic
             sleep 8
             xcrun simctl io "$simulator_id" screenshot "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png"
-            mia_preview="$RUNNER_TEMP/mia-home-preview${suffix}.jpg"
+            youmi_preview="$RUNNER_TEMP/mia-home-preview${suffix}.jpg"
             sips -s format jpeg -s formatOptions 70 -Z 600 \
-              "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png" --out "$mia_preview" >/dev/null
-            python3 -c 'import base64, pathlib, sys; p = pathlib.Path(sys.argv[1]); print("MIA_UI_PREVIEW:" + p.name + ":" + base64.b64encode(p.read_bytes()).decode())' "$mia_preview"
-            kill -INT "$mia_record_pid"
-            wait "$mia_record_pid"
-            cat "$mia_record_log"
+              "$RUNNER_TEMP/mia-artifacts/mia-home${suffix}.png" --out "$youmi_preview" >/dev/null
+            python3 -c 'import base64, pathlib, sys; p = pathlib.Path(sys.argv[1]); print("MIA_UI_PREVIEW:" + p.name + ":" + base64.b64encode(p.read_bytes()).decode())' "$youmi_preview"
+            kill -INT "$youmi_record_pid"
+            wait "$youmi_record_pid"
+            cat "$youmi_record_log"
             trap - EXIT
             test -s "$RUNNER_TEMP/mia-artifacts/mia-orb${suffix}.mp4"
             xcrun simctl shutdown "$simulator_id"
@@ -205,10 +205,10 @@ jobs:
       - name: Upload unsigned iOS app
         uses: actions/upload-artifact@v4
         with:
-          name: Mia-iOS-unsigned-${{ github.sha }}
+          name: Youmi-iOS-unsigned-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/mia-artifacts/Payload/Mia.app
-            ${{ runner.temp }}/mia-artifacts/Mia-unsigned.ipa
+            ${{ runner.temp }}/mia-artifacts/Payload/Youmi.app
+            ${{ runner.temp }}/mia-artifacts/Youmi-unsigned.ipa
             ${{ runner.temp }}/mia-artifacts/SHA256SUMS
             ${{ runner.temp }}/mia-artifacts/mia-home*.png
             ${{ runner.temp }}/mia-artifacts/mia-orb*.mp4

@@ -1,6 +1,6 @@
 # MCP 协议物联网控制用法说明
 
-> 本文档介绍如何基于 MCP 协议实现 ESP32 设备的物联网控制。详细协议流程请参考 [`mcp-protocol_zh.md`](./mcp-protocol_zh.md)。
+> 本文档介绍如何基于 MCP 协议实现 ESP32 设备的物联网控制。详细协议流程请参考 [`mcp-protocol_zh.md`](mcp-protocol_zh.md)。
 
 ## 简介
 
@@ -13,7 +13,7 @@ MCP（Model Context Protocol）是新一代推荐用于物联网控制的协议�
 3. 后台通过 `tools/list` 获取设备支持的所有工具（功能）及参数说明。
 4. 后台通过 `tools/call` 调用具体工具，实现对设备的控制。
 
-详细协议格式与交互请见 [`mcp-protocol_zh.md`](./mcp-protocol_zh.md)。
+详细协议格式与交互请见 [`mcp-protocol_zh.md`](mcp-protocol_zh.md)。
 
 ## 设备端工具注册方法说明
 
@@ -112,4 +112,4 @@ void InitializeTools() {
 ## 备注
 - 工具名称、参数及返回值请以设备端 `AddTool` 注册为准。
 - 推荐所有新项目统一采用 MCP 协议进行物联网控制。
-- 详细协议与进阶用法请查阅 [`mcp-protocol_zh.md`](./mcp-protocol_zh.md)。 
+- 详细协议与进阶用法请查阅 [`mcp-protocol_zh.md`](mcp-protocol_zh.md)。

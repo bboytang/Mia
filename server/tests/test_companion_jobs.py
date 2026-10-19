@@ -463,7 +463,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.calls), 1)
 
     async def test_service_shutdown_shares_budget_and_retains_inflight_job_for_recovery(self):
-        from server.companion.xiaozhi_adapter import stop_service
+        from server.companion.youmi_adapter import stop_service
         started, release = threading.Event(), threading.Event()
         async def resolve(scope):
             def blocked(sources, context):
@@ -488,7 +488,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         try:
             self.assertTrue(await asyncio.to_thread(started.wait, 1))
             before = time.monotonic()
-            self.assertFalse(await stop_service(SimpleNamespace(_mia_worker=self.worker), gc, services, timeout=.12))
+            self.assertFalse(await stop_service(SimpleNamespace(_youmi_worker=self.worker), gc, services, timeout=.12))
             self.assertLess(time.monotonic() - before, .22)  # Scheduler tolerance, not a P23 measurement.
             self.assertEqual(observed, [True] * 3)
             self.assertTrue(all(task.done() for task in services))
@@ -506,7 +506,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.store.list_memories(self.scope.owner)), 1)
 
     async def test_service_shutdown_drains_existing_job_and_gc_concurrently(self):
-        from server.companion.xiaozhi_adapter import stop_service
+        from server.companion.youmi_adapter import stop_service
         started, release = threading.Event(), threading.Event()
         async def resolve(scope):
             def model(sources, context):
@@ -523,7 +523,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             release.set()
         service = asyncio.create_task(asyncio.sleep(10))
         try:
-            self.assertTrue(await stop_service(SimpleNamespace(_mia_worker=self.worker),
+            self.assertTrue(await stop_service(SimpleNamespace(_youmi_worker=self.worker),
                 SimpleNamespace(stop=stop_gc), [service, None], timeout=1))
             self.assertTrue(service.cancelled())
             self.assertTrue(self.worker.task.done())
@@ -533,19 +533,19 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             release.set()
 
     async def test_service_shutdown_gc_error_does_not_skip_worker_or_transport_cleanup(self):
-        from server.companion.xiaozhi_adapter import stop_service
+        from server.companion.youmi_adapter import stop_service
         await self.worker.start()
         async def fail_gc():
             raise OSError('synthetic GC cleanup failure')
         service = asyncio.create_task(asyncio.sleep(10))
-        with self.assertLogs('server.companion.xiaozhi_adapter', level='WARNING'):
-            self.assertFalse(await stop_service(SimpleNamespace(_mia_worker=self.worker),
+        with self.assertLogs('server.companion.youmi_adapter', level='WARNING'):
+            self.assertFalse(await stop_service(SimpleNamespace(_youmi_worker=self.worker),
                 SimpleNamespace(stop=fail_gc), [service], timeout=.3))
         self.assertTrue(self.worker.task.done())
         self.assertTrue(service.cancelled())
 
     async def test_cancelling_service_shutdown_still_cancels_worker_and_services(self):
-        from server.companion.xiaozhi_adapter import stop_service
+        from server.companion.youmi_adapter import stop_service
         started, release = threading.Event(), threading.Event()
         async def resolve(scope):
             def blocked(sources, context):
@@ -558,7 +558,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         await self.worker.start()
         self.assertTrue(await asyncio.to_thread(started.wait, 1))
         service = asyncio.create_task(asyncio.sleep(10))
-        closing = asyncio.create_task(stop_service(SimpleNamespace(_mia_worker=self.worker),
+        closing = asyncio.create_task(stop_service(SimpleNamespace(_youmi_worker=self.worker),
             SimpleNamespace(stop=AsyncMock(side_effect=asyncio.CancelledError)), [service], timeout=1))
         try:
             await asyncio.sleep(.01)
@@ -590,36 +590,36 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(self.row(result)['source_payload'], '{}')
 
     async def test_explicit_remember_priority_is_limited_to_its_own_completion(self):
-        from server.companion import xiaozhi_adapter as mia
-        provider = mia.MiaMemoryProvider(self.store, self.scope.owner, None, 'session', self.scope, self.policy)
-        conn = SimpleNamespace(_mia_memory=provider, _mia_scope=self.scope, _mia_authorization=self.policy,
+        from server.companion import youmi_adapter as youmi
+        provider = youmi.YoumiMemoryProvider(self.store, self.scope.owner, None, 'session', self.scope, self.policy)
+        conn = SimpleNamespace(_youmi_memory=provider, _youmi_scope=self.scope, _youmi_authorization=self.policy,
             read_config_from_api=True, session_id='session', loop=asyncio.get_running_loop(),
             dialogue=SimpleNamespace(dialogue=[]), websocket=SimpleNamespace(send=AsyncMock()),
-            server=SimpleNamespace(_mia_worker=self.worker), client_abort=False)
-        @mia.completed_chat
+            server=SimpleNamespace(_youmi_worker=self.worker), client_abort=False)
+        @youmi.completed_chat
         def complete(conn, query, depth=0):
             conn.sentence_id = uuid.uuid4().hex
-            mia.begin_turn(conn, query)
+            youmi.begin_turn(conn, query)
         await asyncio.to_thread(complete, conn, '请记住我喜欢蓝色')
-        first = self.row(conn._mia_job_status)
+        first = self.row(conn._youmi_job_status)
         await asyncio.to_thread(complete, conn, '今天聊点别的')
-        second = self.row(conn._mia_job_status)
+        second = self.row(conn._youmi_job_status)
         self.assertTrue(json.loads(first['source_payload'])['priority'])
         self.assertFalse(json.loads(second['source_payload'])['priority'])
         self.assertEqual(self.worker.foreground, 0)
         self.assertEqual(self.calls, [])
 
     async def test_wire_status_is_owner_scoped_and_does_not_return_source_or_clear_history(self):
-        from server.companion import xiaozhi_adapter as mia
+        from server.companion import youmi_adapter as youmi
         own = await self.worker.submit(self.event())
         peer = await self.worker.submit(self.event('peer', self.peer))
         history = [SimpleNamespace(role='user', content='keep display history')]
-        conn = SimpleNamespace(_mia_memory=mia.MiaMemoryProvider(self.store, self.scope.owner, None,
-            'session', self.scope, self.policy), read_config_from_api=True, _mia_scope=self.scope,
-            _mia_authorization=self.policy, dialogue=SimpleNamespace(dialogue=history),
+        conn = SimpleNamespace(_youmi_memory=youmi.YoumiMemoryProvider(self.store, self.scope.owner, None,
+            'session', self.scope, self.policy), read_config_from_api=True, _youmi_scope=self.scope,
+            _youmi_authorization=self.policy, dialogue=SimpleNamespace(dialogue=history),
             websocket=SimpleNamespace(send=AsyncMock()))
         async def query(job):
-            await mia.handle_message(conn, json.dumps({'type': 'mia_memory', 'request_id': str(uuid.uuid4()),
+            await youmi.handle_message(conn, json.dumps({'type': 'mia_memory', 'request_id': str(uuid.uuid4()),
                 'action': 'job_status', 'id': job['id']}))
             return json.loads(conn.websocket.send.call_args.args[0])
         response = await query(own)
@@ -631,7 +631,7 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await query(own))['error']['code'], 'authorization_required')
 
     async def test_service_runtime_resolves_existing_model_and_owns_start_stop(self):
-        from server.companion import xiaozhi_adapter as mia
+        from server.companion import youmi_adapter as youmi
         selected = {'type': 'fixture', 'model_name': 'same-agent-model'}
         self.policy.worker_model = AsyncMock(return_value={'selected_module': {'LLM': 'existing'},
                                                           'LLM': {'existing': selected}})
@@ -646,15 +646,15 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
         factory = ModuleType('core.utils.llm')
         factory.create_instance = create
         server = SimpleNamespace(config={'read_config_from_api': True})
-        with patch('server.companion.xiaozhi_adapter._store', return_value=self.store), \
+        with patch('server.companion.youmi_adapter._store', return_value=self.store), \
                 patch('server.companion.jobs.JobStore', return_value=self.jobs), \
                 patch('server.companion.reply._encoder', self.encoder), \
                 patch('server.companion.authorization.PrivateAuthorization', return_value=self.policy), \
                 patch.dict(sys.modules, {'core': ModuleType('core'), 'core.utils': ModuleType('core.utils'),
                                         'core.utils.llm': factory}):
-            await mia.start_worker(server)
+            await youmi.start_worker(server)
             try:
-                result = await server._mia_worker.submit(self.event())
+                result = await server._youmi_worker.submit(self.event())
                 for _ in range(200):
                     if self.row(result)['state'] == 'committed':
                         break
@@ -662,8 +662,8 @@ class JobTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(self.row(result)['state'], 'committed')
                 self.assertEqual(calls, [('fixture', selected)])
             finally:
-                await mia.stop_worker(server)
-            self.assertTrue(server._mia_worker.task.done())
+                await youmi.stop_worker(server)
+            self.assertTrue(server._youmi_worker.task.done())
 
     async def test_secret_never_enters_jobs_and_status_is_not_a_fact_database(self):
         with self.assertRaises(MemoryError):

@@ -1,4 +1,4 @@
-name: Mia
+name: Youmi
 options:
   createIntermediateGroups: true
 settings:
@@ -14,29 +14,30 @@ packages:
     url: https://github.com/sbooth/ogg-binary-xcframework
     exactVersion: 0.1.3
 targets:
-  Mia:
+  Youmi:
     type: application
     platform: iOS
     sources:
-      - MiaApp
-      - MiaShared
+      - YoumiApp
+      - YoumiShared
     dependencies:
-      - target: MiaActivity
+      - target: YoumiActivity
       - package: Opus
         product: opus
       - package: Ogg
         product: ogg
     info:
-      path: MiaApp/Info.plist
+      path: YoumiApp/Info.plist
       properties:
-        CFBundleDisplayName: Mia
-        NSMicrophoneUsageDescription: Mia 需要使用麦克风与你进行语音对话。
+        CFBundleDisplayName: Youmi
+        NSMicrophoneUsageDescription: Youmi 需要使用麦克风与你进行语音对话。
         NSSupportsLiveActivities: true
         UIBackgroundModes:
           - audio
         CFBundleURLTypes:
           - CFBundleURLName: com.bboytang.mia
             CFBundleURLSchemes:
+              - youmi
               - mia
         NSAppTransportSecurity:
           NSExceptionDomains:
@@ -45,23 +46,23 @@ targets:
             '127.0.0.1':
               NSExceptionAllowsInsecureHTTPLoads: true
         UILaunchScreen:
-          UIColorName: MiaLaunchBackground
+          UIColorName: YoumiLaunchBackground
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia
-        CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]: MiaApp/MiaSimulator.entitlements
-  MiaActivity:
+        CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]: YoumiApp/YoumiSimulator.entitlements
+  YoumiActivity:
     type: app-extension
     platform: iOS
     sources:
-      - MiaActivity
-      - MiaShared
+      - YoumiActivity
+      - YoumiShared
     info:
-      path: MiaActivity/Info.plist
+      path: YoumiActivity/Info.plist
       properties:
-        CFBundleDisplayName: Mia
+        CFBundleDisplayName: Youmi
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:
@@ -69,39 +70,39 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.activity
         APPLICATION_EXTENSION_API_ONLY: YES
         SKIP_INSTALL: YES
-        SWIFT_ACTIVE_COMPILATION_CONDITIONS: '$(inherited) MIA_WIDGET_EXTENSION'
-  MiaTests:
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: '$(inherited) YOUMI_WIDGET_EXTENSION'
+  YoumiTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - MiaTests
+      - YoumiTests
     dependencies:
-      - target: Mia
+      - target: Youmi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.tests
         GENERATE_INFOPLIST_FILE: YES
-  MiaUITests:
+  YoumiUITests:
     type: bundle.ui-testing
     platform: iOS
     sources:
-      - MiaUITests
+      - YoumiUITests
     dependencies:
-      - target: Mia
+      - target: Youmi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bboytang.mia.uitests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
-  Mia:
+  Youmi:
     build:
       targets:
-        Mia: all
-        MiaTests: [test]
-        MiaUITests: [test]
+        Youmi: all
+        YoumiTests: [test]
+        YoumiUITests: [test]
     test:
       commandLineArguments:
-        "-MiaDisableAutomaticConversation": true
+        "-YoumiDisableAutomaticConversation": true
       targets:
-        - MiaTests
-        - MiaUITests
+        - YoumiTests
+        - YoumiUITests

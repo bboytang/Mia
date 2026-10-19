@@ -33,9 +33,9 @@ diff --git a/main/manager-web/src/views/DeviceManagement.vue b/main/manager-web/
 +                <el-button size="mini" type="text" @click="approveHardwareCode(scope.row.device_id)">硬件授权</el-button>
 +                <el-button size="mini" type="text" @click="revokePrivateGrant(scope.row.device_id)">撤销私有授权</el-button>
 @@ -86,0 +90,6 @@
-+    <el-dialog title="Mia 私有授权码" :visible.sync="privateCodeVisible" width="min(90vw, 420px)" @closed="clearPrivateCode">
++    <el-dialog title="Youmi 私有授权码" :visible.sync="privateCodeVisible" width="min(90vw, 420px)" @closed="clearPrivateCode">
 +      <p>设备：{{ privateCodeDevice }}</p>
-+      <p>请在 Mia App 的设置／私有授权中输入此码。10 分钟内一次性使用，以服务器核验为准。</p>
++      <p>请在 Youmi App 的设置／私有授权中输入此码。10 分钟内一次性使用，以服务器核验为准。</p>
 +      <el-input :value="privateCode" readonly aria-label="一次性私有授权码" />
 +      <span slot="footer"><el-button @click="privateCodeVisible = false">关闭</el-button></span>
 +    </el-dialog>
@@ -75,7 +75,7 @@ diff --git a/main/manager-web/src/views/DeviceManagement.vue b/main/manager-web/
 +    },
 +    approveHardwareCode(deviceId) {
 +      if (this.privateAuthorizationPending) return;
-+      this.$prompt('请输入 Mia 屏幕上的6位数字授权码，无需 USB。', 'Mia 硬件授权', {
++      this.$prompt('请输入 Youmi 屏幕上的6位数字授权码，无需 USB。', 'Youmi 硬件授权', {
 +        inputValidator: value => /^[0-9]{6}$/.test((value || '').replace(/\s/g, '')) || '请输入完整的6位数字授权码'
 +      }).then(({ value }) => {
 +        const code = value.replace(/\s/g, '');
@@ -85,7 +85,7 @@ diff --git a/main/manager-web/src/views/DeviceManagement.vue b/main/manager-web/
 +          if (this._isDestroyed) return;
 +          if (result.code === 0 && result.data && result.data.device_id === deviceId
 +              && result.data.authorization_code === code && result.data.expires_in === 600) {
-+            this.$message.success('硬件授权已确认，请等待 Mia 完成安全连接。');
++            this.$message.success('硬件授权已确认，请等待 Youmi 完成安全连接。');
 +          } else {
 +            this.$message.error(result.msg || '硬件授权未完成，请核对屏幕上的授权码。');
 +          }

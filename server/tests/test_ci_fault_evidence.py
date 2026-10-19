@@ -2,7 +2,7 @@
 
 import unittest
 
-from scripts.ci.mia_behavior_faults import observed_fault_checks
+from scripts.ci.youmi_behavior_faults import observed_fault_checks
 
 
 class FaultEvidenceTests(unittest.TestCase):

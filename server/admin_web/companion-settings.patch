@@ -1,16 +1,16 @@
 --- a/main/manager-web/src/components/DeviceItem.vue
 +++ b/main/manager-web/src/components/DeviceItem.vue
 @@ -30,0 +31,2 @@
-+    <MiaSettingsDialog v-model="miaSettingsOpen" :agent-id="device.agentId" @configure="handleConfigure" />
-+    <MiaMemoryDialog v-model="miaMemoryOpen" :agent-id="device.agentId" />
++    <YoumiSettingsDialog v-model="youmiSettingsOpen" :agent-id="device.agentId" @configure="handleConfigure" />
++    <YoumiMemoryDialog v-model="youmiMemoryOpen" :agent-id="device.agentId" />
 @@ -31,0 +34,2 @@
-+      <button type="button" class="settings-btn" @click="miaSettingsOpen = true">Mia 功能管理</button>
-+      <button type="button" class="settings-btn" @click="miaMemoryOpen = true">记忆管理</button>
++      <button type="button" class="settings-btn" @click="youmiSettingsOpen = true">Youmi 功能管理</button>
++      <button type="button" class="settings-btn" @click="youmiMemoryOpen = true">记忆管理</button>
 @@ -61,0 +66,2 @@
-+import MiaSettingsDialog from '@/components/MiaSettingsDialog.vue';
-+import MiaMemoryDialog from '@/components/MiaMemoryDialog.vue';
++import YoumiSettingsDialog from '@/components/YoumiSettingsDialog.vue';
++import YoumiMemoryDialog from '@/components/YoumiMemoryDialog.vue';
 @@ -64,0 +71 @@
-+  components: { MiaSettingsDialog, MiaMemoryDialog },
++  components: { YoumiSettingsDialog, YoumiMemoryDialog },
 @@ -77 +84 @@
 -    return { switchValue: false }
-+    return { switchValue: false, miaSettingsOpen: false, miaMemoryOpen: false }
++    return { switchValue: false, youmiSettingsOpen: false, youmiMemoryOpen: false }

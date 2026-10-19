@@ -1,0 +1,293 @@
+--- a/main/manager-web/src/i18n/vi.js
++++ b/main/manager-web/src/i18n/vi.js
+@@ -205,7 +205,7 @@
+   'firmwareDialog.firmwareFile': 'Tệp firmware',
+   'firmwareDialog.clickUpload': 'Nhấp để tải lên',
+   'firmwareDialog.uploadTip': 'Chỉ hỗ trợ tệp firmware (.bin/.apk), kích thước không vượt quá 100MB',
+-  'firmwareDialog.uploadHint': 'Nhắc nhở: Vui lòng tải lên tệp xiaozhi.bin đã hợp nhất trước, không phải tệp merged-binary.bin đã hợp nhất',
++  'firmwareDialog.uploadHint': 'Nhắc nhở: Vui lòng tải lên tệp youmi.bin đã hợp nhất trước, không phải tệp merged-binary.bin đã hợp nhất',
+   'firmwareDialog.remark': 'Ghi chú',
+   'firmwareDialog.remarkPlaceholder': 'Vui lòng nhập thông tin ghi chú',
+   'firmwareDialog.requiredFirmwareName': 'Vui lòng nhập tên firmware (board + phiên bản)',
+@@ -299,7 +299,7 @@
+ 
+   // Register page related
+   'register.title': 'Tạo tài khoản',
+-  'register.welcome': 'Chào mừng đến với XiaoZhi AI',
++  'register.welcome': 'Chào mừng đến với Youmi AI',
+   'register.usernamePlaceholder': 'Vui lòng nhập tên đăng nhập',
+   'register.mobilePlaceholder': 'Vui lòng nhập số điện thoại di động',
+   'register.captchaPlaceholder': 'Vui lòng nhập mã xác minh',
+@@ -585,7 +585,7 @@
+   'button.close': 'Đóng',
+ 
+   // System information
+-  'system.name': 'Dịch vụ XiaoZhi',
++  'system.name': 'Dịch vụ Youmi',
+ 
+   // Voiceprint related
+   'voiceprint.management': 'Quản lý dấu giọng nói',
+@@ -724,7 +724,7 @@
+ 
+   // Home page text
+   'home.addAgent': 'Thêm tác nhân',
+-  'home.greeting': 'Xin chào XiaoZhi',
++  'home.greeting': 'Xin chào Youmi',
+   'home.wish': 'Chúc bạn một ngày tuyệt vời!',
+   'home.languageModel': 'LLM',
+   'home.voiceModel': 'TTS',
+@@ -1009,7 +1009,7 @@
+   // Mô tả Tooltip cho trường biểu mẫu
+   'roleConfig.tooltip.agentName': 'Đặt tên cho tác nhân AI của bạn để nhận dạng và nhận biết',
+   'roleConfig.tooltip.roleTemplate': 'Chọn từ các mẫu vai trò được đặt trước để nhanh chóng định cấu hình cài đặt cơ bản cho tác nhân của bạn',
+-  'roleConfig.tooltip.contextProvider': 'Khi XiaoZhi được kích hoạt, lấy dữ liệu từ hệ thống bên ngoài và tiêm động vào lời nhắc hệ thống của LLM',
++  'roleConfig.tooltip.contextProvider': 'Khi Youmi được kích hoạt, lấy dữ liệu từ hệ thống bên ngoài và tiêm động vào lời nhắc hệ thống của LLM',
+   'roleConfig.tooltip.roleIntroduction': 'Xác định vị trí vai trò, đặc điểm tính cách, quy tắc hành vi và nền tảng kiến thức chuyên môn của tác nhân AI',
+   'roleConfig.tooltip.memoryHis': 'Tóm tắt nội dung bản ghi trò chuyện',
+   'roleConfig.tooltip.languageCode': 'Đặt mã ngôn ngữ như vi-VN, en-US, v.v., được sử dụng để nhận dạng các tính năng cụ thể',
+--- a/main/manager-web/src/i18n/zh_TW.js
++++ b/main/manager-web/src/i18n/zh_TW.js
+@@ -205,7 +205,7 @@
+   'firmwareDialog.firmwareFile': '固件文件',
+   'firmwareDialog.clickUpload': '點擊上傳',
+   'firmwareDialog.uploadTip': '只能上傳固件文件(.bin/.apk)，且不超過100MB',
+-  'firmwareDialog.uploadHint': '溫馨提示：請上傳合併前的xiaozhi.bin文件，而不是合併後的merged-binary.bin文件',
++  'firmwareDialog.uploadHint': '溫馨提示：請上傳合併前的youmi.bin文件，而不是合併後的merged-binary.bin文件',
+   'firmwareDialog.remark': '備註',
+   'firmwareDialog.remarkPlaceholder': '請輸入備註信息',
+   'firmwareDialog.requiredFirmwareName': '請輸入固件名稱(板子+版本號)',
+@@ -299,7 +299,7 @@
+ 
+   // 註冊頁面相關
+   'register.title': '建立帳號',
+-  'register.welcome': '歡迎使用小智慧AI',
++  'register.welcome': '歡迎使用Youmi慧AI',
+   'register.usernamePlaceholder': '請輸入用戶名',
+   'register.mobilePlaceholder': '請輸入手機號碼',
+   'register.captchaPlaceholder': '請輸入驗證碼',
+@@ -585,7 +585,7 @@
+   'button.close': '關閉',
+ 
+   // 系统信息
+-  'system.name': '小智服務',
++  'system.name': 'Youmi服務',
+ 
+   // 声纹相关
+   'voiceprint.management': '聲紋管理',
+@@ -724,7 +724,7 @@
+ 
+   // 首頁文本
+   'home.addAgent': '添加智能體',
+-  'home.greeting': '你好小智',
++  'home.greeting': '你好Youmi',
+   'home.wish': '讓我們度過美好的一天！',
+   'home.languageModel': '語言模型',
+   'home.voiceModel': '音色模型',
+@@ -1009,7 +1009,7 @@
+   // 表單欄位 Tooltip 提示說明
+   'roleConfig.tooltip.agentName': '設定智慧體的名稱，用於標識和識別您的AI助手',
+   'roleConfig.tooltip.roleTemplate': '從預設的角色模板中選擇，快速配置智慧體的基礎設定',
+-  'roleConfig.tooltip.contextProvider': '在小智被喚醒時，獲取外部系統的資料，並將其動態注入到大模型的系統提示詞中',
++  'roleConfig.tooltip.contextProvider': '在Youmi被喚醒時，獲取外部系統的資料，並將其動態注入到大模型的系統提示詞中',
+   'roleConfig.tooltip.roleIntroduction': '定義AI助手的角色定位、人格特徵、行為規範和專業知識背景',
+   'roleConfig.tooltip.memoryHis': '總結聊天記錄內容',
+   'roleConfig.tooltip.languageCode': '設定語言代碼，如zh-TW、en-US等，用於特定功能識別',
+--- a/main/manager-web/src/i18n/pt_BR.js
++++ b/main/manager-web/src/i18n/pt_BR.js
+@@ -205,7 +205,7 @@
+   'firmwareDialog.firmwareFile': 'Arquivo de Firmware',
+   'firmwareDialog.clickUpload': 'Clique para Enviar',
+   'firmwareDialog.uploadTip': 'Apenas arquivos de firmware (.bin/.apk) são suportados, e o tamanho não deve exceder 100MB',
+-  'firmwareDialog.uploadHint': 'Lembrete: Por favor, envie o arquivo xiaozhi.bin pré-mesclado, não o arquivo merged-binary.bin mesclado',
++  'firmwareDialog.uploadHint': 'Lembrete: Por favor, envie o arquivo youmi.bin pré-mesclado, não o arquivo merged-binary.bin mesclado',
+   'firmwareDialog.remark': 'Observação',
+   'firmwareDialog.remarkPlaceholder': 'Por favor, insira informações de observação',
+   'firmwareDialog.requiredFirmwareName': 'Por favor, insira o nome do firmware (placa + versão)',
+@@ -299,7 +299,7 @@
+ 
+   // Página de registro
+   'register.title': 'Criar Conta',
+-  'register.welcome': 'Bem-vindo ao XiaoZhi AI',
++  'register.welcome': 'Bem-vindo ao Youmi AI',
+   'register.usernamePlaceholder': 'Por favor, insira o nome de usuário',
+   'register.mobilePlaceholder': 'Por favor, insira o número de celular',
+   'register.captchaPlaceholder': 'Por favor, insira o captcha',
+@@ -585,7 +585,7 @@
+   'button.close': 'Fechar',
+ 
+   // Informações do sistema
+-  'system.name': 'Serviço XiaoZhi',
++  'system.name': 'Serviço Youmi',
+ 
+   // Impressão vocal
+   'voiceprint.management': 'Gerenciamento de Impressão Vocal',
+@@ -724,7 +724,7 @@
+ 
+   // Página inicial
+   'home.addAgent': 'Adicionar Agente',
+-  'home.greeting': 'Olá XiaoZhi',
++  'home.greeting': 'Olá Youmi',
+   'home.wish': 'Vamos ter um dia maravilhoso!',
+   'home.languageModel': 'LLM',
+   'home.voiceModel': 'TTS',
+@@ -1009,7 +1009,7 @@
+   // Descrições de Tooltip para campos de formulário
+   'roleConfig.tooltip.agentName': 'Defina o nome do seu agente de IA para identificação e reconhecimento',
+   'roleConfig.tooltip.roleTemplate': 'Escolha entre modelos de função predefinidos para configurar rapidamente as configurações básicas do seu agente',
+-  'roleConfig.tooltip.contextProvider': 'Quando o XiaoZhi é ativado, busca dados de sistemas externos e os injeta dinamicamente no prompt do sistema do LLM',
++  'roleConfig.tooltip.contextProvider': 'Quando o Youmi é ativado, busca dados de sistemas externos e os injeta dinamicamente no prompt do sistema do LLM',
+   'roleConfig.tooltip.roleIntroduction': 'Defina o posicionamento do papel, traços de personalidade, normas comportamentais e histórico de conhecimento profissional do agente de IA',
+   'roleConfig.tooltip.memoryHis': 'Resumir conteúdo do registro de chat',
+   'roleConfig.tooltip.languageCode': 'Defina o código de idioma como pt-BR, en-US, etc., usado para reconhecimento de recursos específicos',
+--- a/main/manager-web/src/i18n/en.js
++++ b/main/manager-web/src/i18n/en.js
+@@ -205,7 +205,7 @@
+   'firmwareDialog.firmwareFile': 'Firmware File',
+   'firmwareDialog.clickUpload': 'Click to Upload',
+   'firmwareDialog.uploadTip': 'Only firmware files (.bin/.apk) are supported, and size should not exceed 100MB',
+-  'firmwareDialog.uploadHint': 'Warm reminder: Please upload the pre-merged xiaozhi.bin file, not the merged merged-binary.bin file',
++  'firmwareDialog.uploadHint': 'Warm reminder: Please upload the pre-merged youmi.bin file, not the merged merged-binary.bin file',
+   'firmwareDialog.remark': 'Remark',
+   'firmwareDialog.remarkPlaceholder': 'Please enter remark information',
+   'firmwareDialog.requiredFirmwareName': 'Please enter firmware name (board + version)',
+@@ -299,7 +299,7 @@
+ 
+   // Register page related
+   'register.title': 'Create Account',
+-  'register.welcome': 'Welcome to XiaoZhi AI',
++  'register.welcome': 'Welcome to Youmi AI',
+   'register.usernamePlaceholder': 'Please enter username',
+   'register.mobilePlaceholder': 'Please enter mobile phone number',
+   'register.captchaPlaceholder': 'Please enter captcha',
+@@ -585,7 +585,7 @@
+   'button.close': 'Close',
+ 
+   // System information
+-  'system.name': 'XiaoZhi Service',
++  'system.name': 'Youmi Service',
+ 
+   // Voiceprint related
+   'voiceprint.management': 'Voiceprint Management',
+@@ -724,7 +724,7 @@
+ 
+   // Home page text
+   'home.addAgent': 'Add Agent',
+-  'home.greeting': 'Hi XiaoZhi',
++  'home.greeting': 'Hi Youmi',
+   'home.wish': "Let's have a wonderful day!",
+   'home.languageModel': 'LLM',
+   'home.voiceModel': 'TTS',
+@@ -1009,7 +1009,7 @@
+   // Form field Tooltip descriptions
+   'roleConfig.tooltip.agentName': 'Set the name of your AI agent for identification and recognition',
+   'roleConfig.tooltip.roleTemplate': 'Choose from preset role templates to quickly configure your agent\'s basic settings',
+-  'roleConfig.tooltip.contextProvider': 'When XiaoZhi is awakened, fetch external system data and dynamically inject it into the LLM system prompt',
++  'roleConfig.tooltip.contextProvider': 'When Youmi is awakened, fetch external system data and dynamically inject it into the LLM system prompt',
+   'roleConfig.tooltip.roleIntroduction': 'Define the AI agent\'s role positioning, personality traits, behavioral norms, and professional knowledge background',
+   'roleConfig.tooltip.memoryHis': 'Summarize chat record content',
+   'roleConfig.tooltip.languageCode': 'Set language code such as zh-CN, en-US, etc., used for specific feature recognition',
+--- a/main/manager-web/src/i18n/de.js
++++ b/main/manager-web/src/i18n/de.js
+@@ -205,7 +205,7 @@
+   'firmwareDialog.firmwareFile': 'Firmware-Datei',
+   'firmwareDialog.clickUpload': 'Zum Hochladen klicken',
+   'firmwareDialog.uploadTip': 'Nur Firmware-Dateien (.bin/.apk) werden unterstützt, Größe sollte 100MB nicht überschreiten',
+-  'firmwareDialog.uploadHint': 'Hinweis: Bitte die vorab zusammengeführte xiaozhi.bin-Datei hochladen, nicht die zusammengeführte merged-binary.bin-Datei',
++  'firmwareDialog.uploadHint': 'Hinweis: Bitte die vorab zusammengeführte youmi.bin-Datei hochladen, nicht die zusammengeführte merged-binary.bin-Datei',
+   'firmwareDialog.remark': 'Bemerkung',
+   'firmwareDialog.remarkPlaceholder': 'Bitte Bemerkungsinformationen eingeben',
+   'firmwareDialog.requiredFirmwareName': 'Bitte Firmware-Namen eingeben (Board + Version)',
+@@ -299,7 +299,7 @@
+ 
+   // Register page related
+   'register.title': 'Konto erstellen',
+-  'register.welcome': 'Willkommen bei XiaoZhi AI',
++  'register.welcome': 'Willkommen bei Youmi AI',
+   'register.usernamePlaceholder': 'Bitte Benutzernamen eingeben',
+   'register.mobilePlaceholder': 'Bitte Handynummer eingeben',
+   'register.captchaPlaceholder': 'Bitte Captcha eingeben',
+@@ -585,7 +585,7 @@
+   'button.close': 'Schließen',
+ 
+   // System information
+-  'system.name': 'XiaoZhi Service',
++  'system.name': 'Youmi Service',
+ 
+   // Voiceprint related
+   'voiceprint.management': 'Stimmabdruckverwaltung',
+@@ -724,7 +724,7 @@
+ 
+   // Home page text
+   'home.addAgent': 'Agent hinzufügen',
+-  'home.greeting': 'Hallo XiaoZhi',
++  'home.greeting': 'Hallo Youmi',
+   'home.wish': 'Lassen Sie uns einen wunderbaren Tag haben!',
+   'home.languageModel': 'LLM',
+   'home.voiceModel': 'TTS',
+@@ -1009,7 +1009,7 @@
+   // Tooltip-Beschreibungen für Formularfelder
+   'roleConfig.tooltip.agentName': 'Legen Sie den Namen Ihres KI-Agenten fest, um ihn zu identifizieren und wiederzuerkennen',
+   'roleConfig.tooltip.roleTemplate': 'Wählen Sie aus voreingestellten Rollenvorlagen, um die Grundeinstellungen Ihres Agenten schnell zu konfigurieren',
+-  'roleConfig.tooltip.contextProvider': 'Wenn XiaoZhi aktiviert wird, werden externe Systemdaten abgerufen und dynamisch in die Systemaufforderung des LLM eingefügt',
++  'roleConfig.tooltip.contextProvider': 'Wenn Youmi aktiviert wird, werden externe Systemdaten abgerufen und dynamisch in die Systemaufforderung des LLM eingefügt',
+   'roleConfig.tooltip.roleIntroduction': 'Definieren Sie die Rollenpositionierung, Persönlichkeitsmerkmale, Verhaltensnormen und beruflichen Wissenshintergründe des KI-Agenten',
+   'roleConfig.tooltip.memoryHis': 'Zusammenfassung des Chatverlaufs',
+   'roleConfig.tooltip.languageCode': 'Legen Sie Sprachcodes fest, z.B. de-DE, en-US usw., die für die Erkennung bestimmter Funktionen verwendet werden',
+--- a/main/manager-web/src/i18n/zh_CN.js
++++ b/main/manager-web/src/i18n/zh_CN.js
+@@ -205,7 +205,7 @@
+   'firmwareDialog.firmwareFile': '固件文件',
+   'firmwareDialog.clickUpload': '点击上传',
+   'firmwareDialog.uploadTip': '只能上传固件文件(.bin/.apk)，且不超过100MB',
+-  'firmwareDialog.uploadHint': '温馨提示：请上传合并前的xiaozhi.bin文件，而不是合并后的merged-binary.bin文件',
++  'firmwareDialog.uploadHint': '温馨提示：请上传合并前的youmi.bin文件，而不是合并后的merged-binary.bin文件',
+   'firmwareDialog.remark': '备注',
+   'firmwareDialog.remarkPlaceholder': '请输入备注信息',
+   'firmwareDialog.requiredFirmwareName': '请输入固件名称(板子+版本号)',
+@@ -299,7 +299,7 @@
+ 
+   // 注册页面相关
+   'register.title': '创建账号',
+-  'register.welcome': '欢迎使用小智AI',
++  'register.welcome': '欢迎使用YoumiAI',
+   'register.usernamePlaceholder': '请输入用户名',
+   'register.mobilePlaceholder': '请输入手机号码',
+   'register.captchaPlaceholder': '请输入验证码',
+@@ -585,7 +585,7 @@
+   'button.close': '关闭',
+ 
+   // 系统信息
+-  'system.name': '小智服务',
++  'system.name': 'Youmi服务',
+ 
+   // 声纹相关
+   'voiceprint.management': '声纹管理',
+@@ -724,7 +724,7 @@
+ 
+   // 首页文本
+   'home.addAgent': '添加智能体',
+-  'home.greeting': '你好小智',
++  'home.greeting': '你好Youmi',
+   'home.wish': '让我们度过美好的一天！',
+   'home.languageModel': '语言模型',
+   'home.voiceModel': '音色模型',
+@@ -1009,7 +1009,7 @@
+   // 表单字段 Tooltip 提示说明
+   'roleConfig.tooltip.agentName': '设置智能体的名称，用于标识和识别您的AI助手',
+   'roleConfig.tooltip.roleTemplate': '从预设的角色模板中选择，快速配置智能体的基础设定',
+-  'roleConfig.tooltip.contextProvider': '在小智被唤醒时，获取外部系统的数据，并将其动态注入到大模型的系统提示词中',
++  'roleConfig.tooltip.contextProvider': '在Youmi被唤醒时，获取外部系统的数据，并将其动态注入到大模型的系统提示词中',
+   'roleConfig.tooltip.roleIntroduction': '定义AI助手的角色定位、人格特征、行为规范和专业知识背景',
+   'roleConfig.tooltip.memoryHis': '总结聊天记录内容',
+   'roleConfig.tooltip.languageCode': '设置语言代码，如zh-CN、en-US等，用于特定功能识别',
+--- a/main/manager-web/src/components/VersionFooter.vue
++++ b/main/manager-web/src/components/VersionFooter.vue
+@@ -30,7 +30,7 @@
+   computed: {
+     ...mapState({
+       version: state => state.pubConfig.version,
+-      name: state => state.pubConfig.name,
++      name: state => (state.pubConfig.name || '').replace(/xiaozhi(?:-esp32-server)?|小智/gi, 'Youmi'),
+       beianIcpNum: state => state.pubConfig.beianIcpNum,
+       beianGaNum: state => state.pubConfig.beianGaNum,
+       year: state => state.pubConfig.year

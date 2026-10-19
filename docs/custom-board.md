@@ -1,6 +1,6 @@
 # Custom Board Guide
 
-This guide describes how to add a new board to the XiaoZhi AI voice assistant project. XiaoZhi AI supports 70+ ESP32-series boards; each one lives in its own directory under `main/boards/`.
+This guide describes how to add a new board to the Youmi AI voice assistant project. Youmi AI supports 70+ ESP32-series boards; each one lives in its own directory under `main/boards/`.
 
 ## Important
 
@@ -357,7 +357,7 @@ Emoji collections:
    ```bash
    idf.py menuconfig
    ```
-   Navigate to `Xiaozhi Assistant -> Board Type` and choose your board.
+   Navigate to `Youmi Assistant -> Board Type` and choose your board.
 
 4. Build and flash:
    ```bash
@@ -382,7 +382,7 @@ python scripts/build.py my-custom-board \
 ```
 
 `--language` accepts a locale listed under `main/assets/locales/`.
-`--wake-word` accepts an ESP-SR model name, `nihaoxiaozhi` (which selects the
+`--wake-word` accepts an ESP-SR model name, `nihaoyoumi` (which selects the
 compatible model for the target), or `disabled`. ESP32-C3/C5/C6 targets support
 WakeNet9s (`wn9s_*`) models; ESP32-S3/P4/S31 builds automatically use the AFE
 wake-word engine.
@@ -485,7 +485,7 @@ Supported LCD families include:
 
 ### MCP integration
 
-Any board can register custom tools - speaker control, screen brightness, battery readout, light control, etc. See [MCP IoT control usage](./mcp-usage.md).
+Any board can register custom tools - speaker control, screen brightness, battery readout, light control, etc. See [MCP IoT control usage](mcp-usage.md).
 
 ## Board Class Hierarchy
 

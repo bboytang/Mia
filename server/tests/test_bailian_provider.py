@@ -23,9 +23,9 @@ class BailianProviderTests(unittest.IsolatedAsyncioTestCase):
                 with wave.open(io.BytesIO(base64.b64decode(audio.split(",", 1)[1]))) as wav:
                     self.assertEqual((wav.getframerate(), wav.getnchannels(), wav.getsampwidth()),
                                      (16_000, 1, 2))
-                return httpx.Response(200, json={"choices": [{"message": {"content": "你好 Mia"}}]})
+                return httpx.Response(200, json={"choices": [{"message": {"content": "你好 Youmi"}}]})
             if body["model"] == "qwen-plus":
-                self.assertEqual(body["messages"][1]["content"], "你好 Mia")
+                self.assertEqual(body["messages"][1]["content"], "你好 Youmi")
                 return httpx.Response(200, json={"choices": [{"message": {"content": "你好，我在。"}}]})
             if body["model"] == "qwen3-tts-flash":
                 self.assertEqual(request.url.path,
@@ -41,8 +41,8 @@ class BailianProviderTests(unittest.IsolatedAsyncioTestCase):
         client = httpx.AsyncClient(transport=httpx.MockTransport(respond))
         provider = BailianProvider(api_key="test-key", region="cn-beijing", client=client)
         try:
-            self.assertEqual(await provider.transcribe(bytes(1_920)), "你好 Mia")
-            self.assertEqual(await provider.reply("你好 Mia"), "你好，我在。")
+            self.assertEqual(await provider.transcribe(bytes(1_920)), "你好 Youmi")
+            self.assertEqual(await provider.reply("你好 Youmi"), "你好，我在。")
             self.assertEqual(b"".join([chunk async for chunk in provider.speech("你好，我在。")]),
                              b"\x01\x00\x02\x00")
             self.assertEqual(len(requests), 3)

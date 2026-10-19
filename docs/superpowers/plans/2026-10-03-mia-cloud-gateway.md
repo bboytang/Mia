@@ -1,6 +1,6 @@
-# Mia 云语音网关实施计划
+# Youmi 云语音网关实施计划
 
-目标：在现有协议测试夹具之外，实现可配置的 Ubuntu 小智 WebSocket v1 网关。用户开通 API 后由云端完成中文 ASR、LLM 和 TTS，iOS 客户端无需改变协议。
+目标：在现有协议测试夹具之外，实现可配置的 Ubuntu Youmi WebSocket v1 网关。用户开通 API 后由云端完成中文 ASR、LLM 和 TTS，iOS 客户端无需改变协议。
 
 当前选型：阿里云百炼 `qwen3-asr-flash`、`qwen-plus` 和 `qwen3-tts-flash`。官方 TTS 流的 `audio.data` 是 Base64 编码的 24 kHz/16-bit PCM。地域随 API Key 配置为北京或新加坡；计费和真机延迟仍需验证。
 

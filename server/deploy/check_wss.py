@@ -20,7 +20,7 @@ async def main(endpoint: str):
         reply = json.loads(await asyncio.wait_for(socket.recv(), timeout=10))
         if reply.get("type") != "hello" or not reply.get("session_id"):
             raise RuntimeError(f"网关握手失败: {reply}")
-        print("WSS、令牌和小智协议握手成功")
+        print("WSS、令牌和Youmi协议握手成功")
 
 
 if __name__ == "__main__":

@@ -74,9 +74,9 @@ class VolcengineProtocolTests(unittest.TestCase):
 
     def test_asr_partial_final_and_server_error_decode(self):
         partial = decode_asr_response(asr_response("你好"))
-        final = decode_asr_response(asr_response("你好 Mia", final=True))
+        final = decode_asr_response(asr_response("你好 Youmi", final=True))
         self.assertEqual((partial["text"], partial["final"]), ("你好", False))
-        self.assertEqual((final["text"], final["final"]), ("你好 Mia", True))
+        self.assertEqual((final["text"], final["final"]), ("你好 Youmi", True))
         error_body = gzip.compress(b"{}")
         error = bytes((0x11, 0xF0, 0x11, 0)) + struct.pack(
             ">iI", 45000001, len(error_body)) + error_body
@@ -252,14 +252,14 @@ class VolcengineProviderTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(struct.unpack(">i", regular[4:8])[0], 2)
             self.assertEqual(struct.unpack(">i", final[4:8])[0], -3)
             await socket.send(asr_response("你好"))
-            await socket.send(asr_response("你好 Mia", final=True))
+            await socket.send(asr_response("你好 Youmi", final=True))
 
         server = await serve(handler, "127.0.0.1", 0)
         url = f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}"
         provider = VolcengineProvider("placeholder-ark", "placeholder-voice")
         try:
             with patch("server.volcengine_provider.ASR_URL", url):
-                self.assertEqual(await provider.transcribe(bytes(12_800)), "你好 Mia")
+                self.assertEqual(await provider.transcribe(bytes(12_800)), "你好 Youmi")
         finally:
             await provider.close()
             server.close()

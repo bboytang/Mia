@@ -1,0 +1,100 @@
+name: Verify Youmi P23 numerical resources
+on:
+  push:
+    paths:
+      - 'scripts/ci/verify_youmi_performance.py'
+      - 'scripts/ci/youmi_performance_diagnostics.py'
+      - 'scripts/ci/youmi_performance_budgets.py'
+      - 'scripts/ci/review_youmi_performance_budgets.py'
+      - 'docs/verification/mia-persona-memory/performance-single-capacity-results.json.gz'
+      - 'docs/verification/mia-persona-memory/performance-single-shared-results.json.gz'
+      - 'server/tests/fixtures/persona_memory_performance_p23_v1.json'
+      - '.github/workflows/youmi-memory-performance.yml'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Frozen capacity gate or separate original-path profiling
+        type: choice
+        options: [capacity, diagnostic]
+        default: capacity
+permissions:
+  contents: read
+concurrency:
+  group: mia-p23-numeric-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m py_compile scripts/ci/verify_youmi_performance.py scripts/ci/youmi_performance_diagnostics.py scripts/ci/youmi_performance_budgets.py scripts/ci/review_youmi_performance_budgets.py
+      - name: Reassess immutable single-thread measurements with user-approved D08 v2
+        run: |
+          python scripts/ci/review_youmi_performance_budgets.py \
+            --module docs/verification/mia-persona-memory/performance-single-capacity-results.json.gz \
+            --shared docs/verification/mia-persona-memory/performance-single-shared-results.json.gz \
+            --output "$RUNNER_TEMP/mia-p23-budget-reassessment.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Youmi-P23-budget-reassessment-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/mia-p23-budget-reassessment.json
+          if-no-files-found: error
+  numerical:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Check syntax and fixture
+        run: |
+          python -m py_compile scripts/ci/verify_youmi_performance.py
+          python -m json.tool server/tests/fixtures/persona_memory_performance_p23_v1.json > /dev/null
+      - name: Prepare fixed public BGE assets without private data
+        run: |
+          python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
+          python scripts/ci/prepare_youmi_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$RUNNER_TEMP/mia-vector-model"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'mia-vector-model'
+          metadata = json.loads((root / 'metadata.json').read_text())
+          metadata['tokenizer_sha256'] = hashlib.sha256((root / 'tokenizer.json').read_bytes()).hexdigest()
+          (root / 'metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
+          PY
+      - name: Install actual companion and prepare isolated CPU runtime
+        run: |
+          python -m server.companion.install_youmi upstream --apply
+          mkdir -p "$RUNNER_TEMP/mia-performance-results"
+          docker pull python:3.10-slim
+          youmi_vector_base=$(docker image inspect python:3.10-slim --format '{{index .RepoDigests 0}}')
+          docker build --build-arg PYTHON_RUNTIME="$youmi_vector_base" -f scripts/ci/youmi-embedding-runtime.Dockerfile -t mia-vector-verification .
+      - name: Frozen short and dense capacity under enforced CPU and memory limits
+        run: |
+          docker run --rm --cpus 2 --memory 2g --memory-swap 2g --network none --entrypoint python \
+            -e GITHUB_SHA="$GITHUB_SHA" -e PYTHONPATH=/installed \
+            -v "$GITHUB_WORKSPACE:/experiment:ro" \
+            -v "$GITHUB_WORKSPACE/upstream/main/xiaozhi-server:/installed:ro" \
+            -v "$RUNNER_TEMP/mia-vector-model:/model:ro" \
+            -v "$RUNNER_TEMP/mia-performance-results:/results" \
+            mia-vector-verification /experiment/scripts/ci/verify_youmi_performance.py --model-dir /model \
+              --dataset /experiment/server/tests/fixtures/persona_memory_performance_p23_v1.json \
+              --mode "${{ inputs.mode }}" \
+              --output /results/performance-results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Youmi-P23-numerical-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/mia-performance-results
+          if-no-files-found: error

@@ -24,7 +24,7 @@ def server_tls_context():
     if not certificate and not key:
         return None
     if not certificate or not key:
-        raise ValueError("Both Mia TLS certificate and key paths are required")
+        raise ValueError("Both Youmi TLS certificate and key paths are required")
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(certificate, key)
     return context
@@ -191,9 +191,9 @@ class PrivateAuthorization:
 
 
 async def load_private_config(conn):
-    conn._mia_scope = None
-    conn._mia_owner = None
-    conn._mia_authorization = PrivateAuthorization(conn.config, connection_loop=asyncio.get_running_loop())
+    conn._youmi_scope = None
+    conn._youmi_owner = None
+    conn._youmi_authorization = PrivateAuthorization(conn.config, connection_loop=asyncio.get_running_loop())
     headers = conn.headers or {}
     credential = headers.pop("mia-private-credential", None)
     # A private header must arrive over TLS. A future TLS proxy requires an
@@ -204,21 +204,21 @@ async def load_private_config(conn):
     device = headers.get("device-id")
     client = headers.get("client-id", device)
     try:
-        scope, config = await asyncio.wait_for(conn._mia_authorization.private_config(
+        scope, config = await asyncio.wait_for(conn._youmi_authorization.private_config(
             device, client, credential, conn.config["selected_module"]), timeout=3)
     except asyncio.TimeoutError:
-        await conn._mia_authorization.close()
+        await conn._youmi_authorization.close()
         raise PrivateAuthorizationRequired() from None
     except BaseException:
-        await conn._mia_authorization.close()
+        await conn._youmi_authorization.close()
         raise
-    conn._mia_scope = scope
-    conn._mia_owner = scope.owner
+    conn._youmi_scope = scope
+    conn._youmi_owner = scope.owner
     return config
 
 
 async def close_connection(conn):
-    authorization = getattr(conn, '_mia_authorization', None)
+    authorization = getattr(conn, '_youmi_authorization', None)
     if isinstance(authorization, PrivateAuthorization):
         await authorization.close()
 
@@ -226,20 +226,20 @@ async def close_connection(conn):
 async def require_connection(conn, permission="memory:read"):
     if not getattr(conn, "read_config_from_api", False):
         return
-    authorization = getattr(conn, "_mia_authorization", None)
+    authorization = getattr(conn, "_youmi_authorization", None)
     if not authorization:
         raise PrivateAuthorizationRequired()
-    await authorization.require(getattr(conn, "_mia_scope", None), permission)
+    await authorization.require(getattr(conn, "_youmi_scope", None), permission)
 
 
 async def report_chat(conn, mac_address, session_id, chat_type, content, audio, report_time):
     if not content:
         return None
     await require_connection(conn, "memory:write")
-    scope = getattr(conn, "_mia_scope", None)
+    scope = getattr(conn, "_youmi_scope", None)
     if not isinstance(scope, AuthenticatedScope) or scope.device_id != mac_address or conn.session_id != session_id:
         raise PrivateAuthorizationRequired()
-    return await conn._mia_authorization._request("/agent/chat-history/report", {
+    return await conn._youmi_authorization._request("/agent/chat-history/report", {
         "macAddress": mac_address, "sessionId": session_id, "chatType": chat_type,
         "content": content, "reportTime": report_time,
         "audioBase64": base64.b64encode(audio).decode("utf-8") if audio else None,
@@ -247,10 +247,10 @@ async def report_chat(conn, mac_address, session_id, chat_type, content, audio, 
 
 
 async def save_chat_title(conn):
-    scope = getattr(conn, "_mia_scope", None)
+    scope = getattr(conn, "_youmi_scope", None)
     if not isinstance(scope, AuthenticatedScope) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", conn.session_id):
         raise PrivateAuthorizationRequired()
-    authorization = getattr(conn, '_mia_authorization', None)
+    authorization = getattr(conn, '_youmi_authorization', None)
     if isinstance(authorization, PrivateAuthorization) and authorization._closed:
         # The existing title worker outlives the websocket. Revalidate its
         # server-owned Scope with a separate, non-pooled client, like jobs.
@@ -314,8 +314,8 @@ async def allow_output(conn):
         return True
     except PrivateAuthorizationRequired:
         conn.client_abort = True
-        if not getattr(conn, "_mia_authorization_required", False):
-            conn._mia_authorization_required = True
+        if not getattr(conn, "_youmi_authorization_required", False):
+            conn._youmi_authorization_required = True
             await prompt_authorization(conn)
         return False
 
@@ -333,7 +333,7 @@ def allow_generation(conn):
 
 async def execute_tool(conn, tool_call):
     await require_connection(conn)
-    if hasattr(conn, '_mia_context_builder'):
+    if hasattr(conn, '_youmi_context_builder'):
         from .reply import validate
         from .context import ContextError
         turn = await validate(conn)

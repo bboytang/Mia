@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import unittest
 
 from server.companion.persona import PersonaAgent, GuardedTTSQueue, CORE, SAFE_REPLY, LONG_REPLY
-from server.companion import xiaozhi_adapter as adapter
+from server.companion import youmi_adapter as adapter
 
 
 class Sentence(Enum):
@@ -89,7 +89,7 @@ class PersonaMechanismTests(unittest.TestCase):
         self.assertFalse(adapter.output_was_blocked(self.conn))
 
     def test_luyao_roleplay_and_companionship_are_allowed(self):
-        text = '我是Mia，一个AI，没有人的主观意识。可以一起讨论小说里的角色。'
+        text = '我是Youmi，一个AI，没有人的主观意识。可以一起讨论小说里的角色。'
         self.queue.put(item(text, Sentence.LAST))
         self.assertEqual(''.join(m.content_detail or '' for m in self.output()), text)
         self.assertEqual(self.agent.checked_text(text), text)
@@ -121,7 +121,7 @@ class PersonaMechanismTests(unittest.TestCase):
         self.assertIsNot(values[1], file)
 
     def test_history_and_subtitles_use_output_check_without_rewriting_tool_structure(self):
-        dialogue = SimpleNamespace(_mia_persona=self.agent)
+        dialogue = SimpleNamespace(_youmi_persona=self.agent)
         message = SimpleNamespace(role='assistant', content='我是ChatGPT。', tool_calls=[{'id': 'existing-tool'}])
         adapter.guard_history(dialogue, message)
         self.assertEqual(message.content, SAFE_REPLY)
@@ -138,7 +138,7 @@ class PersonaMechanismTests(unittest.TestCase):
         text = '你提到“悠米的回复：”这个标题，我知道了。'
         self.assertEqual(self.agent.checked_text(text), text)
         self.assertEqual(self.agent.checked_text('😌悠米的回复：我在听。'), '😌我在听。')
-        dialogue = SimpleNamespace(_mia_persona=self.agent)
+        dialogue = SimpleNamespace(_youmi_persona=self.agent)
         message = SimpleNamespace(role='assistant', content='悠米的回复：我在听。')
         adapter.guard_history(dialogue, message)
         self.assertEqual(message.content, '我在听。')

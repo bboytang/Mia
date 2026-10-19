@@ -1,0 +1,87 @@
+name: Verify Youmi persona events and emotion observations
+on:
+  push:
+    paths:
+      - 'scripts/ci/verify_youmi_continuity_provider.py'
+      - '.github/workflows/youmi-memory-continuity.yml'
+  pull_request:
+    paths:
+      - 'scripts/ci/verify_youmi_continuity_provider.py'
+      - '.github/workflows/youmi-memory-continuity.yml'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Dialogue, one real-date observation, or audit a sufficient real-date collection
+        type: choice
+        options: [dialogue, daily, audit]
+        default: dialogue
+      previous_run:
+        description: Previous successful daily run (required for audit; empty only to start daily)
+        type: string
+        default: ''
+permissions:
+  contents: read
+  actions: read
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m py_compile scripts/ci/verify_youmi_continuity_provider.py
+  live:
+    if: github.event_name == 'workflow_dispatch'
+    needs: syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      MIA_CONTINUITY_DIR: /tmp/mia-continuity
+      MIA_CONTINUITY_MODE: ${{ inputs.mode }}
+      MIA_CONTINUITY_PREVIOUS_RUN: ${{ inputs.previous_run }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python -m pip install openai==2.8.1 httpx==0.28.1 numpy==1.26.4
+      - run: python -m server.companion.install_youmi upstream --apply
+      - name: Restore only a verified preceding real-date test artifact
+        if: (inputs.mode == 'daily' && inputs.previous_run != '') || inputs.mode == 'audit'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          run = os.environ['MIA_CONTINUITY_PREVIOUS_RUN']
+          assert run.isdigit()
+          repo = os.environ['GITHUB_REPOSITORY']
+          data = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/actions/runs/{run}']))
+          assert data['conclusion'] == 'success' and data['head_branch'] == os.environ['GITHUB_REF_NAME']
+          assert data['path'] == '.github/workflows/youmi-memory-continuity.yml'
+          root = pathlib.Path(os.environ['MIA_CONTINUITY_DIR'])
+          subprocess.run(['gh', 'run', 'download', run, '--name', f"Youmi-continuity-{data['head_sha']}-{run}", '--dir', str(root)], check=True)
+          report = json.loads((root / 'provider-results.json').read_text())
+          assert report['passed'] and report['mode'] == 'daily' and str(report['collection_run_id']) == run
+          assert report['state_sha256'] == hashlib.sha256((root / 'state.sqlite3').read_bytes()).hexdigest()
+          PY
+      - name: Bounded real provider evidence, no automatic retries or deployment
+        env:
+          MIA_CONTINUITY_UPSTREAM: ${{ github.workspace }}/upstream
+          MIA_TEST_LLM_API_KEY: ${{ secrets.MIA_TEST_LLM_API_KEY }}
+          MIA_TEST_LLM_BASE_URL: ${{ secrets.MIA_TEST_LLM_BASE_URL }}
+          MIA_TEST_LLM_MODEL: ${{ secrets.MIA_TEST_LLM_MODEL }}
+        run: timeout 480s python scripts/ci/verify_youmi_continuity_provider.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Youmi-continuity-${{ github.sha }}-${{ github.run_id }}
+          path: /tmp/mia-continuity
+          if-no-files-found: warn
+          retention-days: 90

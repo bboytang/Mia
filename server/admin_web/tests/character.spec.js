@@ -26,8 +26,8 @@ async function setup(page) {
     await route.fulfill({ json: { code: 0, data: state } });
   });
   await page.goto('https://mia-fixture.invalid/#/home');
-  await page.getByRole('button', { name: 'Mia 功能管理', exact: true }).first().click();
-  const dialog = page.locator('.el-dialog').filter({ hasText: 'Mia 功能管理' });
+  await page.getByRole('button', { name: 'Youmi 功能管理', exact: true }).first().click();
+  const dialog = page.locator('.el-dialog').filter({ hasText: 'Youmi 功能管理' });
   return { dialog, state, backend, requests };
 }
 
@@ -46,7 +46,7 @@ test('baseline is an explicit owner draft, edits save to backend and survive reo
   expect(state.character.enabled).toBe(true);
   expect(state.emotion_tracking.enabled).toBe(0);
   await dialog.getByRole('button', { name: '关闭', exact: true }).click();
-  await page.getByRole('button', { name: 'Mia 功能管理', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Youmi 功能管理', exact: true }).first().click();
   await expect(dialog.getByRole('textbox', { name: '亲昵称呼', exact: true })).toHaveValue('哥哥呀');
   await dialog.locator('.el-checkbox').filter({ hasText: '启用性格与情绪基线' }).click();
   await dialog.getByRole('button', { name: '保存性格与情绪基线' }).click();

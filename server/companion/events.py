@@ -11,7 +11,7 @@ from .persona import PersonaGuardrail
 INFLUENCE = {
     'continuity': 'Continue this relationship from the cited interaction and relevant memories in your own voice.',
     'boundary': 'Respect this evidenced interaction boundary while keeping the fixed core and tool permissions.',
-    'reflection': 'Express your own perspective on this topic as Mia, with the cited interaction as context.',
+    'reflection': 'Express your own perspective on this topic as Youmi, with the cited interaction as context.',
 }
 
 
@@ -76,7 +76,7 @@ def context(store, owner, query, facts, *, session_id=None, turn_id=None):
         return active
     supporting = [fact for fact in facts if _relevant(query, fact)]
     kind = None
-    if re.search(r'^(?:(?:米娅|Mia)[,， ]*)?(?:请|以后请|我希望你|我不希望你).{0,64}(?:不要|(?<!分)别|不再|尊重|称呼|叫我)', query):
+    if re.search(r'^(?:(?:米娅|Youmi)[,， ]*)?(?:请|以后请|我希望你|我不希望你).{0,64}(?:不要|(?<!分)别|不再|尊重|称呼|叫我)', query):
         kind = 'boundary'
     elif supporting and re.search(r'还记得|记得我|上次|之前.{0,8}说', query):
         kind = 'continuity'
@@ -134,7 +134,7 @@ def complete(store, owner, session_id, turn_id, event_ids, assistant):
                 'ON m.id=e.memory_id WHERE e.event_id=? AND m.owner=?', (event_id, owner))]
             proved = any(_relevant(assistant, fact) for fact in facts)
             if row['event_type'] == 'reflection':
-                proved = proved and bool(re.search(r'我|Mia|米娅|挺|看着|看起来|比较|更喜欢', assistant))
+                proved = proved and bool(re.search(r'我|Youmi|米娅|挺|看着|看起来|比较|更喜欢', assistant))
         if proved:
             store.db.execute('UPDATE mia_event_interactions SET assistant_excerpt=? WHERE event_id=?', (assistant, event_id))
             store.db.execute("UPDATE mia_events SET state='active',version=version+1,updated_at=? WHERE id=?", (int(store.clock()), event_id))

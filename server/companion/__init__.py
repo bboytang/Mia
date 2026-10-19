@@ -1,4 +1,4 @@
-"""Persistent Mia memories shared by authenticated server integrations."""
+"""Persistent Youmi memories shared by authenticated server integrations."""
 
 from .memory import EXTRACTION_INSTRUCTIONS, MemoryError, MemoryStore, parse_extraction
 

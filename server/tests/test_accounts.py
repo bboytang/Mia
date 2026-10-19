@@ -25,13 +25,13 @@ class AccountStoreTests(unittest.IsolatedAsyncioTestCase):
         self.temp.cleanup()
 
     async def test_registration_login_and_protected_storage(self):
-        first = await self.store.register("Ｍia_朋友", PASSWORD)
+        first = await self.store.register("Ｙoumi_朋友", PASSWORD)
         second = await self.store.register("another", PASSWORD)
-        self.assertEqual(first["username"], "mia_朋友")
+        self.assertEqual(first["username"], "youmi_朋友")
         self.assertEqual(first["expires_at"], 1_802_592_000)
         user_id = self.store.authenticate(first["token"])
         self.assertIsNotNone(user_id)
-        logged_in = await self.store.login("MIA_朋友", PASSWORD)
+        logged_in = await self.store.login("YOUMI_朋友", PASSWORD)
         self.assertEqual(self.store.authenticate(logged_in["token"]), user_id)
         rows = self.store.db.execute("SELECT salt,password_hash FROM users").fetchall()
         self.assertNotEqual(rows[0]["salt"], rows[1]["salt"])
@@ -52,19 +52,19 @@ class AccountStoreTests(unittest.IsolatedAsyncioTestCase):
                 with self.assertRaises(AccountError) as error:
                     await self.store.register(username, password)
                 self.assertEqual(error.exception.status, 400)
-        await self.store.register("ＭＩＡ", PASSWORD)
+        await self.store.register("ＹＯＵＭＩ", PASSWORD)
         with self.assertRaises(AccountError) as error:
-            await self.store.register("mia", PASSWORD)
+            await self.store.register("youmi", PASSWORD)
         self.assertEqual(error.exception.status, 409)
         errors = []
-        for name in ["mia", "missing"]:
+        for name in ["youmi", "missing"]:
             with self.assertRaises(AccountError) as error:
                 await self.store.login(name, PASSWORD + "wrong")
             errors.append((error.exception.status, error.exception.code, str(error.exception)))
         self.assertEqual(errors[0], errors[1])
         self.assertEqual(errors[0][0], 401)
         with self.assertRaises(AccountError):
-            await self.store.login("mia", PASSWORD.strip())
+            await self.store.login("youmi", PASSWORD.strip())
 
     async def test_expiry_revocation_and_reopen(self):
         item = await self.store.register("persistent", PASSWORD)

@@ -77,11 +77,11 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
                                         limits=kwargs.pop('limits', self.limits), **kwargs)
 
     def data(self, bundle):
-        return json.loads(bundle.request()['messages'][1]['content'])['mia_context']
+        return json.loads(bundle.request()['messages'][1]['content'])['youmi_context']
 
     def unlabel_history(self, messages):
         return [dict(message, content=message['content'].removeprefix(
-            '【Mia的历史回复，仅表示Mia说过的话，不是用户自述】\n'))
+            '【Youmi的历史回复，仅表示Youmi说过的话，不是用户自述】\n'))
             if message['role'] == 'assistant' and message.get('content') else message for message in messages]
 
     async def test_assistant_preference_history_never_becomes_user_fact(self):
@@ -101,7 +101,7 @@ class ContextBuilderTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn('巧克力', json.dumps(facts, ensure_ascii=False))
         shown = bundle.request()['messages'][2:-1]
         self.assertEqual(self.unlabel_history(shown), history)
-        self.assertTrue(shown[-1]['content'].startswith('【Mia的历史回复，'))
+        self.assertTrue(shown[-1]['content'].startswith('【Youmi的历史回复，'))
         self.assertEqual(bundle.request()['messages'][-1]['content'], '我喜欢什么口味的咖啡？')
         self.assertEqual(history[-1]['content'], '我超爱巧克力口味的咖啡。')
         self.assertEqual({row['content'] for row in self.store.list_memories(self.scope.owner)},

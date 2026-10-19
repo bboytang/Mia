@@ -1,6 +1,6 @@
 # FoloToy AI Passport (ai-passport)
 
-Board definition that lets the XiaoZhi voice assistant run on the
+Board definition that lets the Youmi voice assistant run on the
 [FoloToy AI Passport](https://github.com/FoloToy/ai-passport) wearable.
 
 ## Hardware
@@ -32,14 +32,14 @@ Outputs `build/merged-binary.bin` (8 MB flash, USB Serial/JTAG console).
 
 ## Controls
 
-The three physical keys map to XiaoZhi's voice-assistant actions:
+The three physical keys map to Youmi's voice-assistant actions:
 
 - **OK** — single click: toggle the chat state (or enter Wi-Fi config mode
   while starting up)
 - **UP** — single click: volume +10; long press: max volume
 - **DOWN** — single click: volume -10; long press: mute
 
-Because the ladder shares one ADC pin, XiaoZhi reads it as three
+Because the ladder shares one ADC pin, Youmi reads it as three
 independent ADC buttons (the same pattern as the ESP-BOX-Lite).
 
 ## Power management

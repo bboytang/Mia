@@ -1,6 +1,6 @@
 # 自定义开发板指南
 
-本指南介绍如何为小智AI语音聊天机器人项目定制一个新的开发板初始化程序。小智AI支持70多种ESP32系列开发板，每个开发板的初始化代码都放在对应的目录下。
+本指南介绍如何为YoumiAI语音聊天机器人项目定制一个新的开发板初始化程序。YoumiAI支持70多种ESP32系列开发板，每个开发板的初始化代码都放在对应的目录下。
 
 ## 重要提示
 
@@ -216,7 +216,7 @@ private:
     void InitializeDisplay() {
         esp_lcd_panel_io_handle_t panel_io = nullptr;
         esp_lcd_panel_handle_t panel = nullptr;
-        
+
         esp_lcd_panel_io_spi_config_t io_config = {};
         io_config.cs_gpio_num = DISPLAY_SPI_CS_PIN;
         io_config.dc_gpio_num = DISPLAY_DC_PIN;
@@ -232,17 +232,17 @@ private:
         panel_config.rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB;
         panel_config.bits_per_pixel = 16;
         ESP_ERROR_CHECK(esp_lcd_new_panel_st7789(panel_io, &panel_config, &panel));
-        
+
         esp_lcd_panel_reset(panel);
         esp_lcd_panel_init(panel);
         esp_lcd_panel_invert_color(panel, true);
         esp_lcd_panel_swap_xy(panel, DISPLAY_SWAP_XY);
         esp_lcd_panel_mirror(panel, DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y);
-        
+
         // 创建显示屏对象
         display_ = new SpiLcdDisplay(panel_io, panel,
-                                    DISPLAY_WIDTH, DISPLAY_HEIGHT, 
-                                    DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y, 
+                                    DISPLAY_WIDTH, DISPLAY_HEIGHT,
+                                    DISPLAY_OFFSET_X, DISPLAY_OFFSET_Y,
                                     DISPLAY_MIRROR_X, DISPLAY_MIRROR_Y, DISPLAY_SWAP_XY);
     }
 
@@ -265,16 +265,16 @@ public:
     // 获取音频编解码器
     virtual AudioCodec* GetAudioCodec() override {
         static Es8311AudioCodec audio_codec(
-            codec_i2c_bus_, 
-            I2C_NUM_0, 
-            AUDIO_INPUT_SAMPLE_RATE, 
+            codec_i2c_bus_,
+            I2C_NUM_0,
+            AUDIO_INPUT_SAMPLE_RATE,
             AUDIO_OUTPUT_SAMPLE_RATE,
-            AUDIO_I2S_GPIO_MCLK, 
-            AUDIO_I2S_GPIO_BCLK, 
-            AUDIO_I2S_GPIO_WS, 
-            AUDIO_I2S_GPIO_DOUT, 
+            AUDIO_I2S_GPIO_MCLK,
+            AUDIO_I2S_GPIO_BCLK,
+            AUDIO_I2S_GPIO_WS,
+            AUDIO_I2S_GPIO_DOUT,
             AUDIO_I2S_GPIO_DIN,
-            AUDIO_CODEC_PA_PIN, 
+            AUDIO_CODEC_PA_PIN,
             AUDIO_CODEC_ES8311_ADDR);
         return &audio_codec;
     }
@@ -283,7 +283,7 @@ public:
     virtual Display* GetDisplay() override {
         return display_;
     }
-    
+
     // 获取背光控制
     virtual Backlight* GetBacklight() override {
         static PwmBacklight backlight(DISPLAY_BACKLIGHT_PIN, DISPLAY_BACKLIGHT_OUTPUT_INVERT);
@@ -307,9 +307,9 @@ choice BOARD_TYPE
     default BOARD_TYPE_BREAD_COMPACT_WIFI
     help
         Board type. 开发板类型
-    
+
     # ... 其他开发板选项 ...
-    
+
     config BOARD_TYPE_MY_CUSTOM_BOARD
         bool "My Custom Board (我的自定义开发板)"
         depends on IDF_TARGET_ESP32S3  # 根据你的目标芯片修改
@@ -355,10 +355,10 @@ endif()
    ```bash
    # 对于 ESP32-S3
    idf.py set-target esp32s3
-   
+
    # 对于 ESP32-C3
    idf.py set-target esp32c3
-   
+
    # 对于 ESP32
    idf.py set-target esp32
    ```
@@ -372,8 +372,8 @@ endif()
    ```bash
    idf.py menuconfig
    ```
-   
-   在菜单中导航到：`Xiaozhi Assistant` -> `Board Type`，选择你的自定义开发板。
+
+   在菜单中导航到：`Youmi Assistant` -> `Board Type`，选择你的自定义开发板。
 
 4. **编译和烧录**：
    ```bash
@@ -398,7 +398,7 @@ python scripts/build.py my-custom-board \
 ```
 
 `--language` 接受 `main/assets/locales/` 下已有的 locale；`--wake-word`
-接受 ESP-SR 模型名、`nihaoxiaozhi`（自动选择与目标芯片兼容的模型）或
+接受 ESP-SR 模型名、`nihaoyoumi`（自动选择与目标芯片兼容的模型）或
 `disabled`。ESP32-C3/C5/C6 仅支持 WakeNet9s（`wn9s_*`）模型；
 ESP32-S3/P4/S31 构建会自动使用 AFE 唤醒引擎。
 

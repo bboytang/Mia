@@ -1,10 +1,10 @@
-# 小智管理后台统一响应式改造
+# Youmi管理后台统一响应式改造
 
 本目录是现有管理后台的源码补丁和验证工具，不是第二套后台。
 
-## Mia 功能管理
+## Youmi 功能管理
 
-智能体卡片的“Mia 功能管理”读取服务器实际状态，分别控制自动保存记忆、回复时使用长期记忆、人格成长、互动事件延续，以及用户本人明确授权的长期心情追踪。角色设定仍由用户在原角色编辑页保存，打开功能管理不会自动填充或修改角色。关闭开关保留已有数据；成长和事件关闭时停止新增并停止参与后续回复。设置使旧上下文失效，已发送的音频不能撤回。
+智能体卡片的“Youmi 功能管理”读取服务器实际状态，分别控制自动保存记忆、回复时使用长期记忆、人格成长、互动事件延续，以及用户本人明确授权的长期心情追踪。角色设定仍由用户在原角色编辑页保存，打开功能管理不会自动填充或修改角色。关闭开关保留已有数据；成长和事件关闭时停止新增并停止参与后续回复。设置使旧上下文失效，已发送的音频不能撤回。
 
 请求复用原登录与同源 HTTPS，经 manager 核验智能体所有者后代理到原语音服务 HTTP 入口；浏览器不会获得服务端密钥，也不读取 SQLite 文件。每次操作由语音端向 manager 再次核验归属，设置保存在原 SQLite 的 V5 增量表中。保存失败或结果不明时界面不显示成功，需刷新核对。回退必须保留 V5 读取能力，不能让 V4 原二进制直接打开升级后的数据库。
 
@@ -16,13 +16,13 @@
 不要修改生产压缩 JS。将上游源码检出到独立目录后执行：
 
 ```sh
-python3 server/admin_web/apply.py /path/to/xiaozhi-source
-python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
+python3 server/admin_web/apply.py /path/to/youmi-source
+python3 server/admin_web/apply.py /path/to/youmi-source --apply
 ```
 
 默认仅检查，不写文件；逐个校验修改文件的原始 SHA256，发现已有定制或重复安装立即拒绝覆盖。审阅自定义差异后再人工合并，不通过重置生产代码来满足校验。
 
-`.github/workflows/mia-admin-responsive.yml` 在 GitHub Actions 完成：原版构建与生产静态文件对比、原有单元/契约/快照回归、新版生产构建、Chromium/Android Chrome 模拟、WebKit/iOS 模拟、Firefox 的全路由尺寸和交互测试。产物包含可维护的完整前端源码、静态文件、校验值、截图、报告和提交标记。测试使用合成账号与数据，不访问生产或调用模型服务。
+`.github/workflows/youmi-admin-responsive.yml` 在 GitHub Actions 完成：原版构建与生产静态文件对比、原有单元/契约/快照回归、新版生产构建、Chromium/Android Chrome 模拟、WebKit/iOS 模拟、Firefox 的全路由尺寸和交互测试。产物包含可维护的完整前端源码、静态文件、校验值、截图、报告和提交标记。测试使用合成账号与数据，不访问生产或调用模型服务。
 
 ## 修改范围
 
@@ -44,10 +44,10 @@ python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
 
 ## 部署前检查和回滚
 
-当前生产Web镜像同时包含 Nginx 静态前端和 Java manager-api。前端发布必须保留运行镜像中的现有 JAR、启动脚本、Nginx API代理、Compose覆盖、端口、环境与数据卷；不要重新构建上游Java以覆盖Mia认证扩展。
+当前生产Web镜像同时包含 Nginx 静态前端和 Java manager-api。前端发布必须保留运行镜像中的现有 JAR、启动脚本、Nginx API代理、Compose覆盖、端口、环境与数据卷；不要重新构建上游Java以覆盖Youmi认证扩展。
 
 1. 核对CI对应提交全部通过，查看 `baseline/comparison.txt`。字节级不匹配时，必须查看 `baseline/semantic-comparison.json`：编译模块、依赖关系和CSS规则均需匹配；否则先完成实际定制核对，不直接替换现有前端。
-2. 再次记录运行Web镜像 ID、`/app/xiaozhi-esp32-api.jar` SHA256，以及生产静态文件清单；生产变化后重新核对。给当前镜像加唯一回滚标签，备份三份Compose和Nginx配置到非公开受保护目录。
+2. 再次记录运行Web镜像 ID、`/app/youmi-esp32-api.jar` SHA256，以及生产静态文件清单；生产变化后重新核对。给当前镜像加唯一回滚标签，备份三份Compose和Nginx配置到非公开受保护目录。
 3. 从已验证的CI产物准备新版本。派生镜像以**当前生产Web镜像ID**为基础，只复制前端静态资源。保留旧的 `js/`、`css/`、`img/`、`fonts/` 带hash资源供已有桌面会话延迟加载；用新版 `index.html` 和 Service Worker 清单提供新入口。不要在发布时清空旧资源。
 4. 在隔离环境启动候选镜像，用合成数据检查路由、登录、功能与布局；校验新旧JAR一致、API路径与监听端口一致。不要让隔离测试进程连接生产数据库或使用生产密钥。
 5. 发布前安排短暂维护窗口：现有Web容器含Java，替换Web镜像会短暂重启管理API。仅修改 `docker-compose.mia.yml` 中 `xiaozhi-esp32-server-web.image`，保留其他配置。使用现有三份Compose，仅重建Web：
@@ -60,7 +60,7 @@ python3 server/admin_web/apply.py /path/to/xiaozhi-source --apply
 6. 检查 `http://43.143.230.174:8002/` 与 `/xiaozhi/` 代理、已登录会话、普通用户与管理员权限、设备操作及配置保存。确认语音/MySQL/Redis容器没有被重建。HTTPS用户还需检查Service Worker更新；首次打开新版本可能需要刷新。
 7. 失败时恢复本次备份的Compose镜像配置，使用同一命令仅重建Web。确认原镜像和JAR恢复；不回滚数据库，不删除记忆或设备绑定。
 
-本补丁不自动部署、替换文件、重启服务或操作数据。回滚基于**本次发布前**镜像，不能回滚到Mia扩展前的旧Web镜像。
+本补丁不自动部署、替换文件、重启服务或操作数据。回滚基于**本次发布前**镜像，不能回滚到Youmi扩展前的旧Web镜像。
 
 ## 真机验收
 

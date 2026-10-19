@@ -1,4 +1,4 @@
-"""Volcengine ASR, Ark chat, and Seed TTS for the Mia gateway."""
+"""Volcengine ASR, Ark chat, and Seed TTS for the Youmi gateway."""
 
 import asyncio
 import gzip
@@ -154,7 +154,7 @@ class VolcengineProvider:
             headers={"Authorization": f"Bearer {self.ark_api_key}"},
             json={"model": self.chat_model, "thinking": {"type": "disabled"},
                   "messages": [
-                      {"role": "system", "content": "你是 Mia，亲切、简洁的中文语音伙伴。回答适合直接朗读，通常不超过两句话。"},
+                      {"role": "system", "content": "你是 Youmi，亲切、简洁的中文语音伙伴。回答适合直接朗读，通常不超过两句话。"},
                       {"role": "user", "content": user_text},
                   ], "max_tokens": 180},
         )

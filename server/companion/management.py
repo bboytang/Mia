@@ -42,7 +42,7 @@ class ManagementHandler:
             if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent', 'reset_mia_emotion', 'memory_list', 'memory_delete', 'set_character'}:
                 raise ValueError()
             if self.store is None:
-                from .xiaozhi_adapter import _store
+                from .youmi_adapter import _store
                 store = _store()
             else:
                 store = self.store

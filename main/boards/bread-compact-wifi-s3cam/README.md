@@ -3,7 +3,7 @@
 注意因为摄像头占用IO较多，所以占用了ESP32S3的USB 19 20两个引脚
 连线方式参考config.h文件中对引脚的定义
 
- 
+
 # 编译配置命令
 
 **配置编译目标为 ESP32S3：**
@@ -21,7 +21,7 @@ idf.py menuconfig
 **选择板子：**
 
 ```bash
-Xiaozhi Assistant -> Board Type ->面包板新版接线（WiFi）+ LCD + Camera
+Youmi Assistant -> Board Type ->面包板新版接线（WiFi）+ LCD + Camera
 ```
 
 **编译烧入：**

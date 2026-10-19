@@ -17,7 +17,7 @@ from server.tests.test_companion_request_accounting import MODULE, SDKFixturePro
 
 class BehaviorObserverTests(unittest.TestCase):
     def test_sdk_observer_preserves_contract_and_raw_output(self):
-        source = Path(__file__).resolve().parents[2] / 'scripts/ci/verify_mia_behavior.py'
+        source = Path(__file__).resolve().parents[2] / 'scripts/ci/verify_youmi_behavior.py'
         selected = next(n for n in ast.parse(source.read_text()).body
                         if isinstance(n, ast.FunctionDef) and n.name == 'selected_provider')
         http = []
@@ -41,7 +41,7 @@ class BehaviorObserverTests(unittest.TestCase):
         configuration = {'api_key': 'fixture-only', 'model_name': 'glm-4-flash-250414',
             'base_url': 'https://fixture.invalid/v4', 'type': 'openai'}
         with patch.dict(sys.modules, {MODULE: SimpleNamespace(LLMProvider=SDKFixtureProvider),
-                                     'mia_model_comparison': helper}), patch.dict(os.environ, {
+                                     'youmi_model_comparison': helper}), patch.dict(os.environ, {
                 'MIA_TEST_LLM_API_KEY': configuration['api_key'],
                 'MIA_TEST_LLM_MODEL': configuration['model_name'],
                 'MIA_TEST_LLM_BASE_URL': configuration['base_url']}):

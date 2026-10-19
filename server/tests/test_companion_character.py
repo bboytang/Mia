@@ -32,7 +32,7 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('CHARACTER_BASELINE_JSON', system)
         self.assertIn('悠米', system)
         self.assertIn('哥哥', system)
-        self.assertNotIn('你的名字是 Mia', system)
+        self.assertNotIn('你的名字是 Youmi', system)
         self.assertIn('原角色配置保留，不自动改写', bundle.request_json)
         self.assertEqual(self.data(bundle)['facts'], [])
         self.assertEqual(self.store.list_memories(self.scope.owner), [])
@@ -62,7 +62,7 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.save();features.update(self.store, self.scope.owner, {'companion_emotion': True})
         bundle = await self.build(query='今天下雨了')
         self.assertEqual(bundle.request_json.count('哥哥'), 1)
-        self.assertNotIn('character', self.data(bundle)['mia_affect'])
+        self.assertNotIn('character', self.data(bundle)['youmi_affect'])
         self.assertEqual(json.loads(bundle.inputs_json)['character']['address'], '哥哥')
 
     async def test_disposition_changes_actual_affect_and_anger_repairs_gradually_without_erasing_profile(self):

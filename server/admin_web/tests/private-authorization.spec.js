@@ -32,7 +32,7 @@ test('console code and revoke reuse login, preserve binding and clear ephemeral 
   });
   await page.goto('https://mia-fixture.invalid/#/device-management?agentId=test-agent');
   await page.getByRole('button', { name: '私有授权码', exact: true }).first().click();
-  const dialog = page.locator('.el-dialog').filter({ hasText: 'Mia 私有授权码' });
+  const dialog = page.locator('.el-dialog').filter({ hasText: 'Youmi 私有授权码' });
   await expect(dialog).toBeVisible();
   await expect(dialog.locator('input')).toHaveValue('b'.repeat(22));
   expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain('b'.repeat(22));
@@ -71,7 +71,7 @@ test('hardware approval sends the physical code through the existing owner endpo
   const prompt = page.locator('.el-message-box');
   await prompt.locator('input').fill(code);
   await prompt.getByRole('button', { name: /确定/ }).click();
-  await expect(page.getByText('硬件授权已确认，请等待 Mia 完成安全连接。', { exact: true })).toBeVisible();
+  await expect(page.getByText('硬件授权已确认，请等待 Youmi 完成安全连接。', { exact: true })).toBeVisible();
   expect(requests).toEqual([{ body: { device_id: device.id, hardware_code: code },
     authorization: 'Bearer synthetic-test-token' }]);
   expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(code);

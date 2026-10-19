@@ -1,0 +1,182 @@
+name: Verify Youmi P23 shared service envelope
+on:
+  push:
+    paths:
+      - 'scripts/ci/verify_youmi_shared_envelope.py'
+      - 'scripts/ci/verify_youmi_app_lifecycle.py'
+      - 'scripts/ci/youmi_reply_latency.py'
+      - 'scripts/ci/youmi_stage_trace.py'
+      - 'scripts/ci/youmi_v2_diagnostics.py'
+      - 'scripts/ci/tests/test_youmi_stage_trace.py'
+      - 'scripts/ci/youmi_tts_boundaries.py'
+      - 'scripts/ci/tests/test_youmi_tts_boundaries.py'
+      - 'scripts/ci/youmi_tts_timing.py'
+      - 'scripts/ci/youmi_worker_competition.py'
+      - 'scripts/ci/youmi_worker_faults.py'
+      - 'scripts/ci/youmi_worker_fairness.py'
+      - 'scripts/ci/youmi_extraction_diagnostics.py'
+      - 'scripts/ci/youmi_worker_shutdown.py'
+      - 'scripts/ci/tests/test_youmi_worker_shutdown.py'
+      - 'scripts/ci/tests/test_youmi_extraction_diagnostics.py'
+      - 'scripts/ci/tests/test_youmi_worker_fairness.py'
+      - 'server/tests/fixtures/persona_memory_worker_p23_v1.json'
+      - 'scripts/ci/tests/test_youmi_worker_faults.py'
+      - 'scripts/ci/tests/test_youmi_worker_competition.py'
+      - 'scripts/ci/youmi_behavior_runtime.py'
+      - 'scripts/ci/youmi_thread_diagnostics.py'
+      - 'scripts/ci/youmi_query_scheduling.py'
+      - 'scripts/ci/tests/test_youmi_query_scheduling.py'
+      - 'scripts/ci/tests/test_youmi_app_lifecycle.py'
+      - 'scripts/ci/tests/test_youmi_reply_latency.py'
+      - 'scripts/ci/tests/test_youmi_tts_timing.py'
+      - 'scripts/ci/youmi_performance_budgets.py'
+      - 'scripts/ci/run_youmi_shared_envelope.sh'
+      - 'server/companion/manager_tests/YoumiPerformanceIntegrationTest.java'
+      - '.github/workflows/youmi-memory-shared-performance.yml'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Capacity gate or separate shared-resource hot-path diagnosis
+        type: choice
+        options: [capacity, diagnostic, threads, scheduling, app-lifecycle, reply-smoke, reply-stages, reply-stages-replay, reply-latency, worker-smoke, worker-extraction, worker-faults, worker-fairness, worker-fairness-diagnostic, worker-shutdown]
+        default: capacity
+permissions:
+  contents: read
+concurrency:
+  group: mia-p23-shared-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: |
+          python -m py_compile scripts/ci/verify_youmi_shared_envelope.py scripts/ci/youmi_thread_diagnostics.py scripts/ci/youmi_query_scheduling.py
+          python -m py_compile scripts/ci/verify_youmi_app_lifecycle.py
+          python -m py_compile scripts/ci/youmi_worker_shutdown.py
+          python -m py_compile scripts/ci/youmi_reply_latency.py
+          python -m py_compile scripts/ci/youmi_stage_trace.py
+          python -m py_compile scripts/ci/youmi_v2_diagnostics.py
+          python -m py_compile scripts/ci/youmi_tts_boundaries.py
+          python -m py_compile scripts/ci/youmi_tts_timing.py scripts/ci/youmi_worker_competition.py scripts/ci/youmi_worker_faults.py scripts/ci/youmi_worker_fairness.py scripts/ci/youmi_extraction_diagnostics.py
+          python -m unittest discover -s scripts/ci/tests -p 'test_youmi_*.py' -v
+          bash -n scripts/ci/run_youmi_shared_envelope.sh
+  shared:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      MIA_SCOPE_UPSTREAM: ${{ github.workspace }}/upstream
+      MIA_P23_REPORT_DIR: /tmp/mia-p23-shared-results
+      MIA_EMBEDDING_DIR: /tmp/mia-p23-shared-model
+      MIA_P23_MODE: ${{ inputs.mode || 'capacity' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: xinnan-tech/xiaozhi-esp32-server
+          ref: 87c6df77b0220ddbd8fc804f984f83f69f3225e5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: upstream/main/manager-api/pom.xml
+      - name: Prepare dependencies outside measured envelope
+        run: |
+          mkdir -p "$MIA_P23_REPORT_DIR"
+          if [[ "$MIA_P23_MODE" =~ ^(app-lifecycle|reply-smoke|reply-stages|reply-stages-replay|reply-latency|worker-smoke|worker-extraction|worker-faults|worker-fairness|worker-fairness-diagnostic|worker-shutdown)$ ]]; then
+            sudo apt-get update
+            sudo apt-get install -y libopus0 libsndfile1 ffmpeg
+            dpkg-query --show libopus0 libsndfile1 ffmpeg > "$MIA_P23_REPORT_DIR/runtime-system.txt"
+            python -m pip install torch==2.2.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cpu
+            python -m pip install -r upstream/main/xiaozhi-server/requirements.txt
+          else
+            python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          fi
+          python -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3 httpx==0.28.1
+          python -m pip freeze > "$MIA_P23_REPORT_DIR/preparation-dependencies.txt"
+          docker pull mysql:8.4
+          docker pull redis:8
+          docker image inspect --format '{{index .RepoDigests 0}}' mysql:8.4 redis:8 > "$MIA_P23_REPORT_DIR/database-image-digests.txt"
+      - name: Prepare isolated TLS certificates and explicit test trust
+        env:
+          MIA_SCOPE_KEYSTORE: file:${{ runner.temp }}/mia-test-tls/server.p12
+          MIA_SCOPE_CA: ${{ runner.temp }}/mia-test-tls/ca.pem
+          MIA_TLS_CERT_FILE: ${{ runner.temp }}/mia-test-tls/server.pem
+          MIA_TLS_KEY_FILE: ${{ runner.temp }}/mia-test-tls/server.key
+        run: |
+          mkdir -p "$RUNNER_TEMP/mia-test-tls"
+          openssl req -x509 -newkey rsa:2048 -nodes -days 2 \
+            -keyout "$RUNNER_TEMP/mia-test-tls/ca.key" -out "$MIA_SCOPE_CA" \
+            -subj '/CN=Youmi isolated test CA' -addext 'basicConstraints=critical,CA:TRUE' 2>/dev/null
+          openssl req -newkey rsa:2048 -nodes -keyout "$MIA_TLS_KEY_FILE" \
+            -out "$RUNNER_TEMP/mia-test-tls/server.csr" -subj '/CN=localhost' 2>/dev/null
+          python - <<'PY'
+          import certifi, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'mia-test-tls'
+          with Path(os.environ['GITHUB_ENV']).open('a') as environment:
+              for name in ['MIA_SCOPE_KEYSTORE', 'MIA_SCOPE_CA', 'MIA_TLS_CERT_FILE', 'MIA_TLS_KEY_FILE']:
+                  environment.write(name + '=' + os.environ[name] + '\n')
+          (root / 'server.ext').write_text('subjectAltName=DNS:localhost,IP:127.0.0.1\nextendedKeyUsage=serverAuth\n')
+          with Path(certifi.where()).open('ab') as trust:
+              trust.write(b'\n' + Path(os.environ['MIA_SCOPE_CA']).read_bytes())
+          PY
+          openssl x509 -req -days 2 -in "$RUNNER_TEMP/mia-test-tls/server.csr" \
+            -CA "$MIA_SCOPE_CA" -CAkey "$RUNNER_TEMP/mia-test-tls/ca.key" -CAcreateserial \
+            -extfile "$RUNNER_TEMP/mia-test-tls/server.ext" -out "$MIA_TLS_CERT_FILE"
+          openssl pkcs12 -export -out "$RUNNER_TEMP/mia-test-tls/server.p12" \
+            -inkey "$MIA_TLS_KEY_FILE" -in "$MIA_TLS_CERT_FILE" -certfile "$MIA_SCOPE_CA" -passout pass:mia-ci-only
+          sudo "$JAVA_HOME/bin/keytool" -importcert -noprompt -alias mia-isolated-ci \
+            -file "$MIA_SCOPE_CA" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
+      - name: Prepare pinned actual BGE outside measured envelope
+        run: |
+          youmi_export_python=python
+          if [[ "$MIA_P23_MODE" =~ ^(app-lifecycle|reply-smoke|reply-stages|reply-stages-replay|reply-latency|worker-smoke|worker-extraction|worker-faults|worker-fairness|worker-fairness-diagnostic|worker-shutdown)$ ]]; then
+            python -m venv "$RUNNER_TEMP/mia-p23-export"
+            youmi_export_python="$RUNNER_TEMP/mia-p23-export/bin/python"
+            "$youmi_export_python" -m pip install pip==25.3 typing_extensions==4.16.0
+            "$youmi_export_python" -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+            "$youmi_export_python" -m pip install transformers==4.51.3 numpy==1.26.4 onnx==1.17.0 onnxruntime==1.23.2 tokenizers==0.21.1 safetensors==0.5.3
+            "$youmi_export_python" -m pip freeze > "$MIA_P23_REPORT_DIR/export-dependencies.txt"
+          fi
+          "$youmi_export_python" scripts/ci/prepare_youmi_embedding.py --model BAAI/bge-base-zh-v1.5 --revision f03589ceff5aac7111bd60cfc7d497ca17ecac65 --output "$MIA_EMBEDDING_DIR"
+          python - <<'PYMODEL'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['MIA_EMBEDDING_DIR'])
+          metadata = json.loads((root / 'metadata.json').read_text())
+          metadata['tokenizer_sha256'] = hashlib.sha256((root / 'tokenizer.json').read_bytes()).hexdigest()
+          (root / 'metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
+          PYMODEL
+      - name: Install actual companion and compile manager test outside envelope
+        run: |
+          python -m server.companion.install_youmi upstream --apply
+          python -m server.companion.install_identity upstream --apply
+          git -C upstream apply --check "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
+          git -C upstream apply "$GITHUB_WORKSPACE/server/companion/manager_tests/sensitive-data-expectation.patch"
+          cp server/companion/manager_tests/YoumiPerformanceIntegrationTest.java upstream/main/manager-api/src/test/java/xiaozhi/modules/device/
+          cd upstream/main/manager-api
+          mvn --batch-mode -DskipTests=true test-compile dependency:build-classpath -Dmdep.includeScope=test -Dmdep.outputFile="$RUNNER_TEMP/mia-p23-classpath.txt"
+          mvn --batch-mode dependency:get -Dartifact=org.junit.platform:junit-platform-console-standalone:1.10.1
+          java -version 2> "$MIA_P23_REPORT_DIR/java-version.txt"
+      - name: Actual manager, databases and Python-BGE share one 2CPU 2GiB parent
+        env:
+          MIA_TEST_LLM_API_KEY: ${{ secrets.MIA_TEST_LLM_API_KEY }}
+          MIA_TEST_LLM_BASE_URL: ${{ secrets.MIA_TEST_LLM_BASE_URL }}
+        run: bash scripts/ci/run_youmi_shared_envelope.sh
+      - name: Preserve all original results including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Youmi-P23-shared-${{ github.sha }}-${{ github.run_id }}
+          path: /tmp/mia-p23-shared-results
+          if-no-files-found: error

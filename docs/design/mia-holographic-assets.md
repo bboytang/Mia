@@ -2,11 +2,11 @@
 
 用户提供的三张照片为同一球体的正面与侧面参考。采用 imagegen 内置工具制作可复用的透明球壳和独立耳环，动态脸、粒子、姿态和耳环响应由 SwiftUI 实时绘制；图片本身不是动画。
 
-资源：`ios/MiaApp/Assets.xcassets/MiaHolographicShell.imageset/shell.png`、`ios/MiaApp/Assets.xcassets/MiaHolographicEar.imageset/ear.png`。两张均为带 alpha 的 PNG。默认保留玻璃流体主题；`mia.appearance.skin` 保存用户选择。
+资源：`ios/YoumiApp/Assets.xcassets/YoumiHolographicShell.imageset/shell.png`、`ios/YoumiApp/Assets.xcassets/YoumiHolographicEar.imageset/ear.png`。两张均为带 alpha 的 PNG。默认保留玻璃流体主题；`mia.appearance.skin` 保存用户选择。
 
 参考图片仅用于素材生成，不直接打包整张参考照片。球壳边缘仍包含部分静态侧面反射，独立耳环覆盖并做音量响应；流动荧光采用有界粒子绘制，不能将静态高光称为流动动画。后台暂停绘制；减少动态效果关闭眨眼/摇摆/时间流动，保留音量亮度和嘴形反馈。
 
-增加主题时，在 `MiaSkin` 添加稳定的raw值、标题和说明，在 `MiaAvatarView` 路由到对应视图；选择页根据 `CaseIterable` 显示，不需要新增皮肤框架。已发布raw值不要重命名，以免丢失用户选择。
+增加主题时，在 `YoumiSkin` 添加稳定的raw值、标题和说明，在 `YoumiAvatarView` 路由到对应视图；选择页根据 `CaseIterable` 显示，不需要新增皮肤框架。已发布raw值不要重命名，以免丢失用户选择。
 
 ## 球壳提示词（内置 imagegen，透明背景）
 

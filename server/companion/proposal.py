@@ -74,7 +74,7 @@ old_value在旧事实及本次纠错中，new_value在本次且不是旧值，an
 必须是明确口误/更正/否定旧值；不确定、真实前后时间变化、引用或他人说法不能按更正提交。不能证明则memories为空。更正不另造关系或特点。'''
     if growth:
         text += '''
-本次实际既有来源满足三个独立会话/原句的数量资格，请审阅成长。若三个所属事实确实共同支持同一具体主题，请提出一个Mia围绕该主题逐渐形成的有限回应倾向；特点只描述Mia如何回应实际主题，不能改变固定核心或生成没有来源的用户资料、目击/共同活动。
+本次实际既有来源满足三个独立会话/原句的数量资格，请审阅成长。若三个所属事实确实共同支持同一具体主题，请提出一个Youmi围绕该主题逐渐形成的有限回应倾向；特点只描述Youmi如何回应实际主题，不能改变固定核心或生成没有来源的用户资料、目击/共同活动。
 trait同时提供name/description/anchor/evidence_ids/evidence_quotes。anchor必须在description及每条所引quote中连续出现，quotes逐字来自对应旧事实，引用至少三个不同实际所属id及独立来源。不引用本次尚未保存的新句或造id。
 数量仅资格；没有实际共同主题/充分证据时省略trait。新memories仍只提本次来源，不能复制旧事实；成长不能带来没有来源的重要性分数。'''
     if significance:
@@ -159,9 +159,9 @@ def tool_definition(context, *, sources, natural, growth, significance, tracking
         required.append('reconciliation')
     trait = None
     if growth:
-        trait = {'type': 'object', 'description': '可选；仅由三个独立真实来源支持的Mia有限表达成长。无充分语义支持时省略，不生成空对象。', 'properties': {
-            'name': dict(string, maxLength=32, description='Mia在这位用户对话中的有限回应特点名称。'),
-            'description': dict(string, maxLength=256, description='Mia围绕anchor的有限回应倾向，包含实际主题与回应方式；只写特点本身，不抄本字段说明。'),
+        trait = {'type': 'object', 'description': '可选；仅由三个独立真实来源支持的Youmi有限表达成长。无充分语义支持时省略，不生成空对象。', 'properties': {
+            'name': dict(string, maxLength=32, description='Youmi在这位用户对话中的有限回应特点名称。'),
+            'description': dict(string, maxLength=256, description='Youmi围绕anchor的有限回应倾向，包含实际主题与回应方式；只写特点本身，不抄本字段说明。'),
             'anchor': dict(string, minLength=2, maxLength=32),
             'evidence_ids': {'type': 'array', 'minItems': 3, 'maxItems': 16, 'uniqueItems': True, 'items': identifier},
             'evidence_quotes': {'type': 'array', 'minItems': 3, 'maxItems': 16, 'items': {'type': 'object',

@@ -11,7 +11,7 @@ from unittest.mock import patch
 from server.tests import test_companion_reply as fixtures
 
 spec = importlib.util.spec_from_file_location('p23_stage_trace',
-    Path(__file__).resolve().parents[2] / 'scripts/ci/mia_stage_trace.py')
+    Path(__file__).resolve().parents[2] / 'scripts/ci/youmi_stage_trace.py')
 observer = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(observer)
 

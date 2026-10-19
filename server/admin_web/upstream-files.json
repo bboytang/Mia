@@ -61,8 +61,9 @@
     "main/manager-web/src/views/register.vue": "8d26e0fc61764faf54b1a0bdfb4825e3be23bd4fa90371b9b48c7c35c13a9c47",
     "main/manager-web/src/views/retrievePassword.vue": "2f77955d3a235d48c86c5efb6c20aa9a801b9c3ff16e7552d18326b07634d233",
     "main/manager-web/src/views/roleConfig.vue": "45a13f645a517bf7998b9a5f28875d62ae44e68ccc616ed3cb16c6f0d029e0c8",
-    "main/manager-web/src/components/MiaSettingsDialog.vue": null,
-    "main/manager-web/src/components/MiaMemoryDialog.vue": null,
-    "main/manager-web/src/components/MiaCharacterEditor.vue": null
+    "main/manager-web/src/components/YoumiSettingsDialog.vue": null,
+    "main/manager-web/src/components/YoumiMemoryDialog.vue": null,
+    "main/manager-web/src/components/YoumiCharacterEditor.vue": null,
+    "main/manager-web/src/components/VersionFooter.vue": "6706348ee2e0011970c9c195e3b24a4a0e91401aacd28b2b4648c324727c848f"
   }
 }

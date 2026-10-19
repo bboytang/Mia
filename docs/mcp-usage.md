@@ -1,6 +1,6 @@
 # MCP IoT Control Usage
 
-> This document describes how to implement IoT control for ESP32 devices using the MCP protocol. For the detailed wire protocol, see [`mcp-protocol.md`](./mcp-protocol.md).
+> This document describes how to implement IoT control for ESP32 devices using the MCP protocol. For the detailed wire protocol, see [`mcp-protocol.md`](mcp-protocol.md).
 
 ## Introduction
 
@@ -13,7 +13,7 @@ MCP (Model Context Protocol) is the recommended protocol for IoT control in this
 3. The backend issues `tools/list` to discover available tools and their input schemas.
 4. The backend calls individual tools with `tools/call` to control the device.
 
-See [`mcp-protocol.md`](./mcp-protocol.md) for the exact message format.
+See [`mcp-protocol.md`](mcp-protocol.md) for the exact message format.
 
 ## Registering Tools on the Device
 
@@ -182,4 +182,4 @@ These tools are hidden by default. The backend must pass `withUserTools=true` to
 
 - Tool names, parameters, and return values must match what the device registers via `AddTool` / `AddUserOnlyTool`.
 - Prefer MCP for any new IoT control.
-- For the wire protocol and advanced topics, see [`mcp-protocol.md`](./mcp-protocol.md).
+- For the wire protocol and advanced topics, see [`mcp-protocol.md`](mcp-protocol.md).

@@ -34,7 +34,7 @@
 
 ```bash
 git clone https://github.com/78/xiaozhi-esp32.git
-cd xiaozhi-esp32
+cd youmi-esp32
 ```
 
 ### 选择目标与开发板
@@ -56,7 +56,7 @@ idf.py menuconfig
 在菜单中选择：
 
 ```text
-Xiaozhi Assistant -> Board Type -> Maza AI ESP32-S31
+Youmi Assistant -> Board Type -> Maza AI ESP32-S31
 ```
 
 保存配置并退出，然后开始编译：
