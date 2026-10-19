@@ -81,7 +81,7 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         mixed = affect.transition(warm, {'feeling': 'angry', 'intensity': 1})
         self.assertGreater(mixed['valence'], 0)
         self.assertEqual(mixed['feeling'], 'angry')
-        self.assertIn('生气或委屈余波', affect.guidance(mixed))
+        self.assertIn('明确在生气', affect.guidance(mixed))
         self.assertNotIn('感到温暖', affect.guidance(mixed))
 
     async def test_profile_edit_or_disable_invalidates_open_reply_and_stale_admin_save_is_rejected(self):

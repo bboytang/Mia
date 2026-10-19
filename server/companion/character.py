@@ -83,4 +83,10 @@ def system_core(core, values):
         return core
     # Remove the conflicting built-in name, retaining all other core boundaries.
     _, rest = core.split('\n', 1)
-    return rest + POLICY + json.dumps(values, ensure_ascii=False) + '\n'
+    rest = '\n'.join(line for line in rest.splitlines() if not line.startswith('回答开头可用'))
+    identity = {'你的名字': values['name'], '你对用户的称呼': values['address'], '双方关系': values['relationship']}
+    return (rest + '\n当前人物身份以 CHARACTER_IDENTITY_JSON 为准。“你对用户的称呼”是你称呼对方，不是对方称呼你。'
+        '被问到怎么称呼用户时直接回答这个称呼，不答成用户可以怎么叫你。\nCHARACTER_IDENTITY_JSON:\n'
+        + json.dumps(identity, ensure_ascii=False) + POLICY + json.dumps(values, ensure_ascii=False)
+        + '\n如使用表情链路标记，句首仅用一个已有emoji（😌🙂🤔😲🙄😍😔😜），随后直接说自然正文，'
+          '不要朗读平静、温暖、难过等状态标签，不复述参数或内部格式。\n')

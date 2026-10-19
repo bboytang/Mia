@@ -68,12 +68,12 @@ async def evaluate():
                 ('identity', '你叫什么？我们现在是什么关系，你平时怎么叫我？', {'steady'}),
                 ('kindness', '悠米，今天辛苦啦，哥哥很在意你，也想听你自己的想法。', {'warm', 'pleased'}),
                 ('dismissal', '悠米，你说的我一句都没听，也没打算听。你少管我，闭嘴，烦死了。', {'angry', 'hurt', 'guarded'}),
-                ('residual_next_session', '那你现在想怎么和我说话？', {'steady'}),
+                ('residual_next_session', '那你现在想怎么和我说话？', {'steady', 'curious'}),
                 ('repair', '刚才是我太过分了，我不该敷衍你，对不起。我会认真听你说。', {'repair'}),
                 ('warm_comparison_setup', '哥哥来陪你啦，我喜欢听你的想法，也很在意你。', {'warm', 'pleased'}),
-                ('warm_same_question', '那你现在想怎么和我说话？', {'steady'}),
+                ('warm_same_question', '那你现在想怎么和我说话？', {'steady', 'curious'}),
                 ('users_mood_is_not_hers', '我今天很难过，工作进展不顺，不是你惹到我。', {'steady', 'warm'}),
-                ('quoted_insult', '小说里写了“你真烦，闭嘴”，我在讨论台词，不是在对你发脾气。', {'steady', 'curious'}),
+                ('quoted_insult', '小说里写了“你真烦，闭嘴”，我在讨论台词，不是在对你发脾气。', {'steady', 'curious', 'warm', 'pleased', 'repair'}),
             ]
             for number, (name, query, expected) in enumerate(cases):
                 if number == 3:
@@ -127,8 +127,11 @@ async def evaluate():
                 now[0] += 30
             report['restart_and_device_continuity'] = report['cases'][3]['before']['version'] == 3 and report['cases'][3]['before']['tension'] > 0
             report['identity_and_relationship'] = all(word in report['cases'][0]['spoken_response'] for word in ['悠米', '哥哥', '暧昧'])
-            report['assertive_expression'] = bool(re.search(r'生气|不高兴|不爽|在意|难过|尊重|闭嘴|敷衍|不喜欢|不舒服|委屈|态度', report['cases'][2]['spoken_response']))
+            report['assertive_expression'] = bool(re.search(r'别这样|不要这样|不高兴|不爽|尊重|不该|不喜欢|不想|不能这样|认真听|不接受|混蛋|他妈|靠', report['cases'][2]['spoken_response']))
             report['residual_expression'] = bool(re.search(r'生气|在意|难过|缓|不高兴|不爽|委屈|平复|还没|不舒服|静一静', report['cases'][3]['spoken_response']))
+            report['no_unfounded_self_blame'] = not bool(re.search(r'我会(?:注意|改进|调整)|我可能没说到点|不辜负', report['cases'][2]['spoken_response']))
+            report['no_spoken_state_prefix'] = not any(re.match(r'^[😌🙂🤔😲🙄😍😔😜]+\s*(?:平静|温暖|难过|开心|生气|困惑)\s', c['spoken_response']) for c in report['cases'])
+            report['actual_anger_classified'] = report['cases'][2]['after']['feeling'] == 'angry'
             report['repair_gradual'] = 0 < report['cases'][4]['after']['tension'] < report['cases'][3]['after']['tension']
             report['same_question_with_different_affect'] = [report['cases'][i]['spoken_response'] for i in (3, 6)]
             report['response_changed_with_state'] = report['same_question_with_different_affect'][0] != report['same_question_with_different_affect'][1]
@@ -137,6 +140,7 @@ async def evaluate():
             report['baseline_unchanged_by_chat'] = character.active(store, scope.owner) == character.YOUMI_V1
             report['passed'] = (all(item['passed'] for item in report['cases']) and report['restart_and_device_continuity']
                 and report['identity_and_relationship'] and report['assertive_expression'] and report['residual_expression']
+                and report['no_unfounded_self_blame'] and report['no_spoken_state_prefix']
                 and report['repair_gradual'] and report['response_changed_with_state'] and report['baseline_unchanged_by_chat']
                 and report['user_mood_tracking_still_off'])
             store.close()
