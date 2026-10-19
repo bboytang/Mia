@@ -5,6 +5,7 @@
 #include "system_info.h"
 
 #include <esp_log.h>
+#include <esp_timer.h>
 #include <arpa/inet.h>
 #include <cJSON.h>
 #include <cstring>
@@ -166,12 +167,15 @@ bool WebsocketProtocol::OpenAudioChannel() {
     });
 
     ESP_LOGI(TAG, "Connecting to websocket server: %s with version: %d", url.c_str(), version_);
+    const int64_t connect_started_us = esp_timer_get_time();
     if (auto connected = websocket_->Connect(url.c_str()); !connected) {
         ESP_LOGE(TAG, "Failed to connect to websocket server: %s",
                  connected.error().ToString().c_str());
         SetError(Lang::Strings::SERVER_NOT_CONNECTED, url);
         return false;
     }
+    ESP_LOGI(TAG, "WebSocket connected in %lld ms",
+             (long long)((esp_timer_get_time() - connect_started_us) / 1000));
 
     // Send hello message to describe the client
     auto message = GetHelloMessage();
@@ -180,6 +184,7 @@ bool WebsocketProtocol::OpenAudioChannel() {
     }
 
     // Wait for server hello
+    const int64_t hello_started_us = esp_timer_get_time();
     EventBits_t bits =
         xEventGroupWaitBits(event_group_handle_, WEBSOCKET_PROTOCOL_SERVER_HELLO_EVENT, pdTRUE,
                             pdFALSE, pdMS_TO_TICKS(10000));
@@ -188,6 +193,8 @@ bool WebsocketProtocol::OpenAudioChannel() {
         SetError(Lang::Strings::SERVER_TIMEOUT);
         return false;
     }
+    ESP_LOGI(TAG, "Server hello received in %lld ms",
+             (long long)((esp_timer_get_time() - hello_started_us) / 1000));
 
     if (on_audio_channel_opened_ != nullptr) {
         on_audio_channel_opened_();
