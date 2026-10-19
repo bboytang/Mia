@@ -1,6 +1,7 @@
 """P23 real Provider/text reply timing; no P22 behavior or audio-quality claims."""
 
 import asyncio
+from contextlib import nullcontext
 import hashlib
 import json
 import os
@@ -12,7 +13,7 @@ import uuid
 
 
 MODEL = 'glm-4-flash-250414'
-REQUEST_CAPS = {'reply-smoke': 4, 'reply-latency': 144, 'worker-smoke': 8,
+REQUEST_CAPS = {'reply-smoke': 4, 'reply-stages': 4, 'reply-latency': 144, 'worker-smoke': 8,
     'worker-extraction': 2, 'worker-faults': 6, 'worker-fairness': 72,
     'worker-fairness-diagnostic': 4, 'worker-shutdown': 2}
 
@@ -46,6 +47,11 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
     create = provider.client.chat.completions.create
     provider._p23_sample = None
 
+    def save_observation():
+        trace = getattr(provider, '_p23_stage_trace', None)
+        with trace.span('observer.persist') if trace else nullcontext():
+            persist(report)
+
     def counted(*args, **kwargs):
         from mia_companion.model_requests import model_requests
         sample = provider._p23_sample
@@ -56,10 +62,11 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
             assert report['provider_requests'] < report['provider_request_cap'], 'P23 real request cap exceeded'
             report['provider_requests'] += 1
             report.setdefault('provider_request_purposes', []).append(purpose)
-            if purpose == 'extraction' and report.get('capture_extraction_stream'):
+            if ((purpose == 'extraction' and report.get('capture_extraction_stream'))
+                    or (purpose == 'reply' and report.get('capture_reply_stream'))):
                 from mia_extraction_diagnostics import StreamCapture
                 capture = StreamCapture(report['provider_requests'], kwargs)
-                report.setdefault('extraction_streams', []).append(capture.entry)
+                report.setdefault('reply_streams' if purpose == 'reply' else 'extraction_streams', []).append(capture.entry)
             if sample is not None:
                 assert 'sdk_start_ms' not in sample, 'Expected a single real reply request'
                 sample['sdk_start_ms'] = case_elapsed_ms(sample, started)
@@ -70,7 +77,7 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                     'system_sha256': hashlib.sha256(messages[0]['content'].encode()).hexdigest(),
                     'fact_ids': [row['id'] for row in data['facts']], 'events': len(data.get('events', [])),
                     'last_message': messages[-1], 'tools_count': len(kwargs.get('tools', []))}
-            persist(report)
+            save_observation()
         try:
             response = create(*args, **kwargs)
         except Exception as error:
@@ -79,7 +86,7 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                 if capture:
                     capture.entry['create_error_class'] = type(error).__name__
                     capture.finish()
-                persist(report)
+                save_observation()
             raise
         if not kwargs.get('stream'):
             return response
@@ -88,23 +95,28 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
             def __iter__(self):
                 try:
                     for chunk in response:
-                        with lock:
-                            if capture:
-                                capture.append(chunk)
-                            if sample is not None and 'sdk_first_content_ms' not in sample:
-                                if any(getattr(choice.delta, 'content', None) for choice in chunk.choices):
-                                    sample['sdk_first_content_ms'] = case_elapsed_ms(sample)
+                        arrived = None
+                        if sample is not None and 'sdk_first_content_ms' not in sample:
+                            if any(getattr(choice.delta, 'content', None) for choice in chunk.choices):
+                                arrived = time.perf_counter()
+                        trace = getattr(provider, '_p23_stage_trace', None)
+                        with trace.span('observer.sdk_chunk') if trace else nullcontext():
+                            with lock:
+                                if capture:
+                                    capture.append(chunk)
+                                if arrived is not None:
+                                    sample['sdk_first_content_ms'] = case_elapsed_ms(sample, arrived)
                         yield chunk
                 except Exception as error:
                     with lock:
                         report.setdefault('provider_errors', []).append(dict(safe_provider_error(error), purpose=purpose))
-                        persist(report)
+                        save_observation()
                     raise
                 finally:
                     if capture:
                         with lock:
                             capture.finish()
-                            persist(report)
+                            save_observation()
 
             def close(self):
                 try:
@@ -113,7 +125,7 @@ def observe_provider(configuration, purpose, report, lock, persist, factory):
                     if capture:
                         with lock:
                             capture.finish()
-                            persist(report)
+                            save_observation()
 
         return Stream()
 
@@ -149,6 +161,12 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
         sdk_timing_scope='All *_ms timestamps use case start; SDK interval is first-content minus SDK-start. Includes remote compute, transport and consumer/observer overhead, not pure network time',
         baseline_scope='Same Provider/core/role with original empty context assembly and phrase guard; no retrieval/context validation/jobs')
     report['tts_stage_mechanism'] = await verify_original_text_stage(server.logger)
+    stages_mode = os.environ['MIA_P23_MODE'] == 'reply-stages'
+    if stages_mode:
+        from mia_stage_trace import calibrate
+        report.update(stage_observer_calibration=calibrate(), capture_reply_stream=True,
+            capture_extraction_stream=True, controlled_sdk_call_cap=4,
+            diagnostic_scope='One 10k real pair, fixed remote request cap 4 including extraction; four controlled SDK ABBA replays, no formal p95')
 
     def extract_factory(name, model):
         assert name == model['type']
@@ -176,7 +194,8 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
     transport = AuthManager('synthetic-p23-latency-transport')
 
     async def connection(socket):
-        conn = provider = probe = None
+        conn = provider = probe = trace = None
+        sample = None
         try:
             headers = dict(socket.request.headers)
             assert transport.verify_token(headers.get('authorization', '')[7:], headers.get('client-id'), headers.get('device-id'))
@@ -185,7 +204,15 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
             assert type(request['query_index']) is int and 0 <= request['query_index'] < len(fixture['queries'])
             query = fixture['queries'][request['query_index']]
             sample = {'case': request['case'], 'variant': request['variant'], 'query': query,
-                'warm': request['warm'], 'timing_revision': TIMING_REVISION}
+                'warm': request['warm'], 'timing_revision': TIMING_REVISION,
+                'controlled': bool(request.get('controlled', False))}
+            assert not sample['controlled'] or stages_mode
+            if stages_mode and (not sample['controlled'] or request['trace']):
+                from mia_stage_trace import StageTrace
+                sample['started'] = time.perf_counter()
+                trace = StageTrace(sample)
+                trace.install(worker.jobs.store)
+            sample['trace_enabled'] = trace is not None
             conn = object.__new__(ConnectionHandler)
             conn.__dict__.update(config=config, headers=headers, websocket=socket, read_config_from_api=True,
                 need_bind=False, dialogue=Dialogue(), session_id=uuid.uuid4().hex, sentence_id=uuid.uuid4().hex,
@@ -196,7 +223,12 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
             assert scope.owner in report['capacity_per_owner']
             model = private['LLM'][private['selected_module']['LLM']]
             probe = conn.tts = make_probe(conn, sample, lock, {'correct_words': private['correct_words']})
-            provider = conn.llm = observe_provider(model, 'reply', report, lock, persist, factory)
+            if sample['controlled']:
+                from mia_stage_trace import controlled_provider
+                provider = conn.llm = controlled_provider(factory, model, report, sample)
+            else:
+                provider = conn.llm = observe_provider(model, 'reply', report, lock, persist, factory)
+            provider._p23_stage_trace = trace
             profile = root / 'context-profile.json'
             profile.write_text(json.dumps({'provider_module': type(provider).__module__, 'model': provider.model_name,
                 'base_url': provider.base_url, 'context_window': 16384,
@@ -265,6 +297,9 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
                 sample['total_case_ms'] = (time.perf_counter() - sample['started']) * 1000
                 from mia_tts_timing import stage_durations
                 sample['stages'] = stage_durations(sample)
+                if trace:
+                    sample['stage_trace'] = trace.report()
+                    assert not sample['stage_trace']['dropped'], 'Stage trace capacity exceeded'
                 sample.pop('started')
                 persist(report)
             await conn._mia_authorization.require(scope, 'memory:read')
@@ -276,6 +311,12 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
                 persist(report)
             await socket.send(json.dumps({'type': 'p23_error', 'error_class': type(error).__name__}))
         finally:
+            if trace:
+                if sample is not None and 'started' in sample:
+                    sample['stage_trace'] = trace.report()
+                    sample.pop('started')
+                trace.close()
+                persist(report)
             if probe:
                 await probe.close()
             if provider:
@@ -296,14 +337,15 @@ async def drive(state, report, persist):
     from websockets.asyncio.client import connect
     from mia_tts_timing import TIMING_REVISION
 
-    smoke = os.environ['MIA_P23_MODE'] == 'reply-smoke'
+    stages = os.environ['MIA_P23_MODE'] == 'reply-stages'
+    smoke = os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-stages')
     peers = json.loads(os.environ['MIA_P23_PEERS'])
     tls = ssl.create_default_context(cafile=os.environ['MIA_SCOPE_CA'])
     transport = AuthManager('synthetic-p23-latency-transport')
     rows = []
     report.update(reply_cases=rows, acceptance_revision=REVISION, limits=LIMITS,
         optimization_targets=OPTIMIZATION_TARGETS, timing_revision=TIMING_REVISION)
-    for owner_index in range(1 if smoke else 2):
+    for owner_index in ((1,) if stages else range(1 if smoke else 2)):
         peer = peers[owner_index]
         headers = {'device-id': peer['device_id'], 'client-id': peer['client_id'],
             'authorization': 'Bearer ' + transport.generate_token(peer['client_id'], peer['device_id']),
@@ -325,11 +367,18 @@ async def drive(state, report, persist):
                             value = json.loads(await asyncio.wait_for(socket.recv(), 130))
                             if value['type'] in ('p23_case', 'p23_error'):
                                 break
+                        if stages and value['type'] == 'p23_error':
+                            pair['variants'][variant] = value
+                            persist(report)
+                            continue
                         assert value['type'] == 'p23_case', 'Actual reply contract failed; inspect sanitized child report'
                         assert value['timing_revision'] == TIMING_REVISION
                         pair['variants'][variant] = value
                         persist(report)
                 baseline, memory = (pair['variants'][name] for name in ('baseline', 'memory'))
+                if stages and any(x['type'] != 'p23_case' for x in (baseline, memory)):
+                    row['diagnostic_failed'] = True
+                    continue
                 assert baseline['sdk_request']['model'] == memory['sdk_request']['model'] == MODEL
                 assert baseline['sdk_request']['system_sha256'] == memory['sdk_request']['system_sha256']
                 assert baseline['sdk_request']['last_message'] == memory['sdk_request']['last_message']
@@ -337,14 +386,28 @@ async def drive(state, report, persist):
                 assert all(value.startswith(memory['scope_owner'] + '-') for value in memory['sdk_request']['fact_ids'])
                 pair['first_sentence_delta_ms'] = memory['first_sentence_ms'] - baseline['first_sentence_ms']
                 pair['first_checked_text_delta_ms'] = memory['first_checked_text_ms'] - baseline['first_checked_text_ms']
-            measured = [p['first_sentence_delta_ms'] for p in row['pairs'] if not p['warm']]
+            measured = [p['first_sentence_delta_ms'] for p in row['pairs'] if not p['warm'] and 'first_sentence_delta_ms' in p]
+            if not measured:
+                continue
             row['first_sentence_delta'] = summary(measured)
             row['first_checked_text_delta'] = summary([p['first_checked_text_delta_ms'] for p in row['pairs'] if not p['warm']])
             if not smoke:
                 assert len(measured) == 5
                 row['acceptance_passed'] = row['first_sentence_delta']['p95_ms'] <= LIMITS['first_sentence_delta_p95_ms']
                 row['optimization_targets_met'] = row['first_sentence_delta']['p95_ms'] <= OPTIMIZATION_TARGETS['first_sentence_delta_p95_ms']
-    report['reply_contract_passed'] = True
+    if stages:
+        report['controlled_abba'] = []
+        for number, enabled in enumerate((False, True, True, False)):
+            async with connect('wss://127.0.0.1:' + str(state['text_port']), ssl=tls,
+                    additional_headers=headers, open_timeout=10) as socket:
+                await socket.send(json.dumps({'type': 'p23_reply', 'case': 'controlled-' + str(number),
+                    'variant': 'memory', 'query_index': 0, 'warm': False, 'controlled': True, 'trace': enabled}))
+                value = json.loads(await asyncio.wait_for(socket.recv(), 130))
+                report['controlled_abba'].append(value)
+                persist(report)
+        assert all(x['type'] == 'p23_case' for x in report['controlled_abba']), 'Controlled stage replay failed; all results preserved'
+        assert len({x['first_sentence'] for x in report['controlled_abba']}) == 1
+    report['reply_contract_passed'] = not any(row.get('diagnostic_failed') for row in rows)
     report['first_sentence_acceptance_passed'] = None if smoke else all(r['acceptance_passed'] for r in rows)
     report['first_sentence_optimization_targets_met'] = None if smoke else all(r['optimization_targets_met'] for r in rows)
     report['reply_measurement_scope'] = 'Smoke contract only, one pair; no D08 percentile verdict' if smoke else 'Three queries per Scope capacity; one warm pair then five measured pairs, alternating order; negative deltas retained'

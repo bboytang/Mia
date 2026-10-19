@@ -1,0 +1,14 @@
+{
+  "fixed_upstream": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "SDK": "openai==2.8.1",
+  "remote_calls": 0,
+  "controlled_sdk_calls": 4,
+  "output_hashes": [
+    "27c87864d977de4d7a7169dda4752dc93cba64951e297cbc9f251eb3f4f13394",
+    "27c87864d977de4d7a7169dda4752dc93cba64951e297cbc9f251eb3f4f13394",
+    "27c87864d977de4d7a7169dda4752dc93cba64951e297cbc9f251eb3f4f13394",
+    "27c87864d977de4d7a7169dda4752dc93cba64951e297cbc9f251eb3f4f13394"
+  ],
+  "scope": "Offline fixed Provider + actual SDK/MockTransport only; not real model output or complete integration",
+  "mechanism_tests": 34
+}

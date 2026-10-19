@@ -107,7 +107,7 @@ async def serve():
         report['members_after_encoder'] = members(os.getpid())
         report['integrity'] = worker.jobs.store.db.execute('PRAGMA integrity_check').fetchone()[0]
         assert report['integrity'] == 'ok'
-        if os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-latency'):
+        if os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-stages', 'reply-latency'):
             from mia_reply_latency import open_driver
             report['scope'] = 'Actual app/services, original installed ConnectionHandler.chat, real Provider and persistent Worker; synthetic WSS text driver, audio omitted'
             driver = await open_driver(server, scopes, config, root, report, persist)
@@ -167,7 +167,7 @@ async def control(report):
             assert state['pid'] == process.pid
             report['members_ready'] = members(process.pid)
             report['cgroup_ready'] = group_state()
-            if os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-latency'):
+            if os.environ['MIA_P23_MODE'] in ('reply-smoke', 'reply-stages', 'reply-latency'):
                 sys.path.insert(0, str(Path(os.environ['MIA_SCOPE_UPSTREAM']) / 'main/xiaozhi-server'))
                 from mia_reply_latency import drive
                 await drive(state, report, lambda value: save(ROOT / 'app-lifecycle-results.json', value))
@@ -226,7 +226,7 @@ def main():
         'scope': 'Actual full-import app/BGE/idle Worker lifecycle in common 2CPU/2GiB parent; not inflight/reply/Worker fairness acceptance',
         'remaining': ['same-Provider paired first-sentence delta', 'two actual foreground replies and persistent extraction',
             'task fairness/faults/120-second terminal latency', 'inflight application shutdown and durable recovery']}
-    if mode in ('reply-smoke', 'reply-latency'):
+    if mode in ('reply-smoke', 'reply-stages', 'reply-latency'):
         report['scope'] = 'Actual app/services and installed chat, same-Provider empty-memory baseline and real original Worker; sequential pairs with audio omitted'
     elif mode in ('worker-smoke', 'worker-extraction', 'worker-faults', 'worker-fairness', 'worker-fairness-diagnostic', 'worker-shutdown'):
         report['scope'] = 'Actual app/services and real extraction task; per-mode worker contract, no natural-load percentile or audio claim'

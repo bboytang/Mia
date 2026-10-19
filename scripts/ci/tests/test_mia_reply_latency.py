@@ -20,6 +20,12 @@ spec.loader.exec_module(latency)
 
 
 class EmptyMemoryBaselineTests(unittest.TestCase):
+    def test_stage_diagnostic_has_fixed_small_real_request_cap(self):
+        self.assertEqual(latency.REQUEST_CAPS['reply-stages'], 4)
+        root = Path(__file__).resolve().parents[3]
+        self.assertIn('reply-stages', (root / '.github/workflows/mia-memory-shared-performance.yml').read_text())
+        self.assertIn('smoke|stages|latency', (root / 'scripts/ci/run_mia_shared_envelope.sh').read_text())
+
     def test_frozen_report_corrected_stages_preserve_all_six_total_p95_values(self):
         directory = Path(__file__).resolve().parents[1]
         timing_spec = importlib.util.spec_from_file_location('mia_tts_timing', directory / 'mia_tts_timing.py')

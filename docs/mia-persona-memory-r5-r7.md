@@ -20,3 +20,15 @@ R5可控调度反例及最小修正 → R6实际分段观测 → R7边界诊断/
 R6/R7及最终CI待后续记录。本检查点不将局部边界修复称为调度问题全部解决。
 
 R5本地检查点40项通过（2.240秒），含8新反例与既有Worker/门闩回归；初版38项也通过且独立保留。新增证据`verification/mia-persona-memory/performance-r5-scheduling-{local,checkpoint}.json`保存精确文件hash、调度顺序/槽快照、虚拟期限、Mock SDK次数与任务attempt，原实现2失败日志为`performance-r5-scheduling-before.log.gz`。本批只在全部代码冻结后推送一次执行必要同SHA回归，不逐提交重复CI。
+
+R5源码检查点：`b54a649bb0f791fe6ae32770ac59c77f93550eef`，尚未推送；最终候选统一CI待代码冻结。
+
+## 检查点 R6：受控分段观察器
+
+新增仅CI的StageTrace，不安装到companion、生产默认关闭；仅新`reply-stages`模式安装包装器，退出恢复原方法/SQLite对象。统一沿用R1 case原点，连接初始化授权以负时间偏移记录而不混入正式首句总量。覆盖当前manager授权/绑定、profile读取、上下文捕获/版本、Python SQLite锁等待及BEGIN等待加执行、真实BGE/检索、SDK前准备、SDK首内容、逐段回复/句子校验与TTS文本就绪。BEGIN耗时不冒充纯锁竞争，嵌套/并发事件保留parent，exclusive按子区间并集扣除，不能相加所有inclusive。
+
+观察器每case最多8192事件，错误只记类型、不记消息/原文；记录自身SDK采集与持久写盘span。SDK首内容在采集/写盘之前计时。固定空调用ABBA仅作机制开销提示；另用相同实际上游SDK受控输出在完整10k链执行固定off/on/on/off四次，不挑好样本、不把差异直接解释成运行架构缺陷。
+
+计划唯一真实诊断：同SHA新`reply-stages`，10k查询0的一组baseline/memory，**全部远端SDK请求上限4（包括可能的后台提取）、SDK自动重试0**；另最多4次MockTransport受控SDK往返，绝不计作真实模型请求。保留原请求/SDK消耗字段、全部成功失败、trace和资源证据，不重复派发同候选、不形成p95验收。glm-4-flash-250414不变，只有隔离CI fixture支持新模式，未改manager运行实现。
+
+本地34项CI机制通过（含5个trace反例和请求上限），固定上游87c6df77/SDK2.8.1离线四往返输出hash相同，远端请求0；证据performance-r6-sdk-local.json。尚未获得本批真实阶段耗时，不预先认定授权/锁/分段是关键瓶颈；未实现任何版本快速路径、授权缓存或校验删减。R7及最终CI/唯一诊断待后续记录。
