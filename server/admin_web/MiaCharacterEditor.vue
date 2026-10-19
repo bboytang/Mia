@@ -30,7 +30,8 @@ export default {
       { key: 'warmth', label: '温柔度' }, { key: 'attachment', label: '亲近度' }, { key: 'temper', label: '小脾气强度' }
     ] };
   },
-  watch: { profile: { immediate: true, handler(profile) {
+  watch: { profile: { immediate: true, handler(profile, previous) {
+    if (previous && profile.version === previous.version) return;
     this.draft = profile.values ? { ...profile.values } : null; this.enabled = profile.enabled;
   } } },
   methods: {

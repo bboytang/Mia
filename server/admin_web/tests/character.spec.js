@@ -16,6 +16,7 @@ async function setup(page) {
   const backend = { fail: false }, requests = [];
   await page.route('**/agent/test-agent/mia-settings', async route => {
     const command = route.request().postDataJSON(); requests.push(command);
+    if (command.action === 'set_feature_settings') Object.assign(state.features, command.features);
     if (command.action === 'set_character') {
       if (backend.fail || command.version !== state.character.version) {
         await route.fulfill({ json: { code: 500 } }); return;
@@ -37,6 +38,8 @@ test('baseline is an explicit owner draft, edits save to backend and survive reo
   await expect(dialog.getByRole('textbox', { name: '性格名字', exact: true })).toHaveValue('悠米');
   expect(requests.filter(r => r.action === 'set_character')).toHaveLength(0);
   await dialog.getByRole('textbox', { name: '亲昵称呼', exact: true }).fill('哥哥呀');
+  await dialog.getByRole('switch', { name: '人格成长', exact: true }).click();
+  await expect(dialog.getByRole('textbox', { name: '亲昵称呼', exact: true })).toHaveValue('哥哥呀');
   await dialog.getByRole('button', { name: '保存性格与情绪基线' }).click();
   await expect(page.locator('.el-message--success')).toContainText('已保存');
   expect(state.character.values.address).toBe('哥哥呀');
