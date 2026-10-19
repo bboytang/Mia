@@ -10,7 +10,7 @@
    'firmwareDialog.remarkPlaceholder': 'Vui lòng nhập thông tin ghi chú',
    'firmwareDialog.requiredFirmwareName': 'Vui lòng nhập tên firmware (board + phiên bản)',
 @@ -299,7 +299,7 @@
- 
+
    // Register page related
    'register.title': 'Tạo tài khoản',
 -  'register.welcome': 'Chào mừng đến với XiaoZhi AI',
@@ -20,15 +20,15 @@
    'register.captchaPlaceholder': 'Vui lòng nhập mã xác minh',
 @@ -585,7 +585,7 @@
    'button.close': 'Đóng',
- 
+
    // System information
 -  'system.name': 'Dịch vụ XiaoZhi',
 +  'system.name': 'Dịch vụ Youmi',
- 
+
    // Voiceprint related
    'voiceprint.management': 'Quản lý dấu giọng nói',
 @@ -724,7 +724,7 @@
- 
+
    // Home page text
    'home.addAgent': 'Thêm tác nhân',
 -  'home.greeting': 'Xin chào XiaoZhi',
@@ -57,7 +57,7 @@
    'firmwareDialog.remarkPlaceholder': '請輸入備註信息',
    'firmwareDialog.requiredFirmwareName': '請輸入固件名稱(板子+版本號)',
 @@ -299,7 +299,7 @@
- 
+
    // 註冊頁面相關
    'register.title': '建立帳號',
 -  'register.welcome': '歡迎使用小智慧AI',
@@ -67,15 +67,15 @@
    'register.captchaPlaceholder': '請輸入驗證碼',
 @@ -585,7 +585,7 @@
    'button.close': '關閉',
- 
+
    // 系统信息
 -  'system.name': '小智服務',
 +  'system.name': 'Youmi服務',
- 
+
    // 声纹相关
    'voiceprint.management': '聲紋管理',
 @@ -724,7 +724,7 @@
- 
+
    // 首頁文本
    'home.addAgent': '添加智能體',
 -  'home.greeting': '你好小智',
@@ -104,7 +104,7 @@
    'firmwareDialog.remarkPlaceholder': 'Por favor, insira informações de observação',
    'firmwareDialog.requiredFirmwareName': 'Por favor, insira o nome do firmware (placa + versão)',
 @@ -299,7 +299,7 @@
- 
+
    // Página de registro
    'register.title': 'Criar Conta',
 -  'register.welcome': 'Bem-vindo ao XiaoZhi AI',
@@ -114,15 +114,15 @@
    'register.captchaPlaceholder': 'Por favor, insira o captcha',
 @@ -585,7 +585,7 @@
    'button.close': 'Fechar',
- 
+
    // Informações do sistema
 -  'system.name': 'Serviço XiaoZhi',
 +  'system.name': 'Serviço Youmi',
- 
+
    // Impressão vocal
    'voiceprint.management': 'Gerenciamento de Impressão Vocal',
 @@ -724,7 +724,7 @@
- 
+
    // Página inicial
    'home.addAgent': 'Adicionar Agente',
 -  'home.greeting': 'Olá XiaoZhi',
@@ -151,7 +151,7 @@
    'firmwareDialog.remarkPlaceholder': 'Please enter remark information',
    'firmwareDialog.requiredFirmwareName': 'Please enter firmware name (board + version)',
 @@ -299,7 +299,7 @@
- 
+
    // Register page related
    'register.title': 'Create Account',
 -  'register.welcome': 'Welcome to XiaoZhi AI',
@@ -161,15 +161,15 @@
    'register.captchaPlaceholder': 'Please enter captcha',
 @@ -585,7 +585,7 @@
    'button.close': 'Close',
- 
+
    // System information
 -  'system.name': 'XiaoZhi Service',
 +  'system.name': 'Youmi Service',
- 
+
    // Voiceprint related
    'voiceprint.management': 'Voiceprint Management',
 @@ -724,7 +724,7 @@
- 
+
    // Home page text
    'home.addAgent': 'Add Agent',
 -  'home.greeting': 'Hi XiaoZhi',
@@ -198,7 +198,7 @@
    'firmwareDialog.remarkPlaceholder': 'Bitte Bemerkungsinformationen eingeben',
    'firmwareDialog.requiredFirmwareName': 'Bitte Firmware-Namen eingeben (Board + Version)',
 @@ -299,7 +299,7 @@
- 
+
    // Register page related
    'register.title': 'Konto erstellen',
 -  'register.welcome': 'Willkommen bei XiaoZhi AI',
@@ -208,15 +208,15 @@
    'register.captchaPlaceholder': 'Bitte Captcha eingeben',
 @@ -585,7 +585,7 @@
    'button.close': 'Schließen',
- 
+
    // System information
 -  'system.name': 'XiaoZhi Service',
 +  'system.name': 'Youmi Service',
- 
+
    // Voiceprint related
    'voiceprint.management': 'Stimmabdruckverwaltung',
 @@ -724,7 +724,7 @@
- 
+
    // Home page text
    'home.addAgent': 'Agent hinzufügen',
 -  'home.greeting': 'Hallo XiaoZhi',
@@ -245,7 +245,7 @@
    'firmwareDialog.remarkPlaceholder': '请输入备注信息',
    'firmwareDialog.requiredFirmwareName': '请输入固件名称(板子+版本号)',
 @@ -299,7 +299,7 @@
- 
+
    // 注册页面相关
    'register.title': '创建账号',
 -  'register.welcome': '欢迎使用小智AI',
@@ -255,15 +255,15 @@
    'register.captchaPlaceholder': '请输入验证码',
 @@ -585,7 +585,7 @@
    'button.close': '关闭',
- 
+
    // 系统信息
 -  'system.name': '小智服务',
 +  'system.name': 'Youmi服务',
- 
+
    // 声纹相关
    'voiceprint.management': '声纹管理',
 @@ -724,7 +724,7 @@
- 
+
    // 首页文本
    'home.addAgent': '添加智能体',
 -  'home.greeting': '你好小智',
