@@ -74,10 +74,12 @@ inline void Copy(char (&to)[N], const char* from) {
     }
 }
 // Business messages and network events share these transitions in firmware and host tests.
-inline void ApplyMessage(Model& m, const char* role, const char* content) {
+inline void ApplyMessage(Model& m, const char* role, const char* content, bool activating = false) {
     Copy(m.text, content);
     if (role && !std::strcmp(role, "system") && content && *content &&
-        (m.page == Page::Boot || (m.page == Page::Face && m.activity == Activity::Idle)))
+        (m.page == Page::Boot || (m.page == Page::Face && m.activity == Activity::Idle) ||
+         (activating && m.page != Page::Ota && m.page != Page::Connecting && m.page != Page::Wifi &&
+          m.page != Page::Password)))
         m.page = Page::Info;
     if (role && !std::strcmp(role, "user") && content && *content) {
         m.activity = Activity::Thinking;

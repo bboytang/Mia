@@ -241,7 +241,8 @@ void YoumiDisplay::SetStatus(const char* status) {
 void YoumiDisplay::SetChatMessage(const char* role, const char* content) {
     const auto text = mia_text::Simplify(content);
     std::lock_guard<std::mutex> lock(mutex_);
-    ApplyMessage(pending_, role, text.c_str());
+    ApplyMessage(pending_, role, text.c_str(),
+                 Application::GetInstance().GetDeviceState() == kDeviceStateActivating);
     dirty_ = true;
 }
 void YoumiDisplay::ClearChatMessages() {

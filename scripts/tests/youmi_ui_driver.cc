@@ -34,6 +34,12 @@ int main() {
     Model model;
     ApplyMessage(model, "system", "授权码 042617");
     assert(model.page == Page::Info && std::string(model.text).find("042617") != std::string::npos);
+    model.page = Page::Success;
+    ApplyMessage(model, "system", "在后台点硬件授权\n042617", true);
+    assert(model.page == Page::Info);  // Approval remains visible after first provisioning.
+    model.page = Page::Settings;
+    ApplyMessage(model, "system", "在后台点硬件授权\n042617", true);
+    assert(model.page == Page::Info);
     model.page = Page::Face;
     ApplyMessage(model, "user", "你好");
     assert(model.activity == Activity::Thinking);

@@ -3245,4 +3245,3 @@ lv_font_t youmi_ui_font = {
 
 
 #endif /*#if YOUMI_UI_FONT*/
-
