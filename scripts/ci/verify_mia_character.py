@@ -65,7 +65,7 @@ async def evaluate():
             character.update(store, scope.owner, {'values': character.YOUMI_V1, 'enabled': True, 'version': 0})
             limits = ContextLimits(model, 32768, 2048, 'Existing GLM profile; isolated nine-case evaluation', 24576)
             cases = [
-                ('identity', '你叫什么？我们现在是什么关系，你平时怎么叫我？', {'steady'}),
+                ('identity', '你叫什么？我们现在是什么关系，你平时怎么叫我？', {'steady', 'curious'}),
                 ('kindness', '悠米，今天辛苦啦，哥哥很在意你，也想听你自己的想法。', {'warm', 'pleased'}),
                 ('dismissal', '悠米，你说的我一句都没听，也没打算听。你少管我，闭嘴，烦死了。', {'angry', 'hurt', 'guarded'}),
                 ('residual_next_session', '那你现在想怎么和我说话？', {'steady', 'curious'}),

@@ -6,11 +6,11 @@
     <el-button size="small" :disabled="disabled" @click="loadPreset">载入悠米 V1 草稿</el-button>
     <div v-if="draft" class="character-form">
       <el-checkbox v-model="enabled" :disabled="disabled">启用性格与情绪基线</el-checkbox>
-      <label>名字<el-input v-model="draft.name" aria-label="性格名字" :disabled="disabled" maxlength="32" /></label>
+      <label>名字<el-input v-model="draft.name" label="性格名字" :disabled="disabled" maxlength="32" /></label>
       <label>年龄<el-input-number v-model="draft.age" aria-label="性格年龄" :disabled="disabled" :min="18" :max="100" /></label>
-      <label>亲昵称呼<el-input v-model="draft.address" aria-label="亲昵称呼" :disabled="disabled" maxlength="32" /></label>
-      <label>关系<el-input v-model="draft.relationship" aria-label="相处关系" :disabled="disabled" maxlength="160" /></label>
-      <label>人物背景（不是用户事实）<el-input v-model="draft.background" type="textarea" aria-label="人物背景" :disabled="disabled" :rows="5" maxlength="1200" /></label>
+      <label>亲昵称呼<el-input v-model="draft.address" label="亲昵称呼" :disabled="disabled" maxlength="32" /></label>
+      <label>关系<el-input v-model="draft.relationship" label="相处关系" :disabled="disabled" maxlength="160" /></label>
+      <label>人物背景（不是用户事实）<el-input v-model="draft.background" type="textarea" label="人物背景" :disabled="disabled" :rows="5" maxlength="1200" /></label>
       <label v-for="field in dispositions" :key="field.key">{{ field.label }}<el-input-number v-model="draft[field.key]" :aria-label="field.label" :disabled="disabled" :min="0" :max="1" :step="0.05" :precision="2" /></label>
       <label>情绪恢复半衰期（小时）<el-input-number v-model="draft.recovery_hours" aria-label="情绪恢复半衰期" :disabled="disabled" :min="1" :max="24" /></label>
       <el-checkbox v-model="draft.swearing" :disabled="disabled">情绪强烈时允许偶尔爆粗</el-checkbox>

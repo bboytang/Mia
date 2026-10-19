@@ -67,6 +67,10 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         steady = affect.transition(angry, {'feeling': 'steady', 'intensity': 1})
         repaired = affect.transition(angry, {'feeling': 'repair', 'intensity': 2})
         self.assertEqual(steady['feeling'], 'angry')
+        curious = affect.transition(angry, {'feeling': 'curious', 'intensity': 1})
+        self.assertEqual(curious['feeling'], 'angry')
+        self.assertTrue(0 < curious['tension'] < angry['tension'])
+        self.assertIn('并未平复', affect.guidance(curious))
         self.assertTrue(0 < repaired['tension'] < angry['tension'])
         self.assertEqual(repaired['label'], '缓和中')
         now[0] += 10800

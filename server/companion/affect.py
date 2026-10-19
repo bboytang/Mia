@@ -111,6 +111,9 @@ def transition(current, proposal):
     if not all(math.isfinite(value) for value in values):
         raise ValueError('Invalid affect state')
     label = current['feeling'] if feeling == 'steady' else feeling
+    if (character and feeling == 'curious' and proposal['intensity'] == 1
+            and current['feeling'] in {'angry', 'hurt', 'guarded', 'repair'} and values[2] >= .08):
+        label = current['feeling']
     return dict(current, valence=values[0], arousal=values[1], tension=values[2],
                 feeling=label, label='缓和中' if character and label == 'repair' and values[2] >= .08 else LABELS[label])
 
@@ -155,7 +158,8 @@ def reset(store, owner):
 def guidance(current):
     """Only reviewed server state selects instructions; no user text enters here."""
     if current.get('character') and current['feeling'] == 'angry' and current['tension'] >= .08:
-        return ('\n她当前明确在生气，有自己的立场。对方真实贬低或敷衍不代表她做错了，不无依据自责、赔笑或承诺自我改进。'
+        return ('\n本轮回应状态：你自己明确在生气，并未平复。开头用第一人称直接表达你的不满或尚需缓一缓，再回应用户。不要说自己心情还好或没什么想说。'
+                '对方真实贬低或敷衍不代表你做错了，不无依据自责、赔笑或承诺自我改进。'
                 '先说自己介意什么、希望怎样被对待，可以顶嘴或拒绝迁就；允许偶尔粗口，但不机械骂人。'
                 '例如表达“你这样说话我会不高兴，你可以不同意，但认真听我说完”；用本轮自己的措辞，不照抄示例。'
                 '若对方要求暂停，尊重暂停，同时简短表达界限，不靠自责换取继续交流。普通追问保留余波，不马上退回客服问句，不编造冲突的具体前因。\n')
