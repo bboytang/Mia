@@ -513,7 +513,7 @@ def _validate_output(value, sources, context):
 
 
 def explicit_change(source, context):
-    """Recognize only the existing full-quotation reconciliation protocol.
+    """Recognize the full-quotation protocol and a literal self-correction.
 
     The owned context and normal validator remain authoritative; ambiguous or
     unsupported text continues through the ordinary extraction path.
@@ -541,6 +541,35 @@ def explicit_change(source, context):
                 continue
             if result['memories']:
                 matches.append(raw)
+    # An explicit "I misspoke; what I ... is X, not Y" does not need a model
+    # to regenerate factual text. Keep the complete sentence and revalidate
+    # the unique owned target, literal values and an existing activity anchor.
+    quote = REMEMBER_PREFIX.sub('', normalized)
+    natural = re.fullmatch(r'(?P<preface>[^,。.!?;\n]{1,64},)我(?P<topic>[^,。.!?;\n]{1,24})的是'
+        r'(?P<new>[^,。.!?;\n]{2,32}),不是(?P<old>[^,。.!?;\n]{2,32})[。.!?]?', quote)
+    if (not matches and natural and CORRECTION_MARKER.search(natural['preface'])
+            and not re.search(r'不|没|别|假|想|希望|准备|打算|可能|也许', natural['topic'])):
+        from .retrieval import terms
+        for target in context:
+            for anchor in terms(target.get('trigger_terms')):
+                if not 2 <= len(anchor) <= 32 or anchor not in natural['topic']:
+                    continue
+                record = {'category': target.get('category', 'fact'), 'content': quote,
+                    'source_index': 0, 'source_quote': quote, 'kind': 'explicit', 'subject': 'user',
+                    'value': 'durable', 'sensitive': False, 'reconciliation': {
+                        'form': 'natural', 'kind': 'correction', 'target_id': target['id'],
+                        'old_quote': target['content'], 'evidence': quote,
+                        'old_value': natural['old'], 'new_value': natural['new'], 'anchor': anchor}}
+                for key in ('entities', 'keywords', 'trigger_terms'):
+                    record[key] = [term for term in terms(target.get(key)) if term in quote][:8]
+                raw = {'memories': [record], 'trait': None}
+                try:
+                    result = validate_output(raw, [source], context)
+                except MemoryError:
+                    continue
+                if result['memories']:
+                    matches.append(raw)
+                    break
     return matches[0] if len(matches) == 1 else None
 
 

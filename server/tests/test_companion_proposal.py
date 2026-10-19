@@ -39,7 +39,7 @@ class ProposalTests(unittest.TestCase):
                 def response_with_functions(self, session, dialogue, functions):
                     captured.append(json.loads(dialogue[1]['content']))
                     yield None, [delta(raw, NAME)]
-            with self.subTest(native=native), patch('server.companion.proposal.provider_capabilities',
+            with self.subTest(native=native), patch('server.companion.extraction.explicit_change', return_value=None), patch('server.companion.proposal.provider_capabilities',
                     return_value={'native_tools': native, 'plain_json': not native}):
                 result = LLMMemoryExtractor(lambda: ToolProvider() if native else PlainProvider())([source], context)
                 self.assertEqual(result, raw)
@@ -55,6 +55,33 @@ class ProposalTests(unittest.TestCase):
                 self.assertEqual(validate_output(corrected, [source], context)['memories'][0]['replaces_id'], fact['id'])
                 hints[0]['terms'].clear()
                 self.assertEqual(json.dumps(context, ensure_ascii=False), before)
+
+    def test_explicit_literal_self_correction_uses_original_validator_without_provider(self):
+        from server.companion.extraction import explicit_change
+        from unittest.mock import Mock
+        source = '之前说的通勤车记错了，我通勤骑的是银色自行车，不是蓝色自行车'
+        target = {'id': 'owned', 'category': 'fact', 'content': '我平时通勤骑蓝色自行车',
+            'content_version': 1, 'evidence_version': 2, 'trigger_terms': '["通勤"]',
+            'keywords': '["蓝色自行车"]', 'entities': '["蓝色自行车"]'}
+        before = json.dumps(target)
+        factory = Mock(side_effect=AssertionError('Literal correction must not call Provider'))
+        output = LLMMemoryExtractor(factory)([source], [target])
+        clean = validate_output(output, [source], [target])['memories'][0]
+        self.assertEqual(clean['replaces_id'], 'owned')
+        self.assertEqual(clean['content'], source.replace('，', ','))
+        self.assertEqual(clean['reconciliation']['target_version'], 1)
+        self.assertEqual(json.dumps(target), before)
+        factory.assert_not_called()
+        for bad in [source.replace('之前说的通勤车记错了', '假设之前说的通勤车记错了'),
+                source.replace('我通勤骑的是', '我不想通勤骑的是'),
+                source.replace('之前说的通勤车记错了', '以前的通勤车'),
+                '他说：' + source, '“' + source + '”', source + '可能是这样',
+                source.replace('银色自行车', '蓝色自行车')]:
+            with self.subTest(source=bad):
+                self.assertIsNone(explicit_change(bad, [target]))
+        self.assertIsNone(explicit_change(source, []))
+        self.assertIsNone(explicit_change(source, [target, dict(target, id='other')]))
+        self.assertIsNone(explicit_change(source, [dict(target, trigger_terms='["不存在的活动"]')]))
 
     def test_all_branches_project_source_evidence_without_serialized_metadata_or_aliases(self):
         cases = [(['我平常用木梳梳头'], '我梳头用角梳，不是木梳'),
