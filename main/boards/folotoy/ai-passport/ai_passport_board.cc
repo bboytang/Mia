@@ -329,6 +329,14 @@ private:
             EnterWifiConfigMode();
             return;
         }
+        // Stopping a turn must not tear down the session: on ESP32-C3 a fresh
+        // TLS + WebSocket handshake costs several seconds, and this key is the
+        // only way back into a conversation. The server closes an idle session
+        // on its own once it really is done with it.
+        if (app.GetDeviceState() == kDeviceStateListening) {
+            app.StopListening();
+            return;
+        }
         app.ToggleChatState();
     }
 
