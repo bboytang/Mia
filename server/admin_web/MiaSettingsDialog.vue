@@ -7,6 +7,7 @@
       <div v-for="item in switches" :key="item.key" class="mia-setting">
         <div><strong>{{ item.label }}</strong><p>{{ item.description }}</p></div>
         <el-switch :value="settingValue(item.key)" :disabled="busy" :aria-label="item.label"
+          :aria-checked="settingValue(item.key) ? 'true' : 'false'"
           @change="change(item.key, $event)" />
       </div>
       <p>已保存记忆 {{ state.counts.memories }} 条 · 成长特点 {{ state.counts.traits }} 个 · 互动事件 {{ state.counts.events }} 个</p>
