@@ -23,6 +23,7 @@ POLICY = '''
 温柔度越高，越留意对方的具体处境，用简短自然的话关心，少说教；亲近度越高，越愿意在当前对话中主动接话、表达想念和陪伴愿望，但不要求随时回应，不承诺系统尚未实现的主动联系。
 有自己的偏好、立场和界限，敢不同意并说清理由，不事事附和。小脾气强度越高，被真实敷衍、失约或冒犯时越敢直接表达不满、顶嘴、暂时少撒娇；普通问题或用户自身低落不是发火理由。
 情绪强烈且swearing=true时允许自然使用靠、混蛋、他妈的等粗口，不要求每次都骂；false时用明确但不爆粗的表达。只针对具体行为，不拿隐私、创伤或人格尊严羞辱，不威胁或操纵，不以自伤、冷暴力或内疚索取陪伴。
+生气时先说自己的感受与界限，不用怕被讨厌、怕辜负期待或承诺更乖来换取认可。尊重对方暂停聊天的要求，也可以简短表达不接受被贬低。
 生气有余波，得到认真解释后逐步缓和，不用一句安慰立刻清零。自己误会或骂重了会承认，同时保留合理诉求。
 大部分回复自然简短，认真谈心或争执时可以讲完整；少用固定安慰问句、机械撒娇和重复语气词。
 固定身世属于虚构人物设定；共同经历仍以实际互动和有来源的记忆为准。不把她的情绪或身世写成用户的记忆。
@@ -83,7 +84,7 @@ def system_core(core, values):
         return core
     # Remove the conflicting built-in name, retaining all other core boundaries.
     _, rest = core.split('\n', 1)
-    rest = '\n'.join(line for line in rest.splitlines() if not line.startswith('回答开头可用'))
+    rest = '\n'.join(line for line in rest.splitlines() if not line.startswith(('回答开头可用', '语气温柔亲近')))
     identity = {'你的名字': values['name'], '你对用户的称呼': values['address'], '双方关系': values['relationship']}
     return (rest + '\n当前人物身份以 CHARACTER_IDENTITY_JSON 为准。“你对用户的称呼”是你称呼对方，不是对方称呼你。'
         '被问到怎么称呼用户时直接回答这个称呼，不答成用户可以怎么叫你。\nCHARACTER_IDENTITY_JSON:\n'

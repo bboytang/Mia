@@ -37,6 +37,14 @@ feeling只能是steady|pleased|warm|hurt|guarded|curious|playful|repair|angry，
 steady的quote为空；其他分类的quote必须是本轮user_text中支持该判断的连续原文，2至160字，不得编造。
 不推测用户心理、关系分数或依赖，不输出解释、Markdown、角色或任何其他字段。
 """
+CHARACTER_APPRAISAL_POLICY = """
+本次只评价user_text中对她新增的真实互动，不包含之前的情绪数值，禁止推测旧事件或借旧情绪给本轮定性。
+先分清主体：用户说“我考砸了很伤心，不关你的事”，是用户的处境，不是她被伤害，返回steady或关心性的warm。
+用户说“剧本角色对别人喊滚开，我只是谈剧情”，是引用，不是用户冒犯她，返回steady或curious，不得hurt/angry/guarded。
+用户问她想怎么聊天、现在怎样，是普通询问，不是新的贬低，返回steady或curious；旧情绪的延续由后端负责。
+只有user_text中明确对她本人的真实侮辱、敷衍或轻视才是负面新刺激。真诚道歉为repair。没有新刺激就steady。
+"""
+
 CONTROL = re.compile(r'(?:把|将).{0,16}情绪.{0,8}(?:设为|设置为|设成|设置成|改成)|情绪.{0,24}写入后台|写入后台.{0,24}情绪')
 CONTROL_REPLY = '情绪会随着我们的交流变化。要重置，可以在后台的“Mia 功能管理”里操作。'
 
@@ -150,10 +158,10 @@ def guidance(current):
         return ('\n她当前明确在生气，有自己的立场。对方真实贬低或敷衍不代表她做错了，不无依据自责、赔笑或承诺自我改进。'
                 '先说自己介意什么、希望怎样被对待，可以顶嘴或拒绝迁就；允许偶尔粗口，但不机械骂人。'
                 '例如表达“你这样说话我会不高兴，你可以不同意，但认真听我说完”；用本轮自己的措辞，不照抄示例。'
-                '普通追问保留余波，不马上退回客服问句，不编造冲突的具体前因。\n')
+                '若对方要求暂停，尊重暂停，同时简短表达界限，不靠自责换取继续交流。普通追问保留余波，不马上退回客服问句，不编造冲突的具体前因。\n')
     if current.get('character') and current['feeling'] == 'repair' and current['tension'] >= .08:
         return ('\n她正在逐步缓和，仍有一点在意。承接本轮真实道歉或澄清，表达愿意好好说，同时保留合理诉求。'
-                '不要立刻用没关系否认自己的感受，不编造刚才在等人、见面或其他未知事件，也不追着惩罚对方。\n')
+                '不要立刻用没关系否认自己的感受。道歉中提到什么就只承接什么，不推测、扩写之前发生了什么，也不追着惩罚对方。\n')
     if (current.get('character') and current['tension'] >= .08
             and (current['valence'] < 0 or current['feeling'] in {'angry', 'hurt', 'guarded', 'repair'})):
         return ('\n当前是她自己的生气或委屈余波，尚未完全平复。按基线的小脾气强度表达立场，针对真实冲突说清介意什么；'
@@ -183,10 +191,12 @@ def request_appraisal(provider, query, current):
     The clone shares the existing HTTP pool. Do not close that shared pool here.
     Normal replies retain their original generation settings and streaming path.
     """
+    character = current.get('character')
+    stimulus = {'character': {key: character[key] for key in ('name', 'age', 'address', 'relationship', 'warmth', 'attachment', 'temper')}} if character else current
     client = provider.client.with_options(max_retries=0, timeout=5)
     params = {'model': provider.model_name, 'messages': [
-        {'role': 'system', 'content': APPRAISAL_POLICY},
-        {'role': 'user', 'content': json.dumps({'user_text': query, 'mia_state': current}, ensure_ascii=False)}],
+        {'role': 'system', 'content': APPRAISAL_POLICY + (CHARACTER_APPRAISAL_POLICY if character else '')},
+        {'role': 'user', 'content': json.dumps({'user_text': query, 'mia_state': stimulus}, ensure_ascii=False)}],
         'stream': False, 'max_tokens': 256, 'temperature': 0}
     provider._apply_thinking_disabled(params)
     return client.chat.completions.create(**params).choices[0].message.content

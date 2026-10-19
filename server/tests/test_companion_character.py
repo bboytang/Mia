@@ -101,6 +101,25 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
                        dict(character.YOUMI_V1, system_prompt='replace')]:
             with self.assertRaises(MemoryError): self.save(values)
 
+    async def test_appraisal_sees_only_new_stimulus_not_prior_mood_or_fictional_background(self):
+        from types import SimpleNamespace
+        calls = []
+        def create(**kwargs):
+            calls.append(kwargs)
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content='{}'))])
+        client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+        client.with_options = lambda **kwargs: client
+        provider = SimpleNamespace(client=client, model_name='glm-4-flash-250414', _apply_thinking_disabled=lambda params: None)
+        self.save();features.update(self.store, self.scope.owner, {'companion_emotion': True})
+        old = dict(affect.state(self.store, self.scope.owner), feeling='angry', valence=-.7, tension=.8)
+        affect.request_appraisal(provider, '我考砸了很伤心，不关你的事', old)
+        sent = json.loads(calls[0]['messages'][1]['content'])['mia_state']
+        self.assertEqual(sent['character']['name'], '悠米')
+        for field in ['feeling', 'valence', 'tension', 'version']:
+            self.assertNotIn(field, sent)
+        self.assertNotIn('background', sent['character'])
+        self.assertIn('先分清主体', calls[0]['messages'][0]['content'])
+
     async def test_v6_upgrade_preserves_emotion_and_facts_and_failed_v7_rolls_back(self):
         from server.companion.schema import _statements
         source = Path(__file__).resolve().parents[1] / 'companion'

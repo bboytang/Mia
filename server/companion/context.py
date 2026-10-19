@@ -264,6 +264,10 @@ class ContextBuilder:
                 evidence = {'status': 'no_match', 'meaning': '本轮没有与问题匹配的可靠用户长期记忆，用户的这段往事未知。'}
             if inputs.get('character'):
                 evidence['meaning'] = evidence['meaning'].replace('Mia', inputs['character']['name'])
+            if inputs.get('character') and not retained:
+                data['interaction_detail_boundary'] = '本轮没有旧对话原文，情绪余波不代表知道前因。只能承接当前用户明确说出的行为与已有可靠记忆，不推测用户之前做过什么。'
+            else:
+                data.pop('interaction_detail_boundary', None)
             data['memory_evidence'] = evidence
             from .extraction import explicit_change
             change = explicit_change(inputs['query'], data['facts'])
