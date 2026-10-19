@@ -33,9 +33,11 @@ class SDKFixtureProvider:
         self.client = openai.OpenAI(api_key='fixture-only', base_url='https://fixture.invalid/v4',
             http_client=httpx.Client(transport=httpx.MockTransport(transport)))
         self.sdk_calls = 0
+        self.on_sdk_entry = lambda: None
         create = self.client.chat.completions.create
         def observed(*args, **kwargs):
             self.sdk_calls += 1
+            self.on_sdk_entry()
             return create(*args, **kwargs)
         self.client.chat.completions.create = observed
 
@@ -70,8 +72,10 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
             return self.response(request)
         self.transport = transport
         self.providers = []
+        self.sdk_entry = lambda: None
         def factory():
             provider = SDKFixtureProvider(self.transport)
+            provider.on_sdk_entry = self.sdk_entry
             self.providers.append(provider)
             return provider
         async def resolve(scope):
@@ -114,6 +118,25 @@ class V2RequestTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.jobs.policy(job)['phase'], 'terminal')
         self.assertEqual(self.providers[0].client.max_retries, 0)
         self.assertFalse(self.providers[0].client._client.follow_redirects)
+
+    async def test_sdk_started_marker_is_observed_inside_sdk_not_before_invocation(self):
+        job = await self.worker.submit(self.event())
+        def at_entry():
+            with self.store.lock:
+                request, = self.requests(job)
+            self.assertIsNotNone(request['intent_at'])
+            self.assertIsNone(request['sdk_started_at'], 'A pre-call write cannot prove the SDK has begun')
+        self.sdk_entry = at_entry
+        original_response = self.response
+        def at_http(request):
+            with self.store.lock:
+                row, = self.requests(job)
+            self.assertIsNotNone(row['sdk_started_at'])
+            return original_response(request)
+        self.response = at_http
+        await self.worker.run_once()
+        self.assertEqual(self.row(job)['state'], 'committed')
+        self.assertEqual(len(self.http), 1)
 
     async def test_default_sdk_http_client_is_reviewed_but_transport_retries_are_rejected(self):
         provider = SDKFixtureProvider(self.transport)

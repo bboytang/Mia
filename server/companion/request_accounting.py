@@ -90,6 +90,14 @@ class RequestAccounting:
         await self.worker._scope(self.job)
         self.ordinal = await asyncio.to_thread(self.reserve)
 
+    def check(self):
+        with self.store.lock:
+            self._eligible()
+
+    async def preflight(self):
+        await self.worker._scope(self.job)
+        await asyncio.to_thread(self.check)
+
     def entry(self, http=False):
         with self.store.lock, self.store.db:
             self.store.db.execute('BEGIN IMMEDIATE')
@@ -107,9 +115,10 @@ class RequestAccounting:
                 raise RuntimeError('V2 duplicate SDK or HTTP request blocked')
 
     async def start(self, http=False):
-        # Recheck manager binding/permissions after reservation and immediately
-        # before the actual HTTP entry as well; neither check grants a lease.
-        await self.worker._scope(self.job)
+        # SDK entry is observed from inside the SDK's request builder. HTTP
+        # still rechecks manager binding immediately before sending.
+        if http:
+            await self.worker._scope(self.job)
         await asyncio.to_thread(self.entry, http)
 
     def response(self):
@@ -162,7 +171,16 @@ def bind_sdk(provider, accounting):
         raise ExtractionError('tool_contract', 'V2 HTTP transport retry budget is unreviewed')
     client._client.follow_redirects = False
     create = client.chat.completions.create
+    build = client._build_request
     blocked = []
+    def observed_build(*args, **kwargs):
+        try:
+            accounting.call(accounting.start())
+            return build(*args, **kwargs)
+        except Exception as error:
+            blocked.append(error)
+            raise
+    client._build_request = observed_build
     def request_hook(unused):
         try:
             accounting.call(accounting.start(http=True))
@@ -187,7 +205,7 @@ def bind_sdk(provider, accounting):
 
     def tracked_create(*args, **kwargs):
         accounting.call(accounting.intent())
-        accounting.call(accounting.start())
+        accounting.call(accounting.preflight())
         try:
             return ObservedStream(create(*args, **kwargs))
         except Exception:

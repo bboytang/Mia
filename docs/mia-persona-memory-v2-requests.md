@@ -43,3 +43,13 @@
 R6新诊断：实际10k首先冷特征读，然后固定5暖读；记录缓存条数/字节、逐行特征构建聚合时长、扫描线程CPU与墙钟、真实BGE、manager/锁/SQLite等嵌套trace和完整结果hash。每行只累计计数/耗时，不写盘或创建span；整体观察窗口可能含空闲Worker维护，重叠span不相加当墙钟。读取结果必须完全一致；冷10000次特征构建、暖0次，否则诊断拒绝。此时encoder已初始化，不能称模型加载冷启动。没有启用权限/版本快路径或修改R7完整句校验。
 
 冻结后一次push触发必要的服务/身份/manager/真实BGE/提取/观测CI，另仅dispatch一次远端cap0共享诊断。必要源码差异/失败修复会记录新SHA并只重验受影响内容，不重复同源码采样取绿。当前不具备宣布P23整体验收的条件：原首句912.84ms失败与完整36任务10/26仍原样保留。
+
+## 冻结后独立复查：SDK开始必须来自SDK内部
+
+旧候选a229268be63d4dd4bb59cbdf79ec306dc6cc8ca9六项自动CI均success（351服务、身份、manager、实际BGE五报告、提取语法、39观测），但复查发现sdk_started_at仍写在实际SDK调用前，存在把即将调用误说成已经开始的窗口。新增确定性SDK入口反例先在旧实现失败，原log为performance-v2-sdk-observation-before.log.gz；不能用已有绿色结果否认此缺陷。
+
+已修正：intent保留原先事务；发送前另做原权限/来源/取消/deadline复核，然后进入实际SDK。sdk_started_at从固定SDK2.8.1内部_build_request观察点记录，正值证明SDK已经进入请求构建；HTTP hook再复核并记录发送入口。若SDK在该观察点之前失败/崩溃，sdk_started_at为NULL代表未观测/未知，不等同实际SDK次数0，更不能猜远端收到。http_sends也是httpx发送边界的保守记录，不能冒充socket完整写出/远端收据；真实SDK spy与MockTransport分别独立计数。没有修改attempt预算/DDL/默认调度参数。
+
+该补充286项相关回归通过。其首轮触发既有检索反例自身的并行SQLite写事务竞争：编码hook未拿store.lock，两原生编码线程会对同连接commit交叉。只为该故障注入写入补上既有存储锁，来源变化必须拒绝/删除来源清除线索的原断言原样保留；原失败performance-v2-sdk-observation-after.log.gz不覆盖。新文件/门闩/迁移也补齐身份、向量和提取workflow路径，保证今后单改账本仍有相关CI。
+
+共享诊断39191989529仍收原句柄，不重复派发在途测试。由于请求开始观察点确有源码修正，需要新SHA的必要同SHA回归，不能把旧a229268的绿色归到新代码。

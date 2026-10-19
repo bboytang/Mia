@@ -122,7 +122,7 @@ class HybridRetrievalTests(unittest.IsolatedAsyncioTestCase):
         own = self.fact('海鲜过敏需要避开扇贝', triggers=['点菜'], keywords=['扇贝'], emotion=1)
         await self.index.rebuild_batch(self.scope, self.auth)
         def change(*args):
-            with self.store.db:
+            with self.store.lock, self.store.db:
                 self.store.db.execute('UPDATE mia_memory_meta SET trigger_terms=NULL WHERE memory_id=?', (own,))
         self.encoder.hook = change
         with self.assertRaisesRegex(EmbeddingUnavailable, 'memory_changed'):
