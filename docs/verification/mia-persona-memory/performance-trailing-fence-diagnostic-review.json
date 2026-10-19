@@ -1,0 +1,465 @@
+{
+  "run": {
+    "conclusion": "success",
+    "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+    "jobs": [
+      {
+        "completedAt": "2026-10-19T00:31:26Z",
+        "conclusion": "success",
+        "databaseId": 117832826440,
+        "name": "shared",
+        "startedAt": "2026-10-19T00:26:19Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare dependencies outside measured envelope",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare isolated TLS certificates and explicit test trust",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Prepare pinned actual BGE outside measured envelope",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install actual companion and compile manager test outside envelope",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Actual manager, databases and Python-BGE share one 2CPU 2GiB parent",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Preserve all original results including failures",
+            "number": 11,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 19,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 20,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 21,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 22,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 23,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/bboytang/Mia/actions/runs/39180767649/job/117832826440"
+      },
+      {
+        "completedAt": "2026-10-19T00:26:28Z",
+        "conclusion": "success",
+        "databaseId": 117832826689,
+        "name": "syntax",
+        "startedAt": "2026-10-19T00:26:19Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 9,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/bboytang/Mia/actions/runs/39180767649/job/117832826689"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/bboytang/Mia/actions/runs/39180767649"
+  },
+  "runtime_sha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+  "p23_complete": false,
+  "normal_task_p95": null,
+  "scope": "Two fixed original warm inputs only; not the 36-task fairness or normal-load p95 acceptance.",
+  "regressions": [
+    {
+      "conclusion": "success",
+      "databaseId": 39180767649,
+      "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+      "name": "Verify Mia P23 shared service envelope",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39180767649"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39180756118,
+      "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+      "name": "Test Mia Protocol Server",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39180756118"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39180756160,
+      "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+      "name": "Verify Mia structured extraction provider",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39180756160"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39180756108,
+      "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+      "name": "Verify Mia manager baseline",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39180756108"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39180756120,
+      "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+      "name": "Verify Mia binding authorization",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39180756120"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39180756105,
+      "headSha": "ca038445df26470ecbd9feedba40be5d08ff1050",
+      "name": "Verify Mia actual semantic vectors",
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39180756105"
+    }
+  ],
+  "raw_artifact_hashes": {
+    "app-lifecycle-results.json": "ab755f053dff680f57c90006a4eb54ee2f0a4dc2f124be3c13eeb6e9dcde0174",
+    "database-image-digests.txt": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a",
+    "runtime-system.txt": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+    "cgroup-final-cpu.max.txt": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69",
+    "docker-cgroup-driver.txt": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820",
+    "mysql.log": "bd2d1cd5ac18fbb2e964ac29a6ef748e7e232a652f5dcd537241a364721d799a",
+    "export-dependencies.txt": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+    "cgroup-final-cpu.stat.txt": "4186ec35e3a23fa3992b2b034fdbfe8d2a8689bc5c43681bd55343d060d9598f",
+    "cgroup-final-memory.current.txt": "a13360a1350977babe0ee6a6f8e7b41eb075b4d8b6a1bf4a929fb667bd6ec1e2",
+    "container-final.txt": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b",
+    "cgroup-final-memory.max.txt": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e",
+    "python.log": "af25629aa27f6f966a7f6448f00e3574e36344600c208dd0cdf4a01a25f1be52",
+    "redis.log": "c78cbd852df88111a24e14aafa89d118e58e23a5a01b3ea4c84878c6f7299930",
+    "cgroup-final-memory.swap.max.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "manager.log": "cfc87c764bb24a5b41109157af87d2a78a7ea16540e037db55870016228b99a4",
+    "cgroup-final-memory.events.txt": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2",
+    "cgroup-final-memory.peak.txt": "cf16f7f5762f924d538d1ca973d668fc76aa92a6f9806cf56509a1fd9b3753f2",
+    "java-version.txt": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0",
+    "container-stop.txt": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565",
+    "container-stopped.txt": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+    "app-service.log": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+    "preparation-dependencies.txt": "c16bc955986357dd5c5443ad221b733c4cf59e94252fdc26d368accd8b10b538",
+    "app-child/ready.json": "90929e22104b31777f16cc2d5e02e172e9eb212bcac413d2627ccf6e5f001246",
+    "app-child/app-results.json": "722cd5b7cf8c9cc350b67aa5d87c7753a15816414c45a61ba02df072b120a249",
+    "app-child/memory.sqlite3": "2f1f3d2398e4b2d9cddd7038d30d11b510bbb6c392a710258a8012901b7b6491",
+    "junit/TEST-junit-jupiter.xml": "f0db404d3db0648e86c89124450f598b948733d1617855251c6b997150b5ac44",
+    "junit/TEST-junit-vintage.xml": "0e18a96da9bd16342cbb2c043abab13ddc04feed92799159d8dd3f3f22462243",
+    "junit/TEST-junit-platform-suite.xml": "7bf06596b977d6c46d9480d756dc9ae587c0740baa827bfeea9c29735208300a"
+  },
+  "artifacts": [
+    {
+      "file": "performance-trailing-fence-diagnostic-parent.json.gz",
+      "source_path": "app-lifecycle-results.json",
+      "raw_sha256": "ab755f053dff680f57c90006a4eb54ee2f0a4dc2f124be3c13eeb6e9dcde0174",
+      "sha256": "a9c8bd174ebd51dd8fe5da499210459fcc7976ed326ef5a139b93bb6d5e79052"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-child.json.gz",
+      "source_path": "app-child/app-results.json",
+      "raw_sha256": "722cd5b7cf8c9cc350b67aa5d87c7753a15816414c45a61ba02df072b120a249",
+      "sha256": "1b9d0491ce5ff15a6ddcdf714d063aec00575f8d10a7730583362d6cb1742482"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-preparation-dependencies.txt.gz",
+      "source_path": "preparation-dependencies.txt",
+      "raw_sha256": "c16bc955986357dd5c5443ad221b733c4cf59e94252fdc26d368accd8b10b538",
+      "sha256": "10241aa842c5fd1cd7deba36f3ec82c981a46dba1524b7bc8d09a9fcd86f5e40"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-export-dependencies.txt.gz",
+      "source_path": "export-dependencies.txt",
+      "raw_sha256": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40",
+      "sha256": "779f4114c5a61f2c3c80194656772dfb37721853718f780f85d1a13e153915df"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-runtime-system.txt.gz",
+      "source_path": "runtime-system.txt",
+      "raw_sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259",
+      "sha256": "9c90118ebeb3117242f0dc4377cc6e6dc7fcc07cb8ef5466a04c30750595c466"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-container-stopped.txt.gz",
+      "source_path": "container-stopped.txt",
+      "raw_sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7",
+      "sha256": "c4f4b7672f020093500657f382bcff1c81902ea7ba2430e46c1ddd66d67fa0a3"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-ci-results.json.gz",
+      "source_path": "mia-p23-trailing-fence-run.json",
+      "raw_sha256": "94b3a72a753536e36822e2d4ba3580c5fa649fa2d0b8a3105ff458bb3036bcf3",
+      "sha256": "1eede22cfcc25330d4f4679f7919c915089f1d65cb4072fa51a7c82c1296d1e8"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-regression-runs.json.gz",
+      "source_path": "mia-p23-trailing-fence-regressions.json",
+      "raw_sha256": "44ac9b27c8c8ee8c30033b05a4a73941eb5a4aa988c84ed610ce7d36591c83ee",
+      "sha256": "e46e986a63fb6aca2e7262060dde4200590465b8033d8fd027155050d4470220"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-diagnostic.log.gz",
+      "source_path": "mia-p23-trailing-fence-diagnostic.log",
+      "raw_sha256": "5e1d71de278d4c535adcaf91f423654fb7701fa2ee54a21929902d05961f0b1f",
+      "sha256": "cb053bc0b61d49ad9bf79ceb39bcca1f536f7d57e617931f689a0ecf9232eba9"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-service.log.gz",
+      "source_path": "mia-trailing-fence-service.log",
+      "raw_sha256": "821708597313da3221d0c8e11a6c8b4cf7fcff63790e4fc8d73f8c2971df80f6",
+      "sha256": "4ebe7d74d93a97b69e0a4404f0db90a692df3268816c454f904ddca8ea52475b"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-manager.log.gz",
+      "source_path": "mia-trailing-fence-manager.log",
+      "raw_sha256": "852683b015ae1f8c59d0e2aa3f26701e955b2b84cfd125fc6ed44f27fc96a919",
+      "sha256": "28b5255c0828bac6e54cbca5b17f57b382b56c61ef5a6982494a5581433724ad"
+    },
+    {
+      "file": "performance-trailing-fence-diagnostic-extraction-syntax.log.gz",
+      "source_path": "mia-trailing-fence-extraction-syntax.log",
+      "raw_sha256": "6947f93998496872f28888a16a562078dd31889d0635981725b619ba08acc66e",
+      "sha256": "e82deaaba78ec306f30985c8290a75f5df563158a87e2d602c4ae783b9a59f7b"
+    }
+  ],
+  "provider_requests": 3,
+  "provider_errors": [],
+  "tasks": [
+    {
+      "round": 0,
+      "warm": true,
+      "owner": "user:941040001:agent:mia-p23-0",
+      "profile": "short",
+      "source": "周六上午我通常在书桌边整理纸质邮票册",
+      "raw_source": "周六上午我通常在书桌边整理纸质邮票册",
+      "session_id": "p23-fair-0-short",
+      "submitted_at_ms": 170.57110300004297,
+      "admission": {
+        "status": "accepted",
+        "accepted": true,
+        "id": "7d0fdfc500d2c20580b172016a38944b669f71df69eead61a93c9d04a81d37c8",
+        "state": "pending"
+      },
+      "admitted_at_ms": 198.07102300001134,
+      "state": "committed",
+      "attempts": 1,
+      "error_category": null,
+      "submit_to_observed_terminal_seconds": 5.736438112999963
+    },
+    {
+      "round": 0,
+      "warm": true,
+      "owner": "user:941040003:agent:mia-p23-2",
+      "profile": "dense",
+      "source": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+      "raw_source": "整理纸质邮票册时，我先在书桌上铺一块浅色棉布，把准备归位的邮票按收集年份分成几叠，再逐张把卷起的边角轻轻理平，用干净的镊子夹住外缘放进透明护邮袋，接着对照册页右下角的铅笔编号确认位置，把新添的邮票登记在横线记录本里，登记内容包括拿到邮票的月份和图案名称，放好后我会轻轻合上册页，用软布擦掉封面浮灰，把邮票册直立放回书桌左侧的木架，最后把镊子收进蓝色笔盒，再将棉布叠好放进抽屉",
+      "session_id": "p23-fair-0-dense",
+      "submitted_at_ms": 5935.993334000045,
+      "admission": {
+        "status": "accepted",
+        "accepted": true,
+        "id": "6434ffbe6fc4c04a04dd715e3c3100044036e4a41c0de00a22151fa5b210b16d",
+        "state": "pending"
+      },
+      "admitted_at_ms": 5955.774082000005,
+      "state": "committed",
+      "attempts": 2,
+      "error_category": null,
+      "submit_to_observed_terminal_seconds": 25.635014350000006
+    }
+  ],
+  "native_validations": [
+    {
+      "job_id": "7d0fdfc500d2c20580b172016a38944b669f71df69eead61a93c9d04a81d37c8",
+      "attempt": 1,
+      "original_output_sha256": "db80035433c62a9cb140b3b717075d511e76e535b5192978cd101bb456566af8",
+      "original_output_validation": {
+        "passed": true
+      }
+    },
+    {
+      "job_id": "6434ffbe6fc4c04a04dd715e3c3100044036e4a41c0de00a22151fa5b210b16d",
+      "attempt": 1,
+      "original_output_sha256": "b2349f8dd97c05d6e8c04f8122b04f887abbda8244b954c23e768d0ab9fc9679",
+      "original_output_validation": {
+        "passed": false,
+        "error_class": "MemoryError",
+        "code": "invalid_input",
+        "message": "entities has 16 extraction clues; at most 8 are allowed",
+        "rejected_clues": {}
+      }
+    },
+    {
+      "job_id": "6434ffbe6fc4c04a04dd715e3c3100044036e4a41c0de00a22151fa5b210b16d",
+      "attempt": 2,
+      "original_output_sha256": "720b795926fca55785c9f44e2ad713d47e5e7589928ac069ac2f03ecdab6da50",
+      "original_output_validation": {
+        "passed": true
+      }
+    }
+  ],
+  "python_peak_after_workload_mib": 365.51171875,
+  "common_peak_mib": 1392.44921875,
+  "cgroup_final": {
+    "cpu.max": "200000 100000",
+    "cpu.stat": "usage_usec 44957063\nuser_usec 40635382\nsystem_usec 4321680\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 592\nnr_throttled 128\nthrottled_usec 5991863\nnr_bursts 0\nburst_usec 0",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0",
+    "memory.current": "1053851648",
+    "memory.peak": "1460088832",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+  },
+  "app_process_shutdown_seconds": 0.33018785199999456,
+  "idle_service_group_shutdown": {
+    "elapsed_seconds": 2.0059923299999696,
+    "databases_stopped_with_zero_exit_no_oom": true,
+    "remaining_original_processes": [],
+    "passed": true,
+    "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+  },
+  "first_attempt_message_comparisons": [
+    {
+      "job_id": "7d0fdfc500d2c20580b172016a38944b669f71df69eead61a93c9d04a81d37c8",
+      "owner": "user:941040001:agent:mia-p23-0",
+      "messages_sha256": "a3010d29b6664a248442eb59fb36899b50ba138839fbe0e9455670c69fa3239a",
+      "same_as_original_full_batch": true
+    },
+    {
+      "job_id": "6434ffbe6fc4c04a04dd715e3c3100044036e4a41c0de00a22151fa5b210b16d",
+      "owner": "user:941040003:agent:mia-p23-2",
+      "messages_sha256": "3c37557502c540f714f58e9c5550cfdd942af052a044cb407602be35e7d86a23",
+      "same_as_original_full_batch": true
+    }
+  ],
+  "sqlite_audit": {
+    "integrity": "ok",
+    "tasks": 2,
+    "committed_facts_with_original_owner_source_and_768_vectors": [
+      {
+        "id": "836f6060b87b4a33aea0c623d0fc8f0a",
+        "owner": "user:941040001:agent:mia-p23-0",
+        "content": "周六上午我通常在书桌边整理纸质邮票册",
+        "confirmed": 1,
+        "excerpt": "周六上午我通常在书桌边整理纸质邮票册",
+        "session_id": "p23-fair-0-short",
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "vector_sha256": "148748b5f8024bfc81783239825e41f2dfd768a5e78f2bfdbef5bf3eabe995e7"
+      },
+      {
+        "id": "cfe417eaab3445e790f2cd3050e07b66",
+        "owner": "user:941040003:agent:mia-p23-2",
+        "content": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "confirmed": 1,
+        "excerpt": "整理纸质邮票册时,我先在书桌上铺一块浅色棉布,把准备归位的邮票按收集年份分成几叠,再逐张把卷起的边角轻轻理平,用干净的镊子夹住外缘放进透明护邮袋,接着对照册页右下角的铅笔编号确认位置,把新添的邮票登记在横线记录本里,登记内容包括拿到邮票的月份和图案名称,放好后我会轻轻合上册页,用软布擦掉封面浮灰,把邮票册直立放回书桌左侧的木架,最后把镊子收进蓝色笔盒,再将棉布叠好放进抽屉",
+        "session_id": "p23-fair-0-dense",
+        "dimension": 768,
+        "vector_bytes": 3072,
+        "vector_sha256": "32e77db4a062007dcb057be369a87decee27c299b4e0c62df16ce6278d429140"
+      }
+    ]
+  }
+}
