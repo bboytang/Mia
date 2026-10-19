@@ -194,6 +194,25 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(await reply.finish_affect(self.conn))
         self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
 
+    async def test_appraisal_timeout_keeps_normal_reply_and_releases_model_slot(self):
+        from server.companion.model_requests import model_requests
+        with patch('server.companion.affect.request_appraisal', side_effect=TimeoutError):
+            shown = await self.run_reply()
+        self.assertEqual(''.join(shown), '😌第一句。第二句。')
+        self.assertFalse(await reply.finish_affect(self.conn))
+        self.assertEqual(model_requests.snapshot()['active'], 0)
+
+    async def test_switch_change_during_appraisal_stops_generation_and_state_write(self):
+        from server.companion.model_requests import model_requests
+        def changed(*args):
+            features.update(self.store, self.scope.owner, {'companion_emotion': False})
+            return self.appraisal_raw
+        with patch('server.companion.affect.request_appraisal', side_effect=changed):
+            with self.assertRaises(ContextError):await self.run_reply()
+        self.assertEqual(self.provider.calls, [])
+        self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
+        self.assertEqual(model_requests.snapshot()['active'], 0)
+
     async def test_tool_pairs_strip_prefix_without_changing_tool_payloads(self):
         shown = await self.run_reply(['😔我想先把话说清楚。'], functions=self.tools)
         self.assertEqual(shown, [('😔我想先把话说清楚。', None)])

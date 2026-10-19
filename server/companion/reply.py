@@ -221,6 +221,7 @@ def response(conn, functions, depth):
                         raise ContextError('context_turn_superseded')
                     active = replace(active, bundle=bundle)
                     conn._mia_context_turn = active
+                    conn._mia_context_status = {'status': 'ready', 'turn_id': bundle.turn_id, **bundle.diagnostics()}
                     conn._mia_affect_pending = (active, proposal)
             request = active.bundle.request()
             tools = request.get('tools')
