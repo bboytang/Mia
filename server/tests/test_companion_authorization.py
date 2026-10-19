@@ -136,6 +136,26 @@ class ScopeBoundaryTests(unittest.IsolatedAsyncioTestCase):
             session.aclose.assert_awaited_once()
             request.assert_awaited_once()
 
+    async def test_post_disconnect_title_revalidates_scope_without_reopening_connection_transport(self):
+        config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
+        data = scope_data()
+        authorization = auth.PrivateAuthorization(config, connection_loop=asyncio.get_running_loop())
+        await authorization.close()
+        conn = SimpleNamespace(config=config, _mia_scope=auth._manager_scope(data),
+                               _mia_authorization=authorization, session_id='session-one')
+        with patch.object(auth.PrivateAuthorization, '_request', new_callable=AsyncMock,
+                          side_effect=[data, True]) as request:
+            self.assertTrue(await auth.save_chat_title(conn))
+            self.assertEqual(request.await_count, 2)
+            self.assertEqual(request.call_args.args, ('/agent/chat-title/session-one/generate', conn._mia_scope.snapshot()))
+        with patch.object(auth.PrivateAuthorization, '_request', new_callable=AsyncMock,
+                          return_value=dict(data, credential_version=2)) as request:
+            with self.assertRaises(auth.PrivateAuthorizationRequired):
+                await auth.save_chat_title(conn)
+            request.assert_awaited_once()
+        self.assertTrue(authorization._closed)
+        self.assertIsNone(authorization._session)
+
     async def test_both_manager_client_signatures_use_one_request_and_close_owned_session(self):
         config = {"manager-api": {"url": "https://manager.example/xiaozhi"}}
         body = {"fixture": "trusted"}

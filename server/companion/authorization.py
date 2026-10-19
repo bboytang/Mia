@@ -246,12 +246,19 @@ async def report_chat(conn, mac_address, session_id, chat_type, content, audio, 
 
 
 async def save_chat_title(conn):
-    await require_connection(conn)
     scope = getattr(conn, "_mia_scope", None)
     if not isinstance(scope, AuthenticatedScope) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", conn.session_id):
         raise PrivateAuthorizationRequired()
+    authorization = getattr(conn, '_mia_authorization', None)
+    if isinstance(authorization, PrivateAuthorization) and authorization._closed:
+        # The existing title worker outlives the websocket. Revalidate its
+        # server-owned Scope with a separate, non-pooled client, like jobs.
+        authorization = PrivateAuthorization(conn.config)
+    if authorization is None:
+        raise PrivateAuthorizationRequired()
+    await authorization.require(scope, 'memory:read')
     # Existing title generation remains synchronous at manager; one attempt.
-    return await conn._mia_authorization._request(
+    return await authorization._request(
         f"/agent/chat-title/{conn.session_id}/generate", scope.snapshot(), timeout=30)
 
 
