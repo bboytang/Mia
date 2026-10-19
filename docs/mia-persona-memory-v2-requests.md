@@ -35,3 +35,11 @@
 284项相关回归、30项聚焦检查通过。源码审查发现with_options克隆会丢失安装到SDK资源上的观察包装：旧本地账本HTTP正确，但额外SDK spy为0，不能当实际SDK次数证据。保留旧报告，改为仅将每次提取独占的原client.max_retries设0，保留原入口，新增1SDK/1HTTP、2SDK/2HTTP精确断言；更新证据performance-v2-scheduling-accounting.json取代其SDK spy解释，旧文件不覆盖。默认SDK HTTP类和显式transport retries=1拒绝反例另通过。
 
 下一步只在隔离共享资源下固定两臂strict-control/four-ten（每臂16前台SDK＋1真实Worker，全部MockTransport，34 SDK/HTTP固定上限、远端0），测量前台排队影响；历史8.8168秒中位数只用作可控后台保持时长，不冒充GLM网络。同时测真实10k冷特征/5暖读，再执行原4Mock完整chat/Guard/TTS对照。无完整36任务或72回复。
+
+## 检查点4：候选冻结与验证计划
+
+调度SHA 0616e92。最终本地285项companion、39项CI机制通过；Python3.10 AST和diff检查通过。新CI驱动本地干跑完成：固定上游87c6df7真实Provider/SDK/MockTransport，34SDK=34HTTP/远端0，两任务均empty/attempt1。该干跑检索是夹具，不是实际BGE或2CPU资源证据；其虚拟任务clock不用于墙钟队列解释。受限服务组真实结果待唯一GitHub诊断。
+
+R6新诊断：实际10k首先冷特征读，然后固定5暖读；记录缓存条数/字节、逐行特征构建聚合时长、扫描线程CPU与墙钟、真实BGE、manager/锁/SQLite等嵌套trace和完整结果hash。每行只累计计数/耗时，不写盘或创建span；整体观察窗口可能含空闲Worker维护，重叠span不相加当墙钟。读取结果必须完全一致；冷10000次特征构建、暖0次，否则诊断拒绝。此时encoder已初始化，不能称模型加载冷启动。没有启用权限/版本快路径或修改R7完整句校验。
+
+冻结后一次push触发必要的服务/身份/manager/真实BGE/提取/观测CI，另仅dispatch一次远端cap0共享诊断。必要源码差异/失败修复会记录新SHA并只重验受影响内容，不重复同源码采样取绿。当前不具备宣布P23整体验收的条件：原首句912.84ms失败与完整36任务10/26仍原样保留。

@@ -37,6 +37,7 @@ jobs:
         env:
           MIA_MUSIC_TEST_SOURCE: ${{ runner.temp }}/play_music.py
           MIA_LEGACY_MEMORY_SOURCE: ${{ github.workspace }}/legacy-memory/server/companion/memory.py
+          MIA_V2_MECHANISM_REPORT: ${{ runner.temp }}/mia-v2-mechanisms.json
         run: |
           curl --fail --location --retry 3 \
             https://raw.githubusercontent.com/xinnan-tech/xiaozhi-esp32-server/87c6df77b0220ddbd8fc804f984f83f69f3225e5/main/xiaozhi-server/plugins_func/functions/play_music.py \
@@ -51,3 +52,9 @@ jobs:
           name: Mia-music-plugin-${{ github.sha }}
           path: ${{ runner.temp }}/play_music.py
           if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Mia-v2-mechanisms-${{ github.sha }}
+          path: ${{ runner.temp }}/mia-v2-mechanisms.json
+          if-no-files-found: warn

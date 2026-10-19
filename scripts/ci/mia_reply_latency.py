@@ -212,6 +212,8 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
         await asyncio.to_thread(populate, worker.jobs.store, scope, size, 'dense', fixture, vectors)
     report['capacity_per_owner'] = dict(zip((scope.owner for scope in scopes), (1000, 10000, 32)))
     if os.environ['MIA_P23_MODE'] == 'reply-stages-replay':
+        from mia_v2_diagnostics import run as v2_diagnostics
+        await v2_diagnostics(worker, scopes, fixture['queries'][0], root, report, persist)
         # The real-pair mode warms this index before ABBA. Its zero-remote
         # replay needs explicit fixed warm-up, rather than a cold first arm.
         for _ in range(5):
