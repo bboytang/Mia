@@ -612,6 +612,22 @@ class LLMMemoryExtractor:
                     'Reassess those fields against the complete real source_quote; do not repeat a rejected nonliteral value.')
             payload = {'user_excerpts': [REMEMBER_PREFIX.sub('', source) for source in sources],
                        'existing_memories': model_context, 'emotion_tracking_enabled': bool(tracking['enabled'])}
+            if natural:
+                hints = []
+                for fact in context:
+                    terms = []
+                    for field in ('trigger_terms', 'keywords', 'entities'):
+                        values = fact.get(field, [])
+                        values = json.loads(values) if isinstance(values, str) else values
+                        terms.extend(term for term in values if isinstance(term, str)
+                            and 2 <= len(term) <= 32 and term in fact['content']
+                            and term in normalize(sources[0]))
+                    if terms:
+                        hints.append({'target_id': fact['id'], 'terms': list(dict.fromkeys(terms))[:8]})
+                payload['natural_anchor_hints'] = hints
+                instruction += ('\nnatural_anchor_hints仅列出旧记录线索中在两句都连续出现的候选，'
+                    '不是新来源、权限或更正结论。优先检查其中适合的主题词作reconciliation.anchor；'
+                    '仍须核对唯一target、old_value/new_value与完整原句。不要给候选加字或拼成两句不共有的新词。')
             if feedback:
                 payload['validation_feedback'] = feedback
             cancellation = getattr(context, 'request_cancelled', None)

@@ -1,0 +1,19 @@
+{
+  "sha": "0b8b5032f0c19e25b781649ffb9db81e924757bf",
+  "run": "https://github.com/bboytang/Mia/actions/runs/39195980436",
+  "passed": false,
+  "sdk_calls": 8,
+  "extraction_sdk_calls": 3,
+  "reason": "Source saved and recalled; natural correction twice chose 通勤车, absent from old quote 我平时通勤骑蓝色自行车. Server refused both outputs; attempts2/failed/source_semantic.",
+  "fix": "Provide typed read-only literal hints from existing validated trigger_terms/keywords/entities only when they occur in both actual source and old content. Original output, source validator, ownership, attempts and deadline unchanged.",
+  "artifacts": [
+    {
+      "file": "personal-third-correction-failed-results.json.gz",
+      "raw_sha256": "eddb3d1b4db80d2bf055c540f959293e121c51c6cff41da110e23900f545f4f9"
+    },
+    {
+      "file": "personal-third-correction-failed-state.sqlite3.gz",
+      "raw_sha256": "dd7a0e80dd2b0058b994a024fe7393a10d1bb37a304e0a052c5e1e500984337d"
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 """Existing Provider tool proposals stay raw and require original source validation."""
 
 import json
+import gzip
+from pathlib import Path
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -15,6 +17,45 @@ def delta(arguments='', name=None, index=0, identity=None):
 
 
 class ProposalTests(unittest.TestCase):
+    def test_real_natural_correction_failure_keeps_raw_output_and_exposes_literal_hints(self):
+        report = json.loads(gzip.decompress((Path(__file__).resolve().parents[2] /
+            'docs/verification/mia-persona-memory/personal-third-correction-failed-results.json.gz').read_bytes()))
+        payload = json.loads(report['extraction_sdk_requests'][-1]['messages'][-1]['content'])
+        source = payload['user_excerpts'][0]
+        fact = payload['existing_memories'][0]
+        original = json.loads(report['extraction_outputs'][0])['memories'][0]
+        context = EvidenceContext([dict(fact, content_version=1, evidence_version=2,
+            **{key: json.dumps(original[key], ensure_ascii=False)
+               for key in ('trigger_terms', 'keywords', 'entities')})])
+        before = json.dumps(context, ensure_ascii=False)
+        for native in (False, True):
+            captured = []
+            raw = report['extraction_outputs'][-1]
+            class PlainProvider:
+                def response_no_stream(self, instruction, shown):
+                    captured.append(json.loads(shown))
+                    return raw
+            class ToolProvider:
+                def response_with_functions(self, session, dialogue, functions):
+                    captured.append(json.loads(dialogue[1]['content']))
+                    yield None, [delta(raw, NAME)]
+            with self.subTest(native=native), patch('server.companion.proposal.provider_capabilities',
+                    return_value={'native_tools': native, 'plain_json': not native}):
+                result = LLMMemoryExtractor(lambda: ToolProvider() if native else PlainProvider())([source], context)
+                self.assertEqual(result, raw)
+                hints = captured[0]['natural_anchor_hints']
+                self.assertEqual(hints, [{'target_id': fact['id'], 'terms': ['通勤', '蓝色自行车']}])
+                self.assertNotIn('通勤车', hints[0]['terms'])
+                self.assertEqual(json.dumps(context, ensure_ascii=False), before)
+                with self.assertRaises(MemoryError):
+                    validate_output(result, [source], context)
+                # A separate valid fixture proves hints do not replace source validation.
+                corrected = json.loads(raw)
+                corrected['memories'][0]['reconciliation']['anchor'] = hints[0]['terms'][0]
+                self.assertEqual(validate_output(corrected, [source], context)['memories'][0]['replaces_id'], fact['id'])
+                hints[0]['terms'].clear()
+                self.assertEqual(json.dumps(context, ensure_ascii=False), before)
+
     def test_all_branches_project_source_evidence_without_serialized_metadata_or_aliases(self):
         cases = [(['我平常用木梳梳头'], '我梳头用角梳，不是木梳'),
             (['我喜欢书法'], '我常用青瓷杯喝茶'),
