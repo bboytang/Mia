@@ -134,7 +134,7 @@ jobs:
             -CA "$MIA_SCOPE_CA" -CAkey "$RUNNER_TEMP/mia-test-tls/ca.key" -CAcreateserial \
             -extfile "$RUNNER_TEMP/mia-test-tls/server.ext" -out "$MIA_TLS_CERT_FILE"
           openssl pkcs12 -export -out "$RUNNER_TEMP/mia-test-tls/server.p12" \
-            -inkey "$MIA_TLS_KEY_FILE" -in "$MIA_TLS_CERT_FILE" -certfile "$MIA_SCOPE_CA" -passout pass:mia-ci-only
+            -inkey "$MIA_TLS_KEY_FILE" -in "$MIA_TLS_CERT_FILE" -certfile "$MIA_SCOPE_CA" -passout pass:youmi-ci-only
           sudo "$JAVA_HOME/bin/keytool" -importcert -noprompt -alias mia-isolated-ci \
             -file "$MIA_SCOPE_CA" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
       - name: Prepare pinned actual BGE outside measured envelope

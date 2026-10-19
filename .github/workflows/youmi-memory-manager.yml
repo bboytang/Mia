@@ -20,14 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      SPRING_DATASOURCE_DRUID_PASSWORD: mia-ci-only
+      SPRING_DATASOURCE_DRUID_PASSWORD: youmi-ci-only
       SPRING_DATASOURCE_DRUID_URL: jdbc:mysql://127.0.0.1:3306/youmi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATA_REDIS_HOST: 127.0.0.1
     services:
       mysql:
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: mia-ci-only
+          MYSQL_ROOT_PASSWORD: youmi-ci-only
           MYSQL_DATABASE: youmi_esp32_server
         ports:
           - 3306:3306

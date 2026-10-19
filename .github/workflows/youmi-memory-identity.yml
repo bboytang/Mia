@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      SPRING_DATASOURCE_DRUID_PASSWORD: mia-ci-only
+      SPRING_DATASOURCE_DRUID_PASSWORD: youmi-ci-only
       SPRING_DATASOURCE_DRUID_URL: jdbc:mysql://127.0.0.1:3306/youmi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATA_REDIS_HOST: 127.0.0.1
       MIA_SCOPE_INTEGRATION_SCRIPT: ${{ github.workspace }}/scripts/ci/verify_youmi_scope_integration.py
@@ -87,7 +87,7 @@ jobs:
       mysql:
         image: mysql:8.4
         env:
-          MYSQL_ROOT_PASSWORD: mia-ci-only
+          MYSQL_ROOT_PASSWORD: youmi-ci-only
           MYSQL_DATABASE: youmi_esp32_server
         ports:
           - 3306:3306
@@ -147,7 +147,7 @@ jobs:
             -CA "$MIA_SCOPE_CA" -CAkey "$RUNNER_TEMP/mia-test-tls/ca.key" -CAcreateserial \
             -extfile "$RUNNER_TEMP/mia-test-tls/server.ext" -out "$MIA_TLS_CERT_FILE"
           openssl pkcs12 -export -out "$RUNNER_TEMP/mia-test-tls/server.p12" \
-            -inkey "$MIA_TLS_KEY_FILE" -in "$MIA_TLS_CERT_FILE" -certfile "$MIA_SCOPE_CA" -passout pass:mia-ci-only
+            -inkey "$MIA_TLS_KEY_FILE" -in "$MIA_TLS_CERT_FILE" -certfile "$MIA_SCOPE_CA" -passout pass:youmi-ci-only
           sudo "$JAVA_HOME/bin/keytool" -importcert -noprompt -alias mia-isolated-ci \
             -file "$MIA_SCOPE_CA" -keystore "$JAVA_HOME/lib/security/cacerts" -storepass changeit
       - name: Reconstruct existing Youmi and necessary binding patch
@@ -183,5 +183,5 @@ jobs:
           path: |
             ${{ runner.temp }}/mia-binding-results
             upstream/main/manager-api/target/surefire-reports
-            upstream/main/manager-api/target/youmi-esp32-api.jar
+            upstream/main/manager-api/target/xiaozhi-esp32-api.jar
           if-no-files-found: warn

@@ -54,7 +54,7 @@ UNIT
 sudo systemctl daemon-reload
 sudo systemctl start youmip23.slice
 docker run -d --name youmip23-mysql --cgroup-parent="$youmi_parent" --network host \
-    -e MYSQL_ROOT_PASSWORD=mia-ci-only -e MYSQL_DATABASE=youmi_esp32_server \
+    -e MYSQL_ROOT_PASSWORD=youmi-ci-only -e MYSQL_DATABASE=youmi_esp32_server \
     -e MYSQL_ROOT_HOST=127.0.0.1 mysql:8.4 --bind-address=127.0.0.1 >/dev/null
 docker run -d --name youmip23-redis --cgroup-parent="$youmi_parent" --network host \
     redis:8 redis-server --bind 127.0.0.1 >/dev/null
@@ -105,7 +105,7 @@ sudo "${youmi_sudo_environment[@]}" systemd-run --unit=youmip23-measure --slice=
     --setenv="MIA_P23_MODE=${MIA_P23_MODE:-capacity}" \
     --setenv="MIA_P23_DATABASE_PIDS=$youmi_database_pids" \
     --setenv="SPRING_DATASOURCE_DRUID_URL=jdbc:mysql://127.0.0.1:3306/youmi_esp32_server?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useSSL=false" \
-    --setenv=SPRING_DATASOURCE_DRUID_PASSWORD=mia-ci-only \
+    --setenv=SPRING_DATASOURCE_DRUID_PASSWORD=youmi-ci-only \
     --setenv=SPRING_DATA_REDIS_HOST=127.0.0.1 \
     --setenv=OMP_NUM_THREADS=2 --setenv=OPENBLAS_NUM_THREADS=2 \
     "${youmi_provider_environment[@]}" \

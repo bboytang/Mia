@@ -29,7 +29,7 @@ import xiaozhi.modules.sys.service.SysParamsService;
 /** P23 common resources; dedicated Provider only in explicit reply/Worker modes, no P22 cases. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
     "server.servlet.context-path=/youmi", "server.ssl.enabled=true",
-    "server.ssl.key-store=${MIA_SCOPE_KEYSTORE}", "server.ssl.key-store-password=mia-ci-only",
+    "server.ssl.key-store=${MIA_SCOPE_KEYSTORE}", "server.ssl.key-store-password=youmi-ci-only",
     "server.ssl.key-store-type=PKCS12", "mia.private-auth.allow-insecure-test-http=false",
     "logging.level.root=ERROR"
 })
