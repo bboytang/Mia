@@ -6,9 +6,11 @@
     <div v-if="state" v-loading="busy" class="mia-settings">
       <div v-for="item in switches" :key="item.key" class="mia-setting">
         <div><strong>{{ item.label }}</strong><p>{{ item.description }}</p></div>
-        <el-switch :value="settingValue(item.key)" :disabled="busy" :aria-label="item.label"
-          :aria-checked="settingValue(item.key) ? 'true' : 'false'"
-          @change="change(item.key, $event)" />
+        <button type="button" role="switch" class="mia-toggle" :class="{ 'is-on': settingValue(item.key) }"
+          :disabled="busy" :aria-label="item.label" :aria-checked="settingValue(item.key) ? 'true' : 'false'"
+          @click="change(item.key, !settingValue(item.key))">
+          <span class="mia-toggle-track" aria-hidden="true"><span class="mia-toggle-thumb" /></span>
+        </button>
       </div>
       <p>已保存记忆 {{ state.counts.memories }} 条 · 成长特点 {{ state.counts.traits }} 个 · 互动事件 {{ state.counts.events }} 个</p>
       <p>保存后立即影响后续处理；使用旧上下文的回复可能中止，可重新发起对话。已发出的声音无法撤回。</p>
@@ -102,4 +104,11 @@ export default {
 .mia-setting { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid #eee; }
 .mia-setting p { margin: 6px 0 0; color: #606266; line-height: 1.5; }
 .mia-settings { margin-top: 16px; }
+.mia-toggle { flex: 0 0 44px; width: 44px; height: 44px; padding: 2px; border: 0; background: transparent; cursor: pointer; }
+.mia-toggle-track { display: block; box-sizing: border-box; width: 40px; height: 22px; padding: 2px; border-radius: 12px; background: #909399; }
+.mia-toggle-thumb { display: block; width: 18px; height: 18px; border-radius: 50%; background: white; transition: transform .15s; }
+.mia-toggle.is-on .mia-toggle-track { background: #409eff; }
+.mia-toggle.is-on .mia-toggle-thumb { transform: translateX(18px); }
+.mia-toggle:focus-visible { outline: 2px solid #409eff; outline-offset: 2px; }
+.mia-toggle:disabled { opacity: .6; cursor: wait; }
 </style>
