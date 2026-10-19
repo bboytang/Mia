@@ -2,8 +2,9 @@
 
 import asyncio
 from concurrent.futures import TimeoutError as FutureTimeout
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import json
+import logging
 import os
 from pathlib import Path
 import sqlite3
@@ -191,49 +192,49 @@ def wait(conn, operation):
 
 def response(conn, functions, depth):
     turn = wait(conn, prepare(conn, functions, depth))
-    request = turn.bundle.request()
-    tools = request.get('tools')
-    # The same provider object/client/stream continues to own all generation.
+    # One foreground lease covers the short appraisal and existing reply. A
+    # failed appraisal neither writes a state nor prevents normal speech.
     def guarded():
         lease = model_requests.acquire(foreground=True, timeout=10,
             cancelled=lambda: getattr(conn, 'client_abort', False))
-        stream = None
-        from .affect import AppraisalStream
-        affect = json.loads(turn.bundle.inputs_json).get('mia_affect')
-        parser = AppraisalStream(json.loads(turn.bundle.inputs_json)['query']) if affect else None
+        stream, active = None, turn
         try:
-            wait(conn, validate(conn, turn))
+            wait(conn, validate(conn, active))
+            inputs = json.loads(active.bundle.inputs_json)
+            if inputs.get('mia_affect') and depth == 0:
+                from .affect import CONTROL, CONTROL_REPLY, request_appraisal, parse_appraisal
+                conn._mia_affect_pending = None
+                if CONTROL.search(inputs['query']):
+                    yield CONTROL_REPLY if functions is None else (CONTROL_REPLY, None)
+                    return
+                proposal = None
+                try:
+                    proposal = parse_appraisal(request_appraisal(conn.llm, inputs['query'], inputs['mia_affect']), inputs['query'])
+                except Exception as error:
+                    logging.getLogger(__name__).warning('Mia affect appraisal retained previous state (%s)', type(error).__name__)
+                wait(conn, validate(conn, active))
+                if getattr(conn, '_mia_context_turn', None) is not active:
+                    raise ContextError('context_turn_superseded')
+                if proposal:
+                    bundle = wait(conn, active.builder.with_affect(active.bundle, conn._mia_authorization, proposal))
+                    if getattr(conn, '_mia_context_turn', None) is not active:
+                        raise ContextError('context_turn_superseded')
+                    active = replace(active, bundle=bundle)
+                    conn._mia_context_turn = active
+                    conn._mia_affect_pending = (active, proposal)
+            request = active.bundle.request()
+            tools = request.get('tools')
             stream = (conn.llm.response_with_functions(conn.session_id, request['messages'], functions=tools,
                 max_tokens=request['max_tokens']) if tools else
                 conn.llm.response(conn.session_id, request['messages'], max_tokens=request['max_tokens']))
             for delta in stream:
-                if getattr(conn, '_mia_context_turn', None) is not turn:
+                if getattr(conn, '_mia_context_turn', None) is not active:
                     raise ContextError('context_turn_superseded')
                 if getattr(conn, 'client_abort', False):
                     return
-                wait(conn, validate(conn, turn))
-                if parser:
-                    text, calls = delta if tools else (delta, None)
-                    try:
-                        shown = parser.feed(text) if text else text
-                    except (ValueError, TypeError, RecursionError):
-                        raise ContextError('affect_appraisal_invalid') from None
-                    if parser.proposal:
-                        conn._mia_affect_pending = (turn, parser.proposal)
-                    if tools:
-                        if shown or calls:
-                            yield shown, calls
-                    elif shown:
-                        yield shown if functions is None else (shown, None)
-                else:
-                    # Upstream parses pairs whenever its local functions is not None.
-                    yield delta if tools or functions is None else (delta, None)
-            if parser:
-                try:
-                    parser.finish()
-                except ValueError:
-                    raise ContextError('affect_appraisal_incomplete') from None
-            wait(conn, validate(conn, turn))
+                wait(conn, validate(conn, active))
+                yield delta if tools or functions is None else (delta, None)
+            wait(conn, validate(conn, active))
         finally:
             try:
                 if hasattr(stream, 'close'):

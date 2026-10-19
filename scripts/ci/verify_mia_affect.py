@@ -1,6 +1,6 @@
-"""Nine bounded current-GLM appraisals; synthetic users, real persistent context.
+"""Nine bounded current-GLM scenarios; synthetic users, real persistent context.
 
-No production data/role changes, no ASR/TTS and no second appraisal request.
+No production data/role changes, no ASR/TTS and at most one appraisal request before the normal reply.
 """
 import asyncio
 from dataclasses import replace
@@ -12,6 +12,7 @@ from pathlib import Path
 import sys
 import tempfile
 import time
+from types import SimpleNamespace
 
 import httpx
 import openai
@@ -39,13 +40,13 @@ class AuthorizedFixture:
 
 async def evaluate():
     report = {'code_sha': os.environ.get('GITHUB_SHA'), 'kind': 'persistent_mia_affect_real_GLM_synthetic_context',
-              'passed': False, 'cases': [], 'maximum_requests': 9, 'sdk_calls': 0,
-              'implicit_retries': 0, 'production_data_used': False, 'asr_tts_calls': 0,
+              'passed': False, 'cases': [], 'maximum_requests': 18, 'sdk_calls': 0,
+              'implicit_retries': 0, 'production_data_used': False, 'asr_tts_calls': 0, 'design': 'bounded_appraisal_then_original_reply',
               'role_written': False, 'physical_audio_verified': False, 'provider_max_tokens': 2048, 'thinking': 'disabled_as_in_existing_provider'}
     client, sends = None, []
     def sent(request):
         sends.append(1)
-        if len(sends) > 9:
+        if len(sends) > 18:
             raise RuntimeError('Fixed HTTP request budget exceeded')
     try:
         model = os.environ['MIA_TEST_LLM_MODEL']
@@ -83,36 +84,44 @@ async def evaluate():
                 before = affect.state(store, scope.owner)
                 bundle = await builder.build(scope, auth, 'turn-' + str(number), query,
                     limits=limits, role='', session_id='new-session-' + str(number))
-                request = bundle.request()
-                parser = affect.AppraisalStream(query)
                 started = time.monotonic()
-                report['sdk_calls'] += 1
-                spoken = ''
-                raw = ''
-                parse_error, finish_reason = None, None
-                with client.chat.completions.create(model=model, messages=request['messages'],
-                        max_tokens=2048, extra_body={'thinking': {'type': 'disabled'}}, stream=True) as stream:
-                    for chunk in stream:
-                        if not chunk.choices:continue
-                        finish_reason = chunk.choices[0].finish_reason or finish_reason
-                        text = chunk.choices[0].delta.content or ''
-                        raw += text
-                        if parse_error is None:
-                            try:spoken += parser.feed(text) if text else ''
-                            except ValueError as error:parse_error = error
-                if parse_error:raise parse_error
-                parser.finish()
-                valid = bool(((parser.proposal and parser.proposal['feeling'] in expected) or (parser.proposal is None and expected == {'steady'})) and spoken.strip()
-                             and not PersonaGuardrail().inspect_output(spoken)[1])
+                proposal, appraisal_raw, appraisal_error, finish_reason = None, None, None, None
+                managed = bool(affect.CONTROL.search(query))
+                if managed:
+                    raw = spoken = affect.CONTROL_REPLY
+                else:
+                    provider = SimpleNamespace(client=client, model_name=model,
+                        _apply_thinking_disabled=lambda params: params.update(extra_body={'thinking': {'type': 'disabled'}}))
+                    report['sdk_calls'] += 1
+                    try:
+                        appraisal_raw = affect.request_appraisal(provider, query, before)
+                        proposal = affect.parse_appraisal(appraisal_raw, query)
+                    except Exception as error:
+                        appraisal_error = type(error).__name__
+                    if proposal:
+                        bundle = await builder.with_affect(bundle, auth, proposal)
+                    request = bundle.request()
+                    report['sdk_calls'] += 1
+                    raw = ''
+                    with client.chat.completions.create(model=model, messages=request['messages'],
+                            max_tokens=2048, extra_body={'thinking': {'type': 'disabled'}}, stream=True) as stream:
+                        for chunk in stream:
+                            if not chunk.choices:continue
+                            finish_reason = chunk.choices[0].finish_reason or finish_reason
+                            raw += chunk.choices[0].delta.content or ''
+                    spoken = raw
+                safe = bool(spoken.strip() and not PersonaGuardrail().inspect_output(spoken)[1])
+                valid = safe and (managed or bool(proposal and proposal['feeling'] in expected))
                 await builder.validate(bundle, auth)
                 with store.lock, store.db:
-                    committed = bool(spoken.strip() and parser.proposal) and affect.commit(store, scope.owner, 'new-session-' + str(number), 'turn-' + str(number),
-                        query, parser.proposal, before['version'])
+                    committed = bool(safe and proposal) and affect.commit(store, scope.owner, 'new-session-' + str(number),
+                        'turn-' + str(number), query, proposal, before['version'])
                 after = affect.state(store, scope.owner)
                 report['cases'].append({'name': name, 'query': query, 'before': before,
-                    'appraisal': parser.proposal, 'raw_response': raw, 'spoken_response': spoken,
-                    'after': after, 'committed': committed, 'passed': valid and (committed or parser.proposal is None),
-                    'transition_status': 'committed' if committed else 'no_appraisal_retained_state',
+                    'appraisal': proposal, 'raw_appraisal': appraisal_raw, 'appraisal_error': appraisal_error,
+                    'raw_response': raw, 'spoken_response': spoken, 'after': after, 'committed': committed,
+                    'passed': valid and (committed or managed),
+                    'transition_status': 'committed' if committed else 'management_request_no_state_change' if managed else 'appraisal_unavailable_retained_state',
                     'finish_reason': finish_reason, 'elapsed_ms': round((time.monotonic() - started) * 1000, 2)})
                 now[0] += 30
             report['restart_and_device_continuity'] = report['cases'][1]['before']['version'] == 1 and report['cases'][1]['before']['tension'] > 0

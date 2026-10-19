@@ -267,8 +267,8 @@ class ContextBuilder:
                         'conflict': '用户对先前说法提出不确定信息；此时尚待确认。'}[record['reconciliation']['kind']]}
             else:
                 data.pop('requested_change', None)
-            from .affect import POLICY as AFFECT_POLICY, FORMAT, guidance
-            messages = [{'role': 'system', 'content': CORE + POLICY + (AFFECT_POLICY + guidance(affect) + FORMAT if affect else '')},
+            from .affect import POLICY as AFFECT_POLICY, guidance
+            messages = [{'role': 'system', 'content': CORE + POLICY + (AFFECT_POLICY + guidance(affect) if affect else '')},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             for group in retained:
                 for message in group:
@@ -378,6 +378,16 @@ class ContextBuilder:
         bundle = await asyncio.to_thread(self._assemble, scope, turn_id, limits, snapshot, inputs)
         await self.validate(bundle, authorization)
         return bundle
+
+    async def with_affect(self, bundle, authorization, proposal):
+        await self.validate(bundle, authorization)
+        from .affect import transition
+        inputs = json.loads(bundle.inputs_json)
+        inputs['mia_affect'] = dict(transition(inputs['mia_affect'], proposal),
+                                   origin='current_turn_projection_not_committed')
+        updated = await asyncio.to_thread(self._assemble, bundle.scope, bundle.turn_id, bundle.limits, bundle.snapshot, inputs)
+        await self.validate(updated, authorization)
+        return updated
 
     async def complete(self, bundle, authorization, assistant):
         await self.validate(bundle, authorization)

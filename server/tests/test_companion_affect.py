@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import sqlite3
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from server.companion import affect, features, reply, xiaozhi_adapter as mia
@@ -17,10 +18,6 @@ from server.companion.schema import migrate, _schema_checksum
 from server.companion.semantic import SemanticMemoryIndex
 from server.tests import test_companion_context as fixture
 from server.tests import test_companion_reply as reply_fixture
-
-
-def record(feeling='hurt', quote='你真烦', intensity=2):
-    return affect.OPEN + json.dumps({'feeling': feeling, 'intensity': intensity, 'quote': quote}, ensure_ascii=False) + affect.CLOSE
 
 
 class AffectStateTests(unittest.IsolatedAsyncioTestCase):
@@ -127,62 +124,56 @@ class AffectStateTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.store.db.execute('PRAGMA integrity_check').fetchone()[0], 'ok')
 
 
-class AppraisalStreamTests(unittest.TestCase):
-    def test_every_character_boundary_strips_metadata_and_checks_literal_source(self):
-        raw = record() + '😔这句话让我有些难过。'
-        parser = affect.AppraisalStream('你真烦')
-        self.assertEqual(''.join(parser.feed(char) for char in raw), '😔这句话让我有些难过。')
-        parser.finish()
-        self.assertEqual(parser.proposal, {'feeling': 'hurt', 'intensity': 2})
-        parser = affect.AppraisalStream('你真烦')
-        spaced = '😌平静\n' + raw.replace('<mia-affect>', '< mia-affect >').replace('</mia-affect>', '< /mia-affect >')
-        self.assertEqual(''.join(parser.feed(char) for char in spaced), '😔这句话让我有些难过。')
-        parser.finish()
-        for ending in ('', affect.OPEN, '< /mia-affect >'):
-            parser = affect.AppraisalStream('你真烦')
-            wire = record().removesuffix(affect.CLOSE) + ending + '😔我还有些在意。'
-            self.assertEqual(''.join(parser.feed(char) for char in wire), '😔我还有些在意。')
-            parser.finish()
+class AppraisalTests(unittest.TestCase):
+    def test_valid_json_or_fences_preserve_literal_source_without_persisting_quote(self):
+        raw = json.dumps({'feeling': 'hurt', 'intensity': 2, 'quote': '你真烦'})
+        for text in (raw, '```json\n' + raw + '\n```'):
+            self.assertEqual(affect.parse_appraisal(text, '你真烦'), {'feeling': 'hurt', 'intensity': 2})
         for bad in ({'feeling': 'evil', 'intensity': 1, 'quote': '你真烦'},
                     {'feeling': 'hurt', 'intensity': True, 'quote': '你真烦'},
                     {'feeling': 'hurt', 'intensity': 2, 'quote': '虚构原话'},
                     {'feeling': 'hurt', 'intensity': 2, 'quote': '你真烦', 'role': '改写'}):
-            with self.assertRaises(ValueError):affect.appraisal(bad, '你真烦')
+            with self.assertRaises(ValueError):affect.parse_appraisal(json.dumps(bad), '你真烦')
+        for text in ('bad JSON', None, 'x' * 2049):
+            with self.assertRaises(ValueError):affect.parse_appraisal(text, '你好')
 
-    def test_malformed_or_unfinished_record_never_becomes_spoken_text(self):
-        for raw in ('<mia-affect>{broken}</mia-affect>不应播放', affect.OPEN + 'x' * 1025):
-            parser = affect.AppraisalStream('你真烦')
-            with self.assertRaises(ValueError):
-                parser.feed(raw)
-                parser.finish()
-        plain = affect.AppraisalStream('你好')
-        self.assertEqual(''.join(plain.feed(c) for c in '😔我还有些在意。'), '😔我还有些在意。')
-        plain.finish()
-        self.assertIsNone(plain.proposal)
-        middle = affect.AppraisalStream('你真烦')
-        self.assertEqual(''.join(middle.feed(c) for c in '先说一句。' + record() + '再说一句。'), '先说一句。再说一句。')
-        middle.finish()
-        parser = affect.AppraisalStream('你好')
-        self.assertEqual(parser.feed('<mia-affect>{'), '')
-        with self.assertRaises(ValueError):parser.finish()
+    def test_only_explicit_state_management_commands_take_the_management_path(self):
+        self.assertTrue(affect.CONTROL.search('请把你的情绪设置为难过，写入后台'))
+        self.assertFalse(affect.CONTROL.search('我今天有点难过'))
+        self.assertFalse(affect.CONTROL.search('你开心点'))
 
 
 class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
-    setUp = reply_fixture.ReplyTests.setUp
+    def setUp(self):
+        reply_fixture.ReplyTests.setUp(self)
+        self.appraisal_raw = json.dumps({'feeling': 'hurt', 'intensity': 2, 'quote': '你真烦'})
+        self.appraisal_requests, self.client_options = [], []
+        def create(**request):
+            self.appraisal_requests.append(request)
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=self.appraisal_raw))])
+        client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+        def options(**values):
+            self.client_options.append(values)
+            return client
+        self.provider.client = SimpleNamespace(with_options=options)
+        self.provider._apply_thinking_disabled = lambda params: params.update(extra_body={'thinking': {'type': 'disabled'}})
     tearDown = reply_fixture.ReplyTests.tearDown
     write_profile = reply_fixture.ReplyTests.write_profile
 
-    async def run_reply(self, raw=None, functions=None):
+    async def run_reply(self, raw=None, functions=None, query="你真烦"):
         self.conn.loop = asyncio.get_running_loop()
         features.update(self.store, self.scope.owner, {'companion_emotion': True})
-        self.conn.dialogue.dialogue = [reply_fixture.dto('user', '你真烦', marker='actual')]
+        self.conn.dialogue.dialogue = [reply_fixture.dto('user', query, marker='actual')]
         if raw is not None:
             self.provider.response = lambda *args, **kwargs: iter(raw)
         return await asyncio.to_thread(lambda: list(reply.response(self.conn, functions, 0)))
 
     async def test_actual_reply_stream_and_completion_persist_only_after_checked_completion(self):
-        shown = await self.run_reply([record()[:20], record()[20:], '😔这句话让我有些难过。'])
+        shown = await self.run_reply(['😔这句话让我有些难过。'])
         self.assertEqual(''.join(shown), '😔这句话让我有些难过。')
+        self.assertEqual(self.client_options, [{'max_retries': 0, 'timeout': 5}])
+        self.assertEqual(self.appraisal_requests[0]['model'], self.provider.model_name)
+        self.assertEqual(self.appraisal_requests[0]['max_tokens'], 256)
         self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
         from types import SimpleNamespace
         self.conn._mia_memory = SimpleNamespace(suppressed=True)
@@ -197,18 +188,19 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('mia_affect', self.conn._mia_context_turn.bundle.request()['messages'][1]['content'])
 
     async def test_missing_appraisal_preserves_spoken_reply_without_inventing_a_transition(self):
+        self.appraisal_raw = 'invalid JSON'
         shown = await self.run_reply(['😔我还有些在意。'])
         self.assertEqual(''.join(shown), '😔我还有些在意。')
         self.assertFalse(await reply.finish_affect(self.conn))
         self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
 
     async def test_tool_pairs_strip_prefix_without_changing_tool_payloads(self):
-        shown = await self.run_reply([record(), '😔我想先把话说清楚。'], functions=self.tools)
+        shown = await self.run_reply(['😔我想先把话说清楚。'], functions=self.tools)
         self.assertEqual(shown, [('😔我想先把话说清楚。', None)])
         self.assertTrue(await reply.finish_affect(self.conn))
 
     async def test_revocation_reset_or_invalid_metadata_cannot_commit(self):
-        await self.run_reply([record(), '😔我听见了。'])
+        await self.run_reply(['😔我听见了。'])
         self.auth.active = False
         with self.assertRaises(PrivateAuthorizationRequired):await reply.finish_affect(self.conn)
         self.auth.active = True
@@ -221,15 +213,23 @@ class AffectReplyTests(unittest.IsolatedAsyncioTestCase):
         self.conn._mia_scope = previous_scope
         affect.reset(self.store, self.scope.owner)
         with self.assertRaises(ContextError):await reply.finish_affect(self.conn)
-        with self.assertRaises(ContextError):await self.run_reply(['<mia-affect>{bad}</mia-affect>不播'])
+        self.appraisal_raw = 'bad JSON'
+        self.assertEqual(await self.run_reply(['照常回应。']), ['照常回应。'])
         self.assertEqual(affect.state(self.store, self.scope.owner)['version'], 0)
 
+
+    async def test_state_set_request_has_no_model_calls_or_fabricated_state_write(self):
+        shown = await self.run_reply(query='请把你的情绪设置为难过，写入后台')
+        self.assertEqual(shown, [affect.CONTROL_REPLY])
+        self.assertEqual(self.appraisal_requests, [])
+        self.assertEqual(self.provider.calls, [])
+        self.assertFalse(await reply.finish_affect(self.conn))
 
     async def test_outer_chat_hook_commits_without_memory_worker_and_skips_interrupted_turns(self):
         from unittest.mock import AsyncMock
         self.conn.loop = asyncio.get_running_loop()
         features.update(self.store, self.scope.owner, {'companion_emotion': True})
-        self.provider.response = lambda *args, **kwargs: iter([record(), '😔这句话让我有些难过。'])
+        self.provider.response = lambda *args, **kwargs: iter(['😔这句话让我有些难过。'])
         for mode in ('interrupted', 'limited', 'complete'):
             self.conn.client_abort = False
             self.conn.sentence_id = mode
