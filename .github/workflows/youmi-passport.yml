@@ -79,6 +79,16 @@ jobs:
           source "$IDF_PATH/export.sh"
           idf.py --version
           python scripts/build.py "$BOARD" --name "$VARIANT" --language zh-CN
+          idf.py size --format json2 --output-file firmware-size.json
+          idf.py size --output-file firmware-size.txt
+      - name: Upload static RAM and Flash size evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: firmware-size-${{ matrix.variant }}-${{ github.sha }}
+          path: |
+            firmware-size.json
+            firmware-size.txt
+          if-no-files-found: error
       - name: Measure candidate A/B capacity
         if: matrix.variant == 'mia-ai-passport-dev' || matrix.variant == 'mia-ai-passport'
         run: |
