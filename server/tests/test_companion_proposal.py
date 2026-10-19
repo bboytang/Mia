@@ -4,7 +4,7 @@ import json
 from types import SimpleNamespace
 import unittest
 
-from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, validate_output
+from server.companion.extraction import EvidenceContext, LLMMemoryExtractor, decode, validate_output
 from server.companion.memory import MemoryError
 from server.companion.proposal import NAME, read_stream, tool_definition
 
@@ -14,6 +14,36 @@ def delta(arguments='', name=None, index=0, identity=None):
 
 
 class ProposalTests(unittest.TestCase):
+    def test_trailing_format_fence_decodes_one_original_object_without_repair(self):
+        source = '我常用青瓷杯喝茶'
+        value = {'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
+            'source_index': 0, 'kind': 'explicit', 'subject': 'user', 'value': 'durable',
+            'sensitive': False, 'entities': ['青瓷杯'], 'keywords': ['喝茶'], 'trigger_terms': ['喝茶']}]}
+        raw = json.dumps(value, ensure_ascii=False, indent=2)
+        for opening in ('', '```\n', '```json\n'):
+            with self.subTest(opening=opening):
+                arguments = opening + raw + '\n```'
+                original = read_stream(iter([(None, [delta(arguments, NAME)])]))
+                self.assertEqual(original, arguments)
+                self.assertEqual(decode(original), value)
+                self.assertEqual(validate_output(original, [source], [])['memories'][0]['content'], source)
+        for field in ('entities', 'keywords', 'trigger_terms'):
+            for invalid in (['喝茶'] * 9, '["喝茶"]', ['喝茶喝茶']):
+                bad = json.loads(raw)
+                bad['memories'][0][field] = invalid
+                arguments = json.dumps(bad, ensure_ascii=False) + '\n```'
+                self.assertEqual(decode(arguments), bad)
+                with self.assertRaises(MemoryError):
+                    validate_output(arguments, [source], [])
+
+    def test_trailing_fence_does_not_allow_extra_text_multiple_objects_or_invalid_json(self):
+        raw = '{"memories":[]}'
+        for value in ('', '```', raw + '\n说明\n```', '说明\n' + raw + '\n```',
+                raw + '\n' + raw + '\n```', raw + '```', '{"memories":\n```',
+                '[{"memories":[]}]\n```', raw + '\n```\n说明'):
+            with self.subTest(value=value), self.assertRaises(MemoryError):
+                decode(value)
+
     def test_growth_schema_requires_possible_owned_shared_anchor_without_filling_output(self):
         source = '我常用青瓷杯喝茶'
         raw = json.dumps({'memories': [{'category': 'fact', 'content': source, 'source_quote': source,

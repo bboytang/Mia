@@ -215,7 +215,9 @@ def decode(value):
     if isinstance(value, str):
         if len(value) > 24000:
             raise MemoryError('invalid_input', 'Extraction is too large')
-        fenced = re.fullmatch(r'```(?:json)?\s*\n(.*?)\n```', value.strip(), re.S | re.I)
+        # A streamed function argument may contain only the closing Markdown
+        # fence. Decode the entire original JSON body; never repair its values.
+        fenced = re.fullmatch(r'(?:```(?:json)?\s*\n)?(.*?)\n```', value.strip(), re.S | re.I)
         try:
             value = json.loads(fenced[1] if fenced else value)
         except (ValueError, RecursionError):

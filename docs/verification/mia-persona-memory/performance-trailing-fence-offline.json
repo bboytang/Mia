@@ -1,0 +1,506 @@
+{
+  "source_run": 39178747148,
+  "source_sha": "c47a3f30120236d9776caca20a5e3a9e3f687a09",
+  "source_child_raw_sha256": "29b72379d228c7c7a25c5a4b31532c638b8e1e1da815eeafda925ae90ca976bc",
+  "scope": "Offline format/source validation only, empty prior context. No new model requests or retrospective task-success verdict. Each original output hash preserved.",
+  "cases": [
+    {
+      "job_id": "8769e8a2cbbae1e1443ce6aa7a518dab4f14447bf2cc3817f0ca3b56424f9757",
+      "attempt": 1,
+      "original_output_sha256": "f54813a6f4e89b35a5eb1b1503e49b29757b65fc8846f7c79569036e1b40e47b",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 15 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "def8c9c3a0c390ac54573c19b266d78af71b3f0c35e48d2c3e866eed29c5ab65",
+      "attempt": 1,
+      "original_output_sha256": "a11b42eca2117f265a546a002de85e5bfc97ebc18dad03e69bde3e1d9405e220",
+      "error_message": "entities has 16 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 16 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "870f78e068b079d11c335f025c088394d23c75f343650078c8f02b54613191ff",
+      "attempt": 1,
+      "original_output_sha256": "af9c671b069fda0b9eb24a122a67ce7189b665c5a0aabcd1f573f0e450b58792",
+      "error_message": "entities must be an array of at most 8 extraction clues",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities must be an array of at most 8 extraction clues"
+    },
+    {
+      "job_id": "8769e8a2cbbae1e1443ce6aa7a518dab4f14447bf2cc3817f0ca3b56424f9757",
+      "attempt": 2,
+      "original_output_sha256": "d7a5e915306d21dc1937ad5616f1dc9682e759e75ef51dd05fd9ddc98a078ea1",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": false,
+      "current_error": "Invalid extraction JSON"
+    },
+    {
+      "job_id": "9fa6cbb51380f84314b413c594c17159b5e63cc681ab28ab7735d8d1684a2fdd",
+      "attempt": 1,
+      "original_output_sha256": "7fa557fddb41399082eb0dadf7f777aecdc97f3199239ddfd6e556acfab1650d",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "9fa6cbb51380f84314b413c594c17159b5e63cc681ab28ab7735d8d1684a2fdd",
+      "attempt": 2,
+      "original_output_sha256": "4e6f1c0457a42f9d5ab9917dd9cfb5d9bea1ec962ff2fda1eac9fdf5ca24432f",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "109036624a74412bcafddb6ee46f9076cacb981b14c035311d3d070f1988a250",
+      "attempt": 1,
+      "original_output_sha256": "dc38add616f3dad70e72cae7b61a4034ca789201161ec61f1a13976d54398215",
+      "error_message": "entities has 9 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "38f2e8bb2daa09bf57200d666e41eea7c9dd2d16be086e83335e15d2f3e360c2",
+      "attempt": 1,
+      "original_output_sha256": "8fbf47d02637970c08361efc9f59344aba67609be7daaffd1caf239b3159b278",
+      "error_message": "entities has 9 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "d4bb3a2e3b1d04a0e68ed104cdb23d5f492d0ef65922dfa42af1f274eeff70a3",
+      "attempt": 1,
+      "original_output_sha256": "443883b5f90d32b1e612cbd863f70456cd448b437aaf08f72c187ad317722da5",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "109036624a74412bcafddb6ee46f9076cacb981b14c035311d3d070f1988a250",
+      "attempt": 2,
+      "original_output_sha256": "405f3c79f459559784748c99541aabd8ba929b71c295e9b9c1ac7086cf02e632",
+      "error_message": "keywords has 9 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "keywords has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "38f2e8bb2daa09bf57200d666e41eea7c9dd2d16be086e83335e15d2f3e360c2",
+      "attempt": 2,
+      "original_output_sha256": "251821d388b9b8c072457ec590f982f8e2b1fcf886bf95f5a79e4da705434505",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "d4bb3a2e3b1d04a0e68ed104cdb23d5f492d0ef65922dfa42af1f274eeff70a3",
+      "attempt": 2,
+      "original_output_sha256": "8a200c34f4ffd174192537afdc0abaa59c9836b1911bb94e04ce076a5aeccd2b",
+      "error_message": "entities has 9 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "09be75da5033df9c5f45b321b55495a0aa0506cb1b09e202b65abda3302af441",
+      "attempt": 1,
+      "original_output_sha256": "155bfdcc57bdd535a89fd5649e6b56d46d00c561efe592c1317d61661b648358",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "080a7f1119f695b32c608df61960d2c49d99538ba89566228ca22266735d0d92",
+      "attempt": 1,
+      "original_output_sha256": "dec1adf98e38f295429db5f051f2847a5ae1f4a334d61a321bc446f1678de301",
+      "error_message": "trigger_terms clue must occur as a contiguous literal substring of source_quote; do not abbreviate or join separated words",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "trigger_terms clue must occur as a contiguous literal substring of source_quote; do not abbreviate or join separated words"
+    },
+    {
+      "job_id": "09be75da5033df9c5f45b321b55495a0aa0506cb1b09e202b65abda3302af441",
+      "attempt": 2,
+      "original_output_sha256": "b4c56ecdb801002c1383c89fb9868080ba18bb07685bc7a3c8d61666a5db9f77",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "080a7f1119f695b32c608df61960d2c49d99538ba89566228ca22266735d0d92",
+      "attempt": 2,
+      "original_output_sha256": "af576c9926009a18bb3a43327995955e8840a99d693b15ed60b555cc4526af11",
+      "error_message": "trigger_terms clue must occur as a contiguous literal substring of source_quote; do not abbreviate or join separated words",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "trigger_terms clue must occur as a contiguous literal substring of source_quote; do not abbreviate or join separated words"
+    },
+    {
+      "job_id": "87d38cb05db75db79519467b64572b3958bd85f88fff2f3033ac734da689434a",
+      "attempt": 1,
+      "original_output_sha256": "8e4690ff270f3f3b6ce23db27b0805c6e28e768f1fd87220c419664de79c50af",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 14 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "d14f2eb0311e410cdc1e802a3953b19a7f27a34284437dc0fed411524453a0ca",
+      "attempt": 1,
+      "original_output_sha256": "73c3fc0768456cfd39bf2087d5c5386cacc9dbc382295c8d98682f835f7c6e33",
+      "error_message": "entities has 17 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 17 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "97ac2baf6df52542ab5f4d35a3b2d4947c8eaae6b9c433b16fdef3812267d544",
+      "attempt": 1,
+      "original_output_sha256": "8d725b813034fdf2c3899cb72f0b37ec6c6c3f2834bde3640f770d959ea8a899",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "87d38cb05db75db79519467b64572b3958bd85f88fff2f3033ac734da689434a",
+      "attempt": 2,
+      "original_output_sha256": "b34985e7794f10988f4c3c60004ccf0e87abc77e87a138827d8bc8ba17005016",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 18 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "d14f2eb0311e410cdc1e802a3953b19a7f27a34284437dc0fed411524453a0ca",
+      "attempt": 2,
+      "original_output_sha256": "998013b158f799221cba711216e3bb4d9aad2cac01d220bb79487fc0650e5d48",
+      "error_message": "entities has 18 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 18 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "97ac2baf6df52542ab5f4d35a3b2d4947c8eaae6b9c433b16fdef3812267d544",
+      "attempt": 2,
+      "original_output_sha256": "fe3c1dc7eddf654ad8d21093ff46b0dc105f5f4ba36e9cd2f201ed248b348bdc",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "e9eb494ce9241521e80e3e6960c92223d95cdc7c56bb70b3642373c369e1a2fe",
+      "attempt": 1,
+      "original_output_sha256": "0a4f307c2648e0a56ae5e0177daf555959205310d65be7649dcf44ebf0a1aed6",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "14a42eaee5643d79b9be9bdac712f02b2222c642f5e26ca08fc15a2fd4eb8d44",
+      "attempt": 1,
+      "original_output_sha256": "18ba5fda337127b872c89fb9cf728a12901fd66f6abea80cec083e3a113d66a8",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "18b3f948f56eb466437410be484313fb123af23c4b3e27187b0c690fc74f81ec",
+      "attempt": 1,
+      "original_output_sha256": "9f1785648d9a7d8b183747e62ffcc302658069fc30e9440edd80a97d85256621",
+      "error_message": "entities has 12 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 12 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "5db5ea0dd7308f1ec4069e6a288d7014a92d31915e41ca69e984bacdbc17116d",
+      "attempt": 1,
+      "original_output_sha256": "225412e8c6743cb6af7796b7d022fcfefc38aa0d16396f2786d31feaa533f584",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "14a42eaee5643d79b9be9bdac712f02b2222c642f5e26ca08fc15a2fd4eb8d44",
+      "attempt": 2,
+      "original_output_sha256": "306aa253051f9405405b584143fd2ea303ea67f6ee902230ffffd75025b8c888",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "18b3f948f56eb466437410be484313fb123af23c4b3e27187b0c690fc74f81ec",
+      "attempt": 2,
+      "original_output_sha256": "22f9b62971ae24148ecb903307c955ec7298736f3159870e233d1fea979cd45a",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "5db5ea0dd7308f1ec4069e6a288d7014a92d31915e41ca69e984bacdbc17116d",
+      "attempt": 2,
+      "original_output_sha256": "225412e8c6743cb6af7796b7d022fcfefc38aa0d16396f2786d31feaa533f584",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "437323b57d0697ef120a2e1136ffc7797953d92cc573c580f81eab3854f37c4b",
+      "attempt": 1,
+      "original_output_sha256": "b5fc92034ba0cb56359f2892bec169305ad2b354cc5e2e82db341571ef68dc19",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 11 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "437323b57d0697ef120a2e1136ffc7797953d92cc573c580f81eab3854f37c4b",
+      "attempt": 2,
+      "original_output_sha256": "fec339ed2443bb8442f50708df867fe1b23198efdef173bd8244f7e9927d0c11",
+      "error_message": "entities has 11 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 11 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "f879b7c783260fc465898a02daac9f4b2217f5047c2bfd6ef9efa0111dd820af",
+      "attempt": 1,
+      "original_output_sha256": "3cd46003b2e93ab60ec9e93049e37ccca49a57ae5361c084967ab18a5e5cfe17",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 13 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "f879b7c783260fc465898a02daac9f4b2217f5047c2bfd6ef9efa0111dd820af",
+      "attempt": 2,
+      "original_output_sha256": "3cd46003b2e93ab60ec9e93049e37ccca49a57ae5361c084967ab18a5e5cfe17",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 13 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "f83128aa3ab2e1c9113947b718cc3631ff4aa66742fc08e549c1230da4c005ab",
+      "attempt": 1,
+      "original_output_sha256": "10ab87e1a4697654caeab9423832a3c5774a0d88815607590becbff3f6a84688",
+      "error_message": "trigger_terms has 9 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "trigger_terms has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "d1011d14b5d8f56388099ee60612c49cd71452b012f9ba2572e885f0234deb1b",
+      "attempt": 1,
+      "original_output_sha256": "bb5b0cb40234e44fa65cbfc6837f4da491af6763ce96d318323bdf4db1e2676f",
+      "error_message": "entities has 11 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 11 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "0136135c37100c9b10d0b29ce677941ebec80fca6c26d191034793020e43eb14",
+      "attempt": 1,
+      "original_output_sha256": "c8c0b209616fcb85c3d6483a39c6892a18fe3db51bd40c3c8de676f10387908a",
+      "error_message": "entities has 10 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 10 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "f83128aa3ab2e1c9113947b718cc3631ff4aa66742fc08e549c1230da4c005ab",
+      "attempt": 2,
+      "original_output_sha256": "1fa71170b4a4438ed855f89c55e33904a09c01b992aff36925a9e3622087cc9f",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "d1011d14b5d8f56388099ee60612c49cd71452b012f9ba2572e885f0234deb1b",
+      "attempt": 2,
+      "original_output_sha256": "0a289ea22163f2ec9d02943ce277facd8c2a8368b12cf6001980fd51947f78b5",
+      "error_message": "entities has 11 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 11 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "0136135c37100c9b10d0b29ce677941ebec80fca6c26d191034793020e43eb14",
+      "attempt": 2,
+      "original_output_sha256": "f3b3da04a6cc8142416bf50f8284255cf9540b88cdc6f318b1cebfadd0933795",
+      "error_message": "entities has 10 extraction clues; at most 8 are allowed",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 10 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "5fc106e45898db5bfe045b15d86089f7f66de0fe316e260d04358d9a270fdbc2",
+      "attempt": 1,
+      "original_output_sha256": "e249fdf07b81dd459bdbc06f99aaff8098fd5a2fe4e935c5af6b3ab507828759",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "71b97c594aeee0dda84729644650575ffa7e1fa6d68ad91ece65daf533bf4af9",
+      "attempt": 1,
+      "original_output_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": false,
+      "current_error": "Invalid extraction JSON"
+    },
+    {
+      "job_id": "5fc106e45898db5bfe045b15d86089f7f66de0fe316e260d04358d9a270fdbc2",
+      "attempt": 2,
+      "original_output_sha256": "e249fdf07b81dd459bdbc06f99aaff8098fd5a2fe4e935c5af6b3ab507828759",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "71b97c594aeee0dda84729644650575ffa7e1fa6d68ad91ece65daf533bf4af9",
+      "attempt": 2,
+      "original_output_sha256": "ed3a1aca202895eab84312e58dee9d54653565342eb28f6a6fd142b6c50c4d32",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "647466d7458238d2714df7523a93c9ff707668eaec4467777ad469c56c90ec3b",
+      "attempt": 1,
+      "original_output_sha256": "998c157c241b42aebe11e9a2e06f47f80c21bd47162a0bd9c1326c04c63f4152",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "647466d7458238d2714df7523a93c9ff707668eaec4467777ad469c56c90ec3b",
+      "attempt": 2,
+      "original_output_sha256": "ebcb2bc9cc7bdf46640f3883acdbc754f083f97b8715b8a6cb3eb95d3009ad03",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "120bc6038a6adb03ca11f886d727323e4507bdd7eaefa340ba5eaa342a4cf815",
+      "attempt": 1,
+      "original_output_sha256": "2a06fbf8139fd288e2e2e42b4ca18df9dd64d0cf4fb8a9afb8821ac69b84b678",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "fd3e608c858bfc5235de594e8b5e3531be4e36a289ecf26175ba5e66f2443e94",
+      "attempt": 1,
+      "original_output_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": false,
+      "current_error": "Invalid extraction JSON"
+    },
+    {
+      "job_id": "0aae50a7b1ed4e627e8559f3fedde373e1cc6c71bb99dfbb6058d534b0fcccfc",
+      "attempt": 1,
+      "original_output_sha256": "221d216450623fe61a780c7aedbb0e0b51007a015744401031af0fd0d0eba57a",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "120bc6038a6adb03ca11f886d727323e4507bdd7eaefa340ba5eaa342a4cf815",
+      "attempt": 2,
+      "original_output_sha256": "414d15574acbc821e90b687f00c5dd23c59d8a00f99971c87cda0dfed405ba98",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities has 11 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "fd3e608c858bfc5235de594e8b5e3531be4e36a289ecf26175ba5e66f2443e94",
+      "attempt": 2,
+      "original_output_sha256": "75208ef51fd105cbd886a394d64746a07bc55af637a94b1521d5f2b527903de6",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "keywords has 9 extraction clues; at most 8 are allowed"
+    },
+    {
+      "job_id": "0aae50a7b1ed4e627e8559f3fedde373e1cc6c71bb99dfbb6058d534b0fcccfc",
+      "attempt": 2,
+      "original_output_sha256": "221d216450623fe61a780c7aedbb0e0b51007a015744401031af0fd0d0eba57a",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "6a6c5282f06d09071aa7b60e2d9781e34e6a8b51ff81dd6ad1f9a177492d5bcf",
+      "attempt": 1,
+      "original_output_sha256": "568f9bf5e251946a6ee85586bbe74ccb0d3a33ab9e687e17919b88a85cdb87fa",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities must be an array of at most 8 extraction clues"
+    },
+    {
+      "job_id": "60d7dc18d1f743783198ab6c2074e45c3bc695c22ddf49bcbcdca643be17cf5a",
+      "attempt": 1,
+      "original_output_sha256": "221d216450623fe61a780c7aedbb0e0b51007a015744401031af0fd0d0eba57a",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "6a6c5282f06d09071aa7b60e2d9781e34e6a8b51ff81dd6ad1f9a177492d5bcf",
+      "attempt": 2,
+      "original_output_sha256": "dfd39123e05b078fe95bb63706f8b0de6bb7e02156034479d9b45ae1bff0a495",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": false,
+      "current_error": "entities must be an array of at most 8 extraction clues"
+    },
+    {
+      "job_id": "60d7dc18d1f743783198ab6c2074e45c3bc695c22ddf49bcbcdca643be17cf5a",
+      "attempt": 2,
+      "original_output_sha256": "715352fb24dde77222831fe737a0fbc2d94e61b81d9b8c10be64bda9663c0ede",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": true,
+      "source_validation_empty_context_passed": true
+    },
+    {
+      "job_id": "5c51386771d9254a9e3975ad24e23073ed8f354b237554350b5b6dbb12c46218",
+      "attempt": 1,
+      "original_output_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "error_message": "Invalid extraction JSON",
+      "json_decoded": false,
+      "current_error": "Invalid extraction JSON"
+    }
+  ],
+  "summary": {
+    "old_rejections": 56,
+    "now_json_decoded": 52,
+    "source_validation_empty_context_passed": 24,
+    "remaining_error_counts": {
+      "entities has 15 extraction clues; at most 8 are allowed": 1,
+      "entities has 16 extraction clues; at most 8 are allowed": 1,
+      "entities must be an array of at most 8 extraction clues": 3,
+      "Invalid extraction JSON": 4,
+      "entities has 9 extraction clues; at most 8 are allowed": 4,
+      "keywords has 9 extraction clues; at most 8 are allowed": 2,
+      "trigger_terms clue must occur as a contiguous literal substring of source_quote; do not abbreviate or join separated words": 2,
+      "entities has 14 extraction clues; at most 8 are allowed": 1,
+      "entities has 17 extraction clues; at most 8 are allowed": 1,
+      "entities has 18 extraction clues; at most 8 are allowed": 2,
+      "entities has 12 extraction clues; at most 8 are allowed": 1,
+      "entities has 11 extraction clues; at most 8 are allowed": 5,
+      "entities has 13 extraction clues; at most 8 are allowed": 2,
+      "trigger_terms has 9 extraction clues; at most 8 are allowed": 1,
+      "entities has 10 extraction clues; at most 8 are allowed": 2
+    }
+  }
+}
