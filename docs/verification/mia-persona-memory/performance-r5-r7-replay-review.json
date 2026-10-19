@@ -1,0 +1,298 @@
+{
+  "source_run": 39188213889,
+  "url": "https://github.com/bboytang/Mia/actions/runs/39188213889",
+  "code_sha": "bb5b971268eb353e7bd91cd83172b0cc21452d6c",
+  "conclusion": "success",
+  "provider_requests": 0,
+  "controlled_sdk_calls": 4,
+  "fixed_warmup_reads": 5,
+  "cases": [
+    {
+      "case": "controlled-0",
+      "trace_enabled": false,
+      "first_sentence_ms": 524.9859799999967,
+      "stages": {
+        "pre_sdk_ms": 356.98055599999634,
+        "sdk_to_first_content_ms": 2.630816000021241,
+        "after_first_content_ms": 165.37460799997916
+      },
+      "job": {
+        "id": "ffd61beba5a8d8d012280cd77a909b0dafd50e251b1672b058884e192bc4ec42",
+        "state": "empty",
+        "attempts": 1,
+        "submit_to_observed_terminal_seconds": 0.23116511000000628
+      }
+    },
+    {
+      "case": "controlled-1",
+      "trace_enabled": true,
+      "first_sentence_ms": 476.05310300002657,
+      "stages": {
+        "pre_sdk_ms": 338.15788399999747,
+        "sdk_to_first_content_ms": 0.43960300001799624,
+        "after_first_content_ms": 137.4556160000111
+      },
+      "job": {
+        "id": "1eb7666112342dbb51155444bc67d4145d035b0e7850ab498081ce9a1c84076c",
+        "state": "empty",
+        "attempts": 1,
+        "submit_to_observed_terminal_seconds": 0.17795446000002357
+      }
+    },
+    {
+      "case": "controlled-2",
+      "trace_enabled": true,
+      "first_sentence_ms": 413.61904299998287,
+      "stages": {
+        "pre_sdk_ms": 256.9585850000067,
+        "sdk_to_first_content_ms": 0.4370679999965432,
+        "after_first_content_ms": 156.22338999997964
+      },
+      "job": {
+        "id": "0adb681f8ebcbd3e6fb32a26122e73c1e7c1c85823b6fd219318ccfb024fbf50",
+        "state": "empty",
+        "attempts": 1,
+        "submit_to_observed_terminal_seconds": 0.18185163900000134
+      }
+    },
+    {
+      "case": "controlled-3",
+      "trace_enabled": false,
+      "first_sentence_ms": 376.9529229999762,
+      "stages": {
+        "pre_sdk_ms": 274.0150440000093,
+        "sdk_to_first_content_ms": 0.4278549999980896,
+        "after_first_content_ms": 102.51002399996878
+      },
+      "job": {
+        "id": "c384f9cc725990749ddaac732d0c46da93d5394148df0f25389883b3819488d4",
+        "state": "empty",
+        "attempts": 1,
+        "submit_to_observed_terminal_seconds": 0.1282913100000087
+      }
+    }
+  ],
+  "files": [
+    {
+      "source": "app-child/app-results.json",
+      "file": "performance-r5-r7-replay-child.json.gz",
+      "raw_sha256": "7f516c5bfaf502e7ccb0f2041a5b0f0d3c19bba9bcc8d4639b02203cc73e69a0",
+      "gzip_sha256": "e2b7ca21647b198f1131d57bd605ba6491ca6f1e1a72fbf5f89b25a2b3f18c48"
+    },
+    {
+      "source": "app-lifecycle-results.json",
+      "file": "performance-r5-r7-replay-parent.json.gz",
+      "raw_sha256": "fe64df46a4fd1000d4109e8e344519cdf270491665a083f194c1dbc240871362",
+      "gzip_sha256": "14c61aa08ca6c6943099d8b872ec7ba8bd131f32e53749e56478106aa965c141"
+    },
+    {
+      "source": "app-child/tts-boundaries.json",
+      "file": "performance-r5-r7-replay-boundaries.json.gz",
+      "raw_sha256": "e6e078e00dc3ca1e5c9bf30b3ce0ab00777d410c4eee910ea39442c657dc01e1",
+      "gzip_sha256": "ade6ddd7e20be11584f09ec3154fe46c526e41db95b399e2a52a28c026b11ee4"
+    },
+    {
+      "source": "app-service.log",
+      "file": "performance-r5-r7-replay-app.log.gz",
+      "raw_sha256": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c",
+      "gzip_sha256": "3027f7b52f08bf29f487c85fbe923fc19062ed4b94d78452025e5ad1443195f9"
+    },
+    {
+      "source": "mia-r5-r7-replay-39188213889.log",
+      "file": "performance-r5-r7-replay-ci.log.gz",
+      "raw_sha256": "cbef572f46d563e8fb0920dc6f39ea7488519719a93efa59d11ddfd008cff54d",
+      "gzip_sha256": "718e797a56c8b7da5ccb9525fb1591a411fa27d87c8dd6666584c7c29870aaca"
+    },
+    {
+      "source": "mia-r5-r7-replay-39188213889-metadata.json",
+      "file": "performance-r5-r7-replay-metadata.json.gz",
+      "raw_sha256": "9e9730f1919dc32750fdf22f3a929788705d74ebe014d07f15f0cb94e27088ce",
+      "gzip_sha256": "410e0073eacf77ba4f3f715d231a6241a751f9397716c2ba906a0c9cb24ec8fb"
+    }
+  ],
+  "artifact_files": [
+    {
+      "file": "app-child/app-results.json",
+      "bytes": 182757,
+      "sha256": "7f516c5bfaf502e7ccb0f2041a5b0f0d3c19bba9bcc8d4639b02203cc73e69a0"
+    },
+    {
+      "file": "app-child/context-profile.json",
+      "bytes": 244,
+      "sha256": "8ba22b5259baf78a7bbfdb39c8a84ab8b2a55798d81e29130dc099f5eb9f32c1"
+    },
+    {
+      "file": "app-child/memory.sqlite3",
+      "bytes": 83062784,
+      "sha256": "47820bc00602fbf51d2c3c24c992c4cb28bcfb828fd0fc760fef0af4c3cf888e"
+    },
+    {
+      "file": "app-child/ready.json",
+      "bytes": 102,
+      "sha256": "f74d3a7ae24566c21109fc6eaea41e672b35c9d35c4482acb849ffc059cd7c21"
+    },
+    {
+      "file": "app-child/tts-boundaries.json",
+      "bytes": 318322,
+      "sha256": "e6e078e00dc3ca1e5c9bf30b3ce0ab00777d410c4eee910ea39442c657dc01e1"
+    },
+    {
+      "file": "app-lifecycle-results.json",
+      "bytes": 174317,
+      "sha256": "fe64df46a4fd1000d4109e8e344519cdf270491665a083f194c1dbc240871362"
+    },
+    {
+      "file": "app-service.log",
+      "bytes": 37,
+      "sha256": "04a71d3544bffac1fa267065652531ba6d823e791f607502342f39c77cfae25c"
+    },
+    {
+      "file": "cgroup-final-cpu.max.txt",
+      "bytes": 14,
+      "sha256": "07eb5019b2babb019fbbfe1cb328ec5b7affac5e07da4b94ebedb5e110dfab69"
+    },
+    {
+      "file": "cgroup-final-cpu.stat.txt",
+      "bytes": 179,
+      "sha256": "c771f8f4da6f5033e4e60459733261fb8a50a1c233f82a608dc7ce21d34592aa"
+    },
+    {
+      "file": "cgroup-final-memory.current.txt",
+      "bytes": 10,
+      "sha256": "5db65f84dc2ba20f9e6276654485d7fa654efcaff207698c287e694df8e03b75"
+    },
+    {
+      "file": "cgroup-final-memory.events.txt",
+      "bytes": 53,
+      "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2"
+    },
+    {
+      "file": "cgroup-final-memory.max.txt",
+      "bytes": 11,
+      "sha256": "604fec38960d7c5bd3bd6c06ad8f4b42eac0bb30ea02d43518d0f9f11d5e131e"
+    },
+    {
+      "file": "cgroup-final-memory.peak.txt",
+      "bytes": 11,
+      "sha256": "fca5dc31860fce3f83824e8cb325639ab93fa9076b2967425bc0e7df36b403c9"
+    },
+    {
+      "file": "cgroup-final-memory.swap.max.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "container-final.txt",
+      "bytes": 204,
+      "sha256": "2b79dc031158b67979195ad1fe61779f5c5c67a0249cf1d39c7d356dfbfb661b"
+    },
+    {
+      "file": "container-stop.txt",
+      "bytes": 81,
+      "sha256": "3689361c6591f0feb9eaa2c5ab88de2270cfc621fa398772ee1fceb876ab4565"
+    },
+    {
+      "file": "container-stopped.txt",
+      "bytes": 56,
+      "sha256": "472530e441a5ba3ab891f9a68560bc6489f60855c26226b25f2d91f69ee4f0d7"
+    },
+    {
+      "file": "database-image-digests.txt",
+      "bytes": 156,
+      "sha256": "79f4d30c6e01ed391f7bda59d692aadcea05b48cf901a2c9a32ae608867bb21a"
+    },
+    {
+      "file": "docker-cgroup-driver.txt",
+      "bytes": 8,
+      "sha256": "12e6ff4feb1b552a431b41d3935d33f08f9d75ddb8a88f645f4cf231bc05e820"
+    },
+    {
+      "file": "export-dependencies.txt",
+      "bytes": 525,
+      "sha256": "36daedc60cf55268a851210c130f941e8d2afcd84b9838501e690224210d9d40"
+    },
+    {
+      "file": "java-version.txt",
+      "bytes": 205,
+      "sha256": "5b4412738541184e84f6b2d7520d4f4a7c2a455f60650491464c61adcbbbdeb0"
+    },
+    {
+      "file": "junit/TEST-junit-jupiter.xml",
+      "bytes": 22215,
+      "sha256": "a12cb704ebdb838c5d053990c0f8f269e01f4e4fb69d42164f02ce592c6dd60d"
+    },
+    {
+      "file": "junit/TEST-junit-platform-suite.xml",
+      "bytes": 21794,
+      "sha256": "10b43305ee14414ddfb04cd624f031665056fe38d200a439b567720d251fc20f"
+    },
+    {
+      "file": "junit/TEST-junit-vintage.xml",
+      "bytes": 21777,
+      "sha256": "3309df0534060413d2c517070c5c82218140b891fe6ccc1ced839649407c378a"
+    },
+    {
+      "file": "manager.log",
+      "bytes": 25628,
+      "sha256": "f90de51dd9b9b0667fe72004a52e9ce645b8b08a0335229fd2ac6c21938619b7"
+    },
+    {
+      "file": "mysql.log",
+      "bytes": 4436,
+      "sha256": "548daaceb68efef93c50d915625071701119c2b18e7514a613dac979d7866db0"
+    },
+    {
+      "file": "preparation-dependencies.txt",
+      "bytes": 4103,
+      "sha256": "3b668fa3c668d6b3dc62e3828bec433958f37f840efd83049031ef98edb2e10e"
+    },
+    {
+      "file": "python.log",
+      "bytes": 88,
+      "sha256": "e49b53ede389a83bec1b46d3f3619e4b43c0a1acb43b03b8791478a9d030f310"
+    },
+    {
+      "file": "redis.log",
+      "bytes": 5888,
+      "sha256": "b058ad55c28321cb8598f1ad315bd6cead65ae9e6d58fb03467f098d03968506"
+    },
+    {
+      "file": "runtime-system.txt",
+      "bytes": 92,
+      "sha256": "ee4a6012b84363eebb19de3605048e335346316266ef552f760bad3617b2b259"
+    }
+  ],
+  "resource_limits": {
+    "cpu.max": "200000 100000",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0",
+    "memory.peak": "1543573504",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+  },
+  "shutdown": {
+    "elapsed_seconds": 2.4488798670000165,
+    "databases_stopped_with_zero_exit_no_oom": true,
+    "remaining_original_processes": [],
+    "passed": true,
+    "scope": "From SIGTERM to actual app through Java/harness/MySQL/Redis exit; no work in flight, prior accepted jobs already terminal"
+  },
+  "observer_abba": {
+    "on_mean_ms": 444.8360730000047,
+    "off_mean_ms": 450.96945149998646,
+    "on_minus_off_mean_ms": -6.133378499981745,
+    "scope": "All four fixed results retained. One ABBA and warm-state drift cannot establish an overhead bound or prove a speedup. Never subtract this from real first-sentence latency."
+  },
+  "sqlite_read_only": {
+    "integrity": "ok",
+    "job_groups": [
+      [
+        "empty",
+        1,
+        4,
+        4
+      ]
+    ],
+    "bulk_fixture_facts": 11032,
+    "scope": "Four completed question-source tasks, deterministic empty extraction with no extraction SDK; no new model-extracted bulk facts."
+  }
+}

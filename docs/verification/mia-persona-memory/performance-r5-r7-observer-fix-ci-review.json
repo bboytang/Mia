@@ -1,0 +1,414 @@
+{
+  "scope": "Observer/CI-fixture correction only; production runtime byte-identical to tested 50c0664",
+  "runs": [
+    {
+      "conclusion": "success",
+      "event": "push",
+      "headSha": "25e724300c00cc5ffd191b78114026a039755ff5",
+      "jobs": [
+        {
+          "completedAt": "2026-10-19T02:02:19Z",
+          "conclusion": "success",
+          "databaseId": 117854350805,
+          "name": "test",
+          "startedAt": "2026-10-19T02:01:19Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Install libopus and Python dependencies",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Test WebSocket and Opus protocol fixture",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Upload checked music plugin",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 12,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 13,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 14,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/bboytang/Mia/actions/runs/39187984059/job/117854350805"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39187984059",
+      "role": "observer-server",
+      "run_id": 39187984059,
+      "log_file": "performance-r5-r7-observer-server-ci.log.gz",
+      "raw_sha256": "d1ee4f034b2cd38a0cde5ac50f96495c1645ac93b553e9052c0e0628d4dc5bcc",
+      "gzip_sha256": "7050fa95019d4303404113ee91d3cbc888d4163678741603079fd2947f914f69",
+      "test_summaries": [
+        "Ran 327 tests in 32.918s"
+      ]
+    },
+    {
+      "conclusion": "success",
+      "event": "push",
+      "headSha": "25e724300c00cc5ffd191b78114026a039755ff5",
+      "jobs": [
+        {
+          "completedAt": "2026-10-19T02:03:33Z",
+          "conclusion": "success",
+          "databaseId": 117854351860,
+          "name": "baseline",
+          "startedAt": "2026-10-19T02:01:19Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Initialize containers",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 5,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 6,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Reconstruct existing Mia manager patch on pinned source",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Compile and run existing real Java regressions",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Reproduce unsafe baseline with real HTTP, Shiro, MySQL and Redis",
+              "number": 9,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Verify exact deployed class baseline",
+              "number": 10,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 11,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 18,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 19,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 20,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 21,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Stop containers",
+              "number": 22,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 23,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/bboytang/Mia/actions/runs/39187984133/job/117854351860"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39187984133",
+      "role": "observer-manager",
+      "run_id": 39187984133,
+      "log_file": "performance-r5-r7-observer-manager-ci.log.gz",
+      "raw_sha256": "dfa511045f53a770a46801587ffc83e1064c6ac636d09d9b6db0fde63699e0bb",
+      "gzip_sha256": "edf87734a85f212c95fc33a1904fd6d0f58f8d02dbea5f3e6bfb78e182f52673",
+      "test_summaries": [
+        "Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.191 s -- in xiaozhi.modules.timbre.service.impl.TimbreServiceImplTest",
+        "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.299 s -- in xiaozhi.modules.sys.service.impl.SysDictDataServiceImplTest",
+        "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.210 s -- in xiaozhi.modules.sys.service.impl.SysParamsServiceImplTest",
+        "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.88 s -- in xiaozhi.modules.sys.loginControllerTest",
+        "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.321 s -- in xiaozhi.modules.device.DeviceTest",
+        "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.253 s -- in xiaozhi.modules.device.service.impl.DeviceAddressBookServiceImplTest",
+        "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.095 s -- in xiaozhi.modules.device.service.impl.DeviceAutoUpdateTest",
+        "Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.423 s -- in xiaozhi.modules.device.service.impl.MqttGatewayAuthorizationTest",
+        "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in xiaozhi.modules.device.service.impl.DeviceTimeSerializationTest",
+        "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.187 s -- in xiaozhi.modules.device.controller.DeviceControllerTest",
+        "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.663 s -- in xiaozhi.modules.config.service.impl.ConfigServiceImplTest",
+        "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in xiaozhi.modules.security.config.ShiroConfigTest",
+        "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.296 s -- in xiaozhi.modules.agent.typehandler.ContextProviderListTypeHandlerTest",
+        "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.083 s -- in xiaozhi.modules.agent.service.impl.AgentSnapshotRedactionRunnerTest",
+        "Tests run: 59, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.711 s -- in xiaozhi.modules.agent.service.impl.AgentSnapshotServiceImplTest",
+        "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s -- in xiaozhi.modules.agent.dto.AgentUpdateDTOTest",
+        "Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.219 s -- in xiaozhi.modules.correctword.service.impl.CorrectWordFileServiceImplTest",
+        "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s -- in xiaozhi.modules.knowledge.rag.KnowledgeBaseAdapterFactoryTest",
+        "Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 s -- in xiaozhi.common.redis.RedisSerializationTest",
+        "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in xiaozhi.common.utils.JsonUtilsTest",
+        "Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in xiaozhi.common.utils.SensitiveDataUtilsTest",
+        "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in xiaozhi.common.utils.AESUtilsTest",
+        "Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.415 s -- in xiaozhi.common.service.impl.BaseServiceImplTest",
+        "Tests run: 150, Failures: 0, Errors: 0, Skipped: 0",
+        "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.517 s -- in xiaozhi.modules.device.MiaIdentityBaselineTest",
+        "Tests run: 4, Failures: 0, Errors: 0, Skipped: 0"
+      ]
+    },
+    {
+      "conclusion": "success",
+      "event": "push",
+      "headSha": "25e724300c00cc5ffd191b78114026a039755ff5",
+      "jobs": [
+        {
+          "completedAt": "2026-10-19T02:01:27Z",
+          "conclusion": "success",
+          "databaseId": 117854351024,
+          "name": "syntax",
+          "startedAt": "2026-10-19T02:01:19Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/bboytang/Mia/actions/runs/39187984089/job/117854351024"
+        },
+        {
+          "completedAt": "2026-10-19T02:01:17Z",
+          "conclusion": "skipped",
+          "databaseId": 117854352165,
+          "name": "shared",
+          "startedAt": "2026-10-19T02:01:18Z",
+          "status": "completed",
+          "steps": [],
+          "url": "https://github.com/bboytang/Mia/actions/runs/39187984089/job/117854352165"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39187984089",
+      "role": "observer-mechanism",
+      "run_id": 39187984089,
+      "log_file": "performance-r5-r7-observer-mechanism-ci.log.gz",
+      "raw_sha256": "8aa2f7eaf69ed31dc6ed28078976223a082675be46337fe6a0ce2cbcb9e981bd",
+      "gzip_sha256": "aea134b7e1748b8fe72b159a7c4a3ce17e3cdd3c97595a1777472f47ea0b056d",
+      "test_summaries": [
+        "Ran 39 tests in 0.472s"
+      ]
+    },
+    {
+      "conclusion": "success",
+      "event": "push",
+      "headSha": "bb5b971268eb353e7bd91cd83172b0cc21452d6c",
+      "jobs": [
+        {
+          "completedAt": "2026-10-19T02:02:24Z",
+          "conclusion": "success",
+          "databaseId": 117854578192,
+          "name": "syntax",
+          "startedAt": "2026-10-19T02:02:17Z",
+          "status": "completed",
+          "steps": [
+            {
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run actions/setup-python@v5",
+              "number": 3,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Run python -m py_compile scripts/ci/verify_mia_shared_envelope.py scripts/ci/mia_thread_diagnostics.py scripts/ci/mia_query_scheduling.py",
+              "number": 4,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/setup-python@v5",
+              "number": 7,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 8,
+              "status": "completed"
+            },
+            {
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 9,
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/bboytang/Mia/actions/runs/39188059135/job/117854578192"
+        },
+        {
+          "completedAt": "2026-10-19T02:02:15Z",
+          "conclusion": "skipped",
+          "databaseId": 117854579241,
+          "name": "shared",
+          "startedAt": "2026-10-19T02:02:15Z",
+          "status": "completed",
+          "steps": [],
+          "url": "https://github.com/bboytang/Mia/actions/runs/39188059135/job/117854579241"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/bboytang/Mia/actions/runs/39188059135",
+      "role": "warm-mechanism",
+      "run_id": 39188059135,
+      "log_file": "performance-r5-r7-warm-mechanism-ci.log.gz",
+      "raw_sha256": "b84dcc408d43b3803f4c94ae8e4d1c513118a5c240dc40316f06f37c823305ba",
+      "gzip_sha256": "35f23e07b387a42919fc1d867016112d5b9dd61f9938489aa4349c30dd2bb618",
+      "test_summaries": [
+        "Ran 39 tests in 0.294s"
+      ]
+    }
+  ]
+}

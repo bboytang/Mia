@@ -1,0 +1,10 @@
+{
+  "upstream_sha": "87c6df77b0220ddbd8fc804f984f83f69f3225e5",
+  "SDK": "openai==2.8.1",
+  "default_max_retries": 2,
+  "logical_sdk_create_calls": 1,
+  "mock_http_calls": 3,
+  "remote_provider_calls": 0,
+  "final_error_class": "InternalServerError",
+  "scope": "Actual fixed Provider and SDK with local 503 MockTransport; only retry backoff replaced by zero, retry count unchanged. Not a production network measurement."
+}

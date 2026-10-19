@@ -1,0 +1,229 @@
+{
+  "source_run": 39187014445,
+  "source_sha": "50c0664c8dc77ca57da31d6d44123d2ea281cce7",
+  "source_raw_sha256": "3875ed4aed6f917243f8f4f4153d66df06cec0312b2bad683b35792ccebd2e83",
+  "scope": "Two original real-model cases from a failed observer run; single cold 10k pair, no percentile or retrospective acceptance. Controlled ABBA invalid and excluded as a whole.",
+  "provider_requests": 2,
+  "provider_errors": [],
+  "cases": [
+    {
+      "case": "1-0-0-baseline",
+      "capacity": 10000,
+      "variant": "baseline",
+      "sdk_start_ms": 17.143107999970653,
+      "sdk_first_content_ms": 835.5351160000168,
+      "first_checked_text_ms": 1041.4589309999656,
+      "first_sentence_ms": 1041.638766999995,
+      "stages": {
+        "pre_sdk_ms": 17.143107999970653,
+        "sdk_to_first_content_ms": 818.3920080000462,
+        "after_first_content_ms": 206.10365099997807
+      },
+      "raw_sdk_parts": 134,
+      "raw_sdk_text_sha256": "d29493cb9ec27286328facd8a43ea2fb6c067c9bfcc796e31e8482cf94f4a1b3",
+      "raw_sdk_text_chars": 228,
+      "first_comma_observer_ms": 905.3318969999964,
+      "first_sentence_boundary_observer_ms": 1041.3389369999777,
+      "first_guard_check_completed_ms": 1041.4314999999874,
+      "audio_generation_measured": false,
+      "audio_playback_measured": false,
+      "comma_to_tts_text_ms": 136.30686999999853,
+      "boundary_to_tts_text_ms": 0.2998300000172094,
+      "guard_cpu_ms": 0.02168999998275467,
+      "before_tts_ready": {
+        "provider.profile_read": {
+          "calls": 1,
+          "inclusive_ms": 0.14190400003144532,
+          "exclusive_ms": 0.14190400003144532
+        },
+        "context.assemble": {
+          "calls": 1,
+          "inclusive_ms": 0.26102700002184065,
+          "exclusive_ms": 0.26102700002184065
+        },
+        "guard.queue_put": {
+          "calls": 14,
+          "inclusive_ms": 0.3372969999304587,
+          "exclusive_ms": 0.25418199993509916
+        },
+        "sqlite.python_lock_wait": {
+          "calls": 5,
+          "inclusive_ms": 0.03717800001368232,
+          "exclusive_ms": 0.03717800001368232
+        },
+        "observer.persist": {
+          "calls": 1,
+          "inclusive_ms": 14.666503999990255,
+          "exclusive_ms": 14.666503999990255
+        },
+        "observer.sdk_chunk": {
+          "calls": 13,
+          "inclusive_ms": 0.3993939999986651,
+          "exclusive_ms": 0.3993939999986651
+        },
+        "guard.output_check": {
+          "calls": 1,
+          "inclusive_ms": 0.02168999998275467,
+          "exclusive_ms": 0.02168999998275467
+        },
+        "guard.checked_text_release": {
+          "calls": 1,
+          "inclusive_ms": 0.08311499999535954,
+          "exclusive_ms": 0.06142500001260487
+        }
+      },
+      "limitations": "Comma-to-ready mixes streamed arrivals, per-delta validation and TTS queue scheduling; not pure guard CPU. Inclusive times and parallel calls cannot be summed."
+    },
+    {
+      "case": "1-0-0-memory",
+      "capacity": 10000,
+      "variant": "memory",
+      "sdk_start_ms": 2488.193850000016,
+      "sdk_first_content_ms": 3179.803015999994,
+      "first_checked_text_ms": 3578.1588699999816,
+      "first_sentence_ms": 3579.168224,
+      "stages": {
+        "pre_sdk_ms": 2488.193850000016,
+        "sdk_to_first_content_ms": 691.6091659999779,
+        "after_first_content_ms": 399.3652080000061
+      },
+      "raw_sdk_parts": 136,
+      "raw_sdk_text_sha256": "ea3f80efa2bd78f5ac645de49b02ae1f6f4b9167cec9e25b716b195ad25aa3a0",
+      "raw_sdk_text_chars": 193,
+      "first_comma_observer_ms": 3265.8673850000355,
+      "first_sentence_boundary_observer_ms": 3559.9167380000267,
+      "first_guard_check_completed_ms": 3578.1285539999885,
+      "audio_generation_measured": false,
+      "audio_playback_measured": false,
+      "comma_to_tts_text_ms": 313.3008389999645,
+      "boundary_to_tts_text_ms": 19.251485999973283,
+      "guard_cpu_ms": 0.025607999987187213,
+      "before_tts_ready": {
+        "sqlite.python_lock_wait": {
+          "calls": 39,
+          "inclusive_ms": 0.21057099991139694,
+          "exclusive_ms": 0.21057099991139694
+        },
+        "manager.request": {
+          "calls": 25,
+          "inclusive_ms": 563.3916660000864,
+          "exclusive_ms": 563.3916660000864
+        },
+        "authorization.restore": {
+          "calls": 25,
+          "inclusive_ms": 565.5072729997528,
+          "exclusive_ms": 2.1156069996663973
+        },
+        "authorization.require": {
+          "calls": 25,
+          "inclusive_ms": 566.1943370000699,
+          "exclusive_ms": 0.6870640003171502
+        },
+        "authorization.output_delivery": {
+          "calls": 1,
+          "inclusive_ms": 34.16178999998465,
+          "exclusive_ms": 0.019495999993068835
+        },
+        "guard.queue_put": {
+          "calls": 18,
+          "inclusive_ms": 0.5680359999473694,
+          "exclusive_ms": 0.4740299999639319
+        },
+        "provider.profile_read": {
+          "calls": 20,
+          "inclusive_ms": 3.2399939999550043,
+          "exclusive_ms": 3.2399939999550043
+        },
+        "context.assemble": {
+          "calls": 2,
+          "inclusive_ms": 3.47129599992968,
+          "exclusive_ms": 3.47129599992968
+        },
+        "bge.native_encode": {
+          "calls": 2,
+          "inclusive_ms": 185.26603400005115,
+          "exclusive_ms": 185.26603400005115
+        },
+        "retrieval.encode_wait_and_run": {
+          "calls": 2,
+          "inclusive_ms": 186.89352999996345,
+          "exclusive_ms": 186.89352999996345
+        },
+        "retrieval.sqlite_scan": {
+          "calls": 1,
+          "inclusive_ms": 2093.0222950000257,
+          "exclusive_ms": 2093.0222950000257
+        },
+        "retrieval.total": {
+          "calls": 1,
+          "inclusive_ms": 2274.4148489999816,
+          "exclusive_ms": 18.903197000042837
+        },
+        "sqlite.begin_wait_and_execute": {
+          "calls": 21,
+          "inclusive_ms": 1.0063580000405636,
+          "exclusive_ms": 1.0063580000405636
+        },
+        "context.versions": {
+          "calls": 21,
+          "inclusive_ms": 0.7377289999226377,
+          "exclusive_ms": 0.7377289999226377
+        },
+        "context.capture": {
+          "calls": 21,
+          "inclusive_ms": 9.123479000152201,
+          "exclusive_ms": 7.297110000081375
+        },
+        "context.validate": {
+          "calls": 20,
+          "inclusive_ms": 461.0894990000247,
+          "exclusive_ms": 5.635124999855634
+        },
+        "reply.validate": {
+          "calls": 20,
+          "inclusive_ms": 448.01963999981353,
+          "exclusive_ms": 4.492654999864953
+        },
+        "reply.prepare": {
+          "calls": 1,
+          "inclusive_ms": 2407.632182000043,
+          "exclusive_ms": 1.6235000000506261
+        },
+        "reply.event_loop_wait": {
+          "calls": 20,
+          "inclusive_ms": 2798.370449999993,
+          "exclusive_ms": 4.2026710001437095
+        },
+        "observer.persist": {
+          "calls": 1,
+          "inclusive_ms": 67.78147099998932,
+          "exclusive_ms": 67.78147099998932
+        },
+        "observer.sdk_chunk": {
+          "calls": 18,
+          "inclusive_ms": 0.7818390000124964,
+          "exclusive_ms": 0.7818390000124964
+        },
+        "guard.output_check": {
+          "calls": 1,
+          "inclusive_ms": 0.025607999987187213,
+          "exclusive_ms": 0.025607999987187213
+        },
+        "guard.checked_text_release": {
+          "calls": 1,
+          "inclusive_ms": 0.0940059999834375,
+          "exclusive_ms": 0.06839799999625029
+        }
+      },
+      "limitations": "Comma-to-ready mixes streamed arrivals, per-delta validation and TTS queue scheduling; not pure guard CPU. Inclusive times and parallel calls cannot be summed."
+    }
+  ],
+  "single_pair_delta_ms": 2537.529457000005,
+  "formal_acceptance": "Unchanged: historical 912.8408424ms p95 failure; no new formal verdict.",
+  "component_diagnosis": {
+    "passed": true,
+    "cases": 19,
+    "superseded_sentence_dropped": true,
+    "scope": "Controlled text deltas through unchanged installed guard and original TTS consumer; no SDK, waveform or playback"
+  }
+}
