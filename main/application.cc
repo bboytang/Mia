@@ -1,8 +1,9 @@
 #include "application.h"
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
-#include "passport/signed_update.h"
-#include <atomic>
 #include <freertos/semphr.h>
+#include <atomic>
+#include "passport/private_authorization.h"
+#include "passport/signed_update.h"
 #endif
 #include "assets.h"
 #include "assets/lang_config.h"
@@ -402,6 +403,8 @@ void Application::ActivationTask() {
             protocol_->CloseAudioChannel();
         }
     }
+    // Preserve the original 120s signed-update health check before owner input.
+    mia::passport::EnsurePrivateAuthorization();
 #endif
     // Signal completion to main loop
     xEventGroupSetBits(event_group_, MAIN_EVENT_ACTIVATION_DONE);

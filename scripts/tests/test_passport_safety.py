@@ -37,11 +37,22 @@ class PassportSafetyTests(unittest.TestCase):
     def test_endpoint_policy_accepts_pinned_http_ws_and_rejects_endpoint_changes(self):
         source = r'''
 #include "passport/backend_policy.h"
+#include "passport/private_authorization.h"
 #include <cassert>
 int main() {
     using mia::passport::IsPinnedEndpoint;
     using mia::passport::IsDiscoveryEndpoint;
     using mia::passport::IsVoiceEndpoint;
+    using mia::passport::IsPrivateCredential;
+    assert(IsPrivateCredential(std::string(43, 'a')));
+    assert(IsPrivateCredential(std::string(41, 'Z') + "-_"));
+    for (const auto& invalid : {std::string(), std::string(42, 'a'), std::string(44, 'a'),
+                               std::string(42, 'a') + "\n", std::string(42, 'a') + ":"})
+        assert(!IsPrivateCredential(invalid));
+    assert(IsPinnedEndpoint(mia::passport::kPrivateVoiceUrl,
+                            mia::passport::kPrivateVoiceUrl, "wss://"));
+    assert(!IsPinnedEndpoint("ws://43.143.230.174:8000/xiaozhi/v1/",
+                             mia::passport::kPrivateVoiceUrl, "wss://"));
     constexpr auto discovery = "http://43.143.230.174:8002/xiaozhi/ota/";
     constexpr auto voice = "ws://43.143.230.174:8000/xiaozhi/v1/";
     assert(IsDiscoveryEndpoint(discovery, discovery));

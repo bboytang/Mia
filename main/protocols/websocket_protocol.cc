@@ -1,9 +1,12 @@
 #include "websocket_protocol.h"
 #include "application.h"
 #include "board.h"
+#include "passport/backend_policy.h"
 #include "settings.h"
 #include "system_info.h"
-#include "passport/backend_policy.h"
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+#include "passport/private_authorization.h"
+#endif
 
 #include <esp_log.h>
 #include <arpa/inet.h>
@@ -81,7 +84,18 @@ bool WebsocketProtocol::OpenAudioChannel() {
     Settings settings("websocket", false);
     std::string url = settings.GetString("url");
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
-    if (!mia::passport::IsVoiceEndpoint(url, CONFIG_MIA_PASSPORT_WEBSOCKET_URL)) {
+    const auto private_credential = mia::passport::ReadPrivateCredential();
+    if (private_credential) {
+        if (!mia::passport::IsPrivateCredential(*private_credential)) {
+            ESP_LOGE(TAG, "Mia private authorization must be renewed");
+            return false;
+        }
+        url = mia::passport::kPrivateVoiceUrl;
+    }
+    if ((!private_credential &&
+         !mia::passport::IsVoiceEndpoint(url, CONFIG_MIA_PASSPORT_WEBSOCKET_URL)) ||
+        (private_credential &&
+         !mia::passport::IsPinnedEndpoint(url, mia::passport::kPrivateVoiceUrl, "wss://"))) {
         ESP_LOGE(TAG, "Mia voice endpoint is missing or does not match configuration");
         return false;
     }
@@ -114,6 +128,10 @@ bool WebsocketProtocol::OpenAudioChannel() {
         }
         websocket_->SetHeader("Authorization", token.c_str());
     }
+#ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    if (private_credential)
+        websocket_->SetHeader("Mia-Private-Credential", private_credential->c_str());
+#endif
     websocket_->SetHeader("Protocol-Version", std::to_string(version_).c_str());
     websocket_->SetHeader("Device-Id", SystemInfo::GetMacAddress().c_str());
     websocket_->SetHeader("Client-Id", Board::GetInstance().GetUuid().c_str());

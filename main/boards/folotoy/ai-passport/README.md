@@ -320,3 +320,28 @@ This changes display text only, not server history, audio or other boards.
 The existing CI/release build command selects `--language zh-CN` for built-in
 prompts; language remains a build parameter, following repository policy.
 The dictionaries are application code/data, not changes to the frozen assets.
+
+### Mia 1.0.2 personal memory OTA candidate
+
+Uses the existing signed A/B application update and frozen pins, partitions,
+assets and public key. The first boot still confirms authenticated legacy voice
+within the original 120 seconds before asking for owner input. After confirmation,
+the screen shows a 128-bit random one-time code for up to ten minutes. Open the
+existing manager over HTTPS, select this device, choose 硬件授权 and enter that
+code. No USB, Wi-Fi reset, account service or new database schema is required.
+
+The device exchanges the code only at the pinned HTTPS endpoint with CA/hostname
+verification and redirects disabled. The private credential is committed to a
+separate NVS namespace, never to an OTA capsule or discovery response. Future
+voice requests use the pinned WSS endpoint and private header. A stored invalid
+grant fails closed instead of selecting legacy WS. On subsequent boots the
+existing grant is renewed through the existing HTTPS renewal endpoint; a transport
+failure preserves it. The existing 30-day server expiry and owner revocation
+remain authoritative. Continuous uptime beyond expiry without a renewal still
+requires a restart/reauthorization in this personal candidate.
+
+Deployment order: HTTPS plus the existing owner authorization interface first;
+signed OTA and physical owner confirmation second; full private memory backend
+cutover after grant issuance. Confirmed hardware enrollment is not inferred from
+a build, an OTA HTTP request, a MAC address, or an earlier voice connection.
+Actual C3 TLS, screen readability, microphone and speaker remain device checks.

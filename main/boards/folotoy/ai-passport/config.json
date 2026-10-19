@@ -29,7 +29,7 @@
                 "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=n",
                 "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
                 "CONFIG_APP_PROJECT_VER_FROM_CONFIG=y",
-                "CONFIG_APP_PROJECT_VER=\"1.0.1\""
+                "CONFIG_APP_PROJECT_VER=\"1.0.2\""
             ]
         },
         {
@@ -48,7 +48,7 @@
                 "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=n",
                 "CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y",
                 "CONFIG_APP_PROJECT_VER_FROM_CONFIG=y",
-                "CONFIG_APP_PROJECT_VER=\"1.0.1\""
+                "CONFIG_APP_PROJECT_VER=\"1.0.2\""
             ]
         }
     ]
