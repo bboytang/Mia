@@ -164,9 +164,11 @@ async def open_driver(server, scopes, config, root, report, persist, *, lock=Non
     stages_mode = os.environ['MIA_P23_MODE'] == 'reply-stages'
     if stages_mode:
         from mia_stage_trace import calibrate
+        from mia_tts_boundaries import diagnose
         report.update(stage_observer_calibration=calibrate(), capture_reply_stream=True,
             capture_extraction_stream=True, controlled_sdk_call_cap=4,
             diagnostic_scope='One 10k real pair, fixed remote request cap 4 including extraction; four controlled SDK ABBA replays, no formal p95')
+        report['tts_boundary_diagnosis'] = await diagnose(server.logger)
 
     def extract_factory(name, model):
         assert name == model['type']

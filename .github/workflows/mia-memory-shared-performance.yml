@@ -7,6 +7,8 @@ on:
       - 'scripts/ci/mia_reply_latency.py'
       - 'scripts/ci/mia_stage_trace.py'
       - 'scripts/ci/tests/test_mia_stage_trace.py'
+      - 'scripts/ci/mia_tts_boundaries.py'
+      - 'scripts/ci/tests/test_mia_tts_boundaries.py'
       - 'scripts/ci/mia_tts_timing.py'
       - 'scripts/ci/mia_worker_competition.py'
       - 'scripts/ci/mia_worker_faults.py'
@@ -56,6 +58,7 @@ jobs:
           python -m py_compile scripts/ci/mia_worker_shutdown.py
           python -m py_compile scripts/ci/mia_reply_latency.py
           python -m py_compile scripts/ci/mia_stage_trace.py
+          python -m py_compile scripts/ci/mia_tts_boundaries.py
           python -m py_compile scripts/ci/mia_tts_timing.py scripts/ci/mia_worker_competition.py scripts/ci/mia_worker_faults.py scripts/ci/mia_worker_fairness.py scripts/ci/mia_extraction_diagnostics.py
           python -m unittest discover -s scripts/ci/tests -p 'test_mia_*.py' -v
           bash -n scripts/ci/run_mia_shared_envelope.sh
