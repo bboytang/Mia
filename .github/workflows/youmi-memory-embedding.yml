@@ -2,13 +2,13 @@ name: Compare Youmi Chinese memory embeddings
 on:
   push:
     paths:
-      - 'scripts/ci/*mia*embedding*'
+      - 'scripts/ci/*youmi*embedding*'
       - 'scripts/ci/youmi-embedding-runtime.Dockerfile'
       - 'server/tests/fixtures/persona_memory_retrieval_zh*.json'
       - '.github/workflows/youmi-memory-embedding.yml'
   pull_request:
     paths:
-      - 'scripts/ci/*mia*embedding*'
+      - 'scripts/ci/*youmi*embedding*'
       - 'scripts/ci/youmi-embedding-runtime.Dockerfile'
       - 'server/tests/fixtures/persona_memory_retrieval_zh*.json'
       - '.github/workflows/youmi-memory-embedding.yml'

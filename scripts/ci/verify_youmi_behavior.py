@@ -233,7 +233,7 @@ def installed_connection(report):
     selected = [node for node in tree.body if getattr(node, 'name', None) in names
         or isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id in names for target in node.targets)]
     assert len(selected) == len(names)
-    namespace = dict(asyncio=asyncio, json=json, re=re, uuid=uuid, time=time, TAG='P22', mia=adapter, youmi_auth=authorization,
+    namespace = dict(asyncio=asyncio, json=json, re=re, uuid=uuid, time=time, TAG='P22', youmi=adapter, youmi_auth=authorization,
         Message=Message, Dialogue=Dialogue, TTSMessageDTO=TTSMessageDTO, SentenceType=SentenceType,
         ContentType=ContentType, Action=Action, ActionResponse=ActionResponse,
         enqueue_tool_report=lambda *args, **kwargs: None,

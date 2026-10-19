@@ -99,7 +99,7 @@ async def evaluate(directory, output):
         return False
     def text_only(text):
         return re.sub(r'[😌🙂🤔😲🙄😍😔😜。！？!?，,]', '', text)
-    ns = dict(asyncio=asyncio, json=json, re=re, uuid=uuid, time=time, TAG='P15', mia=mia, youmi_auth=youmi_auth,
+    ns = dict(asyncio=asyncio, json=json, re=re, uuid=uuid, time=time, TAG='P15', youmi=youmi, youmi_auth=youmi_auth,
         Message=Message, Dialogue=Dialogue, TTSMessageDTO=TTSMessageDTO, SentenceType=SentenceType,
         ContentType=ContentType, Action=Action, ActionResponse=ActionResponse, TextMessageHandler=TextMessageHandler,
         TextMessageType=TextMessageType, enqueue_tool_report=lambda *args, **kwargs: None,

@@ -6,8 +6,8 @@ FROM ${IDF_IMAGE}
 ARG FIRMWARE_SOURCE_REVISION=unknown
 ARG FIRMWARE_SOURCE_URL=https://github.com/78/xiaozhi-esp32
 
-LABEL org.opencontainers.image.title="XiaoZhi firmware builder" \
-      org.opencontainers.image.description="Builds one XiaoZhi board configuration with a selected language and wake word" \
+LABEL org.opencontainers.image.title="Youmi firmware builder" \
+      org.opencontainers.image.description="Builds one Youmi board configuration with a selected language and wake word" \
       org.opencontainers.image.source="${FIRMWARE_SOURCE_URL}" \
       org.opencontainers.image.revision="${FIRMWARE_SOURCE_REVISION}"
 
@@ -21,8 +21,8 @@ RUN chmod 0755 \
       docker/firmware-builder/firmware_builder.py \
     && . "${IDF_PATH}/export.sh" >/dev/null \
     && idf.py --version \
-    && python3 scripts/build.py --list-boards --json >/tmp/xiaozhi-boards.json \
-    && python3 scripts/build.py --list-languages --json >/tmp/xiaozhi-languages.json
+    && python3 scripts/build.py --list-boards --json >/tmp/youmi-boards.json \
+    && python3 scripts/build.py --list-languages --json >/tmp/youmi-languages.json
 
 ENV FIRMWARE_SOURCE_DIR=/opt/xiaozhi-esp32 \
     FIRMWARE_OUTPUT_DIR=/output \
