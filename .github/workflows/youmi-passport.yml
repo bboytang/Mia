@@ -1,7 +1,7 @@
 name: Verify Youmi AI Passport OTA
 on:
   push:
-    branches: ['feature/mia-passport-*']
+    branches: ['feature/mia-passport-*', 'feature/youmi-passport-ui']
   workflow_dispatch:
 permissions:
   contents: read
@@ -12,6 +12,26 @@ jobs:
       - uses: actions/checkout@v7
       - name: Host regression and flash safety tests
         run: python3 -m unittest discover -s scripts/tests -v
+  ui-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build native RGB565 screenshots with the firmware renderer
+        run: |
+          git clone --depth 1 --branch v9.5.0 https://github.com/lvgl/lvgl.git "$RUNNER_TEMP/lvgl"
+          test "$(git -C "$RUNNER_TEMP/lvgl" rev-parse HEAD)" = 85aa60d18b3d5e5588d7b247abf90198f07c8a63
+          cmake -S scripts/ui -B "$RUNNER_TEMP/ui-build" -DLVGL_SOURCE="$RUNNER_TEMP/lvgl" -DCMAKE_BUILD_TYPE=Release
+          cmake --build "$RUNNER_TEMP/ui-build" -j 4
+          "$RUNNER_TEMP/ui-build/youmi-ui-preview" "$RUNNER_TEMP/ui-renders"
+          python3 -m pip install Pillow
+          python3 scripts/ui/compare.py "$RUNNER_TEMP/ui-renders" docs/Youmi-ui "$RUNNER_TEMP/ui-comparison"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: youmi-ui-native-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/ui-renders/
+            ${{ runner.temp }}/ui-comparison/
+          if-no-files-found: error
   android-inspection:
     runs-on: ubuntu-latest
     steps:

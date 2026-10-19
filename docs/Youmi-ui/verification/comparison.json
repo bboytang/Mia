@@ -1,0 +1,172 @@
+{
+  "renderer": "Production Painter with LVGL 9.5.0, RGB565, 20-row strip, 32KB pool",
+  "hardware_tested": false,
+  "fixture_data": true,
+  "note": "MAE is descriptive, not a 1:1 acceptance score. References include cropped device borders and simulated glows. Screen 09 deliberately uses a full ASCII selector; Home_5G is replaced by a 2.4GHz fixture.",
+  "host_metrics": {
+    "hardware_tested": false,
+    "pool_bytes": 32768,
+    "dma_strip_bytes": 9600,
+    "model_bytes": 1000,
+    "screens": [
+      {
+        "screen": 1,
+        "host_refresh_us": 686,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 2,
+        "host_refresh_us": 1154,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 3,
+        "host_refresh_us": 671,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 4,
+        "host_refresh_us": 646,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 5,
+        "host_refresh_us": 719,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 6,
+        "host_refresh_us": 2057,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 7,
+        "host_refresh_us": 435,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 8,
+        "host_refresh_us": 496,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 9,
+        "host_refresh_us": 362,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 10,
+        "host_refresh_us": 1467,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 11,
+        "host_refresh_us": 842,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      },
+      {
+        "screen": 12,
+        "host_refresh_us": 580,
+        "lv_used_bytes": 6024,
+        "lv_peak_bytes": 9032,
+        "lv_largest_bytes": 24232
+      }
+    ]
+  },
+  "screens": [
+    {
+      "screen": "01_boot",
+      "rgb_mae": 36.613,
+      "implementation_sha256": "8bfe3ee07a4d496cee53994cffd1c11ed07015862e2a3530d3fa073382f5cb7a",
+      "reference_sha256": "cde4a5208eeca89a4c31e4349ad9d737f59d497a1d0d5c93f94bdb1ec760adc4"
+    },
+    {
+      "screen": "02_idle",
+      "rgb_mae": 25.549,
+      "implementation_sha256": "c762cb23cfb5f3b746833e99b6d056c0d0b2ffc1c7ab757c5c6c2b2431dfde71",
+      "reference_sha256": "025cbc348d3a1a66dbcf6bd4a920a4fc5e2846dad25996ad013ca3179e7bb89e"
+    },
+    {
+      "screen": "03_listening",
+      "rgb_mae": 27.598,
+      "implementation_sha256": "f3d59eddb50c4ba8a13978e8e33e44e19abeb13d0a1ece8ed7ebf2327c41708d",
+      "reference_sha256": "c37e58a1f617dfe6227d4743f5673e8f930aa2311eb931af6cc53c4c892a9e45"
+    },
+    {
+      "screen": "04_thinking",
+      "rgb_mae": 26.165,
+      "implementation_sha256": "74de5ab1d8830a3297c8b822189e7379fd737ec7ce97eecb822ea2e937bb3668",
+      "reference_sha256": "e23bbe1db10a2d080c4f94bd353c5b2ebd04c52fa3bddbea73a05ad55ff492a2"
+    },
+    {
+      "screen": "05_speaking",
+      "rgb_mae": 24.424,
+      "implementation_sha256": "bd3f6927acdb5b24c7419bee599ecb98c987a365994ea9c1c3385e4958ae80c3",
+      "reference_sha256": "6a15fedacbfa0eff77ac26b772e3a40e53acab491bf815cdcb6f7089e5ae7f8a"
+    },
+    {
+      "screen": "06_emotions",
+      "rgb_mae": 25.416,
+      "implementation_sha256": "51c05318b15c16ca8b3036d01cd55654ed15a77ce93af79dac70793bad34e07a",
+      "reference_sha256": "5024d69b2298a4fa029149864d05bbd5e8dce2300b5fee86ab4a80617da58f9a"
+    },
+    {
+      "screen": "07_settings",
+      "rgb_mae": 29.502,
+      "implementation_sha256": "9b21f159ff6f6049a851bbe93d9d41439fc53f18b4c7c7219b5f896d3810b46d",
+      "reference_sha256": "a48f309e7c7969977e58e33dd545f6e565ec06f8ebdb2af8990a576666d94d74"
+    },
+    {
+      "screen": "08_wifi_list",
+      "rgb_mae": 29.269,
+      "implementation_sha256": "c15e9940723627d027d3b477ab92cb4f2fda3cfe4e3dcea59a5507a2d81d2d0e",
+      "reference_sha256": "a0fa6396a87c2b74caa63feb5ec272431c642827d926baf0b8b37069906f0a98"
+    },
+    {
+      "screen": "09_wifi_password",
+      "rgb_mae": 28.84,
+      "implementation_sha256": "4087af9eca8eaae8cde98fc9ccc2f736d9a0b0121d6e1e1f436dac6def4b7c2b",
+      "reference_sha256": "d923bbb09220c5c14a84454346ffafb2a47ebd9bf474cec7029573d7dc7e0096"
+    },
+    {
+      "screen": "10_wifi_connecting",
+      "rgb_mae": 25.89,
+      "implementation_sha256": "fbabddc5fd12dc47246a6b0485aac76339131080ae67eae266180df36bb891c4",
+      "reference_sha256": "9fcde018a38564f81ff5fd004dab245302d5157980dc45f63b4343dc28c08126"
+    },
+    {
+      "screen": "11_wifi_success",
+      "rgb_mae": 25.932,
+      "implementation_sha256": "8354a2a44a827b70d4af4b0835a845548747ea154bf5e4a115027a13e87b6919",
+      "reference_sha256": "54078aadc86240ebb293b7f42a584a942d45500e27606a3520a863256890cf0b"
+    },
+    {
+      "screen": "12_ota",
+      "rgb_mae": 28.119,
+      "implementation_sha256": "c39d6d277f3481f0cf23b15a2c99ee5b5617fee5281332127c81a4945fd52ebb",
+      "reference_sha256": "b1cf1a43f89211479c277ceb0ec401130e56d69ed0bb2227dae847b0fb55f103"
+    }
+  ]
+}

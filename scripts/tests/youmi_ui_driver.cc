@@ -1,0 +1,34 @@
+#include <cassert>
+#include <set>
+#include <string>
+#include "youmi_ui_model.h"
+
+int main() {
+    using namespace youmi_ui;
+    std::set<char> entered;
+    for (int bank = 0; bank < 11; ++bank)
+        for (int cell = 0; cell < 9; ++cell)
+            if (const char c = Candidate(bank, cell))
+                entered.insert(c);
+    assert(entered.size() == 95);
+    for (int c = 32; c <= 126; ++c)
+        assert(entered.count(char(c)));
+    assert(!Candidate(10, 9));
+    assert(!ValidPassword("1234567"));
+    assert(ValidPassword("Ab9 !@#\"\\"));
+    assert(ValidPassword(std::string(63, '~').c_str()));
+    assert(!ValidPassword(std::string(64, '~').c_str()));
+    assert(ValidPassword(std::string(64, 'a').c_str()));
+    assert(!ValidPassword(std::string(65, 'a').c_str()));
+    assert(!ValidPassword("1234567\n"));
+    char text[5];
+    Copy(text, "你你好");
+    assert(std::string(text) == "你");
+    char smaller[3];
+    Copy(smaller, "你好");
+    assert(!smaller[0]);
+    char ssid[33];
+    Copy(ssid, std::string(32, 's').c_str());
+    assert(std::strlen(ssid) == 32);
+    assert(sizeof(Model) < 2048);
+}

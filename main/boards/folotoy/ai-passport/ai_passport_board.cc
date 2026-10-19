@@ -445,11 +445,21 @@ private:
         auto up = adc_button_[kAdcButtonUp];
         up->OnClick([this]() {
             if (KeyEventsBlocked()) return;
-            Application::GetInstance().Schedule([this]() { ChangeVolume(10); });
+            Application::GetInstance().Schedule([this]() {
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+                if (static_cast<YoumiDisplay*>(display_)->HandleKey(youmi_ui::Key::Up))
+                    return;
+#endif
+                ChangeVolume(10);
+            });
         });
         up->OnLongPress([this]() {
             if (KeyEventsBlocked()) return;
             Application::GetInstance().Schedule([this]() {
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+                if (static_cast<YoumiDisplay*>(display_)->HandleKey(youmi_ui::Key::Up))
+                    return;
+#endif
                 GetAudioCodec()->SetOutputVolume(100);
                 GetDisplay()->ShowNotification(Lang::Strings::MAX_VOLUME);
             });
@@ -458,11 +468,21 @@ private:
         auto down = adc_button_[kAdcButtonDown];
         down->OnClick([this]() {
             if (KeyEventsBlocked()) return;
-            Application::GetInstance().Schedule([this]() { ChangeVolume(-10); });
+            Application::GetInstance().Schedule([this]() {
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+                if (static_cast<YoumiDisplay*>(display_)->HandleKey(youmi_ui::Key::Down))
+                    return;
+#endif
+                ChangeVolume(-10);
+            });
         });
         down->OnLongPress([this]() {
             if (KeyEventsBlocked()) return;
             Application::GetInstance().Schedule([this]() {
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+                if (static_cast<YoumiDisplay*>(display_)->HandleKey(youmi_ui::Key::Down))
+                    return;
+#endif
                 GetAudioCodec()->SetOutputVolume(0);
                 GetDisplay()->ShowNotification(Lang::Strings::MUTED);
             });
@@ -472,6 +492,10 @@ private:
         ok->OnClick([this]() {
             if (KeyEventsBlocked()) return;
             Application::GetInstance().Schedule([this]() {
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+                if (static_cast<YoumiDisplay*>(display_)->HandleKey(youmi_ui::Key::Ok))
+                    return;
+#endif
                 // Opening the audio channel with the network down would only
                 // raise an error alert, so show the ordinary "connecting" hint
                 // instead. Covers a wake from soft sleep as well as a link that
@@ -487,13 +511,10 @@ private:
 
 #if CONFIG_MIA_PASSPORT_DEVELOPMENT
         ok->OnLongPress([this]() {
-            // A five-second hold is deliberate, so it may enter provisioning even
-            // when the same press woke the panel from the screen-off idle stage.
-            Application::GetInstance().Schedule([this]() {
-                if (Application::GetInstance().GetDeviceState() == kDeviceStateIdle) {
-                    EnterWifiConfigMode();
-                }
-            });
+            if (KeyEventsBlocked())
+                return;
+            Application::GetInstance().Schedule(
+                [this]() { static_cast<YoumiDisplay*>(display_)->HandleKey(youmi_ui::Key::Back); });
         });
 #endif
 
@@ -1083,6 +1104,22 @@ private:
 
 public:
 #ifdef CONFIG_MIA_PASSPORT_DEVELOPMENT
+    void SetNetworkEventCallback(NetworkEventCallback callback) override {
+        WifiBoard::SetNetworkEventCallback(
+            [this, callback = std::move(callback)](NetworkEvent event, const std::string& data) {
+                if (event == NetworkEvent::Connected || event == NetworkEvent::Disconnected ||
+                    event == NetworkEvent::WifiConfigModeEnter) {
+                    // WifiManager invokes this outside its mutex. Preserve its sole
+                    // application callback and only publish a small UI mailbox update.
+                    static_cast<YoumiDisplay*>(display_)->NetworkChanged(
+                        event == NetworkEvent::Connected, data.c_str(),
+                        event == NetworkEvent::WifiConfigModeEnter);
+                }
+                if (callback)
+                    callback(event, data);
+            });
+    }
+
     void SetPowerSaveLevel(PowerSaveLevel level) override {
         WifiBoard::SetPowerSaveLevel(level);
         if (level == PowerSaveLevel::PERFORMANCE) {
@@ -1100,6 +1137,12 @@ public:
         InitializeCodecI2c();
         InitializeSpi();
         InitializeDisplay();
+#if CONFIG_MIA_PASSPORT_DEVELOPMENT
+        static_cast<YoumiDisplay*>(display_)->SetProvisioningAction([this]() {
+            if (!IsInWifiConfigMode())
+                EnterWifiConfigMode();
+        });
+#endif
         InitializeButtons();
         GetBacklight()->RestoreBrightness();
         InitializePowerSaveTimer();
