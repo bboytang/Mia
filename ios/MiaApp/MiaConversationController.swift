@@ -48,6 +48,7 @@ final class MiaConversationController: ObservableObject {
                  }
              }
          }) {
+        MiaXiaozhiClient.migrateLegacyEndpoints(in: preferences)
         let session = session ?? MiaVoiceSession()
         let xiaozhi = xiaozhi ?? MiaXiaozhiClient()
         self.session = session

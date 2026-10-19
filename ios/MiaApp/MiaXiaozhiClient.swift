@@ -56,8 +56,8 @@ private final class MiaOTARedirectPolicy: NSObject, URLSessionTaskDelegate {
 
 @MainActor
 final class MiaXiaozhiClient: ObservableObject {
-    nonisolated static let defaultWebSocket = "ws://43.143.230.174:8000/xiaozhi/v1/"
-    nonisolated static let defaultOTA = "http://43.143.230.174:8002/xiaozhi/ota/"
+    nonisolated static let defaultWebSocket = "wss://43.143.230.174:8000/xiaozhi/v1/"
+    nonisolated static let defaultOTA = "https://43.143.230.174/xiaozhi/ota/"
     let identity: MiaXiaozhiIdentity
     @Published private(set) var activationCode: String?
     @Published private(set) var status = "尚未发现设备配置"
@@ -70,6 +70,16 @@ final class MiaXiaozhiClient: ObservableObject {
     init(identity: MiaXiaozhiIdentity = MiaXiaozhiIdentity()) {
         self.identity = identity
         self.session = URLSession(configuration: .ephemeral)
+    }
+
+    nonisolated static func migrateLegacyEndpoints(in defaults: UserDefaults) {
+        // Only replace former built-in addresses; preserve custom servers and identity.
+        if defaults.string(forKey: "mia.xiaozhi.websocketURL") == "ws://43.143.230.174:8000/xiaozhi/v1/" {
+            defaults.set(defaultWebSocket, forKey: "mia.xiaozhi.websocketURL")
+        }
+        if defaults.string(forKey: "mia.xiaozhi.otaURL") == "http://43.143.230.174:8002/xiaozhi/ota/" {
+            defaults.set(defaultOTA, forKey: "mia.xiaozhi.otaURL")
+        }
     }
 
     nonisolated static func validatedURL(_ endpoint: String, schemes: [String]) throws -> URL {

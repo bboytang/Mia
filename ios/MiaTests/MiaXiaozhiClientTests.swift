@@ -23,6 +23,37 @@ final class MiaXiaozhiClientTests: XCTestCase {
         XCTAssertEqual(repaired.deviceID, first.deviceID)
     }
 
+    func testProductionDefaultsSupportPrivateAuthorizationOverTLS() throws {
+        let endpoints = try MiaPrivateAuthorizationClient.endpoints(
+            ota: MiaXiaozhiClient.defaultOTA, websocket: MiaXiaozhiClient.defaultWebSocket)
+        XCTAssertEqual(endpoints.ota.absoluteString, "https://43.143.230.174/xiaozhi/ota/")
+        XCTAssertEqual(endpoints.voice.absoluteString, "wss://43.143.230.174:8000/xiaozhi/v1/")
+        let request = try MiaPrivateAuthorizationClient.request(ota: MiaXiaozhiClient.defaultOTA,
+            websocket: MiaXiaozhiClient.defaultWebSocket, identity: MiaXiaozhiIdentity(),
+            code: "abcdefghijklmnopqrstuv")
+        XCTAssertEqual(request.url?.absoluteString, "https://43.143.230.174/xiaozhi/device/mia-auth/exchange")
+    }
+
+    func testUpgradeMigratesOnlyOldBuiltInAddressesAndPreservesIdentity() throws {
+        let name = "MiaEndpointUpgrade-" + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
+        defer { defaults.removePersistentDomain(forName: name) }
+        let identity = MiaXiaozhiIdentity(defaults: defaults)
+        defaults.set("ws://43.143.230.174:8000/xiaozhi/v1/", forKey: "mia.xiaozhi.websocketURL")
+        defaults.set("http://43.143.230.174:8002/xiaozhi/ota/", forKey: "mia.xiaozhi.otaURL")
+        MiaXiaozhiClient.migrateLegacyEndpoints(in: defaults)
+        MiaXiaozhiClient.migrateLegacyEndpoints(in: defaults)
+        XCTAssertEqual(defaults.string(forKey: "mia.xiaozhi.websocketURL"), MiaXiaozhiClient.defaultWebSocket)
+        XCTAssertEqual(defaults.string(forKey: "mia.xiaozhi.otaURL"), MiaXiaozhiClient.defaultOTA)
+        XCTAssertEqual(MiaXiaozhiIdentity(defaults: defaults), identity)
+
+        defaults.set("wss://custom.example/voice/", forKey: "mia.xiaozhi.websocketURL")
+        defaults.set("https://custom.example/ota/", forKey: "mia.xiaozhi.otaURL")
+        let before = defaults.dictionaryRepresentation()
+        MiaXiaozhiClient.migrateLegacyEndpoints(in: defaults)
+        XCTAssertEqual(defaults.dictionaryRepresentation() as NSDictionary, before as NSDictionary)
+    }
+
     func testOTARequestUsesMatchingIdentityAndActualClientCapabilities() throws {
         let identity = MiaXiaozhiIdentity()
         let request = try MiaXiaozhiClient.otaRequest(endpoint: "https://fixture.example/ota/", identity: identity)
