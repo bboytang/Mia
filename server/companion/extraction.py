@@ -279,6 +279,18 @@ def context_for(store, owner, expected_consent=None):
         return result
 
 
+def project_context(context):
+    """Fresh model-only evidence, without DB-serialized metadata or authority."""
+    result = []
+    for fact in context:
+        shown = {key: fact[key] for key in ('id', 'category', 'content') if key in fact}
+        if 'evidence' in fact:
+            shown['evidence'] = [{key: item[key] for key in ('session_id', 'fingerprint', 'excerpt') if key in item}
+                for item in fact['evidence']]
+        result.append(shown)
+    return result
+
+
 def reconciliation_for(proposed, source, quote, known, kind, subject, sensitive):
     proof = proposed.get('reconciliation')
     if proof is None:
@@ -521,11 +533,9 @@ class LLMMemoryExtractor:
             significance = not natural and len(sources) == 1 and has_importance
             base = (NATURAL_CHANGE_INSTRUCTIONS if natural else
                     FOCUSED_EXTRACTION_INSTRUCTIONS if growth or significance else INSTRUCTIONS)
-            # A read-only projection excludes output-shaped serialized metadata.
-            # The validator keeps the original versions and evidence context.
-            context_keys = ('id', 'category', 'content', 'evidence') if growth else ('id', 'category', 'content')
-            model_context = ([{key: fact[key] for key in context_keys} for fact in context]
-                             if natural or growth else context)
+            # Every branch shares the same model representation. Versions and
+            # serialized index features stay in the original trusted context.
+            model_context = project_context(context)
             if growth:
                 base += GROWTH_INSTRUCTIONS
             if significance:

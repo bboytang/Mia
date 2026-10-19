@@ -14,6 +14,45 @@ def delta(arguments='', name=None, index=0, identity=None):
 
 
 class ProposalTests(unittest.TestCase):
+    def test_all_branches_project_source_evidence_without_serialized_metadata_or_aliases(self):
+        cases = [(['我平常用木梳梳头'], '我梳头用角梳，不是木梳'),
+            (['我喜欢书法'], '我常用青瓷杯喝茶'),
+            (['我观云会画图', '观云时我做笔记', '我周末去山顶观云'], '我常用青瓷杯喝茶'),
+            (['我喜欢书法'], '整理旧相册对我很有意义')]
+        for texts, source in cases:
+            for native in (False, True):
+                with self.subTest(source=source, native=native):
+                    context = EvidenceContext([{'id': str(i), 'category': 'fact', 'content': text,
+                        'content_version': 2, 'evidence_version': 3, 'entities': '["数据库字符串"]',
+                        'keywords': '["元数据"]', 'trigger_terms': '["活动"]', 'extra_private': 'do not project',
+                        'evidence': [{'session_id': f's{i}', 'fingerprint': f'fp{i}', 'excerpt': text,
+                            'unneeded': 'do not project'}]} for i, text in enumerate(texts)])
+                    before = json.dumps(context, ensure_ascii=False)
+                    captured = []
+                    def capture(payload):
+                        shown = json.loads(payload)['existing_memories']
+                        captured.extend(shown)
+                        shown[0]['evidence'][0]['excerpt'] = 'provider-local mutation'
+                    class PlainProvider:
+                        def response_no_stream(self, instruction, payload):
+                            capture(payload)
+                            return '{"memories":[]}'
+                    class ToolProvider:
+                        def response_with_functions(self, session, dialogue, functions):
+                            capture(dialogue[1]['content'])
+                            yield None, [delta('{"memories":[]}', NAME)]
+                    provider = ToolProvider() if native else PlainProvider()
+                    LLMMemoryExtractor(lambda: provider)([source], context)
+                    self.assertEqual(json.dumps(context, ensure_ascii=False), before)
+                    self.assertEqual(captured[0]['id'], context[0]['id'])
+                    self.assertEqual(captured[0]['content'], context[0]['content'])
+                    self.assertEqual(captured[0]['evidence'][0]['session_id'], 's0')
+                    self.assertNotIn('entities', captured[0])
+                    self.assertNotIn('keywords', captured[0])
+                    self.assertNotIn('trigger_terms', captured[0])
+                    self.assertNotIn('extra_private', captured[0])
+                    self.assertNotIn('unneeded', captured[0]['evidence'][0])
+
     def test_trailing_format_fence_decodes_one_original_object_without_repair(self):
         source = '我常用青瓷杯喝茶'
         value = {'memories': [{'category': 'fact', 'content': source, 'source_quote': source,
