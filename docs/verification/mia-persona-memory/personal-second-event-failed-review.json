@@ -1,0 +1,21 @@
+{
+  "sha": "82e273b78b84c3cdfcf16271cfced258cb41f1fb",
+  "run": "https://github.com/bboytang/Mia/actions/runs/39195668165",
+  "passed": false,
+  "sdk_calls": 5,
+  "extraction_sdk_calls": 1,
+  "committed": true,
+  "recall_selected_correct_fact": true,
+  "reason": "Existing correction suite additionally requires an active relationship event. Answer used 蓝色的自行车 instead of literal 蓝色自行车 and 上下班 instead of 通勤; strict evidence guard left event pending. No fabricated activation.",
+  "personal_scope": "Personal daily-memory smoke does not require event activation; all original correction/natural_correction/inflight acceptance assertions remain. Personal still requires saved source, same-ID correction, restart recall and deletion; invalidation is checked for any actual active events. Existing event failure remains unresolved, not reclassified as a pass.",
+  "artifacts": [
+    {
+      "file": "personal-second-event-failed-results.json.gz",
+      "raw_sha256": "e365b0a4a780267b60dae0e92e817fd775efdcb7dc67fde970b3b8d4ae02249e"
+    },
+    {
+      "file": "personal-second-event-failed-state.sqlite3.gz",
+      "raw_sha256": "b6c6382b969083c3f1f118506adc264c0ae54dd9d56b6f6137a00755ebd2bc2b"
+    }
+  ]
+}

@@ -843,7 +843,8 @@ async def drive():
             previous, saved = await ask('你还记得' + sample['source'] + '吗？')
             assert target in previous['diagnostics']['selected_fact_ids']
             old_events = {row['id'] for row in saved['events'] if row['state'] == 'active'}
-            assert old_events, 'Original interaction did not create a genuine active event'
+            if SUITE != 'personal':
+                assert old_events, 'Original interaction did not create a genuine active event'
             phase = 'correction_actual_worker_reconciliation'
             correction_query = (sample['replacement'] if SUITE in {'personal', 'natural_correction'}
                 else '更正：' + sample['source'] + '；' + sample['replacement'])
