@@ -39,7 +39,7 @@ class ManagementHandler:
             if not isinstance(command, dict):
                 raise ValueError()
             action = command.get('action')
-            if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent'}:
+            if action not in {'status', 'pause', 'set_feature_settings', 'emotion_consent', 'reset_mia_emotion'}:
                 raise ValueError()
             if self.store is None:
                 from .xiaozhi_adapter import _store
@@ -47,7 +47,10 @@ class ManagementHandler:
             else:
                 store = self.store
             def apply():
-                if action == 'set_feature_settings':
+                if action == 'reset_mia_emotion':
+                    from .affect import reset
+                    reset(store, owner)
+                elif action == 'set_feature_settings':
                     update(store, owner, command.get('features'))
                 elif action != 'status':
                     store.handle(owner, command)

@@ -198,6 +198,9 @@ def response(conn, functions, depth):
         lease = model_requests.acquire(foreground=True, timeout=10,
             cancelled=lambda: getattr(conn, 'client_abort', False))
         stream = None
+        from .affect import AppraisalStream
+        affect = json.loads(turn.bundle.inputs_json).get('mia_affect')
+        parser = AppraisalStream(json.loads(turn.bundle.inputs_json)['query']) if affect else None
         try:
             wait(conn, validate(conn, turn))
             stream = (conn.llm.response_with_functions(conn.session_id, request['messages'], functions=tools,
@@ -209,8 +212,27 @@ def response(conn, functions, depth):
                 if getattr(conn, 'client_abort', False):
                     return
                 wait(conn, validate(conn, turn))
-                # Upstream parses pairs whenever its local functions is not None.
-                yield delta if tools or functions is None else (delta, None)
+                if parser:
+                    text, calls = delta if tools else (delta, None)
+                    try:
+                        shown = parser.feed(text) if text else text
+                    except (ValueError, TypeError, RecursionError):
+                        raise ContextError('affect_appraisal_invalid') from None
+                    if parser.proposal:
+                        conn._mia_affect_pending = (turn, parser.proposal)
+                    if tools:
+                        if shown or calls:
+                            yield shown, calls
+                    elif shown:
+                        yield shown if functions is None else (shown, None)
+                else:
+                    # Upstream parses pairs whenever its local functions is not None.
+                    yield delta if tools or functions is None else (delta, None)
+            if parser:
+                try:
+                    parser.finish()
+                except ValueError:
+                    raise ContextError('affect_appraisal_incomplete') from None
             wait(conn, validate(conn, turn))
         finally:
             try:
@@ -219,3 +241,24 @@ def response(conn, functions, depth):
             finally:
                 lease.release()
     return guarded()
+
+
+async def finish_affect(conn):
+    pending = getattr(conn, '_mia_affect_pending', None)
+    if not pending or getattr(getattr(conn, '_mia_memory', None), 'suppressed', False):
+        return False
+    turn, proposal = pending
+    await validate(conn, turn)
+    inputs = json.loads(turn.bundle.inputs_json)
+    if not inputs.get('session_id'):
+        return False
+    def finish():
+        from .affect import commit
+        store = turn.builder.index.store
+        with store.lock, store.db:
+            store.db.execute('BEGIN IMMEDIATE')
+            if turn.builder._versions(turn.bundle.scope) != turn.bundle.snapshot:
+                raise ContextError('context_changed')
+            return commit(store, turn.bundle.scope.owner, inputs['session_id'], turn.bundle.turn_id,
+                          inputs['query'], proposal, inputs['mia_affect']['version'])
+    return await asyncio.to_thread(finish)

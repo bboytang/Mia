@@ -189,7 +189,9 @@ class ContextBuilder:
                 selected_events = events.context(store, scope.owner, query, facts or [], session_id=session_id, turn_id=turn_id)
                 if emotions.RELEVANT.search(query):
                     selected_trend = emotions.trend(store, scope.owner)
-            return self._versions(scope), traits, selected_events, selected_trend
+            from .affect import state
+            affect = state(store, scope.owner) if flags['companion_emotion'] else None
+            return self._versions(scope), traits, selected_events, selected_trend, affect
 
     async def validate(self, bundle, authorization):
         if not isinstance(bundle, ContextBundle):
@@ -239,6 +241,9 @@ class ContextBuilder:
     def _assemble(self, scope, turn_id, limits, snapshot, inputs):
         ceiling = limits.input_limit()
         data = {'memory_status': inputs['memory_status'], 'role_data': '', 'facts': [], 'traits': [], 'scene': None}
+        affect = inputs.get('mia_affect')
+        if affect:
+            data['mia_affect'] = affect
         retained = []
         omitted = {'role': False, 'fact_ids': [], 'traits': [], 'history_turns': inputs['older_turns_removed'], 'scene': False}
         def request():
@@ -262,7 +267,8 @@ class ContextBuilder:
                         'conflict': '用户对先前说法提出不确定信息；此时尚待确认。'}[record['reconciliation']['kind']]}
             else:
                 data.pop('requested_change', None)
-            messages = [{'role': 'system', 'content': CORE + POLICY},
+            from .affect import POLICY as AFFECT_POLICY
+            messages = [{'role': 'system', 'content': CORE + POLICY + (AFFECT_POLICY if affect else '')},
                         {'role': 'user', 'content': packed({'mia_context': data})}]
             for group in retained:
                 for message in group:
@@ -356,19 +362,19 @@ class ContextBuilder:
         except sqlite3.Error:
             status = 'unavailable'
         try:
-            snapshot, traits, event_data, trend_data = await asyncio.to_thread(self._capture, scope, expected,
+            snapshot, traits, event_data, trend_data, affect = await asyncio.to_thread(self._capture, scope, expected,
                 query, facts, session_id, turn_id)
         except EmbeddingUnavailable:
             raise ContextError('context_changed') from None
         except (sqlite3.Error, ValueError):
             snapshot, traits, facts, status = None, [], [], 'unavailable'
-            event_data, trend_data = [], {'status': 'unavailable'}
+            event_data, trend_data, affect = [], {'status': 'unavailable'}, None
             if continuation:
                 raise ContextError('context_snapshot_unavailable') from None
             inputs['older_turns_removed'] += len(inputs['history'])
             inputs['history'] = []
         inputs.update(facts=facts, traits=traits, memory_status=status, events=event_data,
-                      emotion_trend=trend_data, session_id=session_id)
+                      emotion_trend=trend_data, mia_affect=affect, session_id=session_id)
         bundle = await asyncio.to_thread(self._assemble, scope, turn_id, limits, snapshot, inputs)
         await self.validate(bundle, authorization)
         return bundle

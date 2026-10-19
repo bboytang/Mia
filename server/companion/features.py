@@ -3,12 +3,12 @@
 from .memory import MemoryError
 
 
-DEFAULTS = {'memory_recall': True, 'personality_growth': True, 'interaction_events': True}
+DEFAULTS = {'memory_recall': True, 'personality_growth': True, 'interaction_events': True, 'companion_emotion': False}
 
 
 def settings(store, owner):
     with store.lock:
-        row = store.db.execute('SELECT memory_recall,personality_growth,interaction_events '
+        row = store.db.execute('SELECT memory_recall,personality_growth,interaction_events,companion_emotion '
                                'FROM mia_feature_settings WHERE owner=?', (owner,)).fetchone()
         return {key: bool(row[key]) if row else value for key, value in DEFAULTS.items()}
 
@@ -29,10 +29,11 @@ def update(store, owner, values):
 
 def status(store, owner):
     from .emotions import consent
+    from .affect import state
     with store.lock, store.db:
         store._owner(owner)
         return {'features': settings(store, owner), 'paused': store.snapshot(owner)['paused'],
-                'emotion_tracking': consent(store, owner),
+                'emotion_tracking': consent(store, owner), 'mia_emotion': state(store, owner),
                 'counts': {name: store.db.execute('SELECT COUNT(*) FROM ' + table + ' WHERE owner=?',
                     (owner,)).fetchone()[0] for name, table in
                     [('memories', 'memories'), ('traits', 'traits'), ('events', 'mia_events')]}}

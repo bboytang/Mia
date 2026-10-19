@@ -514,6 +514,8 @@ class MemoryStore:
             self.db.execute("DELETE FROM checkpoints WHERE owner=?", (owner,))
             self.db.execute('DELETE FROM mia_observations WHERE owner=?', (owner,))
             self.db.execute('DELETE FROM mia_events WHERE owner=?', (owner,))
+            self.db.execute('DELETE FROM mia_affect_turns WHERE owner=?', (owner,))
+            self.db.execute('DELETE FROM mia_affect_state WHERE owner=?', (owner,))
             self.db.execute('UPDATE mia_scope_versions SET observation_epoch=observation_epoch+1,event_epoch=event_epoch+1 WHERE owner=?', (owner,))
             self.db.execute("UPDATE owners SET revision=revision+1,version=version+1 WHERE owner=?", (owner,))
             self._cancel_jobs(owner)

@@ -340,6 +340,7 @@ def begin_turn(conn, query):
     conn._mia_previous_context = getattr(conn, '_mia_context_turn', None)
     conn._mia_context_turn = None
     conn._mia_job_status = None
+    conn._mia_affect_pending = None
     conn._mia_emotion = ("calm", 0.5)
     conn._mia_output_replacement = None
     agent = persona_agent(conn)
@@ -536,15 +537,17 @@ def completed_chat(function):
             if worker:
                 worker.foreground -= 1
             event = frame['event']
-            if event and not frame['limited'] and not getattr(conn, 'client_abort', False):
+            if (event or getattr(conn, '_mia_affect_pending', None)) and not frame['limited'] and not getattr(conn, 'client_abort', False):
                 async def accept():
                     from .authorization import allow_output
                     try:
+                        if frame.get('assistant') and not output_was_blocked(conn):
+                            await reply.finish_affect(conn)
                         turn = getattr(conn, '_mia_context_turn', None)
                         if turn and any(item['state'] == 'pending' for item in turn.bundle.diagnostics()['events']):
                             activated = await turn.builder.complete(turn.bundle, conn._mia_authorization, frame.get('assistant', ''))
                             conn._mia_event_status = {'activated': activated}
-                        result = await worker.submit(event) if worker else {'status': 'unavailable', 'accepted': False}
+                        result = await worker.submit(event) if worker and event else {'status': 'unavailable', 'accepted': False}
                     except PrivateAuthorizationRequired:
                         result = {'status': 'cancelled', 'accepted': False}
                     except Exception:

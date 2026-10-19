@@ -12,6 +12,10 @@
           <span class="mia-toggle-track" aria-hidden="true"><span class="mia-toggle-thumb" /></span>
         </button>
       </div>
+      <div v-if="state.mia_emotion" class="mia-emotion-status">
+        <p>Mia 当前情绪：{{ state.mia_emotion.enabled ? state.mia_emotion.label : '已停用' }}<span v-if="state.mia_emotion.updated_at"> · 最近互动 {{ new Date(state.mia_emotion.updated_at * 1000).toLocaleString() }}</span></p>
+        <el-button size="small" :disabled="busy" @click="change('reset_mia_emotion', true)">重置 Mia 情绪</el-button>
+      </div>
       <p>已保存记忆 {{ state.counts.memories }} 条 · 成长特点 {{ state.counts.traits }} 个 · 互动事件 {{ state.counts.events }} 个</p>
       <p>保存后立即影响后续处理；使用旧上下文的回复可能中止，可重新发起对话。已发出的声音无法撤回。</p>
     </div>
@@ -31,10 +35,11 @@ export default {
     return {
       state: null, busy: false, error: '', generation: 0,
       switches: [
-        { key: 'automatic_memory', label: '自动保存记忆', description: '聊天后提取并保存长期信息。关闭后暂停新的记忆、成长和心情采集，已有记录保留。' },
+        { key: 'automatic_memory', label: '自动保存记忆', description: '聊天后提取并保存长期信息。关闭后暂停新的记忆、成长和你的心情采集；Mia 自己的持续情绪由独立开关控制。' },
         { key: 'memory_recall', label: '对话中使用长期记忆', description: '关闭后不在回复中使用已保存的记忆、成长特点、互动事件或心情趋势；不会删除记录，也不会清空当前聊天。' },
         { key: 'personality_growth', label: '人格成长', description: '根据多个真实会话形成表达特点。关闭后停止生成，也不在回复中使用已有特点；不会修改你的角色设定。' },
         { key: 'interaction_events', label: '互动事件延续', description: '记忆使用开启时，保存并使用有来源的互动事件。关闭后停止新增，也不在回复中使用。' },
+        { key: 'companion_emotion', label: 'Mia 的持续情绪', description: 'Mia 自己的情绪随互动变化、随时间逐渐恢复，跨会话、重启和已授权设备延续，影响回应。关闭后停止更新和使用；不改变你的角色设定。' },
         { key: 'emotion_tracking', label: '我的长期心情追踪', description: '这是对你长期心情的观察，不是 Mia 的情绪。默认关闭，只有你明确开启才采集；关闭不删除已有记录。' }
       ]
     };
@@ -83,10 +88,15 @@ export default {
         try { await this.$confirm('开启后会根据你的真实对话持续记录心情观察，用于长期趋势。是否同意开启？', '长期心情追踪', { type: 'warning' }); }
         catch (_) { return; }
       }
+      if (key === 'reset_mia_emotion') {
+        try { await this.$confirm('将 Mia 当前情绪恢复为平静，不修改角色、记忆或你的心情记录。是否重置？', '重置 Mia 情绪', { type: 'warning' }); }
+        catch (_) { return; }
+      }
       if (!this.value || this.agentId !== agentId || this.generation !== openedGeneration) return;
       const generation = ++this.generation;
       this.busy = true; this.error = '';
-      const command = key === 'automatic_memory' ? { action: 'pause', paused: !next }
+      const command = key === 'reset_mia_emotion' ? { action: 'reset_mia_emotion' }
+        : key === 'automatic_memory' ? { action: 'pause', paused: !next }
         : key === 'emotion_tracking' ? { action: 'emotion_consent', enabled: next }
           : { action: 'set_feature_settings', features: { [key]: next } };
       try {

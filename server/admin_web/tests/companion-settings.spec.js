@@ -9,8 +9,9 @@ async function setup(page) {
   });
   await mockBackend(page, false);
   const state = {
-    features: { memory_recall: true, personality_growth: true, interaction_events: true },
+    features: { memory_recall: true, personality_growth: true, interaction_events: true, companion_emotion: false },
     paused: false, emotion_tracking: { enabled: 0, version: 0 },
+    mia_emotion: { enabled: false, label: '平静', updated_at: null },
     counts: { memories: 2, traits: 0, events: 1 }
   };
   const requests = [];
@@ -23,7 +24,11 @@ async function setup(page) {
       await route.fulfill({ json: { code: 500, msg: 'synthetic failure' } }); return;
     }
     if (command.action === 'pause') state.paused = command.paused;
-    if (command.action === 'set_feature_settings') Object.assign(state.features, command.features);
+    if (command.action === 'set_feature_settings') {
+      Object.assign(state.features, command.features);
+      state.mia_emotion.enabled = state.features.companion_emotion;
+    }
+    if (command.action === 'reset_mia_emotion') { state.mia_emotion.label = '平静'; state.mia_emotion.updated_at = null; }
     if (command.action === 'emotion_consent') state.emotion_tracking.enabled = command.enabled ? 1 : 0;
     await route.fulfill({ json: { code: 0, data: state } });
   });
@@ -37,7 +42,7 @@ async function setup(page) {
 test('console switches read server state, save with login, and survive reopening', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { dialog, requests } = await setup(page);
-  await expect(dialog.getByRole('switch')).toHaveCount(5);
+  await expect(dialog.getByRole('switch')).toHaveCount(6);
   await expect(dialog.getByRole('switch', { name: '我的长期心情追踪' })).toHaveAttribute('aria-checked', 'false');
   await dialog.getByRole('switch', { name: '人格成长', exact: true }).click();
   await expect(dialog.getByRole('switch', { name: '人格成长', exact: true })).toHaveAttribute('aria-checked', 'false');
@@ -71,4 +76,24 @@ test('long-term user mood requires explicit consent and role editing never autos
   await dialog.getByRole('button', { name: '编辑角色设定' }).click();
   await expect(page).toHaveURL(/role-config\?agentId=test-agent/);
   expect(requests.every(item => !('system_prompt' in item.command) && !('role' in item.command))).toBe(true);
+});
+
+
+test('Mia emotion has its own server switch, visible state and confirmed reset', async ({ page }) => {
+  const { dialog, requests, state } = await setup(page);
+  await dialog.getByRole('switch', { name: 'Mia 的持续情绪', exact: true }).click();
+  await expect(dialog.getByRole('switch', { name: 'Mia 的持续情绪', exact: true })).toHaveAttribute('aria-checked', 'true');
+  expect(state.emotion_tracking.enabled).toBe(0);
+  state.mia_emotion.label = '难过';
+  await dialog.getByRole('button', { name: '刷新', exact: true }).click();
+  await expect(dialog).toContainText('Mia 当前情绪：难过');
+  await dialog.getByRole('button', { name: '重置 Mia 情绪', exact: true }).click();
+  await page.locator('.el-message-box').getByRole('button', { name: '取消', exact: true }).click();
+  expect(requests.some(item => item.command.action === 'reset_mia_emotion')).toBe(false);
+  await dialog.getByRole('button', { name: '重置 Mia 情绪', exact: true }).click();
+  await page.locator('.el-message-box').getByRole('button', { name: '确定', exact: true }).click();
+  await expect(dialog).toContainText('Mia 当前情绪：平静');
+  expect(requests.filter(item => item.command.action !== 'status').map(item => item.command)).toEqual([
+    { action: 'set_feature_settings', features: { companion_emotion: true } }, { action: 'reset_mia_emotion' }
+  ]);
 });

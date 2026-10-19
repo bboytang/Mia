@@ -117,6 +117,15 @@ class MiaPrivateManagementTest {
         assertNotEquals(0, post("/config/mia-management/verify", proof, secret).path("code").asInt());
     }
 
+    @Test void ownerCanResetOnlyMiaEmotionWithoutEditingRole() throws Exception {
+        JsonNode result = post("/agent/" + AGENT + "/mia-settings", Map.of("action", "reset_mia_emotion"), token(OWNER));
+        assertEquals(0, result.path("code").asInt());
+        assertEquals("reset_mia_emotion", forwarded.get().path("request").path("action").asText());
+        assertEquals("", db.queryForObject("SELECT system_prompt FROM ai_agent WHERE id=?", String.class, AGENT));
+        assertNotEquals(0, post("/agent/" + AGENT + "/mia-settings", Map.of("action", "reset_mia_emotion"), token(OTHER)).path("code").asInt());
+        assertEquals(1, calls.get());
+    }
+
     @Test void invalidOrDestructiveActionsAreNotProxied() throws Exception {
         for (var command : new Map[]{Map.of(), Map.of("action", "clear"), Map.of("action", "replace_role")}) {
             assertNotEquals(0, post("/agent/" + AGENT + "/mia-settings", command, token(OWNER)).path("code").asInt());

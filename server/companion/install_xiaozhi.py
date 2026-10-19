@@ -278,7 +278,7 @@ def install(root, changes):
     try:
         for name in ["__init__.py", "memory.py", "xiaozhi_adapter.py", "authorization.py", "schema.py", "schema.sql", "schema-v2.sql", "persona.py",
                      "embedding.py", "semantic.py", "retrieval.py", "context.py", "reply.py", "jobs.py", "extraction.py", "proposal.py", "model_requests.py",
-                     "events.py", "emotions.py", "schema-v3.sql", "schema-v4.sql", "schema-v5.sql", "features.py", "management.py",
+                     "events.py", "emotions.py", "schema-v3.sql", "schema-v4.sql", "schema-v5.sql", "schema-v6.sql", "affect.py", "features.py", "management.py",
                      "request_accounting.py", "requirements-vector.txt"]:
             shutil.copy2(Path(__file__).parent / name, destination / name)
         for relative, (_, changed) in changes.items():
