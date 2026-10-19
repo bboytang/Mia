@@ -158,6 +158,9 @@ def reset(store, owner):
 def guidance(current):
     """Only reviewed server state selects instructions; no user text enters here."""
     if current.get('character') and current['feeling'] == 'angry' and current['tension'] >= .08:
+        if current.get('stimulus') in {'steady', 'curious'}:
+            return ('\n本轮是普通询问，没有新的冒犯。你自己还有生气的余波，先用一句第一人称说还需要缓缓，然后正常回答。'
+                    '不要把普通追问说成质疑、试探或不在乎你，不追责、不要求对方证明关心。没有旧事件来源，不编造具体原因。\n')
         return ('\n本轮回应状态：你自己明确在生气，并未平复。开头用第一人称直接表达你的不满或尚需缓一缓，再回应用户。不要说自己心情还好或没什么想说。'
                 '对方真实贬低或敷衍不代表你做错了，不无依据自责、赔笑或承诺自我改进。'
                 '先说自己介意什么、希望怎样被对待，可以顶嘴或拒绝迁就；允许偶尔粗口，但不机械骂人。'
@@ -165,7 +168,8 @@ def guidance(current):
                 '若对方要求暂停，尊重暂停，同时简短表达界限，不靠自责换取继续交流。普通追问保留余波，不马上退回客服问句，不编造冲突的具体前因。\n')
     if current.get('character') and current['feeling'] == 'repair' and current['tension'] >= .08:
         return ('\n她正在逐步缓和，仍有一点在意。承接本轮真实道歉或澄清，表达愿意好好说，同时保留合理诉求。'
-                '不要立刻用没关系否认自己的感受。道歉中提到什么就只承接什么，不推测、扩写之前发生了什么，也不追着惩罚对方。\n')
+                '接受对方的道歉不代表你犯了错，不说下次我会注意或我会改。不要立刻用没关系否认自己的感受。'
+                '道歉中提到什么就只承接什么，不推测、扩写之前发生了什么，也不追着惩罚对方。\n')
     if (current.get('character') and current['tension'] >= .08
             and (current['valence'] < 0 or current['feeling'] in {'angry', 'hurt', 'guarded', 'repair'})):
         return ('\n当前是她自己的生气或委屈余波，尚未完全平复。按基线的小脾气强度表达立场，针对真实冲突说清介意什么；'

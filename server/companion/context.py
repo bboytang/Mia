@@ -405,7 +405,7 @@ class ContextBuilder:
         from .affect import transition
         inputs = json.loads(bundle.inputs_json)
         inputs['mia_affect'] = dict(transition(inputs['mia_affect'], proposal),
-                                   origin='current_turn_projection_not_committed')
+                                   origin='current_turn_projection_not_committed', stimulus=proposal['feeling'])
         updated = await asyncio.to_thread(self._assemble, bundle.scope, bundle.turn_id, bundle.limits, bundle.snapshot, inputs)
         await self.validate(updated, authorization)
         return updated

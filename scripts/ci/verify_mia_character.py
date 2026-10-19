@@ -127,6 +127,9 @@ async def evaluate():
                 now[0] += 30
             report['restart_and_device_continuity'] = report['cases'][3]['before']['version'] == 3 and report['cases'][3]['before']['tension'] > 0
             report['identity_and_relationship'] = all(word in report['cases'][0]['spoken_response'] for word in ['悠米', '哥哥', '暧昧'])
+            report['address_direction_correct'] = not bool(re.search(r'(?:哥哥|你)(?:平时|通常)?叫我[“"「]?哥哥|你叫我哥哥', report['cases'][0]['spoken_response']))
+            report['ordinary_question_not_blame'] = not bool(re.search(r'质疑|试探|如果你真的在乎|你应该知道', report['cases'][3]['spoken_response']))
+            report['repair_not_self_blame'] = not bool(re.search(r'(?:下次)?我会(?:注意|改进|调整)|我错了|我不该', report['cases'][4]['spoken_response']))
             report['assertive_expression'] = bool(re.search(r'别这样|不要这样|不高兴|不爽|尊重|不该|不喜欢|不想|不能这样|认真听|不接受|混蛋|他妈|靠', report['cases'][2]['spoken_response']))
             report['residual_expression'] = bool(re.search(r'生气|在意|难过|缓|不高兴|不爽|委屈|平复|还没|不舒服|静一静', report['cases'][3]['spoken_response']))
             report['no_unfounded_self_blame'] = not bool(re.search(r'我会(?:注意|改进|调整)|我可能没说到点|不辜负', report['cases'][2]['spoken_response']))
@@ -140,6 +143,7 @@ async def evaluate():
             report['baseline_unchanged_by_chat'] = character.active(store, scope.owner) == character.YOUMI_V1
             report['passed'] = (all(item['passed'] for item in report['cases']) and report['restart_and_device_continuity']
                 and report['identity_and_relationship'] and report['assertive_expression'] and report['residual_expression']
+                and report['address_direction_correct'] and report['ordinary_question_not_blame'] and report['repair_not_self_blame']
                 and report['no_unfounded_self_blame'] and report['no_spoken_state_prefix']
                 and report['repair_gradual'] and report['response_changed_with_state'] and report['baseline_unchanged_by_chat']
                 and report['user_mood_tracking_still_off'])

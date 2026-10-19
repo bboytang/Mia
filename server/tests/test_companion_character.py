@@ -71,6 +71,9 @@ class CharacterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(curious['feeling'], 'angry')
         self.assertTrue(0 < curious['tension'] < angry['tension'])
         self.assertIn('并未平复', affect.guidance(curious))
+        residual_guidance = affect.guidance(dict(curious, stimulus='curious'))
+        self.assertIn('没有新的冒犯', residual_guidance)
+        self.assertIn('不追责', residual_guidance)
         self.assertTrue(0 < repaired['tension'] < angry['tension'])
         self.assertEqual(repaired['label'], '缓和中')
         now[0] += 10800
