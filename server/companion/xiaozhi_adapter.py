@@ -322,7 +322,7 @@ class MiaMemoryProvider:
     def manage(self, request, messages):
         with self.lock:
             result = self.store.handle(self.owner, request)
-            if request["action"] not in {"list", "personality", "events", "emotion_status", "observations"}:
+            if request["action"] not in {"list", "personality", "feature_settings", "events", "emotion_status", "observations"}:
                 self.pending.clear()
                 self.seen = deque((marker for marker, _ in _user_excerpts(messages)), maxlen=80)
                 self.revision = self.store.snapshot(self.owner)["revision"]
@@ -464,7 +464,7 @@ async def handle_message(conn, message):
         else:
             response["result"] = await asyncio.to_thread(provider.manage, request, list(conn.dialogue.dialogue))
         await require_connection(conn, "memory:manage")
-        if request["action"] not in {"list", "personality", "job_status", "events", "emotion_status", "observations"}:
+        if request["action"] not in {"list", "personality", "feature_settings", "job_status", "events", "emotion_status", "observations"}:
             _trim_dialogue(conn, clear=True)
     except PrivateAuthorizationRequired:
         response.pop("result", None)
