@@ -52,6 +52,100 @@ _encoder = OfflineEncoder()
 _builders = {}
 _lock = threading.Lock()
 
+DEFAULT_CONTEXT_WINDOW = 32768
+DEFAULT_INPUT_TOKENS = 24576
+DEFAULT_RESPONSE_TOKENS = 2048
+DEFAULT_CAPACITY_SOURCE = ('conservative fallback: model capacity not catalogued; '
+                           '32K window, 24K estimated input and 2048 response budget')
+
+
+@dataclass(frozen=True)
+class ModelCapacity:
+    context_window: int
+    input_tokens: int
+    capacity_source: str
+
+
+MODEL_CAPACITY = {
+    'glm-4-flash': ModelCapacity(
+        32768, 24576,
+        'https://docs.bigmodel.cn/cn/guide/models/free/glm-4-flash-250414 documents 128K context; '
+        'conservative personal 32K window, 24K estimated input and 2048 response budget'),
+    'doubao-seed-2-0-lite': ModelCapacity(
+        32768, 24576,
+        'https://ark.volcengine.com/region:cn-beijing/docs/model-list documents 256K context and '
+        '128K max response (default 4K); conservative personal 32K window, 24K estimated input '
+        'and 2048 response budget'),
+    'doubao-seed-2-1-lite': ModelCapacity(
+        32768, 24576,
+        'https://ark.volcengine.com/region:cn-beijing/docs/model-list documents 1024K context and '
+        '256K max response (default 4K); conservative personal 32K window, 24K estimated input '
+        'and 2048 response budget'),
+}
+
+
+def _make_limits(model, context_window, response_tokens, capacity_source, input_tokens):
+    if not isinstance(model, str) or not model.strip():
+        model = 'unknown'
+    if type(context_window) is not int or context_window <= 1:
+        return None
+    if type(response_tokens) is not int or response_tokens <= 0 or response_tokens >= context_window:
+        response_tokens = min(DEFAULT_RESPONSE_TOKENS, max(1, context_window // 4))
+    if type(input_tokens) is not int or input_tokens <= 0:
+        return None
+    if not isinstance(capacity_source, str) or not capacity_source.strip():
+        return None
+    try:
+        limits = ContextLimits(model, context_window, response_tokens, capacity_source, input_tokens)
+        limits.input_limit()
+        return limits
+    except ContextError:
+        return None
+
+
+def _configured_limits(config, model, base_url, response_tokens):
+    if not isinstance(config, dict):
+        return None
+    configured_model = config.get('model_name')
+    configured_url = config.get('base_url')
+    if (isinstance(configured_model, str) and isinstance(model, str) and model.strip()
+            and configured_model != model):
+        return None
+    if isinstance(configured_url, str) and base_url and configured_url.rstrip('/') != base_url:
+        return None
+    window = config.get('context_window')
+    input_tokens = config.get('input_tokens', DEFAULT_INPUT_TOKENS)
+    source = config.get('capacity_source')
+    if not isinstance(source, str) or not source.strip():
+        source = f'manager model config: context_window={window}'
+    if type(response_tokens) is not int or response_tokens <= 0:
+        try:
+            response_tokens = int(config.get('max_tokens'))
+        except (TypeError, ValueError):
+            response_tokens = DEFAULT_RESPONSE_TOKENS
+    return _make_limits(model, window, response_tokens, source, input_tokens)
+
+
+def _reviewed_profile(provider, model, base_url, response_tokens):
+    try:
+        profile = json.loads(Path(os.environ['MIA_CONTEXT_PROFILE_FILE']).read_text(encoding='utf-8'))
+        if (profile['provider_module'] != type(provider).__module__
+                or profile['model'] != model
+                or profile['base_url'].rstrip('/') != base_url):
+            return None
+        return _make_limits(model, profile['context_window'], response_tokens,
+                            profile['capacity_source'], profile.get('input_tokens', 8192))
+    except (OSError, KeyError, AttributeError, TypeError, ValueError):
+        return None
+
+
+def _catalog_limits(model, response_tokens):
+    for name, entry in MODEL_CAPACITY.items():
+        if model == name or model.startswith(name + '-'):
+            return _make_limits(model, entry.context_window, response_tokens,
+                                entry.capacity_source, entry.input_tokens)
+    return None
+
 
 def builder_for(store):
     if store is None:
@@ -62,19 +156,34 @@ def builder_for(store):
         return _builders[store]
 
 
-def provider_limits(provider):
-    # This file is a reviewed server artifact, never a hello/listen/client field.
-    # Bind capacity to the exact provider, endpoint and model; no alias guessing.
-    try:
-        profile = json.loads(Path(os.environ['MIA_CONTEXT_PROFILE_FILE']).read_text(encoding='utf-8'))
-        if (profile['provider_module'] != type(provider).__module__
-                or profile['model'] != provider.model_name
-                or profile['base_url'].rstrip('/') != provider.base_url.rstrip('/')):
-            raise ValueError()
-        return ContextLimits.from_provider(provider, profile['context_window'], profile['capacity_source'],
-            profile.get('input_tokens', 8192))
-    except (OSError, KeyError, AttributeError, TypeError, ValueError):
-        raise ContextError('context_limits_unverified') from None
+def provider_limits(provider, config=None):
+    """Resolve capacity without requiring a per-model profile.
+
+    Precedence: explicit manager config -> reviewed profile / built-in catalog ->
+    conservative default. Client/hello/listen fields are never consulted.
+    """
+    model = getattr(provider, 'model_name', None)
+    if not isinstance(model, str) or not model.strip():
+        model = 'unknown'
+    base_url = getattr(provider, 'base_url', '') or ''
+    if not isinstance(base_url, str):
+        base_url = ''
+    base_url = base_url.rstrip('/')
+    response_tokens = getattr(provider, 'max_tokens', None)
+    limits = _configured_limits(config, model, base_url, response_tokens)
+    if limits is not None:
+        return limits
+    limits = _reviewed_profile(provider, model, base_url, response_tokens)
+    if limits is not None:
+        return limits
+    limits = _catalog_limits(model, response_tokens)
+    if limits is not None:
+        return limits
+    limits = _make_limits(model, DEFAULT_CONTEXT_WINDOW, response_tokens,
+                          DEFAULT_CAPACITY_SOURCE, DEFAULT_INPUT_TOKENS)
+    if limits is not None:
+        return limits
+    raise ContextError('context_limits_unverified')
 
 
 def actual_messages(dialogue):
@@ -108,7 +217,8 @@ async def validate(conn, turn=None):
     turn = turn or getattr(conn, '_youmi_context_turn', None)
     if turn is None or turn.bundle.scope != getattr(conn, '_youmi_scope', None):
         raise ContextError('context_turn_unavailable')
-    limits = await asyncio.to_thread(provider_limits, conn.llm)
+    limits = await asyncio.to_thread(
+        provider_limits, conn.llm, getattr(conn, '_youmi_llm_config', None))
     if limits != turn.bundle.limits:
         raise ContextError('context_limits_changed')
     # Context validation already checks current manager permission for this
@@ -122,7 +232,8 @@ async def validate(conn, turn=None):
 
 async def prepare(conn, functions, depth):
     await require_connection(conn)
-    limits = await asyncio.to_thread(provider_limits, conn.llm)
+    limits = await asyncio.to_thread(
+        provider_limits, conn.llm, getattr(conn, '_youmi_llm_config', None))
     builder = conn._youmi_context_builder
     rows = actual_messages(conn.dialogue)
     turn = getattr(conn, '_youmi_context_turn', None)

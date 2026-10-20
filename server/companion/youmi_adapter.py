@@ -42,12 +42,20 @@ def _store():
 def attach_private_config(conn, private_config):
     """Config lookup must already have verified the independent private grant."""
     conn._youmi_owner = None
+    conn._youmi_llm_config = None
     if not conn.read_config_from_api or not isinstance(private_config, dict):
         return
     scope = getattr(conn, "_youmi_scope", None)
     if not isinstance(scope, AuthenticatedScope) or private_config.get("mia_owner") != scope.owner:
         return
     conn._youmi_owner = scope.owner
+    selected = private_config.get("selected_module")
+    models = private_config.get("LLM")
+    if isinstance(selected, dict) and isinstance(models, dict):
+        name = selected.get("LLM")
+        config = models.get(name) if isinstance(name, str) else None
+        if isinstance(config, dict):
+            conn._youmi_llm_config = dict(config)
 
 
 def initialize_memory(conn):

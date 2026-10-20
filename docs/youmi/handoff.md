@@ -1,5 +1,7 @@
 # Youmi 人格与长期记忆：当前交接
 
+2026-10-20 容量适配与 Doubao 修复：现网智能体切到 `LLM_DoubaoLLM` 后，先因 `/etc/mia-context-profile.json` 仍固定 GLM 出现“当前对话容量尚未确认”；`doubao-seed-2-0-lite-260215` 已下线（404），`doubao-seed-2-0-lite-260428` 账号未激活（ModelNotOpen），最终使用已激活的 `doubao-seed-2-1-lite-260915`（API 200，max_tokens=2048）。已实现三层容量解析（管理端显式 `context_window`/`input_tokens` → 审查 profile／内置模型目录 → 保守默认 32K/24K/2048），目录覆盖 GLM-4-Flash、Doubao Seed 2.0/2.1 Lite，均带官方来源；未知模型按保守默认截断，客户端字段仍忽略。当前分支 408 项服务端测试通过；生产 `b51be7e` 容器已热更新 `reply.py`/`xiaozhi_adapter.py` 并重启，备份在 `/opt/xiaozhi-server/mia-hotfix-20261020/`，用户已确认对话正常。源码改动尚未提交。
+
 2026-10-20 OTA 最新：用户授权发布 1.0.6（快速重连），源码 `5c0d6cb5c67ee4d3d321d804a793712398b1a731`（`feature/youmi-passport-ui`），sequence=7。[128 主机测试、五构建、原生 UI 截图及安卓只读检查](https://github.com/bboytang/Youmi/actions/runs/39346041966)通过；签名独立验签、分区/资源哈希与 1.0.5 一致，GitHub Release 已发布，原 OTA 后台登记后 `ota_id=b26afc7c627b49ebb5e4ddd60f191d0e`，发现接口返回 1.0.6 且实际下载哈希通过，旧版本保留、自动更新开启。本版在聆听中按 OK 停止时保留 WebSocket 以减少下次按键重连；发布时设备仍上报 1.0.5，实机按键延迟、UI/语音共存、帧率与功耗未验收。重启检查更新；[发布与验证证据](../verification/youmi-firmware/ota-1.0.6.json)。
 
 2026-10-19 OTA：用户授权发布带新 UI 的 1.0.5，源码 `41a030fb9287bdfc6d8b134b8f3849bd3ac30c98`（`feature/youmi-passport-ui`），sequence=6。128 主机测试、五构建、原生 UI 截图及真实包四组 A/B 主机模拟通过；签名公钥、分区与资源保持，发现校验匹配服务器现有 WSS。已发布 GitHub 并登记原 OTA 后台，服务端签名及实际 HTTP 下载哈希通过，旧版本保留、自动更新保持开启。发布时设备上报 1.0.4，本版实机安装/语音共存/运行内存与帧率未验收。重启检查更新；[发布与验证证据](../verification/youmi-firmware/ota-1.0.5.json)。

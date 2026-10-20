@@ -104,26 +104,34 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
         for i in reversed(range(count)):
             self.conn.dialogue.dialogue.append(dto('tool', text, tool_id=f'{prefix}-{i}'))
 
-    async def test_profile_requires_exact_provider_endpoint_model_and_configured_output(self):
+    async def test_invalid_or_mismatched_profile_falls_back_to_conservative_default(self):
         for fields in ({'model': 'other'}, {'base_url': 'https://other.invalid'}, {'provider_module': 'other'},
                        {'context_window': None}, {'capacity_source': ''}):
             self.write_profile(**fields)
-            with self.assertRaisesRegex(ContextError, 'context_limits_unverified'):
-                await reply.prepare(self.conn, [], 0)
+            turn = await reply.prepare(self.conn, [], 0)
+            self.assertEqual(turn.bundle.limits.context_window, reply.DEFAULT_CONTEXT_WINDOW)
+            self.assertEqual(turn.bundle.limits.response_tokens, self.provider.max_tokens)
+            self.assertEqual(turn.bundle.limits.input_limit(), min(
+                reply.DEFAULT_INPUT_TOKENS, reply.DEFAULT_CONTEXT_WINDOW - self.provider.max_tokens))
+            self.assertIn('conservative fallback', turn.bundle.limits.capacity_source)
+        # A missing output budget falls back to the conservative 2048.
         self.write_profile()
         self.provider.max_tokens = None
-        with self.assertRaisesRegex(ContextError, 'context_limits_unverified'):
-            await reply.prepare(self.conn, [], 0)
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.response_tokens, reply.DEFAULT_RESPONSE_TOKENS)
         self.assertEqual(self.provider.calls, [])
 
-    async def test_client_profile_is_ignored_and_missing_server_file_stays_limited(self):
+    async def test_client_profile_is_ignored_and_missing_server_file_uses_default(self):
         self.conn.config = {'context_window': 100000, 'max_tokens': 128}
         self.profile.unlink()
-        with self.assertRaisesRegex(ContextError, 'context_limits_unverified'):
-            await reply.prepare(self.conn, [], 0)
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.context_window, reply.DEFAULT_CONTEXT_WINDOW)
+        self.assertEqual(turn.bundle.limits.response_tokens, self.provider.max_tokens)
+        self.assertEqual(turn.bundle.limits.input_limit(), min(
+            reply.DEFAULT_INPUT_TOKENS, reply.DEFAULT_CONTEXT_WINDOW - self.provider.max_tokens))
         self.assertEqual(self.provider.calls, [])
 
-    async def test_input_budget_only_comes_from_bound_server_profile_and_changes_invalidate_turn(self):
+    async def test_effective_limits_change_invalidates_turn_and_invalid_profile_falls_back(self):
         self.conn.config = {'input_tokens': 24576, 'context_window': 32768}
         first = await reply.prepare(self.conn, [], 0)
         self.assertEqual(first.bundle.limits.input_limit(), 8192)
@@ -134,8 +142,47 @@ class ReplyTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(second.bundle.limits.input_limit(), 24576)
         for value in (True, None, 0, '24576'):
             self.write_profile(input_tokens=value)
-            with self.subTest(value=value), self.assertRaisesRegex(ContextError, 'limits_unverified'):
-                await reply.prepare(self.conn, [], 0)
+            with self.subTest(value=value):
+                turn = await reply.prepare(self.conn, [], 0)
+                self.assertEqual(turn.bundle.limits.context_window, reply.DEFAULT_CONTEXT_WINDOW)
+                self.assertEqual(turn.bundle.limits.input_limit(), min(
+                    reply.DEFAULT_INPUT_TOKENS,
+                    reply.DEFAULT_CONTEXT_WINDOW - self.provider.max_tokens))
+        self.assertEqual(self.provider.calls, [])
+
+    async def test_explicit_manager_capacity_overrides_profile_and_catalog(self):
+        self.conn._youmi_llm_config = {'model_name': 'unit-model', 'base_url': Provider.base_url,
+                                       'context_window': 65536, 'input_tokens': 32768}
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.context_window, 65536)
+        self.assertEqual(turn.bundle.limits.input_limit(), 32768)
+        self.write_profile(input_tokens=4096)
+        await reply.validate(self.conn, turn)
+        self.assertEqual(self.provider.calls, [])
+
+    async def test_invalid_explicit_capacity_falls_back_to_profile(self):
+        self.conn._youmi_llm_config = {'model_name': 'unit-model', 'base_url': Provider.base_url,
+                                       'context_window': '65536'}
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.context_window, 16384)
+        self.assertEqual(turn.bundle.limits.input_limit(), 8192)
+
+    async def test_catalog_and_conservative_default_cover_models_without_profiles(self):
+        self.profile.unlink()
+        self.provider.model_name = 'glm-4-flash-250414'
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.context_window, reply.DEFAULT_CONTEXT_WINDOW)
+        self.assertIn('bigmodel', turn.bundle.limits.capacity_source)
+        self.provider.model_name = 'doubao-seed-2-1-lite-260915'
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertIn('1024K', turn.bundle.limits.capacity_source)
+        self.provider.model_name = 'brand-new-model-1'
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.context_window, reply.DEFAULT_CONTEXT_WINDOW)
+        self.assertIn('conservative fallback', turn.bundle.limits.capacity_source)
+        self.provider.max_tokens = None
+        turn = await reply.prepare(self.conn, [], 0)
+        self.assertEqual(turn.bundle.limits.response_tokens, reply.DEFAULT_RESPONSE_TOKENS)
         self.assertEqual(self.provider.calls, [])
 
     async def test_ten_parallel_and_multistep_continuations_keep_facts_without_reexecuting_tools(self):

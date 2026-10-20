@@ -8,11 +8,15 @@
 
 固定上游OpenAI兼容Provider会把空输出配置转换为None，因此现网不满足D05的已配置输出预留。当前[官方GLM-4文档](https://docs.bigmodel.cn/cn/guide/models/text/glm-4)主要说明带日期版本，尚不能把旧别名按名称映射到可靠容量。保持`context_limits_unverified`，不借CI夹具16384／1024推定生产参数；输出上限选择已询问用户，未收到选择前不新增默认值。未调用真实聊天Provider或修改现网。
 
+## 2026-10-20：三层容量适配
+
+现网智能体切换为 `LLM_DoubaoLLM` 后，先因审查 profile 仍固定 GLM 出现 `context_limits_unverified` 兜底；随后确认 `doubao-seed-2-0-lite-260215` 已下线（404），`doubao-seed-2-0-lite-260428` 账号未激活（ModelNotOpen），最终使用已激活的 `doubao-seed-2-1-lite-260915`（API 200）。现改为三层解析：显式模型配置 → 审查 profile／内置模型目录 → 保守默认（32K 窗口、24K 估算输入、2048 输出）。内置目录当前覆盖 GLM-4-Flash、Doubao Seed 2.0 Lite 与 Seed 2.1 Lite，均带官方容量来源；未知模型按保守默认并在请求构建时截断。空 `max_tokens` 使用 2048；客户端/hello/listen 容量字段仍完全忽略。只有模型名和可用预算都无法确定时才保留 `context_limits_unverified`。
+
 ## 接入约定
 
 安装器仍以固定v0.9.7原文hash检验并生成可重现补丁，拒绝重复安装／覆盖生产。新增`reply.py`随安装包复制。原文字listen/detect和ASR识别文本共同到`startToChat`／`ConnectionHandler.chat`；可信Scope的intent_llm回复路径改经同一入口，复用原主Provider与工具处理器，不创建平行回复Client。原唤醒／退出控制保留。
 
-预算仅来自服务端`MIA_CONTEXT_PROFILE_FILE`指向的审查制品，必须含`provider_module`、`base_url`、`model`、`context_window`和`capacity_source`。前3项须与当前实际Provider完全匹配；输出始终读取其现有`max_tokens`。缺字段／文件、端点或模型变化、None输出均明确限制，忽略客户端容量字段；不提供可误用的生产猜测profile。`MIA_EMBEDDING_DIR`为已核实离线资产目录，进程共享单encoder／每事实库单index；不在线下载、不用FTS回填。
+预算按三层顺序解析：1）管理端所选模型的 `context_window` / `input_tokens`（可选，来自服务端私有配置，绝不读取 hello/listen/客户端字段）；2）`MIA_CONTEXT_PROFILE_FILE` 指向的审查制品（`provider_module`、`base_url`、`model` 与当前 Provider 完全匹配时生效）或内置模型目录（当前覆盖 GLM-4-Flash 与 Doubao Seed 2.0 Lite，按模型 ID 前缀匹配）；3）保守默认 32K 窗口 / 24K 估算输入 / 2048 输出。输出上限优先读取 Provider 的 `max_tokens`，为空或越界时使用 2048。请求构建始终按预算截断；只有连模型名和可用预算都无法确定的极端情况仍返回 `context_limits_unverified`。客户端容量字段仍完全忽略。`MIA_EMBEDDING_DIR`为已核实离线资产目录，进程共享单encoder／每事实库单index；不在线下载、不用FTS回填。
 
 从实际非temporary DTO读取用户／助手／工具，不调用会补虚构interrupted结果的Dialogue转换。显示历史保持既有DTO。首次不能证明旧历史快照时不携入模型；后续同快照保留有界完整旧轮次。样式单独捕获为数据，旧memory槽及固定核心不混入样式。工具续答只追加DTO中新增完整链、同轮工具定义重新预算，不改已有参数／结果，不限制合法多次模型调用；空字符串工具结果可合法记录，缺结果仍拒绝。
 
@@ -22,7 +26,7 @@
 
 ## 验证入口与待验边界
 
-- `server/tests/test_companion_reply.py`：预算绑定与客户端忽略、10步并行工具链、删除无重放、缺失／修改链、历史版本变化、源DTO不变、撤权先于DB、流式停止／关闭、逐工具复查、DB／资产故障及样式边界。单位向量、策略和Provider均为fixture。
+- `server/tests/test_companion_reply.py`：三层容量回退（显式配置／审查 profile／内置目录／保守默认）、客户端忽略、10步并行工具链、删除无重放、缺失／修改链、历史版本变化、源DTO不变、撤权先于DB、流式停止／关闭、逐工具复查、DB／资产故障及样式边界。单位向量、策略和Provider均为fixture。
 - `scripts/ci/verify_mia_reply.py`：实际安装后的整段ConnectionHandler类、listen／文本processor／startToChat／intent／TTS序列化代码原样编译运行；仅省略无关启动导入与物理硬件初始化。实际Dialogue、BGE、SQLite、原Provider和OpenAI SDK，经本地WebSocket文字协议及合成SSE响应验证普通／多步并行工具／direct_answer／ASR识别文本／删除／缺配置／撤权。2CPU／2GiB、network-none，外部聊天请求0；策略与工具结果合成，不冒充真实manager／聊天／声学。
 - 实际manager HTTPS/WSS身份job补reply.prepare本人事实／外人隔离、删除后安全重建／禁止工具、撤权先于文件／DB与工具派发；此job向量／容量profile仍为fixture。
 
