@@ -849,11 +849,13 @@ void Application::HandleToggleChatEvent() {
     if (state == kDeviceStateIdle) {
         ListeningMode mode = GetDefaultListeningMode();
         if (!protocol_->IsAudioChannelOpened()) {
+            ESP_LOGI(TAG, "Audio channel closed, connecting");
             SetDeviceState(kDeviceStateConnecting);
             // Schedule to let the state change be processed first (UI update)
             Schedule([this, mode]() { ContinueOpenAudioChannel(mode); });
             return;
         }
+        ESP_LOGI(TAG, "Audio channel already open, starting listening immediately");
         SetListeningMode(mode);
     } else if (state == kDeviceStateSpeaking) {
         AbortSpeaking(kAbortReasonNone);
@@ -873,7 +875,11 @@ void Application::ContinueOpenAudioChannel(ListeningMode mode) {
     board.SetPowerSaveLevel(PowerSaveLevel::PERFORMANCE);
 
     if (!protocol_->IsAudioChannelOpened()) {
-        if (!protocol_->OpenAudioChannel()) {
+        const int64_t started_us = esp_timer_get_time();
+        const bool opened = protocol_->OpenAudioChannel();
+        ESP_LOGI(TAG, "Audio channel %s in %lld ms", opened ? "opened" : "open failed",
+                 (long long)((esp_timer_get_time() - started_us) / 1000));
+        if (!opened) {
             // Return to idle so the device is not stuck in the connecting
             // state (not every failure path reports a network error)
             SetDeviceState(kDeviceStateIdle);
