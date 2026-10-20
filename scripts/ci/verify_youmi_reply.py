@@ -274,11 +274,12 @@ async def evaluate(directory, output):
                 count = len(tool_calls)
                 assert (await text_case('delete'))['provider_requests'] == 2
                 assert len(tool_calls) == count + 1  # No side-effect replay during rebuild.
-                # Unknown profile returns explicit protocol/TTS limitation, no API.
+                # A missing profile now falls back to the conservative default
+                # capacity instead of blocking the turn without an API call.
                 profile.unlink()
-                limited = await text_case('limits_missing')
-                assert limited['provider_requests'] == 0
-                assert any(m['type'] == 'youmi_context' and m['code'] == 'context_limits_unverified' for m in limited['protocol'])
+                fallback = await text_case('default_capacity')
+                assert fallback['provider_requests'] == 1
+                assert not any(m['type'] == 'youmi_context' for m in fallback['protocol'])
                 # Restore fixture for revoked authorization at tool continuation.
                 profile.write_text(json.dumps({'provider_module': type(provider).__module__, 'base_url': provider.base_url,
                     'model': provider.model_name, 'context_window': 16384, 'capacity_source': 'CI synthetic'}))
