@@ -1,6 +1,8 @@
 # Youmi 人格与长期记忆：当前交接
 
-2026-10-19 OTA 最新：用户授权发布带新 UI 的 1.0.5，源码 `41a030fb9287bdfc6d8b134b8f3849bd3ac30c98`（`feature/youmi-passport-ui`），sequence=6。128 主机测试、五构建、原生 UI 截图及真实包四组 A/B 主机模拟通过；签名公钥、分区与资源保持，发现校验匹配服务器现有 WSS。已发布 GitHub 并登记原 OTA 后台，服务端签名及实际 HTTP 下载哈希通过，旧版本保留、自动更新保持开启。发布时设备上报 1.0.4，本版实机安装/语音共存/运行内存与帧率未验收。重启检查更新；[发布与验证证据](../verification/youmi-firmware/ota-1.0.5.json)。
+2026-10-20 OTA 最新：用户授权发布 1.0.6（快速重连），源码 `5c0d6cb5c67ee4d3d321d804a793712398b1a731`（`feature/youmi-passport-ui`），sequence=7。[128 主机测试、五构建、原生 UI 截图及安卓只读检查](https://github.com/bboytang/Youmi/actions/runs/39346041966)通过；签名独立验签、分区/资源哈希与 1.0.5 一致，GitHub Release 已发布，原 OTA 后台登记后 `ota_id=b26afc7c627b49ebb5e4ddd60f191d0e`，发现接口返回 1.0.6 且实际下载哈希通过，旧版本保留、自动更新开启。本版在聆听中按 OK 停止时保留 WebSocket 以减少下次按键重连；发布时设备仍上报 1.0.5，实机按键延迟、UI/语音共存、帧率与功耗未验收。重启检查更新；[发布与验证证据](../verification/youmi-firmware/ota-1.0.6.json)。
+
+2026-10-19 OTA：用户授权发布带新 UI 的 1.0.5，源码 `41a030fb9287bdfc6d8b134b8f3849bd3ac30c98`（`feature/youmi-passport-ui`），sequence=6。128 主机测试、五构建、原生 UI 截图及真实包四组 A/B 主机模拟通过；签名公钥、分区与资源保持，发现校验匹配服务器现有 WSS。已发布 GitHub 并登记原 OTA 后台，服务端签名及实际 HTTP 下载哈希通过，旧版本保留、自动更新保持开启。发布时设备上报 1.0.4，本版实机安装/语音共存/运行内存与帧率未验收。重启检查更新；[发布与验证证据](../verification/youmi-firmware/ota-1.0.5.json)。
 
 2026-10-19 OTA 发现兼容修复：用户重启后出现错误，设备实际仍为1.0.3。原发现响应已改为WSS，而旧固件仍固定验证原WS提示，因此在下载前拒绝。源码 `c1f03ce` 已通过405后端/188 Java（新增7项兼容）测试，并仅替换生产 `OTAController.class`；其他JAR条目、前端、语音容器及WSS参数保持，TLS1.3/HTTPS200。1.0.3/1.0.4专用发现提示兼容，私有语音继续WSS与原授权。已请用户重启再检查，尚不宣称1.0.4实机安装通过。[部署与测试记录](../verification/youmi-firmware/ota-1.0.4.json)。
 
